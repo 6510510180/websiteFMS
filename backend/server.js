@@ -16,36 +16,33 @@ app.use(express.json());
 // =======================
 // Serve Frontend
 // =======================
-
-// ให้ Express ใช้โฟลเดอร์ frontend
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-// หน้าแรก = login
 app.get("/", (req, res) => {
-res.sendFile(path.join(__dirname, "../frontend/login.html"));
+  res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
 
 // =======================
 // PostgreSQL (Supabase)
 // =======================
 const pool = new Pool({
-host: process.env.DB_HOST,
-port: process.env.DB_PORT,
-user: process.env.DB_USER,
-password: process.env.DB_PASSWORD,
-database: process.env.DB_NAME,
-ssl: { rejectUnauthorized: false }
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  ssl: { rejectUnauthorized: false }
 });
 
-// ทดสอบการเชื่อมต่อ
+// Test connection
 pool.connect()
-.then(client => {
-console.log("✅ Connected to PostgreSQL");
-client.release();
-})
-.catch(err => {
-console.error("❌ Database connection error:", err);
-});
+  .then(client => {
+    console.log("✅ Connected to PostgreSQL");
+    client.release();
+  })
+  .catch(err => {
+    console.error("❌ Database connection error:", err);
+  });
 
 // =======================
 // API
@@ -53,58 +50,64 @@ console.error("❌ Database connection error:", err);
 
 // Test API
 app.get("/api/test", (req, res) => {
-res.json({ message: "API working" });
+  res.json({ message: "API working" });
 });
 
-// Login API
-app.post("/login", async (req, res) => {
-const { email, password } = req.body;
 
-try {
-const result = await pool.query(
-"SELECT * FROM users WHERE email = $1",
-[email]
-);
+// =======================
+// LOGIN API (แก้แล้ว)
+// =======================
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
 
-```
-if (result.rows.length === 0) {
-  return res.status(401).json({ message: "ไม่พบผู้ใช้งาน" });
-}
+  try {
+    const result = await pool.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
+    );
 
-const user = result.rows[0];
+    if (result.rows.length === 0) {
+      return res.status(401).json({ message: "ไม่พบผู้ใช้งาน" });
+    }
 
-if (user.password !== password) {
-  return res.status(401).json({ message: "รหัสผ่านไม่ถูกต้อง" });
-}
+    const user = result.rows[0];
 
-res.json({
-  message: "เข้าสู่ระบบสำเร็จ",
-  token: "dummy-token",
-  user: {
-    id: user.id,
-    email: user.email
+    // ตารางใช้ password_hash
+    if (user.password_hash !== password) {
+      return res.status(401).json({ message: "รหัสผ่านไม่ถูกต้อง" });
+    }
+
+    res.json({
+      message: "เข้าสู่ระบบสำเร็จ",
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      }
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 });
-```
 
-} catch (err) {
-console.error(err);
-res.status(500).json({ message: "Server error" });
-}
-});
 
-// ดึงข้อมูลหลักสูตร
+// =======================
+// Courses API (แก้ column)
+// =======================
 app.get("/api/courses", async (req, res) => {
-try {
-const result = await pool.query(
-"SELECT * FROM courses ORDER BY course_id DESC"
-);
-res.json(result.rows);
-} catch (err) {
-console.error(err);
-res.status(500).json({ message: "Server error" });
-}
+  try {
+    const result = await pool.query(
+      "SELECT * FROM courses ORDER BY id DESC"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
+
 
 // =======================
 // PORT (สำคัญสำหรับ Render)
@@ -112,5 +115,5 @@ res.status(500).json({ message: "Server error" });
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
