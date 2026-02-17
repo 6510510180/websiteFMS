@@ -313,60 +313,62 @@
     </div>
   </div>
 
-  <script>
-    const API_BASE = "http://localhost:3000/api";
+ <script>
+  const API_BASE = "https://websitefms.onrender.com";
 
-    // toggle show / hide password
-    const passwordInput = document.getElementById("password");
-    const togglePassword = document.getElementById("togglePassword");
+  const passwordInput = document.getElementById("password");
+  const togglePassword = document.getElementById("togglePassword");
 
-    togglePassword.addEventListener("click", () => {
-      const type =
-        passwordInput.getAttribute("type") === "password"
-          ? "text"
-          : "password";
-      passwordInput.setAttribute("type", type);
-      togglePassword.textContent = type === "password" ? "Show" : "Hide";
-    });
+  togglePassword.addEventListener("click", () => {
+    const type =
+      passwordInput.getAttribute("type") === "password"
+        ? "text"
+        : "password";
+    passwordInput.setAttribute("type", type);
+    togglePassword.textContent = type === "password" ? "Show" : "Hide";
+  });
 
-    // handle login
-    const loginForm = document.getElementById("loginForm");
-    const messageEl = document.getElementById("message");
+  const loginForm = document.getElementById("loginForm");
+  const messageEl = document.getElementById("message");
 
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      messageEl.textContent = "";
-      messageEl.style.color = "red";
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    messageEl.textContent = "";
+    messageEl.style.color = "red";
 
-      const email = document.getElementById("email").value.trim();
-      const password = passwordInput.value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = passwordInput.value.trim();
 
-      try {
-        const res = await fetch(`${API_BASE}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
+    try {
+      const res = await fetch(`${API_BASE}/api/login`, {   // ✅ 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-        const data = await res.json();
+      const data = await res.json();
 
-        if (!res.ok) {
-          messageEl.textContent = data.message || "เข้าสู่ระบบไม่สำเร็จ";
-          return;
-        }
-
-        // success
-        localStorage.setItem("token", data.token);
-        messageEl.style.color = "green";
-        messageEl.textContent = "เข้าสู่ระบบสำเร็จ";
-
-        window.location.href = "dashboard.html";
-
-      } catch (err) {
-        console.error(err);
-        messageEl.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้";
+      if (!res.ok) {
+        messageEl.textContent = data.message || "เข้าสู่ระบบไม่สำเร็จ";
+        return;
       }
-    });
-  </script>
+
+      // success
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      messageEl.style.color = "green";
+      messageEl.textContent = "เข้าสู่ระบบสำเร็จ";
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 800);
+
+    } catch (err) {
+      console.error(err);
+      messageEl.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้";
+    }
+  });
+</script>
+
 </body>
 </html>
