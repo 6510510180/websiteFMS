@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>ข้อมูลทั่วไปหลักสูตร</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  body{
+    margin:0;
+    font-family: "Segoe UI", sans-serif;
+    background:#f5f6fa;
+    display:flex;
+  }
+
+  /* Sidebar */
+  .sidebar{
+    width:240px;
+    background:white;
+    height:100vh;
+    padding:20px;
+    box-shadow:2px 0 8px rgba(0,0,0,0.05);
+    position:fixed;
+  }
+
+  .menu-item{
+    padding:12px;
+    margin-bottom:8px;
+    border-radius:10px;
+    cursor:pointer;
+    color:#555;
+  }
+
+  .menu-item:hover,
+  .menu-item.active{
+    background:#f1e6ff;
+    color:#5c2ea6;
+  }
+
+  /* Main */
+  .main{
+    margin-left:260px;
+    padding:30px;
+    width:calc(100% - 260px);
+  }
+
+  .card{
+    background:white;
+    border-radius:16px;
+    padding:25px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    max-width:700px;
+  }
+
+  h2{
+    margin-bottom:20px;
+    color:#5c2ea6;
+  }
+
+  .row{
+    margin-bottom:15px;
+  }
+
+  .label{
+    font-size:14px;
+    color:#777;
+  }
+
+  .value{
+    font-size:18px;
+    font-weight:600;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="menu-item" onclick="goDashboard()">แดชบอร์ด</div>
+  <div class="menu-item active">ข้อมูลทั่วไป</div>
+  <div class="menu-item" onclick="goStudent()">นักศึกษา</div>
+  <div class="menu-item" onclick="goPlan()">แผนการศึกษา</div>
+  <div class="menu-item" onclick="goCourse()">หลักสูตร</div>
+  <div class="menu-item" onclick="goQA()">ประกันคุณภาพ</div>
+</div>
+
+<!-- Main -->
+<div class="main">
+  <div class="card">
+    <h2>ข้อมูลทั่วไปของหลักสูตร</h2>
+
+    <div class="row">
+      <div class="label">ชื่อหลักสูตร</div>
+      <div class="value" id="name_th">-</div>
+    </div>
+
+    <div class="row">
+      <div class="label">รหัสหลักสูตร</div>
+      <div class="value" id="code">-</div>
+    </div>
+
+    <div class="row">
+      <div class="label">สาขา</div>
+      <div class="value" id="major">-</div>
+    </div>
+
+    <div class="row">
+      <div class="label">ปีที่เริ่มใช้</div>
+      <div class="value" id="start_year">-</div>
+    </div>
+
+    <div class="row">
+      <div class="label">คณะ / มหาวิทยาลัย</div>
+      <div class="value" id="faculty">-</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const API_BASE = "http://localhost:3000";
+const token = localStorage.getItem("token");
+
+if(!token){
+  alert("กรุณาเข้าสู่ระบบ");
+  window.location.href = "login.html";
+}
+
+// รับ courseId จาก URL
+const params = new URLSearchParams(window.location.search);
+const courseId = params.get("courseId");
+
+if(!courseId){
+  alert("ไม่พบรหัสหลักสูตร");
+}
+
+// โหลดข้อมูลหลักสูตร
+async function loadCourse(){
+  try{
+    const res = await fetch(`${API_BASE}/api/courses/${courseId}`,{
+      headers:{
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const course = await res.json();
+
+    if(!res.ok){
+      console.error(course);
+      return;
+    }
+
+    // แสดงข้อมูล
+    document.getElementById("name_th").textContent = course.name_th || "-";
+    document.getElementById("code").textContent = course.code || "-";
+    document.getElementById("major").textContent = course.major || "-";
+    document.getElementById("start_year").textContent = course.start_year || "-";
+    document.getElementById("faculty").textContent = 
+      (course.faculty || "-") + " / " + (course.university || "-");
+
+  }catch(err){
+    console.error(err);
+    alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้");
+  }
+}
+
+loadCourse();
+
+
+// ===== Navigation =====
+function goDashboard(){
+  window.location.href = "dashboard.html";
+}
+
+function goStudent(){
+  window.location.href = `student-info.html?courseId=${courseId}`;
+}
+
+function goPlan(){
+  window.location.href = `study-plan.html?courseId=${courseId}`;
+}
+
+function goCourse(){
+  window.location.href = `course-info.html?courseId=${courseId}`;
+}
+
+function goQA(){
+  window.location.href = `qa-info.html?courseId=${courseId}`;
+}
+
+</script>
+
+</body>
+</html>

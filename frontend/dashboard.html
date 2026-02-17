@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard | FMS Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* 🎨 โทนสีหลัก + ตัวแปร */
+    :root {
+      --primary: #8a3dd1;
+      --primary-light: #f4e9ff;
+      --bg: #f5f4fb;
+      --text-dark: #444;
+      --card-bg: #ffffffcc;
+      --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: "Segoe UI", sans-serif;
+      display: flex;
+      color: var(--text-dark);
+    }
+
+    /* ================= Sidebar ================= */
+    .sidebar {
+      width: 240px;
+      background: #fff;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 0 20px 20px 0;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .sidebar h2 {
+      font-size: 22px;
+      margin: 0 0 40px 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .menu-item {
+      padding: 14px 18px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+
+    .menu-item.active,
+    .menu-item:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      transform: translateX(4px);
+    }
+
+    /* ================= Main ================= */
+    .main {
+      margin-left: 270px;
+      padding: 30px;
+      width: calc(100% - 270px);
+      min-height: 100vh;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .topbar h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0.2px;
+    }
+
+    /* Search bar */
+    .searchbar input {
+      padding: 12px 18px;
+      width: 300px;
+      border-radius: 25px;
+      border: 1px solid #ddd;
+      outline: none;
+      background: #fff;
+      transition: 0.2s;
+    }
+    .searchbar input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px #e7d9ff;
+    }
+
+    /* Add button */
+    .add-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 11px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 6px 16px rgba(138, 61, 209, 0.35);
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .add-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(138, 61, 209, 0.45);
+    }
+
+    /* ================= Cards ================= */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
+      transition: 0.25s;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #777;
+      margin-bottom: 6px;
+    }
+    .card-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* ================= Charts ================= */
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .chart-box {
+      background: var(--card-bg);
+      padding: 22px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(12px);
+    }
+
+    /* ================= Table ================= */
+    .table-box {
+      margin-top: 20px;
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(12px);
+    }
+
+    .table-box h3 {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    th {
+      text-align: left;
+      padding: 12px;
+      color: #666;
+      font-size: 14px;
+      border-bottom: 1px solid #eee;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 12px;
+      border-top: 1px solid #f3f3f3;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    /* Status tags */
+    .status-active {
+      background: #dfffeb;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 12px;
+      color: #2e9a52;
+      font-weight: 600;
+    }
+    .status-draft {
+      background: #f8e1ff;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 12px;
+      color: #a600d9;
+      font-weight: 600;
+    }
+
+    /* Links + Action */
+    .course-link {
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .action-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--primary);
+      background: #fff;
+      color: var(--primary);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .action-btn:hover { background: var(--primary-light); }
+
+    /* ================= Responsive ================= */
+    @media (max-width: 1100px) {
+      .cards { grid-template-columns: 1fr 1fr; }
+      .chart-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 880px) {
+      .sidebar { width: 220px; }
+      .main { margin-left: 240px; width: calc(100% - 240px); }
+      .searchbar input { width: 220px; }
+    }
+    @media (max-width: 720px) {
+      .sidebar {
+        position: fixed;
+        transform: translateX(-100%);
+        transition: 0.3s;
+        z-index: 10;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+      }
+      .topbar {
+        grid-template-columns: 1fr auto;
+      }
+      .searchbar { display: none; }
+      .cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ Sidebar (ครอบเมนูด้วย .sidebar เพื่อให้สไตล์ทำงานครบ) -->
+  <aside class="sidebar">
+    <h2>FMS Admin</h2>
+    <nav class="menu">
+      <div class="menu-item active" id="menuDashboard">แดชบอร์ด</div>
+      <div class="menu-item" id="menuGeneral">ข้อมูลทั่วไป</div>
+      <div class="menu-item" id="menuStudent">นักศึกษา</div>
+      <div class="menu-item" id="menuPlan">แผนการศึกษา</div>
+      <div class="menu-item" id="menuCourse">หลักสูตร</div>
+      <div class="menu-item" id="menuQA">ประกันคุณภาพการศึกษา</div>
+      <div class="menu-item" id="logoutBtn">ออกจากระบบ</div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main">
+    <div class="topbar">
+      <h2>Dashboard (ภาพรวมระบบ)</h2>
+
+      <div class="searchbar">
+        <input type="text" placeholder="ค้นหารายวิชา..." />
+      </div>
+
+      <button class="add-btn" id="addCourseBtn">+ Add New Course</button>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards">
+      <div class="card">
+        <div class="card-title">จำนวนหลักสูตรทั้งหมด</div>
+        <div class="card-number" id="totalCourses">0</div>
+      </div>
+      <div class="card">
+        <div class="card-title">หลักสูตรใช้งานอยู่ (Active)</div>
+        <div class="card-number" id="activeCourses">0</div>
+      </div>
+      <div class="card">
+        <div class="card-title">ปิดปรับปรุง (Maintenance)</div>
+        <div class="card-number" id="maintenance">0</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="chart-row">
+      <div class="chart-box">
+        <canvas id="chart1"></canvas>
+      </div>
+      <div class="chart-box">
+        <canvas id="chart2"></canvas>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-box">
+      <h3>หลักสูตรใหม่ล่าสุด (New Courses)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>COURSE NAME</th>
+            <th>ระดับการศึกษา</th>
+            <th>DATE ADDED</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="courseTable"><!-- will be filled by JS --></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "http://localhost:3000";
+
+    // ตรวจสอบ token
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("กรุณาเข้าสู่ระบบก่อน");
+      window.location.href = "login.html";
+    }
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    });
+
+    // ไปหน้าเพิ่มหลักสูตร
+    document.getElementById("addCourseBtn").addEventListener("click", () => {
+      window.location.href = "add-course.html";
+    });
+
+    // ===== Menu Navigation =====
+    document.getElementById("menuDashboard").onclick = () => {
+      window.location.href = "dashboard.html";
+    };
+    document.getElementById("menuGeneral").onclick = () => {
+      window.location.href = "general-info.html";
+    };
+    document.getElementById("menuStudent").onclick = () => {
+      window.location.href = "student-info.html";
+    };
+    document.getElementById("menuPlan").onclick = () => {
+      window.location.href = "study-plan.html";
+    };
+    document.getElementById("menuCourse").onclick = () => {
+      window.location.href = "course-list.html"; // หรือ course-info.html ถ้ามีหน้าเดียว
+    };
+    document.getElementById("menuQA").onclick = () => {
+      window.location.href = "qa-info.html";
+    };
+
+    // โหลดข้อมูลหลักสูตรมาใส่ Dashboard
+    async function loadCourses() {
+      try {
+        const res = await fetch(`${API_BASE}/api/courses`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const courses = await res.json();
+
+        const table = document.getElementById("courseTable");
+        const total = document.getElementById("totalCourses");
+        const active = document.getElementById("activeCourses");
+        const maintenance = document.getElementById("maintenance");
+
+        if (!res.ok) {
+          console.error(courses);
+          return;
+        }
+
+        // เคลียร์ข้อมูลเก่า
+        table.innerHTML = "";
+
+        // นับจำนวนหลักสูตร
+        total.textContent = courses.length;
+        active.textContent = courses.filter((c) => c.status === "active").length;
+        maintenance.textContent = courses.filter((c) => c.status === "maintenance").length;
+
+        // แสดง 5 รายการล่าสุด
+        courses.slice(0, 5).forEach((c) => {
+          const row = document.createElement("tr");
+          const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString() : "-";
+          row.innerHTML = `
+            <td>
+              <span class="course-link" onclick="goToCourse(${c.id})">
+                ${c.name_th || "-"}
+              </span>
+            </td>
+            <td>${c.degree_level || "-"}</td>
+            <td>${dateStr}</td>
+            <td>
+              <span class="${c.status === 'active' ? 'status-active' : 'status-draft'}">
+                ${c.status || 'draft'}
+              </span>
+            </td>
+            <td>
+              <button class="action-btn" onclick="goToCourse(${c.id})">
+                ดู / แก้ไข
+              </button>
+            </td>
+          `;
+          table.appendChild(row);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // ฟังก์ชันไปหน้า course-info
+    function goToCourse(id) {
+      window.location.href = `course-info.html?courseId=${id}`;
+    }
+    window.goToCourse = goToCourse; // ให้ onclick ใน HTML มองเห็น
+
+    // โหลดข้อมูลเมื่อเปิดหน้า
+    loadCourses();
+
+    // ===== Charts (ตัวอย่างเดิม) =====
+    // Bar
+    new Chart(document.getElementById("chart1"), {
+      type: "bar",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        datasets: [
+          {
+            label: "จำนวนผู้ใช้งาน",
+            data: [200, 300, 280, 350, 420, 500],
+            backgroundColor: "#9d48e8",
+            borderRadius: 8,
+          },
+        ],
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: "#eee" } },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+
+    // Pie
+    new Chart(document.getElementById("chart2"), {
+      type: "pie",
+      data: {
+        labels: ["BIS", "FIN", "MKT", "LSM", "MICE", "HRM"],
+        datasets: [
+          {
+            data: [15, 10, 22, 12, 18, 14],
+            backgroundColor: ["#7E57C2", "#9575CD", "#B39DDB", "#CE93D8", "#F48FB1", "#80DEEA"],
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: "right",
+            labels: { usePointStyle: true, boxWidth: 8 },
+          },
+        },
+      },
+    });
+  </script>
+</body>
+</html>

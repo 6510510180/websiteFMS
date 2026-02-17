@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Portal | FMS PSU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f7d7ff, #f3b3ff);
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 1180px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(18px);
+      border-radius: 24px;
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 32px;
+      box-shadow: 0 18px 60px rgba(143, 52, 188, 0.35);
+    }
+
+    /* ซ้าย: การ์ด PSU FMS */
+    .brand-card {
+      border-radius: 28px;
+      padding: 32px 28px;
+      background: radial-gradient(circle at top left, #ffb4ff, #b144d6 45%, #7a2ba8 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("bg-pattern.png"); /* ถ้าไม่มีรูป ลบบรรทัดนี้ได้ */
+      opacity: 0.18;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .brand-logo {
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .brand-logo h1 {
+      font-size: 52px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .brand-logo span.dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #38e3ff;
+      margin-left: 6px;
+    }
+
+    .brand-text {
+      position: relative;
+      margin-top: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      position: relative;
+      margin-top: 24px;
+      max-width: 260px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    /* ขวา: ฟอร์ม Login */
+    .form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-right: 16px;
+      color: #4a2a64;
+    }
+
+    .form-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .form-header p {
+      font-size: 14px;
+      color: #7c5b9b;
+      margin-bottom: 28px;
+    }
+
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    .field-label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #5b3e7b;
+    }
+
+    .field-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .field-wrapper input {
+      width: 100%;
+      padding: 12px 40px 12px 40px;
+      border-radius: 999px;
+      border: 1px solid #d5c3ec;
+      background: rgba(255, 255, 255, 0.9);
+      outline: none;
+      font-size: 14px;
+      transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .field-wrapper input:focus {
+      border-color: #8b4ad9;
+      box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.18);
+      background: #fff;
+    }
+
+    .field-icon {
+      position: absolute;
+      left: 14px;
+      font-size: 15px;
+      opacity: 0.6;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      font-size: 12px;
+      cursor: pointer;
+      color: #8a70a8;
+    }
+
+    .options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #7c5b9b;
+      margin-top: 4px;
+      margin-bottom: 18px;
+    }
+
+    .options-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .options-row input[type="checkbox"] {
+      accent-color: #8b4ad9;
+    }
+
+    .options-row a {
+      color: #7c5b9b;
+      text-decoration: none;
+    }
+
+    .options-row a:hover {
+      text-decoration: underline;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      border-radius: 999px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #8a3dd1, #5d2b9c);
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(106, 38, 170, 0.4);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(106, 38, 170, 0.5);
+      opacity: 0.96;
+    }
+
+    .btn-login:active {
+      transform: translateY(1px);
+      box-shadow: 0 6px 14px rgba(106, 38, 170, 0.35);
+    }
+
+    #message {
+      margin-top: 10px;
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    @media (max-width: 960px) {
+      .login-wrapper {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+
+      .brand-card {
+        min-height: 260px;
+      }
+
+      .form-panel {
+        padding-right: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .login-wrapper {
+        margin: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-wrapper">
+    <!-- ฝั่งซ้าย: การ์ด PSU FMS -->
+    <div class="brand-card">
+      <div class="brand-logo">
+        <h1>PSU<span class="dot"></span></h1>
+        <div class="brand-text">
+          FACULTY OF<br />
+          MANAGEMENT SCIENCES
+        </div>
+      </div>
+      <div class="brand-sub">
+        PRINCE OF SONGKLA UNIVERSITY<br />
+        ADMIN PORTAL · WEBSITE FMS
+      </div>
+    </div>
+
+    <!-- ฝั่งขวา: ฟอร์ม Login -->
+    <div class="form-panel">
+      <div class="form-header">
+        <h2>Admin Portal</h2>
+        <p>Sign in to continue</p>
+      </div>
+
+      <form id="loginForm">
+        <div class="field-group">
+          <div class="field-label">Email Address</div>
+          <div class="field-wrapper">
+            <span class="field-icon">📧</span>
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Password</div>
+          <div class="field-wrapper">
+            <span class="field-icon">🔒</span>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            />
+            <span class="toggle-password" id="togglePassword">Show</span>
+          </div>
+        </div>
+
+        <div class="options-row">
+          <label>
+            <input type="checkbox" id="rememberMe" />
+            Remember Me
+          </label>
+          <a href="#">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn-login">Login</button>
+        <p id="message"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "http://localhost:3000/api";
+
+    // toggle show / hide password
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    togglePassword.addEventListener("click", () => {
+      const type =
+        passwordInput.getAttribute("type") === "password"
+          ? "text"
+          : "password";
+      passwordInput.setAttribute("type", type);
+      togglePassword.textContent = type === "password" ? "Show" : "Hide";
+    });
+
+    // handle login
+    const loginForm = document.getElementById("loginForm");
+    const messageEl = document.getElementById("message");
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      messageEl.textContent = "";
+      messageEl.style.color = "red";
+
+      const email = document.getElementById("email").value.trim();
+      const password = passwordInput.value.trim();
+
+      try {
+        const res = await fetch(`${API_BASE}/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          messageEl.textContent = data.message || "เข้าสู่ระบบไม่สำเร็จ";
+          return;
+        }
+
+        // success
+        localStorage.setItem("token", data.token);
+        messageEl.style.color = "green";
+        messageEl.textContent = "เข้าสู่ระบบสำเร็จ";
+
+        window.location.href = "dashboard.html";
+
+      } catch (err) {
+        console.error(err);
+        messageEl.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้";
+      }
+    });
+  </script>
+</body>
+</html>

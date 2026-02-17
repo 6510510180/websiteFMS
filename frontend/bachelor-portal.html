@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>BBA Program | FMS PSU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: #f6f2ff;
+      color: #333;
+    }
+
+    /* Top navigation */
+    .topbar {
+      height: 64px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: #5c2ea6;
+    }
+    .topbar-nav a {
+      margin-left: 20px;
+      font-size: 14px;
+      text-decoration: none;
+      color: #555;
+    }
+    .topbar-nav a.active {
+      color: #5c2ea6;
+      font-weight: 600;
+    }
+
+    .page-wrapper {
+      max-width: 1180px;
+      margin: 24px auto 60px;
+      padding: 0 16px 40px;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+    .hero-left {
+      background: linear-gradient(120deg,#f7d1ff,#d3c9ff);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 14px 32px rgba(122,71,213,0.25);
+    }
+    .hero-program-label {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #b394ff;
+      margin-bottom: 6px;
+    }
+    .hero-title-th {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0;
+      color: #3c214f;
+    }
+    .hero-title-en {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 2px 0 10px;
+      color: #8125ff;
+    }
+    .hero-desc {
+      font-size: 13px;
+      color: #503c6f;
+      line-height: 1.6;
+    }
+
+    .hero-right {
+      border-radius: 22px;
+      background: #e5e0ff;
+      background-position: center;
+      background-size: cover;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+      min-height: 200px;
+    }
+
+    /* Info cards row */
+    .info-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .info-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: 0 10px 24px rgba(169,132,255,0.18);
+    }
+    .info-label {
+      font-size: 11px;
+      color: #999;
+      margin-bottom: 4px;
+    }
+    .info-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #5c2ea6;
+    }
+
+    /* Section title */
+    .section-title {
+      font-size: 18px;
+      margin: 24px 0 10px;
+      color: #333;
+    }
+
+    /* Career section */
+    .career-section {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 18px 20px 20px;
+      box-shadow: 0 14px 30px rgba(142,95,241,0.18);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .career-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: 10px 30px;
+      margin-top: 8px;
+      position: relative;
+      z-index: 2;
+    }
+    .career-item {
+      font-size: 13px;
+      color: #4a3d70;
+      line-height: 1.6;
+      padding-left: 14px;
+      position: relative;
+    }
+    .career-item::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #ff4fb1;
+    }
+
+    /* Study plan */
+    .plan-section {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 18px 20px 20px;
+      box-shadow: 0 14px 28px rgba(130,93,230,0.2);
+    }
+    .plan-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .plan-header a {
+      font-size:12px;
+      color:#8047ff;
+      text-decoration:none;
+    }
+
+    .plan-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+    }
+    .plan-card {
+      border-radius:16px;
+      background: linear-gradient(140deg,#f1ddff,#e7d6ff);
+      padding:12px 14px 14px;
+      color:#3a2554;
+      box-shadow:0 10px 24px rgba(161,120,247,0.35);
+    }
+    .plan-card h4 {
+      margin:0 0 6px;
+      font-size:14px;
+    }
+    .plan-list {
+      margin:0;
+      padding-left:14px;
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top:32px;
+      font-size:11px;
+      color:#999;
+      text-align:center;
+    }
+
+    #message {
+      margin-top:8px;
+      font-size:13px;
+      color:red;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0,1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <span>FMS PSU</span>
+      <span style="font-size:12px;color:#999;">Bachelor of Business Administration</span>
+    </div>
+    <div class="topbar-nav">
+      <a href="bachelor-portal.html">หน้าหลัก</a>
+      <a href="#" class="active">ข้อมูลสาขาวิชา</a>
+      <a href="#">นักศึกษา</a>
+      <a href="#">แผนการศึกษา</a>
+      <a href="#">QA</a>
+    </div>
+  </div>
+
+  <div class="page-wrapper">
+    <div id="message"></div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-left">
+        <div class="hero-program-label" id="programLabel">BACHELOR PROGRAM</div>
+        <h1 class="hero-title-th" id="titleTh">ชื่อหลักสูตรภาษาไทย</h1>
+        <h2 class="hero-title-en" id="titleEn">Major Name in English</h2>
+        <p class="hero-desc" id="heroDesc">
+          รายละเอียดหลักสูตร/สาขาวิชาเบื้องต้นจะแสดงที่นี่
+        </p>
+      </div>
+      <div class="hero-right" id="heroImageBox">
+        <!-- ใช้ course.info_image หรือ hero_image เป็นพื้นหลัง -->
+      </div>
+    </section>
+
+    <!-- Info cards -->
+    <section class="info-row">
+      <div class="info-card">
+        <div class="info-label">ระยะเวลาการศึกษา</div>
+        <div class="info-value" id="programType">-</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">จำนวนหน่วยกิตตลอดหลักสูตร</div>
+        <div class="info-value" id="totalCredits">-</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">การให้ปริญญา</div>
+        <div class="info-value" id="awardTitle">-</div>
+      </div>
+    </section>
+
+    <!-- Career section -->
+    <section class="career-section">
+      <h3 class="section-title">แนวทางการประกอบอาชีพ</h3>
+      <div class="career-grid" id="careerList">
+        <!-- เติม bullet จาก major.career_path -->
+      </div>
+    </section>
+
+    <!-- Study plan -->
+    <section class="plan-section">
+      <div class="plan-header">
+        <h3 class="section-title" style="margin:0;">โครงสร้างแผนการศึกษา</h3>
+        <a href="#">View Full Course Catalog →</a>
+      </div>
+
+      <div class="plan-grid">
+        <div class="plan-card">
+          <h4>ชั้นปีที่ 1</h4>
+          <ul class="plan-list" id="plan1"></ul>
+        </div>
+        <div class="plan-card">
+          <h4>ชั้นปีที่ 2</h4>
+          <ul class="plan-list" id="plan2"></ul>
+        </div>
+        <div class="plan-card">
+          <h4>ชั้นปีที่ 3</h4>
+          <ul class="plan-list" id="plan3"></ul>
+        </div>
+        <div class="plan-card">
+          <h4>ชั้นปีที่ 4</h4>
+          <ul class="plan-list" id="plan4"></ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      © 2024 University BBA Portal. All rights reserved.
+    </div>
+  </div>
+
+  <script>
+    const BASE_URL   = "http://localhost:3000";
+    const PUBLIC_API = BASE_URL + "/api/public";
+
+    const msgEl = document.getElementById("message");
+
+    const params   = new URLSearchParams(window.location.search);
+    const courseId = params.get("courseId");
+    const majorId  = params.get("majorId");
+
+    if (!courseId || !majorId) {
+      msgEl.textContent = "ไม่พบรหัส courseId หรือ majorId ใน URL (เช่น ?courseId=1&majorId=2)";
+    } else {
+      loadCourseAndMajor(courseId, majorId);
+    }
+
+    async function loadCourseAndMajor(courseId, majorId) {
+      try {
+        const [courseRes, majorsRes] = await Promise.all([
+          fetch(`${PUBLIC_API}/courses/${courseId}`),
+          fetch(`${PUBLIC_API}/courses/${courseId}/majors`)
+        ]);
+
+        const course = await courseRes.json();
+        const majors = await majorsRes.json();
+
+        if (!courseRes.ok) {
+          msgEl.textContent = course.message || "โหลดข้อมูลหลักสูตรไม่สำเร็จ";
+          return;
+        }
+        if (!majorsRes.ok) {
+          msgEl.textContent = majors.message || "โหลดข้อมูลสาขาวิชาไม่สำเร็จ";
+          return;
+        }
+
+        const major = majors.find(m => String(m.id) === String(majorId));
+        if (!major) {
+          msgEl.textContent = "ไม่พบข้อมูลสาขาวิชาตาม majorId ที่ระบุ";
+          return;
+        }
+
+        renderCourse(course, major);
+      } catch (err) {
+        console.error(err);
+        msgEl.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (public bba page)";
+      }
+    }
+
+    function renderCourse(course, major) {
+      // HERO text
+      document.getElementById("programLabel").textContent =
+        (course.degree_level || "Bachelor Program").toUpperCase();
+
+      // ชื่อสาขา/หลักสูตร
+      document.getElementById("titleTh").textContent =
+        major.name_th || course.name_th || "-";
+
+      document.getElementById("titleEn").textContent =
+        major.name_en || course.name_en || "";
+
+      document.getElementById("heroDesc").textContent =
+        major.intro || course.short_detail || "";
+
+      // Hero image → ใช้ info_image ถ้ามี, ไม่งั้นลอง hero_image
+      const heroBox = document.getElementById("heroImageBox");
+      const heroUrl = course.info_image || course.hero_image || "";
+      if (heroUrl) {
+        heroBox.style.backgroundImage = `url('${BASE_URL + heroUrl}')`;
+        heroBox.style.backgroundSize = "cover";
+        heroBox.style.backgroundPosition = "center";
+      } else {
+        heroBox.style.background = "#ddd";
+      }
+
+      // Info cards
+      document.getElementById("programType").textContent =
+        course.program_type || "หลักสูตร 4 ปี";
+
+      document.getElementById("totalCredits").textContent =
+        (course.total_credits != null ? course.total_credits + " หน่วยกิต" : "-");
+
+      document.getElementById("awardTitle").textContent =
+        course.award_title || "-";
+
+      // Career list
+      const careerContainer = document.getElementById("careerList");
+      careerContainer.innerHTML = "";
+      const items = splitToList(major.career_path);
+      if (!items.length) {
+        const p = document.createElement("p");
+        p.textContent = "อยู่ระหว่างจัดทำข้อมูลแนวทางการประกอบอาชีพ";
+        p.style.fontSize = "13px";
+        p.style.color = "#777";
+        careerContainer.appendChild(p);
+      } else {
+        items.forEach(text => {
+          const div = document.createElement("div");
+          div.className = "career-item";
+          div.textContent = text;
+          careerContainer.appendChild(div);
+        });
+      }
+
+      // Study plan ปี 1–4
+      fillPlanList("plan1", major.plan_1);
+      fillPlanList("plan2", major.plan_2);
+      fillPlanList("plan3", major.plan_3);
+      fillPlanList("plan4", major.plan_4);
+    }
+
+    function splitToList(raw) {
+      if (!raw) return [];
+      // รองรับคั่นด้วย \n / ; / , / •
+      return raw
+        .split(/\r?\n|;|,|•/g)
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+
+    function fillPlanList(elementId, rawPlan) {
+      const ul = document.getElementById(elementId);
+      ul.innerHTML = "";
+      const items = splitToList(rawPlan);
+      if (!items.length) {
+        const li = document.createElement("li");
+        li.textContent = "อยู่ระหว่างจัดทำข้อมูล";
+        ul.appendChild(li);
+        return;
+      }
+      items.forEach(text => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        ul.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

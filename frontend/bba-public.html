@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Bachelor of Business Administration | FMS PSU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: #f8f8fb;
+      color: #333;
+    }
+
+    header {
+      background: white;
+      padding: 12px 40px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo { font-weight: 700; color: #5c2ea6; }
+    nav a { margin-left: 18px; font-size: 14px; color: #666; text-decoration: none; }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 24px 16px 40px;
+    }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .hero-text {
+      background: linear-gradient(135deg,#f7e8ff,#fff);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .hero-text h1 {
+      font-size: 32px;
+      color: #4a258f;
+      margin-bottom: 10px;
+    }
+
+    .hero-text p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .hero-img {
+      border-radius: 18px;
+      background: #ddd;
+      background-size: cover;
+      background-position: center;
+      min-height: 220px;
+    }
+
+    /* INFO */
+    .info-row {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .info-card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+      font-size: 13px;
+    }
+
+    .info-label { color: #888; }
+    .info-value { font-weight: 600; color: #4a258f; }
+
+    /* MAJORS */
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .majors-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 18px;
+    }
+
+    .major-card {
+      border-radius: 18px;
+      padding: 18px;
+      color: white;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(135deg, rgba(147,84,219,0.9), rgba(220,141,255,0.9));
+      box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+    }
+
+    .major-title { font-weight: 600; }
+    .major-sub { font-size: 13px; opacity: .9; }
+    .major-intro { font-size: 12px; margin-top: 6px; opacity: .9; }
+
+    .major-footer {
+      margin-top: 10px;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .major-footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .info-row { grid-template-columns: 1fr; }
+      .majors-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">FMS PSU</div>
+  <nav>
+    <a href="#">Programs</a>
+    <a href="#">Admissions</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1 id="heroTitle">กำลังโหลด...</h1>
+      <p id="heroDesc"></p>
+    </div>
+    <div class="hero-img" id="heroImage"></div>
+  </section>
+
+  <!-- INFO -->
+  <section class="info-row">
+    <div class="info-card">
+      <div class="info-label">ระยะเวลาการศึกษา</div>
+      <div class="info-value" id="infoDuration"></div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">จำนวนหน่วยกิต</div>
+      <div class="info-value" id="infoCredits"></div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">การให้ปริญญา</div>
+      <div class="info-value" id="infoAward"></div>
+    </div>
+  </section>
+
+  <!-- MAJORS -->
+  <section>
+    <h2 class="section-title">สาขาวิชาที่เปิดสอน</h2>
+    <div class="majors-grid" id="majorsGrid"></div>
+  </section>
+
+</div>
+
+<script>
+const API_BASE = "http://localhost:3000/api/public";
+const params = new URLSearchParams(window.location.search);
+const courseId = params.get("courseId") || 1;
+
+let course = null;
+
+// ---------- LOAD COURSE ----------
+async function loadCourse() {
+  const res = await fetch(`${API_BASE}/courses/${courseId}`);
+  course = await res.json();
+
+  document.getElementById("heroTitle").textContent =
+    course.name_en || "Bachelor of Business Administration";
+
+  document.getElementById("heroDesc").textContent =
+    course.short_detail || "";
+
+  document.getElementById("infoDuration").textContent =
+    course.program_type || "-";
+
+  document.getElementById("infoCredits").textContent =
+    course.total_credits ? course.total_credits + " หน่วยกิต" : "-";
+
+  document.getElementById("infoAward").textContent =
+    course.award_title || "-";
+
+  if (course.hero_image) {
+    const hero = document.getElementById("heroImage");
+    hero.style.backgroundImage =
+      `url('http://localhost:3000${course.hero_image}')`;
+  }
+}
+
+// ---------- LOAD MAJORS ----------
+async function loadMajors() {
+  const res = await fetch(`${API_BASE}/courses/${courseId}/majors`);
+  const majors = await res.json();
+
+  const grid = document.getElementById("majorsGrid");
+  grid.innerHTML = "";
+
+  if (!Array.isArray(majors) || majors.length === 0) {
+    grid.innerHTML = "<p>ยังไม่มีข้อมูลสาขาวิชา</p>";
+    return;
+  }
+
+  majors.forEach(m => {
+    const card = document.createElement("div");
+    card.className = "major-card";
+
+    if (m.image_url) {
+      card.style.backgroundImage =
+        `linear-gradient(135deg, rgba(147,84,219,0.9), rgba(220,141,255,0.9)),
+         url('http://localhost:3000${m.image_url}')`;
+      card.style.backgroundSize = "cover";
+      card.style.backgroundPosition = "center";
+    }
+
+    card.innerHTML = `
+      <div>
+        <div class="major-title">${m.name_th}</div>
+        <div class="major-sub">${m.name_en || ""}</div>
+        <div class="major-intro">${(m.intro || "").slice(0,120)}</div>
+      </div>
+      <div class="major-footer">
+        <a href="bachelor-portal.html?majorId=${m.id}">รายละเอียด &gt;</a>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+loadCourse();
+loadMajors();
+</script>
+
+</body>
+</html>
