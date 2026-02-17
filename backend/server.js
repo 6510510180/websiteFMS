@@ -14,9 +14,10 @@ app.use(cors());
 app.use(express.json());
 
 // =======================
-// Serve Frontend
+// Serve Frontend (สำคัญที่สุด)
 // =======================
-// ให้เปิดไฟล์ในโฟลเดอร์ frontend
+
+// บอก Express ให้ใช้โฟลเดอร์ frontend
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 // หน้าแรก = login
@@ -25,7 +26,7 @@ app.get("/", (req, res) => {
 });
 
 // =======================
-// PostgreSQL (Supabase)
+// PostgreSQL
 // =======================
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -33,12 +34,10 @@ const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  ssl: { rejectUnauthorized: false }
 });
 
-// ทดสอบ DB
+// Test connection
 pool.connect()
   .then(client => {
     console.log("✅ Connected to PostgreSQL");
@@ -51,13 +50,10 @@ pool.connect()
 // =======================
 // API
 // =======================
-
-// Test API
 app.get("/api/test", (req, res) => {
   res.json({ message: "API working" });
 });
 
-// ดึงหลักสูตร
 app.get("/api/courses", async (req, res) => {
   try {
     const result = await pool.query(
@@ -71,7 +67,7 @@ app.get("/api/courses", async (req, res) => {
 });
 
 // =======================
-// PORT (สำคัญสำหรับ Render)
+// PORT (Render)
 // =======================
 const PORT = process.env.PORT || 3000;
 
