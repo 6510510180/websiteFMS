@@ -1,10 +1,12 @@
-// backend/db.js
+require('dotenv').config();
 const { Pool } = require('pg');
 
-// ใช้ DATABASE_URL จาก Render หรือใส่ Supabase connection string ตรงนี้
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 
-    'postgresql://postgres:6510510180651051018@db.pbxcqybjlmzxrxrcfsed.supabase.co:5432/postgres',
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   ssl: {
     rejectUnauthorized: false
   }
@@ -17,7 +19,7 @@ pool.connect()
     client.release();
   })
   .catch(err => {
-    console.error('❌ Database connection error:', err);
+    console.error('❌ Database connection error:', err.message);
   });
 
 module.exports = pool;
