@@ -1,575 +1,34 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <title>Add / Edit Course | FMS Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body {
-      margin: 0;
-      background: #f8f8fb;
-      font-family: "Segoe UI", sans-serif;
-      display: flex;
-    }
-    .sidebar {
-      width: 240px;
-      background: white;
-      height: 100vh;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-      padding: 20px;
-      position: fixed;
-      display: flex;
-      flex-direction: column;
-    }
-    .sidebar h2 {
-      font-size: 20px;
-      margin-bottom: 30px;
-      color: #5c2ea6;
-    }
-    .menu {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-    }
-    .menu-item {
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      color: #5e5e70;
-      transition: 0.2s;
-    }
-    .menu-item.active,
-    .menu-item:hover {
-      background: #f1e6ff;
-      color: #5c2ea6;
-    }
-    .main {
-      margin-left: 260px;
-      padding: 25px;
-      width: calc(100% - 260px);
-    }
-    .page-header small {
-      color: #999;
-      font-size: 13px;
-    }
-    .page-header h2 {
-      margin: 4px 0;
-    }
-    .page-header p {
-      font-size: 13px;
-      color: #888;
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px 22px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      margin-bottom: 20px;
-    }
-    .card-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-    .form-grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px 24px;
-      margin-top: 12px;
-      margin-bottom: 16px;
-    }
-    .field {
-      margin-bottom: 12px;
-    }
-    .field label {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 4px;
-      color: #555;
-    }
-    .field input,
-    .field textarea,
-    .field select {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      background: #faf7ff;
-      outline: none;
-      font-size: 14px;
-    }
-    .field input:focus,
-    .field textarea:focus,
-    .field select:focus {
-      border-color: #8a3dd1;
-      background: #fff;
-      box-shadow: 0 0 0 2px rgba(138, 61, 209, 0.15);
-    }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .footer-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 16px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      border-radius: 999px;
-      padding: 8px 20px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .btn-secondary {
-      background: #ffdddd;
-      color: #b33939;
-    }
-    .btn-primary {
-      background: #8a3dd1;
-      color: white;
-      box-shadow: 0 5px 14px rgba(138, 61, 209, 0.3);
-    }
-    .btn-success {
-      background: #2ecc71;
-      color: #fff;
-      box-shadow: 0 5px 14px rgba(46, 204, 113, 0.3);
-    }
-    #message {
-      margin-top: 8px;
-      font-size: 13px;
-    }
-  </style>
-</head>
-<body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>FMS PSU</h2>
-    <div class="menu">
-      <div class="menu-item" onclick="location.href='dashboard.html'">แดชบอร์ด</div>
-      <div class="menu-item active">จัดการหลักสูตร</div>
-      <div class="menu-item" onclick="location.href='dashboard.html'">แผนการศึกษา</div>
-      <div class="menu-item" id="logoutBtn">ออกจากระบบ</div>
-    </div>
-  </div>
-
-  <!-- Main -->
-  <div class="main">
-    <div class="page-header">
-      <small>แดชบอร์ด / จัดการหลักสูตร / เพิ่มหรือแก้ไขหลักสูตร</small>
-      <h2 id="pageTitle">เพิ่มหลักสูตรใหม่</h2>
-      <p id="pageSub">กรอกข้อมูลหลักสูตรให้ครบถ้วน แล้วกดบันทึก</p>
-    </div>
-
-    <form id="courseForm">
-      <div class="card">
-        <div class="card-title">ข้อมูลหลักสูตร</div>
-
-        <div class="form-grid-2">
-          <div class="field">
-            <label>ชื่อหลักสูตร (ภาษาไทย) *</label>
-            <input type="text" id="name_th" required />
-          </div>
-          <div class="field">
-            <label>ชื่อหลักสูตร (ภาษาอังกฤษ)</label>
-            <input type="text" id="name_en" />
-          </div>
-
-          <div class="field">
-            <label>ระดับการศึกษา</label>
-            <input type="text" id="degree_level" placeholder="เช่น ปริญญาตรี" />
-          </div>
-          <div class="field">
-            <label>สถานะหลักสูตร</label>
-            <select id="status">
-              <option value="active">Active</option>
-              <option value="draft">Draft</option>
-              <option value="maintenance">Maintenance</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>รูปแบบหลักสูตร</label>
-            <input type="text" id="program_type" placeholder="เช่น หลักสูตร 4 ปี" />
-          </div>
-          <div class="field">
-            <label>รูปแบบการจัดการศึกษา</label>
-            <input type="text" id="study_system" placeholder="เช่น ภาคปกติ" />
-          </div>
-
-          <div class="field">
-            <label>การให้ปริญญา</label>
-            <input type="text" id="award_title" placeholder="เช่น บริหารธุรกิจบัณฑิต (บธ.บ.)" />
-          </div>
-          <div class="field">
-            <label>จำนวนหน่วยกิตตลอดหลักสูตร</label>
-            <input type="number" id="total_credits" placeholder="เช่น 129" />
-          </div>
-        </div>
-
-        <div class="field">
-          <label>คำอธิบายสั้น ๆ ของหลักสูตร</label>
-          <textarea id="short_detail" placeholder="เช่น จุดเด่นของหลักสูตร กลุ่มเป้าหมาย ฯลฯ"></textarea>
-        </div>
-
-        <!-- รูปภาพ -->
-        <div class="form-grid-2">
-          <div class="field">
-            <label>รูปสำหรับหน้า สาขา / หน้าทั่วไป</label>
-            <input type="file" id="heroFile" accept="image/*" />
-            <input type="hidden" id="hero_image" />
-            <div style="margin-top:6px;">
-              <img id="heroPreview" src="" style="max-width:260px; border-radius:12px; display:none;">
-            </div>
-          </div>
-
-          <div class="field">
-            <label>รูปสำหรับหน้ารายละเอียดรายวิชา + หน้ารายละเอียดหลักสูตร</label>
-            <input type="file" id="infoFile" accept="image/*" />
-            <input type="hidden" id="info_image" />
-            <div style="margin-top:6px;">
-              <img id="infoPreview" src="" style="max-width:260px; border-radius:12px; display:none;">
-            </div>
-          </div>
-        </div>
-        <!-- … ฟิลด์ชื่อหลักสูตร / degree / status / credit ต่าง ๆ … -->
-
-<div class="form-grid-2">
-  <!-- hero image -->
-  <div class="field">
-    <label>รูปใช้ในหน้าทั่วไป</label>
-    <input type="file" id="heroFile" accept="image/*" />
-    <input type="hidden" id="hero_image" />
-    <div style="margin-top:6px;">
-      <img id="heroPreview" style="max-width:260px;border-radius:12px;display:none;">
-    </div>
-  </div>
-
-  <!-- info image -->
-  <div class="field">
-    <label>รูปใช้ในหน้ารายละเอียดวิชา + หน้าทั่วไป</label>
-    <input type="file" id="infoFile" accept="image/*" />
-    <input type="hidden" id="info_image" />
-    <div style="margin-top:6px;">
-      <img id="infoPreview" style="max-width:260px;border-radius:12px;display:none;">
-    </div>
-  </div>
-
-  <!-- home image -->
-  <div class="field">
-    <label>รูป Card สำหรับหน้าหลัก</label>
-    <input type="file" id="homeFile" accept="image/*" />
-    <input type="hidden" id="home_image" />
-    <div style="margin-top:6px;">
-      <img id="homePreview" style="max-width:260px;border-radius:12px;display:none;">
-    </div>
-  </div>
-</div>
-<div class="menu">
-  <div class="menu-item" onclick="location.href='course-info.html'">
-    ข้อมูลทั่วไป
-  </div>
-
-  <div class="menu-item" onclick="location.href='course-list.html'">
-    หลักสูตร
-  </div>
-
-  <div class="menu-item" onclick="location.href='student-list.html'">
-    นักศึกษา
-  </div>
-
-  <div class="menu-item" onclick="location.href='study-plan.html'">
-    แผนการศึกษา
-  </div>
-
-  <div class="menu-item" onclick="location.href='qa-dashboard.html'">
-    ประกันคุณภาพการศึกษา
-  </div>
-</div>
-
-
-
-        <div class="footer-actions">
-          <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
-
-          <!-- ปุ่มบันทึกปกติ -->
-          <button type="submit" class="btn btn-primary" id="saveBtn">
-            บันทึกหลักสูตร
-          </button>
-
-          <!-- ปุ่มบันทึก + ไปเพิ่มสาขา (เฉพาะโหมดเพิ่มใหม่) -->
-          <button type="button" class="btn btn-success" id="saveAndAddMajorBtn">
-            บันทึกและเพิ่มสาขาวิชา ➜
-          </button>
-        </div>
-        <div id="message"></div>
-      </div>
-    </form>
-  </div>
-
-  <script>
-    const BASE_URL = "http://localhost:3000";
-    const API_BASE = BASE_URL + "/api";
-
-    // ตรวจ token
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("กรุณาเข้าสู่ระบบก่อน");
-      window.location.href = "login.html";
-    }
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("token");
-      window.location.href = "login.html";
-    });
-
-    const msg = document.getElementById("message");
-    const params = new URLSearchParams(window.location.search);
-    const courseId = params.get("courseId");   // ถ้ามี = โหมดแก้ไข
-    const isEditMode = !!courseId;
-
-    const pageTitle     = document.getElementById("pageTitle");
-    const pageSub       = document.getElementById("pageSub");
-    const saveBtn       = document.getElementById("saveBtn");
-    const saveAndAddBtn = document.getElementById("saveAndAddMajorBtn");
-
-    const heroFile      = document.getElementById("heroFile");
-    const heroHidden    = document.getElementById("hero_image");
-    const heroPreview   = document.getElementById("heroPreview");
-
-    const infoFile      = document.getElementById("infoFile");
-    const infoHidden    = document.getElementById("info_image");
-    const infoPreview   = document.getElementById("infoPreview");
-
-    // จะไปหน้าไหนหลังบันทึก (ใช้เฉพาะโหมดเพิ่มใหม่)
-    let afterSaveMode = "courseInfo";
-
-    // ------------ ฟังก์ชันอัปโหลดรูป -------------
-    async function uploadImage(fileInput, hiddenInput, previewImg) {
-      const file = fileInput.files[0];
-      if (!file) return;
-
-      const fd = new FormData();
-      fd.append("image", file);
-
-      msg.style.color = "#555";
-      msg.textContent = "กำลังอัปโหลดรูปภาพ...";
-
-      try {
-        const res = await fetch(`${API_BASE}/upload-course-image`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${token}`
-          },
-          body: fd
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          msg.style.color = "red";
-          msg.textContent = data.message || "อัปโหลดรูปไม่สำเร็จ";
-          return;
-        }
-
-        // เก็บ path และแสดง preview
-        hiddenInput.value = data.url;                 // เช่น /uploads/course-xxx.jpg
-        previewImg.src = BASE_URL + data.url;         // ให้ browser โหลดจาก server
-        previewImg.style.display = "block";
-
-        msg.style.color = "green";
-        msg.textContent = "อัปโหลดรูปสำเร็จ";
-
-      } catch (err) {
-        console.error(err);
-        msg.style.color = "red";
-        msg.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (อัปโหลดรูป)";
-      }
-    }
-
-    heroFile.addEventListener("change", () => uploadImage(heroFile, heroHidden, heroPreview));
-    infoFile.addEventListener("change", () => uploadImage(infoFile, infoHidden, infoPreview));
-
-    // ---------------------- ตั้งค่าตามโหมด ----------------------
-    if (isEditMode) {
-      // ========== โหมดแก้ไข ==========
-      pageTitle.textContent = "แก้ไขข้อมูลหลักสูตร";
-      pageSub.textContent   = "ปรับแก้ข้อมูลหลักสูตร แล้วกดบันทึกเพื่ออัปเดต";
-      saveBtn.textContent   = "อัปเดตหลักสูตร";
-
-      if (saveAndAddBtn) {
-        saveAndAddBtn.textContent = "เพิ่มสาขาวิชาใหม่ในหลักสูตรนี้ ➜";
-        saveAndAddBtn.addEventListener("click", () => {
-          window.location.href = `add-major.html?courseId=${courseId}`;
-        });
-      }
-
-      loadCourseForEdit(courseId);
-    } else {
-      // ========== โหมดเพิ่มใหม่ ==========
-      saveBtn.addEventListener("click", () => {
-        afterSaveMode = "courseInfo";
-      });
-
-      if (saveAndAddBtn) {
-        saveAndAddBtn.addEventListener("click", () => {
-          afterSaveMode = "addMajor";
-          document.getElementById("courseForm").requestSubmit();
-        });
-      }
-    }
-
-    // ---------------------- โหลดข้อมูลหลักสูตรเพื่อแก้ไข ----------------------
-   async function loadCourseForEdit(id) {
-  try {
-    const res = await fetch(`${API_BASE}/courses/${id}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-    const c = await res.json();
-
-    if (res.status === 401) {
-      alert("token ไม่ถูกต้องหรือหมดอายุ กรุณาเข้าสู่ระบบใหม่");
-      localStorage.removeItem("token");
-      window.location.href = "login.html";
-      return;
-    }
-
-    if (!res.ok) {
-      msg.style.color = "red";
-      msg.textContent = c.message || "ไม่สามารถโหลดข้อมูลหลักสูตรเดิมได้";
-      return;
-    }
-
-    // ---------- เติมค่าข้อความ ----------
-    document.getElementById("name_th").value       = c.name_th || "";
-    document.getElementById("name_en").value       = c.name_en || "";
-    document.getElementById("degree_level").value  = c.degree_level || "";
-    document.getElementById("short_detail").value  = c.short_detail || "";
-    document.getElementById("status").value        = c.status || "draft";
-    document.getElementById("program_type").value  = c.program_type || "";
-    document.getElementById("study_system").value  = c.study_system || "";
-    document.getElementById("award_title").value   = c.award_title || "";
-    document.getElementById("total_credits").value = c.total_credits ?? "";
-
-    // ---------- เติมค่า URL รูป + แสดง preview ----------
-    document.getElementById("hero_image").value = c.hero_image || "";
-    document.getElementById("info_image").value = c.info_image || "";
-    document.getElementById("home_image").value = c.home_image || "";
-
-    const base = "http://localhost:3000";
-
-    if (c.hero_image) {
-      const img = document.getElementById("heroPreview");
-      img.src = base + c.hero_image;
-      img.style.display = "block";
-    }
-    if (c.info_image) {
-      const img = document.getElementById("infoPreview");
-      img.src = base + c.info_image;
-      img.style.display = "block";
-    }
-    if (c.home_image) {
-      const img = document.getElementById("homePreview");
-      img.src = base + c.home_image;
-      img.style.display = "block";
-    }
-
-  } catch (err) {
-    console.error(err);
-    msg.style.color = "red";
-    msg.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (โหลดข้อมูลหลักสูตร)";
-  }
-}
-
-
-    // ---------------------- Submit ฟอร์ม (เพิ่มใหม่ & แก้ไข) ----------------------
-    const form = document.getElementById("courseForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      msg.textContent = "";
-      msg.style.color = "red";
-
-      const body = {
-  name_th:       document.getElementById("name_th").value.trim(),
-  name_en:       document.getElementById("name_en").value.trim(),
-  degree_level:  document.getElementById("degree_level").value.trim(),
-  short_detail:  document.getElementById("short_detail").value.trim(),
-  status:        document.getElementById("status").value,
-  program_type:  document.getElementById("program_type").value.trim(),
-  study_system:  document.getElementById("study_system").value.trim(),
-  award_title:   document.getElementById("award_title").value.trim(),
-  total_credits: document.getElementById("total_credits").value
-                   ? Number(document.getElementById("total_credits").value)
-                   : null,
-
-  hero_image: document.getElementById("hero_image").value || null,
-  info_image: document.getElementById("info_image").value || null,
-  home_image: document.getElementById("home_image").value || null
-};
-
-
-      if (!body.name_th) {
-        msg.textContent = "กรุณากรอกชื่อหลักสูตร (ภาษาไทย)";
-        return;
-      }
-
-      try {
-        const url    = isEditMode ? `${API_BASE}/courses/${courseId}` : `${API_BASE}/courses`;
-        const method = isEditMode ? "PUT" : "POST";
-
-        const res = await fetch(url, {
-          method,
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify(body)
-        });
-
-        const data = await res.json();
-
-        if (res.status === 401) {
-          alert("token ไม่ถูกต้องหรือหมดอายุ กรุณาเข้าสู่ระบบใหม่");
-          localStorage.removeItem("token");
-          window.location.href = "login.html";
-          return;
-        }
-
-        if (!res.ok) {
-          msg.textContent =
-            data.message ||
-            (isEditMode ? "อัปเดตหลักสูตรไม่สำเร็จ" : "บันทึกหลักสูตรไม่สำเร็จ");
-          return;
-        }
-
-        msg.style.color = "green";
-        msg.textContent = isEditMode
-          ? "อัปเดตหลักสูตรสำเร็จ"
-          : "บันทึกหลักสูตรสำเร็จ";
-
-        const idToGo = isEditMode ? courseId : data.courseId;
-
-        setTimeout(() => {
-          if (!isEditMode && afterSaveMode === "addMajor") {
-            window.location.href = `add-major.html?courseId=${idToGo}`;
-          } else {
-            window.location.href = `course-info.html?courseId=${idToGo}`;
-          }
-        }, 600);
-
-      } catch (err) {
-        console.error(err);
-        msg.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (บันทึกหลักสูตร)";
-      }
-    });
-    // ------------ ฟังก์ชันอัปโหลดรูป 3 แบบ ------------
-async function uploadImage(fileInputId, hiddenInputId, previewImgId) {
-  const fileInput = document.getElementById(fileInputId);
+<script>
+// =============================
+// CONFIG
+// =============================
+const BASE_URL = "https://websitefms.onrender.com";
+
+// =============================
+// ELEMENTS
+// =============================
+const courseForm = document.getElementById("courseForm");
+const courseIdInput = document.getElementById("courseId");
+
+// File inputs
+const heroFile = document.getElementById("heroFile");
+const infoFile = document.getElementById("infoFile");
+const homeFile = document.getElementById("homeFile");
+
+// Hidden inputs
+const heroHidden = document.getElementById("hero_image");
+const infoHidden = document.getElementById("info_image");
+const homeHidden = document.getElementById("home_image");
+
+// Preview images
+const heroPreview = document.getElementById("heroPreview");
+const infoPreview = document.getElementById("infoPreview");
+const homePreview = document.getElementById("homePreview");
+
+// =============================
+// UPLOAD IMAGE FUNCTION
+// =============================
+async function uploadImage(fileInput, hiddenInput, previewImg) {
   const file = fileInput.files[0];
   if (!file) return;
 
@@ -577,43 +36,129 @@ async function uploadImage(fileInputId, hiddenInputId, previewImgId) {
   formData.append("image", file);
 
   try {
-    const res = await fetch(API_BASE + "/upload-course-image", {
+    const res = await fetch(`${BASE_URL}/api/upload`, {
       method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      },
       body: formData
     });
 
     const data = await res.json();
-    if (!res.ok) {
-      alert(data.message || "อัปโหลดรูปไม่สำเร็จ");
-      return;
+
+    if (res.ok) {
+      hiddenInput.value = data.url;
+      previewImg.src = BASE_URL + data.url;
+      previewImg.style.display = "block";
+      console.log("Upload success:", data.url);
+    } else {
+      alert("Upload failed: " + data.error);
     }
-
-    document.getElementById(hiddenInputId).value = data.url;
-
-    const img = document.getElementById(previewImgId);
-    img.src = "http://localhost:3000" + data.url;
-    img.style.display = "block";
-
   } catch (err) {
     console.error(err);
-    alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (อัปโหลดรูป)");
+    alert("Upload error");
   }
 }
 
-// ผูกกับ input file
-document.getElementById("heroFile").addEventListener("change", () => {
-  uploadImage("heroFile", "hero_image", "heroPreview");
-});
-document.getElementById("infoFile").addEventListener("change", () => {
-  uploadImage("infoFile", "info_image", "infoPreview");
-});
-document.getElementById("homeFile").addEventListener("change", () => {
-  uploadImage("homeFile", "home_image", "homePreview");
+// Event listeners
+heroFile.addEventListener("change", () =>
+  uploadImage(heroFile, heroHidden, heroPreview)
+);
+
+infoFile.addEventListener("change", () =>
+  uploadImage(infoFile, infoHidden, infoPreview)
+);
+
+homeFile.addEventListener("change", () =>
+  uploadImage(homeFile, homeHidden, homePreview)
+);
+
+// =============================
+// LOAD COURSE FOR EDIT
+// =============================
+async function loadCourseForEdit(id) {
+  try {
+    const res = await fetch(`${BASE_URL}/api/courses/${id}`);
+    const data = await res.json();
+
+    // Fill form
+    document.getElementById("course_name").value = data.course_name;
+    document.getElementById("course_description").value = data.course_description;
+    document.getElementById("course_details").value = data.course_details;
+
+    heroHidden.value = data.hero_image || "";
+    infoHidden.value = data.info_image || "";
+    homeHidden.value = data.home_image || "";
+
+    if (data.hero_image) {
+      heroPreview.src = BASE_URL + data.hero_image;
+      heroPreview.style.display = "block";
+    }
+
+    if (data.info_image) {
+      infoPreview.src = BASE_URL + data.info_image;
+      infoPreview.style.display = "block";
+    }
+
+    if (data.home_image) {
+      homePreview.src = BASE_URL + data.home_image;
+      homePreview.style.display = "block";
+    }
+
+    courseIdInput.value = id;
+
+  } catch (err) {
+    console.error("Load error:", err);
+    alert("โหลดข้อมูลไม่สำเร็จ");
+  }
+}
+
+// =============================
+// SAVE / UPDATE COURSE
+// =============================
+courseForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const id = courseIdInput.value;
+
+  const payload = {
+    course_name: document.getElementById("course_name").value,
+    course_description: document.getElementById("course_description").value,
+    course_details: document.getElementById("course_details").value,
+    hero_image: heroHidden.value,
+    info_image: infoHidden.value,
+    home_image: homeHidden.value
+  };
+
+  try {
+    const res = await fetch(
+      id ? `${BASE_URL}/api/courses/${id}` : `${BASE_URL}/api/courses`,
+      {
+        method: id ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert(id ? "อัปเดตสำเร็จ" : "เพิ่มคอร์สสำเร็จ");
+      window.location.href = "courses.html";
+    } else {
+      alert(data.error || "เกิดข้อผิดพลาด");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
 });
 
-  </script>
-</body>
-</html>
+// =============================
+// CHECK URL PARAM (EDIT MODE)
+// =============================
+const params = new URLSearchParams(window.location.search);
+const editId = params.get("id");
+
+if (editId) {
+  loadCourseForEdit(editId);
+}
+</script>
