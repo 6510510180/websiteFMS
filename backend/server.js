@@ -14,14 +14,14 @@ app.use(cors());
 app.use(express.json());
 
 // =======================
-// Static files (สำคัญมาก)
+// Serve Frontend
 // =======================
-// ให้เข้าถึงไฟล์ HTML ในโฟลเดอร์ public
-app.use(express.static(path.join(__dirname, "public")));
+// ให้เปิดไฟล์ในโฟลเดอร์ frontend
+app.use(express.static(path.join(__dirname, "../frontend")));
 
-// เปิดหน้าแรกเป็น login.html
+// หน้าแรก = login
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
+  res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
 
 // =======================
@@ -38,7 +38,7 @@ const pool = new Pool({
   }
 });
 
-// ทดสอบการเชื่อมต่อ
+// ทดสอบ DB
 pool.connect()
   .then(client => {
     console.log("✅ Connected to PostgreSQL");
@@ -49,7 +49,7 @@ pool.connect()
   });
 
 // =======================
-// ตัวอย่าง API
+// API
 // =======================
 
 // Test API
@@ -57,10 +57,12 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "API working" });
 });
 
-// ตัวอย่างดึงหลักสูตร
+// ดึงหลักสูตร
 app.get("/api/courses", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM courses ORDER BY course_id DESC");
+    const result = await pool.query(
+      "SELECT * FROM courses ORDER BY course_id DESC"
+    );
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -69,7 +71,7 @@ app.get("/api/courses", async (req, res) => {
 });
 
 // =======================
-// PORT สำหรับ Render
+// PORT (สำคัญสำหรับ Render)
 // =======================
 const PORT = process.env.PORT || 3000;
 
