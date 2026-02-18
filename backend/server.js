@@ -21,6 +21,36 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
+// =======================
+// Add Course API
+// =======================
+app.post("/api/courses", async (req, res) => {
+  const { course_code, course_name, credits } = req.body;
+
+  // ตรวจสอบข้อมูล
+  if (!course_code || !course_name || !credits) {
+    return res.status(400).json({ message: "กรอกข้อมูลไม่ครบ" });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO courses (course_code, course_name, credits)
+       VALUES ($1, $2, $3)
+       RETURNING *`,
+      [course_code, course_name, credits]
+    );
+
+    res.json({
+      message: "เพิ่มรายวิชาสำเร็จ",
+      course: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error("Add course error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 // =======================
 // PostgreSQL (Supabase)
