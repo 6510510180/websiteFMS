@@ -25,7 +25,14 @@ app.get("/", (req, res) => {
 // Add Course API
 // =======================
 app.post("/api/courses", async (req, res) => {
-  const { course_code, course_name, credits } = req.body;
+  const {
+    name_th,
+    name_en,
+    degree_level,
+    status,
+    total_credits,
+    short_detail
+  } = req.body;
 
   // ตรวจสอบข้อมูล
   if (!course_code || !course_name || !credits) {
