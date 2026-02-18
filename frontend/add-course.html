@@ -275,7 +275,7 @@ const isEdit = !!courseId;
 const msg = document.getElementById("message");
 const form = document.getElementById("courseForm");
 const saveBtn = document.getElementById("saveBtn");
-const saveAndAddBtn = document.getElementById("saveAndAddMajorBtn");
+const saveAndAddBtn = document.getElementById("addMajorBtn");
 
 /* ===============================
 IMAGE ELEMENTS
@@ -433,7 +433,8 @@ form.addEventListener("submit", async (e) => {
     msg.style.color = "green";
     msg.textContent = "บันทึกสำเร็จ";
 
-    const id = isEdit ? courseId : data.courseId;
+    const id = isEdit ? courseId : (data.id || data.courseId);
+
 
     setTimeout(() => {
       if (!isEdit && afterSave === "major") {
