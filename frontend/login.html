@@ -314,61 +314,72 @@
   </div>
 
  <script>
-  const API_BASE = "https://websitefms.onrender.com";
+const API_BASE = "https://websitefms.onrender.com";
 
-  const passwordInput = document.getElementById("password");
-  const togglePassword = document.getElementById("togglePassword");
+const passwordInput = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
+const loginForm = document.getElementById("loginForm");
+const messageEl = document.getElementById("message");
 
-  togglePassword.addEventListener("click", () => {
-    const type =
-      passwordInput.getAttribute("type") === "password"
-        ? "text"
-        : "password";
-    passwordInput.setAttribute("type", type);
-    togglePassword.textContent = type === "password" ? "Show" : "Hide";
-  });
+// toggle password
+togglePassword.addEventListener("click", () => {
+  const type =
+    passwordInput.getAttribute("type") === "password"
+      ? "text"
+      : "password";
+  passwordInput.setAttribute("type", type);
+  togglePassword.textContent = type === "password" ? "Show" : "Hide";
+});
 
-  const loginForm = document.getElementById("loginForm");
-  const messageEl = document.getElementById("message");
+// submit login
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    messageEl.textContent = "";
-    messageEl.style.color = "red";
+  messageEl.textContent = "";
+  messageEl.style.color = "red";
 
-    const email = document.getElementById("email").value.trim();
-    const password = passwordInput.value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = passwordInput.value.trim();
 
-    try {
-      const res = await fetch(`${API_BASE}/api/login`, {   // ✅ 
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  if (!email || !password) {
+    messageEl.textContent = "กรุณากรอกอีเมลและรหัสผ่าน";
+    return;
+  }
 
-      const data = await res.json();
+  try {
+    const res = await fetch(`${API_BASE}/api/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    });
 
-      if (!res.ok) {
-        messageEl.textContent = data.message || "เข้าสู่ระบบไม่สำเร็จ";
-        return;
-      }
+    const data = await res.json();
 
-      // success
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      messageEl.style.color = "green";
-      messageEl.textContent = "เข้าสู่ระบบสำเร็จ";
-
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 800);
-
-    } catch (err) {
-      console.error(err);
-      messageEl.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้";
+    if (!res.ok) {
+      messageEl.textContent = data.message || "เข้าสู่ระบบไม่สำเร็จ";
+      return;
     }
-  });
+
+    // บันทึก user
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    messageEl.style.color = "green";
+    messageEl.textContent = "เข้าสู่ระบบสำเร็จ";
+
+    // ไป dashboard (ต้องใช้ domain เดียวกัน)
+    setTimeout(() => {
+      window.location.href = "https://websitefms.onrender.com/dashboard.html";
+    }, 800);
+
+  } catch (err) {
+    console.error(err);
+    messageEl.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้";
+  }
+});
 </script>
+
 
 </body>
 </html>

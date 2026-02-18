@@ -356,42 +356,43 @@
     const API_BASE = "https://websitefms.onrender.com";
 
 
-    // ตรวจสอบ token
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("กรุณาเข้าสู่ระบบก่อน");
-      window.location.href = "login.html";
-    }
+    // ตรวจสอบ user
+    const user = localStorage.getItem("user");
+if (!user) {
+  alert("กรุณาเข้าสู่ระบบก่อน");
+  window.location.href = "https://websitefms.onrender.com/login.html";
+}
+
 
     // Logout
     document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("token");
-      window.location.href = "login.html";
+      localStorage.removeItem("user");
+      window.location.href = "https://websitefms.onrender.com/login.html";
     });
 
     // ไปหน้าเพิ่มหลักสูตร
     document.getElementById("addCourseBtn").addEventListener("click", () => {
-      window.location.href = "add-course.html";
+      window.location.href = "https://websitefms.onrender.com/add-course.html";
     });
 
     // ===== Menu Navigation =====
     document.getElementById("menuDashboard").onclick = () => {
-      window.location.href = "dashboard.html";
+      window.location.href = "https://websitefms.onrender.com/dashboard.html";
     };
     document.getElementById("menuGeneral").onclick = () => {
-      window.location.href = "general-info.html";
+      window.location.href = "https://websitefms.onrender.com/general-info.html";
     };
     document.getElementById("menuStudent").onclick = () => {
-      window.location.href = "student-info.html";
+      window.location.href = "https://websitefms.onrender.com/student-info.html";
     };
     document.getElementById("menuPlan").onclick = () => {
-      window.location.href = "study-plan.html";
+      window.location.href = "https://websitefms.onrender.com/study-plan.html";
     };
     document.getElementById("menuCourse").onclick = () => {
-      window.location.href = "course-list.html"; // หรือ course-info.html ถ้ามีหน้าเดียว
+      window.location.href = "https://websitefms.onrender.com/course-list.html"; // หรือ course-info.html ถ้ามีหน้าเดียว
     };
     document.getElementById("menuQA").onclick = () => {
-      window.location.href = "qa-info.html";
+      window.location.href = "https://websitefms.onrender.com/qa-info.html";
     };
 
     // โหลดข้อมูลหลักสูตรมาใส่ Dashboard
