@@ -4,6 +4,9 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const { Pool } = require("pg");
+const multer = require("multer");
+const fs = require("fs");
+
 
 const app = express();
 
@@ -21,6 +24,30 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
+// =======================
+// UPLOAD CONFIG
+// =======================
+const uploadDir = path.join(__dirname, "uploads");
+
+// สร้างโฟลเดอร์ถ้ายังไม่มี
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+app.use("/uploads", express.static(uploadDir));
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({ storage });
+
 
 // =======================
 // PostgreSQL (Supabase)
@@ -96,23 +123,49 @@ app.post("/api/login", async (req, res) => {
 
 // เพิ่มรายวิชา
 app.post("/api/courses", async (req, res) => {
-  const { course_code, course_name, credits } = req.body;
+  const {
+    name_th,
+    name_en,
+    degree_level,
+    status,
+    program_type,
+    study_system,
+    award_title,
+    total_credits,
+    short_detail,
+    hero_image,
+    info_image
+  } = req.body;
 
-  if (!course_code || !course_name || !credits) {
+  if (!name_th) {
     return res.status(400).json({ message: "กรอกข้อมูลไม่ครบ" });
   }
 
   try {
     const result = await pool.query(
-      `INSERT INTO courses (course_code, course_name, credits)
-       VALUES ($1, $2, $3)
-       RETURNING *`,
-      [course_code, course_name, credits]
+      `INSERT INTO courses
+      (name_th, name_en, degree_level, status, program_type, study_system,
+       award_title, total_credits, short_detail, hero_image, info_image)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+      RETURNING id`,
+      [
+        name_th,
+        name_en,
+        degree_level,
+        status,
+        program_type,
+        study_system,
+        award_title,
+        total_credits,
+        short_detail,
+        hero_image,
+        info_image
+      ]
     );
 
     res.json({
-      message: "เพิ่มรายวิชาสำเร็จ",
-      course: result.rows[0]
+      message: "เพิ่มหลักสูตรสำเร็จ",
+      id: result.rows[0].id
     });
 
   } catch (err) {
@@ -120,6 +173,20 @@ app.post("/api/courses", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// =======================
+// UPLOAD API
+// =======================
+app.post("/api/upload", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  res.json({
+    url: "/uploads/" + req.file.filename
+  });
+});
+
 
 // ดูรายการรายวิชา
 app.get("/api/courses", async (req, res) => {
