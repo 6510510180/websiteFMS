@@ -354,14 +354,19 @@
 
   <script>
     const API_BASE = "https://websitefms.onrender.com";
-
+  
 
     // ตรวจสอบ user
-    const user = localStorage.getItem("user");
-if (!user) {
+    const userData = localStorage.getItem("user");
+
+if (!userData) {
   alert("กรุณาเข้าสู่ระบบก่อน");
   window.location.href = "https://websitefms.onrender.com/login.html";
 }
+
+const user = JSON.parse(userData);
+const token = user.token;
+
 
 
     // Logout
@@ -398,11 +403,16 @@ if (!user) {
     // โหลดข้อมูลหลักสูตรมาใส่ Dashboard
     async function loadCourses() {
       try {
-        const res = await fetch(`${API_BASE}/api/courses`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(`${API_BASE}/api/courses?time=${Date.now()}`, {
+  headers: { Authorization: `Bearer ${token}` },});
+
 
         const courses = await res.json();
+
+        courses.sort((a, b) => {
+      return new Date(b.created_at) - new Date(a.created_at);
+      });
+
 
         const table = document.getElementById("courseTable");
         const total = document.getElementById("totalCourses");
