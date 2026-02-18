@@ -21,43 +21,6 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
-// =======================
-// Add Course API
-// =======================
-app.post("/api/courses", async (req, res) => {
-  const {
-    name_th,
-    name_en,
-    degree_level,
-    status,
-    total_credits,
-    short_detail
-  } = req.body;
-
-  // ตรวจสอบข้อมูล
-  if (!course_code || !course_name || !credits) {
-    return res.status(400).json({ message: "กรอกข้อมูลไม่ครบ" });
-  }
-
-  try {
-    const result = await pool.query(
-      `INSERT INTO courses (course_code, course_name, credits)
-       VALUES ($1, $2, $3)
-       RETURNING *`,
-      [course_code, course_name, credits]
-    );
-
-    res.json({
-      message: "เพิ่มรายวิชาสำเร็จ",
-      course: result.rows[0]
-    });
-
-  } catch (err) {
-    console.error("Add course error:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
 
 // =======================
 // PostgreSQL (Supabase)
@@ -82,17 +45,15 @@ pool.connect()
   });
 
 // =======================
-// API
+// TEST API
 // =======================
-
-// Test API
 app.get("/api/test", (req, res) => {
   res.json({ message: "API working" });
 });
 
 
 // =======================
-// LOGIN API (แก้แล้ว)
+// LOGIN API
 // =======================
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
@@ -109,7 +70,6 @@ app.post("/api/login", async (req, res) => {
 
     const user = result.rows[0];
 
-    // ตารางใช้ password_hash
     if (user.password_hash !== password) {
       return res.status(401).json({ message: "รหัสผ่านไม่ถูกต้อง" });
     }
@@ -131,8 +91,37 @@ app.post("/api/login", async (req, res) => {
 
 
 // =======================
-// Courses API (แก้ column)
+// COURSES API
 // =======================
+
+// เพิ่มรายวิชา
+app.post("/api/courses", async (req, res) => {
+  const { course_code, course_name, credits } = req.body;
+
+  if (!course_code || !course_name || !credits) {
+    return res.status(400).json({ message: "กรอกข้อมูลไม่ครบ" });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO courses (course_code, course_name, credits)
+       VALUES ($1, $2, $3)
+       RETURNING *`,
+      [course_code, course_name, credits]
+    );
+
+    res.json({
+      message: "เพิ่มรายวิชาสำเร็จ",
+      course: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error("Add course error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ดูรายการรายวิชา
 app.get("/api/courses", async (req, res) => {
   try {
     const result = await pool.query(
@@ -141,6 +130,134 @@ app.get("/api/courses", async (req, res) => {
     res.json(result.rows);
   } catch (err) {
     console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// =======================
+// MAJORS API
+// =======================
+
+// เพิ่มสาขา (ปุ่ม Finish)
+app.post("/api/majors", async (req, res) => {
+  const {
+    course_id,
+    name_th,
+    name_en,
+    intro,
+    image_url,
+    career_path,
+    plan_1,
+    plan_2,
+    plan_3,
+    plan_4
+  } = req.body;
+
+  if (!course_id || !name_th) {
+    return res.status(400).json({ message: "ข้อมูลไม่ครบ" });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO majors
+      (course_id, name_th, name_en, intro, image_url, career_path, plan_1, plan_2, plan_3, plan_4)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+      RETURNING id`,
+      [
+        course_id,
+        name_th,
+        name_en,
+        intro,
+        image_url,
+        career_path,
+        plan_1,
+        plan_2,
+        plan_3,
+        plan_4
+      ]
+    );
+
+    res.json({
+      message: "เพิ่มสาขาสำเร็จ",
+      majorId: result.rows[0].id
+    });
+
+  } catch (err) {
+    console.error("Add major error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// แก้ไขสาขา
+app.put("/api/majors/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const {
+    name_th,
+    name_en,
+    intro,
+    image_url,
+    career_path,
+    plan_1,
+    plan_2,
+    plan_3,
+    plan_4
+  } = req.body;
+
+  try {
+    await pool.query(
+      `UPDATE majors SET
+        name_th=$1,
+        name_en=$2,
+        intro=$3,
+        image_url=$4,
+        career_path=$5,
+        plan_1=$6,
+        plan_2=$7,
+        plan_3=$8,
+        plan_4=$9
+      WHERE id=$10`,
+      [
+        name_th,
+        name_en,
+        intro,
+        image_url,
+        career_path,
+        plan_1,
+        plan_2,
+        plan_3,
+        plan_4,
+        id
+      ]
+    );
+
+    res.json({ message: "อัปเดตสาขาสำเร็จ" });
+
+  } catch (err) {
+    console.error("Update major error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// ดึงข้อมูลสาขา
+app.get("/api/majors/:id", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM majors WHERE id=$1",
+      [req.params.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    }
+
+    res.json(result.rows[0]);
+
+  } catch (err) {
+    console.error("Get major error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
