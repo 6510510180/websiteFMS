@@ -372,6 +372,77 @@ app.put("/api/majors/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+// ======================
+// UPDATE COURSE
+// ======================
+app.put("/api/courses/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const {
+    name_th,
+    name_en,
+    degree_level,
+    status,
+    program_type,
+    study_system,
+    award_title,
+    total_credits,
+    short_detail,
+    hero_image,
+    info_image
+  } = req.body;
+
+  if (!name_th) {
+    return res.status(400).json({ message: "กรอกข้อมูลไม่ครบ" });
+  }
+
+  try {
+    const result = await pool.query(
+      `UPDATE courses SET
+        name_th=$1,
+        name_en=$2,
+        degree_level=$3,
+        status=$4,
+        program_type=$5,
+        study_system=$6,
+        award_title=$7,
+        total_credits=$8,
+        short_detail=$9,
+        hero_image=$10,
+        info_image=$11
+      WHERE id=$12
+      RETURNING id`,
+      [
+        name_th,
+        name_en,
+        degree_level,
+        status,
+        program_type,
+        study_system,
+        award_title,
+        total_credits,
+        short_detail,
+        hero_image,
+        info_image,
+        id
+      ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "ไม่พบหลักสูตร" });
+    }
+
+    res.json({
+      message: "อัปเดตหลักสูตรสำเร็จ",
+      id: result.rows[0].id
+    });
+
+  } catch (err) {
+    console.error("Update course error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 // ดึงข้อมูลสาขา
