@@ -332,10 +332,11 @@
   </div>
 
   <script>
-  const API_BASE = "http://localhost:3000/api";
+  const BASE_URL = "https://websitefms.onrender.com";
+const API = BASE_URL + "/api";
 
   // ตรวจ token
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("user");
   if (!token) {
     alert("กรุณาเข้าสู่ระบบก่อน");
     window.location.href = "login.html";
@@ -343,7 +344,7 @@
 
   // logout
   document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     window.location.href = "login.html";
   });
 
@@ -363,15 +364,15 @@
 
   async function loadMajor(id) {
     try {
-      const res = await fetch(`${API_BASE}/majors/${id}`, {
+      const res = await fetch(`${API}/majors/${id}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
       });
 
       if (res.status === 401) {
-        alert("กรุณาเข้าสู่ระบบใหม่ (token หมดอายุ)");
-        localStorage.removeItem("token");
+        alert("กรุณาเข้าสู่ระบบใหม่");
+        localStorage.removeItem("user");
         window.location.href = "login.html";
         return;
       }
@@ -424,8 +425,8 @@
 
     try {
       const url = majorId
-        ? `${API_BASE}/majors/${majorId}`
-        : `${API_BASE}/majors`;
+        ? `${API}/majors/${majorId}`
+        : `${API}/majors`;
 
       const method = majorId ? "PUT" : "POST";
 
@@ -440,8 +441,8 @@
 
       // token หมดอายุ
       if (res.status === 401) {
-        alert("กรุณาเข้าสู่ระบบใหม่ (token หมดอายุ)");
-        localStorage.removeItem("token");
+        alert("กรุณาเข้าสู่ระบบใหม่");
+        localStorage.removeItem("user");
         window.location.href = "login.html";
         return;
       }
