@@ -275,11 +275,16 @@
 
 
     // ตรวจ token
-    const token = localStorage.getItem("user");
-    if (!token) {
-      alert("กรุณาเข้าสู่ระบบก่อน");
-      window.location.href = "login.html";
-    }
+    const userData = localStorage.getItem("user");
+
+if (!userData) {
+  alert("กรุณาเข้าสู่ระบบก่อน");
+  window.location.href = "login.html";
+}
+
+const user = JSON.parse(userData);
+const token = user.token;
+
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.removeItem("user");
@@ -313,28 +318,35 @@
       });
     }
     if (deleteBtn) {
-      deleteBtn.addEventListener("click", async () => {
-        if (!confirm("ต้องการลบหลักสูตรนี้พร้อมสาขาวิชาทั้งหมดใช่หรือไม่?")) return;
-        try {
-          const res = await fetch(`${API_BASE}/courses/${courseId}`, {
-            method: "DELETE",
-            headers: {
-              "Authorization": `Bearer ${token}`
-            }
-          });
-          const data = await res.json();
-          if (!res.ok) {
-            alert(data.message || "ลบหลักสูตรไม่สำเร็จ");
-            return;
-          }
-          alert("ลบหลักสูตรสำเร็จ");
-          window.location.href = "dashboard.html";
-        } catch (err) {
-          console.error(err);
-          alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (ลบหลักสูตร)");
+  deleteBtn.addEventListener("click", async () => {
+    if (!confirm("ต้องการลบหลักสูตรนี้พร้อมสาขาวิชาทั้งหมดใช่หรือไม่?")) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/courses/${courseId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         }
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "ลบหลักสูตรไม่สำเร็จ");
+        return;
+      }
+
+      alert("ลบหลักสูตรสำเร็จ");
+      window.location.href = "dashboard.html";
+
+    } catch (err) {
+      console.error(err);
+      alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (ลบหลักสูตร)");
     }
+  });
+}
+
 
     // ---------- โหลดข้อมูลหลักสูตร ----------
     async function loadCourse(id) {
