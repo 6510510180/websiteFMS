@@ -378,6 +378,29 @@ async function loadDashboard(){
     document.getElementById("totalCourses").textContent = total;
     document.getElementById("activeCourses").textContent = active;
     document.getElementById("maintenance").textContent = maintenance;
+    document.getElementById("addCourseBtn").addEventListener("click", () => {
+  window.location.href = "add-course.html";
+  // ===== Sidebar Navigation =====
+// ===== Sidebar Navigation =====
+document.getElementById("menuDashboard")?.addEventListener("click", () => {
+  window.location.href = "dashboard.html";
+});
+
+document.getElementById("menuPlan")?.addEventListener("click", () => {
+  window.location.href = "study-plan.html";
+});
+
+document.getElementById("menuCourse")?.addEventListener("click", () => {
+  window.location.href = "course-list.html";
+});
+
+document.getElementById("menuQA")?.addEventListener("click", () => {
+  window.location.href = "qa.html";
+});
+
+
+});
+
 
     /* ===============================
        2️⃣ แสดง 3 หลักสูตรล่าสุด
