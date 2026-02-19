@@ -464,20 +464,6 @@ app.get("/api/majors/:id", async (req, res) => {
   }
 });
 
-// ดึงหลักสูตรทั้งหมด
-app.get("/api/courses", async (req, res) => {
-  try {
-    const result = await pool.query(
-      "SELECT * FROM courses ORDER BY id DESC"
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
 // =======================
 // PORT (สำคัญสำหรับ Render)
 // =======================
@@ -720,7 +706,7 @@ app.delete("/api/semesters/:semesterId", async (req, res) => {
  * SUBJECTS (คลังวิชา)
  * POST /api/subjects  body: { code, name_th, name_en, default_credits, default_hour_structure }
  */
-aapp.post("/api/subjects", async (req, res) => {
+app.post("/api/subjects", async (req, res) => {
   const {
     code, name_th, name_en,
     default_credits, default_hour_structure,
@@ -771,62 +757,6 @@ app.get("/api/subjects", async (req, res) => {
     res.json(r.rows);
   } catch (err) {
     console.error("Search subject error:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-/**
- * เพิ่มรายวิชาเข้า "ภาคเรียน"
- * POST /api/semesters/:semesterId/subjects
- * body: { subject_id OR (code,name_th,...), category, credits, hour_structure, sort_order }
- * - ถ้าไม่มี subject_id แต่ให้ code,name_th,... จะสร้าง subject ใหม่แล้วผูก
- */
-app.post("/api/semesters/:semesterId/subjects", async (req, res) => {
-  const { semesterId } = req.params;
-  let { subject_id, code, name_th, name_en, default_credits, default_hour_structure,
-        category = "Core", credits, hour_structure, sort_order = 1 } = req.body;
-
-  try {
-    await pool.query("BEGIN");
-
-    if (!subject_id) {
-      if (!code || !name_th || !default_credits) {
-        await pool.query("ROLLBACK");
-        return res.status(400).json({ message: "ข้อมูลวิชาไม่ครบ" });
-      }
-      const created = await pool.query(
-        `INSERT INTO subjects(code, name_th, name_en, default_credits, default_hour_structure)
-         VALUES ($1,$2,$3,$4,$5) RETURNING id`,
-        [code, name_th, name_en || null, default_credits, default_hour_structure || null]
-      );
-      subject_id = created.rows[0].id;
-    }
-
-    const r = await pool.query(
-      `INSERT INTO semester_subjects(semester_id, subject_id, category, credits, hour_structure, sort_order)
-       VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
-      [semesterId, subject_id, category, credits || null, hour_structure || null, sort_order]
-    );
-
-    // อัปเดตรวมหน่วยกิตในภาคเรียน
-    await pool.query(
-      `UPDATE semesters s
-       SET total_credits = COALESCE((
-         SELECT SUM(COALESCE(ss.credits, sb.default_credits))
-         FROM semester_subjects ss
-         JOIN subjects sb ON sb.id = ss.subject_id
-         WHERE ss.semester_id = s.id
-       ),0)
-       WHERE s.id=$1`,
-      [semesterId]
-    );
-
-    await pool.query("COMMIT");
-    res.json({ message: "เพิ่มรายวิชาสำเร็จ", item: r.rows[0] });
-
-  } catch (err) {
-    await pool.query("ROLLBACK");
-    console.error("Add subject to semester error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -961,27 +891,6 @@ app.post("/api/majors/:majorId/study-plans", async (req, res) => {
 // GET รายละเอียดแผน (รวม semester + subjects)
 // GET /api/study-plans/:planId
 // (ใช้ของเดิมได้เลย)
-
-
-// เพิ่ม "เทอม" (ภาคเรียน) ในแผน
-// POST /api/study-plans/:planId/semesters
-// body: { term_no, title, sort_order }
-app.post("/api/study-plans/:planId/semesters", async (req, res) => {
-  const { planId } = req.params;
-  const { term_no, title, sort_order = 1 } = req.body;
-  if (!term_no) return res.status(400).json({ message: "ข้อมูลไม่ครบ" });
-
-  try {
-    const r = await pool.query(
-      `INSERT INTO semesters(study_plan_id, term_no, title, sort_order)
-       VALUES ($1,$2,$3,$4) RETURNING *`,
-      [planId, term_no, title || null, sort_order]
-    );
-    res.json({ message: "เพิ่มภาคเรียนสำเร็จ", semester: r.rows[0] });
-  } catch (e) { console.error(e); res.status(500).json({ message: "Server error" }); }
-});
-// ค้นหารายวิชาจากคลัง (autocomplete)
-// GET /api/subjects?query=xxx   (ของเดิมนำมาใช้ได้)
 
 
 // เพิ่มรายวิชาเข้าเทอม (ภาคเรียน)
