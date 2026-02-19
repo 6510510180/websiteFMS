@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>จัดการหลักสูตร</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI",sans-serif;
+  background:#f5f6fa;
+}
+
+/* Container */
+.container{
+  padding:30px;
+  max-width:1100px;
+  margin:auto;
+}
+
+/* Header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.btn-primary{
+  background:#7b3fe4;
+  color:#fff;
+  border:none;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* Search */
+.search-bar{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.search-bar input,
+.search-bar select{
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+
+/* Table */
+.table-card{
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.05);
+  overflow:hidden;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:14px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+}
+
+th{
+  background:#faf7ff;
+  color:#666;
+}
+
+/* Badge */
+.badge{
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:12px;
+}
+
+.active{ background:#e6ffe8; color:#2e9a52; }
+.draft{ background:#f5e7ff; color:#7b3fe4; }
+.maintenance{ background:#ffe6e6; color:#c0392b; }
+
+/* Action buttons */
+.action-btn{
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:16px;
+  margin-right:6px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h2>จัดการหลักสูตร (Course Management)</h2>
+    <button class="btn-primary" onclick="goAdd()">+ เพิ่มหลักสูตรใหม่</button>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="ค้นหาชื่อหลักสูตร">
+    <select id="statusFilter">
+      <option value="">สถานะทั้งหมด</option>
+      <option value="active">Active</option>
+      <option value="draft">Draft</option>
+      <option value="maintenance">Maintenance</option>
+    </select>
+  </div>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>ชื่อหลักสูตร</th>
+          <th>ระดับการศึกษา</th>
+          <th>สถานะ</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody id="courseTable">
+        <tr><td colspan="4">กำลังโหลด...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+const BASE_URL = "https://websitefms.onrender.com";
+const API = BASE_URL + "/api";
+
+// รับ courseId จาก URL
+const params = new URLSearchParams(window.location.search);
+const courseId = params.get("courseId");
+
+if(!courseId){
+  alert("ไม่พบรหัสหลักสูตร");
+  window.location.href = "course-management.html";
+}
+
+// โหลดข้อมูลหลักสูตร
+async function loadCourse(){
+  try{
+    const res = await fetch(`${API}/courses/${courseId}`);
+    const data = await res.json();
+
+    if(!res.ok){
+      alert(data.message || "โหลดข้อมูลไม่สำเร็จ");
+      return;
+    }
+
+    // แสดงข้อมูล
+    document.getElementById("name_th").textContent = data.name_th;
+    document.getElementById("degree_level").textContent = data.degree_level;
+    document.getElementById("status").textContent = data.status;
+
+  }catch(err){
+    alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้");
+  }
+}
+
+loadCourse();
+</script>
