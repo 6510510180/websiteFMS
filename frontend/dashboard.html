@@ -359,33 +359,69 @@
 const BASE_URL = "https://websitefms.onrender.com";
 const API = BASE_URL + "/api";
 
-async function loadCourses(){
+async function loadDashboard(){
   try{
     const res = await fetch(`${API}/courses`);
     const courses = await res.json();
 
-    const table = document.getElementById("courseTable");
-
-    if(!res.ok || courses.length === 0){
-      table.innerHTML = `<tr><td colspan="4">ไม่พบข้อมูล</td></tr>`;
-      return;
+    if(!res.ok){
+      throw new Error("โหลดข้อมูลไม่ได้");
     }
 
-    table.innerHTML = courses.map(c => `
-      <tr>
-        <td>${c.name_th}</td>
-        <td>${c.degree_level}</td>
-        <td><span class="badge ${c.status}">${c.status}</span></td>
-        <td>
-          <button class="action-btn"
-            onclick="viewCourse(${c.id})">👁️</button>
-        </td>
-      </tr>
-    `).join("");
+    /* ===============================
+       1️⃣ คำนวณตัวเลขการ์ดด้านบน
+    =============================== */
+    const total = courses.length;
+    const active = courses.filter(c => c.status === "active").length;
+    const maintenance = courses.filter(c => c.status === "maintenance").length;
+
+    document.getElementById("totalCourses").textContent = total;
+    document.getElementById("activeCourses").textContent = active;
+    document.getElementById("maintenance").textContent = maintenance;
+
+    /* ===============================
+       2️⃣ แสดง 3 หลักสูตรล่าสุด
+    =============================== */
+    const latestCourses = courses
+      .sort((a,b)=> b.id - a.id)
+      .slice(0,3);
+
+    const table = document.getElementById("courseTable");
+
+    table.innerHTML = latestCourses.map(c => {
+
+      const statusClass =
+        c.status === "active" ? "status-active" :
+        c.status === "draft" ? "status-draft" :
+        "status-draft";
+
+      const today = new Date().toLocaleDateString("th-TH");
+
+      return `
+        <tr>
+          <td class="course-link"
+              onclick="viewCourse(${c.id})">
+              ${c.name_th}
+          </td>
+          <td>${c.degree_level || "-"}</td>
+          <td>${today}</td>
+          <td><span class="${statusClass}">
+              ${c.status || "-"}
+          </span></td>
+          <td>
+            <button class="action-btn"
+              onclick="viewCourse(${c.id})">
+              View
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join("");
 
   }catch(err){
+    console.error(err);
     document.getElementById("courseTable").innerHTML =
-      `<tr><td colspan="4">โหลดข้อมูลไม่ได้</td></tr>`;
+      `<tr><td colspan="5">โหลดข้อมูลไม่ได้</td></tr>`;
   }
 }
 
@@ -393,5 +429,5 @@ function viewCourse(id){
   window.location.href = `general-info.html?courseId=${id}`;
 }
 
-loadCourses();
+loadDashboard();
 </script>

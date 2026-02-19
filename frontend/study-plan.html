@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <title>แผนการศึกษา | Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --primary:#6C4DF6; --bg:#f7f6fb; --text:#222; --muted:#7a7a7a; --card:#fff; --border:#e8e6f1; }
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,"Noto Sans Thai",sans-serif;color:var(--text);background:var(--bg)}
+    .wrap{max-width:1200px;margin:0 auto;padding:20px}
+    h1{margin:0 0 12px}
+    .panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+    .grid{display:grid;gap:12px}
+    .grid.cols-4{grid-template-columns:repeat(4,1fr)} .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    label{font-size:13px;color:#555;display:block;margin-bottom:6px}
+    input,select,textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff}
+    textarea{min-height:90px;resize:vertical}
+    .btn{border:1px solid var(--border);border-radius:10px;padding:10px 14px;background:#fff;cursor:pointer}
+    .btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+    .row{display:flex;gap:10px;align-items:center}
+    .muted{color:var(--muted)}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .sem{border:1px dashed var(--border);border-radius:10px;padding:10px}
+    .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .hidden{display:none}
+    .success{color:#0a7f43} .error{color:#b00020}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>แผนการศึกษา (Admin)</h1>
+
+    <!-- เลือกหลักสูตร/สาขา/ปี/เทอม -->
+    <section class="panel">
+      <div class="grid cols-4">
+        <div>
+          <label>เลือกหลักสูตร</label>
+          <select id="courseSelect"></select>
+        </div>
+        <div>
+          <label>เลือกสาขาวิชา</label>
+          <select id="majorSelect"></select>
+        </div>
+        <div>
+          <label>ปีการศึกษา</label>
+          <input id="academicYear" type="number" placeholder="เช่น 2026" />
+        </div>
+        <div>
+          <label>ปีที่</label>
+          <select id="yearNo">
+            <option value="1">ปี 1</option>
+            <option value="2">ปี 2</option>
+            <option value="3">ปี 3</option>
+            <option value="4">ปี 4</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn primary" id="btnOpenPlan">เปิด/สร้างแผน</button>
+        <span class="muted" id="planInfo"></span>
+      </div>
+    </section>
+
+    <!-- เลือกเทอม + รายวิชาในเทอม -->
+    <section class="panel hidden" id="termPanel">
+      <div class="header">
+        <div class="row">
+          <label>เทอม</label>
+          <select id="termNo">
+            <option value="1">ภาคเรียนที่ 1</option>
+            <option value="2">ภาคเรียนที่ 2</option>
+            <option value="3">ภาคฤดูร้อน</option>
+          </select>
+          <button class="btn" id="btnEnsureSemester">เปิด/สร้างเทอมนี้</button>
+        </div>
+        <div class="muted" id="semesterInfo"></div>
+      </div>
+
+      <!-- ฟอร์มเพิ่มรายวิชา -->
+      <h3>เพิ่มรายวิชาในเทอม</h3>
+      <div class="grid cols-3">
+        <div>
+          <label>รหัสวิชา</label>
+          <input id="subCode" placeholder="เช่น 460-101" />
+        </div>
+        <div>
+          <label>ชื่อวิชา (ไทย)</label>
+          <input id="subNameTh" placeholder="ชื่อวิชาภาษาไทย" />
+        </div>
+        <div>
+          <label>ชื่อวิชา (อังกฤษ)</label>
+          <input id="subNameEn" placeholder="ชื่อวิชาภาษาอังกฤษ" />
+        </div>
+        <div>
+          <label>หน่วยกิต</label>
+          <input id="subCredits" type="number" placeholder="เช่น 3" />
+        </div>
+        <div>
+          <label>โครงชั่วโมง (เช่น 3(3-0-6))</label>
+          <input id="subHours" />
+        </div>
+        <div>
+          <label>หมวด</label>
+          <select id="subCategory">
+            <option>Core</option>
+            <option>Elective</option>
+            <option>GE</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:10px">
+        <div>
+          <label>คำอธิบายรายวิชา (ไทย)</label>
+          <textarea id="subDescTh" placeholder="คำอธิบายวิชา (ไทย)"></textarea>
+        </div>
+        <div>
+          <label>คำอธิบายรายวิชา (อังกฤษ)</label>
+          <textarea id="subDescEn" placeholder="Course Description (EN)"></textarea>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:10px">
+        <div>
+          <label>สิ่งที่ผู้เรียนจะได้รับ (ไทย)</label>
+          <textarea id="subOutTh" placeholder="ผลลัพธ์การเรียนรู้ (ไทย)"></textarea>
+        </div>
+        <div>
+          <label>สิ่งที่ผู้เรียนจะได้รับ (อังกฤษ)</label>
+          <textarea id="subOutEn" placeholder="Learning Outcomes (EN)"></textarea>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px">
+        <button class="btn primary" id="btnAddSubject">เพิ่มรายวิชา</button>
+        <span id="saveMsg" class="muted"></span>
+      </div>
+
+      <hr style="margin:16px 0"/>
+
+      <!-- รายการวิชาในเทอม -->
+      <h3>รายวิชาในเทอมนี้</h3>
+      <div id="subjectList" class="list"></div>
+    </section>
+  </div>
+
+  <script>
+    "use strict";
+
+    // ========= API =========
+    const api = {
+      courses: "/api/courses",
+      majorsByCourse: (courseId) => `/api/courses/${courseId}/majors`,
+      studyPlansMajor: (majorId) => `/api/majors/${majorId}/study-plans`,
+      createPlanMajor: (majorId) => `/api/majors/${majorId}/study-plans`,
+      plan: (planId) => `/api/study-plans/${planId}`,
+      addSemester: (planId) => `/api/study-plans/${planId}/semesters`,
+      addSubject: (semesterId) => `/api/semesters/${semesterId}/subjects`,
+      searchSubjects: (q) => `/api/subjects?query=${encodeURIComponent(q)}`
+    };
+
+    // ========= Elements =========
+    const els = {
+      courseSelect: document.getElementById("courseSelect"),
+      majorSelect: document.getElementById("majorSelect"),
+      academicYear: document.getElementById("academicYear"),
+      yearNo: document.getElementById("yearNo"),
+      btnOpenPlan: document.getElementById("btnOpenPlan"),
+      planInfo: document.getElementById("planInfo"),
+
+      termPanel: document.getElementById("termPanel"),
+      termNo: document.getElementById("termNo"),
+      btnEnsureSemester: document.getElementById("btnEnsureSemester"),
+      semesterInfo: document.getElementById("semesterInfo"),
+
+      subCode: document.getElementById("subCode"),
+      subNameTh: document.getElementById("subNameTh"),
+      subNameEn: document.getElementById("subNameEn"),
+      subCredits: document.getElementById("subCredits"),
+      subHours: document.getElementById("subHours"),
+      subCategory: document.getElementById("subCategory"),
+      subDescTh: document.getElementById("subDescTh"),
+      subDescEn: document.getElementById("subDescEn"),
+      subOutTh: document.getElementById("subOutTh"),
+      subOutEn: document.getElementById("subOutEn"),
+
+      btnAddSubject: document.getElementById("btnAddSubject"),
+      saveMsg: document.getElementById("saveMsg"),
+      subjectList: document.getElementById("subjectList")
+    };
+
+    // ========= State =========
+    const state = {
+      planId: null,
+      semesterId: null, // เทอมที่เปิดอยู่
+    };
+
+    // ========= Helpers =========
+    async function getJSON(url, opts = {}) {
+      const res = await fetch(url, opts);
+      if (!res.ok) {
+        let t = "";
+        try { t = await res.text(); } catch {}
+        throw new Error(t || res.statusText);
+      }
+      return res.json();
+    }
+    function show(el){ el.classList.remove("hidden"); }
+    function hide(el){ el.classList.add("hidden"); }
+    function msg(el, text, type=""){ el.textContent = text; el.className = type || "muted"; setTimeout(()=>{ el.textContent=""; el.className="muted"; }, 2500); }
+
+    // ========= Init =========
+    (async function init(){
+      bind();
+      await loadCourses();  // ดึงหลักสูตรจริง
+      await loadMajors();   // ดึงสาขาจริงตามหลักสูตรที่เลือก
+    })();
+
+    function bind(){
+      els.courseSelect.addEventListener("change", async ()=>{
+        await loadMajors();
+      });
+
+      els.btnOpenPlan.addEventListener("click", openOrCreatePlan);
+      els.btnEnsureSemester.addEventListener("click", ensureSemester);
+      els.btnAddSubject.addEventListener("click", addSubjectToSemester);
+
+      // Autocomplete รหัสวิชา: ถ้าพิมพ์แล้วกดออก ลองค้นหาเพื่อเติมชื่อ/เครดิตให้อัตโนมัติ (ออพชัน)
+      els.subCode.addEventListener("blur", async ()=>{
+        const code = els.subCode.value.trim();
+        if (!code) return;
+        try {
+          const items = await getJSON(api.searchSubjects(code));
+          const found = items.find(it => it.code.toLowerCase() === code.toLowerCase());
+          if (found) {
+            // เติมค่าเดิม
+            els.subNameTh.value = found.name_th || "";
+            els.subNameEn.value = found.name_en || "";
+            els.subCredits.value = found.default_credits ?? "";
+            els.subHours.value = found.default_hour_structure || "";
+            els.subDescTh.value = found.description_th || "";
+            els.subDescEn.value = found.description_en || "";
+            els.subOutTh.value = found.outcomes_th || "";
+            els.subOutEn.value = found.outcomes_en || "";
+            msg(els.saveMsg, "เติมข้อมูลวิชาเดิมให้แล้ว", "success");
+          }
+        } catch(e){}
+      });
+    }
+
+    // ========= Load dropdowns =========
+    async function loadCourses(){
+      const data = await getJSON(api.courses);
+      els.courseSelect.innerHTML = data.map(c => {
+        const label = c.name_th || c.name_en || `Course #${c.id}`;
+        return `<option value="${c.id}">${label}</option>`;
+      }).join("");
+    }
+
+    async function loadMajors(){
+      const courseId = els.courseSelect.value;
+      if (!courseId) { els.majorSelect.innerHTML = ""; return; }
+      const majors = await getJSON(api.majorsByCourse(courseId));
+      els.majorSelect.innerHTML = majors.map(m => `<option value="${m.id}">${m.name_th || m.name_en || ('Major #' + m.id)}</option>`).join("");
+    }
+
+    // ========= Open/Create plan =========
+    async function openOrCreatePlan(){
+      const majorId = Number(els.majorSelect.value);
+      const academic_year = Number(els.academicYear.value);
+      const year_no = Number(els.yearNo.value);
+      if (!majorId || !academic_year || !year_no) return msg(els.planInfo, "กรุณาเลือก/กรอกข้อมูลให้ครบ", "error");
+
+      // หาแผนของสาขานี้ ปีที่นี้
+      const list = await getJSON(`${api.studyPlansMajor(majorId)}?year_no=${year_no}&page=1&pageSize=50`);
+      let found = (list.data || []).find(p => Number(p.academic_year) === academic_year && Number(p.year_no) === year_no);
+
+      if (!found) {
+        const created = await getJSON(api.createPlanMajor(majorId), {
+          method:"POST", headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ academic_year, year_no, status:"active" })
+        });
+        found = created.plan;
+        msg(els.planInfo, "สร้างแผนใหม่สำเร็จ", "success");
+      } else {
+        msg(els.planInfo, "เปิดแผนที่มีอยู่แล้ว", "success");
+      }
+
+      state.planId = found.id;
+      show(els.termPanel);
+      els.semesterInfo.textContent = "ยังไม่ได้เลือกเทอม";
+      state.semesterId = null;
+      // แสดงรายวิชาถ้ากดเปิดเทอมภายหลัง
+    }
+
+    // ========= Ensure semester for selected term =========
+    async function ensureSemester(){
+      if (!state.planId) return msg(els.semesterInfo, "กรุณาเปิด/สร้างแผนก่อน", "error");
+      const term_no = Number(els.termNo.value);
+      // โหลดรายละเอียดแผนเพื่อดูว่ามีเทอมนี้หรือยัง
+      const detail = await getJSON(api.plan(state.planId));
+      let sem = (detail.semesters || []).find(s => Number(s.term_no) === term_no);
+
+      if (!sem) {
+        const title = term_no === 1 ? "Semester 1" : term_no === 2 ? "Semester 2" : "Summer";
+        const created = await getJSON(api.addSemester(state.planId), {
+          method:"POST", headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ term_no, title, sort_order: term_no })
+        });
+        // reload
+        const detail2 = await getJSON(api.plan(state.planId));
+        sem = (detail2.semesters || []).find(s => Number(s.term_no) === term_no);
+        msg(els.semesterInfo, "สร้างเทอมสำเร็จ", "success");
+      } else {
+        msg(els.semesterInfo, "เปิดเทอมที่มีอยู่แล้ว", "success");
+      }
+
+      state.semesterId = sem.id;
+      renderSemesterSubjects(sem);
+    }
+
+    // ========= Render subject list in semester =========
+    function renderSemesterSubjects(semester){
+      els.subjectList.innerHTML = (semester.subjects || []).map(it => {
+        const credits = (it.credits != null) ? it.credits : it.default_credits;
+        const hour = it.hour_structure || it.default_hour_structure || "";
+        return `
+          <div class="sem">
+            <div class="row" style="justify-content:space-between">
+              <div><b>${it.code}</b> - ${it.name_th} <small>(${it.category})</small></div>
+              <div>${credits} หน่วยกิต</div>
+            </div>
+            <div class="muted">${hour}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // ========= Add subject to semester =========
+    async function addSubjectToSemester(){
+      if (!state.planId)  return msg(els.saveMsg, "กรุณาเปิด/สร้างแผนก่อน", "error");
+      if (!state.semesterId) return msg(els.saveMsg, "กรุณาเปิด/สร้างเทอมก่อน", "error");
+
+      const code = els.subCode.value.trim();
+      const name_th = els.subNameTh.value.trim();
+      const name_en = els.subNameEn.value.trim() || null;
+      const credits = Number(els.subCredits.value || 0);
+      const hour_structure = els.subHours.value.trim() || null;
+      const category = els.subCategory.value;
+      const description_th = els.subDescTh.value.trim() || null;
+      const description_en = els.subDescEn.value.trim() || null;
+      const outcomes_th = els.subOutTh.value.trim() || null;
+      const outcomes_en = els.subOutEn.value.trim() || null;
+
+      if (!code || !name_th || !credits) {
+        return msg(els.saveMsg, "กรุณากรอก รหัสวิชา / ชื่อไทย / หน่วยกิต", "error");
+      }
+
+      // ลองค้นหา subject เดิมก่อน
+      let subject_id = null;
+      try {
+        const items = await getJSON(api.searchSubjects(code));
+        const found = items.find(it => it.code.toLowerCase() === code.toLowerCase());
+        if (found) subject_id = found.id;
+      } catch(e){}
+
+      const payload = {
+        category,
+        credits,              // ถ้าอยากยึด default_credits เสมอ ให้ตั้งค่านี้เป็น null
+        hour_structure,
+      };
+
+      if (subject_id) {
+        payload.subject_id = subject_id;
+      } else {
+        // สร้างวิชาใหม่พร้อมรายละเอียด
+        payload.code = code;
+        payload.name_th = name_th;
+        payload.name_en = name_en;
+        payload.default_credits = credits;
+        payload.default_hour_structure = hour_structure;
+        payload.description_th = description_th;
+        payload.description_en = description_en;
+        payload.outcomes_th = outcomes_th;
+        payload.outcomes_en = outcomes_en;
+      }
+
+      await getJSON(api.addSubject(state.semesterId), {
+        method:"POST", headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      msg(els.saveMsg, "บันทึกสำเร็จ", "success");
+
+      // Reload semester to show list
+      const detail = await getJSON(api.plan(state.planId));
+      const term_no = Number(els.termNo.value);
+      const sem = (detail.semesters || []).find(s => Number(s.term_no) === term_no);
+      if (sem) renderSemesterSubjects(sem);
+
+      // เคลียร์ฟอร์มบางส่วน
+      // els.subCode.value = ""; // ถ้าอยากให้เคลียร์ช่องรหัสด้วย ให้ uncomment
+      els.subNameTh.value = ""; els.subNameEn.value = "";
+      // els.subCredits.value = ""; // หรือปล่อยเครดิตเดิมให้ใช้ต่อ
+      // els.subHours.value = "";
+      els.subDescTh.value = ""; els.subDescEn.value = "";
+      els.subOutTh.value = ""; els.subOutEn.value = "";
+    }
+  </script>
+</body>
+</html>
