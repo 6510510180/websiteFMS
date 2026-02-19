@@ -5,11 +5,17 @@
   <title>Admin Portal | FMS PSU</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    /* ---------------- Base ---------------- */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    :root {
+      /* ค่าพื้นฐาน: เริ่มจากไม่มีภาพ จนกว่าจะตั้งโดย JS */
+      --brand-image-url: none;
     }
 
     body {
@@ -20,86 +26,107 @@
       background: linear-gradient(135deg, #f7d7ff, #f3b3ff);
     }
 
+    /* ---------------- Layout ---------------- */
     .login-wrapper {
       width: 100%;
       max-width: 1180px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.24);
       backdrop-filter: blur(18px);
       border-radius: 24px;
       padding: 32px;
       display: grid;
-      grid-template-columns: 1.1fr 1fr;
+      grid-template-columns: 1.15fr 1fr; /* ซ้ายกว้างขึ้นเล็กน้อย */
       gap: 32px;
       box-shadow: 0 18px 60px rgba(143, 52, 188, 0.35);
     }
 
-    /* ซ้าย: การ์ด PSU FMS */
+    /* ---------------- Left (brand) ---------------- */
     .brand-card {
+      position: relative;
+      overflow: hidden;
       border-radius: 28px;
-      padding: 32px 28px;
-      background: radial-gradient(circle at top left, #ffb4ff, #b144d6 45%, #7a2ba8 100%);
+      padding: 28px;
       color: #fff;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      position: relative;
-      overflow: hidden;
+      min-height: 520px;
+
+      /* overlay + ภาพพื้นหลังจากตัวแปร (JS จะตั้งค่าให้) */
+      background-image:
+        linear-gradient(to bottom right, rgba(110, 48, 180, 0.35), rgba(86, 27, 150, 0.58)),
+        var(--brand-image-url);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      box-shadow: 0 16px 42px rgba(106, 38, 170, 0.35);
     }
 
-    .brand-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: url("bg-pattern.png"); /* ถ้าไม่มีรูป ลบบรรทัดนี้ได้ */
-      opacity: 0.18;
-      mix-blend-mode: screen;
-      pointer-events: none;
-    }
+    /* ถ้ามีไฟล์ bg-pattern.png จะซ้อนลายบาง ๆ ได้
+       ถ้าไม่มีไฟล์ สามารถลบบล็อกนี้ได้เลย */
+    .brand-card {
+  background-image:
+    linear-gradient(to bottom right, rgba(110,48,180,.35), rgba(86,27,150,.58)),
+    url("./assets/brand/logo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 
     .brand-logo {
       position: relative;
-      margin-bottom: 32px;
+      margin-bottom: 18px;
+      z-index: 1;
     }
 
     .brand-logo h1 {
-      font-size: 52px;
+      font-size: 56px;
       line-height: 1;
       font-weight: 800;
       letter-spacing: 2px;
+      text-shadow: 0 6px 22px rgba(0,0,0,0.28);
     }
 
-    .brand-logo span.dot {
+    .brand-logo .dot {
       display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
+      width: 10px; height: 10px; border-radius: 50%;
       background: #38e3ff;
       margin-left: 6px;
+      box-shadow: 0 0 0 4px rgba(56,227,255,0.22);
     }
 
     .brand-text {
       position: relative;
-      margin-top: 14px;
+      margin-top: 10px;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: .8px;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.28);
+      z-index: 1;
     }
 
     .brand-sub {
       position: relative;
-      margin-top: 24px;
-      max-width: 260px;
+      margin-top: 18px;
+      max-width: 340px;
       font-size: 14px;
-      opacity: 0.9;
+      opacity: .95;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.28);
+      z-index: 1;
     }
 
-    /* ขวา: ฟอร์ม Login */
+
+    /* ---------------- Right (form) ---------------- */
     .form-panel {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding-right: 16px;
+      padding-right: 8px;
       color: #4a2a64;
+      position: relative;
     }
 
     .form-header h2 {
@@ -114,9 +141,7 @@
       margin-bottom: 28px;
     }
 
-    .field-group {
-      margin-bottom: 18px;
-    }
+    .field-group { margin-bottom: 18px; }
 
     .field-label {
       font-size: 13px;
@@ -136,10 +161,11 @@
       padding: 12px 40px 12px 40px;
       border-radius: 999px;
       border: 1px solid #d5c3ec;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       outline: none;
       font-size: 14px;
       transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      box-shadow: 0 6px 16px rgba(93, 43, 156, 0.08);
     }
 
     .field-wrapper input:focus {
@@ -189,9 +215,7 @@
       text-decoration: none;
     }
 
-    .options-row a:hover {
-      text-decoration: underline;
-    }
+    .options-row a:hover { text-decoration: underline; }
 
     .btn-login {
       width: 100%;
@@ -204,7 +228,7 @@
       color: white;
       background: linear-gradient(135deg, #8a3dd1, #5d2b9c);
       cursor: pointer;
-      box-shadow: 0 10px 24px rgba(106, 38, 170, 0.4);
+      box-shadow: 0 12px 26px rgba(106, 38, 170, 0.35);
       transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s;
     }
 
@@ -225,32 +249,27 @@
       min-height: 18px;
     }
 
+    /* ---------------- Responsive ---------------- */
     @media (max-width: 960px) {
       .login-wrapper {
         grid-template-columns: 1fr;
         padding: 24px;
       }
-
-      .brand-card {
-        min-height: 260px;
-      }
-
-      .form-panel {
-        padding-right: 0;
-      }
+      .brand-card { min-height: 360px; }
+      .form-panel { padding-right: 0; margin-top: 12px; }
     }
 
     @media (max-width: 640px) {
-      .login-wrapper {
-        margin: 16px;
-      }
+      .login-wrapper { margin: 16px; }
+      .brand-logo h1 { font-size: 42px; }
     }
   </style>
 </head>
 <body>
   <div class="login-wrapper">
-    <!-- ฝั่งซ้าย: การ์ด PSU FMS -->
+    <!-- ซ้าย: การ์ด PSU FMS -->
     <div class="brand-card">
+      <span class="decor-dot"></span>
       <div class="brand-logo">
         <h1>PSU<span class="dot"></span></h1>
         <div class="brand-text">
@@ -264,7 +283,7 @@
       </div>
     </div>
 
-    <!-- ฝั่งขวา: ฟอร์ม Login -->
+    <!-- ขวา: ฟอร์ม Login -->
     <div class="form-panel">
       <div class="form-header">
         <h2>Admin Portal</h2>
@@ -276,12 +295,7 @@
           <div class="field-label">Email Address</div>
           <div class="field-wrapper">
             <span class="field-icon">📧</span>
-            <input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              required
-            />
+            <input type="email" id="email" placeholder="Enter your email" required />
           </div>
         </div>
 
@@ -289,12 +303,7 @@
           <div class="field-label">Password</div>
           <div class="field-wrapper">
             <span class="field-icon">🔒</span>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              required
-            />
+            <input type="password" id="password" placeholder="Enter your password" required />
             <span class="toggle-password" id="togglePassword">Show</span>
           </div>
         </div>
@@ -313,73 +322,91 @@
     </div>
   </div>
 
- <script>
-const API_BASE = "https://websitefms.onrender.com";
+  <script>
+    /* ---------- CONFIG ---------- */
+    const API_BASE = "https://websitefms.onrender.com";
 
-const passwordInput = document.getElementById("password");
-const togglePassword = document.getElementById("togglePassword");
-const loginForm = document.getElementById("loginForm");
-const messageEl = document.getElementById("message");
+    /* ---------- Password toggle ---------- */
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    const loginForm = document.getElementById("loginForm");
+    const messageEl = document.getElementById("message");
 
-// toggle password
-togglePassword.addEventListener("click", () => {
-  const type =
-    passwordInput.getAttribute("type") === "password"
-      ? "text"
-      : "password";
-  passwordInput.setAttribute("type", type);
-  togglePassword.textContent = type === "password" ? "Show" : "Hide";
-});
-
-// submit login
-loginForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  messageEl.textContent = "";
-  messageEl.style.color = "red";
-
-  const email = document.getElementById("email").value.trim();
-  const password = passwordInput.value.trim();
-
-  if (!email || !password) {
-    messageEl.textContent = "กรุณากรอกอีเมลและรหัสผ่าน";
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API_BASE}/api/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, password })
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+      togglePassword.textContent = type === "password" ? "Show" : "Hide";
     });
 
-    const data = await res.json();
+    /* ---------- Login submit ---------- */
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    if (!res.ok) {
-      messageEl.textContent = data.message || "เข้าสู่ระบบไม่สำเร็จ";
-      return;
-    }
+      messageEl.textContent = "";
+      messageEl.style.color = "red";
 
-    // บันทึก user
-    localStorage.setItem("user", JSON.stringify(data.user));
+      const email = document.getElementById("email").value.trim();
+      const password = passwordInput.value.trim();
 
-    messageEl.style.color = "green";
-    messageEl.textContent = "เข้าสู่ระบบสำเร็จ";
+      if (!email || !password) {
+        messageEl.textContent = "กรุณากรอกอีเมลและรหัสผ่าน";
+        return;
+      }
 
-    // ไป dashboard (ต้องใช้ domain เดียวกัน)
-    setTimeout(() => {
-      window.location.href = "https://websitefms.onrender.com/dashboard.html";
-    }, 800);
+      try {
+        const res = await fetch(`${API_BASE}/api/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
 
-  } catch (err) {
-    console.error(err);
-    messageEl.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้";
-  }
-});
-</script>
+        const data = await res.json();
 
+        if (!res.ok) {
+          messageEl.textContent = data.message || "เข้าสู่ระบบไม่สำเร็จ";
+          return;
+        }
 
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        messageEl.style.color = "green";
+        messageEl.textContent = "เข้าสู่ระบบสำเร็จ";
+
+        setTimeout(() => {
+          window.location.href = "https://websitefms.onrender.com/dashboard.html";
+        }, 800);
+      } catch (err) {
+        console.error(err);
+        messageEl.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้";
+      }
+    });
+
+    /* ---------- Brand image auto-detect ----------
+       ลองเส้นทางยอดนิยมทีละอัน แล้วตั้งค่าให้ CSS ใช้รูปแรกที่โหลดสำเร็จ */
+    (function resolveBrandImage() {
+      const candidates = [
+        "/uploads/logo.jpg",                 // กรณีใช้ Express เสิร์ฟ static: /uploads
+        "backend/uploads/logo.jpg",          // จากโครงสร้างที่พี่ส่งมา
+        "./logo.jpg",
+        "./assets/logo.jpg",
+        "./images/logo.jpg"
+      ];
+
+      function tryLoad(index) {
+        if (index >= candidates.length) return; // ไม่พบรูป จะเห็นเฉพาะ gradient
+
+        const path = candidates[index];
+        const img = new Image();
+        img.onload = () => {
+          // ตั้งค่า URL ให้กับ CSS variable
+          document.documentElement.style.setProperty("--brand-image-url", `url("${path}")`);
+        };
+        img.onerror = () => tryLoad(index + 1);
+        img.src = path + (path.includes("?") ? "" : `?v=${Date.now()}`); // กัน cache ระหว่างทดสอบ
+      }
+
+      tryLoad(0);
+    })();
+  </script>
 </body>
 </html>

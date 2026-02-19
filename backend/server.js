@@ -265,6 +265,25 @@ app.delete("/api/courses/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/majors/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      "DELETE FROM majors WHERE id = $1 RETURNING *",
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "ไม่พบสาขา" });
+    }
+
+    res.json({ message: "ลบสาขาสำเร็จ" });
+  } catch (err) {
+    console.error("Delete major error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 
 // =======================
