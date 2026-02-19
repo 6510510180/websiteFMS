@@ -287,8 +287,6 @@
     <h2>FMS Admin</h2>
     <nav class="menu">
       <div class="menu-item active" id="menuDashboard">แดชบอร์ด</div>
-      <div class="menu-item" id="menuGeneral">ข้อมูลทั่วไป</div>
-      <div class="menu-item" id="menuStudent">นักศึกษา</div>
       <div class="menu-item" id="menuPlan">แผนการศึกษา</div>
       <div class="menu-item" id="menuCourse">หลักสูตร</div>
       <div class="menu-item" id="menuQA">ประกันคุณภาพการศึกษา</div>
@@ -357,170 +355,43 @@
     </div>
   </div>
 
-  <script>
-    const API_BASE = "https://websitefms.onrender.com";
-  
+ <script>
+const BASE_URL = "https://websitefms.onrender.com";
+const API = BASE_URL + "/api";
 
-    // ตรวจสอบ user
-    const userData = localStorage.getItem("user");
+async function loadCourses(){
+  try{
+    const res = await fetch(`${API}/courses`);
+    const courses = await res.json();
 
-if (!userData) {
-  alert("กรุณาเข้าสู่ระบบก่อน");
-  window.location.href = "https://websitefms.onrender.com/login.html";
+    const table = document.getElementById("courseTable");
+
+    if(!res.ok || courses.length === 0){
+      table.innerHTML = `<tr><td colspan="4">ไม่พบข้อมูล</td></tr>`;
+      return;
+    }
+
+    table.innerHTML = courses.map(c => `
+      <tr>
+        <td>${c.name_th}</td>
+        <td>${c.degree_level}</td>
+        <td><span class="badge ${c.status}">${c.status}</span></td>
+        <td>
+          <button class="action-btn"
+            onclick="viewCourse(${c.id})">👁️</button>
+        </td>
+      </tr>
+    `).join("");
+
+  }catch(err){
+    document.getElementById("courseTable").innerHTML =
+      `<tr><td colspan="4">โหลดข้อมูลไม่ได้</td></tr>`;
+  }
 }
 
-const user = JSON.parse(userData);
-const token = user.token;
+function viewCourse(id){
+  window.location.href = `general-info.html?courseId=${id}`;
+}
 
-
-
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("user");
-      window.location.href = "https://websitefms.onrender.com/login.html";
-    });
-
-    // ไปหน้าเพิ่มหลักสูตร
-    document.getElementById("addCourseBtn").addEventListener("click", () => {
-      window.location.href = "https://websitefms.onrender.com/add-course.html";
-    });
-
-    // ===== Menu Navigation =====
-    document.getElementById("menuDashboard").onclick = () => {
-      window.location.href = "https://websitefms.onrender.com/dashboard.html";
-    };
-    document.getElementById("menuGeneral").onclick = () => {
-      window.location.href = "https://websitefms.onrender.com/general-info.html";
-    };
-    document.getElementById("menuStudent").onclick = () => {
-      window.location.href = "https://websitefms.onrender.com/student-info.html";
-    };
-    document.getElementById("menuPlan").onclick = () => {
-      window.location.href = "https://websitefms.onrender.com/study-plan.html";
-    };
-    document.getElementById("menuCourse").onclick = () => {
-      window.location.href = "https://websitefms.onrender.com/course-list.html"; // หรือ course-info.html ถ้ามีหน้าเดียว
-    };
-    document.getElementById("menuQA").onclick = () => {
-      window.location.href = "https://websitefms.onrender.com/qa-info.html";
-    };
-
-    // โหลดข้อมูลหลักสูตรมาใส่ Dashboard
-    async function loadCourses() {
-      try {
-        const res = await fetch(`${API_BASE}/api/courses?time=${Date.now()}`, {
-  headers: { Authorization: `Bearer ${token}` },});
-
-
-        const courses = await res.json();
-
-        courses.sort((a, b) => {
-      return new Date(b.created_at) - new Date(a.created_at);
-      });
-
-
-        const table = document.getElementById("courseTable");
-        const total = document.getElementById("totalCourses");
-        const active = document.getElementById("activeCourses");
-        const maintenance = document.getElementById("maintenance");
-
-        if (!res.ok) {
-          console.error(courses);
-          return;
-        }
-
-        // เคลียร์ข้อมูลเก่า
-        table.innerHTML = "";
-
-        // นับจำนวนหลักสูตร
-        total.textContent = courses.length;
-        active.textContent = courses.filter((c) => c.status === "active").length;
-        maintenance.textContent = courses.filter((c) => c.status === "maintenance").length;
-
-        // แสดง 5 รายการล่าสุด
-        courses.slice(0, 5).forEach((c) => {
-          const row = document.createElement("tr");
-          const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString() : "-";
-          row.innerHTML = `
-            <td>
-              <span class="course-link" onclick="goToCourse(${c.id})">
-                ${c.name_th || "-"}
-              </span>
-            </td>
-            <td>${c.degree_level || "-"}</td>
-            <td>${dateStr}</td>
-            <td>
-              <span class="${c.status === 'active' ? 'status-active' : 'status-draft'}">
-                ${c.status || 'draft'}
-              </span>
-            </td>
-            <td>
-              <button class="action-btn" onclick="goToCourse(${c.id})">
-                ดู / แก้ไข
-              </button>
-            </td>
-          `;
-          table.appendChild(row);
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    // ฟังก์ชันไปหน้า course-info
-    function goToCourse(id) {
-      window.location.href = `course-info.html?courseId=${id}`;
-    }
-    window.goToCourse = goToCourse; // ให้ onclick ใน HTML มองเห็น
-
-    // โหลดข้อมูลเมื่อเปิดหน้า
-    loadCourses();
-
-    // ===== Charts (ตัวอย่างเดิม) =====
-    // Bar
-    new Chart(document.getElementById("chart1"), {
-      type: "bar",
-      data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        datasets: [
-          {
-            label: "จำนวนผู้ใช้งาน",
-            data: [200, 300, 280, 350, 420, 500],
-            backgroundColor: "#9d48e8",
-            borderRadius: 8,
-          },
-        ],
-      },
-      options: {
-        plugins: { legend: { display: false } },
-        scales: {
-          y: { grid: { color: "#eee" } },
-          x: { grid: { display: false } },
-        },
-      },
-    });
-
-    // Pie
-    new Chart(document.getElementById("chart2"), {
-      type: "pie",
-      data: {
-        labels: ["BIS", "FIN", "MKT", "LSM", "MICE", "HRM"],
-        datasets: [
-          {
-            data: [15, 10, 22, 12, 18, 14],
-            backgroundColor: ["#7E57C2", "#9575CD", "#B39DDB", "#CE93D8", "#F48FB1", "#80DEEA"],
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          legend: {
-            position: "right",
-            labels: { usePointStyle: true, boxWidth: 8 },
-          },
-        },
-      },
-    });
-  </script>
-</body>
-</html>
+loadCourses();
+</script>
