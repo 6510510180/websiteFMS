@@ -378,10 +378,11 @@ async function loadDashboard(){
     document.getElementById("totalCourses").textContent = total;
     document.getElementById("activeCourses").textContent = active;
     document.getElementById("maintenance").textContent = maintenance;
-    document.getElementById("addCourseBtn").addEventListener("click", () => {
+    // ✅ ถูก - แยก event ออกมา
+document.getElementById("addCourseBtn").addEventListener("click", () => {
   window.location.href = "add-course.html";
-  // ===== Sidebar Navigation =====
-// ===== Sidebar Navigation =====
+});
+
 document.getElementById("menuDashboard")?.addEventListener("click", () => {
   window.location.href = "dashboard.html";
 });
@@ -393,14 +394,6 @@ document.getElementById("menuPlan")?.addEventListener("click", () => {
 document.getElementById("menuCourse")?.addEventListener("click", () => {
   window.location.href = "course-list.html";
 });
-
-document.getElementById("menuQA")?.addEventListener("click", () => {
-  window.location.href = "qa.html";
-});
-
-
-});
-
 
     /* ===============================
        2️⃣ แสดง 3 หลักสูตรล่าสุด
@@ -448,8 +441,9 @@ document.getElementById("menuQA")?.addEventListener("click", () => {
   }
 }
 
+// ✅ ถูก
 function viewCourse(id){
-  window.location.href = `general-info.html?courseId=${id}`;
+  window.location.href = `course-info.html?courseId=${id}`;
 }
 
 loadDashboard();
