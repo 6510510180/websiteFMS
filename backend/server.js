@@ -121,54 +121,32 @@ app.post("/api/login", async (req, res) => {
 // COURSES API
 // =======================
 
-// เพิ่มรายวิชา
+// ===== POST /api/courses =====
 app.post("/api/courses", async (req, res) => {
   const {
-    name_th,
-    name_en,
-    degree_level,
-    status,
-    program_type,
-    study_system,
-    award_title,
-    total_credits,
-    short_detail,
-    hero_image,
-    info_image,
-    student_range
+    name_th, name_en, degree_level, status,
+    program_type, study_system, award_title,
+    total_credits, short_detail, hero_image,
+    info_image, student_range              // ✅ รับค่า student_range
   } = req.body;
 
-  if (!name_th) {
-    return res.status(400).json({ message: "กรอกข้อมูลไม่ครบ" });
-  }
+  if (!name_th) return res.status(400).json({ message: "กรอกข้อมูลไม่ครบ" });
 
   try {
     const result = await pool.query(
       `INSERT INTO courses
       (name_th, name_en, degree_level, status, program_type, study_system,
-       award_title, total_credits, short_detail, hero_image, info_image,student_range)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+       award_title, total_credits, short_detail, hero_image, info_image, student_range)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
       RETURNING id`,
       [
-        name_th,
-        name_en,
-        degree_level,
-        status,
-        program_type,
-        study_system,
-        award_title,
-        total_credits,
-        short_detail,
-        hero_image,
-        info_image
+        name_th, name_en, degree_level, status,
+        program_type, study_system, award_title,
+        total_credits, short_detail, hero_image,
+        info_image, student_range             // ✅ เพิ่ม student_range
       ]
     );
-
-    res.json({
-      message: "เพิ่มหลักสูตรสำเร็จ",
-      id: result.rows[0].id
-    });
-
+    res.json({ message: "เพิ่มหลักสูตรสำเร็จ", id: result.rows[0].id });
   } catch (err) {
     console.error("Add course error:", err);
     res.status(500).json({ message: "Server error" });
@@ -389,7 +367,8 @@ app.put("/api/courses/:id", async (req, res) => {
     total_credits,
     short_detail,
     hero_image,
-    info_image
+    info_image,
+    student_range
   } = req.body;
 
   if (!name_th) {
@@ -397,6 +376,7 @@ app.put("/api/courses/:id", async (req, res) => {
   }
 
   try {
+    // ===== PUT /api/courses/:id =====
     const result = await pool.query(
       `UPDATE courses SET
         name_th=$1,
@@ -409,23 +389,15 @@ app.put("/api/courses/:id", async (req, res) => {
         total_credits=$8,
         short_detail=$9,
         hero_image=$10,
-        info_image=$11
-      student_range=$12 
+        info_image=$11,
+        student_range=$12
       WHERE id=$13
       RETURNING id`,
       [
-        name_th,
-        name_en,
-        degree_level,
-        status,
-        program_type,
-        study_system,
-        award_title,
-        total_credits,
-        short_detail,
-        hero_image,
-        info_image,
-        id
+        name_th, name_en, degree_level, status,
+        program_type, study_system, award_title,
+        total_credits, short_detail, hero_image,
+        info_image, student_range, id
       ]
     );
 
