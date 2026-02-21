@@ -134,7 +134,8 @@ app.post("/api/courses", async (req, res) => {
     total_credits,
     short_detail,
     hero_image,
-    info_image
+    info_image,
+    student_range
   } = req.body;
 
   if (!name_th) {
@@ -145,7 +146,7 @@ app.post("/api/courses", async (req, res) => {
     const result = await pool.query(
       `INSERT INTO courses
       (name_th, name_en, degree_level, status, program_type, study_system,
-       award_title, total_credits, short_detail, hero_image, info_image)
+       award_title, total_credits, short_detail, hero_image, info_image,student_range)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
       RETURNING id`,
       [
@@ -409,7 +410,8 @@ app.put("/api/courses/:id", async (req, res) => {
         short_detail=$9,
         hero_image=$10,
         info_image=$11
-      WHERE id=$12
+      student_range=$12 
+      WHERE id=$13
       RETURNING id`,
       [
         name_th,

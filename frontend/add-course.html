@@ -211,6 +211,10 @@
             <label>จำนวนหน่วยกิตตลอดหลักสูตร</label>
             <input type="number" id="total_credits" placeholder="เช่น 129" />
           </div>
+          <div class="field">
+          <label>สำหรับนักศึกษา (รหัส)</label>
+          <input type="text" id="student_range" placeholder="เช่น รหัส 67-70" />
+        </div>
         </div>
 
         <div class="field">
@@ -376,6 +380,7 @@ async function loadCourse() {
     document.getElementById("award_title").value = c.award_title || "";
     document.getElementById("total_credits").value = c.total_credits || "";
     document.getElementById("short_detail").value = c.short_detail || "";
+    document.getElementById("student_range").value = c.short_detail || "";
 
     if (c.hero_image) {
       heroHidden.value = c.hero_image;
@@ -422,6 +427,7 @@ form.addEventListener("submit", async (e) => {
     award_title: document.getElementById("award_title").value,
     total_credits: document.getElementById("total_credits").value,
     short_detail: document.getElementById("short_detail").value,
+    student_range: document.getElementById("student_range").value,
     hero_image: heroHidden.value,
     info_image: infoHidden.value
   };
