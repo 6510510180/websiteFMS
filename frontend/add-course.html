@@ -365,6 +365,19 @@ if (isEdit) {
 
   loadCourse();
 }
+// ===== Sidebar navigation =====
+document.getElementById("menuDashboard").addEventListener("click", () => {
+  window.location.href = "dashboard.html";
+});
+document.getElementById("menuPlan").addEventListener("click", () => {
+  window.location.href = "study-plan.html";
+});
+document.getElementById("menuCourse").addEventListener("click", () => {
+  window.location.href = "course-list.html";
+});
+document.getElementById("menuQA").addEventListener("click", () => {
+  window.location.href = "qa.html";
+});
 
 async function loadCourse() {
   try {
@@ -380,8 +393,7 @@ async function loadCourse() {
     document.getElementById("award_title").value = c.award_title || "";
     document.getElementById("total_credits").value = c.total_credits || "";
     document.getElementById("short_detail").value = c.short_detail || "";
-    document.getElementById("student_range").value = c.short_detail || "";
-
+    document.getElementById("student_range").value = c.student_range || "";
     if (c.hero_image) {
       heroHidden.value = c.hero_image;
       heroPreview.src = BASE_URL + c.hero_image;
