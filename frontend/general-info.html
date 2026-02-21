@@ -120,52 +120,67 @@
 </div>
 
   <script>
-/* ===============================
-CONFIG
-=============================== */
 const BASE_URL = "https://websitefms.onrender.com";
 const API = BASE_URL + "/api";
 
-/* ===============================
-AUTH (ระบบปัจจุบันใช้ user)
-=============================== */
+// Auth
 const user = localStorage.getItem("user");
 if (!user) {
   alert("กรุณาเข้าสู่ระบบ");
   window.location.href = "login.html";
 }
 
-/* ===============================
-GET courseId
-=============================== */
+// Sidebar navigation
+document.getElementById("menuDashboard").addEventListener("click", () => {
+  window.location.href = "dashboard.html";
+});
+document.getElementById("menuGeneral")?.addEventListener("click", () => {
+  window.location.href = courseId
+    ? `general-info.html?courseId=${courseId}`
+    : "course-list.html";
+});
+document.getElementById("menuStudent")?.addEventListener("click", () => {
+  window.location.href = "student-info.html";
+});
+document.getElementById("menuPlan").addEventListener("click", () => {
+  window.location.href = "study-plan.html";
+});
+document.getElementById("menuCourse").addEventListener("click", () => {
+  window.location.href = "course-list.html";
+});
+document.getElementById("menuQA").addEventListener("click", () => {
+  window.location.href = "qa.html";
+});
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
+});
+
+// Get courseId
 const params = new URLSearchParams(window.location.search);
 const courseId = params.get("courseId");
 
+// ถ้าไม่มี courseId ให้ไปหน้า course-list แทน alert
 if (!courseId) {
-  alert("ไม่พบรหัสหลักสูตร");
   window.location.href = "course-list.html";
 }
 
-/* ===============================
-LOAD COURSE
-=============================== */
+// Load course
 async function loadCourse() {
   try {
     const res = await fetch(`${API}/courses/${courseId}`);
     const c = await res.json();
 
     if (!res.ok) {
-      console.error(c);
-      alert("โหลดข้อมูลไม่สำเร็จ");
+      alert("โหลดข้อมูลไม่สำเร็จ: " + c.message);
       return;
     }
 
-    // ===== แสดงข้อมูลตามโครงสร้างจริง =====
-    document.getElementById("name_th").textContent = c.name_th || "-";
-    document.getElementById("code").textContent = c.name_en || "-";
-    document.getElementById("major").textContent = c.degree_level || "-";
+    document.getElementById("name_th").textContent  = c.name_th     || "-";
+    document.getElementById("code").textContent     = c.name_en     || "-";
+    document.getElementById("major").textContent    = c.degree_level || "-";
     document.getElementById("start_year").textContent = c.program_type || "-";
-    document.getElementById("faculty").textContent =
+    document.getElementById("faculty").textContent  =
       (c.study_system || "-") + " / " + (c.award_title || "-");
 
   } catch (err) {
@@ -174,28 +189,4 @@ async function loadCourse() {
   }
 }
 
-loadCourse();
-
-/* ===============================
-NAVIGATION
-=============================== */
-function goDashboard() {
-  window.location.href = "dashboard.html";
-}
-
-function goStudent() {
-  window.location.href = `student-info.html?courseId=${courseId}`;
-}
-
-function goPlan() {
-  window.location.href = `study-plan.html?courseId=${courseId}`;
-}
-
-function goCourse() {
-  window.location.href = `course-info.html?courseId=${courseId}`;
-}
-
-function goQA() {
-  window.location.href = `qa-info.html?courseId=${courseId}`;
-}
-</script>
+if (courseId) loadCourse();

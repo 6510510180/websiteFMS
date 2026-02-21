@@ -267,6 +267,7 @@
         </tbody>
       </table>
     </div>
+    
 
   </div>
 
@@ -282,6 +283,19 @@ if (!userData) {
   alert("กรุณาเข้าสู่ระบบก่อน");
   window.location.href = "login.html";
 }
+// เพิ่มต่อจาก logoutBtn
+document.getElementById("menuDashboard").addEventListener("click", () => {
+  window.location.href = "dashboard.html";
+});
+document.getElementById("menuPlan").addEventListener("click", () => {
+  window.location.href = "study-plan.html";
+});
+document.getElementById("menuCourse").addEventListener("click", () => {
+  window.location.href = "course-list.html";
+});
+document.getElementById("menuQA").addEventListener("click", () => {
+  window.location.href = "qa.html";
+});
 
 const user = JSON.parse(userData);
 const token = user.token;
@@ -367,6 +381,7 @@ const token = user.token;
         document.getElementById("c_study_system").textContent  = course.study_system || "-";
         document.getElementById("c_award_title").textContent   = course.award_title || "-";
         document.getElementById("c_total_credits").textContent = course.total_credits ?? "-";
+        
 
         const statusEl = document.getElementById("c_status");
         if (course.status === "active") {
