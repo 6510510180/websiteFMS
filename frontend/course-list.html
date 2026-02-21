@@ -2,110 +2,178 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>จัดการหลักสูตร</title>
+<title>จัดการหลักสูตร | FMS Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{
-  margin:0;
-  font-family:"Segoe UI",sans-serif;
-  background:#f5f6fa;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f5f6fa;
+  display: flex;
 }
 
-/* Container */
-.container{
-  padding:30px;
-  max-width:1100px;
-  margin:auto;
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: white;
+  height: 100vh;
+  padding: 20px;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Header */
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
+.sidebar h2 {
+  font-size: 20px;
+  color: #5c2ea6;
+  margin-bottom: 30px;
 }
 
-.btn-primary{
-  background:#7b3fe4;
-  color:#fff;
-  border:none;
-  padding:10px 16px;
-  border-radius:8px;
-  cursor:pointer;
+.menu { display: flex; flex-direction: column; gap: 4px; }
+
+.menu-item {
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #5e5e70;
+  font-size: 14px;
+  transition: 0.2s;
 }
+
+.menu-item:hover,
+.menu-item.active {
+  background: #f1e6ff;
+  color: #5c2ea6;
+}
+
+.sidebar-bottom { margin-top: auto; }
+
+/* Main */
+.main {
+  margin-left: 240px;
+  padding: 30px;
+  width: calc(100% - 240px);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-header h2 { font-size: 22px; color: #2d2d3a; }
+
+.btn-primary {
+  background: #7b3fe4;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(123,63,228,0.3);
+  transition: 0.2s;
+}
+.btn-primary:hover { background: #6830c8; transform: translateY(-1px); }
 
 /* Search */
-.search-bar{
-  display:flex;
-  gap:10px;
-  margin-bottom:15px;
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 .search-bar input,
-.search-bar select{
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #ddd;
+.search-bar select {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #faf8ff;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
 }
+.search-bar input { flex: 1; }
+.search-bar input:focus,
+.search-bar select:focus { border-color: #7b3fe4; }
 
 /* Table */
-.table-card{
-  background:#fff;
-  border-radius:14px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.05);
-  overflow:hidden;
+.table-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  overflow: hidden;
 }
 
-table{
-  width:100%;
-  border-collapse:collapse;
+table { width: 100%; border-collapse: collapse; }
+
+th, td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  font-size: 14px;
 }
 
-th,td{
-  padding:14px;
-  border-bottom:1px solid #eee;
-  text-align:left;
-}
+th { background: #faf7ff; color: #666; font-weight: 600; }
 
-th{
-  background:#faf7ff;
-  color:#666;
-}
+tbody tr { cursor: pointer; transition: background 0.15s; }
+tbody tr:hover { background: #fdfbff; }
 
 /* Badge */
-.badge{
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:12px;
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
 }
-
-.active{ background:#e6ffe8; color:#2e9a52; }
-.draft{ background:#f5e7ff; color:#7b3fe4; }
-.maintenance{ background:#ffe6e6; color:#c0392b; }
+.badge.active { background: #e6ffe8; color: #2e9a52; }
+.badge.draft { background: #f5e7ff; color: #7b3fe4; }
+.badge.maintenance { background: #ffe6e6; color: #c0392b; }
 
 /* Action buttons */
-.action-btn{
-  border:none;
-  background:none;
-  cursor:pointer;
-  font-size:16px;
-  margin-right:6px;
+.action-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: 0.15s;
 }
+.action-btn:hover { background: #f1e6ff; }
 </style>
 </head>
 <body>
 
-<div class="container">
+<!-- Sidebar -->
+<div class="sidebar">
+  <h2>FMS PSU</h2>
+  <nav class="menu">
+    <div class="menu-item" id="menuDashboard">🏠 แดชบอร์ด</div>
+    <div class="menu-item" id="menuPlan">📚 แผนการศึกษา</div>
+    <div class="menu-item active" id="menuCourse">⚙️ หลักสูตร</div>
+    <div class="menu-item" id="menuQA">🛡️ ประกันคุณภาพการศึกษา</div>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="menu-item" id="logoutBtn">🚪 ออกจากระบบ</div>
+  </div>
+</div>
 
-  <div class="header">
-    <h2>จัดการหลักสูตร (Course Management)</h2>
+<!-- Main -->
+<div class="main">
+
+  <div class="page-header">
+    <h2>จัดการหลักสูตร</h2>
     <button class="btn-primary" onclick="goAdd()">+ เพิ่มหลักสูตรใหม่</button>
   </div>
 
   <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="ค้นหาชื่อหลักสูตร">
+    <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อหลักสูตร...">
     <select id="statusFilter">
       <option value="">สถานะทั้งหมด</option>
       <option value="active">Active</option>
@@ -125,7 +193,7 @@ th{
         </tr>
       </thead>
       <tbody id="courseTable">
-        <tr><td colspan="4">กำลังโหลด...</td></tr>
+        <tr><td colspan="4" style="text-align:center;padding:40px;color:#aaa;">กำลังโหลด...</td></tr>
       </tbody>
     </table>
   </div>
@@ -136,9 +204,27 @@ th{
 const BASE_URL = "https://websitefms.onrender.com";
 const API = BASE_URL + "/api";
 
+// Auth
+const userData = localStorage.getItem("user");
+if (!userData) {
+  alert("กรุณาเข้าสู่ระบบก่อน");
+  window.location.href = "login.html";
+}
+
+// Sidebar navigation
+document.getElementById("menuDashboard").addEventListener("click", () => { window.location.href = "dashboard.html"; });
+document.getElementById("menuPlan").addEventListener("click", () => { window.location.href = "study-plan.html"; });
+document.getElementById("menuCourse").addEventListener("click", () => { window.location.href = "course-management.html"; });
+document.getElementById("menuQA").addEventListener("click", () => { window.location.href = "qa.html"; });
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
+});
+
+// State
 let allCourses = [];
 
-// โหลดหลักสูตรทั้งหมด — ไม่ต้องการ courseId
+// Load all courses
 async function loadCourses() {
   try {
     const res = await fetch(`${API}/courses`);
@@ -147,36 +233,36 @@ async function loadCourses() {
     renderTable(data);
   } catch(err) {
     document.getElementById("courseTable").innerHTML =
-      `<tr><td colspan="4">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้</td></tr>`;
+      `<tr><td colspan="4" style="text-align:center;padding:40px;color:#aaa;">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้</td></tr>`;
   }
 }
 
 function renderTable(courses) {
   const tbody = document.getElementById("courseTable");
   if (!courses.length) {
-    tbody.innerHTML = `<tr><td colspan="4">ไม่พบข้อมูลหลักสูตร</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:40px;color:#aaa;">ไม่พบข้อมูลหลักสูตร</td></tr>`;
     return;
   }
   tbody.innerHTML = courses.map(c => `
-    <tr style="cursor:pointer"
-        onclick="window.location.href='course-info.html?courseId=${c.id}'">
-      <td>${c.name_th || "-"}</td>
+    <tr onclick="window.location.href='course-info.html?courseId=${c.id}'">
+      <td><b>${c.name_th || "-"}</b></td>
       <td>${c.degree_level || "-"}</td>
       <td><span class="badge ${c.status}">${c.status || "-"}</span></td>
       <td onclick="event.stopPropagation()">
-        <button class="action-btn"
+        <button class="action-btn" title="แก้ไข"
           onclick="window.location.href='add-course.html?courseId=${c.id}'">✏️</button>
-        <button class="action-btn"
-          onclick="deleteCourse(${c.id})">🗑️</button>
+        <button class="action-btn" title="ลบ"
+          onclick="deleteCourse(${c.id}, '${(c.name_th||'').replace(/'/g,"\\'")}')">🗑️</button>
       </td>
     </tr>
   `).join("");
 }
 
-document.getElementById("searchInput").addEventListener("input", filter);
-document.getElementById("statusFilter").addEventListener("change", filter);
+// Filter
+document.getElementById("searchInput").addEventListener("input", applyFilter);
+document.getElementById("statusFilter").addEventListener("change", applyFilter);
 
-function filter() {
+function applyFilter() {
   const q = document.getElementById("searchInput").value.toLowerCase();
   const s = document.getElementById("statusFilter").value;
   const filtered = allCourses.filter(c =>
@@ -186,10 +272,17 @@ function filter() {
   renderTable(filtered);
 }
 
-async function deleteCourse(id) {
-  if (!confirm("ต้องการลบหลักสูตรนี้ใช่หรือไม่?")) return;
-  await fetch(`${API}/courses/${id}`, { method: "DELETE" });
-  loadCourses();
+// Delete
+async function deleteCourse(id, name) {
+  if (!confirm(`ต้องการลบหลักสูตร "${name}" ใช่หรือไม่?`)) return;
+  try {
+    const res = await fetch(`${API}/courses/${id}`, { method: "DELETE" });
+    const data = await res.json();
+    if (!res.ok) { alert(data.message || "ลบไม่สำเร็จ"); return; }
+    loadCourses();
+  } catch(err) {
+    alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้");
+  }
 }
 
 function goAdd() {
@@ -198,3 +291,5 @@ function goAdd() {
 
 loadCourses();
 </script>
+</body>
+</html>
