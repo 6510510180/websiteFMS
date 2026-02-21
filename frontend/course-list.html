@@ -136,35 +136,65 @@ th{
 const BASE_URL = "https://websitefms.onrender.com";
 const API = BASE_URL + "/api";
 
-// รับ courseId จาก URL
-const params = new URLSearchParams(window.location.search);
-const courseId = params.get("courseId");
+let allCourses = [];
 
-if(!courseId){
-  alert("ไม่พบรหัสหลักสูตร");
-  window.location.href = "course-list.html";
-}
-
-// โหลดข้อมูลหลักสูตร
-async function loadCourse(){
-  try{
-    const res = await fetch(`${API}/courses/${courseId}`);
+// โหลดหลักสูตรทั้งหมด — ไม่ต้องการ courseId
+async function loadCourses() {
+  try {
+    const res = await fetch(`${API}/courses`);
     const data = await res.json();
-
-    if(!res.ok){
-      alert(data.message || "โหลดข้อมูลไม่สำเร็จ");
-      return;
-    }
-
-    // แสดงข้อมูล
-    document.getElementById("name_th").textContent = data.name_th;
-    document.getElementById("degree_level").textContent = data.degree_level;
-    document.getElementById("status").textContent = data.status;
-
-  }catch(err){
-    alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้");
+    allCourses = data;
+    renderTable(data);
+  } catch(err) {
+    document.getElementById("courseTable").innerHTML =
+      `<tr><td colspan="4">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้</td></tr>`;
   }
 }
 
-loadCourse();
+function renderTable(courses) {
+  const tbody = document.getElementById("courseTable");
+  if (!courses.length) {
+    tbody.innerHTML = `<tr><td colspan="4">ไม่พบข้อมูลหลักสูตร</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = courses.map(c => `
+    <tr style="cursor:pointer"
+        onclick="window.location.href='course-info.html?courseId=${c.id}'">
+      <td>${c.name_th || "-"}</td>
+      <td>${c.degree_level || "-"}</td>
+      <td><span class="badge ${c.status}">${c.status || "-"}</span></td>
+      <td onclick="event.stopPropagation()">
+        <button class="action-btn"
+          onclick="window.location.href='add-course.html?courseId=${c.id}'">✏️</button>
+        <button class="action-btn"
+          onclick="deleteCourse(${c.id})">🗑️</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+document.getElementById("searchInput").addEventListener("input", filter);
+document.getElementById("statusFilter").addEventListener("change", filter);
+
+function filter() {
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const s = document.getElementById("statusFilter").value;
+  const filtered = allCourses.filter(c =>
+    (!q || (c.name_th||"").toLowerCase().includes(q)) &&
+    (!s || c.status === s)
+  );
+  renderTable(filtered);
+}
+
+async function deleteCourse(id) {
+  if (!confirm("ต้องการลบหลักสูตรนี้ใช่หรือไม่?")) return;
+  await fetch(`${API}/courses/${id}`, { method: "DELETE" });
+  loadCourses();
+}
+
+function goAdd() {
+  window.location.href = "add-course.html";
+}
+
+loadCourses();
 </script>
