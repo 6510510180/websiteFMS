@@ -348,6 +348,22 @@ const API = BASE_URL + "/api";
     localStorage.removeItem("user");
     window.location.href = "login.html";
   });
+  document.getElementById("addCourseBtn").addEventListener("click", () => {
+  window.location.href = "add-course.html";
+});
+
+document.getElementById("menuDashboard")?.addEventListener("click", () => {
+  window.location.href = "dashboard.html";
+});
+
+document.getElementById("menuPlan")?.addEventListener("click", () => {
+  window.location.href = "study-plan.html";
+});
+
+document.getElementById("menuCourse")?.addEventListener("click", () => {
+  window.location.href = "course-list.html";
+});
+
 
   // ดึง courseId / majorId จาก query string
   const params = new URLSearchParams(window.location.search);

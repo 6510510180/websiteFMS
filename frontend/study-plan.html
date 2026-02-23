@@ -345,11 +345,22 @@ if (!localStorage.getItem("user")) { window.location.href = "login.html"; }
 
 function goTo(url) { window.location.href = url; }
 
-document.getElementById("menuDashboard").addEventListener("click", () => goTo("dashboard.html"));
-document.getElementById("menuPlan").addEventListener("click", () => goTo("study-plan.html"));
-document.getElementById("menuCourse").addEventListener("click", () => goTo("course-management.html"));
-document.getElementById("menuQA").addEventListener("click", () => goTo("qa.html"));
-document.getElementById("logoutBtn").addEventListener("click", () => { localStorage.removeItem("user"); goTo("login.html"); });
+document.getElementById("addCourseBtn").addEventListener("click", () => {
+  window.location.href = "add-course.html";
+});
+
+document.getElementById("menuDashboard")?.addEventListener("click", () => {
+  window.location.href = "dashboard.html";
+});
+
+document.getElementById("menuPlan")?.addEventListener("click", () => {
+  window.location.href = "study-plan.html";
+});
+
+document.getElementById("menuCourse")?.addEventListener("click", () => {
+  window.location.href = "course-list.html";
+});
+
 
 function toast(msg, type = "") {
   const el = document.getElementById("toast");

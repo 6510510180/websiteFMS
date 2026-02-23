@@ -284,18 +284,22 @@ if (!userData) {
   window.location.href = "login.html";
 }
 // เพิ่มต่อจาก logoutBtn
-document.getElementById("menuDashboard").addEventListener("click", () => {
+document.getElementById("addCourseBtn").addEventListener("click", () => {
+  window.location.href = "add-course.html";
+});
+
+document.getElementById("menuDashboard")?.addEventListener("click", () => {
   window.location.href = "dashboard.html";
 });
-document.getElementById("menuPlan").addEventListener("click", () => {
+
+document.getElementById("menuPlan")?.addEventListener("click", () => {
   window.location.href = "study-plan.html";
 });
-document.getElementById("menuCourse").addEventListener("click", () => {
+
+document.getElementById("menuCourse")?.addEventListener("click", () => {
   window.location.href = "course-list.html";
 });
-document.getElementById("menuQA").addEventListener("click", () => {
-  window.location.href = "qa.html";
-});
+
 
 const user = JSON.parse(userData);
 const token = user.token;
