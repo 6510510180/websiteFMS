@@ -4,176 +4,320 @@
 <meta charset="UTF-8">
 <title>แผนการศึกษา | FMS Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --purple:#6C4DF6; --purple-light:#f0ecff; --purple-mid:#e8e1fd;
-  --text:#1a1a2e; --muted:#8b8fa8; --border:#ecedf2;
-  --bg:#f8f7fc; --white:#fff;
-  --green:#22c55e; --green-bg:#dcfce7;
-  --red:#ef4444; --red-bg:#fee2e2;
+  --primary: #8a3dd1;
+  --primary-light: #f4e9ff;
+  --bg: #f8f8fb;
+  --white: #ffffff;
+  --text: #1a1a2e;
+  --muted: #8b8fa8;
+  --border: #ecedf2;
+  --purple: #6C4DF6;
+  --purple-light: #f0ecff;
+  --purple-mid: #e8e1fd;
+  --red: #ef4444;
+  --red-bg: #fee2e2;
+  --sidebar-w: 240px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
 
-/* SIDEBAR */
-.sidebar{width:220px;background:var(--white);border-right:1px solid var(--border);padding:20px 14px;position:fixed;height:100vh;display:flex;flex-direction:column;gap:4px;z-index:20}
-.sidebar-logo{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;border-bottom:1px solid var(--border);margin-bottom:12px}
-.logo-icon{width:36px;height:36px;background:var(--purple);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px}
-.logo-text{font-weight:700;font-size:15px} .logo-sub{font-size:11px;color:var(--muted)}
-.nav-section{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 10px 4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--muted);font-size:14px;font-weight:500;transition:all .15s}
-.nav-item:hover{background:var(--purple-light);color:var(--purple)}
-.nav-item.active{background:var(--purple);color:white}
-.nav-item .icon{font-size:16px;width:20px;text-align:center}
-.sidebar-bottom{margin-top:auto;border-top:1px solid var(--border);padding-top:12px}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  display: flex;
+  min-height: 100vh;
+}
 
-/* MAIN */
-.main{margin-left:220px;flex:1;display:flex;flex-direction:column;min-width:0}
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--white);
+  height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0 20px 20px 0;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.08);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.sidebar-logo {
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-logo .brand {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.3px;
+}
+.sidebar-logo .brand-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+.nav-item:hover,
+.nav-item.active {
+  background: var(--primary-light);
+  color: var(--primary);
+  transform: translateX(4px);
+}
+.nav-item.active { font-weight: 600; }
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+
+.sidebar-footer {
+  padding: 14px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-footer .nav-item { color: #ef4444; }
+.sidebar-footer .nav-item:hover { background: var(--red-bg); color: #dc2626; }
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
 
 /* Topbar */
-.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.topbar-title{font-size:16px;font-weight:700}
-.topbar-right{display:flex;align-items:center;gap:12px}
-.search-box{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 12px;width:220px}
-.search-box input{border:none;background:none;outline:none;font-size:13px;color:var(--text);font-family:inherit;width:100%}
-.search-box input::placeholder{color:var(--muted)}
-.notif-btn{width:34px;height:34px;border-radius:8px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:16px}
-.notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid white}
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.topbar-title { font-size: 16px; font-weight: 700; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.search-box {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 12px; width: 220px;
+}
+.search-box input { border: none; background: none; outline: none; font-size: 13px; color: var(--text); font-family: inherit; width: 100%; }
+.search-box input::placeholder { color: var(--muted); }
+.notif-btn {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: var(--bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative; font-size: 16px;
+}
+.notif-dot { position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); border: 1.5px solid white; }
 
 /* Content */
-.content{padding:28px;display:flex;gap:20px;flex:1;min-height:0}
-.panel-left{flex:1;min-width:0}
-.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-bottom:16px}
-.breadcrumb a{color:var(--purple);text-decoration:none;cursor:pointer}
-.page-heading{font-size:26px;font-weight:700;margin-bottom:4px}
-.page-sub{font-size:14px;color:var(--muted);margin-bottom:24px}
-.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.toolbar-search{display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:9px 14px;flex:1}
-.toolbar-search:focus-within{border-color:var(--purple)}
-.toolbar-search input{border:none;background:none;outline:none;font-size:14px;font-family:inherit;color:var(--text);width:100%}
-.toolbar-search input::placeholder{color:var(--muted)}
-.filter-select{padding:9px 28px 9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--white);font-size:13px;font-family:inherit;color:var(--text);cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238b8fa8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.content { padding: 28px; display: flex; gap: 20px; flex: 1; min-height: 0; }
+.panel-left { flex: 1; min-width: 0; }
+
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+.breadcrumb a { color: var(--purple); text-decoration: none; cursor: pointer; }
+.page-heading { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+.page-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+
+.toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.toolbar-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; padding: 9px 14px; flex: 1;
+}
+.toolbar-search:focus-within { border-color: var(--purple); }
+.toolbar-search input { border: none; background: none; outline: none; font-size: 14px; font-family: inherit; color: var(--text); width: 100%; }
+.toolbar-search input::placeholder { color: var(--muted); }
+.filter-select {
+  padding: 9px 28px 9px 12px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--white); font-size: 13px; font-family: inherit; color: var(--text);
+  cursor: pointer; outline: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238b8fa8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+}
 
 /* Table */
-.table-card{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.table-header{display:grid;grid-template-columns:2fr 2fr 80px;padding:12px 20px;background:var(--bg);border-bottom:1px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.table-row{display:grid;grid-template-columns:2fr 2fr 80px;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;align-items:center}
-.table-row:last-child{border-bottom:none}
-.table-row:hover{background:var(--purple-light)}
-.table-row.selected{background:var(--purple-light)}
-.major-name{font-weight:600;font-size:14px}
-.major-en{font-size:12px;color:var(--muted);margin-top:2px}
-.action-group{display:flex;gap:4px}
-.icon-btn{width:30px;height:30px;border-radius:7px;background:none;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .12s;color:var(--muted)}
-.icon-btn:hover.edit{background:var(--purple-light);border-color:var(--purple);color:var(--purple)}
-.table-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted)}
-.pagination{display:flex;gap:4px}
-.page-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:none;cursor:pointer;font-size:13px;font-family:inherit;display:flex;align-items:center;justify-content:center;transition:all .12s}
-.page-btn:hover{background:var(--purple-light);border-color:var(--purple);color:var(--purple)}
-.page-btn.active{background:var(--purple);color:white;border-color:var(--purple)}
+.table-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.table-header {
+  display: grid; grid-template-columns: 2fr 2fr 80px;
+  padding: 12px 20px; background: var(--bg); border-bottom: 1px solid var(--border);
+  font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px;
+}
+.table-row {
+  display: grid; grid-template-columns: 2fr 2fr 80px;
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background .12s; align-items: center;
+}
+.table-row:last-child { border-bottom: none; }
+.table-row:hover { background: var(--purple-light); }
+.table-row.selected { background: var(--purple-light); }
+.major-name { font-weight: 600; font-size: 14px; }
+.major-en { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.action-group { display: flex; gap: 4px; }
+.icon-btn {
+  width: 30px; height: 30px; border-radius: 7px; background: none;
+  border: 1px solid var(--border); cursor: pointer; display: flex;
+  align-items: center; justify-content: center; font-size: 13px;
+  transition: all .12s; color: var(--muted);
+}
+.icon-btn:hover { background: var(--purple-light); border-color: var(--purple); color: var(--purple); }
+.table-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--muted); }
+.pagination { display: flex; gap: 4px; }
+.page-btn {
+  width: 30px; height: 30px; border-radius: 7px; border: 1px solid var(--border);
+  background: none; cursor: pointer; font-size: 13px; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; transition: all .12s;
+}
+.page-btn:hover { background: var(--purple-light); border-color: var(--purple); color: var(--purple); }
+.page-btn.active { background: var(--purple); color: white; border-color: var(--purple); }
 
 /* Right panel */
-.panel-right{width:500px;display:none;flex-direction:column;gap:0;flex-shrink:0}
-.panel-right.open{display:flex}
-.detail-card{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;max-height:calc(100vh - 120px);position:sticky;top:88px}
+.panel-right { width: 500px; display: none; flex-direction: column; flex-shrink: 0; }
+.panel-right.open { display: flex; }
+.detail-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  overflow: hidden; display: flex; flex-direction: column;
+  max-height: calc(100vh - 120px); position: sticky; top: 88px;
+}
+.detail-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-shrink: 0; }
+.detail-title { font-size: 17px; font-weight: 700; line-height: 1.3; }
+.detail-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.detail-meta { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+.meta-chip { padding: 3px 10px; border-radius: 999px; background: var(--purple-light); color: var(--purple); font-size: 12px; font-weight: 600; }
+.close-btn {
+  width: 28px; height: 28px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--muted); flex-shrink: 0; transition: all .12s;
+}
+.close-btn:hover { background: var(--red-bg); color: var(--red); border-color: var(--red); }
 
-.detail-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-shrink:0}
-.detail-title{font-size:17px;font-weight:700;line-height:1.3}
-.detail-sub{font-size:12px;color:var(--muted);margin-top:3px}
-.detail-meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center}
-.meta-chip{padding:3px 10px;border-radius:999px;background:var(--purple-light);color:var(--purple);font-size:12px;font-weight:600}
-.close-btn{width:28px;height:28px;border-radius:6px;background:var(--bg);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);flex-shrink:0;transition:all .12s}
-.close-btn:hover{background:var(--red-bg);color:var(--red);border-color:var(--red)}
+.year-tabs { display: flex; gap: 6px; padding: 12px 20px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
+.year-tab {
+  padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--white); font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit; color: var(--muted); transition: all .15s;
+}
+.year-tab:hover { background: var(--purple-light); color: var(--purple); border-color: var(--purple); }
+.year-tab.active { background: var(--purple); color: white; border-color: var(--purple); }
 
-/* Year tabs */
-.year-tabs{display:flex;gap:6px;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0}
-.year-tab{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--muted);transition:all .15s}
-.year-tab:hover{background:var(--purple-light);color:var(--purple);border-color:var(--purple)}
-.year-tab.active{background:var(--purple);color:white;border-color:var(--purple)}
+.plan-section { padding: 16px 20px; overflow-y: auto; flex: 1; }
+.plan-section-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.add-sem-btn {
+  display: flex; align-items: center; gap: 4px; padding: 4px 10px;
+  background: var(--purple-light); color: var(--purple); border: none;
+  border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background .12s;
+}
+.add-sem-btn:hover { background: var(--purple-mid); }
 
-.plan-section{padding:16px 20px;overflow-y:auto;flex:1}
-.plan-section-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.add-sem-btn{display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--purple-light);color:var(--purple);border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .12s}
-.add-sem-btn:hover{background:var(--purple-mid)}
+.semester-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+.semester-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+.semester-head-left { display: flex; align-items: center; gap: 8px; }
+.semester-name { font-size: 14px; font-weight: 700; }
+.credits-badge { font-size: 12px; color: var(--muted); }
+.chevron { font-size: 11px; color: var(--muted); transition: transform .2s; }
+.semester-block.collapsed .chevron { transform: rotate(-90deg); }
+.semester-block.collapsed .semester-body { display: none; }
+.subject-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--border); transition: background .1s; }
+.subject-row:last-child { border-bottom: none; }
+.subject-row:hover { background: var(--purple-light); }
+.subject-code { font-size: 12px; font-weight: 700; color: var(--purple); margin-bottom: 2px; }
+.subject-name { font-size: 13px; font-weight: 500; }
+.subject-cat { font-size: 11px; color: var(--muted); }
+.subject-credits { font-size: 13px; font-weight: 700; white-space: nowrap; }
+.subject-del { width: 24px; height: 24px; border-radius: 5px; background: none; border: none; cursor: pointer; font-size: 13px; color: var(--muted); transition: all .1s; display: flex; align-items: center; justify-content: center; margin-left: 6px; }
+.subject-del:hover { background: var(--red-bg); color: var(--red); }
+.add-subject-row { padding: 8px 14px; border-top: 1px dashed var(--border); }
+.add-subject-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; border: 1.5px dashed var(--border); border-radius: 8px; background: none; color: var(--muted); font-size: 13px; font-family: inherit; cursor: pointer; transition: all .15s; }
+.add-subject-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
 
-.semester-block{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px}
-.semester-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
-.semester-head-left{display:flex;align-items:center;gap:8px}
-.semester-name{font-size:14px;font-weight:700}
-.credits-badge{font-size:12px;color:var(--muted)}
-.chevron{font-size:11px;color:var(--muted);transition:transform .2s}
-.semester-block.collapsed .chevron{transform:rotate(-90deg)}
-.semester-block.collapsed .semester-body{display:none}
-.subject-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);transition:background .1s}
-.subject-row:last-child{border-bottom:none}
-.subject-row:hover{background:var(--purple-light)}
-.subject-code{font-size:12px;font-weight:700;color:var(--purple);margin-bottom:2px}
-.subject-name{font-size:13px;font-weight:500}
-.subject-cat{font-size:11px;color:var(--muted)}
-.subject-credits{font-size:13px;font-weight:700;white-space:nowrap}
-.subject-del{width:24px;height:24px;border-radius:5px;background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted);transition:all .1s;display:flex;align-items:center;justify-content:center;margin-left:6px}
-.subject-del:hover{background:var(--red-bg);color:var(--red)}
-.add-subject-row{padding:8px 14px;border-top:1px dashed var(--border)}
-.add-subject-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px;border:1.5px dashed var(--border);border-radius:8px;background:none;color:var(--muted);font-size:13px;font-family:inherit;cursor:pointer;transition:all .15s}
-.add-subject-btn:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-light)}
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(15,10,40,.5); backdrop-filter: blur(6px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 20px; width: 100%; max-width: 780px; max-height: 90vh; overflow-y: auto; box-shadow: 0 32px 80px rgba(0,0,0,.22); display: flex; flex-direction: column; }
+.modal-header { padding: 24px 28px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: white; z-index: 1; border-radius: 20px 20px 0 0; }
+.modal-title { font-size: 20px; font-weight: 700; }
+.modal-close { width: 32px; height: 32px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--muted); transition: all .12s; }
+.modal-close:hover { background: var(--red-bg); color: var(--red); border-color: var(--red); }
+.modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 0; }
+.section-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; margin-top: 20px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.section-label:first-child { margin-top: 0; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; }
+.field input, .field select, .field textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); font-size: 14px; font-family: inherit; color: var(--text); outline: none; transition: all .15s; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--purple); background: white; box-shadow: 0 0 0 3px rgba(108,77,246,.1); }
+.field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field-row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; }
+.modal-footer { padding: 16px 28px 24px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--border); position: sticky; bottom: 0; background: white; border-radius: 0 0 20px 20px; }
+.btn-cancel { padding: 10px 20px; border-radius: 10px; background: var(--bg); border: 1.5px solid var(--border); font-size: 14px; font-family: inherit; cursor: pointer; color: var(--text); font-weight: 500; transition: background .12s; }
+.btn-cancel:hover { background: var(--border); }
+.btn-save { padding: 10px 24px; border-radius: 10px; background: var(--purple); color: white; border: none; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background .12s; box-shadow: 0 4px 12px rgba(108,77,246,.3); }
+.btn-save:hover { background: #5a3dd8; }
 
-/* ===== MODAL — ใหญ่ขึ้น ===== */
-.modal-overlay{position:fixed;inset:0;background:rgba(15,10,40,.5);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.open{display:flex}
-.modal{background:var(--white);border-radius:20px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.22);display:flex;flex-direction:column}
-.modal-header{padding:24px 28px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1;border-radius:20px 20px 0 0}
-.modal-title{font-size:20px;font-weight:700}
-.modal-close{width:32px;height:32px;border-radius:8px;background:var(--bg);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted);transition:all .12s}
-.modal-close:hover{background:var(--red-bg);color:var(--red);border-color:var(--red)}
-.modal-body{padding:24px 28px;display:flex;flex-direction:column;gap:0}
+.empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+.empty-state .icon { font-size: 36px; margin-bottom: 10px; }
+.empty-state p { font-size: 14px; line-height: 1.6; }
+.loading { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
 
-.section-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;margin-top:20px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.section-label:first-child{margin-top:0}
-
-.field{margin-bottom:14px}
-.field label{display:block;font-size:13px;font-weight:600;color:#555;margin-bottom:6px}
-.field input,.field select,.field textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);font-size:14px;font-family:inherit;color:var(--text);outline:none;transition:all .15s}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--purple);background:white;box-shadow:0 0 0 3px rgba(108,77,246,.1)}
-.field textarea{resize:vertical;min-height:90px;line-height:1.6}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.field-row-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px}
-.field-row-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
-
-.modal-footer{padding:16px 28px 24px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);position:sticky;bottom:0;background:white;border-radius:0 0 20px 20px}
-.btn-cancel{padding:10px 20px;border-radius:10px;background:var(--bg);border:1.5px solid var(--border);font-size:14px;font-family:inherit;cursor:pointer;color:var(--text);font-weight:500;transition:background .12s}
-.btn-cancel:hover{background:var(--border)}
-.btn-save{padding:10px 24px;border-radius:10px;background:var(--purple);color:white;border:none;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .12s;box-shadow:0 4px 12px rgba(108,77,246,.3)}
-.btn-save:hover{background:#5a3dd8}
-
-.empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
-.empty-state .icon{font-size:36px;margin-bottom:10px}
-.empty-state p{font-size:14px;line-height:1.6}
-.loading{text-align:center;padding:40px;color:var(--muted);font-size:14px}
-
-.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:white;padding:12px 20px;border-radius:12px;font-size:14px;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;font-weight:500}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.success{background:#16a34a}
-.toast.error{background:var(--red)}
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; z-index: 999; transform: translateY(80px); opacity: 0; transition: all .3s; font-weight: 500; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: #16a34a; }
+.toast.error { background: var(--red); }
 </style>
 </head>
 <body>
 
-<aside class="sidebar">
+<!-- ── SIDEBAR ── -->
+<div class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-icon">FMS</div>
-    <div><div class="logo-text">FMS PSU</div><div class="logo-sub">Admin Portal</div></div>
+    <div class="brand">FMS Admin</div>
+    <div class="brand-sub">PSU Faculty of Management</div>
   </div>
-  <div class="nav-section">เมนูหลัก</div>
-  <div class="nav-item" id="menuDashboard"><span class="icon">🏠</span> แดชบอร์ด</div>
-  <div class="nav-item active" id="menuPlan"><span class="icon">📚</span> แผนการศึกษา</div>
-  <div class="nav-item" id="menuCourse"><span class="icon">⚙️</span> หลักสูตร</div>
-  <div class="nav-item" id="menuQA"><span class="icon">🛡️</span> ประกันคุณภาพ</div>
-  <div class="sidebar-bottom">
-    <div class="nav-item" id="logoutBtn"><span class="icon">🚪</span> ออกจากระบบ</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="dashboard.html" id="menuDashboard">แดชบอร์ด</a>
+    <a class="nav-item active" href="study-plan.html" id="menuPlan">แผนการศึกษา</a>
+    <a class="nav-item" href="course-management.html" id="menuCourse">หลักสูตร</a>
+    <a class="nav-item" href="qa.html" id="menuQA">ประกันคุณภาพการศึกษา</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn">ออกจากระบบ</a>
   </div>
-</aside>
+</div>   <!-- ← เพิ่มบรรทัดนี้ -->
 
+<!-- ── MAIN ── -->
+<div class="main">
+
+<!-- ── MAIN ── -->
 <div class="main">
   <header class="topbar">
     <div class="topbar-title">แผนการศึกษา (Study Plan)</div>
@@ -190,7 +334,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);dis
     <!-- Left -->
     <div class="panel-left">
       <div class="breadcrumb">
-        <a onclick="goTo('dashboard.html')">แดชบอร์ด</a>
+        <a onclick="window.location.href='dashboard.html'">แดชบอร์ด</a>
         <span>/</span><span>แผนการศึกษา</span>
       </div>
       <h1 class="page-heading">แผนการศึกษา</h1>
@@ -234,7 +378,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);dis
           <button class="close-btn" id="closePanel">✕</button>
         </div>
 
-        <!-- Year tabs ปี 1-4 -->
         <div class="year-tabs" id="yearTabs">
           <button class="year-tab active" data-year="1" onclick="selectYear(1)">ปี 1</button>
           <button class="year-tab" data-year="2" onclick="selectYear(2)">ปี 2</button>
@@ -256,7 +399,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);dis
   </div>
 </div>
 
-<!-- Modal: Add Subject (ขนาดใหญ่) -->
+<!-- Modal -->
 <div class="modal-overlay" id="subjectModal">
   <div class="modal">
     <div class="modal-header">
@@ -264,7 +407,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);dis
       <button class="modal-close" id="modalClose">✕</button>
     </div>
     <div class="modal-body">
-
       <div class="section-label">ข้อมูลรายวิชา</div>
       <div class="field-row-3">
         <div class="field" style="grid-column:span 2">
@@ -276,7 +418,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);dis
           <input type="number" id="m_credits" placeholder="3" min="1" max="9" />
         </div>
       </div>
-
       <div class="field-row">
         <div class="field">
           <label>ชื่อวิชา (ภาษาไทย) *</label>
@@ -287,7 +428,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);dis
           <input type="text" id="m_name_en" placeholder="Subject Name (EN)" />
         </div>
       </div>
-
       <div class="field-row">
         <div class="field">
           <label>โครงชั่วโมง</label>
@@ -302,7 +442,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);dis
           </select>
         </div>
       </div>
-
       <div class="section-label">คำอธิบายรายวิชา</div>
       <div class="field-row">
         <div class="field">
@@ -314,7 +453,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);dis
           <textarea id="m_desc_en" placeholder="Course description in English..."></textarea>
         </div>
       </div>
-
       <div class="section-label">ผลลัพธ์การเรียนรู้</div>
       <div class="field-row">
         <div class="field">
@@ -326,7 +464,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);dis
           <textarea id="m_out_en" placeholder="Learning outcomes after completing the course..."></textarea>
         </div>
       </div>
-
     </div>
     <div class="modal-footer">
       <button class="btn-cancel" id="modalCancel">ยกเลิก</button>
@@ -343,24 +480,11 @@ const API  = BASE + "/api";
 
 if (!localStorage.getItem("user")) { window.location.href = "login.html"; }
 
-function goTo(url) { window.location.href = url; }
-
-document.getElementById("addCourseBtn").addEventListener("click", () => {
-  window.location.href = "add-course.html";
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
 });
-
-document.getElementById("menuDashboard")?.addEventListener("click", () => {
-  window.location.href = "dashboard.html";
-});
-
-document.getElementById("menuPlan")?.addEventListener("click", () => {
-  window.location.href = "study-plan.html";
-});
-
-document.getElementById("menuCourse")?.addEventListener("click", () => {
-  window.location.href = "course-list.html";
-});
-
 
 function toast(msg, type = "") {
   const el = document.getElementById("toast");
@@ -368,15 +492,13 @@ function toast(msg, type = "") {
   setTimeout(() => { el.className = "toast"; }, 2800);
 }
 
-// State
 let allMajors = [], allCourses = [], filtered = [];
 let currentPage = 1, PAGE_SIZE = 6;
 let selectedMajor = null;
-let currentYear = 1;       // ปีที่เลือก (1-4)
+let currentYear = 1;
 let planId = null;
-let planCache = {};         // cache plan per year: { 1: planId, 2: planId, ... }
+let planCache = {};
 
-// Init
 async function init() {
   try {
     allCourses = await fetch(`${API}/courses`).then(r => r.json());
@@ -386,17 +508,14 @@ async function init() {
       opt.value = c.id; opt.textContent = c.name_th || `Course #${c.id}`;
       sel.appendChild(opt);
     });
-
     const allMajorArrays = await Promise.all(
       allCourses.map(c => fetch(`${API}/courses/${c.id}/majors`).then(r => r.json()).catch(() => []))
     );
-
     allMajors = allMajorArrays.flatMap((majors, i) =>
       majors.map(m => ({ ...m, course_name: allCourses[i]?.name_th || "-", course_id: allCourses[i]?.id }))
     );
-
     applyFilter();
-  } catch(e) {
+  } catch {
     document.getElementById("majorTableBody").innerHTML = `<div class="loading">❌ เชื่อมต่อไม่ได้</div>`;
   }
 }
@@ -429,7 +548,7 @@ function renderTable() {
       </div>
       <div style="font-size:13px;color:var(--muted)">${m.course_name||"-"}</div>
       <div class="action-group" onclick="event.stopPropagation()">
-        <button class="icon-btn edit" onclick="goTo('add-major.html?courseId=${m.course_id}&majorId=${m.id}')" title="แก้ไข">✏️</button>
+        <button class="icon-btn" onclick="window.location.href='add-major.html?courseId=${m.course_id}&majorId=${m.id}'" title="แก้ไข">✏️</button>
       </div>
     </div>`).join("");
 
@@ -446,27 +565,21 @@ function renderTable() {
 
 function gotoPage(p) { currentPage = p; renderTable(); }
 
-// Select major
 async function selectMajor(id) {
   selectedMajor = allMajors.find(m => m.id === id);
   if (!selectedMajor) return;
   renderTable();
-
   document.getElementById("rightPanel").classList.add("open");
   document.getElementById("detailTitle").textContent = selectedMajor.name_th || "-";
   document.getElementById("detailSub").textContent = selectedMajor.name_en || "-";
   document.getElementById("detailCourse").textContent = selectedMajor.course_name || "-";
-
-  planCache = {};
-  currentYear = 1;
+  planCache = {}; currentYear = 1;
   updateYearTabs();
   await loadPlanForYear(selectedMajor.id, 1);
 }
 
-// Year tab selection
 function selectYear(year) {
-  currentYear = year;
-  updateYearTabs();
+  currentYear = year; updateYearTabs();
   if (selectedMajor) loadPlanForYear(selectedMajor.id, year);
 }
 
@@ -480,37 +593,27 @@ function updateYearTabs() {
 async function loadPlanForYear(majorId, yearNo) {
   document.getElementById("semesterList").innerHTML = `<div class="loading">⏳ กำลังโหลด...</div>`;
   planId = null;
-
   try {
-    // ดึง plan ของ majorId + year_no นี้
     const plans = await fetch(`${API}/majors/${majorId}/study-plans?page=1&pageSize=20`).then(r => r.json());
     const yearData = plans.data || [];
     const year = new Date().getFullYear() + 543;
-
-    // หา plan ที่ตรง year_no
     let plan = yearData.find(p => Number(p.year_no) === yearNo);
-
     if (!plan) {
-      // สร้าง plan ใหม่สำหรับปีนี้
       const created = await fetch(`${API}/majors/${majorId}/study-plans`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ academic_year: year, year_no: yearNo, status: "active" })
       }).then(r => r.json());
       plan = created.plan;
     }
-
     if (!plan) {
       document.getElementById("semesterList").innerHTML =
         `<div class="empty-state"><div class="icon">📭</div><p>ไม่พบแผนการศึกษา</p></div>`;
       return;
     }
-
-    planId = plan.id;
-    planCache[yearNo] = planId;
-
+    planId = plan.id; planCache[yearNo] = planId;
     const detail = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
     renderSemesters(detail.semesters || [], yearNo);
-  } catch(e) {
+  } catch {
     document.getElementById("semesterList").innerHTML =
       `<div class="empty-state"><div class="icon">❌</div><p>โหลดข้อมูลไม่สำเร็จ</p></div>`;
   }
@@ -522,7 +625,6 @@ function renderSemesters(semesters, yearNo) {
       `<div class="empty-state"><div class="icon">📭</div><p>ยังไม่มีภาคเรียนใน ปี ${yearNo}<br>กด "+ Add Semester" เพื่อเริ่มต้น</p></div>`;
     return;
   }
-
   document.getElementById("semesterList").innerHTML = semesters.map(sem => {
     const totalCred = (sem.subjects||[]).reduce((s,it) => s + Number(it.credits ?? it.default_credits ?? 0), 0);
     const subjectsHtml = (sem.subjects||[]).map(it => `
@@ -537,7 +639,6 @@ function renderSemesters(semesters, yearNo) {
           <button class="subject-del" onclick="deleteSubject(${it.id})">🗑</button>
         </div>
       </div>`).join("");
-
     return `<div class="semester-block" id="sem_${sem.id}">
       <div class="semester-head" onclick="toggleSem(${sem.id})">
         <div class="semester-head-left">
@@ -558,14 +659,12 @@ function renderSemesters(semesters, yearNo) {
 
 function toggleSem(id) { document.getElementById("sem_"+id)?.classList.toggle("collapsed"); }
 
-// Close panel
 document.getElementById("closePanel").addEventListener("click", () => {
   document.getElementById("rightPanel").classList.remove("open");
   selectedMajor = null; planId = null; planCache = {};
   renderTable();
 });
 
-// Add semester
 document.getElementById("btnAddSemester").addEventListener("click", async () => {
   if (!planId) return toast("กรุณาเลือกสาขาวิชาก่อน", "error");
   try {
@@ -573,7 +672,6 @@ document.getElementById("btnAddSemester").addEventListener("click", async () => 
     const existing = (detail.semesters||[]).map(s => Number(s.term_no));
     const next = [1,2,3].find(t => !existing.includes(t));
     if (!next) return toast("มีครบทุกภาคเรียนแล้ว", "error");
-
     const termNames = ["","ภาคเรียนที่ 1","ภาคเรียนที่ 2","ภาคฤดูร้อน"];
     const title = `ปี ${currentYear} - ${termNames[next]}`;
     await fetch(`${API}/study-plans/${planId}/semesters`, {
@@ -583,26 +681,23 @@ document.getElementById("btnAddSemester").addEventListener("click", async () => 
     toast(`เพิ่ม${termNames[next]}สำเร็จ ✓`, "success");
     const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
     renderSemesters(d.semesters||[], currentYear);
-  } catch(e) { toast("เกิดข้อผิดพลาด", "error"); }
+  } catch { toast("เกิดข้อผิดพลาด", "error"); }
 });
 
-// Modal
 let modalSemId = null;
-
 function openSubjectModal(semId) {
   modalSemId = semId;
   ["m_code","m_name_th","m_name_en","m_credits","m_hours","m_desc_th","m_desc_en","m_out_th","m_out_en"]
     .forEach(id => { document.getElementById(id).value = ""; });
   document.getElementById("subjectModal").classList.add("open");
 }
-
 function closeModal() { document.getElementById("subjectModal").classList.remove("open"); }
-
 document.getElementById("modalCancel").addEventListener("click", closeModal);
 document.getElementById("modalClose").addEventListener("click", closeModal);
-document.getElementById("subjectModal").addEventListener("click", e => { if (e.target === document.getElementById("subjectModal")) closeModal(); });
+document.getElementById("subjectModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("subjectModal")) closeModal();
+});
 
-// Autocomplete subject code
 document.getElementById("m_code").addEventListener("blur", async () => {
   const code = document.getElementById("m_code").value.trim();
   if (!code) return;
@@ -620,7 +715,7 @@ document.getElementById("m_code").addEventListener("blur", async () => {
       document.getElementById("m_out_en").value  = found.outcomes_en || "";
       toast("เติมข้อมูลวิชาเดิมให้แล้ว ✓");
     }
-  } catch(e) {}
+  } catch {}
 });
 
 document.getElementById("modalSave").addEventListener("click", async () => {
@@ -628,23 +723,15 @@ document.getElementById("modalSave").addEventListener("click", async () => {
   const name_th = document.getElementById("m_name_th").value.trim();
   const credits = Number(document.getElementById("m_credits").value);
   if (!code || !name_th || !credits) return toast("กรุณากรอก รหัสวิชา / ชื่อไทย / หน่วยกิต", "error");
-
   let subject_id = null;
   try {
     const items = await fetch(`${API}/subjects?query=${encodeURIComponent(code)}`).then(r => r.json());
     const found = items.find(it => it.code.toLowerCase() === code.toLowerCase());
     if (found) subject_id = found.id;
-  } catch(e) {}
-
-  const payload = {
-    category: document.getElementById("m_category").value,
-    credits,
-    hour_structure: document.getElementById("m_hours").value.trim() || null
-  };
-
-  if (subject_id) {
-    payload.subject_id = subject_id;
-  } else {
+  } catch {}
+  const payload = { category: document.getElementById("m_category").value, credits, hour_structure: document.getElementById("m_hours").value.trim() || null };
+  if (subject_id) { payload.subject_id = subject_id; }
+  else {
     Object.assign(payload, {
       code, name_th, default_credits: credits,
       name_en: document.getElementById("m_name_en").value.trim() || null,
@@ -655,7 +742,6 @@ document.getElementById("modalSave").addEventListener("click", async () => {
       outcomes_en: document.getElementById("m_out_en").value.trim() || null
     });
   }
-
   try {
     const res = await fetch(`${API}/semesters/${modalSemId}/subjects`, {
       method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(payload)
@@ -665,7 +751,7 @@ document.getElementById("modalSave").addEventListener("click", async () => {
     closeModal();
     const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
     renderSemesters(d.semesters||[], currentYear);
-  } catch(e) { toast("บันทึกไม่สำเร็จ", "error"); }
+  } catch { toast("บันทึกไม่สำเร็จ", "error"); }
 });
 
 async function deleteSubject(ssId) {
@@ -675,13 +761,12 @@ async function deleteSubject(ssId) {
     toast("ลบรายวิชาสำเร็จ", "success");
     const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
     renderSemesters(d.semesters||[], currentYear);
-  } catch(e) { toast("ลบไม่สำเร็จ", "error"); }
+  } catch { toast("ลบไม่สำเร็จ", "error"); }
 }
 
 document.getElementById("searchInput").addEventListener("input", applyFilter);
 document.getElementById("topSearch").addEventListener("input", applyFilter);
 document.getElementById("courseFilter").addEventListener("change", applyFilter);
-
 init();
 </script>
 </body>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<title>Add / Edit Course | FMS Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #7c3aed;
+  --primary-light: #ede9fe;
+  --sidebar-w: 230px;
+  --text: #1e1b2e;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --bg: #f5f4fa;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: #fff;
+  height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 16px rgba(0,0,0,0.07);
+  border-radius: 0 20px 20px 0;
+  z-index: 100;
+  overflow: hidden;
+}
+.sidebar-logo {
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-logo .brand {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.5px;
+}
+.sidebar-logo .brand-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: background .18s, color .18s, transform .18s;
+  user-select: none;
+}
+.nav-item:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  transform: translateX(3px);
+}
+.nav-item.active {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+}
+.nav-item .nav-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.sidebar-footer {
+  padding: 14px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-footer .nav-item { color: #ef4444; }
+.sidebar-footer .nav-item:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  transform: translateX(3px);
+}
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  padding: 28px;
+  width: calc(100% - var(--sidebar-w));
+}
+.page-header small { color: #999; font-size: 13px; }
+.page-header h2 { margin: 4px 0; font-size: 22px; color: var(--text); }
+.page-header p { font-size: 13px; color: var(--muted); }
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 22px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+  margin-top: 12px;
+  margin-bottom: 16px;
+}
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 13px; margin-bottom: 4px; color: #555; }
+.field input, .field textarea, .field select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #faf7ff;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(124,58,237,0.15);
+}
+textarea { resize: vertical; min-height: 80px; }
+
+.footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.btn { border-radius: 999px; padding: 9px 22px; border: none; cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 500; transition: opacity .15s; }
+.btn:hover { opacity: 0.88; }
+.btn-secondary { background: #ffdddd; color: #b33939; }
+.btn-primary { background: var(--primary); color: white; box-shadow: 0 5px 14px rgba(124,58,237,0.3); }
+.btn-success { background: #2ecc71; color: #fff; box-shadow: 0 5px 14px rgba(46,204,113,0.3); }
+#message { margin-top: 8px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">FMS Admin</div>
+    <div class="brand-sub">PSU Faculty of Management</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="dashboard.html" id="menuDashboard">
+      <span class="nav-icon">🏠</span><span>แดชบอร์ด</span>
+    </a>
+    <a class="nav-item" href="study-plan.html" id="menuPlan">
+      <span class="nav-icon">📋</span><span>แผนการศึกษา</span>
+    </a>
+    <a class="nav-item active" href="course-management.html" id="menuCourse">
+      <span class="nav-icon">🎓</span><span>หลักสูตร</span>
+    </a>
+    <a class="nav-item" href="qa.html" id="menuQA">
+      <span class="nav-icon">✅</span><span>ประกันคุณภาพการศึกษา</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn">
+      <span class="nav-icon">🚪</span><span>ออกจากระบบ</span>
+    </a>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="page-header">
+    <small>แดชบอร์ด / เพิ่มหรือแก้ไขหลักสูตร</small>
+    <h2 id="pageTitle">เพิ่มหลักสูตรใหม่</h2>
+    <p id="pageSub">กรอกข้อมูลหลักสูตรให้ครบถ้วน แล้วกดบันทึก</p>
+  </div>
+
+  <form id="courseForm">
+    <div class="card">
+      <div class="card-title">ข้อมูลหลักสูตร</div>
+      <div class="form-grid-2">
+        <div class="field">
+          <label>ชื่อหลักสูตร (ภาษาไทย) *</label>
+          <input type="text" id="name_th" required />
+        </div>
+        <div class="field">
+          <label>ชื่อหลักสูตร (ภาษาอังกฤษ)</label>
+          <input type="text" id="name_en" />
+        </div>
+        <div class="field">
+          <label>ระดับการศึกษา</label>
+          <input type="text" id="degree_level" placeholder="เช่น ปริญญาตรี" />
+        </div>
+        <div class="field">
+          <label>สถานะหลักสูตร</label>
+          <select id="status">
+            <option value="active">Active</option>
+            <option value="draft">Draft</option>
+            <option value="maintenance">Maintenance</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>รูปแบบหลักสูตร</label>
+          <input type="text" id="program_type" placeholder="เช่น หลักสูตร 4 ปี" />
+        </div>
+        <div class="field">
+          <label>รูปแบบการจัดการศึกษา</label>
+          <input type="text" id="study_system" placeholder="เช่น ภาคปกติ" />
+        </div>
+        <div class="field">
+          <label>การให้ปริญญา</label>
+          <input type="text" id="award_title" placeholder="เช่น บริหารธุรกิจบัณฑิต (บธ.บ.)" />
+        </div>
+        <div class="field">
+          <label>จำนวนหน่วยกิตตลอดหลักสูตร</label>
+          <input type="number" id="total_credits" placeholder="เช่น 129" />
+        </div>
+        <div class="field">
+          <label>สำหรับนักศึกษา (รหัส)</label>
+          <input type="text" id="student_range" placeholder="เช่น รหัส 67-70" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>คำอธิบายสั้น ๆ ของหลักสูตร</label>
+        <textarea id="short_detail" placeholder="เช่น จุดเด่นของหลักสูตร กลุ่มเป้าหมาย ฯลฯ"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">รูปหลักสูตร</div>
+      <div class="field">
+        <label>รูปหน้าปก (Hero Image)</label>
+        <input type="file" id="heroFile" accept="image/*" />
+        <input type="hidden" id="hero_image" />
+        <img id="heroPreview" style="max-width:200px; display:none; margin-top:10px; border-radius:8px;" />
+      </div>
+      <div class="field">
+        <label>รูปข้อมูลหลักสูตร</label>
+        <input type="file" id="infoFile" accept="image/*" />
+        <input type="hidden" id="info_image" />
+        <img id="infoPreview" style="max-width:200px; display:none; margin-top:10px; border-radius:8px;" />
+      </div>
+    </div>
+
+    <div class="footer-actions">
+      <button type="button" class="btn btn-secondary" onclick="history.back()">ยกเลิก</button>
+      <button type="submit" class="btn btn-primary" id="saveBtn">บันทึกหลักสูตร</button>
+      <button type="button" class="btn btn-success" id="addMajorBtn">บันทึกและเพิ่มสาขา</button>
+      <button type="button" class="btn btn-secondary" id="deleteBtn" style="display:none; background:#ffdddd; color:#b33939;">ลบหลักสูตร</button>
+    </div>
+    <div id="message"></div>
+  </form>
+</div>
+
+<script>
+const BASE_URL = "https://websitefms.onrender.com";
+const API = BASE_URL + "/api";
+
+const user = localStorage.getItem("user");
+if (!user) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
+
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
+});
+
+const params = new URLSearchParams(window.location.search);
+const courseId = params.get("courseId");
+const isEdit = !!courseId;
+const msg = document.getElementById("message");
+const form = document.getElementById("courseForm");
+const saveBtn = document.getElementById("saveBtn");
+const saveAndAddBtn = document.getElementById("addMajorBtn");
+const heroFile = document.getElementById("heroFile");
+const heroHidden = document.getElementById("hero_image");
+const heroPreview = document.getElementById("heroPreview");
+const infoFile = document.getElementById("infoFile");
+const infoHidden = document.getElementById("info_image");
+const infoPreview = document.getElementById("infoPreview");
+
+async function uploadImage(fileInput, hiddenInput, previewImg) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const fd = new FormData();
+  fd.append("image", file);
+  msg.style.color = "#555";
+  msg.textContent = "กำลังอัปโหลดรูป...";
+  try {
+    const res = await fetch(`${API}/upload`, { method: "POST", body: fd });
+    const data = await res.json();
+    if (!res.ok) { msg.style.color = "red"; msg.textContent = data.message || "อัปโหลดไม่สำเร็จ"; return; }
+    hiddenInput.value = data.url;
+    previewImg.src = BASE_URL + data.url;
+    previewImg.style.display = "block";
+    msg.style.color = "green";
+    msg.textContent = "อัปโหลดสำเร็จ";
+  } catch { msg.style.color = "red"; msg.textContent = "Server error (upload)"; }
+}
+
+heroFile?.addEventListener("change", () => uploadImage(heroFile, heroHidden, heroPreview));
+infoFile?.addEventListener("change", () => uploadImage(infoFile, infoHidden, infoPreview));
+
+if (isEdit) {
+  saveBtn.textContent = "อัปเดตหลักสูตร";
+  loadCourse();
+}
+
+async function loadCourse() {
+  try {
+    const res = await fetch(`${API}/courses/${courseId}`);
+    const c = await res.json();
+    document.getElementById("name_th").value = c.name_th || "";
+    document.getElementById("name_en").value = c.name_en || "";
+    document.getElementById("degree_level").value = c.degree_level || "";
+    document.getElementById("status").value = c.status || "draft";
+    document.getElementById("program_type").value = c.program_type || "";
+    document.getElementById("study_system").value = c.study_system || "";
+    document.getElementById("award_title").value = c.award_title || "";
+    document.getElementById("total_credits").value = c.total_credits || "";
+    document.getElementById("short_detail").value = c.short_detail || "";
+    document.getElementById("student_range").value = c.student_range || "";
+    if (c.hero_image) { heroHidden.value = c.hero_image; heroPreview.src = BASE_URL + c.hero_image; heroPreview.style.display = "block"; }
+    if (c.info_image) { infoHidden.value = c.info_image; infoPreview.src = BASE_URL + c.info_image; infoPreview.style.display = "block"; }
+  } catch { msg.textContent = "โหลดข้อมูลไม่สำเร็จ"; }
+}
+
+let afterSave = "info";
+saveBtn.onclick = () => { afterSave = "info"; };
+saveAndAddBtn?.addEventListener("click", () => { afterSave = "major"; form.requestSubmit(); });
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const body = {
+    name_th: document.getElementById("name_th").value,
+    name_en: document.getElementById("name_en").value,
+    degree_level: document.getElementById("degree_level").value,
+    status: document.getElementById("status").value,
+    program_type: document.getElementById("program_type").value,
+    study_system: document.getElementById("study_system").value,
+    award_title: document.getElementById("award_title").value,
+    total_credits: document.getElementById("total_credits").value,
+    short_detail: document.getElementById("short_detail").value,
+    student_range: document.getElementById("student_range").value,
+    hero_image: heroHidden.value,
+    info_image: infoHidden.value
+  };
+  const url = isEdit ? `${API}/courses/${courseId}` : `${API}/courses`;
+  const method = isEdit ? "PUT" : "POST";
+  try {
+    const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const data = await res.json();
+    if (!res.ok) { msg.style.color = "red"; msg.textContent = data.message || "บันทึกไม่สำเร็จ"; return; }
+    msg.style.color = "green";
+    msg.textContent = "บันทึกสำเร็จ";
+    const id = isEdit ? courseId : (data.id || data.courseId);
+    setTimeout(() => {
+      if (!isEdit && afterSave === "major") window.location.href = `add-major.html?courseId=${id}`;
+      else window.location.href = `course-info.html?courseId=${id}`;
+    }, 600);
+  } catch { msg.textContent = "Server error"; }
+});
+</script>
+</body>
+</html>
