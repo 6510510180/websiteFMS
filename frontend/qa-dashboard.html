@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>ประกันคุณภาพการศึกษา | FMS Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple:       #6B3FA0;
+  --purple-dark:  #4A2870;
+  --purple-light: #F3EEFF;
+  --purple-mid:   #E8DEFF;
+  --accent:       #9B6DD1;
+  --bg:           #F7F5FA;
+  --white:        #FFFFFF;
+  --text:         #181117;
+  --text-sub:     #64748B;
+  --border:       #EDE8F5;
+  --red:          #EF4444;
+  --red-bg:       #FEE2E2;
+  --blue:         #3B82F6;
+  --blue-bg:      #EFF6FF;
+  --amber:        #F59E0B;
+  --amber-bg:     #FFFBEB;
+  --green:        #10B981;
+  --green-bg:     #ECFDF5;
+  --sidebar-w:    240px;
+  --topbar-h:     64px;
+  --radius:       12px;
+  --shadow:       0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:    0 4px 12px rgba(107,63,160,0.10);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans Thai', 'Lexend', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--white);
+  height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  z-index: 100;
+}
+.sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.sidebar-brand-title { font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+.sidebar-brand-sub { font-size: 11.5px; color: var(--purple); font-weight: 500; margin-top: 2px; }
+.sidebar-section-label { padding: 20px 20px 6px; font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.2px; }
+.sidebar-nav { flex: 1; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 8px;
+  font-size: 13.5px; font-weight: 500; color: var(--text-sub);
+  text-decoration: none; transition: all 0.18s ease; cursor: pointer; user-select: none;
+}
+.nav-item:hover { background: var(--purple-light); color: var(--purple); }
+.nav-item.active { background: var(--purple-light); color: var(--purple); font-weight: 600; }
+.nav-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.75; }
+.nav-item.active .nav-icon, .nav-item:hover .nav-icon { opacity: 1; }
+.sidebar-footer { padding: 12px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.sidebar-footer .nav-item { color: var(--red); }
+.sidebar-footer .nav-item:hover { background: var(--red-bg); color: #DC2626; }
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top: 0; left: var(--sidebar-w); right: 0;
+  height: var(--topbar-h); background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; z-index: 90;
+}
+.topbar-left { display: flex; flex-direction: column; }
+.topbar-title { font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; }
+.topbar-breadcrumb { font-size: 11.5px; color: var(--text-sub); margin-top: 1px; }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.search-wrap {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 14px; width: 220px; transition: border-color 0.15s;
+}
+.search-wrap:focus-within { border-color: var(--accent); }
+.search-wrap input { border: none; background: none; outline: none; font-size: 13px; color: var(--text); font-family: inherit; width: 100%; }
+.search-wrap input::placeholder { color: var(--text-sub); }
+.avatar-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 10px; border-radius: 8px; transition: background 0.15s; }
+.avatar-wrap:hover { background: var(--purple-light); }
+.avatar-name { font-size: 13px; font-weight: 600; color: var(--purple); }
+.avatar-circle { width: 34px; height: 34px; border-radius: 50%; background: var(--purple-mid); border: 2px solid var(--purple-light); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--purple); }
+
+/* ── MAIN ── */
+.main { margin-left: var(--sidebar-w); padding-top: var(--topbar-h); flex: 1; min-width: 0; }
+.page-body { padding: 32px; display: flex; flex-direction: column; gap: 28px; }
+
+.page-heading-wrap { display: flex; flex-direction: column; gap: 4px; }
+.page-heading { font-family: 'Lexend', sans-serif; font-size: 26px; font-weight: 800; color: var(--purple); letter-spacing: -0.4px; line-height: 1.2; }
+.page-sub { font-size: 14px; color: var(--text-sub); }
+
+/* ── Action cards ── */
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.action-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 24px 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  cursor: pointer; transition: all 0.2s ease;
+  text-decoration: none; box-shadow: var(--shadow);
+  position: relative; overflow: hidden;
+}
+.action-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--purple); transform: scaleX(0); transition: transform 0.2s ease; transform-origin: left;
+}
+.action-card:hover { border-color: var(--purple); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.action-card:hover::before { transform: scaleX(1); }
+.action-card-left { display: flex; flex-direction: column; gap: 6px; }
+.action-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-sub); }
+.action-card-title { font-family: 'Lexend', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.2; }
+.action-card-desc { font-size: 13px; color: var(--text-sub); margin-top: 2px; }
+.action-card-icon { width: 56px; height: 56px; border-radius: 12px; background: var(--purple-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.action-card-icon svg { color: var(--purple); }
+
+/* ── Section ── */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.section-title { display: flex; align-items: center; gap: 8px; font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+.section-title-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); }
+.section-link { font-size: 13px; font-weight: 600; color: var(--purple); text-decoration: none; cursor: pointer; transition: opacity 0.15s; }
+.section-link:hover { opacity: 0.7; }
+
+/* ── Recent list ── */
+.recent-list { display: flex; flex-direction: column; gap: 10px; }
+.recent-item {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  box-shadow: var(--shadow); transition: box-shadow 0.15s, border-color 0.15s;
+  animation: fadeUp 0.4s ease both;
+}
+.recent-item:hover { border-color: #D8C8F0; box-shadow: var(--shadow-md); }
+.recent-item:nth-child(1) { animation-delay: 0.05s; }
+.recent-item:nth-child(2) { animation-delay: 0.10s; }
+.recent-item:nth-child(3) { animation-delay: 0.15s; }
+.recent-item:nth-child(4) { animation-delay: 0.20s; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.recent-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.recent-info { flex: 1; min-width: 0; }
+.recent-name { font-size: 14.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.recent-meta { font-size: 12px; color: var(--text-sub); margin-top: 3px; }
+.btn-edit { padding: 7px 20px; background: var(--purple); color: var(--white); border: none; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background 0.15s, transform 0.15s; white-space: nowrap; flex-shrink: 0; }
+.btn-edit:hover { background: var(--purple-dark); transform: translateY(-1px); }
+.divider { height: 1px; background: var(--border); }
+svg { display: block; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-title">FMS Admin</div>
+    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
+  </div>
+  <div class="sidebar-section-label">เมนูหลัก</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="dashboard.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+      แดชบอร์ด
+    </a>
+    <a class="nav-item" href="study-plan.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+      แผนการศึกษา
+    </a>
+    <a class="nav-item" href="course-management.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+      หลักสูตร
+    </a>
+    <a class="nav-item active" href="qa.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      ประกันคุณภาพการศึกษา
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title">ประกันคุณภาพการศึกษา</div>
+    <div class="topbar-breadcrumb">แดชบอร์ด · ประกันคุณภาพการศึกษา</div>
+  </div>
+  <div class="topbar-right">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg>
+      <input type="text" placeholder="ค้นหาข้อมูล..." />
+    </div>
+    <div class="avatar-wrap">
+      <div class="avatar-name">Administrator</div>
+      <div class="avatar-circle">A</div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="page-body">
+
+    <div class="page-heading-wrap">
+      <div class="page-heading">เลือกหมวดหมู่ข้อมูล</div>
+      <div class="page-sub">คุณสามารถจัดการหลักสูตรหรือดำเนินการได้ที่นี่</div>
+    </div>
+
+    <div>
+      <div class="section-header">
+        <div class="section-title">
+          <div class="section-title-dot"></div>
+          กรุณาเลือกข้อมูลที่ต้องการจัดการ
+        </div>
+      </div>
+      <div class="action-grid">
+        <a class="action-card" href="qa-add.html">
+          <div class="action-card-left">
+            <div class="action-card-label">ดำเนินการ</div>
+            <div class="action-card-title">เพิ่มข้อมูลใหม่</div>
+            <div class="action-card-desc">เพิ่ม PLO, Stakeholders, Analytics หรือผลงาน</div>
+          </div>
+          <div class="action-card-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+          </div>
+        </a>
+        <a class="action-card" href="qa-add.html?mode=edit">
+          <div class="action-card-left">
+            <div class="action-card-label">ดำเนินการ</div>
+            <div class="action-card-title">แก้ไขข้อมูลเดิม</div>
+            <div class="action-card-desc">ค้นหาและแก้ไขข้อมูล QA ที่มีอยู่ในระบบ</div>
+          </div>
+          <div class="action-card-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div>
+      <div class="section-header">
+        <div class="section-title">
+          <div class="section-title-dot"></div>
+          รายการที่เพิ่มล่าสุด
+        </div>
+        <a class="section-link">ดูประวัติทั้งหมด</a>
+      </div>
+      <div class="recent-list">
+        <div class="recent-item">
+          <div class="recent-icon" style="background:var(--purple-light)">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color:var(--purple)"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="recent-info">
+            <div class="recent-name">PLO10 - ทักษะการสื่อสารและสารสนเทศ</div>
+            <div class="recent-meta">เพิ่มเมื่อ 10 นาทีที่แล้ว · โดย คุณสมชาย</div>
+          </div>
+          <button class="btn-edit">แก้ไขต่อ</button>
+        </div>
+        <div class="recent-item">
+          <div class="recent-icon" style="background:var(--blue-bg)">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color:var(--blue)"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+          </div>
+          <div class="recent-info">
+            <div class="recent-name">สถิตินักศึกษาเข้าใหม่ ปีการศึกษา 2566</div>
+            <div class="recent-meta">แก้ไขเมื่อ 1 ชั่วโมงที่แล้ว · หมวด Analytics</div>
+          </div>
+          <button class="btn-edit">แก้ไขต่อ</button>
+        </div>
+        <div class="recent-item">
+          <div class="recent-icon" style="background:var(--amber-bg)">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color:var(--amber)"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="recent-info">
+            <div class="recent-name">แบบสำรวจความพึงพอใจผู้ใช้บัณฑิต (Stakeholders)</div>
+            <div class="recent-meta">เพิ่มเมื่อ 3 ชั่วโมงที่แล้ว · รอดำเนินการ</div>
+          </div>
+          <button class="btn-edit">แก้ไขต่อ</button>
+        </div>
+        <div class="recent-item">
+          <div class="recent-icon" style="background:var(--green-bg)">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color:var(--green)"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="recent-info">
+            <div class="recent-name">ผลงานวิจัยดีเด่น: การพัฒนา AI สำหรับการศึกษา</div>
+            <div class="recent-meta">แก้ไขเมื่อ 5 ชั่วโมงที่แล้ว · หมวด ผลงาน</div>
+          </div>
+          <button class="btn-edit">แก้ไขต่อ</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+if (!localStorage.getItem("user")) { window.location.href = "login.html"; }
+document.getElementById("logoutBtn").addEventListener("click", e => {
+  e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html";
+});
+</script>
+</body>
+</html>

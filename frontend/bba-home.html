@@ -1,406 +1,617 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8" />
-<title>FMS PSU | Bachelor Programs Portal</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <title>หลักสูตรบริหารธุรกิจบัณฑิต</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+        }
 
-<style>
-/* ========== BASE ========== */
-* {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background: #f7f7fb;
-  color: #333;
-}
-a {
-  text-decoration: none;
-  color: inherit;
-}
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fdfdfd;
+            color: #333;
+        }
 
-/* ========== HEADER ========== */
-header {
-  background: #fff;
-  padding: 12px 36px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.logo-main {
-  font-weight: 700;
-  color: #5c2ea6;
-}
-.logo-sub {
-  font-size: 12px;
-  color: #999;
-}
-nav a {
-  margin-left: 18px;
-  font-size: 14px;
-  color: #666;
-}
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-/* ========== PAGE WRAP ========== */
-.page {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 24px;
-}
+        .navbar .logo img { height: 40px; }
 
-/* ========== HERO ========== */
-.hero {
-  background: #f1d8ff;
-  border-radius: 26px;
-  padding: 22px 26px;
-  margin-bottom: 24px;
-}
-.hero h1 {
-  margin: 0;
-  font-size: 24px;
-  color: #4a1f87;
-}
-.hero h2 {
-  margin: 6px 0;
-  font-size: 16px;
-  font-weight: normal;
-  color: #4a1f87;
-}
-.hero span {
-  display: inline-block;
-  background: rgba(255,255,255,0.85);
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 12px;
-  color: #5c2ea6;
-}
+        .navbar ul {
+            display: flex;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
 
-/* ========== LAYOUT ========== */
-.layout {
-  display: grid;
-  grid-template-columns: 3.5fr 1.4fr;
-  gap: 26px;
-  align-items: start;
-}
+        .navbar a {
+            font-size: 14px;
+            color: #555;
+            text-decoration: none;
+            transition: 0.3s;
+        }
 
-/* ========== COURSES ========== */
-.section-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
+        .navbar a.active {
+            color: #9b51e0;
+            font-weight: bold;
+        }
 
-.course-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-.course-card {
-  background: #fff;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-  cursor: pointer;
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-.course-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 26px rgba(0,0,0,0.18);
-}
+        .container {
+            width: 90%;
+            margin: 20px auto;
+        }
 
-.course-img {
-  height: 170px;
-  position: relative;
-  background: linear-gradient(135deg,#9b5de5,#d66efd);
-}
-.badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #ff4f8b;
-  color: #fff;
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 999px;
-}
-.degree, .year {
-  position: absolute;
-  bottom: 10px;
-  background: rgba(0,0,0,.35);
-  color: #fff;
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 999px;
-}
-.degree { left: 10px; }
-.year { right: 10px; }
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
 
-.course-body {
-  padding: 14px 16px 16px;
-  background: linear-gradient(180deg,#f5e6ff,#fdf7ff);
-}
-.course-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #2b1a5a;
-}
-.course-desc {
-  margin-top: 6px;
-  font-size: 12px;
-  color: #5a4a90;
-}
+        .hero-banner {
+            background-color: #f1e1ff;
+            padding: 40px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
 
-/* ========== EXTRA ========== */
-.extra {
-  margin-top: 22px;
-}
-.extra-head {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-.extra-head a {
-  font-size: 12px;
-  color: #7a3fe0;
-}
-.extra-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 14px;
-}
-.extra-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 12px 14px;
-  display: flex;
-  gap: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-.extra-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 14px;
-  background: #f1d8ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.extra-title {
-  font-size: 13px;
-  font-weight: 600;
-}
-.extra-sub {
-  font-size: 11px;
-  color: #777;
-}
+        .welcome-text {
+            color: black !important;
+            margin: 0;
+            font-size: 24px;
+            line-height: 1.2;
+        }
 
-/* ========== SIDEBAR ========== */
-.notice-box {
-  background: #fff;
-  border-radius: 20px;
-  padding: 18px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-  margin-bottom: 18px;
-}
-.notice-item {
-  margin: 12px 0;
-  font-size: 13px;
-}
-.dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 6px;
-}
-.notice-time {
-  font-size: 11px;
-  color: #999;
-}
-.notice-btn {
-  width: 100%;
-  margin-top: 10px;
-  padding: 6px;
-  border-radius: 999px;
-  border: none;
-  background: #f1d8ff;
-  color: #6a2fba;
-  cursor: pointer;
-}
+        .sub-text {
+            color: #9b51e0;
+            margin: 10px 0 0 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
 
-.resources {
-  background: #241245;
-  color: #f3e8ff;
-  border-radius: 20px;
-  padding: 18px;
-}
-.resources a {
-  display: block;
-  margin: 6px 0;
-}
+        /* ── Course Grid ── */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-/* ========== FOOTER ========== */
-footer {
-  margin-top: 28px;
-  text-align: center;
-  font-size: 11px;
-  color: #777;
-}
+        .course-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 1100px) {
-  .course-grid { grid-template-columns: repeat(2,1fr); }
-  .extra-grid { grid-template-columns: repeat(2,1fr); }
-}
-@media (max-width: 800px) {
-  .layout { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
-  .course-grid { grid-template-columns: 1fr; }
-  .extra-grid { grid-template-columns: 1fr; }
-}
-</style>
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(155,81,224,0.18);
+        }
+
+        .badge-new {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff4757;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* รูปภาพหลักสูตร */
+        .course-img-wrap {
+            width: 100%;
+            height: 140px;
+            overflow: hidden;
+            background: #e8d5ff;
+            position: relative;
+        }
+
+        .course-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* placeholder ถ้าไม่มีรูป */
+        .course-img-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e8d5ff 0%, #d4b8ff 100%);
+        }
+
+        .course-img-placeholder i {
+            font-size: 40px;
+            color: #9b51e0;
+            opacity: 0.5;
+        }
+
+        /* label แบบ overlay ซ้อนบนรูป (เหมือนในรูป) */
+        .course-label-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(155,81,224,0.95) 60%, transparent 100%);
+            color: #fff;
+            padding: 28px 12px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        /* badge สถานะ */
+        .badge-status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .badge-status.active { background: #e6ffe8; color: #2e9a52; }
+        .badge-status.draft { background: #fff3cd; color: #856404; }
+        .badge-status.maintenance { background: #ffe6e6; color: #c0392b; }
+
+        /* Loading / empty state */
+        .course-grid-loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #aaa;
+            font-size: 15px;
+        }
+
+        /* ── Announcement Box ── */
+        .announcement-box {
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #eee;
+            height: 440px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bold-text { font-weight: bold; font-size: 18px; }
+
+        .announce-list { list-style: none; padding: 0; }
+
+        .announce-list li {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 3px solid #9b51e0;
+        }
+
+        .btn-all {
+            width: 100%;
+            padding: 12px;
+            background: #f8f0ff;
+            border: none;
+            border-radius: 8px;
+            color: #9b51e0;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .more-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .calendar-link {
+            color: #9b51e0;
+            text-decoration: none;
+            font-size: 13px;
+            margin-right: 5%;
+        }
+
+        .more-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .option-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+        }
+
+        .resources-box {
+            background: #9b51e0;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .resources-box h4 { margin: 0 0 15px 0; font-size: 18px; }
+
+        .resources-box a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 12px;
+            font-size: 14px;
+            opacity: 0.9;
+            transition: 0.2s;
+        }
+
+        .resources-box a:hover { opacity: 1; transform: translateX(5px); }
+
+        /* ── Footer ── */
+        .footer {
+            background: #fff;
+            padding: 50px 5%;
+            border-top: 1px solid #eee;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 40px;
+        }
+
+        .footer-logo-col h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .footer-logo-col p { font-size: 13px; line-height: 1.6; color: #777; }
+
+        .footer-col h4 { margin-bottom: 20px; font-size: 15px; font-weight: bold; }
+        .footer-col ul { margin: 0; padding: 0; list-style: none; }
+        .footer-col li { margin-bottom: 10px; font-size: 13px; color: #666; cursor: pointer; }
+        .footer-col p { margin: 5px 0; font-size: 13px; color: #666; }
+
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; color: #999; }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #f5f5f5;
+            font-size: 12px;
+            color: #bbb;
+        }
+
+        .footer-legal { display: flex; gap: 25px; }
+        .footer-legal a { text-decoration: none; color: #999; }
+    </style>
 </head>
-
 <body>
-
-<header>
-  <div class="logo">
-    <div class="logo-main">FMS PSU</div>
-    <div class="logo-sub">Bachelor Programs Portal</div>
-  </div>
-  <nav>
-    <a href="#">หน้าหลัก</a>
-    <a href="#">ข้อมูลทั่วไป</a>
-    <a href="#">นักศึกษา</a>
-    <a href="#">แผนการศึกษา</a>
-    <a href="#">QA</a>
-  </nav>
-</header>
-
-<div class="page">
-
-  <div class="hero">
-    <h1>ยินดีต้อนรับสู่คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์</h1>
-    <h2>ระดับปริญญาตรี (Bachelor of Business Administration)</h2>
-    <span>หลักสูตรบริหารธุรกิจบัณฑิต & สาขาต่าง ๆ</span>
-  </div>
-
-  <div class="layout">
-
-    <!-- LEFT -->
-    <div>
-      <div class="section-title">หลักสูตร</div>
-      <div class="course-grid" id="courseGrid"></div>
-
-      <div class="extra">
-        <div class="extra-head">
-          <strong>เพิ่มเติม</strong>
-          <a href="#">View Full Calendar</a>
+    <header class="navbar">
+        <div class="logo">
+            <img src="logo.jpg" alt="Logo">
         </div>
-        <div class="extra-grid">
-          <div class="extra-card">
-            <div class="extra-icon">🗂</div>
-            <div>
-              <div class="extra-title">แผนการศึกษา</div>
-              <div class="extra-sub">แผนการเรียนทั้งหมด</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">หน้าหลัก</a></li>
+                <li><a href="info.html">ข้อมูลทั่วไป</a></li>
+                <li><a href="student.html">นักศึกษา</a></li>
+                <li><a href="plan.html">แผนการศึกษา</a></li>
+                <li><a href="#">QA</a></li>
+            </ul>
+        </nav>
+        <div class="nav-right">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-banner">
+            <h1 class="welcome-text">ยินดีต้อนรับสู่คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์</h1>
+            <h2 class="sub-text">ปริญญาตรี</h2>
+        </section>
+
+        <div class="main-content">
+            <div class="left-column">
+                <h3 class="section-title">หลักสูตร</h3>
+
+                <!-- Course Grid: static cards + dynamic จาก API -->
+                <div class="course-grid" id="courseGrid">
+
+                    <!-- Static cards (hardcode) -->
+                    <div class="course-card" onclick="window.location.href='info.html'">
+                        <span class="badge-new">NEW</span>
+                        <div class="course-img-wrap">
+                            <img src="p1.jpg" alt="p1">
+                            <div class="course-label-overlay">
+                                หลักสูตรบริหารธุรกิจบัณฑิต
+                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2567</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card" onclick="window.location.href='bba-2563.html'">
+                        <div class="course-img-wrap">
+                            <img src="p2.jpg" alt="p2">
+                            <div class="course-label-overlay">
+                                หลักสูตรบริหารธุรกิจบัณฑิต
+                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2563</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-img-wrap">
+                            <img src="p3.jpg" alt="p3">
+                            <div class="course-label-overlay">
+                                การจัดการความเป็นผู้ประกอบการ
+                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2565</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-img-wrap">
+                            <img src="p4.jpg" alt="p4">
+                            <div class="course-label-overlay">
+                                หลักสูตรบัญชีบัณฑิต
+                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2568</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-img-wrap">
+                            <img src="p5.jpg" alt="p5">
+                            <div class="course-label-overlay">
+                                หลักสูตรบัญชีบัณฑิต
+                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2564</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-img-wrap">
+                            <img src="p6.jpg" alt="p6">
+                            <div class="course-label-overlay">
+                                หลักสูตรรัฐประศาสนศาสตรบัณฑิต
+                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2564</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic cards จาก API จะ append ต่อท้ายนี้ -->
+                </div>
+
+                <div class="more-header">
+                    <h3 class="section-title" style="margin:0;">เพิ่มเติม</h3>
+                    <span class="calendar-link">View Full Calendar</span>
+                </div>
+                <div class="more-options">
+                    <div class="option-card">
+                        <i class="fa-regular fa-calendar-days" style="color:#9b51e0;"></i>
+                        <div>
+                            <strong>แผนการศึกษา</strong>
+                            <p>แผนการศึกษาหลักสูตรบริหาร</p>
+                        </div>
+                    </div>
+                    <div class="option-card">
+                        <i class="fa-solid fa-users" style="color:#f2994a;"></i>
+                        <div>
+                            <strong>นักศึกษา</strong>
+                            <p>ข้อมูลทั่วไปที่นักศึกษาควรรู้</p>
+                        </div>
+                    </div>
+                    <div class="option-card">
+                        <i class="fa-solid fa-magnifying-glass" style="color:#27ae60;"></i>
+                        <div>
+                            <strong>ค้นหา</strong>
+                            <p>ค้นหาข้อมูลภายในระบบ</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="extra-card">
-            <div class="extra-icon">👩‍🎓</div>
-            <div>
-              <div class="extra-title">นักศึกษา</div>
-              <div class="extra-sub">ข้อมูลกิจกรรม</div>
+
+            <div class="right-column">
+                <div class="announcement-box">
+                    <div>
+                        <div class="announce-header">
+                            <span class="bold-text">ประกาศ</span>
+                            <i class="fa-regular fa-bell" style="color:#9b51e0;"></i>
+                        </div>
+                        <ul class="announce-list">
+                            <li>
+                                <strong>Registration Deadline</strong>
+                                <p>Fall 2024 registration closes in 3 days.</p>
+                                <small>2 hours ago</small>
+                            </li>
+                            <li>
+                                <strong>Campus Job Fair</strong>
+                                <p>Join us at the Student Center this Friday.</p>
+                                <small>Yesterday</small>
+                            </li>
+                            <li>
+                                <strong>Library Hours Extended</strong>
+                                <p>The main library will be open 24/7.</p>
+                                <small>Oct 20</small>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn-all">View All Notices</button>
+                </div>
+
+                <div class="resources-box">
+                    <h4>Resources</h4>
+                    <a href="#"><i class="fa-solid fa-book"></i> Library Catalog</a>
+                    <a href="#"><i class="fa-solid fa-headset"></i> Student Support</a>
+                    <a href="#"><i class="fa-solid fa-hand-holding-dollar"></i> Financial Aid</a>
+                </div>
             </div>
-          </div>
-          <div class="extra-card">
-            <div class="extra-icon">🔍</div>
-            <div>
-              <div class="extra-title">ค้นหา</div>
-              <div class="extra-sub">ค้นหาหลักสูตร</div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-logo-col">
+                    <h4><i class="fa-solid fa-graduation-cap"></i> มหาวิทยาลัยสงขลานครินทร์</h4>
+                    <p>คณะวิทยาการจัดการ มุ่งเน้นการสร้างผู้นำธุรกิจรุ่นใหม่ที่มีคุณธรรมและนวัตกรรม</p>
+                    <div class="social-icons">
+                        <i class="fa-brands fa-facebook"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>หลักสูตร</h4>
+                    <ul>
+                        <li>ปริญญาตรี</li>
+                        <li>ปริญญาโท</li>
+                        <li>ปริญญาเอก</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>ข้อมูลนิสิต</h4>
+                    <ul>
+                        <li>การรับสมัคร</li>
+                        <li>ห้องสมุด</li>
+                        <li>กองกิจการนักศึกษา</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>ติดต่อเรา</h4>
+                    <p>fms-info@group.psu.ac.th</p>
+                    <p>+66-7428-7815</p>
+                    <p>15 ถนนกาญจนวณิชย์ อำเภอหาดใหญ่ จังหวัดสงขลา 90112</p>
+                </div>
             </div>
-          </div>
+            <div class="footer-bottom">
+                <p>© 2026 University Name. All rights reserved.</p>
+                <div class="footer-legal">
+                    <p>Policy</p>
+                    <p>Terms of Service</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
+    </footer>
 
-    <!-- RIGHT -->
-    <div>
-      <div class="notice-box">
-        <strong>ประกาศ</strong>
+    <script>
+    const BASE_URL = "https://websitefms.onrender.com";
+    const API = BASE_URL + "/api";
 
-        <div class="notice-item">
-          <span class="dot" style="background:#ff4f8b"></span>
-          Registration Deadline<br>
-          <span class="notice-time">2 hours ago</span>
-        </div>
+    async function loadCourses() {
+        const grid = document.getElementById("courseGrid");
 
-        <div class="notice-item">
-          <span class="dot" style="background:#9b51ff"></span>
-          Campus Job Fair<br>
-          <span class="notice-time">Yesterday</span>
-        </div>
+        try {
+            const res = await fetch(`${API}/courses`);
+            const courses = await res.json();
 
-        <button class="notice-btn">View All Notices</button>
-      </div>
+            // กรองเฉพาะที่ active หรือแสดงทั้งหมด
+            // ถ้าอยากแสดงเฉพาะ active: courses.filter(c => c.status === 'active')
+            const list = courses;
 
-      <div class="resources">
-        <strong>Resources</strong>
-        <a href="#">Library Catalog</a>
-        <a href="#">Student Support</a>
-        <a href="#">Financial Aid</a>
-      </div>
-    </div>
+            if (!list.length) {
+                return; // static cards ยังแสดงอยู่
+            }
 
-  </div>
-</div>
+            // append ต่อท้าย static cards
+            grid.insertAdjacentHTML('beforeend', list.map(course => {
+                // รูปภาพ: ใช้ hero_image ก่อน ถ้าไม่มีใช้ info_image ถ้าไม่มีเลยแสดง placeholder
+                const imgSrc = course.hero_image
+                    ? BASE_URL + course.hero_image
+                    : course.info_image
+                        ? BASE_URL + course.info_image
+                        : null;
 
-<footer>
-  © 2026 University BBA Portal. All rights reserved.
-</footer>
+                const imgHtml = imgSrc
+                    ? `<img src="${imgSrc}" alt="${course.name_th}" onerror="this.parentElement.innerHTML='<div class=\\'course-img-placeholder\\'><i class=\\'fa-solid fa-graduation-cap\\'></i></div>'">`
+                    : `<div class="course-img-placeholder"><i class="fa-solid fa-graduation-cap"></i></div>`;
 
-<script>
-const API_BASE = "http://localhost:3000/api/public";
+                // badge NEW = active, badge สีอื่น = draft/maintenance
+                const badgeHtml = course.status === 'active'
+                    ? `<span class="badge-new">NEW</span>`
+                    : course.status === 'draft'
+                        ? `<span class="badge-status draft">Draft</span>`
+                        : course.status === 'maintenance'
+                            ? `<span class="badge-status maintenance">ปรับปรุง</span>`
+                            : '';
 
-async function loadCourses() {
-  const grid = document.getElementById("courseGrid");
-  try {
-    const res = await fetch(API_BASE + "/courses");
-    const courses = await res.json();
-    grid.innerHTML = "";
+                // ชื่อที่แสดงบนการ์ด: ชื่อไทย + ปีหลักสูตร (จาก student_range ถ้ามี)
+                const yearLabel = course.student_range
+                    ? `<br><span style="font-size:11px;opacity:0.85;">${course.student_range}</span>`
+                    : course.degree_level
+                        ? `<br><span style="font-size:11px;opacity:0.85;">${course.degree_level}</span>`
+                        : '';
 
-    courses.forEach(c => {
-      const div = document.createElement("div");
-      div.className = "course-card";
-      div.innerHTML = `
-        <div class="course-img">
-          <span class="degree">${c.degree_level || "ปริญญาตรี"}</span>
-          <span class="year">${c.program_type || "4 ปี"}</span>
-          <span class="badge">New</span>
-        </div>
-        <div class="course-body">
-          <div class="course-name">${c.name_th || "-"}</div>
-          <div class="course-desc">${(c.short_detail || "").slice(0,80)}</div>
-        </div>
-      `;
-      grid.appendChild(div);
-    });
+                // คลิกแล้วไปหน้า course-info.html
+                return `
+                <div class="course-card" onclick="window.location.href='course-info.html?courseId=${course.id}'">
+                    ${badgeHtml}
+                    <div class="course-img-wrap">
+                        ${imgHtml}
+                        <div class="course-label-overlay">
+                            ${course.name_th || 'ไม่มีชื่อหลักสูตร'}
+                            ${yearLabel}
+                        </div>
+                    </div>
+                </div>`;
+            }).join("") );
 
-  } catch {
-    grid.innerHTML = "<p>ไม่สามารถโหลดข้อมูลได้</p>";
-  }
-}
-loadCourses();
-</script>
+        } catch (err) {
+            // static cards ยังแสดงอยู่ถึงแม้ API ล้มเหลว
+            console.error("API load failed:", err);
+            console.error(err);
+        }
+    }
 
+    loadCourses();
+    </script>
 </body>
 </html>
