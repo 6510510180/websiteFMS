@@ -4,489 +4,311 @@
   <meta charset="UTF-8">
   <title>Add Major | FMS Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-
-  <style>
-    body {
-      margin: 0;
-      background: #f8f8fb;
-      font-family: "Segoe UI", sans-serif;
-      display: flex;
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    /* ── SIDEBAR (QA-Dashboard style) ── */
+    :root {
+      --purple:#6B3FA0;--purple-dark:#4A2870;--purple-light:#F3EEFF;--purple-mid:#E8DEFF;
+      --accent:#9B6DD1;--bg-base:#F7F5FA;--white:#FFFFFF;--text-main:#181117;--text-sub:#64748B;
+      --border-col:#EDE8F5;--red:#EF4444;--red-bg:#FEE2E2;--sidebar-w:240px;--topbar-h:64px;
     }
-
-    /* Sidebar */
-    .sidebar {
-      width: 240px;
-      background: white;
-      height: 100vh;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-      padding: 20px;
-      position: fixed;
-      display: flex;
-      flex-direction: column;
+    .sidebar-qa {
+      width:var(--sidebar-w);background:var(--white);height:100vh;position:fixed;
+      left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border-col);z-index:100;
     }
-
-    .sidebar h2 {
-      font-size: 20px;
-      margin-bottom: 30px;
-      color: #5c2ea6;
+    .sidebar-brand{padding:20px 20px 16px;border-bottom:1px solid var(--border-col);}
+    .sidebar-brand-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text-main);letter-spacing:-0.2px;}
+    .sidebar-brand-sub{font-size:11.5px;color:var(--purple);font-weight:500;margin-top:2px;}
+    .sidebar-section-label{padding:20px 20px 6px;font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1.2px;}
+    .sidebar-nav-qa{flex:1;padding:8px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+    .nav-item-qa{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:8px;
+      font-size:13.5px;font-weight:500;color:var(--text-sub);
+      text-decoration:none;transition:all 0.18s;cursor:pointer;user-select:none;
     }
+    .nav-item-qa:hover{background:var(--purple-light);color:var(--purple);}
+    .nav-item-qa.active{background:var(--purple-light);color:var(--purple);font-weight:600;}
+    .nav-icon-qa{width:18px;height:18px;flex-shrink:0;opacity:0.75;}
+    .nav-item-qa.active .nav-icon-qa,.nav-item-qa:hover .nav-icon-qa{opacity:1;}
+    .sidebar-footer-qa{padding:12px;border-top:1px solid var(--border-col);}
+    .sidebar-footer-qa .nav-item-qa{color:var(--red);}
+    .sidebar-footer-qa .nav-item-qa:hover{background:var(--red-bg);color:#DC2626;}
+    svg{display:block;}
 
-    .menu {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-    }
 
-    .menu-item {
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      color: #5e5e70;
-      transition: 0.2s;
-    }
+:root {
+  --primary: #7c3aed;
+  --primary-light: #ede9fe;
+  --sidebar-w: 230px;
+  --text: #1e1b2e;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --bg: #f5f4fa;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--bg); display: flex; min-height: 100vh; }
 
-    .menu-item.active,
-    .menu-item:hover {
-      background: #f1e6ff;
-      color: #5c2ea6;
-    }
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: #fff;
+  height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 16px rgba(0,0,0,0.07);
+  border-radius: 0 20px 20px 0;
+  z-index: 100;
+  overflow: hidden;
+}
+.sidebar-logo { padding: 22px 24px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.sidebar-logo .brand { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+.sidebar-logo .brand-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.sidebar-nav { flex: 1; padding: 16px 14px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 12px; cursor: pointer;
+  font-size: 14px; font-weight: 500; color: var(--muted);
+  text-decoration: none;
+  transition: background .18s, color .18s, transform .18s;
+  user-select: none;
+}
+.nav-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(3px); }
+.nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.sidebar-footer { padding: 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.sidebar-footer .nav-item { color: #ef4444; }
+.sidebar-footer .nav-item:hover { background: #fee2e2; color: #dc2626; transform: translateX(3px); }
 
-    .main {
-      margin-left: 260px;
-      padding: 25px;
-      width: calc(100% - 260px);
-    }
+/* ── MAIN ── */
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.page-header small { color: #999; font-size: 13px; }
+.page-header h2 { margin: 4px 0; font-size: 22px; color: var(--text); }
+.page-header p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
 
-    .page-header small {
-      color: #999;
-      font-size: 13px;
-    }
+.card { background: white; border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.form-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px 24px; margin-top: 12px; margin-bottom: 16px; }
+.field label { display: block; font-size: 13px; margin-bottom: 4px; color: #555; }
+.field input, .field textarea, .field select {
+  width: 100%; padding: 10px 12px; border-radius: 10px;
+  border: 1px solid #ddd; background: #faf7ff;
+  outline: none; font-size: 14px; font-family: inherit;
+}
+.field input:focus, .field textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 2px rgba(124,58,237,0.15); }
 
-    .page-header h2 {
-      margin: 4px 0;
-    }
+.editor-block { margin-top: 12px; }
+.editor-label { font-size: 13px; margin-bottom: 4px; color: #555; }
+.fake-toolbar { display: flex; gap: 12px; padding: 6px 10px; border-radius: 10px 10px 0 0; background: var(--primary-light); color: var(--primary); font-size: 13px; }
+.fake-toolbar span { cursor: default; }
+.editor-textarea { width: 100%; min-height: 100px; border-radius: 0 0 10px 10px; border: 1px solid #e2d4ff; border-top: none; padding: 10px 12px; resize: vertical; outline: none; background: #faf7ff; font-size: 14px; font-family: inherit; }
 
-    .page-header p {
-      font-size: 13px;
-      color: #888;
-    }
+.upload-box { border: 2px dashed #d6c5ff; border-radius: 12px; padding: 30px; text-align: center; color: #9c78e6; font-size: 13px; margin-top: 8px; margin-bottom: 20px; background: #fcf9ff; }
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px 22px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
-    }
+.plan-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px; margin-top: 12px; }
+.plan-card { border-radius: 14px; background: #f7f0ff; padding: 0; overflow: hidden; }
+.plan-card .fake-toolbar { border-radius: 14px 14px 0 0; }
+.plan-card .editor-textarea { border-radius: 0 0 14px 14px; border-color: #e2d4ff; }
 
-    .card-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .form-grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 16px 24px;
-      margin-top: 12px;
-      margin-bottom: 16px;
-    }
-
-    .field label {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 4px;
-      color: #555;
-    }
-
-    .field input {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      background: #faf7ff;
-      outline: none;
-      font-size: 14px;
-    }
-
-    .field input:focus {
-      border-color: #8a3dd1;
-      background: #fff;
-      box-shadow: 0 0 0 2px rgba(138,61,209,0.15);
-    }
-
-    .editor-block {
-      margin-top: 12px;
-    }
-
-    .editor-label {
-      font-size: 13px;
-      margin-bottom: 4px;
-      color: #555;
-    }
-
-    .fake-toolbar {
-      display: flex;
-      gap: 12px;
-      padding: 6px 10px;
-      border-radius: 10px 10px 0 0;
-      background: #f5e9ff;
-      color: #7a4ecb;
-      font-size: 13px;
-    }
-
-    .fake-toolbar span {
-      cursor: default;
-    }
-
-    .editor-textarea {
-      width: 100%;
-      min-height: 100px;
-      border-radius: 0 0 10px 10px;
-      border: 1px solid #e2d4ff;
-      border-top: none;
-      padding: 10px 12px;
-      resize: vertical;
-      outline: none;
-      background: #faf7ff;
-      font-size: 14px;
-    }
-
-    .upload-box {
-      border: 2px dashed #d6c5ff;
-      border-radius: 12px;
-      padding: 30px;
-      text-align: center;
-      color: #9c78e6;
-      font-size: 13px;
-      margin-top: 8px;
-      margin-bottom: 20px;
-      background: #fcf9ff;
-    }
-
-    .plan-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap: 16px;
-      margin-top: 12px;
-    }
-
-    .plan-card {
-      border-radius: 14px;
-      background: #f7f0ff;
-      padding: 0;
-      overflow: hidden;
-    }
-
-    .plan-card .fake-toolbar {
-      border-radius: 14px 14px 0 0;
-    }
-
-    .plan-card .editor-textarea {
-      border-radius: 0 0 14px 14px;
-      border-color: #e2d4ff;
-    }
-
-    .footer-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .btn {
-      border-radius: 999px;
-      padding: 8px 20px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .btn-secondary {
-      background: #ffdddd;
-      color: #b33939;
-    }
-
-    .btn-primary {
-      background: #8a3dd1;
-      color: white;
-      box-shadow: 0 5px 14px rgba(138,61,209,0.3);
-    }
-
-    #message {
-      margin-top: 8px;
-      font-size: 13px;
-    }
+.footer-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+.btn { border-radius: 999px; padding: 9px 22px; border: none; cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 500; transition: opacity .15s; }
+.btn:hover { opacity: 0.88; }
+.btn-secondary { background: #ffdddd; color: #b33939; }
+.btn-primary { background: var(--primary); color: white; box-shadow: 0 5px 14px rgba(124,58,237,0.3); }
+#message { margin-top: 8px; font-size: 13px; }
   </style>
 </head>
 <body>
+<aside class="sidebar-qa">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-title">FMS Admin</div>
+    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
+  </div>
+  <div class="sidebar-section-label">เมนูหลัก</div>
+  <nav class="sidebar-nav-qa">
+    <a class="nav-item-qa" href="dashboard.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+      แดชบอร์ด
+    </a>
+    <a class="nav-item-qa" href="study-plan.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+      แผนการศึกษา
+    </a>
+    <a class="nav-item-qa active" href="course-list.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+      หลักสูตร
+    </a>
+    <a class="nav-item-qa" href="qa-dashboard.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      ประกันคุณภาพการศึกษา
+    </a>
+  </nav>
+  <div class="sidebar-footer-qa">
+    <a class="nav-item-qa" href="login.html" id="logoutBtn">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+</aside>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>FMS PSU</h2>
-    <div class="menu">
-       <div class="menu-item active" id="menuDashboard">แดชบอร์ด</div>
-      <div class="menu-item" id="menuPlan">แผนการศึกษา</div>
-      <div class="menu-item" id="menuCourse">หลักสูตร</div>
-      <div class="menu-item" id="menuQA">ประกันคุณภาพการศึกษา</div>
-      <div class="menu-item" id="logoutBtn">ออกจากระบบ</div>
-    </div>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="page-header">
+    <small>แดชบอร์ด / จัดการหลักสูตร / ข้อมูลทั่วไป</small>
+    <h2>สาขาวิชา</h2>
+    <p>จัดการ เพิ่ม ลบ และแก้ไขข้อมูลรายวิชาในคณะบริหารธุรกิจ</p>
   </div>
 
-  <!-- Main -->
-  <div class="main">
-    <div class="page-header">
-      <small>แดชบอร์ด / จัดการหลักสูตร / ข้อมูลทั่วไป</small>
-      <h2>สาขาวิชา</h2>
-      <p>จัดการ เพิ่ม ลบ และแก้ไขข้อมูลรายวิชาในคณะบริหารธุรกิจ</p>
-    </div>
-
-    <form id="majorForm">
-      <div class="card">
-        <div class="card-title">สาขาวิชาที่เปิดสอน</div>
-
-        <div class="form-grid-2">
-          <div class="field">
-            <label>ชื่อหลักสูตร (ภาษาไทย)</label>
-            <input type="text" id="major_name_th" placeholder="เช่น การเงินและการลงทุน" required />
-          </div>
-          <div class="field">
-            <label>ชื่อหลักสูตร (ภาษาอังกฤษ)</label>
-            <input type="text" id="major_name_en" placeholder="เช่น Finance" />
-          </div>
+  <form id="majorForm">
+    <div class="card">
+      <div class="card-title">สาขาวิชาที่เปิดสอน</div>
+      <div class="form-grid-2">
+        <div class="field">
+          <label>ชื่อหลักสูตร (ภาษาไทย)</label>
+          <input type="text" id="major_name_th" placeholder="เช่น การเงินและการลงทุน" required />
         </div>
-
-        <div class="editor-block">
-          <div class="editor-label">แนะนำสาขาวิชา</div>
-          <div class="fake-toolbar">
-            <span>B</span>
-            <span>I</span>
-            <span>U</span>
-            <span>•</span>
-            <span>1.</span>
-            <span>🔗</span>
-          </div>
-          <textarea id="intro" class="editor-textarea"
-            placeholder="เขียนคำอธิบายสาขาวิชา เช่น จุดเด่น รายวิชาสำคัญ กลุ่มเป้าหมาย ฯลฯ"></textarea>
-        </div>
-
-        <div style="margin-top:18px;">
-          <div class="editor-label">รูปภาพแนะนำ</div>
-          <div class="upload-box">
-            อัปโหลดไฟล์ หรือวาง<br>
-            <small>PNG, JPG, GIF ขนาดไม่เกิน 10MB (ยังไม่บันทึกไฟล์จริง แค่เก็บ URL/ชื่อไฟล์ไว้ในระบบ)</small>
-          </div>
-          <input type="text" id="image_url" placeholder="(ถ้าต้องการ) ใส่ URL รูปภาพ หรือชื่อไฟล์" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #ddd; background:#faf7ff;">
-        </div>
-
-        <div class="editor-block">
-          <div class="editor-label">แนวทางการประกอบอาชีพ</div>
-          <div class="fake-toolbar">
-            <span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span>
-          </div>
-          <textarea id="career_path" class="editor-textarea"
-            placeholder="ตัวอย่าง: นักการตลาดดิจิทัล, นักวิเคราะห์ข้อมูลการตลาด, ผู้เชี่ยวชาญกลยุทธ์แบรนด์ ฯลฯ"></textarea>
+        <div class="field">
+          <label>ชื่อหลักสูตร (ภาษาอังกฤษ)</label>
+          <input type="text" id="major_name_en" placeholder="เช่น Finance" />
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">โครงสร้างแผนการศึกษา</div>
-        <p style="font-size:13px;color:#888;margin-top:0;">สามารถใช้แบ่งเป็น แผนปี 1–4 หรือ กลุ่มหมวดวิชา ตามที่ต้องการ</p>
-
-        <div class="plan-grid">
-          <div class="plan-card">
-            <div class="fake-toolbar">
-              <span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span>
-            </div>
-            <textarea id="plan_1" class="editor-textarea" placeholder="เช่น แผนปีที่ 1 หรือหมวดวิชาแกน"></textarea>
-          </div>
-          <div class="plan-card">
-            <div class="fake-toolbar">
-              <span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span>
-            </div>
-            <textarea id="plan_2" class="editor-textarea" placeholder="เช่น แผนปีที่ 2 หรือหมวดวิชาเลือก"></textarea>
-          </div>
-          <div class="plan-card">
-            <div class="fake-toolbar">
-              <span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span>
-            </div>
-            <textarea id="plan_3" class="editor-textarea" placeholder="เช่น แผนปีที่ 3"></textarea>
-          </div>
-          <div class="plan-card">
-            <div class="fake-toolbar">
-              <span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span>
-            </div>
-            <textarea id="plan_4" class="editor-textarea" placeholder="เช่น แผนปีที่ 4"></textarea>
-          </div>
-        </div>
-
-        <div class="footer-actions">
-          <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Finish</button>
-        </div>
-        <div id="message"></div>
+      <div class="editor-block">
+        <div class="editor-label">แนะนำสาขาวิชา</div>
+        <div class="fake-toolbar"><span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span></div>
+        <textarea id="intro" class="editor-textarea" placeholder="เขียนคำอธิบายสาขาวิชา เช่น จุดเด่น รายวิชาสำคัญ กลุ่มเป้าหมาย ฯลฯ"></textarea>
       </div>
-    </form>
-  </div>
 
-  <script>
-  const BASE_URL = "https://websitefms.onrender.com";
+      <div style="margin-top:18px;">
+        <div class="editor-label">รูปภาพแนะนำ</div>
+        <div class="upload-box">
+          อัปโหลดไฟล์ หรือวาง<br>
+          <small>PNG, JPG, GIF ขนาดไม่เกิน 10MB</small>
+        </div>
+        <input type="text" id="image_url" placeholder="(ถ้าต้องการ) ใส่ URL รูปภาพ หรือชื่อไฟล์"
+          style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #ddd; background:#faf7ff; font-family:inherit;">
+      </div>
+
+      <div class="editor-block">
+        <div class="editor-label">แนวทางการประกอบอาชีพ</div>
+        <div class="fake-toolbar"><span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span></div>
+        <textarea id="career_path" class="editor-textarea" placeholder="ตัวอย่าง: นักการตลาดดิจิทัล, นักวิเคราะห์ข้อมูลการตลาด ฯลฯ"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">โครงสร้างแผนการศึกษา</div>
+      <p style="font-size:13px;color:var(--muted);margin-top:0;margin-bottom:12px;">สามารถใช้แบ่งเป็น แผนปี 1–4 หรือ กลุ่มหมวดวิชา ตามที่ต้องการ</p>
+
+      <div class="plan-grid">
+        <div class="plan-card">
+          <div class="fake-toolbar"><span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span></div>
+          <textarea id="plan_1" class="editor-textarea" placeholder="เช่น แผนปีที่ 1 หรือหมวดวิชาแกน"></textarea>
+        </div>
+        <div class="plan-card">
+          <div class="fake-toolbar"><span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span></div>
+          <textarea id="plan_2" class="editor-textarea" placeholder="เช่น แผนปีที่ 2 หรือหมวดวิชาเลือก"></textarea>
+        </div>
+        <div class="plan-card">
+          <div class="fake-toolbar"><span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span></div>
+          <textarea id="plan_3" class="editor-textarea" placeholder="เช่น แผนปีที่ 3"></textarea>
+        </div>
+        <div class="plan-card">
+          <div class="fake-toolbar"><span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span></div>
+          <textarea id="plan_4" class="editor-textarea" placeholder="เช่น แผนปีที่ 4"></textarea>
+        </div>
+      </div>
+
+      <div class="footer-actions">
+        <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Finish</button>
+      </div>
+      <div id="message"></div>
+    </div>
+  </form>
+</div>
+
+<script>
+const BASE_URL = "https://websitefms.onrender.com";
 const API = BASE_URL + "/api";
 
-  // ตรวจ token
-  const token = localStorage.getItem("user");
-  if (!token) {
-    alert("กรุณาเข้าสู่ระบบก่อน");
-    window.location.href = "login.html";
-  }
+const token = localStorage.getItem("user");
+if (!token) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
 
-  // logout
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("user");
-    window.location.href = "login.html";
-  });
-  document.getElementById("addCourseBtn").addEventListener("click", () => {
-  window.location.href = "add-course.html";
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
 });
 
-document.getElementById("menuDashboard")?.addEventListener("click", () => {
-  window.location.href = "dashboard.html";
+const params = new URLSearchParams(window.location.search);
+const courseId = params.get("courseId");
+const majorId = params.get("majorId");
+
+if (!courseId) alert("ไม่พบข้อมูลหลักสูตรที่เชื่อมโยง (courseId)");
+if (majorId) loadMajor(majorId);
+
+async function loadMajor(id) {
+  try {
+    const res = await fetch(`${API}/majors/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+    if (res.status === 401) { localStorage.removeItem("user"); window.location.href = "login.html"; return; }
+    const m = await res.json();
+    if (!res.ok) { alert(m.message || "ไม่สามารถดึงข้อมูลสาขาวิชาได้"); return; }
+    document.getElementById("major_name_th").value = m.name_th || "";
+    document.getElementById("major_name_en").value = m.name_en || "";
+    document.getElementById("intro").value = m.intro || "";
+    document.getElementById("image_url").value = m.image_url || "";
+    document.getElementById("career_path").value = m.career_path || "";
+    document.getElementById("plan_1").value = m.plan_1 || "";
+    document.getElementById("plan_2").value = m.plan_2 || "";
+    document.getElementById("plan_3").value = m.plan_3 || "";
+    document.getElementById("plan_4").value = m.plan_4 || "";
+    document.querySelector(".btn.btn-primary").textContent = "Update";
+  } catch { alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (โหลดข้อมูลสาขา)"); }
+}
+
+const form = document.getElementById("majorForm");
+const msg = document.getElementById("message");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  msg.textContent = ""; msg.style.color = "red";
+  const body = {
+    course_id: Number(courseId),
+    name_th: document.getElementById("major_name_th").value.trim(),
+    name_en: document.getElementById("major_name_en").value.trim(),
+    intro: document.getElementById("intro").value.trim(),
+    image_url: document.getElementById("image_url").value.trim(),
+    career_path: document.getElementById("career_path").value.trim(),
+    plan_1: document.getElementById("plan_1").value.trim(),
+    plan_2: document.getElementById("plan_2").value.trim(),
+    plan_3: document.getElementById("plan_3").value.trim(),
+    plan_4: document.getElementById("plan_4").value.trim()
+  };
+  try {
+    const url = majorId ? `${API}/majors/${majorId}` : `${API}/majors`;
+    const method = majorId ? "PUT" : "POST";
+    const res = await fetch(url, { method, headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }, body: JSON.stringify(body) });
+    if (res.status === 401) { localStorage.removeItem("user"); window.location.href = "login.html"; return; }
+    const data = await res.json();
+    if (!res.ok) { msg.textContent = data.message || (majorId ? "แก้ไขสาขาวิชาไม่สำเร็จ" : "บันทึกสาขาวิชาไม่สำเร็จ"); return; }
+    msg.style.color = "green";
+    msg.textContent = majorId ? "อัปเดตสาขาวิชาสำเร็จ" : "บันทึกสาขาวิชาสำเร็จ";
+    window.location.href = `course-info.html?courseId=${courseId}`;
+  } catch { msg.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้"; }
 });
-
-document.getElementById("menuPlan")?.addEventListener("click", () => {
-  window.location.href = "study-plan.html";
-});
-
-document.getElementById("menuCourse")?.addEventListener("click", () => {
-  window.location.href = "course-list.html";
-});
-
-document.getElementById("menuQA").addEventListener("click", () => {
-  window.location.href = "qa-dashboard.html";
-});
-
-
-  // ดึง courseId / majorId จาก query string
-  const params = new URLSearchParams(window.location.search);
-  const courseId = params.get("courseId");
-  const majorId = params.get("majorId");   // ถ้ามี = โหมดแก้ไข
-
-  if (!courseId) {
-    alert("ไม่พบข้อมูลหลักสูตรที่เชื่อมโยง (courseId)");
-  }
-
-  // ------------------ โหลดข้อมูลเดิมถ้าเป็นโหมดแก้ไข ------------------
-  if (majorId) {
-    loadMajor(majorId);
-  }
-
-  async function loadMajor(id) {
-    try {
-      const res = await fetch(`${API}/majors/${id}`, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-
-      if (res.status === 401) {
-        alert("กรุณาเข้าสู่ระบบใหม่");
-        localStorage.removeItem("user");
-        window.location.href = "login.html";
-        return;
-      }
-
-      const m = await res.json();
-      if (!res.ok) {
-        alert(m.message || "ไม่สามารถดึงข้อมูลสาขาวิชาได้");
-        return;
-      }
-
-      document.getElementById("major_name_th").value = m.name_th || "";
-      document.getElementById("major_name_en").value = m.name_en || "";
-      document.getElementById("intro").value = m.intro || "";
-      document.getElementById("image_url").value = m.image_url || "";
-      document.getElementById("career_path").value = m.career_path || "";
-      document.getElementById("plan_1").value = m.plan_1 || "";
-      document.getElementById("plan_2").value = m.plan_2 || "";
-      document.getElementById("plan_3").value = m.plan_3 || "";
-      document.getElementById("plan_4").value = m.plan_4 || "";
-
-      // เปลี่ยนข้อความปุ่มให้รู้ว่าเป็นโหมดแก้ไข
-      document.querySelector(".btn.btn-primary").textContent = "Update";
-    } catch (err) {
-      console.error(err);
-      alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (โหลดข้อมูลสาขา)");
-    }
-  }
-
-  // ------------------ Submit ฟอร์ม (เพิ่ม / แก้ไข) ------------------
-  const form = document.getElementById("majorForm");
-  const msg = document.getElementById("message");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    msg.textContent = "";
-    msg.style.color = "red";
-
-    const body = {
-      course_id: Number(courseId),
-      name_th: document.getElementById("major_name_th").value.trim(),
-      name_en: document.getElementById("major_name_en").value.trim(),
-      intro: document.getElementById("intro").value.trim(),
-      image_url: document.getElementById("image_url").value.trim(),
-      career_path: document.getElementById("career_path").value.trim(),
-      plan_1: document.getElementById("plan_1").value.trim(),
-      plan_2: document.getElementById("plan_2").value.trim(),
-      plan_3: document.getElementById("plan_3").value.trim(),
-      plan_4: document.getElementById("plan_4").value.trim()
-    };
-
-    try {
-      const url = majorId
-        ? `${API}/majors/${majorId}`
-        : `${API}/majors`;
-
-      const method = majorId ? "PUT" : "POST";
-
-      const res = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(body)
-      });
-
-      // token หมดอายุ
-      if (res.status === 401) {
-        alert("กรุณาเข้าสู่ระบบใหม่");
-        localStorage.removeItem("user");
-        window.location.href = "login.html";
-        return;
-      }
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        msg.textContent =
-          data.message ||
-          (majorId ? "แก้ไขสาขาวิชาไม่สำเร็จ" : "บันทึกสาขาวิชาไม่สำเร็จ");
-        return;
-      }
-
-      msg.style.color = "green";
-      msg.textContent = majorId
-        ? "อัปเดตสาขาวิชาสำเร็จ"
-        : "บันทึกสาขาวิชาสำเร็จ";
-
-      // กลับไปหน้าเช็คข้อมูลหลักสูตร
-      window.location.href = `course-info.html?courseId=${courseId}`;
-    } catch (err) {
-      console.error(err);
-      msg.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้";
-    }
-  });
 </script>
+</body>
+</html>

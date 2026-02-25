@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>จัดการ PLO/MLO | FMS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --purple: #7F13EC;
+  --purple-dark: #5c0db0;
+  --purple-mid: #9B6DD1;
+  --purple-light: #F3EEFF;
+  --purple-bg: #EDE7F3;
+  --text: #21111C;
+  --text-sub: #64748B;
+  --border: rgba(0,0,0,0.12);
+  --white: #FFFFFF;
+  --bg: #F7F4FC;
+  --red: #EF4444;
+  --green: #22c55e;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans Thai', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ── TOPBAR ── */
+.topbar {
+  width: 100%; height: 64px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 40px;
+  gap: 16px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.topbar-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.topbar-logo-icon {
+  width: 32px; height: 32px;
+  background: var(--purple);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.topbar-logo-icon svg { width: 18px; height: 18px; fill: white; }
+.topbar-brand { font-family: 'Lexend', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); }
+.topbar-nav { display: flex; align-items: center; gap: 4px; margin-left: 32px; flex: 1; }
+.topbar-nav a {
+  padding: 8px 16px; border-radius: 8px;
+  font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 600;
+  color: var(--text-sub); text-decoration: none;
+  transition: .18s;
+  white-space: nowrap;
+}
+.topbar-nav a:hover { background: var(--purple-light); color: var(--purple); }
+.topbar-nav a.active {
+  color: var(--purple);
+  border-bottom: 2px solid var(--purple);
+  border-radius: 0;
+  padding-bottom: 6px;
+}
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--purple-bg);
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; color: var(--purple);
+  cursor: pointer;
+}
+
+/* ── PAGE CONTENT ── */
+.page { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; width: 100%; }
+
+.page-title { font-size: 32px; font-weight: 900; color: var(--text); line-height: 1.2; }
+.page-subtitle { font-size: 15px; color: var(--purple-mid); margin-top: 6px; }
+
+/* ── TAB SWITCHER ── */
+.tab-row {
+  display: flex; background: var(--purple-bg);
+  border-radius: 10px; padding: 4px; margin: 24px 0 0;
+  gap: 0;
+}
+.tab-btn {
+  flex: 1; padding: 10px 16px; border: none; background: transparent;
+  font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--purple-mid); border-radius: 8px; cursor: pointer;
+  transition: .18s;
+}
+.tab-btn.active {
+  background: var(--white);
+  color: var(--purple);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* ── IMPORT BANNER ── */
+.import-bar {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--white); border: 1.5px dashed var(--purple-mid);
+  border-radius: 12px; padding: 14px 20px;
+  margin-top: 20px; cursor: pointer;
+  transition: border-color .18s, background .18s;
+}
+.import-bar:hover { border-color: var(--purple); background: var(--purple-light); }
+.import-icon {
+  width: 40px; height: 40px; background: var(--purple-light);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.import-icon svg { width: 20px; height: 20px; fill: var(--purple); }
+.import-text strong { display: block; font-size: 14px; font-weight: 700; color: var(--text); }
+.import-text span { font-size: 12px; color: var(--text-sub); }
+.import-cta {
+  background: var(--purple); color: white;
+  border: none; padding: 9px 20px; border-radius: 8px;
+  font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; white-space: nowrap; transition: .18s;
+  display: flex; align-items: center; gap: 6px;
+}
+.import-cta:hover { background: var(--purple-dark); }
+.btn-template {
+  background: white; color: var(--purple);
+  border: 1.5px solid var(--purple); padding: 8px 16px; border-radius: 8px;
+  font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; white-space: nowrap; transition: .18s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-template:hover { background: var(--purple-light); }
+#fileInput { display: none; }
+
+/* ── IMPORT SUCCESS TOAST ── */
+.toast {
+  position: fixed; bottom: 32px; right: 32px;
+  background: #1a1a2e; color: white;
+  padding: 14px 20px; border-radius: 12px;
+  font-size: 14px; font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  display: flex; align-items: center; gap: 10px;
+  transform: translateY(80px); opacity: 0;
+  transition: all .3s cubic-bezier(.34,1.56,.64,1);
+  z-index: 9999; pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+/* ── FORM CARD ── */
+.form-card {
+  background: var(--white);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(127,19,236,0.06);
+  margin-top: 20px;
+  overflow: hidden;
+}
+.form-card-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.form-card-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.entry-count {
+  background: var(--purple-light); color: var(--purple);
+  font-size: 12px; font-weight: 700;
+  padding: 3px 10px; border-radius: 999px;
+}
+.form-body { padding: 0; }
+
+/* ── ROW ── */
+.plo-row {
+  display: flex; align-items: center; gap: 0;
+  padding: 12px 24px;
+  border-bottom: 1px solid #f3eeff;
+  transition: background .15s;
+}
+.plo-row:last-child { border-bottom: none; }
+.plo-row:hover { background: #fdfbff; }
+.row-num {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--purple-bg); color: var(--purple);
+  font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-right: 12px;
+}
+.row-fields { flex: 1; display: grid; grid-template-columns: 180px 1fr; gap: 10px; }
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-label { font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; }
+.field-input {
+  height: 40px; padding: 0 12px;
+  border: 1.5px solid #e5dff0;
+  border-radius: 8px; background: var(--white);
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-size: 14px; color: var(--text); outline: none;
+  transition: border-color .18s, box-shadow .18s;
+  width: 100%;
+}
+.field-input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(127,19,236,0.08); }
+.field-input::placeholder { color: #bbb; }
+.row-del {
+  width: 32px; height: 32px; border: none; background: transparent;
+  border-radius: 8px; cursor: pointer; color: #ccc;
+  display: flex; align-items: center; justify-content: center;
+  margin-left: 10px; transition: .15s; flex-shrink: 0;
+}
+.row-del:hover { background: #fee2e2; color: var(--red); }
+.row-del svg { width: 16px; height: 16px; }
+
+/* ── ADD ROW BUTTON ── */
+.add-row-btn {
+  width: 100%; padding: 13px;
+  background: transparent; border: none; border-top: 1px dashed #e0d8f0;
+  color: var(--purple); font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: background .18s;
+}
+.add-row-btn:hover { background: var(--purple-light); }
+
+/* ── HINT BOX ── */
+.hint-box {
+  background: var(--purple-bg); border: 1px solid rgba(127,19,236,0.15);
+  border-radius: 12px; padding: 14px 18px;
+  display: flex; gap: 12px; align-items: flex-start;
+  margin-top: 20px;
+}
+.hint-icon { flex-shrink: 0; margin-top: 1px; }
+.hint-icon svg { width: 20px; height: 20px; fill: var(--purple); }
+.hint-text strong { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.hint-text p { font-size: 13px; color: rgba(33,17,28,0.65); line-height: 1.6; }
+
+/* ── FOOTER ACTIONS ── */
+.footer-actions {
+  display: flex; justify-content: flex-end; gap: 12px;
+  margin-top: 24px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.btn-cancel {
+  height: 44px; padding: 0 28px;
+  background: transparent; border: 1.5px solid var(--border);
+  border-radius: 10px; font-family: 'Noto Sans Thai', sans-serif;
+  font-size: 15px; font-weight: 700; color: var(--text-sub);
+  cursor: pointer; transition: .18s;
+}
+.btn-cancel:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+.btn-save {
+  height: 44px; padding: 0 32px;
+  background: var(--purple); color: white; border: none;
+  border-radius: 10px; font-family: 'Noto Sans Thai', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(127,19,236,0.25);
+  transition: .18s; display: flex; align-items: center; gap: 8px;
+}
+.btn-save:hover { background: var(--purple-dark); transform: translateY(-1px); }
+.btn-save svg { width: 18px; height: 18px; fill: white; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  padding: 48px 24px; text-align: center; color: var(--text-sub);
+}
+.empty-state svg { width: 48px; height: 48px; fill: #ddd; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+  <a class="topbar-logo" href="#">
+    <div class="topbar-logo-icon">
+      <svg viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg>
+    </div>
+    <span class="topbar-brand">ระบบจัดการผลลัพธ์การเรียนรู้</span>
+  </a>
+  <nav class="topbar-nav">
+    <a href="#">หน้าหลัก</a>
+    <a href="#" class="active">จัดการ PLO/MLO</a>
+    <a href="#">Alignment Matrix</a>
+    <a href="#">คะแนนผลลัพธ์ PLO</a>
+    <a href="#">KAS</a>
+  </nav>
+  <div class="topbar-right">
+    <div class="avatar">A</div>
+  </div>
+</header>
+
+<!-- ── PAGE ── -->
+<main class="page">
+  <div class="page-title">จัดการข้อมูล PLOs และ MLOs</div>
+  <div class="page-subtitle">กำหนดมาตรฐานผลลัพธ์การเรียนรู้ระดับหลักสูตรและระดับวิชาเอก</div>
+
+  <!-- TAB -->
+  <div class="tab-row">
+    <button class="tab-btn active" onclick="switchTab('PLO', this)">PLO (Program Learning Outcome)</button>
+    <button class="tab-btn" onclick="switchTab('MLO', this)">MLO (Major Learning Outcome)</button>
+  </div>
+
+  <!-- IMPORT -->
+  <div class="import-bar" onclick="document.getElementById('fileInput').click()">
+    <div class="import-icon">
+      <svg viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
+    </div>
+    <div class="import-text">
+      <strong>นำเข้าข้อมูลจาก Excel</strong>
+      <span>รองรับไฟล์ .xlsx, .xls — คอลัมน์: รหัส, หัวข้อทักษะ</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-left:auto" onclick="event.stopPropagation()">
+      <button class="btn-template" onclick="downloadTemplate()">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        ดาวน์โหลด Template
+      </button>
+      <button class="import-cta" onclick="document.getElementById('fileInput').click()">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="white"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
+        เลือกไฟล์
+      </button>
+    </div>
+  </div>
+  <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="importExcel(event)">
+
+  <!-- FORM CARD -->
+  <div class="form-card">
+    <div class="form-card-header">
+      <span class="form-card-title" id="cardTitle">รายการ PLO</span>
+      <span class="entry-count" id="entryCount">0 รายการ</span>
+    </div>
+    <div class="form-body">
+      <div id="rowContainer"></div>
+      <button class="add-row-btn" onclick="addRow()">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+        เพิ่มรายการ
+      </button>
+    </div>
+  </div>
+
+  <!-- HINT -->
+  <div class="hint-box">
+    <div class="hint-icon">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+    </div>
+    <div class="hint-text">
+      <strong>ข้อแนะนำการใช้งาน</strong>
+      <p>การกำหนด PLO ควรครอบคลุมความรู้ ทักษะ และเจตคติที่พึงมีเมื่อจบหลักสูตร ส่วน MLO จะเป็นส่วนขยายเฉพาะทางตามรายวิชาเอกที่นิสิตเลือก</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-actions">
+    <button class="btn-cancel" onclick="resetRows()">ยกเลิก</button>
+    <button class="btn-save" onclick="saveData()">
+      <svg viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+      บันทึกข้อมูล
+    </button>
+  </div>
+</main>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toastMsg">บันทึกข้อมูลสำเร็จ</span>
+</div>
+
+<script>
+let currentTab = 'PLO';
+let data = { PLO: [], MLO: [] };
+
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cardTitle').textContent = `รายการ ${tab}`;
+  renderRows();
+}
+
+function renderRows() {
+  const container = document.getElementById('rowContainer');
+  const rows = data[currentTab];
+  document.getElementById('entryCount').textContent = `${rows.length} รายการ`;
+  if (!rows.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+        <p>ยังไม่มีข้อมูล กดปุ่ม "เพิ่มรายการ" หรือนำเข้าจาก Excel</p>
+      </div>`;
+    return;
+  }
+  container.innerHTML = rows.map((r, i) => `
+    <div class="plo-row" id="row-${i}">
+      <div class="row-num">${i + 1}</div>
+      <div class="row-fields">
+        <div class="field-group">
+          <div class="field-label">รหัส</div>
+          <input class="field-input" placeholder="เช่น ${currentTab}${i+1}"
+            value="${escHtml(r.code)}"
+            oninput="updateField(${i}, 'code', this.value)">
+        </div>
+        <div class="field-group">
+          <div class="field-label">หัวข้อทักษะ</div>
+          <input class="field-input" placeholder="ระบุหัวข้อทักษะหลัก"
+            value="${escHtml(r.skill)}"
+            oninput="updateField(${i}, 'skill', this.value)">
+        </div>
+      </div>
+      <button class="row-del" title="ลบ" onclick="deleteRow(${i})">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+      </button>
+    </div>
+  `).join('');
+}
+
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function addRow() {
+  data[currentTab].push({ code: '', skill: '' });
+  renderRows();
+  // focus last input
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('.field-input');
+    if (inputs.length) inputs[inputs.length - 2].focus();
+  }, 50);
+}
+
+function deleteRow(i) {
+  data[currentTab].splice(i, 1);
+  renderRows();
+}
+
+function updateField(i, field, val) {
+  data[currentTab][i][field] = val;
+  document.getElementById('entryCount').textContent = `${data[currentTab].length} รายการ`;
+}
+
+function resetRows() {
+  if (!data[currentTab].length || confirm('ต้องการล้างข้อมูลทั้งหมดในแท็บนี้?')) {
+    data[currentTab] = [];
+    renderRows();
+  }
+}
+
+function saveData() {
+  const rows = data[currentTab];
+  const incomplete = rows.filter(r => !r.code.trim() || !r.skill.trim());
+  if (incomplete.length) {
+    showToast(`⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง (${incomplete.length} รายการ)`, '#f59e0b');
+    return;
+  }
+  console.log('Saving', currentTab, rows);
+  showToast(`✓ บันทึก ${currentTab} จำนวน ${rows.length} รายการสำเร็จ`);
+}
+
+/* ── EXCEL TEMPLATE DOWNLOAD ── */
+function downloadTemplate() {
+  const header = [['รหัส', 'หัวข้อทักษะ']];
+  const examples = [
+    [`${currentTab}1`, 'ความรู้ด้านทฤษฎีและแนวคิดหลักของสาขาวิชา'],
+    [`${currentTab}2`, 'ทักษะการวิเคราะห์และแก้ปัญหาอย่างเป็นระบบ'],
+    [`${currentTab}3`, 'ทักษะการสื่อสารและการทำงานร่วมกับผู้อื่น'],
+  ];
+  const ws = XLSX.utils.aoa_to_sheet([...header, ...examples]);
+
+  // column widths
+  ws['!cols'] = [{ wch: 12 }, { wch: 52 }];
+
+  // style header row (basic)
+  ['A1','B1'].forEach(cell => {
+    if (!ws[cell]) return;
+    ws[cell].s = {
+      font: { bold: true, color: { rgb: 'FFFFFF' } },
+      fill: { fgColor: { rgb: '7F13EC' } },
+      alignment: { horizontal: 'center' }
+    };
+  });
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, `${currentTab} Template`);
+  XLSX.writeFile(wb, `${currentTab}_template.xlsx`);
+  showToast(`✓ ดาวน์โหลด Template ${currentTab} สำเร็จ`);
+}
+
+
+function importExcel(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const wb = XLSX.read(ev.target.result, { type: 'binary' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+
+      // skip header row, map columns: col0=code, col1=skill
+      const imported = [];
+      for (let i = 1; i < json.length; i++) {
+        const row = json[i];
+        const code = String(row[0] || '').trim();
+        const skill = String(row[1] || '').trim();
+        if (code || skill) imported.push({ code, skill });
+      }
+
+      if (!imported.length) {
+        showToast('⚠️ ไม่พบข้อมูลในไฟล์ กรุณาตรวจสอบรูปแบบ', '#f59e0b');
+        return;
+      }
+
+      data[currentTab] = [...data[currentTab], ...imported];
+      renderRows();
+      showToast(`✓ นำเข้าสำเร็จ ${imported.length} รายการจาก ${file.name}`);
+    } catch(err) {
+      showToast('❌ ไม่สามารถอ่านไฟล์ได้ กรุณาตรวจสอบรูปแบบ', '#ef4444');
+    }
+  };
+  reader.readAsBinaryString(file);
+  e.target.value = '';
+}
+
+/* ── TOAST ── */
+let toastTimer;
+function showToast(msg, color) {
+  const t = document.getElementById('toast');
+  const dot = t.querySelector('.toast-dot');
+  document.getElementById('toastMsg').textContent = msg;
+  dot.style.background = color || '#22c55e';
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// init
+renderRows();
+</script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLO-MLO KAS Dashboard</title>
+
+<style>
+:root {
+    --primary: #6A1B9A;
+    --secondary: #8E24AA;
+    --light: #F3E5F5;
+    --accent: #BA68C8;
+    --white: #ffffff;
+    --shadow: rgba(106, 27, 154, 0.2);
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
+}
+
+/* Header */
+header {
+    background: var(--primary);
+    color: var(--white);
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px var(--shadow);
+}
+
+/* Container */
+.container {
+    padding: 40px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Card Layout */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+/* Card */
+.card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 8px 20px var(--shadow);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px var(--shadow);
+}
+
+.card h2 {
+    color: var(--primary);
+    margin-bottom: 15px;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: var(--secondary);
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+    background: var(--light);
+}
+
+/* Button */
+.button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: var(--accent);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.button:hover {
+    background: var(--primary);
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+    color: var(--primary);
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+PLO – MLO – KAS Dashboard
+</header>
+
+<div class="container">
+    <div class="card-grid">
+
+        <!-- Knowledge Card -->
+        <div class="card">
+            <h2>Knowledge (K)</h2>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>PLO</th>
+                    <th>MLO</th>
+                </tr>
+                <tr>
+                    <td>K1</td>
+                    <td>3</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>K4</td>
+                    <td>2</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td>K21</td>
+                    <td>1</td>
+                    <td>6</td>
+                </tr>
+            </table>
+            <a href="#" class="button">ดูทั้งหมด</a>
+        </div>
+
+        <!-- Attitude Card -->
+        <div class="card">
+            <h2>Attitude (A)</h2>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>PLO</th>
+                    <th>MLO</th>
+                </tr>
+                <tr>
+                    <td>A6</td>
+                    <td>5</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td>A9</td>
+                    <td>5</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td>A10</td>
+                    <td>4</td>
+                    <td>8</td>
+                </tr>
+            </table>
+            <a href="#" class="button">ดูทั้งหมด</a>
+        </div>
+
+        <!-- Skill Card -->
+        <div class="card">
+            <h2>Skill (S)</h2>
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>PLO</th>
+                    <th>MLO</th>
+                </tr>
+                <tr>
+                    <td>S4</td>
+                    <td>4</td>
+                    <td>9</td>
+                </tr>
+                <tr>
+                    <td>S5</td>
+                    <td>3</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td>S12</td>
+                    <td>2</td>
+                    <td>9</td>
+                </tr>
+            </table>
+            <a href="#" class="button">ดูทั้งหมด</a>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+© 2026 Curriculum Mapping System | Purple Mangosteen Theme
+</footer>
+
+</body>
+</html>

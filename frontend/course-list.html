@@ -4,188 +4,171 @@
 <meta charset="UTF-8">
 <title>จัดการหลักสูตร | FMS Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-    /* 🎨 โทนสีหลัก + ตัวแปร */
-    :root {
-      --primary: #8a3dd1;
-      --primary-light: #f4e9ff;
-      --bg: #f5f4fb;
-      --text-dark: #444;
-      --card-bg: #ffffffcc;
-      --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
-      --radius: 18px;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      font-family: "Segoe UI", sans-serif;
-      display: flex;
-      color: var(--text-dark);
-    }
-
-    /* ================= Sidebar ================= */
-    .sidebar {
-      width: 240px;
-      background: #fff;
-      height: 100vh;
-      position: fixed;
-      left: 0;
-      top: 0;
-      padding: 25px;
-      display: flex;
-      flex-direction: column;
-      border-radius: 0 20px 20px 0;
-      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
-    }
-
-    .sidebar h2 {
-      font-size: 22px;
-      margin: 0 0 40px 0;
-      color: var(--primary);
-      font-weight: 700;
-    }
-
-    .menu {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .menu-item {
-      padding: 14px 18px;
-      border-radius: 14px;
-      cursor: pointer;
-      font-weight: 500;
-      color: #666;
-      transition: all 0.25s ease;
-      user-select: none;
-    }
-
-    .menu-item.active,
-    .menu-item:hover {
-      background: var(--primary-light);
-      color: var(--primary);
-      transform: translateX(4px);
-    }
-
-/* Main */
-.main {
-  margin-left: 240px;
-  padding: 30px;
-  width: calc(100% - 240px);
+    /* ── SIDEBAR (QA-Dashboard style) ── */
+   :root {
+       --purple: #6B3FA0;
+  --purple-dark: #4A2870;
+  --purple-light: #F3EEFF;
+  --purple-mid: #E8DEFF;
+  --accent: #9B6DD1;
+  --bg: #F7F5FA;
+  --white: #FFFFFF;
+  --text: #181117;
+  --text-sub: #64748B;
+  --border: #EDE8F5;
+  --red: #EF4444;
+  --red-bg: #FEE2E2;
+  --sidebar-w: 240px;
+  --topbar-h: 64px;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(107,63,160,0.10);
 }
+    .sidebar-qa {
+      width:var(--sidebar-w);background:var(--white);height:100vh;position:fixed;
+      left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border-col);z-index:100;
+    }
+    .sidebar-brand{padding:20px 20px 16px;border-bottom:1px solid var(--border-col);}
+    .sidebar-brand-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text-main);letter-spacing:-0.2px;}
+    .sidebar-brand-sub{font-size:11.5px;color:var(--purple);font-weight:500;margin-top:2px;}
+    .sidebar-section-label{padding:20px 20px 6px;font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1.2px;}
+    .sidebar-nav-qa{flex:1;padding:8px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+    .nav-item-qa{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:8px;
+      font-size:13.5px;font-weight:500;color:var(--text-sub);
+      text-decoration:none;transition:all 0.18s;cursor:pointer;user-select:none;
+    }
+    .nav-item-qa:hover{background:var(--purple-light);color:var(--purple);}
+    .nav-item-qa.active{background:var(--purple-light);color:var(--purple);font-weight:600;}
+    .nav-icon-qa{width:18px;height:18px;flex-shrink:0;opacity:0.75;}
+    .nav-item-qa.active .nav-icon-qa,.nav-item-qa:hover .nav-icon-qa{opacity:1;}
+    .sidebar-footer-qa{padding:12px;border-top:1px solid var(--border-col);}
+    .sidebar-footer-qa .nav-item-qa{color:var(--red);}
+    .sidebar-footer-qa .nav-item-qa:hover{background:var(--red-bg);color:#DC2626;}
+    svg{display:block;}
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--bg); display: flex; min-height: 100vh; }
 
-.page-header h2 { font-size: 22px; color: #2d2d3a; }
-
-.btn-primary {
-  background: #7b3fe4;
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  font-family: inherit;
-  box-shadow: 0 4px 12px rgba(123,63,228,0.3);
-  transition: 0.2s;
-}
-.btn-primary:hover { background: #6830c8; transform: translateY(-1px); }
-
-/* Search */
-.search-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.search-bar input,
-.search-bar select {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  background: #faf8ff;
-  font-size: 14px;
-  font-family: inherit;
-  outline: none;
-}
-.search-bar input { flex: 1; }
-.search-bar input:focus,
-.search-bar select:focus { border-color: #7b3fe4; }
-
-/* Table */
-.table-card {
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
   background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 16px rgba(0,0,0,0.07);
+  border-radius: 0 20px 20px 0;
+  z-index: 100;
   overflow: hidden;
 }
+.sidebar-logo { padding: 22px 24px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.sidebar-logo .brand { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+.sidebar-logo .brand-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.sidebar-nav { flex: 1; padding: 16px 14px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 12px; cursor: pointer;
+  font-size: 14px; font-weight: 500; color: var(--muted);
+  text-decoration: none;
+  transition: background .18s, color .18s, transform .18s;
+  user-select: none;
+}
+.nav-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(3px); }
+.nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.sidebar-footer { padding: 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.sidebar-footer .nav-item { color: #ef4444; }
+.sidebar-footer .nav-item:hover { background: #fee2e2; color: #dc2626; transform: translateX(3px); }
 
-table { width: 100%; border-collapse: collapse; }
-
-th, td {
-  padding: 14px;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-  font-size: 14px;
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
-th { background: #faf7ff; color: #666; font-weight: 600; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.page-header h2 { font-size: 22px; color: var(--text); }
 
-tbody tr { cursor: pointer; transition: background 0.15s; }
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff; border: none; padding: 10px 18px;
+  border-radius: 10px; cursor: pointer; font-size: 14px;
+  font-family: inherit; box-shadow: 0 4px 12px rgba(124,58,228,0.3);
+  transition: .2s;
+}
+.btn-primary { background: #6830c8; transform: translateY(-1px); }
+
+.search-bar { display: flex; gap: 10px; margin-bottom: 16px; }
+.search-bar input, .search-bar select {
+  padding: 10px 14px; border-radius: 10px; border: 1px solid #ddd;
+  background: #faf8ff; font-size: 14px; font-family: inherit; outline: none;
+}
+.search-bar input { flex: 1; }
+.search-bar input:focus, .search-bar select:focus { border-color: var(--primary); }
+
+.table-card { background: #fff; border-radius: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 14px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; }
+th { background: #faf7ff; color: #666; font-weight: 600; }
+tbody tr { cursor: pointer; transition: background .15s; }
 tbody tr:hover { background: #fdfbff; }
 
-/* Badge */
-.badge {
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-}
+.badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
 .badge.active { background: #e6ffe8; color: #2e9a52; }
-.badge.draft { background: #f5e7ff; color: #7b3fe4; }
+.badge.draft { background: #f5e7ff; color: var(--primary); }
 .badge.maintenance { background: #ffe6e6; color: #c0392b; }
 
-/* Action buttons */
-.action-btn {
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: 0.15s;
-}
-.action-btn:hover { background: #f1e6ff; }
+.action-btn { border: none; background: none; cursor: pointer; font-size: 16px; padding: 4px 6px; border-radius: 6px; transition: .15s; }
+.action-btn:hover { background: var(--primary-light); }
 </style>
 </head>
 <body>
-
-<!-- Sidebar -->
-<div class="sidebar">
-  <h2>FMS PSU</h2>
-  <nav class="menu">
-    <div class="menu-item" id="menuDashboard">แดชบอร์ด</div>
-    <div class="menu-item" id="menuPlan">แผนการศึกษา</div>
-    <div class="menu-item active" id="menuCourse">หลักสูตร</div>
-    <div class="menu-item" id="menuQA">ประกันคุณภาพการศึกษา</div>
-    <div class="menu-item" id="logoutBtn">ออกจากระบบ</div>
+<aside class="sidebar-qa">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-title">FMS Admin</div>
+    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
   </div>
-</div>
+  <div class="sidebar-section-label">เมนูหลัก</div>
+  <nav class="sidebar-nav-qa">
+    <a class="nav-item-qa" href="dashboard.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+      แดชบอร์ด
+    </a>
+    <a class="nav-item-qa" href="study-plan.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+      แผนการศึกษา
+    </a>
+    <a class="nav-item-qa active" href="course-list.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+      หลักสูตร
+    </a>
+    <a class="nav-item-qa" href="qa-dashboard.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      ประกันคุณภาพการศึกษา
+    </a>
+  </nav>
+  <div class="sidebar-footer-qa">
+    <a class="nav-item-qa" href="login.html" id="logoutBtn">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+</aside>
 
-<!-- Main -->
+  
+<!-- ── MAIN ── -->
 <div class="main">
-
   <div class="page-header">
     <h2>จัดการหลักสูตร</h2>
     <button class="btn-primary" onclick="goAdd()">+ เพิ่มหลักสูตรใหม่</button>
@@ -216,41 +199,29 @@ tbody tr:hover { background: #fdfbff; }
       </tbody>
     </table>
   </div>
-
 </div>
 
 <script>
 const BASE_URL = "https://websitefms.onrender.com";
 const API = BASE_URL + "/api";
 
-// Auth
-const userData = localStorage.getItem("user");
-if (!userData) {
-  alert("กรุณาเข้าสู่ระบบก่อน");
-  window.location.href = "login.html";
-}
+if (!localStorage.getItem("user")) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
 
-// Sidebar navigation
-document.getElementById("menuDashboard").addEventListener("click", () => { window.location.href = "dashboard.html"; });
-document.getElementById("menuPlan").addEventListener("click", () => { window.location.href = "study-plan.html"; });
-document.getElementById("menuCourse").addEventListener("click", () => { window.location.href = "course-list.html"; });
-document.getElementById("menuQA").addEventListener("click", () => { window.location.href = "qa-dashboard.html"; });
-document.getElementById("logoutBtn").addEventListener("click", () => {
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+  e.preventDefault();
   localStorage.removeItem("user");
   window.location.href = "login.html";
 });
 
-// State
 let allCourses = [];
 
-// Load all courses
 async function loadCourses() {
   try {
     const res = await fetch(`${API}/courses`);
     const data = await res.json();
     allCourses = data;
     renderTable(data);
-  } catch(err) {
+  } catch {
     document.getElementById("courseTable").innerHTML =
       `<tr><td colspan="4" style="text-align:center;padding:40px;color:#aaa;">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้</td></tr>`;
   }
@@ -268,30 +239,24 @@ function renderTable(courses) {
       <td>${c.degree_level || "-"}</td>
       <td><span class="badge ${c.status}">${c.status || "-"}</span></td>
       <td onclick="event.stopPropagation()">
-        <button class="action-btn" title="แก้ไข"
-          onclick="window.location.href='add-course.html?courseId=${c.id}'">✏️</button>
-        <button class="action-btn" title="ลบ"
-          onclick="deleteCourse(${c.id}, '${(c.name_th||'').replace(/'/g,"\\'")}')">🗑️</button>
+        <button class="action-btn" title="แก้ไข" onclick="window.location.href='add-course.html?courseId=${c.id}'">✏️</button>
+        <button class="action-btn" title="ลบ" onclick="deleteCourse(${c.id}, '${(c.name_th||'').replace(/'/g,"\\'")}')">🗑️</button>
       </td>
     </tr>
   `).join("");
 }
 
-// Filter
 document.getElementById("searchInput").addEventListener("input", applyFilter);
 document.getElementById("statusFilter").addEventListener("change", applyFilter);
 
 function applyFilter() {
   const q = document.getElementById("searchInput").value.toLowerCase();
   const s = document.getElementById("statusFilter").value;
-  const filtered = allCourses.filter(c =>
-    (!q || (c.name_th||"").toLowerCase().includes(q)) &&
-    (!s || c.status === s)
-  );
-  renderTable(filtered);
+  renderTable(allCourses.filter(c =>
+    (!q || (c.name_th||"").toLowerCase().includes(q)) && (!s || c.status === s)
+  ));
 }
 
-// Delete
 async function deleteCourse(id, name) {
   if (!confirm(`ต้องการลบหลักสูตร "${name}" ใช่หรือไม่?`)) return;
   try {
@@ -299,15 +264,10 @@ async function deleteCourse(id, name) {
     const data = await res.json();
     if (!res.ok) { alert(data.message || "ลบไม่สำเร็จ"); return; }
     loadCourses();
-  } catch(err) {
-    alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้");
-  }
+  } catch { alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้"); }
 }
 
-function goAdd() {
-  window.location.href = "add-course.html";
-}
-
+function goAdd() { window.location.href = "add-course.html"; }
 loadCourses();
 </script>
 </body>

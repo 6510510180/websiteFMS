@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>คะแนนผลลัพธ์ PLO | FMS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --purple: #7F13EC;
+  --purple-dark: #5c0db0;
+  --purple-mid: #9B6DD1;
+  --purple-light: #F3EEFF;
+  --purple-bg: #EDE7F3;
+  --text: #21111C;
+  --text-sub: #64748B;
+  --border: rgba(0,0,0,0.09);
+  --white: #FFFFFF;
+  --bg: #F7F4FC;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --teal: #0891b2;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans Thai', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; font-size: 13px; }
+
+/* ── TOPBAR ── */
+.topbar {
+  width: 100%; height: 64px; background: var(--white); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 40px; gap: 16px;
+  position: sticky; top: 0; z-index: 200; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.topbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-icon { width: 32px; height: 32px; background: var(--purple); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo-icon svg { width: 18px; height: 18px; fill: white; }
+.topbar-brand { font-family: 'Lexend', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); }
+.topbar-nav { display: flex; align-items: center; gap: 4px; margin-left: 32px; flex: 1; }
+.topbar-nav a {
+  padding: 8px 16px; border-radius: 8px; font-family: 'Lexend', sans-serif;
+  font-size: 14px; font-weight: 600; color: var(--text-sub); text-decoration: none; transition: .18s; white-space: nowrap;
+}
+.topbar-nav a:hover { background: var(--purple-light); color: var(--purple); }
+.topbar-nav a.active { color: var(--purple); border-bottom: 2px solid var(--purple); border-radius: 0; padding-bottom: 6px; }
+.topbar-right { margin-left: auto; }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--purple-bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: var(--purple); cursor: pointer; }
+
+/* ── LAYOUT ── */
+.page { display: flex; gap: 24px; padding: 32px 40px 80px; max-width: 100%; }
+.main-col { flex: 1; min-width: 0; }
+.side-col { width: 300px; flex-shrink: 0; }
+
+/* ── PAGE HEADER ── */
+.page-title { font-size: 20px; font-weight: 900; color: var(--text); line-height: 1.3; margin-bottom: 20px; }
+.page-title span { color: var(--purple); }
+
+/* ── CARD ── */
+.card {
+  background: var(--white); border-radius: 14px;
+  border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(127,19,236,0.06);
+  overflow: hidden; margin-bottom: 16px;
+}
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+}
+.card-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.card-title svg { width: 16px; height: 16px; fill: var(--purple); }
+.avg-badge {
+  font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700;
+  background: var(--purple-bg); color: var(--purple);
+  padding: 3px 10px; border-radius: 999px;
+}
+
+/* ── ACTIONS ── */
+.action-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: 10px;
+  font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; border: none; transition: .18s; white-space: nowrap;
+}
+.btn-primary { background: var(--purple); color: white; box-shadow: 0 4px 10px rgba(127,19,236,0.2); }
+.btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+.btn-outline { background: white; color: var(--purple); border: 1.5px solid var(--purple); }
+.btn-outline:hover { background: var(--purple-light); }
+.btn-green { background: #16a34a; color: white; }
+.btn-green:hover { background: #15803d; }
+.btn svg { width: 15px; height: 15px; fill: currentColor; }
+#fileInput { display: none; }
+
+/* ── TABLE ── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #faf7ff; color: var(--text-sub); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; padding: 10px 14px; border-bottom: 2px solid #ede8f5; text-align: center; white-space: nowrap; }
+th.left { text-align: left; }
+td { padding: 10px 14px; border-bottom: 1px solid #f3eeff; vertical-align: middle; }
+td.label-cell { font-size: 12.5px; color: var(--text); max-width: 280px; line-height: 1.4; }
+td.label-cell .lo-code { font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700; color: var(--purple); margin-bottom: 2px; }
+td.label-cell .lo-desc { font-size: 11.5px; color: var(--text-sub); }
+td.score-cell { text-align: center; }
+td.score-cell input {
+  width: 64px; height: 34px; border: 1.5px solid #e0d8f0; border-radius: 8px;
+  text-align: center; font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 700;
+  color: var(--text); background: #faf8ff; outline: none; transition: .15s;
+}
+td.score-cell input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(127,19,236,0.08); background: white; }
+td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+.score-avg { font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 800; }
+.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 700; }
+
+/* section rows */
+.section-row td { background: #f5eeff; font-size: 12px; font-weight: 700; color: var(--purple); padding: 8px 14px; border-bottom: 1px solid #e8deff; }
+.total-row td { background: #2d1b4e; color: white; font-weight: 700; font-size: 13px; padding: 12px 14px; }
+.total-row td .score-avg { color: #c4b5fd; }
+.subtotal-row td { background: #6b21a8; color: white; font-weight: 700; padding: 10px 14px; }
+
+/* ── SIDE PANEL ── */
+.side-card {
+  background: var(--white); border-radius: 14px;
+  border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(127,19,236,0.06);
+  padding: 18px; margin-bottom: 14px;
+}
+.side-card h3 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+.side-card h3 svg { width: 15px; height: 15px; }
+
+/* compare bars */
+.compare-item { margin-bottom: 10px; }
+.compare-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+.compare-label span:first-child { color: var(--text-sub); }
+.compare-label strong { font-family: 'Lexend', sans-serif; font-weight: 700; }
+.bar-bg { height: 8px; background: #f0ebfa; border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 999px; background: var(--purple); transition: width .5s ease; }
+.bar-fill.teal { background: var(--teal); }
+
+/* stat blocks */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.stat-block { background: var(--purple-bg); border-radius: 10px; padding: 12px; text-align: center; }
+.stat-block .stat-val { font-family: 'Lexend', sans-serif; font-size: 24px; font-weight: 800; color: var(--purple); }
+.stat-block .stat-label { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+
+/* summary bullets */
+.summary-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.summary-list li { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; line-height: 1.5; color: var(--text-sub); }
+.bullet { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.bullet.green { background: var(--green); }
+.bullet.amber { background: var(--amber); }
+
+/* quick nav */
+.quick-nav { display: flex; flex-direction: column; gap: 6px; }
+.nav-link {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
+  text-decoration: none; font-size: 13px; font-weight: 600; color: var(--text-sub);
+  background: #faf7ff; transition: .15s;
+}
+.nav-link:hover, .nav-link.active { background: var(--purple-light); color: var(--purple); }
+.nav-link svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 28px; right: 28px;
+  background: #1a1a2e; color: white; padding: 12px 18px; border-radius: 12px;
+  font-size: 13px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  display: flex; align-items: center; gap: 10px;
+  transform: translateY(80px); opacity: 0;
+  transition: all .3s cubic-bezier(.34,1.56,.64,1); z-index: 9999; pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a class="topbar-logo" href="#">
+    <div class="logo-icon"><svg viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg></div>
+    <span class="topbar-brand">ระบบจัดการผลลัพธ์การเรียนรู้</span>
+  </a>
+  <nav class="topbar-nav">
+    <a href="#">หน้าหลัก</a>
+    <a href="plo-mlo.html">จัดการ PLO/MLO</a>
+    <a href="alignment-matrix.html">Alignment Matrix</a>
+    <a href="#" class="active">คะแนนผลลัพธ์ PLO</a>
+    <a href="#">KAS</a>
+  </nav>
+  <div class="topbar-right"><div class="avatar">A</div></div>
+</header>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- MAIN COLUMN -->
+  <div class="main-col">
+    <div class="page-title">สรุปจากระบบการประเมินผลการเรียนรู้และการทวนสอบผลสัมฤทธิ์ของนักศึกษา<br><span>ปีการศึกษา 2567</span></div>
+
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+        <svg viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
+        นำเข้าจาก Excel
+      </button>
+      <button class="btn btn-outline" onclick="downloadTemplate()">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        ดาวน์โหลด Template
+      </button>
+      <button class="btn btn-green" onclick="exportExcel()">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"/></svg>
+        Export Excel
+      </button>
+      <button class="btn btn-outline" onclick="addRowModal()">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+        เพิ่ม PLO/MLO
+      </button>
+    </div>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="importExcel(event)">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
+          ตารางสรุปคะแนนเฉลี่ยตาม PLO/MLO
+        </div>
+        <span class="avg-badge" id="avgBadge">Average Scale 1.0–5.0</span>
+      </div>
+      <div class="table-wrap">
+        <table id="scoreTable">
+          <thead>
+            <tr>
+              <th class="left" style="min-width:260px">ผลลัพธ์การเรียนรู้ (Learning Outcomes)</th>
+              <th style="width:90px">SEM 1</th>
+              <th style="width:90px">SEM 2</th>
+              <th style="width:100px">GRAND TOTAL</th>
+              <th style="width:50px"></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDE COLUMN -->
+  <div class="side-col">
+
+    <!-- COMPARE -->
+    <div class="side-card">
+      <h3>
+        <svg viewBox="0 0 20 20" fill="var(--purple)"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+        เปรียบเทียบคะแนนรวมแต่ละด้าน
+      </h3>
+      <div id="compareSection"></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="side-card">
+      <h3>
+        <svg viewBox="0 0 20 20" fill="var(--purple)"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        ภาพรวม
+      </h3>
+      <div class="stat-grid" id="statGrid"></div>
+      <div style="margin-top:12px">
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="saveData()">
+          <svg viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+          บันทึกข้อมูล
+        </button>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="side-card">
+      <h3>
+        <svg viewBox="0 0 20 20" fill="var(--amber)"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+        สรุปข้อเสนอแนะ
+      </h3>
+      <ul class="summary-list" id="summaryList"></ul>
+    </div>
+
+    <!-- QUICK NAV -->
+    <div class="side-card">
+      <h3><svg viewBox="0 0 20 20" fill="var(--purple)"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg> ลิงก์ที่เกี่ยวข้อง</h3>
+      <div class="quick-nav">
+        <a href="plo-mlo.html" class="nav-link"><svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>PLOs/MLOs</a>
+        <a href="alignment-matrix.html" class="nav-link"><svg viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Alignment Matrix</a>
+        <a href="#" class="nav-link active"><svg viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>คะแนนผลลัพธ์</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
+
+<script>
+// ── DATA MODEL ──
+// type: 'section' | 'row' | 'subtotal' | 'total' | 'grand'
+// section rows have no scores; subtotal/total rows auto-calculate
+let tableData = [
+  { type:'section', label:'ผลลัพธ์การเรียนรู้ระดับหลักสูตร (BA)' },
+  { type:'row', code:'PLO1', desc:'การบูรณาการประยุกต์ศาสตร์ด้านบริหารธุรกิจ', sem1:4.60, sem2:4.54 },
+  { type:'row', code:'PLO2', desc:'การใช้ผู้ประกอบการที่มีจิตสำนึกด้วยความรับผิดชอบต่อสังคม', sem1:4.57, sem2:4.59 },
+  { type:'row', code:'PLO3', desc:'การประยุกต์เทคโนโลยีดิจิทัลเพื่อวิเคราะห์ทางธุรกิจ', sem1:4.60, sem2:4.54 },
+  { type:'row', code:'PLO4', desc:'ทักษะความร่วมมือในการทำงานเป็นทีมและการสื่อสาร', sem1:4.63, sem2:4.55 },
+  { type:'row', code:'PLO5', desc:'จริยธรรม คุณธรรมและจรรยาบรรณ', sem1:4.67, sem2:4.60 },
+  { type:'row', code:'PLO6', desc:'พัฒนาทักษะและความสามารถในการเรียนรู้ตลอดชีวิต', sem1:4.67, sem2:4.61 },
+  { type:'row', code:'MLO', desc:'วิชาเอกการจัดการทรัพยากรมนุษย์', sem1:null, sem2:4.66 },
+  { type:'row', code:'MLO', desc:'วิชาเอกการจัดการโซ่อุปทานและโลจิสติกส์', sem1:null, sem2:4.55 },
+  { type:'row', code:'MLO', desc:'วิชาเอกการตลาดและการสื่อสารการตลาด', sem1:4.58, sem2:4.59 },
+  { type:'row', code:'MLO', desc:'วิชาเอกการเป็นผู้ประกอบการธุรกิจ', sem1:4.57, sem2:4.33 },
+  { type:'row', code:'PLO', desc:'PLO', sem1:4.63, sem2:4.57 },
+  { type:'row', code:'ด้านความรู้และทักษะทางวิชาชีพปฎิบัติ', desc:'', sem1:4.63, sem2:4.68 },
+  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', sem1:4.60, sem2:4.65 },
+  { type:'row', code:'ด้านทักษะการวิเคราะห์เชิงปริมาณ', desc:'การสื่อสารและการใช้เทคโนโลยีสารสนเทศ', sem1:4.66, sem2:4.70 },
+  { type:'row', code:'ด้านทักษะความสัมพันธ์ระหว่างบุคคล', desc:'รวมทั้งความรอบรู้ความสามารถในการมีเหตุผล', sem1:4.50, sem2:4.73 },
+  { type:'subtotal', label:'รวมผลลัพธ์วิชาเอกธุรกิจ (Total)', refRows:'ba' },
+  { type:'section', label:'ผลลัพธ์หลักสูตร (Multi-disciplinary)' },
+  { type:'row', code:'ด้านความรู้', desc:'', sem1:5.00, sem2:4.61 },
+  { type:'row', code:'ด้านความรู้และทักษะทางวิชาชีพปฎิบัติ', desc:'', sem1:5.00, sem2:4.83 },
+  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', sem1:5.00, sem2:5.00 },
+  { type:'row', code:'ด้านทักษะการวิเคราะห์เชิงปริมาณ', desc:'การสื่อสารและการใช้เทคโนโลยีสารสนเทศ', sem1:5.00, sem2:4.67 },
+  { type:'row', code:'ด้านทักษะความสัมพันธ์ระหว่างบุคคล', desc:'', sem1:5.00, sem2:null },
+  { type:'subtotal', label:'ผลลัพธ์หลักสูตร Total', refRows:'multi' },
+  { type:'total', label:'ภาควิชาบริหารธุรกิจ Total', refRows:'all_ba' },
+  { type:'grand', label:'Grand Total', refRows:'all' },
+];
+
+function avg(vals) {
+  const v = vals.filter(x => x !== null && x !== undefined && x !== '');
+  if (!v.length) return null;
+  return v.reduce((a,b)=>a+parseFloat(b),0)/v.length;
+}
+
+function fmt(v) {
+  if (v === null || v === undefined || v === '') return '<span style="color:#ccc">—</span>';
+  const n = parseFloat(v);
+  if (isNaN(n)) return '<span style="color:#ccc">—</span>';
+  const color = n >= 4.5 ? 'var(--green)' : n >= 4.0 ? 'var(--amber)' : 'var(--red)';
+  return `<span class="score-avg" style="color:${color}">${n.toFixed(2)}</span>`;
+}
+
+function scoreColor(n) {
+  if (n === null) return '';
+  return n >= 4.5 ? 'var(--green)' : n >= 4.0 ? 'var(--amber)' : 'var(--red)';
+}
+
+function computeGrand(refRows) {
+  let rows;
+  if (refRows === 'ba') rows = tableData.filter((r,i)=>r.type==='row' && i < 16);
+  else if (refRows === 'multi') rows = tableData.filter((r,i)=>r.type==='row' && i >= 16);
+  else rows = tableData.filter(r=>r.type==='row');
+  const s1 = avg(rows.map(r=>r.sem1));
+  const s2 = avg(rows.map(r=>r.sem2));
+  const gt = avg([s1, s2].filter(x=>x!==null));
+  return { sem1: s1, sem2: s2, grand: gt };
+}
+
+function getRowGrand(row) {
+  return avg([row.sem1, row.sem2].filter(x=>x!==null && x!==''));
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  let html = '';
+  let rowIdx = 0;
+
+  tableData.forEach((item, idx) => {
+    if (item.type === 'section') {
+      html += `<tr class="section-row"><td colspan="5">${item.label}</td></tr>`;
+    } else if (item.type === 'row') {
+      const grand = getRowGrand(item);
+      const ri = rowIdx++;
+      html += `<tr>
+        <td class="label-cell">
+          ${item.code ? `<div class="lo-code">${item.code}</div>` : ''}
+          ${item.desc ? `<div class="lo-desc">${item.desc}</div>` : ''}
+        </td>
+        <td class="score-cell"><input type="number" step="0.01" min="0" max="5" value="${item.sem1??''}" placeholder="—" data-idx="${idx}" data-sem="1" oninput="onScoreInput(this)"></td>
+        <td class="score-cell"><input type="number" step="0.01" min="0" max="5" value="${item.sem2??''}" placeholder="—" data-idx="${idx}" data-sem="2" oninput="onScoreInput(this)"></td>
+        <td class="score-cell">${fmt(grand)}</td>
+        <td style="text-align:center">
+          <button onclick="deleteRow(${idx})" title="ลบ" style="border:none;background:none;cursor:pointer;color:#ccc;font-size:16px;padding:4px 6px;border-radius:6px;transition:.15s" onmouseover="this.style.color='#ef4444';this.style.background='#fee2e2'" onmouseout="this.style.color='#ccc';this.style.background='none'">🗑</button>
+        </td>
+      </tr>`;
+    } else if (item.type === 'subtotal') {
+      const c = computeGrand(item.refRows);
+      html += `<tr class="subtotal-row">
+        <td>${item.label}</td>
+        <td style="text-align:center">${fmt(c.sem1)}</td>
+        <td style="text-align:center">${fmt(c.sem2)}</td>
+        <td style="text-align:center">${fmt(c.grand)}</td>
+        <td></td>
+      </tr>`;
+    } else if (item.type === 'total' || item.type === 'grand') {
+      const c = computeGrand(item.refRows);
+      html += `<tr class="total-row">
+        <td>${item.label}</td>
+        <td style="text-align:center">${fmt(c.sem1)}</td>
+        <td style="text-align:center">${fmt(c.sem2)}</td>
+        <td style="text-align:center">${fmt(c.grand)}</td>
+        <td></td>
+      </tr>`;
+    }
+  });
+  tbody.innerHTML = html;
+  updateSidePanel();
+}
+
+function onScoreInput(el) {
+  const idx = parseInt(el.dataset.idx);
+  const sem = el.dataset.sem;
+  const val = el.value === '' ? null : parseFloat(el.value);
+  if (sem === '1') tableData[idx].sem1 = val;
+  else tableData[idx].sem2 = val;
+  // re-render only computed cells
+  renderTable();
+}
+
+function deleteRow(idx) {
+  if (!confirm('ต้องการลบรายการนี้?')) return;
+  tableData.splice(idx, 1);
+  renderTable();
+}
+
+function addRowModal() {
+  const code = prompt('รหัส/ชื่อ PLO-MLO (เช่น PLO7):');
+  if (!code) return;
+  const desc = prompt('คำอธิบาย:') || '';
+  tableData.splice(tableData.findIndex(r=>r.type==='subtotal'||r.type==='total'||r.type==='grand')-1, 0,
+    { type:'row', code, desc, sem1:null, sem2:null }
+  );
+  renderTable();
+  showToast('เพิ่มรายการสำเร็จ');
+}
+
+// ── SIDE PANEL ──
+function updateSidePanel() {
+  const rows = tableData.filter(r=>r.type==='row');
+  const allGrands = rows.map(r=>getRowGrand(r)).filter(v=>v!==null);
+  const overallAvg = avg(allGrands);
+  const baRows = rows.slice(0, rows.findIndex((r,i,a)=> {
+    const sectionIdx = tableData.findIndex(t=>t.type==='section' && t.label.includes('Multi'));
+    return tableData.indexOf(r) > sectionIdx;
+  }));
+  const multiRows = rows.filter(r=>!baRows.includes(r));
+  const baAvg = avg(baRows.map(r=>getRowGrand(r)).filter(v=>v!==null));
+  const multiAvg = avg(multiRows.map(r=>getRowGrand(r)).filter(v=>v!==null));
+
+  // compare bars
+  const compareData = [
+    { label:'Grand Total', val: overallAvg, max:5, color:'var(--purple)' },
+    { label:'รวมผลลัพธ์วิชาเอกธุรกิจ', val: baAvg, max:5, color:'var(--teal)' },
+  ];
+  document.getElementById('compareSection').innerHTML = compareData.map(c=>`
+    <div class="compare-item">
+      <div class="compare-label">
+        <span>${c.label}</span>
+        <strong style="color:${c.color}">${c.val!==null?c.val.toFixed(2)+' / 5.0':'—'}</strong>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${c.val?((c.val/5)*100).toFixed(1):0}%;background:${c.color}"></div></div>
+    </div>
+  `).join('');
+
+  // stat grid
+  const pct = overallAvg ? Math.round((overallAvg/5)*100) : 0;
+  document.getElementById('statGrid').innerHTML = `
+    <div class="stat-block">
+      <div class="stat-val" style="color:${scoreColor(overallAvg)}">${pct}%</div>
+      <div class="stat-label">TARGET ACHIEVED</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-val" style="color:${scoreColor(overallAvg)}">${overallAvg!==null?overallAvg.toFixed(2):'—'}</div>
+      <div class="stat-label">OVERALL AVG</div>
+    </div>
+  `;
+
+  // summary
+  const low = rows.filter(r=>{ const g=getRowGrand(r); return g!==null && g<4.33; });
+  const high = rows.filter(r=>{ const g=getRowGrand(r); return g!==null && g>=4.5; });
+  let bullets = `<li><span class="bullet green"></span>สอบผ่านมาตรฐานและกระบวนการกลั่นกรองมีมิติมากขึ้น กรอบมาตรฐาน AUN-QA ได้รับการตรวจสอบทุกรายวิชา (5.0)</li>`;
+  if (low.length > 0) {
+    bullets += `<li><span class="bullet amber"></span>วิชาเอกบางหมวด (MLO) มีคะแนนต่ำกว่าเกณฑ์ขั้นต่ำ 2 (${low.map(r=>r.code).join(', ')}) ควรดำเนินการแผนพัฒนาคุณภาพ</li>`;
+  } else {
+    bullets += `<li><span class="bullet green"></span>ทุก PLO/MLO ผ่านเกณฑ์ขั้นต่ำที่กำหนด</li>`;
+  }
+  document.getElementById('summaryList').innerHTML = bullets;
+}
+
+// ── IMPORT EXCEL ──
+function importExcel(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const wb = XLSX.read(ev.target.result, { type:'binary' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(ws, { header:1, defval:'' });
+      // Expected: col0=code, col1=desc, col2=sem1, col3=sem2
+      let imported = 0;
+      const insertIdx = tableData.findIndex(r=>r.type==='subtotal'||r.type==='total'||r.type==='grand');
+      for (let i = 1; i < json.length; i++) {
+        const row = json[i];
+        const code = String(row[0]||'').trim();
+        const desc = String(row[1]||'').trim();
+        const sem1 = row[2]!=='' && !isNaN(parseFloat(row[2])) ? parseFloat(row[2]) : null;
+        const sem2 = row[3]!=='' && !isNaN(parseFloat(row[3])) ? parseFloat(row[3]) : null;
+        if (!code && !desc) continue;
+        tableData.splice(insertIdx + imported, 0, { type:'row', code, desc, sem1, sem2 });
+        imported++;
+      }
+      if (!imported) { showToast('⚠️ ไม่พบข้อมูลในไฟล์', '#f59e0b'); return; }
+      renderTable();
+      showToast(`✓ นำเข้า ${imported} รายการสำเร็จ`);
+    } catch { showToast('❌ ไม่สามารถอ่านไฟล์ได้', '#ef4444'); }
+  };
+  reader.readAsBinaryString(file);
+  e.target.value = '';
+}
+
+// ── DOWNLOAD TEMPLATE ──
+function downloadTemplate() {
+  const header = ['รหัส (Code)', 'คำอธิบาย (Description)', 'คะแนน SEM 1', 'คะแนน SEM 2'];
+  const examples = [
+    ['PLO1','การบูรณาการประยุกต์ศาสตร์ด้านบริหารธุรกิจ', 4.60, 4.54],
+    ['PLO2','การใช้ผู้ประกอบการที่มีจิตสำนึกด้วยความรับผิดชอบ', 4.57, 4.59],
+    ['MLO1.1','วิชาเอกการจัดการทรัพยากรมนุษย์', '', 4.66],
+  ];
+  const ws = XLSX.utils.aoa_to_sheet([header, ...examples]);
+  ws['!cols'] = [{wch:14},{wch:50},{wch:14},{wch:14}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'PLO Score Template');
+  XLSX.writeFile(wb, 'plo_score_template.xlsx');
+  showToast('✓ ดาวน์โหลด Template สำเร็จ');
+}
+
+// ── EXPORT EXCEL ──
+function exportExcel() {
+  const header = ['รหัส/ชื่อ', 'คำอธิบาย', 'SEM 1', 'SEM 2', 'Grand Total'];
+  const dataRows = [];
+  tableData.forEach(item => {
+    if (item.type === 'section') {
+      dataRows.push([item.label, '', '', '', '']);
+    } else if (item.type === 'row') {
+      const g = getRowGrand(item);
+      dataRows.push([item.code, item.desc, item.sem1??'', item.sem2??'', g!==null?parseFloat(g.toFixed(2)):'']);
+    } else if (item.type === 'subtotal' || item.type === 'total' || item.type === 'grand') {
+      const c = computeGrand(item.refRows);
+      dataRows.push([item.label,'',c.sem1?parseFloat(c.sem1.toFixed(2)):'',c.sem2?parseFloat(c.sem2.toFixed(2)):'',c.grand?parseFloat(c.grand.toFixed(2)):'']);
+    }
+  });
+  const ws = XLSX.utils.aoa_to_sheet([header, ...dataRows]);
+  ws['!cols'] = [{wch:30},{wch:50},{wch:12},{wch:12},{wch:14}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'PLO Score Report');
+  XLSX.writeFile(wb, 'plo_score_report_2567.xlsx');
+  showToast('✓ Export Excel สำเร็จ');
+}
+
+function saveData() {
+  showToast('✓ บันทึกข้อมูลสำเร็จ');
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg, color='#22c55e') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastDot').style.background = color;
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+renderTable();
+</script>
+</body>
+</html>
