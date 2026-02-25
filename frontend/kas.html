@@ -221,11 +221,11 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <span class="brand">ระบบจัดการผลลัพธ์การเรียนรู้</span>
   </a>
   <nav class="top-nav">
-    <a href="#">หน้าหลัก</a>
-    <a href="#" class="active">จัดการ PLO/MLO</a>
-    <a href="alignment-matrix.html">Alignment Matrix</a>
-    <a href="plo-score.html">คะแนนผลลัพธ์ PLO</a>
-    <a href="kas.html">KAS</a>
+    <a href="qa-add.html">หน้าหลัก</a>
+    <a href="plo.html">จัดการ PLO/MLO</a>
+    <a href="matrix.html">Alignment Matrix</a>
+    <a href="score-plo.html">คะแนนผลลัพธ์ PLO</a>
+    <a href="kas.html"class="active">KAS</a>
   </nav>
   <div class="avatar">A</div>
 </header>
@@ -561,13 +561,14 @@ function renderCourseCard(){
       </div>
     </div>
     <div class="clo-table-wrap" id="clo-table-wrap">
-      <div id="inner-info" style="display:none;padding:18px 24px;color:var(--text-sub);font-size:13px">ข้อมูลรายวิชาแสดงที่นี่</div>
+      <div id="inner-info" style="display:none;padding:18px 24px;color:var(--text-sub);font-size:15px">ข้อมูลรายวิชาแสดงที่นี่</div>
       <div id="inner-clo">
         <div class="clo-thead">
           <div>CLO &amp; DESCRIPTION</div>
           <div class="clo-th-kas">LINKED OUTCOME DETAILS</div>
-          <div class="clo-th-kas" style="color:var(--k-color)">⚙ K</div>
+          <div class="clo-th-kas" style="color:var(--k-color)">📖 K</div>
           <div class="clo-th-kas" style="color:var(--a-color)">♥ A</div>
+          <div class="clo-th-kas" style="color:var(--s-color)">⚙ S</div>
         </div>
         <div id="clo-rows">${renderCloRows(c)}</div>
       </div>

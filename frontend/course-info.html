@@ -4,176 +4,301 @@
   <meta charset="UTF-8">
   <title>ข้อมูลทั่วไปของหลักสูตร | FMS Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --purple: #6B3FA0;
+      --purple-dark: #4A2870;
+      --purple-light: #F3EEFF;
+      --purple-mid: #E8DEFF;
+      --accent: #9B6DD1;
+      --bg: #F7F5FA;
+      --white: #FFFFFF;
+      --text: #181117;
+      --text-sub: #64748B;
+      --border: #EDE8F5;
+      --red: #EF4444;
+      --red-bg: #FEE2E2;
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(107,63,160,0.10);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    * { box-sizing: border-box; margin:0; padding:0; }
     body {
-      margin: 0;
-      background: #f8f8fb;
-      font-family: "Segoe UI", sans-serif;
+      font-family: 'Noto Sans Thai', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
       display: flex;
     }
-    .sidebar {
+
+    /* Sidebar (ใช้โครงสร้างเดียวกับ course-list) */
+    .sidebar-qa {
       width: 240px;
       background: white;
       height: 100vh;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-      padding: 20px;
       position: fixed;
+      left: 0; top: 0;
+      border-right: 1px solid var(--border);
+      box-shadow: 2px 0 16px rgba(0,0,0,0.06);
+      z-index: 100;
       display: flex;
       flex-direction: column;
     }
-    .sidebar h2 { font-size: 20px; margin-bottom: 30px; color: #5c2ea6; }
-    .menu { margin-top: 10px; display: flex; flex-direction: column; }
-    .menu-item {
-      padding: 12px; border-radius: 10px; margin-bottom: 8px;
-      cursor: pointer; color: #5e5e70; transition: 0.2s;
+    .sidebar-brand {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
     }
-    .menu-item.active, .menu-item:hover {
-      background: #f1e6ff; color: #5c2ea6;
+    .sidebar-brand-title {
+      font-family: 'Lexend', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .sidebar-brand-sub {
+      font-size: 11.5px;
+      color: var(--purple);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .sidebar-section-label {
+      padding: 20px 20px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+    .sidebar-nav-qa {
+      flex: 1;
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+    .nav-item-qa {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-sub);
+      text-decoration: none;
+      transition: all 0.18s;
+      cursor: pointer;
+    }
+    .nav-item-qa:hover,
+    .nav-item-qa.active {
+      background: var(--purple-light);
+      color: var(--purple);
+      font-weight: 600;
+    }
+    .nav-icon-qa { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.75; }
+    .nav-item-qa.active .nav-icon-qa,
+    .nav-item-qa:hover .nav-icon-qa { opacity: 1; }
+
+    .sidebar-footer-qa {
+      padding: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-footer-qa .nav-item-qa { color: var(--red); }
+    .sidebar-footer-qa .nav-item-qa:hover { background: var(--red-bg); color: #DC2626; }
+
+    /* Main Content */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 32px;
     }
 
-    .main {
-      margin-left: 260px;
-      padding: 25px;
-      width: calc(100% - 260px);
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 28px;
     }
-    .page-header small { color:#999; font-size:13px; }
-    .page-header h2 { margin:4px 0; }
-    .page-header p { font-size:13px; color:#888; }
+    .page-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text);
+    }
+    .page-header small {
+      color: var(--text-sub);
+      font-size: 13px;
+    }
+
+    .btn-main, .btn-primary {
+      background: var(--purple);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(107,63,160,0.25);
+      transition: all 0.2s;
+    }
+    .btn-main:hover, .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(107,63,160,0.35);
+    }
+    .btn-danger {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid #fecaca;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 500;
+      cursor: pointer;
+    }
 
     .card {
-      background:white;
-      border-radius:16px;
-      padding:20px 22px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.05);
-      margin-bottom:20px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
     }
-    .card-title { font-size:18px; font-weight:600; margin-bottom:6px; }
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--purple-dark);
+    }
 
     .form-grid-2 {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:16px 24px;
-      margin-top:12px;
-      margin-bottom:16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px 32px;
     }
     .field label {
-      display:block; font-size:13px; margin-bottom:4px; color:#555;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+      display: block;
     }
     .field-value {
-      width:100%;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid #eee;
-      background:#f7f2ff;
-      font-size:14px;
-      color:#444;
-    }
-
-    .toggle-status {
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:6px 12px;
-      border-radius:999px;
-      background:#e6ffe8;
-      color:#1f8b3a;
-      font-size:13px;
+      padding: 12px 16px;
+      background: var(--purple-light);
+      border-radius: 10px;
+      border: 1px solid #e5d9ff;
+      font-size: 14.5px;
+      min-height: 48px;
+      color: var(--text);
     }
 
     .image-row {
-      display:flex;
-      flex-wrap:wrap;
-      gap:20px;
-      margin-top:10px;
-    }
-    .image-box {
-      flex:1 1 260px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 16px;
     }
     .image-box img {
-      max-width:100%;
-      border-radius:16px;
-      background:#eee;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      background: #f8f5ff;
     }
 
-    .table-box { margin-top:10px; }
-    table { width:100%; border-collapse:collapse; font-size:14px; }
-    th, td { padding:10px; border-top:1px solid #eee; text-align:left; }
-    th { color:#777; background:#faf7ff; }
-
-    .status-pill {
-      display:inline-block;
-      padding:4px 10px;
-      border-radius:999px;
-      font-size:12px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
     }
-    .status-active { background:#dfffeb; color:#2e9a52; }
-    .status-draft { background:#f8e1ff; color:#a600d9; }
+    th, td {
+      padding: 14px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+    th {
+      background: var(--purple-light);
+      color: #555;
+      font-weight: 600;
+    }
+
+    .status-pill, .toggle-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .status-active { background: #e6ffe8; color: #2e9a52; }
+    .status-draft   { background: #f5e7ff; color: var(--purple); }
+    .status-maintenance { background: #ffe6e6; color: #c0392b; }
 
     .btn-link {
       background: none;
       border: none;
-      padding: 4px 8px;
-      font-size: 12px;
+      color: var(--purple);
+      font-size: 13px;
       cursor: pointer;
-      color: #5c2ea6;
+      padding: 4px 8px;
     }
-    .btn-link.danger { color:#c0392b; }
+    .btn-link.danger { color: var(--red); }
     .btn-link:hover { text-decoration: underline; }
 
-    .header-actions {
-      margin-top:10px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-    .btn-main {
-      border-radius:999px;
-      padding:6px 14px;
-      border:none;
-      cursor:pointer;
-      font-size:13px;
-      background:#8a3dd1;
-      color:#fff;
-      box-shadow:0 4px 10px rgba(138,61,209,0.25);
-    }
-    .btn-danger {
-      border-radius:999px;
-      padding:6px 14px;
-      border:none;
-      cursor:pointer;
-      font-size:13px;
-      background:#ffdddd;
-      color:#b33939;
-    }
-
-    #message { margin-top:8px; font-size:13px; color:red; }
+    #message { color: var(--red); margin: 12px 0; font-size: 14px; }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>FMS PSU</h2>
-    <div class="menu">
-     <div class="menu-item active" id="menuDashboard">แดชบอร์ด</div>
-      <div class="menu-item" id="menuPlan">แผนการศึกษา</div>
-      <div class="menu-item" id="menuCourse">หลักสูตร</div>
-      <div class="menu-item" id="menuQA">ประกันคุณภาพการศึกษา</div>
-      <div class="menu-item" id="logoutBtn">ออกจากระบบ</div>
-    </div>
+  <!-- Sidebar (เหมือน course-list.html) -->
+  <aside class="sidebar-qa">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-title">FMS Admin</div>
+    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
   </div>
+  <div class="sidebar-section-label">เมนูหลัก</div>
+  <nav class="sidebar-nav-qa">
+    <a class="nav-item-qa" href="dashboard.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+      แดชบอร์ด
+    </a>
+    <a class="nav-item-qa" href="study-plan.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+      แผนการศึกษา
+    </a>
+    <a class="nav-item-qa active" href="course-list.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+      หลักสูตร
+    </a>
+    <a class="nav-item-qa" href="qa-dashboard.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      ประกันคุณภาพการศึกษา
+    </a>
+  </nav>
+  <div class="sidebar-footer-qa">
+    <a class="nav-item-qa" href="login.html" id="logoutBtn">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+</aside>
 
-  <!-- Main -->
+  <!-- Main Content -->
   <div class="main">
     <div class="page-header">
-      <small>แดชบอร์ด / จัดการหลักสูตร / ข้อมูลทั่วไป</small>
-      <h2>ข้อมูลทั่วไปของหลักสูตร</h2>
-      <p>ตรวจสอบ แก้ไข และจัดการข้อมูลหลักสูตรที่บันทึกไว้ในระบบ</p>
-
-      <div class="header-actions">
+      <div>
+        <small>แดชบอร์ด / จัดการหลักสูตร / ข้อมูลทั่วไป</small>
+        <h2>ข้อมูลทั่วไปของหลักสูตร</h2>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
         <button id="editCourseBtn" class="btn-main">แก้ไขข้อมูลหลักสูตร</button>
-        <button id="addMajorBtn"  class="btn-main">เพิ่มสาขาวิชาใหม่</button>
+        <button id="addMajorBtn" class="btn-main">เพิ่มสาขาวิชาใหม่</button>
         <button id="deleteCourseBtn" class="btn-danger">ลบหลักสูตรนี้</button>
       </div>
     </div>
@@ -202,38 +327,35 @@
         </div>
         <div class="field">
           <label>สถานะหลักสูตร</label>
-          <div id="c_status" class="toggle-status">
-            <span>Active</span>
+          <div id="c_status" class="toggle-status status-active">
+            <span>กำลังโหลด...</span>
           </div>
-        </div>
-      </div>
-      <div class="card">
-  <div class="card-title">ภาพประกอบหลักสูตร</div>
-  <img id="courseInfoImage"
-       style="max-width:100%;border-radius:16px;display:none;">
-</div>
-
-
-      <!-- รูปภาพหลักสูตร -->
-      <div class="image-row">
-        <div class="image-box">
-          <label style="font-size:13px;color:#666;">Hero Image (หน้า Portal / Bachelor Portal)</label>
-          <img id="c_hero_image" src="" alt="hero image" style="display:none;">
-        </div>
-        <div class="image-box">
-          <label style="font-size:13px;color:#666;">Info Image (หน้า Course Info + หน้า Public รายละเอียด)</label>
-          <img id="c_info_image" src="" alt="info image" style="display:none;">
         </div>
       </div>
     </div>
 
-    <!-- ข้อมูลโครงสร้างหลักสูตร -->
+    <!-- ภาพประกอบหลักสูตร -->
+    <div class="card">
+      <div class="card-title">ภาพประกอบหลักสูตร</div>
+      <div class="image-row">
+        <div class="image-box">
+          <label>Hero Image (หน้า Portal / Bachelor Portal)</label>
+          <img id="c_hero_image" src="" alt="Hero Image" style="display:none;">
+        </div>
+        <div class="image-box">
+          <label>Info Image (หน้า Course Info + รายละเอียดสาธารณะ)</label>
+          <img id="c_info_image" src="" alt="Info Image" style="display:none;">
+        </div>
+      </div>
+    </div>
+
+    <!-- โครงสร้างหลักสูตร -->
     <div class="card">
       <div class="card-title">รายละเอียดโครงสร้างหลักสูตร</div>
       <div class="form-grid-2">
         <div class="field">
           <label>รูปแบบหลักสูตร</label>
-          <div class="field-value" id="c_program_type">-</div>
+          <div class="field-value" id="program_type">-</div>
         </div>
         <div class="field">
           <label>การจัดการศึกษา</label>
@@ -251,7 +373,7 @@
     </div>
 
     <!-- ตารางสาขาวิชา -->
-    <div class="card table-box">
+    <div class="card">
       <div class="card-title">สาขาวิชาที่เปิดสอน</div>
       <table>
         <thead>
@@ -263,51 +385,44 @@
           </tr>
         </thead>
         <tbody id="majorTable">
-          <tr><td colspan="4">ยังไม่มีข้อมูลสาขาวิชา</td></tr>
+          <tr><td colspan="4" style="text-align:center; color:#aaa; padding:40px;">กำลังโหลด...</td></tr>
         </tbody>
       </table>
     </div>
-    
-
   </div>
 
   <script>
     const BASE_URL = "https://websitefms.onrender.com";
     const API_BASE = BASE_URL + "/api";
 
-
-    // ตรวจ token
+    // ตรวจสอบ token และ user
     const userData = localStorage.getItem("user");
+    if (!userData) {
+      alert("กรุณาเข้าสู่ระบบก่อน");
+      window.location.href = "login.html";
+    }
 
-if (!userData) {
-  alert("กรุณาเข้าสู่ระบบก่อน");
-  window.location.href = "login.html";
-}
-// เพิ่มต่อจาก logoutBtn
-document.getElementById("addCourseBtn").addEventListener("click", () => {
-  window.location.href = "add-course.html";
-});
+    const user = JSON.parse(userData);
+    const token = user.token;
 
-document.getElementById("menuDashboard")?.addEventListener("click", () => {
-  window.location.href = "dashboard.html";
-});
-
-document.getElementById("menuPlan")?.addEventListener("click", () => {
-  window.location.href = "study-plan.html";
-});
-
-document.getElementById("menuCourse")?.addEventListener("click", () => {
-  window.location.href = "course-list.html";
-});
-
-
-const user = JSON.parse(userData);
-const token = user.token;
-
-
+    // Logout
     document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.removeItem("user");
       window.location.href = "login.html";
+    });
+
+    // Menu navigation
+    document.getElementById("menuDashboard")?.addEventListener("click", () => {
+      window.location.href = "dashboard.html";
+    });
+    document.getElementById("menuPlan")?.addEventListener("click", () => {
+      window.location.href = "study-plan.html";
+    });
+    document.getElementById("menuCourse")?.addEventListener("click", () => {
+      window.location.href = "course-list.html";
+    });
+    document.getElementById("menuQA")?.addEventListener("click", () => {
+      window.location.href = "qa-dashboard.html";
     });
 
     const msg = document.getElementById("message");
@@ -316,91 +431,83 @@ const token = user.token;
 
     if (!courseId) {
       msg.textContent = "ไม่พบรหัสหลักสูตร (courseId)";
-    } else {
-      loadCourse(courseId);
-      loadMajors(courseId);
+      return;
     }
 
-    // ปุ่มแก้ไข / เพิ่มสาขา / ลบหลักสูตร
-    const editBtn   = document.getElementById("editCourseBtn");
-    const addMajorBtn = document.getElementById("addMajorBtn");
-    const deleteBtn = document.getElementById("deleteCourseBtn");
+    // ปุ่มต่าง ๆ
+    document.getElementById("editCourseBtn")?.addEventListener("click", () => {
+      window.location.href = `add-course.html?courseId=${courseId}`;
+    });
 
-    if (editBtn) {
-      editBtn.addEventListener("click", () => {
-        window.location.href = `add-course.html?courseId=${courseId}`;
-      });
-    }
-    if (addMajorBtn) {
-      addMajorBtn.addEventListener("click", () => {
-        window.location.href = `add-major.html?courseId=${courseId}`;
-      });
-    }
-    if (deleteBtn) {
-  deleteBtn.addEventListener("click", async () => {
-    if (!confirm("ต้องการลบหลักสูตรนี้พร้อมสาขาวิชาทั้งหมดใช่หรือไม่?")) return;
+    document.getElementById("addMajorBtn")?.addEventListener("click", () => {
+      window.location.href = `add-major.html?courseId=${courseId}`;
+    });
 
-    try {
-      const res = await fetch(`${API_BASE}/courses/${courseId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        }
-      });
+    document.getElementById("deleteCourseBtn")?.addEventListener("click", async () => {
+      if (!confirm("ต้องการลบหลักสูตรนี้พร้อมสาขาวิชาทั้งหมดใช่หรือไม่?")) return;
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || "ลบหลักสูตรไม่สำเร็จ");
-        return;
-      }
-
-      alert("ลบหลักสูตรสำเร็จ");
-      window.location.href = "dashboard.html";
-
-    } catch (err) {
-      console.error(err);
-      alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (ลบหลักสูตร)");
-    }
-  });
-}
-
-
-    // ---------- โหลดข้อมูลหลักสูตร ----------
-    async function loadCourse(id) {
       try {
-        const res = await fetch(`${API_BASE}/courses/${id}`);
-        const course = await res.json();
+        const res = await fetch(`${API_BASE}/courses/${courseId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
+        const data = await res.json();
+
         if (!res.ok) {
-          msg.textContent = course.message || "ไม่สามารถดึงข้อมูลหลักสูตรได้";
+          alert(data.message || "ลบหลักสูตรไม่สำเร็จ");
           return;
         }
+
+        alert("ลบหลักสูตรสำเร็จ");
+        window.location.href = "course-list.html";
+
+      } catch (err) {
+        console.error(err);
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+      }
+    });
+
+    // โหลดข้อมูลหลักสูตร
+    async function loadCourse(id) {
+      try {
+        const res = await fetch(`${API_BASE}/courses/${id}`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("ไม่สามารถดึงข้อมูลได้");
+
+        const course = await res.json();
 
         document.getElementById("c_name_th").textContent       = course.name_th || "-";
         document.getElementById("c_degree_level").textContent  = course.degree_level || "-";
         document.getElementById("c_name_en").textContent       = course.name_en || "-";
         document.getElementById("c_short_detail").textContent  = course.short_detail || "-";
-        document.getElementById("c_program_type").textContent  = course.program_type || "-";
+        document.getElementById("program_type").textContent    = course.program_type || "-";
         document.getElementById("c_study_system").textContent  = course.study_system || "-";
         document.getElementById("c_award_title").textContent   = course.award_title || "-";
         document.getElementById("c_total_credits").textContent = course.total_credits ?? "-";
-        
 
+        // สถานะ
         const statusEl = document.getElementById("c_status");
+        let statusText = "ไม่ระบุ";
+        let statusClass = "status-draft";
+
         if (course.status === "active") {
-          statusEl.textContent = "พร้อมใช้งาน (Active)";
-          statusEl.style.background = "#e6ffe8";
-          statusEl.style.color = "#1f8b3a";
+          statusText = "พร้อมใช้งาน (Active)";
+          statusClass = "status-active";
         } else if (course.status === "maintenance") {
-          statusEl.textContent = "ปิดปรับปรุง (Maintenance)";
-          statusEl.style.background = "#ffe8e6";
-          statusEl.style.color = "#b33939";
-        } else {
-          statusEl.textContent = "ฉบับร่าง (Draft)";
-          statusEl.style.background = "#f8e1ff";
-          statusEl.style.color = "#a600d9";
+          statusText = "ปิดปรับปรุง (Maintenance)";
+          statusClass = "status-maintenance";
+        } else if (course.status === "draft") {
+          statusText = "ฉบับร่าง (Draft)";
+          statusClass = "status-draft";
         }
+
+        statusEl.innerHTML = `<span>${statusText}</span>`;
+        statusEl.className = `toggle-status ${statusClass}`;
 
         // รูปภาพ
         const heroImg = document.getElementById("c_hero_image");
@@ -409,46 +516,40 @@ const token = user.token;
         if (course.hero_image) {
           heroImg.src = BASE_URL + course.hero_image;
           heroImg.style.display = "block";
-        } else {
-          heroImg.style.display = "none";
         }
-
         if (course.info_image) {
           infoImg.src = BASE_URL + course.info_image;
           infoImg.style.display = "block";
-        } else {
-          infoImg.style.display = "none";
         }
 
       } catch (err) {
         console.error(err);
-        msg.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (course)";
+        msg.textContent = "ไม่สามารถโหลดข้อมูลหลักสูตรได้";
       }
     }
 
-    // ---------- โหลดสาขาวิชา ----------
+    // โหลดสาขาวิชา
     async function loadMajors(id) {
       try {
-        const res = await fetch(`${API_BASE}/courses/${id}/majors`);
+        const res = await fetch(`${API_BASE}/courses/${id}/majors`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("ไม่สามารถดึงสาขาวิชาได้");
+
         const majors = await res.json();
         const tbody = document.getElementById("majorTable");
 
-        if (!res.ok) {
-          tbody.innerHTML = `<tr><td colspan="4">${majors.message || "ไม่สามารถดึงข้อมูลสาขาวิชาได้"}</td></tr>`;
-          return;
-        }
-
         if (!majors.length) {
-          tbody.innerHTML = `<tr><td colspan="4">ยังไม่มีข้อมูลสาขาวิชา</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#aaa; padding:40px;">ยังไม่มีสาขาวิชา</td></tr>`;
           return;
         }
 
         tbody.innerHTML = "";
         majors.forEach(m => {
-          const introShort = (m.intro || "").slice(0, 80);
+          const introShort = (m.intro || "").slice(0, 80) + (m.intro?.length > 80 ? "..." : "");
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td>${m.name_th || "-"}</td>
+            <td><strong>${m.name_th || "-"}</strong></td>
             <td>${introShort || "-"}</td>
             <td><span class="status-pill status-active">ใช้งานได้</span></td>
             <td>
@@ -459,7 +560,7 @@ const token = user.token;
           tbody.appendChild(tr);
         });
 
-        // event ปุ่มแก้ไข / ลบ
+        // Event ปุ่มแก้ไขสาขา
         document.querySelectorAll(".edit-major").forEach(btn => {
           btn.addEventListener("click", () => {
             const majorId = btn.dataset.id;
@@ -467,22 +568,25 @@ const token = user.token;
           });
         });
 
+        // Event ปุ่มลบสาขา
         document.querySelectorAll(".delete-major").forEach(btn => {
           btn.addEventListener("click", async () => {
             const majorId = btn.dataset.id;
             if (!confirm("ต้องการลบสาขาวิชานี้ใช่หรือไม่?")) return;
+
             try {
               const res = await fetch(`${API_BASE}/majors/${majorId}`, {
-                method: "DELETE",});
-              const data = await res.json();
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${token}` }
+              });
               if (!res.ok) {
-                alert(data.message || "ลบข้อมูลไม่สำเร็จ");
+                const data = await res.json();
+                alert(data.message || "ลบไม่สำเร็จ");
                 return;
               }
-              loadMajors(courseId); // โหลดใหม่
+              loadMajors(courseId); // refresh
             } catch (err) {
-              console.error(err);
-              alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (ลบสาขา)");
+              alert("เกิดข้อผิดพลาดในการลบสาขาวิชา");
             }
           });
         });
@@ -490,9 +594,13 @@ const token = user.token;
       } catch (err) {
         console.error(err);
         document.getElementById("majorTable").innerHTML =
-          `<tr><td colspan="4">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (majors)</td></tr>`;
+          `<tr><td colspan="4" style="text-align:center; color:#aaa; padding:40px;">ไม่สามารถโหลดสาขาวิชาได้</td></tr>`;
       }
     }
+
+    // เริ่มโหลดข้อมูล
+    loadCourse(courseId);
+    loadMajors(courseId);
   </script>
 </body>
 </html>

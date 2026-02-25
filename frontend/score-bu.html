@@ -179,11 +179,11 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
     <span class="topbar-brand">ระบบจัดการผลลัพธ์การเรียนรู้</span>
   </a>
   <nav class="topbar-nav">
-    <a href="qa-add.html">หน้าหลัก</a>
-    <a href="plo.html">จัดการ PLO/MLO</a>
-    <a href="matrix.html">Alignment Matrix</a>
-    <a href="score-plo.html" class="active">คะแนนผลลัพธ์ PLO</a>
-    <a href="kas.html">KAS</a>
+    <a href="#">หน้าหลัก</a>
+    <a href="plo-mlo.html">จัดการ PLO/MLO</a>
+    <a href="alignment-matrix.html">Alignment Matrix</a>
+    <a href="#" class="active">คะแนนผลลัพธ์ PLO</a>
+    <a href="#">KAS</a>
   </nav>
   <div class="topbar-right"><div class="avatar">A</div></div>
 </header>
@@ -276,6 +276,17 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
       <ul class="summary-list" id="summaryList"></ul>
     </div>
 
+    <!-- QUICK NAV -->
+    <div class="side-card">
+      <h3><svg viewBox="0 0 20 20" fill="var(--purple)"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg> ลิงก์ที่เกี่ยวข้อง</h3>
+      <div class="quick-nav">
+        <a href="plo-mlo.html" class="nav-link"><svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>PLOs/MLOs</a>
+        <a href="alignment-matrix.html" class="nav-link"><svg viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Alignment Matrix</a>
+        <a href="#" class="nav-link active"><svg viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>คะแนนผลลัพธ์</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
@@ -286,28 +297,28 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
 // section rows have no scores; subtotal/total rows auto-calculate
 let tableData = [
   { type:'section', label:'ผลลัพธ์การเรียนรู้ระดับหลักสูตร (BA)' },
-  { type:'row', code:'PLO1', desc:'การบูรณาการประยุกต์ศาสตร์ด้านบริหารธุรกิจ', sem1:null, sem2:null },
-  { type:'row', code:'PLO2', desc:'การใช้ผู้ประกอบการที่มีจิตสำนึกด้วยความรับผิดชอบต่อสังคม', sem1:null, sem2:null },
-  { type:'row', code:'PLO3', desc:'การประยุกต์เทคโนโลยีดิจิทัลเพื่อวิเคราะห์ทางธุรกิจ', sem1:null, sem2:null },
-  { type:'row', code:'PLO4', desc:'ทักษะความร่วมมือในการทำงานเป็นทีมและการสื่อสาร', sem1:null, sem2:null },
-  { type:'row', code:'PLO5', desc:'จริยธรรม คุณธรรมและจรรยาบรรณ', sem1:null, sem2:null },
-  { type:'row', code:'PLO6', desc:'พัฒนาทักษะและความสามารถในการเรียนรู้ตลอดชีวิต', sem1:null, sem2:null },
-  { type:'row', code:'MLO', desc:'วิชาเอกการจัดการทรัพยากรมนุษย์', sem1:null, sem2:null },
-  { type:'row', code:'MLO', desc:'วิชาเอกการจัดการโซ่อุปทานและโลจิสติกส์', sem1:null, sem2:null },
-  { type:'row', code:'MLO', desc:'วิชาเอกการตลาดและการสื่อสารการตลาด', sem1:null, sem2:null },
-  { type:'row', code:'MLO', desc:'วิชาเอกการเป็นผู้ประกอบการธุรกิจ', sem1:null, sem2:null },
-  { type:'row', code:'PLO', desc:'PLO', sem1:null, sem2:null },
-  { type:'row', code:'ด้านความรู้และทักษะทางวิชาชีพปฎิบัติ', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านทักษะการวิเคราะห์เชิงปริมาณ', desc:'การสื่อสารและการใช้เทคโนโลยีสารสนเทศ', sem1:null, sem2:null },
-  { type:'row', code:'ด้านทักษะความสัมพันธ์ระหว่างบุคคล', desc:'รวมทั้งความรอบรู้ความสามารถในการมีเหตุผล', sem1:null, sem2:null },
+  { type:'row', code:'PLO1', desc:'การบูรณาการประยุกต์ศาสตร์ด้านบริหารธุรกิจ', sem1:4.60, sem2:4.54 },
+  { type:'row', code:'PLO2', desc:'การใช้ผู้ประกอบการที่มีจิตสำนึกด้วยความรับผิดชอบต่อสังคม', sem1:4.57, sem2:4.59 },
+  { type:'row', code:'PLO3', desc:'การประยุกต์เทคโนโลยีดิจิทัลเพื่อวิเคราะห์ทางธุรกิจ', sem1:4.60, sem2:4.54 },
+  { type:'row', code:'PLO4', desc:'ทักษะความร่วมมือในการทำงานเป็นทีมและการสื่อสาร', sem1:4.63, sem2:4.55 },
+  { type:'row', code:'PLO5', desc:'จริยธรรม คุณธรรมและจรรยาบรรณ', sem1:4.67, sem2:4.60 },
+  { type:'row', code:'PLO6', desc:'พัฒนาทักษะและความสามารถในการเรียนรู้ตลอดชีวิต', sem1:4.67, sem2:4.61 },
+  { type:'row', code:'MLO', desc:'วิชาเอกการจัดการทรัพยากรมนุษย์', sem1:null, sem2:4.66 },
+  { type:'row', code:'MLO', desc:'วิชาเอกการจัดการโซ่อุปทานและโลจิสติกส์', sem1:null, sem2:4.55 },
+  { type:'row', code:'MLO', desc:'วิชาเอกการตลาดและการสื่อสารการตลาด', sem1:4.58, sem2:4.59 },
+  { type:'row', code:'MLO', desc:'วิชาเอกการเป็นผู้ประกอบการธุรกิจ', sem1:4.57, sem2:4.33 },
+  { type:'row', code:'PLO', desc:'PLO', sem1:4.63, sem2:4.57 },
+  { type:'row', code:'ด้านความรู้และทักษะทางวิชาชีพปฎิบัติ', desc:'', sem1:4.63, sem2:4.68 },
+  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', sem1:4.60, sem2:4.65 },
+  { type:'row', code:'ด้านทักษะการวิเคราะห์เชิงปริมาณ', desc:'การสื่อสารและการใช้เทคโนโลยีสารสนเทศ', sem1:4.66, sem2:4.70 },
+  { type:'row', code:'ด้านทักษะความสัมพันธ์ระหว่างบุคคล', desc:'รวมทั้งความรอบรู้ความสามารถในการมีเหตุผล', sem1:4.50, sem2:4.73 },
   { type:'subtotal', label:'รวมผลลัพธ์วิชาเอกธุรกิจ (Total)', refRows:'ba' },
   { type:'section', label:'ผลลัพธ์หลักสูตร (Multi-disciplinary)' },
-  { type:'row', code:'ด้านความรู้', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านความรู้และทักษะทางวิชาชีพปฎิบัติ', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', ssem1:null, sem2:null },
-  { type:'row', code:'ด้านทักษะการวิเคราะห์เชิงปริมาณ', desc:'การสื่อสารและการใช้เทคโนโลยีสารสนเทศ', sem1:null, sem2:null },
-  { type:'row', code:'ด้านทักษะความสัมพันธ์ระหว่างบุคคล', desc:'', sem1:null, sem2:null },
+  { type:'row', code:'ด้านความรู้', desc:'', sem1:5.00, sem2:4.61 },
+  { type:'row', code:'ด้านความรู้และทักษะทางวิชาชีพปฎิบัติ', desc:'', sem1:5.00, sem2:4.83 },
+  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', sem1:5.00, sem2:5.00 },
+  { type:'row', code:'ด้านทักษะการวิเคราะห์เชิงปริมาณ', desc:'การสื่อสารและการใช้เทคโนโลยีสารสนเทศ', sem1:5.00, sem2:4.67 },
+  { type:'row', code:'ด้านทักษะความสัมพันธ์ระหว่างบุคคล', desc:'', sem1:5.00, sem2:null },
   { type:'subtotal', label:'ผลลัพธ์หลักสูตร Total', refRows:'multi' },
   { type:'total', label:'ภาควิชาบริหารธุรกิจ Total', refRows:'all_ba' },
   { type:'grand', label:'Grand Total', refRows:'all' },
