@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>เพิ่มข้อมูล QA | FMS Admin</title>
+<title>เพิ่ม/แก้ไขข้อมูล QA | FMS Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -34,7 +34,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
 
-/* ── SIDEBAR (same as qa.html) ── */
+/* ── SIDEBAR ── */
 .sidebar { width: var(--sidebar-w); background: var(--white); height: 100vh; position: fixed; left: 0; top: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; }
 .sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .sidebar-brand-title { font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
@@ -70,10 +70,47 @@ body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg
 /* ── MAIN ── */
 .main { margin-left: var(--sidebar-w); padding-top: var(--topbar-h); flex: 1; min-width: 0; }
 .page-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
-
 .page-heading-wrap { display: flex; flex-direction: column; gap: 4px; }
 .page-heading { font-family: 'Lexend', sans-serif; font-size: 26px; font-weight: 800; color: var(--purple); letter-spacing: -0.4px; }
 .page-sub { font-size: 14px; color: var(--text-sub); }
+
+/* ── Mode toggle banner ── */
+.mode-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1.5px solid;
+}
+.mode-banner.add-mode {
+  background: var(--purple-light);
+  border-color: #d8c8f5;
+  color: var(--purple-dark);
+}
+.mode-banner.edit-mode {
+  background: var(--amber-bg);
+  border-color: #fde68a;
+  color: #92400e;
+}
+.mode-banner svg { flex-shrink: 0; }
+.mode-switch-btn {
+  margin-left: auto;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1.5px solid currentColor;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  color: inherit;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.mode-switch-btn:hover { background: rgba(0,0,0,0.06); }
 
 /* ── Category sections ── */
 .category-section {
@@ -88,7 +125,6 @@ body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg
 .category-section:nth-child(2) { animation-delay: 0.10s; }
 .category-section:nth-child(3) { animation-delay: 0.15s; }
 .category-section:nth-child(4) { animation-delay: 0.20s; }
-
 @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 .category-header {
@@ -99,30 +135,13 @@ body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg
   align-items: center;
   gap: 10px;
 }
-
 .category-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .category-dot.purple { background: var(--purple); }
 .category-dot.blue   { background: var(--blue); }
 .category-dot.amber  { background: var(--amber); }
 .category-dot.green  { background: var(--green); }
-
-.category-title {
-  font-family: 'Lexend', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: 0.1px;
-}
-
-.category-badge {
-  margin-left: auto;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--purple-light);
-  color: var(--purple);
-}
+.category-title { font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+.category-badge { margin-left: auto; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--purple-light); color: var(--purple); }
 
 /* ── Item row ── */
 .item-row {
@@ -136,16 +155,14 @@ body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg
 }
 .item-row:last-child { border-bottom: none; }
 .item-row:hover { background: var(--purple-light); }
-
 .item-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .item-info { flex: 1; min-width: 0; }
 .item-name { font-size: 14px; font-weight: 600; color: var(--text); }
 .item-desc { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
 
-.btn-add {
+/* ── Buttons ── */
+.btn-action {
   padding: 7px 22px;
-  background: var(--purple);
-  color: var(--white);
   border: none;
   border-radius: 8px;
   font-size: 13px;
@@ -155,8 +172,25 @@ body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg
   transition: background 0.15s, transform 0.15s;
   white-space: nowrap;
   flex-shrink: 0;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-.btn-add:hover { background: var(--purple-dark); transform: translateY(-1px); }
+/* Add mode — purple */
+.btn-action.add {
+  background: var(--purple);
+  color: var(--white);
+}
+.btn-action.add:hover { background: var(--purple-dark); transform: translateY(-1px); }
+
+/* Edit mode — amber */
+.btn-action.edit {
+  background: var(--amber-bg);
+  color: #92400e;
+  border: 1.5px solid #fde68a;
+}
+.btn-action.edit:hover { background: #fef3c7; transform: translateY(-1px); }
 
 svg { display: block; }
 </style>
@@ -189,7 +223,7 @@ svg { display: block; }
     </a>
   </nav>
   <div class="sidebar-footer">
-    <a class="nav-item" href="login.html" id="logoutBtn">
+    <a class="nav-item" href="#" id="logoutBtn">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
       ออกจากระบบ
     </a>
@@ -199,9 +233,9 @@ svg { display: block; }
 <!-- TOPBAR -->
 <header class="topbar">
   <div class="topbar-left">
-    <div class="topbar-title">เพิ่มข้อมูล QA</div>
+    <div class="topbar-title" id="topbarTitle">เพิ่มข้อมูล QA</div>
     <div class="topbar-breadcrumb">
-      <a href="qa-dashboard.html">ประกันคุณภาพ</a> · เลือกข้อมูล PLO/MLO ที่ต้องการเพิ่ม
+      <a href="qa-dashboard.html">ประกันคุณภาพ</a> · <span id="topbarSub">เลือกข้อมูลที่ต้องการเพิ่ม</span>
     </div>
   </div>
   <div class="topbar-right">
@@ -221,15 +255,24 @@ svg { display: block; }
   <div class="page-body">
 
     <div class="page-heading-wrap">
-      <div class="page-heading">เลือกข้อมูลที่ต้องการเพิ่ม</div>
-      <div class="page-sub">เลือกหมวดหมู่และประเภทข้อมูลที่ต้องการดำเนินการ</div>
+      <div class="page-heading" id="pageHeading">เลือกข้อมูลที่ต้องการเพิ่ม</div>
+      <div class="page-sub" id="pageSub">เลือกหมวดหมู่และประเภทข้อมูลที่ต้องการดำเนินการ</div>
+    </div>
+
+    <!-- Mode banner -->
+    <div class="mode-banner add-mode" id="modeBanner">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
+      </svg>
+      <span id="bannerText">คุณกำลังอยู่ในโหมด <strong>เพิ่มข้อมูลใหม่</strong> — กดปุ่มด้านขวาเพื่อสลับไปโหมดแก้ไข</span>
+      <button class="mode-switch-btn" id="modeSwitchBtn">สลับเป็นโหมดแก้ไข</button>
     </div>
 
     <!-- PLO / MLO -->
     <div class="category-section">
       <div class="category-header">
         <div class="category-dot purple"></div>
-        <div class="category-title">เลือกข้อมูล PLO/MLO ที่ต้องการเพิ่ม</div>
+        <div class="category-title">ผลลัพธ์การเรียนรู้ (PLO / MLO / CLO)</div>
         <span class="category-badge">4 รายการ</span>
       </div>
 
@@ -241,7 +284,11 @@ svg { display: block; }
           <div class="item-name">ผลลัพธ์การเรียนรู้ (Learning Outcomes)</div>
           <div class="item-desc">PLO, MLO และ CLO ของหลักสูตร</div>
         </div>
-        <a class="btn-add" href="plo.html"> Add </a>
+        <!-- href จะถูกใส่โดย JS -->
+        <a class="btn-action add" id="btn-plo" href="plo.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
 
       <div class="item-row">
@@ -252,7 +299,10 @@ svg { display: block; }
           <div class="item-name">Alignment Matrix</div>
           <div class="item-desc">ความสัมพันธ์ระหว่าง PLO และรายวิชา</div>
         </div>
-        <a class="btn-add" href="matrix.html"> Add </a>
+        <a class="btn-action add" id="btn-matrix" href="matrix.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
 
       <div class="item-row">
@@ -263,7 +313,10 @@ svg { display: block; }
           <div class="item-name">คะแนนผลลัพธ์ PLO</div>
           <div class="item-desc">ผลการประเมิน PLO แต่ละข้อ</div>
         </div>
-        <a class="btn-add" href="score-plo.html"> Add </a>
+        <a class="btn-action add" id="btn-score" href="score-plo.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
 
       <div class="item-row">
@@ -274,7 +327,10 @@ svg { display: block; }
           <div class="item-name">PLO MLO CLO และ KAS</div>
           <div class="item-desc">โครงสร้างผลลัพธ์การเรียนรู้ทั้งหมด</div>
         </div>
-        <a class="btn-add" href="kas.html"> Add </a>
+        <a class="btn-action add" id="btn-kas" href="kas.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
     </div>
 
@@ -282,10 +338,9 @@ svg { display: block; }
     <div class="category-section">
       <div class="category-header">
         <div class="category-dot amber"></div>
-        <div class="category-title">เลือกข้อมูล Stakeholders ที่ต้องการเพิ่ม</div>
+        <div class="category-title">Stakeholders</div>
         <span class="category-badge" style="background:var(--amber-bg);color:var(--amber)">1 รายการ</span>
       </div>
-
       <div class="item-row">
         <div class="item-icon" style="background:var(--amber-bg)">
           <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="color:var(--amber)"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/></svg>
@@ -294,7 +349,10 @@ svg { display: block; }
           <div class="item-name">Stakeholders</div>
           <div class="item-desc">ความพึงพอใจของผู้มีส่วนได้ส่วนเสีย</div>
         </div>
-        <button class="btn-add">Add</button>
+        <a class="btn-action add" id="btn-stakeholder" href="stakeholder.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
     </div>
 
@@ -302,7 +360,7 @@ svg { display: block; }
     <div class="category-section">
       <div class="category-header">
         <div class="category-dot blue"></div>
-        <div class="category-title">เลือกข้อมูล Analytics ที่ต้องการเพิ่ม</div>
+        <div class="category-title">Analytics</div>
         <span class="category-badge" style="background:var(--blue-bg);color:var(--blue)">4 รายการ</span>
       </div>
 
@@ -314,7 +372,10 @@ svg { display: block; }
           <div class="item-name">สถิติจำนวนนักศึกษา</div>
           <div class="item-desc">จำนวนนักศึกษาแยกตามชั้นปีและสาขา</div>
         </div>
-        <button class="btn-add">Add</button>
+        <a class="btn-action add" id="btn-students" href="analytics-students.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
 
       <div class="item-row">
@@ -325,7 +386,10 @@ svg { display: block; }
           <div class="item-name">สถานะการศึกษา</div>
           <div class="item-desc">สถานะนักศึกษาปัจจุบัน ลาออก สำเร็จการศึกษา</div>
         </div>
-        <button class="btn-add">Add</button>
+        <a class="btn-action add" id="btn-status" href="analytics-status.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
 
       <div class="item-row">
@@ -336,7 +400,10 @@ svg { display: block; }
           <div class="item-name">สถิติการฝึกงานสหกิจ</div>
           <div class="item-desc">ข้อมูลการฝึกงานและสหกิจศึกษา</div>
         </div>
-        <button class="btn-add">Add</button>
+        <a class="btn-action add" id="btn-coop" href="analytics-coop.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
 
       <div class="item-row">
@@ -347,7 +414,10 @@ svg { display: block; }
           <div class="item-name">สถิติการฝึกงาน</div>
           <div class="item-desc">ข้อมูลสถิติการฝึกงานทั่วไป</div>
         </div>
-        <button class="btn-add">Add</button>
+        <a class="btn-action add" id="btn-intern" href="analytics-intern.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
     </div>
 
@@ -355,7 +425,7 @@ svg { display: block; }
     <div class="category-section">
       <div class="category-header">
         <div class="category-dot green"></div>
-        <div class="category-title">เลือกข้อมูลผลงานที่ต้องการเพิ่ม</div>
+        <div class="category-title">ผลงาน</div>
         <span class="category-badge" style="background:var(--green-bg);color:var(--green)">2 รายการ</span>
       </div>
 
@@ -367,7 +437,10 @@ svg { display: block; }
           <div class="item-name">ผลงานที่โดดเด่น</div>
           <div class="item-desc">รางวัล ผลงานวิชาการ และความสำเร็จของนักศึกษา</div>
         </div>
-        <button class="btn-add">Add</button>
+        <a class="btn-action add" id="btn-achievement" href="achievement.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
 
       <div class="item-row">
@@ -378,7 +451,10 @@ svg { display: block; }
           <div class="item-name">สถิติการทำงานหลังจบการศึกษา</div>
           <div class="item-desc">ข้อมูลการมีงานทำและเงินเดือนของบัณฑิต</div>
         </div>
-        <button class="btn-add">Add</button>
+        <a class="btn-action add" id="btn-graduate" href="graduate-stats.html">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่ม
+        </a>
       </div>
     </div>
 
@@ -387,9 +463,96 @@ svg { display: block; }
 
 <script>
 if (!localStorage.getItem("user")) { window.location.href = "login.html"; }
+
 document.getElementById("logoutBtn").addEventListener("click", e => {
-  e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html";
+  e.preventDefault();
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
 });
+
+// ── Map ของแต่ละปุ่ม: { addUrl, editUrl, label } ──
+const itemMap = {
+  "btn-plo":         { add: "plo.html",               edit: "plo.html?mode=edit",               label: "Learning Outcomes" },
+  "btn-matrix":      { add: "matrix.html",             edit: "matrix.html?mode=edit",             label: "Alignment Matrix" },
+  "btn-score":       { add: "score-plo.html",          edit: "score-plo.html?mode=edit",          label: "คะแนนผลลัพธ์ PLO" },
+  "btn-kas":         { add: "kas.html",                edit: "kas.html?mode=edit",                label: "PLO MLO CLO & KAS" },
+  "btn-stakeholder": { add: "stakeholder.html",        edit: "stakeholder.html?mode=edit",        label: "Stakeholders" },
+  "btn-students":    { add: "analytics-students.html", edit: "analytics-students.html?mode=edit", label: "สถิติจำนวนนักศึกษา" },
+  "btn-status":      { add: "analytics-status.html",   edit: "analytics-status.html?mode=edit",   label: "สถานะการศึกษา" },
+  "btn-coop":        { add: "analytics-coop.html",     edit: "analytics-coop.html?mode=edit",     label: "สถิติสหกิจ" },
+  "btn-intern":      { add: "analytics-intern.html",   edit: "analytics-intern.html?mode=edit",   label: "สถิติการฝึกงาน" },
+  "btn-achievement": { add: "achievement.html",        edit: "achievement.html?mode=edit",        label: "ผลงานที่โดดเด่น" },
+  "btn-graduate":    { add: "graduate-stats.html",     edit: "graduate-stats.html?mode=edit",     label: "สถิติการทำงานหลังจบ" },
+};
+
+// ── ตรวจ mode จาก URL ──
+const params  = new URLSearchParams(window.location.search);
+let isEdit    = params.get("mode") === "edit";
+
+function applyMode() {
+  const banner      = document.getElementById("modeBanner");
+  const bannerText  = document.getElementById("bannerText");
+  const switchBtn   = document.getElementById("modeSwitchBtn");
+  const heading     = document.getElementById("pageHeading");
+  const sub         = document.getElementById("pageSub");
+  const topTitle    = document.getElementById("topbarTitle");
+  const topSub      = document.getElementById("topbarSub");
+
+  if (isEdit) {
+    // ── Edit mode ──
+    banner.className      = "mode-banner edit-mode";
+    banner.querySelector("svg").innerHTML = `<path fill-rule="evenodd" d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" clip-rule="evenodd"/>`;
+    bannerText.innerHTML  = `คุณกำลังอยู่ในโหมด <strong>แก้ไขข้อมูลเดิม</strong> — กดปุ่มเพื่อสลับกลับโหมดเพิ่มข้อมูล`;
+    switchBtn.textContent = "สลับเป็นโหมดเพิ่มข้อมูล";
+    heading.textContent   = "เลือกข้อมูลที่ต้องการแก้ไข";
+    sub.textContent       = "เลือกหมวดหมู่ที่ต้องการแก้ไขข้อมูลที่มีอยู่แล้วในระบบ";
+    topTitle.textContent  = "แก้ไขข้อมูล QA";
+    topSub.textContent    = "เลือกข้อมูลที่ต้องการแก้ไข";
+
+    // อัปเดตทุกปุ่มเป็น edit mode (สีเหลือง + label "แก้ไข")
+    Object.entries(itemMap).forEach(([id, urls]) => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.href      = urls.edit;
+      btn.className = "btn-action edit";
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg> แก้ไข`;
+    });
+
+  } else {
+    // ── Add mode ──
+    banner.className      = "mode-banner add-mode";
+    banner.querySelector("svg").innerHTML = `<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>`;
+    bannerText.innerHTML  = `คุณกำลังอยู่ในโหมด <strong>เพิ่มข้อมูลใหม่</strong> — กดปุ่มด้านขวาเพื่อสลับไปโหมดแก้ไข`;
+    switchBtn.textContent = "สลับเป็นโหมดแก้ไข";
+    heading.textContent   = "เลือกข้อมูลที่ต้องการเพิ่ม";
+    sub.textContent       = "เลือกหมวดหมู่และประเภทข้อมูลที่ต้องการดำเนินการ";
+    topTitle.textContent  = "เพิ่มข้อมูล QA";
+    topSub.textContent    = "เลือกข้อมูล PLO/MLO ที่ต้องการเพิ่ม";
+
+    // อัปเดตทุกปุ่มเป็น add mode (สีม่วง + label "เพิ่ม")
+    Object.entries(itemMap).forEach(([id, urls]) => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.href      = urls.add;
+      btn.className = "btn-action add";
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg> เพิ่ม`;
+    });
+  }
+}
+
+// ── ปุ่มสลับ mode ──
+document.getElementById("modeSwitchBtn").addEventListener("click", () => {
+  isEdit = !isEdit;
+  // อัปเดต URL โดยไม่ reload
+  const newUrl = isEdit
+    ? window.location.pathname + "?mode=edit"
+    : window.location.pathname;
+  history.replaceState(null, "", newUrl);
+  applyMode();
+});
+
+// เริ่มต้น
+applyMode();
 </script>
 </body>
 </html>
