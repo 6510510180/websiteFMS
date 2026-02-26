@@ -409,8 +409,8 @@ form.addEventListener("submit", async (e) => {
     total_credits: document.getElementById("total_credits").value,
     short_detail: document.getElementById("short_detail").value,
     student_range: document.getElementById("student_range").value,
-    hero_image: heroHidden.value,
-    info_image: infoHidden.value
+    hero_image: heroHidden.value || null,
+  info_image: infoHidden.value || null
   };
   const url = isEdit ? `${API}/courses/${courseId}` : `${API}/courses`;
   const method = isEdit ? "PUT" : "POST";

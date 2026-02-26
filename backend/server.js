@@ -148,10 +148,11 @@ app.post("/api/courses", async (req, res) => {
     );
     res.json({ message: "เพิ่มหลักสูตรสำเร็จ", id: result.rows[0].id });
   } catch (err) {
-    console.error("Add course error:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Add course error:", err.message, err.detail); // เพิ่ม detail
+    res.status(500).json({ message: err.message });
   }
 });
+
 
 // =======================
 // UPLOAD API
