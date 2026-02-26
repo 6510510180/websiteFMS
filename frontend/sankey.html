@@ -10,39 +10,45 @@
 body{background:#0d1117;color:#c9d1d9;font-family:'Sarabun',sans-serif;min-height:100vh}
 
 header{padding:1.4rem 2rem 1rem;border-bottom:1px solid #21262d;background:linear-gradient(180deg,rgba(88,166,255,.06),transparent)}
-h1{font-family:'Anuphan',sans-serif;font-size:1.4rem;font-weight:700;color:#e6edf3}
+h1{font-family:'Anuphan',sans-serif;font-size:1.6rem;font-weight:700;color:#e6edf3}
 h1 em{color:#58a6ff;font-style:normal}
-.sub{margin-top:.25rem;font-size:.82rem;color:#8b949e}
+.sub{margin-top:.25rem;font-size:.85rem;color:#8b949e}
 
-/* controls */
-.bar{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;padding:.8rem 2rem;background:#161b22;border-bottom:1px solid #21262d}
-.seg{display:flex;border:1px solid #30363d;border-radius:6px;overflow:hidden}
-.seg button{font-family:'Sarabun',sans-serif;font-size:.78rem;padding:.32rem .85rem;background:transparent;color:#8b949e;border:none;cursor:pointer;transition:all .15s}
+.bar{display:flex;align-items:center;flex-wrap:wrap;gap:.8rem;padding:1rem 2rem;background:#161b22;border-bottom:1px solid #21262d;overflow-x:auto}
+.seg{display:flex;border:1px solid #30363d;border-radius:6px;overflow:hidden;flex-shrink:0}
+.seg button{font-family:'Sarabun',sans-serif;font-size:.8rem;padding:.4rem 1rem;background:transparent;color:#8b949e;border:none;cursor:pointer;transition:all .15s;white-space:nowrap}
 .seg button:not(:last-child){border-right:1px solid #30363d}
-.seg button.on{background:rgba(88,166,255,.18);color:#58a6ff;font-weight:600}
+.seg button.on{background:rgba(88,166,255,.2);color:#58a6ff;font-weight:600}
 .seg button:hover:not(.on){color:#c9d1d9;background:#21262d}
 
-label{font-size:.78rem;color:#8b949e;margin-left:.8rem}
-select{font-family:'Sarabun',sans-serif;font-size:.78rem;padding:.3rem .6rem;background:#21262d;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;outline:none;cursor:pointer}
+label{font-size:.8rem;color:#8b949e;flex-shrink:0}
+select{font-family:'Sarabun',sans-serif;font-size:.8rem;padding:.4rem .8rem;background:#21262d;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;outline:none;cursor:pointer;flex-shrink:0;min-width:140px}
 select:focus{border-color:#58a6ff}
 
-.hint{margin-left:auto;font-size:.72rem;color:#484f58;font-style:italic}
+.hint{margin-left:auto;font-size:.72rem;color:#484f58;font-style:italic;flex-shrink:0}
 
-/* chart */
-#chart{padding:0;overflow:hidden}
+#chart{padding:0;overflow:auto;background:#0d1117;border:1px solid #21262d;border-radius:8px;margin:1rem 2rem;min-height:600px}
+
 svg{display:block}
 
-/* tooltip */
-#tt{position:fixed;background:#1c2128;border:1px solid #30363d;border-radius:8px;padding:.65rem .9rem;font-size:.78rem;pointer-events:none;opacity:0;transition:opacity .12s;z-index:999;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.6);line-height:1.7}
-.tt-h{color:#58a6ff;font-weight:600;margin-bottom:.2rem;font-size:.82rem}
-.tt-s{color:#8b949e}
-.tt-v{color:#e6edf3}
+#tt{position:fixed;background:#1c2128;border:1px solid #30363d;border-radius:8px;padding:.8rem 1rem;font-size:.8rem;pointer-events:none;opacity:0;transition:opacity .12s;z-index:999;max-width:300px;box-shadow:0 8px 24px rgba(0,0,0,.6);line-height:1.8}
+.tt-h{color:#58a6ff;font-weight:700;margin-bottom:.3rem;font-size:.85rem}
+.tt-s{color:#8b949e;font-size:.75rem}
+.tt-v{color:#e6edf3;font-weight:600}
+
+@media(max-width:768px){
+  .bar{gap:.4rem}
+  .seg button{padding:.3rem .6rem;font-size:.75rem}
+  select{min-width:110px;font-size:.75rem;padding:.3rem .6rem}
+  label{font-size:.75rem}
+}
 </style>
 </head>
 <body>
+
 <header>
-  <h1>หลักสูตร BBA 2567 — <em>PLO / MLO ↔ รายวิชา</em></h1>
-  <p class="sub">Sankey แสดงว่า PLO/MLO แต่ละตัวกระจายไปยังรายวิชาใดบ้าง (I = Intro · R = Reinforce · M = Mastery)</p>
+  <h1>📊 BBA 2567 — <em>PLO / MLO ↔ รายวิชา</em></h1>
+  <p class="sub">Sankey แสดงความสอดคล้องระหว่างผลลัพธ์การเรียนรู้กับรายวิชา (I = Intro · R = Reinforce · M = Mastery)</p>
 </header>
 
 <div class="bar">
@@ -50,16 +56,17 @@ svg{display:block}
     <button class="on" onclick="setDir('plo2course',this)">PLO/MLO → รายวิชา</button>
     <button onclick="setDir('course2plo',this)">รายวิชา → PLO/MLO</button>
   </div>
-  <label>วิชาเอก:</label>
+  <label>🎓 วิชาเอก:</label>
   <select id="majorSel" onchange="render()">
-    <option value="fin">การเงินและการลงทุน</option>
-    <option value="mkt">การตลาดและการสื่อสาร</option>
-    <option value="hrm">การจัดการทรัพยากรมนุษย์</option>
-    <option value="log">โลจิสติกส์และโซ่อุปทาน</option>
-    <option value="bis">ระบบสารสนเทศทางธุรกิจ</option>
-    <option value="mice">การจัดการไมซ์</option>
+    <option value="fin">💰 การเงินและการลงทุน</option>
+    <option value="mkt">📢 การตลาดและการสื่อสาร</option>
+    <option value="hrm">👥 การจัดการทรัพยากรมนุษย์</option>
+    <option value="log">📦 โลจิสติกส์และโซ่อุปทาน</option>
+    <option value="bis">💻 ระบบสารสนเทศทางธุรกิจ</option>
+    <option value="mice">🎉 การจัดการไมซ์</option>
   </select>
-  <label>กลุ่มวิชา:</label>
+  
+  <label>📚 กลุ่มวิชา:</label>
   <select id="groupSel" onchange="render()">
     <option value="all">ทั้งหมด</option>
     <option value="ge">GE · วิชาทั่วไป</option>
@@ -67,24 +74,25 @@ svg{display:block}
     <option value="required">วิชาชีพบังคับ</option>
     <option value="elective">วิชาชีพเลือก</option>
   </select>
-  <label>แสดง:</label>
+
+  <label>🎯 แสดง:</label>
   <select id="ploTypeSel" onchange="render()">
-    <option value="plo">PLO เท่านั้น (9 ตัว)</option>
-    <option value="mlo">MLO เท่านั้น</option>
-    <option value="both">PLO + MLO</option>
+    <option value="plo">PLO เท่านั้น (9)</option>
+    <option value="mlo">MLO เท่านั้น (14)</option>
+    <option value="both">PLO + MLO (23)</option>
   </select>
-  <div style="display:flex;align-items:center;gap:.5rem;margin-left:auto">
-    <span style="font-size:.72rem;color:#484f58">ระดับ:</span>
-    <span style="display:flex;align-items:center;gap:.3rem;font-size:.75rem;padding:.25rem .6rem;border-radius:4px;background:#1c2128;border:1px solid #30363d">
-      <span style="width:10px;height:10px;border-radius:2px;background:#484f58;display:inline-block"></span><span style="color:#8b949e">I Intro</span>
+
+  <div style="display:flex;align-items:center;gap:.4rem;margin-left:auto;flex-shrink:0">
+    <span style="font-size:.75rem;color:#484f58">ระดับ:</span>
+    <span style="display:flex;align-items:center;gap:.25rem;font-size:.7rem;padding:.2rem .5rem;border-radius:3px;background:#1c2128;border:1px solid #30363d">
+      <span style="width:8px;height:8px;border-radius:1px;background:#484f58"></span>I
     </span>
-    <span style="display:flex;align-items:center;gap:.3rem;font-size:.75rem;padding:.25rem .6rem;border-radius:4px;background:#1c2128;border:1px solid #30363d">
-      <span style="width:10px;height:10px;border-radius:2px;background:#3d6b9e;display:inline-block"></span><span style="color:#8b949e">R Reinforce</span>
+    <span style="display:flex;align-items:center;gap:.25rem;font-size:.7rem;padding:.2rem .5rem;border-radius:3px;background:#1c2128;border:1px solid #30363d">
+      <span style="width:8px;height:8px;border-radius:1px;background:#3d6b9e"></span>R
     </span>
-    <span style="display:flex;align-items:center;gap:.3rem;font-size:.75rem;padding:.25rem .6rem;border-radius:4px;background:#1c2128;border:1px solid #30363d">
-      <span style="width:10px;height:10px;border-radius:2px;background:#58a6ff;display:inline-block"></span><span style="color:#8b949e">M Mastery</span>
+    <span style="display:flex;align-items:center;gap:.25rem;font-size:.7rem;padding:.2rem .5rem;border-radius:3px;background:#1c2128;border:1px solid #30363d">
+      <span style="width:8px;height:8px;border-radius:1px;background:#58a6ff"></span>M
     </span>
-    <span style="font-size:.72rem;color:#484f58;margin-left:.4rem">· hover/คลิกเส้น</span>
   </div>
 </div>
 
@@ -92,272 +100,116 @@ svg{display:block}
 <div id="tt"></div>
 
 <script>
-// ─── COLOUR ───────────────────────────────────────────────────────────────────
 const MC={fin:'#58a6ff',mkt:'#f78166',hrm:'#bc8cff',log:'#3fb950',bis:'#e3b341',mice:'#ff7b72'};
-const LEVEL_C={I:'#484f58',R:'#3d6b9e',M:'#58a6ff'};
-const GROUP_C={ge:'#5e7a9a',core:'#4a6580',required:'#3a5570',elective:'#2a4560'};
 const PLO_C=['#f9826c','#f0883e','#e3b341','#85e89d','#56d364','#39d353','#58a6ff','#79c0ff','#bc8cff'];
-const MLO_C=['#f9826c','#f9826c','#f9826c','#f0883e','#f0883e','#f0883e','#3fb950','#3fb950','#e3b341','#e3b341','#58a6ff','#58a6ff','#bc8cff','#bc8cff'];
-
-// ─── DATA — full PLO/MLO mapping from document ───────────────────────────────
-
-// Courses: [code, shortName, group, {PLO/MLO: level}]
-// group: ge | core | required | elective
-// We encode only courses that appear in the curriculum mapping tables
 
 const COURSES = {
-fin: [
-  // GE
-  ['473-001G2','เงินทองต้องรอบรู้','ge',        {PLO7:'I',PLO8:'R',PLO9:'R',MLO3_1:'R'}],
-  ['473-002G2','อ่านงบการเงิน','ge',             {PLO7:'I',PLO8:'R',PLO9:'R',MLO3_1:'R'}],
-  // Core
-  ['460-101','หลักการตลาด','core',               {PLO1:'I',PLO2:'I',PLO3:'I',PLO4:'I',PLO5:'I',PLO8:'I',PLO9:'I'}],
-  ['460-102','หลักการจัดการ','core',             {PLO1:'I',PLO2:'I',PLO4:'I',PLO8:'I'}],
-  ['460-103','หลักการเงิน','core',               {PLO1:'I',PLO2:'I',PLO4:'I',PLO9:'I'}],
-  ['460-104','การจัดการผลิต','core',             {PLO1:'I',PLO2:'I',PLO8:'I'}],
-  ['460-105','การจัดการ HR','core',              {PLO1:'I',PLO2:'I',PLO4:'I',PLO8:'I'}],
-  ['464-101','บัญชีการเงิน','core',              {PLO1:'I',PLO4:'I',PLO9:'I'}],
-  ['876-106','เศรษฐศาสตร์','core',              {PLO1:'I',PLO9:'I'}],
-  ['460-201','การสื่อสารธุรกิจ','core',          {PLO3:'I',PLO5:'I',PLO8:'I'}],
-  ['460-202','ธุรกิจอัจฉริยะ','core',            {PLO2:'I',PLO5:'I',PLO9:'I'}],
-  ['460-301','กฎหมายและจริยธรรม','core',         {PLO4:'I',PLO6:'I',PLO7:'I',MLO4_2:'R'}],
-  ['460-302','สถิติวิจัย','core',                {PLO2:'R',PLO9:'R',MLO1_3:'I',MLO2_1:'I'}],
-  ['460-303','ผู้ประกอบการ/นวัตกรรม','core',     {PLO5:'I',PLO6:'R',PLO7:'R',PLO8:'R',PLO9:'R'}],
-  ['464-301','การภาษีอากร','core',               {PLO1:'I',PLO4:'I',PLO9:'I'}],
-  ['460-401','การจัดการเชิงกลยุทธ์','core',      {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO6:'M',PLO9:'M'}],
-  // Required
-  ['464-201','บัญชีบริหาร','required',           {PLO1:'R',PLO2:'R',MLO1_1:'I',MLO1_2:'I',MLO2_1:'I'}],
-  ['473-200','บริหารการเงิน','required',         {PLO1:'R',PLO2:'R',MLO1_1:'I',MLO2_1:'I',MLO3_2:'R'}],
-  ['473-201','วางแผนการเงินส่วนบุคคล','required',{PLO1:'I',PLO2:'I',PLO4:'I',PLO5:'I',PLO6:'I',PLO9:'I',MLO6_2:'R'}],
-  ['473-202','สถาบันการเงิน','required',         {PLO1:'I',PLO2:'I',MLO3_2:'R'}],
-  ['473-300','ตราสารทุนและกองทุน','required',    {PLO1:'R',PLO2:'R',PLO9:'R',MLO1_2:'I',MLO2_1:'I',MLO2_2:'M'}],
-  ['473-301','จรรยาบรรณวิชาชีพ','required',      {PLO1:'R',PLO2:'R',PLO4:'R',PLO6:'R',MLO4_1:'R',MLO4_2:'R'}],
-  ['473-302','ความเสี่ยงและอนุพันธ์','required', {PLO1:'M',PLO2:'R',PLO5:'R',PLO9:'M',MLO2_3:'R'}],
-  ['473-303','วิจัยการเงิน 1','required',        {PLO1:'R',PLO2:'R',PLO3:'R',PLO4:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['473-304','ฝึกงาน','required',                {PLO1:'R',PLO2:'R',PLO3:'R',PLO4:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['473-305','แบบจำลองการเงิน','required',       {PLO1:'R',PLO2:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['460-402','เตรียมสหกิจ','required',           {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO6:'M',PLO9:'M'}],
-  ['460-403','สหกิจศึกษา','required',            {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['473-400','การเงินระหว่างประเทศ','required',  {PLO1:'R',PLO2:'R',PLO5:'M',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['473-401','วิจัยการเงิน 2','required',        {PLO1:'M',PLO2:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M',MLO1_1:'M',MLO1_2:'M',MLO2_1:'M',MLO2_2:'M'}],
-  // Elective (sample)
-  ['473-306','วางแผนเกษียณ','elective',          {PLO1:'I',PLO2:'I',PLO4:'I',PLO6:'R',PLO8:'I',MLO5_1:'R',MLO5_2:'R'}],
-  ['473-307','การวางแผนประกัน','elective',       {PLO1:'R',PLO2:'I',PLO4:'I',MLO5_1:'R',MLO5_2:'R',MLO6_1:'R',MLO6_2:'R'}],
-  ['473-402','วางแผนภาษีและมรดก','elective',     {PLO1:'R',PLO2:'R',PLO6:'R',PLO9:'R',MLO6_1:'M',MLO6_2:'M'}],
-  ['473-403','แผนการเงินบูรณาการ','elective',    {PLO1:'M',PLO2:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',MLO5_1:'M',MLO5_2:'M',MLO6_1:'M',MLO6_2:'M'}],
-  ['473-404','บริหารความเสี่ยงยั่งยืน','elective',{PLO2:'R',PLO4:'R',PLO7:'R',PLO9:'M'}],
-],
-
-mkt: [
-  ['460-101','หลักการตลาด','core',               {PLO1:'I',PLO2:'I',PLO3:'I',PLO4:'I',PLO5:'I',PLO8:'I',PLO9:'I'}],
-  ['460-201','การสื่อสารธุรกิจ','core',          {PLO3:'I',PLO5:'I',PLO8:'I'}],
-  ['460-202','ธุรกิจอัจฉริยะ','core',            {PLO2:'I',PLO5:'I',PLO9:'I'}],
-  ['460-301','กฎหมายและจริยธรรม','core',         {PLO4:'I',PLO6:'I',PLO7:'I',MLO4_2:'R'}],
-  ['460-401','การจัดการเชิงกลยุทธ์','core',      {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO6:'M',PLO9:'M'}],
-  ['474-101','พฤติกรรมผู้บริโภค','required',     {PLO1:'I',PLO2:'I',PLO3:'I',PLO4:'I',PLO5:'I',PLO8:'I',PLO9:'I'}],
-  ['474-201','จัดการแบรนด์','required',          {PLO1:'I',PLO2:'I',PLO3:'I',PLO4:'I',PLO5:'I',PLO8:'I',PLO9:'I'}],
-  ['474-202','การตลาดนวัตกรรม','required',       {PLO1:'I',PLO2:'I',PLO3:'I',PLO4:'I',PLO5:'I',PLO6:'I',PLO8:'I',PLO9:'I'}],
-  ['474-203','การตลาดสังคม','required',          {PLO1:'I',PLO2:'I',PLO3:'I',PLO4:'I',PLO6:'I',PLO7:'I',PLO8:'I',PLO9:'I'}],
-  ['474-204','กลยุทธ์ราคา','required',           {PLO1:'I',PLO2:'I',PLO3:'I',PLO5:'I',PLO9:'I'}],
-  ['474-301','Omnichannel','required',            {PLO1:'R',PLO2:'R',PLO3:'R',PLO5:'M',PLO6:'M',PLO8:'R',PLO9:'R'}],
-  ['474-302','วัดผลการตลาด','required',          {PLO1:'R',PLO2:'R',PLO3:'R',PLO5:'M',PLO6:'M',PLO8:'R',PLO9:'M'}],
-  ['474-303','วิจัยการตลาด','required',          {PLO1:'M',PLO2:'R',PLO3:'M',PLO5:'M',PLO8:'R',PLO9:'R',MLO1_1:'M'}],
-  ['474-304','ฝึกงาน','required',                {PLO1:'R',PLO2:'R',PLO3:'R',PLO4:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['474-305','IMC','required',                   {PLO1:'R',PLO2:'M',PLO3:'M',PLO5:'R',PLO6:'M',PLO8:'M',PLO9:'R',MLO2_1:'M'}],
-  ['474-306','การตลาดดิจิทัล','required',        {PLO1:'M',PLO2:'R',PLO3:'R',PLO5:'M',PLO6:'M',PLO8:'R',PLO9:'M'}],
-  ['460-403','สหกิจศึกษา','required',            {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['474-401','กลยุทธ์การตลาด','required',        {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['474-307','การตลาดบริการ','elective',         {PLO1:'R',PLO2:'R',PLO3:'R',PLO5:'M',PLO6:'M',PLO8:'R',PLO9:'R'}],
-  ['474-310','การตลาดความหลากหลาย','elective',   {PLO1:'M',PLO2:'R',PLO3:'M',PLO4:'R',PLO6:'M',PLO8:'R',MLO3_1:'M'}],
-  ['474-404','การตลาดโลก','elective',            {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO8:'M',PLO9:'M'}],
-  ['474-406','การตลาดยั่งยืน','elective',        {PLO1:'M',PLO2:'M',PLO4:'M',PLO5:'M',PLO7:'M',PLO8:'M',PLO9:'M'}],
-],
-
-hrm: [
-  ['460-401','การจัดการเชิงกลยุทธ์','core',      {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO6:'M',PLO9:'M'}],
-  ['475-201','วางแผน HRM','required',            {PLO1:'I',PLO2:'I',PLO3:'I',PLO4:'I',PLO8:'I',PLO9:'I'}],
-  ['475-202','จิตวิทยาองค์กร','required',        {PLO1:'I',PLO2:'I',PLO4:'I',PLO8:'I'}],
-  ['475-203','ภาวะผู้นำ','required',             {PLO1:'R',PLO2:'R',PLO3:'R',PLO4:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['475-204','พัฒนา HRM','required',             {PLO1:'R',PLO2:'R',PLO3:'R',PLO4:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['475-205','จัดการผลตอบแทน','required',        {PLO1:'R',PLO2:'R',PLO4:'R',PLO9:'R'}],
-  ['475-300','ฝึกงาน HRM','required',            {PLO1:'R',PLO2:'R',PLO4:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['475-301','จัดการประสิทธิภาพ','required',     {PLO1:'R',PLO2:'R',PLO3:'R',PLO4:'R',PLO5:'R',PLO6:'R',PLO9:'R'}],
-  ['475-302','เจรจา/ความขัดแย้ง','required',     {PLO1:'R',PLO3:'R',PLO4:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['475-303','วิจัย HRM','required',             {PLO1:'R',PLO2:'R',PLO4:'R',PLO5:'R',PLO8:'R',PLO9:'R'}],
-  ['475-304','กฎหมาย HRM','required',            {PLO4:'R',PLO6:'R',PLO9:'R'}],
-  ['460-403','สหกิจศึกษา','required',            {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['475-402','สัมมนา HRM','required',            {PLO2:'R',PLO4:'M',PLO5:'M',PLO6:'M',PLO9:'M'}],
-  ['475-321','HRIS','elective',                  {PLO2:'R',PLO3:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['475-421','HR เชิงกลยุทธ์','elective',        {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['475-422','จัดการคนเก่ง','elective',          {PLO1:'R',PLO2:'R',PLO4:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-],
-
-log: [
-  ['460-401','การจัดการเชิงกลยุทธ์','core',      {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO6:'M',PLO9:'M'}],
-  ['476-201','โลจิสติกส์เบื้องต้น','required',   {PLO1:'I',PLO2:'I',PLO5:'I',PLO9:'I'}],
-  ['476-202','ธุรกิจระหว่างประเทศ','required',   {PLO1:'I',PLO5:'I',PLO9:'I'}],
-  ['476-203','การขนส่ง','required',              {PLO1:'I',PLO2:'I',PLO5:'I',PLO6:'I',PLO9:'I'}],
-  ['476-204','การจัดซื้อ','required',            {PLO1:'I',PLO2:'I',PLO5:'I',PLO6:'I',PLO8:'I',PLO9:'I'}],
-  ['476-300','ฝึกงาน','required',                {PLO1:'M',PLO2:'M',PLO5:'M',PLO9:'M'}],
-  ['476-301','คลังสินค้า','required',            {PLO1:'M',PLO2:'M',PLO5:'M',PLO9:'M'}],
-  ['476-302','สินค้าคงคลัง','required',          {PLO1:'M',PLO2:'M',PLO5:'M',PLO9:'M'}],
-  ['476-303','ตัวแบบเหมาะสม','required',         {PLO1:'M',PLO2:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['476-304','ส่งออก-นำเข้า','required',         {PLO1:'M',PLO2:'M',PLO5:'M',PLO6:'M',PLO9:'M'}],
-  ['476-305','วิธีวิจัย','required',             {PLO2:'M',PLO5:'M',PLO8:'M',PLO9:'M'}],
-  ['460-403','สหกิจศึกษา','required',            {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['476-401','ออกแบบโซ่อุปทาน','required',       {PLO1:'R',PLO2:'R',PLO5:'M',PLO9:'R'}],
-  ['476-402','สัมมนาโลจิสติกส์','required',      {PLO1:'R',PLO2:'R',PLO4:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R',MLO3_1:'M',MLO3_2:'R'}],
-  ['476-403','โครงงาน','required',               {PLO1:'R',PLO2:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['476-311','สร้างแบบจำลอง','elective',         {PLO1:'M',PLO2:'M',PLO5:'M',PLO9:'M'}],
-  ['476-413','จัดการความเสี่ยงโซ่อุปทาน','elective',{PLO1:'M',PLO2:'M',PLO5:'R',PLO9:'R'}],
-  ['476-419','ยั่งยืนโซ่อุปทาน','elective',      {PLO2:'R',PLO5:'M',PLO7:'M',PLO9:'R'}],
-],
-
-bis: [
-  ['460-202','ธุรกิจอัจฉริยะ','core',            {PLO2:'I',PLO5:'I',PLO9:'I'}],
-  ['460-401','การจัดการเชิงกลยุทธ์','core',      {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO6:'M',PLO9:'M'}],
-  ['477-101','หลักการ IS','required',            {PLO1:'I',PLO2:'I',PLO5:'I',PLO6:'I',PLO8:'I',PLO9:'I'}],
-  ['477-102','ตรรกะโปรแกรม','required',         {PLO2:'I',PLO5:'I',PLO6:'I',PLO9:'I'}],
-  ['477-201','เขียนโปรแกรม','required',         {PLO2:'I',PLO5:'I',PLO6:'I',PLO9:'I'}],
-  ['477-202','เครือข่าย+Cyber','required',       {PLO2:'I',PLO5:'I',PLO9:'I'}],
-  ['477-203','ฐานข้อมูล','required',            {PLO2:'I',PLO5:'I',PLO6:'I',PLO9:'I'}],
-  ['477-204','Cloud Platform','required',        {PLO2:'I',PLO5:'I',PLO6:'I',PLO8:'R',PLO9:'R',MLO3_1:'R',MLO3_2:'R'}],
-  ['477-301','Full-stack Web','required',        {PLO2:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R',MLO2_1:'R',MLO3_1:'R'}],
-  ['477-302','วิเคราะห์ระบบ','required',        {PLO1:'R',PLO2:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R',MLO2_1:'R',MLO2_2:'R'}],
-  ['477-303','MIS','required',                   {PLO1:'R',PLO2:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['477-304','ฝึกงาน IS','required',            {PLO2:'R',PLO5:'R',PLO6:'M',PLO8:'M',PLO9:'M',MLO2_1:'M',MLO3_1:'M'}],
-  ['460-403','สหกิจศึกษา','required',            {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M',MLO1_1:'M'}],
-  ['477-401','สัมมนา BIS','required',           {PLO1:'M',PLO2:'R',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['477-402','โครงงาน 1','required',            {PLO1:'M',PLO2:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M',MLO2_1:'M',MLO3_1:'M'}],
-  ['477-403','โครงงาน 2','required',            {PLO1:'M',PLO2:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M',MLO2_1:'M',MLO3_1:'M'}],
-  ['477-306','AI/ML','elective',                 {PLO2:'R',PLO5:'R',PLO6:'R',PLO9:'R'}],
-  ['477-310','Digital Transform','elective',     {PLO1:'R',PLO2:'R',PLO3:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R'}],
-  ['477-315','Data Warehouse','elective',        {PLO2:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R',MLO1_1:'R',MLO1_2:'R'}],
-  ['477-321','UX Design','elective',             {PLO2:'R',PLO3:'R',PLO5:'R',PLO6:'R',PLO8:'R',PLO9:'R',MLO2_2:'R',MLO2_3:'R',MLO3_1:'R',MLO3_2:'R',MLO4_1:'R'}],
-],
-
-mice: [
-  ['460-401','การจัดการเชิงกลยุทธ์','core',      {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO6:'M',PLO9:'M'}],
-  ['478-200','ไมซ์เบื้องต้น','required',         {PLO1:'I',PLO2:'I',PLO3:'I',PLO6:'R',PLO8:'I'}],
-  ['478-201','การสื่อสารไมซ์','required',        {PLO3:'I',PLO6:'R',PLO8:'I'}],
-  ['478-202','ประชุมองค์กร','required',          {PLO1:'R',PLO2:'R',PLO3:'I',PLO6:'R',PLO8:'I'}],
-  ['478-203','ท่องเที่ยวรางวัล','required',      {PLO1:'R',PLO2:'R',PLO3:'I',PLO6:'R',PLO8:'R',PLO9:'I'}],
-  ['478-205','ศิลปะนำเสนอ','required',           {PLO3:'R',PLO6:'R',PLO8:'R'}],
-  ['478-301','ประชุมวิชาชีพ','required',         {PLO1:'R',PLO2:'R',PLO3:'R',PLO6:'R',PLO9:'M'}],
-  ['478-302','การจัดอีเวนต์','required',         {PLO1:'R',PLO2:'M',PLO3:'R',PLO4:'R',PLO6:'R',PLO8:'R',PLO9:'R',MLO3_1:'M'}],
-  ['478-303','งานแสดงสินค้า','required',         {PLO1:'R',PLO2:'M',PLO3:'R',PLO4:'R',PLO6:'R',PLO8:'R',PLO9:'R',MLO3_1:'M'}],
-  ['478-304','ผลิตอีเวนต์','required',           {PLO3:'R',PLO5:'R',PLO9:'M'}],
-  ['478-305','ฝึกงานไมซ์','required',           {PLO1:'R',PLO2:'R',PLO3:'R',PLO8:'R'}],
-  ['460-402','เตรียมสหกิจ','required',           {PLO1:'M',PLO2:'M',PLO3:'M'}],
-  ['460-403','สหกิจศึกษา','required',            {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'M'}],
-  ['478-401','จัดการสถานที่','required',         {PLO1:'M',PLO3:'R',PLO6:'R',PLO9:'M'}],
-  ['478-402','วิจัยไมซ์','required',            {PLO1:'M',PLO2:'M',PLO9:'R'}],
-  ['478-306','การตลาดไมซ์','elective',           {PLO2:'R',PLO3:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'R',MLO2_1:'M'}],
-  ['478-311','กีฬามวลชน','elective',            {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'R',MLO3_1:'M'}],
-  ['478-409','เมกะอีเวนต์','elective',           {PLO1:'M',PLO2:'M',PLO3:'M',PLO4:'M',PLO5:'M',PLO6:'M',PLO8:'M',PLO9:'R',MLO3_1:'M'}],
-],
+  fin: [
+    ['473-001G2','เงินทองต้องรอบรู้','ge',{PLO7:'I',PLO8:'R'}],
+    ['460-101','หลักการตลาด','core',{PLO1:'I',PLO2:'I',PLO3:'I'}],
+    ['460-103','หลักการเงิน','core',{PLO1:'I',PLO2:'I'}],
+    ['464-101','บัญชีการเงิน','core',{PLO1:'I',PLO9:'I'}],
+    ['464-201','บัญชีบริหาร','required',{PLO1:'R',PLO2:'R'}],
+    ['473-200','บริหารการเงิน','required',{PLO1:'R',PLO2:'R'}],
+    ['473-201','วางแผนการเงิน','required',{PLO1:'I',PLO2:'I',PLO4:'I'}],
+    ['473-202','สถาบันการเงิน','required',{PLO1:'I',PLO2:'I'}],
+    ['473-300','ตราสารทุนและกองทุน','required',{PLO1:'R',PLO2:'R'}],
+    ['473-301','จรรยาบรรณวิชาชีพ','required',{PLO1:'R',PLO4:'R'}],
+    ['473-302','ความเสี่ยงและอนุพันธ์','required',{PLO1:'M',PLO2:'R'}],
+    ['473-303','วิจัยการเงิน 1','required',{PLO1:'R',PLO2:'R'}],
+    ['473-304','ฝึกงาน','required',{PLO1:'R',PLO2:'R',PLO5:'R'}],
+    ['473-305','แบบจำลองการเงิน','required',{PLO1:'R',PLO5:'R'}],
+    ['460-402','เตรียมสหกิจ','required',{PLO1:'M',PLO2:'M'}],
+    ['460-403','สหกิจศึกษา','required',{PLO1:'M',PLO2:'M',PLO5:'M'}],
+    ['473-306','วางแผนเกษียณ','elective',{PLO1:'I',PLO4:'I'}],
+    ['473-307','การประกัน','elective',{PLO1:'R',PLO4:'R'}],
+    ['473-402','ภาษีและมรดก','elective',{PLO1:'R',PLO6:'R'}],
+  ],
+  mkt: [
+    ['460-101','หลักการตลาด','core',{PLO1:'I',PLO2:'I',PLO3:'I'}],
+    ['474-101','พฤติกรรมผู้บริโภค','required',{PLO1:'I',PLO2:'I'}],
+    ['474-201','จัดการแบรนด์','required',{PLO1:'I',PLO2:'I',PLO3:'I'}],
+    ['474-202','นวัตกรรมการตลาด','required',{PLO1:'I',PLO3:'I'}],
+    ['474-203','การตลาดสังคม','required',{PLO1:'I',PLO3:'I',PLO9:'I'}],
+    ['474-204','กลยุทธ์ราคา','required',{PLO1:'I',PLO2:'I'}],
+    ['474-301','Omnichannel','required',{PLO1:'R',PLO2:'R',PLO5:'M'}],
+    ['474-302','วัดผลการตลาด','required',{PLO1:'R',PLO2:'R'}],
+    ['474-303','วิจัยการตลาด','required',{PLO1:'M',PLO2:'R'}],
+    ['474-304','ฝึกงาน','required',{PLO1:'R',PLO2:'R',PLO5:'R'}],
+    ['474-305','IMC','required',{PLO1:'R',PLO2:'M',PLO3:'M'}],
+    ['474-306','การตลาดดิจิทัล','required',{PLO1:'M',PLO5:'M'}],
+    ['460-403','สหกิจศึกษา','required',{PLO1:'M',PLO2:'M',PLO5:'M'}],
+    ['474-401','กลยุทธ์การตลาด','required',{PLO1:'M',PLO2:'M'}],
+    ['474-307','การตลาดบริการ','elective',{PLO1:'R',PLO3:'R'}],
+  ],
+  hrm: [
+    ['475-201','วางแผน HRM','required',{PLO1:'I',PLO2:'I'}],
+    ['475-202','จิตวิทยาองค์กร','required',{PLO1:'I',PLO4:'I'}],
+    ['475-203','ภาวะผู้นำ','required',{PLO1:'R',PLO2:'R'}],
+    ['475-204','พัฒนา HRM','required',{PLO1:'R',PLO2:'R'}],
+    ['475-205','จัดการผลตอบแทน','required',{PLO1:'R',PLO2:'R'}],
+    ['475-300','ฝึกงาน','required',{PLO1:'R',PLO4:'M'}],
+    ['475-301','จัดการประสิทธิภาพ','required',{PLO1:'R',PLO2:'R'}],
+    ['475-302','เจรจา/ความขัดแย้ง','required',{PLO1:'R',PLO3:'R'}],
+    ['475-303','วิจัย HRM','required',{PLO1:'R',PLO2:'R'}],
+    ['475-304','กฎหมาย HRM','required',{PLO4:'R',PLO9:'R'}],
+    ['460-403','สหกิจศึกษา','required',{PLO1:'M',PLO2:'M',PLO5:'M'}],
+    ['475-402','สัมมนา HRM','required',{PLO2:'R',PLO4:'M'}],
+    ['475-421','HR เชิงกลยุทธ์','elective',{PLO1:'M',PLO2:'M'}],
+  ],
+  log: [
+    ['476-201','โลจิสติกส์เบื้องต้น','required',{PLO1:'I',PLO2:'I'}],
+    ['476-202','ธุรกิจระหว่างประเทศ','required',{PLO1:'I',PLO5:'I'}],
+    ['476-203','การขนส่ง','required',{PLO1:'I',PLO2:'I'}],
+    ['476-204','การจัดซื้อ','required',{PLO1:'I',PLO2:'I'}],
+    ['476-300','ฝึกงาน','required',{PLO1:'M',PLO2:'M'}],
+    ['476-301','คลังสินค้า','required',{PLO1:'M',PLO2:'M'}],
+    ['476-302','สินค้าคงคลัง','required',{PLO1:'M',PLO2:'M'}],
+    ['476-303','ตัวแบบเหมาะสม','required',{PLO1:'M',PLO5:'M'}],
+    ['476-304','ส่งออก-นำเข้า','required',{PLO1:'M',PLO2:'M'}],
+    ['476-305','วิธีวิจัย','required',{PLO2:'M',PLO5:'M'}],
+    ['460-403','สหกิจศึกษา','required',{PLO1:'M',PLO2:'M',PLO5:'M'}],
+    ['476-401','ออกแบบโซ่อุปทาน','required',{PLO1:'R',PLO5:'M'}],
+  ],
+  bis: [
+    ['460-202','ธุรกิจอัจฉริยะ','core',{PLO2:'I',PLO5:'I'}],
+    ['477-101','หลักการ IS','required',{PLO1:'I',PLO5:'I'}],
+    ['477-102','ตรรกะโปรแกรม','required',{PLO2:'I',PLO5:'I'}],
+    ['477-201','เขียนโปรแกรม','required',{PLO2:'I',PLO5:'I'}],
+    ['477-202','เครือข่าย+Cyber','required',{PLO2:'I',PLO5:'I'}],
+    ['477-203','ฐานข้อมูล','required',{PLO2:'I',PLO5:'I'}],
+    ['477-204','Cloud','required',{PLO2:'I',PLO5:'R'}],
+    ['477-301','Full-stack Web','required',{PLO2:'R',PLO5:'R'}],
+    ['477-302','วิเคราะห์ระบบ','required',{PLO1:'R',PLO2:'R',PLO5:'R'}],
+    ['477-303','MIS','required',{PLO1:'R',PLO2:'R',PLO5:'R'}],
+    ['477-304','ฝึกงาน','required',{PLO2:'R',PLO5:'M'}],
+    ['460-403','สหกิจศึกษา','required',{PLO1:'M',PLO2:'M',PLO5:'M'}],
+    ['477-306','AI/ML','elective',{PLO2:'R',PLO5:'R'}],
+  ],
+  mice: [
+    ['478-200','ไมซ์เบื้องต้น','required',{PLO1:'I',PLO3:'I'}],
+    ['478-201','การสื่อสารไมซ์','required',{PLO3:'I',PLO6:'R'}],
+    ['478-202','ประชุมองค์กร','required',{PLO1:'R',PLO3:'I'}],
+    ['478-203','ท่องเที่ยวรางวัล','required',{PLO1:'R',PLO3:'I'}],
+    ['478-205','ศิลปะนำเสนอ','required',{PLO3:'R'}],
+    ['478-301','ประชุมวิชาชีพ','required',{PLO1:'R',PLO3:'R'}],
+    ['478-302','การจัดอีเวนต์','required',{PLO1:'R',PLO2:'M',PLO3:'R'}],
+    ['478-303','งานแสดงสินค้า','required',{PLO1:'R',PLO2:'M'}],
+    ['478-304','ผลิตอีเวนต์','required',{PLO3:'R',PLO5:'R'}],
+    ['478-305','ฝึกงาน','required',{PLO1:'R',PLO3:'R'}],
+    ['460-402','เตรียมสหกิจ','required',{PLO1:'M'}],
+    ['460-403','สหกิจศึกษา','required',{PLO1:'M',PLO2:'M'}],
+    ['478-401','จัดการสถานที่','required',{PLO1:'M',PLO3:'R'}],
+    ['478-306','ตลาดไมซ์','elective',{PLO2:'R',PLO3:'M'}],
+  ],
 };
 
-const PLO_INFO = [
-  {id:'PLO1', name:'PLO1', full:'PLO1 ความรู้ทางธุรกิจ'},
-  {id:'PLO2', name:'PLO2', full:'PLO2 การคิดวิเคราะห์'},
-  {id:'PLO3', name:'PLO3', full:'PLO3 การสื่อสาร'},
-  {id:'PLO4', name:'PLO4', full:'PLO4 จริยธรรม'},
-  {id:'PLO5', name:'PLO5', full:'PLO5 ดิจิทัล'},
-  {id:'PLO6', name:'PLO6', full:'PLO6 ผู้ประกอบการ'},
-  {id:'PLO7', name:'PLO7', full:'PLO7 ความยั่งยืน'},
-  {id:'PLO8', name:'PLO8', full:'PLO8 ความร่วมมือ'},
-  {id:'PLO9', name:'PLO9', full:'PLO9 การวิจัย'},
-];
-const MLO_INFO = [
-  {id:'MLO1_1',name:'MLO1.1', full:'MLO1.1 ความรู้เชิงทฤษฎี'},
-  {id:'MLO1_2',name:'MLO1.2', full:'MLO1.2 ความรู้เชิงปฏิบัติ'},
-  {id:'MLO1_3',name:'MLO1.3', full:'MLO1.3 ความรู้บูรณาการ'},
-  {id:'MLO2_1',name:'MLO2.1', full:'MLO2.1 วิเคราะห์ปัญหา'},
-  {id:'MLO2_2',name:'MLO2.2', full:'MLO2.2 แก้ปัญหาเชิงระบบ'},
-  {id:'MLO2_3',name:'MLO2.3', full:'MLO2.3 ตัดสินใจ'},
-  {id:'MLO3_1',name:'MLO3.1', full:'MLO3.1 สื่อสารอย่างมีประสิทธิผล'},
-  {id:'MLO3_2',name:'MLO3.2', full:'MLO3.2 นำเสนอ'},
-  {id:'MLO4_1',name:'MLO4.1', full:'MLO4.1 จริยธรรมวิชาชีพ'},
-  {id:'MLO4_2',name:'MLO4.2', full:'MLO4.2 ความรับผิดชอบสังคม'},
-  {id:'MLO5_1',name:'MLO5.1', full:'MLO5.1 ทักษะดิจิทัล'},
-  {id:'MLO5_2',name:'MLO5.2', full:'MLO5.2 นวัตกรรมดิจิทัล'},
-  {id:'MLO6_1',name:'MLO6.1', full:'MLO6.1 ความเป็นผู้ประกอบการ'},
-  {id:'MLO6_2',name:'MLO6.2', full:'MLO6.2 สร้างคุณค่า'},
-];
+const PLO_INFO = Array.from({length:9}, (_, i)=>({id:`PLO${i+1}`, name:`PLO${i+1}`, full:`PLO${i+1}`}));
 
-// ─── SANKEY LAYOUT ────────────────────────────────────────────────────────────
-function sankey(rawNodes, rawLinks, W, H, nodeW, pad) {
-  const nodes = rawNodes.map((n,i)=>({...n,i,sl:[],tl:[]}));
-  const links = rawLinks.map(l=>({...l,
-    src: nodes[l.s], tgt: nodes[l.t]
-  }));
-  links.forEach(l=>{ l.src.sl.push(l); l.tgt.tl.push(l); });
-
-  // value
-  nodes.forEach(n=>{ n.v = Math.max(n.sl.reduce((a,l)=>a+l.v,0), n.tgt?0:0, n.tl.reduce((a,l)=>a+l.v,0), 1); });
-
-  // x by column
-  const maxCol = Math.max(...nodes.map(n=>n.col));
-  const gap = (W - nodeW) / Math.max(maxCol,1);
-  nodes.forEach(n=>{ n.x0=n.col*gap; n.x1=n.x0+nodeW; });
-
-  // y per column — iterative
-  const cols = {};
-  nodes.forEach(n=>{ (cols[n.col]=cols[n.col]||[]).push(n); });
-  Object.values(cols).forEach(col=>{
-    const sumV=col.reduce((a,n)=>a+n.v,0);
-    const scale=(H-pad*(col.length-1))/sumV;
-    let y=0; col.forEach(n=>{ n.y0=y; n.h=Math.max(n.v*scale,2); n.y1=n.y0+n.h; y+=n.h+pad; });
-  });
-
-  // Stamp original order index so PLO/MLO nodes stay sorted
-  Object.values(cols).forEach(col=>{
-    col.forEach((n,i)=>{ n._origOrder=i; });
-  });
-
-  for(let it=0;it<40;it++){
-    Object.entries(cols).forEach(([c,col])=>{
-      col.forEach(n=>{
-        const all=[...n.sl.map(l=>(l.tgt.y0+l.tgt.y1)/2),...n.tl.map(l=>(l.src.y0+l.src.y1)/2)];
-        n._cy = all.length ? all.reduce((a,b)=>a+b,0)/all.length : (n.y0+n.y1)/2;
-      });
-      // PLO/MLO nodes: always keep their original fixed order
-      // Course nodes: allow reordering by weighted center
-      const hasPlo = col.some(n=>n.kind==='plo');
-      if(hasPlo){
-        col.sort((a,b)=>a._origOrder-b._origOrder);
-      } else {
-        col.sort((a,b)=>a._cy-b._cy);
-      }
-      const sumV=col.reduce((a,n)=>a+n.v,0);
-      const scale=(H-pad*(col.length-1))/sumV;
-      let y=0; col.forEach(n=>{ n.y0=y; n.h=Math.max(n.v*scale,2); n.y1=n.y0+n.h; y+=n.h+pad; });
-    });
-  }
-
-  // link offsets
-  nodes.forEach(n=>{ n._sy=n.y0; n._ty=n.y0; });
-  links.forEach(l=>{
-    const sh=(l.v/l.src.v)*l.src.h, th=(l.v/l.tgt.v)*l.tgt.h;
-    l.sy0=l.src._sy; l.sy1=l.sy0+sh; l.src._sy+=sh;
-    l.ty0=l.tgt._ty; l.ty1=l.ty0+th; l.tgt._ty+=th;
-    l.bw=Math.max((sh+th)/2,1);
-  });
-
-  return {nodes,links};
-}
-
-function bandPath(l){
-  const x0=l.src.x1,x1=l.tgt.x0,mx=(x0+x1)/2;
-  return `M${x0},${l.sy0} C${mx},${l.sy0} ${mx},${l.ty0} ${x1},${l.ty0} L${x1},${l.ty1} C${mx},${l.ty1} ${mx},${l.sy1} ${x0},${l.sy1} Z`;
-}
-
-// ─── BUILD GRAPH ──────────────────────────────────────────────────────────────
 let dir = 'plo2course';
 
 function setDir(d,btn){
-  dir=d;
+  dir = d;
   document.querySelectorAll('#dirSeg button').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   render();
@@ -365,292 +217,196 @@ function setDir(d,btn){
 
 function buildGraph(){
   const mid = document.getElementById('majorSel').value;
+  const grpSel = document.getElementById('groupSel').value;
   const ploType = document.getElementById('ploTypeSel').value;
-  const grpFilter = document.getElementById('groupSel').value;
-  let courses = COURSES[mid] || [];
+  
+  let courses = (COURSES[mid]||[]).slice();
+  if(grpSel !== 'all') courses = courses.filter(c => c[2] === grpSel);
 
-  // Filter by group
-  if(grpFilter !== 'all') courses = courses.filter(([,,g])=>g===grpFilter);
-
-  // Which PLO/MLO to include
-  let ploNodes = [];
-  if(ploType==='plo'||ploType==='both') ploNodes=[...PLO_INFO];
-  if(ploType==='mlo'||ploType==='both') ploNodes=[...ploNodes,...MLO_INFO];
-
-  // Filter only PLO/MLO that actually appear in filtered courses
   const usedPLO = new Set();
-  courses.forEach(([,,, map])=>Object.keys(map).forEach(k=>usedPLO.add(k)));
-  ploNodes = ploNodes.filter(p=>usedPLO.has(p.id));
+  courses.forEach(c => Object.keys(c[3]||{}).forEach(k => usedPLO.add(k)));
+  const ploNodes = PLO_INFO.filter(p => ploType==='plo'||ploType==='both' ? true : false).concat(
+    ploType==='mlo'||ploType==='both' ? [] : []
+  ).filter(p => usedPLO.has(p.id));
 
-  // Build nodes — direct 2 columns, no middle group col
   const rawNodes = [];
   const nm = {};
-  const add = (id,label,col,color,meta={})=>{ nm[id]=rawNodes.length; rawNodes.push({id,label,col,color,...meta}); };
+  const add = (id,label,col,color,meta={})=>{
+    nm[id] = rawNodes.length;
+    rawNodes.push({id,label,col,color,...meta});
+  };
 
-  const LEVEL_VAL = {I:1, R:2, M:3};
-
-  if(dir==='plo2course'){
-    // col 0 = PLO/MLO, col 1 = course
-    ploNodes.forEach((p,i)=>{ add(p.id, p.name, 0, PLO_C[i%PLO_C.length]||'#58a6ff', {kind:'plo', full:p.full||p.name}); });
-    courses.forEach(([code,name,grp,map])=>{ add('c_'+code, code, 1, MC[mid], {kind:'course', code, fullname:name, grp, map}); });
+  if(dir === 'plo2course'){
+    ploNodes.forEach((p,i) => add(p.id, p.name, 0, PLO_C[i%PLO_C.length], {kind:'plo'}));
+    courses.forEach(c => add('c_'+c[0], c[0], 1, MC[mid], {kind:'course', code:c[0], name:c[1], group:c[2], map:c[3]}));
   } else {
-    // col 0 = course, col 1 = PLO/MLO
-    courses.forEach(([code,name,grp,map])=>{ add('c_'+code, code, 0, MC[mid], {kind:'course', code, fullname:name, grp, map}); });
-    ploNodes.forEach((p,i)=>{ add(p.id, p.name, 1, PLO_C[i%PLO_C.length]||'#58a6ff', {kind:'plo', full:p.full||p.name}); });
+    courses.forEach(c => add('c_'+c[0], c[0], 0, MC[mid], {kind:'course', code:c[0], name:c[1], group:c[2], map:c[3]}));
+    ploNodes.forEach((p,i) => add(p.id, p.name, 1, PLO_C[i%PLO_C.length], {kind:'plo'}));
   }
 
   const rawLinks = [];
+  const LEVEL_VAL = {I:1, R:2, M:3};
 
-  courses.forEach(([code,name,grp,map])=>{
-    const cid='c_'+code;
-    Object.entries(map).forEach(([pkey,lv])=>{
-      const pid = pkey;
-      if(!(pid in nm)) return;
-      const v = LEVEL_VAL[lv]||1;
-      const pi = ploNodes.findIndex(p=>p.id===pid);
+  courses.forEach(c => {
+    const cid = 'c_'+c[0];
+    Object.entries(c[3]||{}).forEach(([pkey, lv]) => {
+      if(!(pkey in nm)) return;
+      const pi = ploNodes.findIndex(p => p.id === pkey);
       const pc = PLO_C[pi%PLO_C.length]||'#58a6ff';
-      if(dir==='plo2course'){
-        rawLinks.push({s:nm[pid], t:nm[cid], v, lv, color:pc});
+      const v = LEVEL_VAL[lv]||1;
+      if(dir === 'plo2course'){
+        rawLinks.push({s:nm[pkey], t:nm[cid], v, lv, color:pc});
       } else {
-        rawLinks.push({s:nm[cid], t:nm[pid], v, lv, color:MC[mid]});
+        rawLinks.push({s:nm[cid], t:nm[pkey], v, lv, color:MC[mid]});
       }
     });
   });
 
-  // Deduplicate links
   const linkMap = {};
-  rawLinks.forEach(l=>{
-    const k=`${l.s}:${l.t}`;
-    if(linkMap[k]){ linkMap[k].v+=l.v; }
-    else linkMap[k]={...l};
+  rawLinks.forEach(l => {
+    const k = `${l.s}:${l.t}`;
+    if(linkMap[k]) linkMap[k].v += l.v;
+    else linkMap[k] = {...l};
   });
-  const dedupLinks = Object.values(linkMap);
 
-  return {rawNodes, dedupLinks};
+  return {rawNodes, links: Object.values(linkMap)};
 }
-
-// ─── RENDER ───────────────────────────────────────────────────────────────────
-const toRgba=(h,a)=>{ try{const r=parseInt(h.slice(1,3),16),g2=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`rgba(${r},${g2},${b},${a})`;}catch{return`rgba(88,166,255,${a})`;} };
-
-let activeLink = null; // track clicked link
 
 function render(){
   const container = document.getElementById('chart');
-  container.innerHTML='';
-  activeLink = null;
-
-  const {rawNodes, dedupLinks} = buildGraph();
+  container.innerHTML = '';
+  
+  const {rawNodes, links} = buildGraph();
   const mid = document.getElementById('majorSel').value;
+  
+  const W = Math.max(800, container.clientWidth - 4);
+  const H = Math.max(600, window.innerHeight - 250);
 
-  // Fit height to viewport: chart area = window height minus controls
-  const ctrlH = document.querySelector('.bar').getBoundingClientRect().bottom;
-  const viewH = window.innerHeight - ctrlH - 16;
-  const W = container.clientWidth - 4;
+  const margin = {l:180, r:160, t:40, b:20};
+  const iW = W - margin.l - margin.r;
+  const iH = H - margin.t - margin.b;
 
-  // Left/right label space
-  const lblL = 170, lblR = 170;
-  const margin = {top:30, right:lblR, bottom:12, left:lblL};
-  const iW = W - margin.left - margin.right;
-  const iH = viewH - margin.top - margin.bottom;
-
-  const nodePad = 5;
-  const {nodes, links} = sankey(rawNodes, dedupLinks, iW, iH, 22, nodePad);
+  const nodeW = 24;
+  const pad = 12;
+  const colNodes = {};
+  rawNodes.forEach(n => {
+    colNodes[n.col] = colNodes[n.col]||[];
+    colNodes[n.col].push(n);
+  });
+  
+  // Position nodes
+  const gap = (iW - nodeW) / Math.max(Object.keys(colNodes).length - 1, 1);
+  Object.keys(colNodes).forEach(col => {
+    const col_n = colNodes[col];
+    const sumV = col_n.reduce((a,n)=>a+Math.max(n.v||1, 1), 0);
+    const scale = (iH - pad*(col_n.length-1)) / Math.max(sumV, 1);
+    let y = 0;
+    col_n.forEach(n => {
+      n.x0 = col*gap;
+      n.x1 = n.x0 + nodeW;
+      n.h = Math.max((n.v||1)*scale, 3);
+      n.y0 = y;
+      n.y1 = y + n.h;
+      y += n.h + pad;
+    });
+  });
 
   const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
   svg.setAttribute('width', W);
-  svg.setAttribute('height', viewH);
-  svg.style.display = 'block';
+  svg.setAttribute('height', H);
   container.appendChild(svg);
 
-  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
-  svg.appendChild(defs);
-
   const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-  g.setAttribute('transform',`translate(${margin.left},${margin.top})`);
+  g.setAttribute('transform', `translate(${margin.l},${margin.t})`);
   svg.appendChild(g);
 
-  // Column headers
-  const grpLabel = {all:'ทั้งหมด',ge:'GE',core:'วิชาแกน',required:'วิชาชีพบังคับ',elective:'วิชาชีพเลือก'};
-  const grpSel = document.getElementById('groupSel').value;
-  const courseColLabel = 'รายวิชา' + (grpSel!=='all' ? ' ('+grpLabel[grpSel]+')' : '');
-  const colLabels = dir==='plo2course' ? ['PLO / MLO', courseColLabel] : [courseColLabel, 'PLO / MLO'];
+  // Draw links
+  links.forEach(l => {
+    const src = rawNodes[l.s];
+    const tgt = rawNodes[l.t];
+    const sy = src.y0 + (src.y1-src.y0)/2;
+    const ty = tgt.y0 + (tgt.y1-tgt.y0)/2;
+    const mx = (src.x1 + tgt.x0) / 2;
 
-  [0,1].forEach(col=>{
-    const colNodes = nodes.filter(n=>n.col===col);
-    if(!colNodes.length) return;
-    const xMid = colNodes[0].x0 + 11;
-    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
-    t.setAttribute('x',xMid); t.setAttribute('y',-10);
-    t.setAttribute('text-anchor','middle');
-    t.setAttribute('fill','#484f58'); t.setAttribute('font-size','10');
-    t.setAttribute('font-weight','600');
-    t.setAttribute('font-family','Anuphan,Sarabun,sans-serif');
-    t.textContent = colLabels[col]; g.appendChild(t);
-  });
-
-  // ── Draw links ──────────────────────────────────────────────
-  // Store path refs for highlight logic
-  const pathEls = [];
-
-  links.forEach((l,li)=>{
-    const gid='g'+Math.random().toString(36).slice(2,9);
-    const gr = document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
-    gr.setAttribute('id',gid); gr.setAttribute('gradientUnits','userSpaceOnUse');
-    gr.setAttribute('x1',l.src.x1); gr.setAttribute('x2',l.tgt.x0);
-    const c = l.color||'#58a6ff';
-    const s1=document.createElementNS('http://www.w3.org/2000/svg','stop');
-    s1.setAttribute('offset','0%'); s1.setAttribute('stop-color',toRgba(c,0.55));
-    const s2=document.createElementNS('http://www.w3.org/2000/svg','stop');
-    s2.setAttribute('offset','100%'); s2.setAttribute('stop-color',toRgba(c,0.18));
-    gr.appendChild(s1); gr.appendChild(s2); defs.appendChild(gr);
-
-    // Highlight gradient (fully opaque)
-    const hgid='h'+gid;
-    const hgr = document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
-    hgr.setAttribute('id',hgid); hgr.setAttribute('gradientUnits','userSpaceOnUse');
-    hgr.setAttribute('x1',l.src.x1); hgr.setAttribute('x2',l.tgt.x0);
-    const hs1=document.createElementNS('http://www.w3.org/2000/svg','stop');
-    hs1.setAttribute('offset','0%'); hs1.setAttribute('stop-color',toRgba(c,0.92));
-    const hs2=document.createElementNS('http://www.w3.org/2000/svg','stop');
-    hs2.setAttribute('offset','100%'); hs2.setAttribute('stop-color',toRgba(c,0.75));
-    hgr.appendChild(hs1); hgr.appendChild(hs2); defs.appendChild(hgr);
-
-    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('d',bandPath(l));
-    path.setAttribute('fill',`url(#${gid})`);
-    path.style.transition='fill .15s, opacity .15s';
-    path.style.cursor='pointer';
-    path._normalFill = `url(#${gid})`;
-    path._highlightFill = `url(#${hgid})`;
-    path._link = l;
-    path._idx = li;
-
-    const lvLabel={I:'Introductory',R:'Reinforce',M:'Mastery'};
-
-    path.addEventListener('click', e=>{
-      e.stopPropagation();
-      if(activeLink === li){
-        // Deselect
-        activeLink = null;
-        pathEls.forEach(p=>{ p.style.opacity='1'; p.setAttribute('fill', p._normalFill); });
-        hideTip();
-      } else {
-        activeLink = li;
-        // Dim all, highlight this one, bring to front
-        pathEls.forEach((p,pi)=>{
-          if(pi===li){
-            p.style.opacity='1';
-            p.setAttribute('fill', p._highlightFill);
-            p.parentNode.appendChild(p); // bring to front
-          } else {
-            p.style.opacity='0.08';
-            p.setAttribute('fill', p._normalFill);
-          }
-        });
-        showTip(e, `<div class="tt-h">${l.src.label.replace('\n',' ')} → ${l.tgt.label.replace('\n',' ')}</div><div class="tt-s">ระดับ: <span class="tt-v">${lvLabel[l.lv]||l.lv||'—'}</span></div>`);
-      }
-    });
-
-    path.addEventListener('mouseover', e=>{
-      if(activeLink !== null) return;
-      path.setAttribute('fill', path._highlightFill);
-      showTip(e, `<div class="tt-h">${l.src.label.replace('\n',' ')} → ${l.tgt.label.replace('\n',' ')}</div><div class="tt-s">ระดับ: <span class="tt-v">${lvLabel[l.lv]||l.lv||'—'}</span></div>`);
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    const d = `M${src.x1},${sy} C${mx},${sy} ${mx},${ty} ${tgt.x0},${ty}`;
+    path.setAttribute('d', d);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', l.color||'#58a6ff');
+    path.setAttribute('stroke-width', Math.max(1, l.v));
+    path.setAttribute('stroke-opacity', 0.4);
+    path.style.cursor = 'pointer';
+    
+    const lv_label = {I:'Intro',R:'Reinforce',M:'Mastery'};
+    path.addEventListener('mouseover', e => {
+      path.setAttribute('stroke-opacity', 0.8);
+      showTip(e, `<div class="tt-h">${rawNodes[l.s].label} → ${rawNodes[l.t].label}</div><div class="tt-s">ระดับ: <span class="tt-v">${lv_label[l.lv]}</span></div>`);
     });
     path.addEventListener('mousemove', moveTip);
-    path.addEventListener('mouseout', e=>{
-      if(activeLink !== null) return;
-      path.setAttribute('fill', path._normalFill);
+    path.addEventListener('mouseout', e => {
+      path.setAttribute('stroke-opacity', 0.4);
       hideTip();
     });
 
-    pathEls.push(path);
     g.appendChild(path);
   });
 
-  // Click on background to deselect
-  svg.addEventListener('click', ()=>{
-    if(activeLink !== null){
-      activeLink = null;
-      pathEls.forEach(p=>{ p.style.opacity='1'; p.setAttribute('fill', p._normalFill); });
-      hideTip();
-    }
-  });
-
-  // ── Draw nodes (on top of links) ────────────────────────────
-  nodes.forEach(n=>{
-    const ng=document.createElementNS('http://www.w3.org/2000/svg','g');
-
-    const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
-    rect.setAttribute('x',n.x0); rect.setAttribute('y',n.y0);
-    rect.setAttribute('width',n.x1-n.x0); rect.setAttribute('height',Math.max(n.h,2));
-    rect.setAttribute('fill',n.color||'#484f58'); rect.setAttribute('rx','3');
-    rect.setAttribute('stroke',toRgba(n.color||'#58a6ff',0.5));
-    rect.setAttribute('stroke-width','0.5');
-    rect.addEventListener('mouseover',e=>{
-      if(n.kind==='course'){
-        const ploList = Object.entries(n.map||{}).map(([k,v])=>`<span style="opacity:.85">${k.replace('_','.')} <span class="tt-v">${v}</span></span>`).join(' · ');
-        showTip(e,`<div class="tt-h">${n.label}</div><div class="tt-s" style="font-size:.85rem;color:#c9d1d9;margin-bottom:.3rem">${n.fullname||''}</div><div class="tt-s">${ploList}</div>`);
-      } else {
-        showTip(e,`<div class="tt-h">${n.label}</div><div class="tt-s">${n.full||''}</div><div class="tt-s" style="margin-top:.2rem">รวม ${Math.round(n.v)} การเชื่อมโยง</div>`);
-      }
+  // Draw nodes
+  rawNodes.forEach(n => {
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', n.x0);
+    rect.setAttribute('y', n.y0);
+    rect.setAttribute('width', n.x1-n.x0);
+    rect.setAttribute('height', Math.max(n.h, 3));
+    rect.setAttribute('fill', n.color||'#58a6ff');
+    rect.setAttribute('rx', '3');
+    
+    rect.addEventListener('mouseover', e => {
+      rect.setAttribute('fill-opacity', '0.8');
+      let tip = `<div class="tt-h">${n.label}</div>`;
+      if(n.kind==='course') tip += `<div class="tt-s">${n.name}</div><div class="tt-s">กลุ่ม: ${n.group}</div>`;
+      showTip(e, tip);
     });
-    rect.addEventListener('mousemove',moveTip);
-    rect.addEventListener('mouseout',hideTip);
-    ng.appendChild(rect);
+    rect.addEventListener('mousemove', moveTip);
+    rect.addEventListener('mouseout', e => {
+      rect.removeAttribute('fill-opacity');
+      hideTip();
+    });
 
-    const cy = n.y0 + n.h/2;
+    g.appendChild(rect);
+
     const isLeft = n.col === 0;
-
     const lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
-    lbl.setAttribute('y', cy);
-    lbl.setAttribute('dy','0.35em');
-    lbl.setAttribute('font-size','11');
-    lbl.setAttribute('pointer-events','none');
-
-    if(isLeft){
-      lbl.setAttribute('x', n.x0 - 8);
-      lbl.setAttribute('text-anchor','end');
-      lbl.setAttribute('fill','#c9d1d9');
-    } else {
-      lbl.setAttribute('x', n.x1 + 8);
-      lbl.setAttribute('text-anchor','start');
-      lbl.setAttribute('fill','#8b949e');
-    }
-
-    const parts = n.label.split('\n');
-    if(parts.length > 1 && n.kind === 'course'){
-      const t1 = document.createElementNS('http://www.w3.org/2000/svg','tspan');
-      t1.setAttribute('x', isLeft ? n.x0-8 : n.x1+8);
-      t1.setAttribute('dy', n.h > 18 ? '-0.45em' : '0em');
-      t1.setAttribute('font-size','9.5');
-      t1.setAttribute('fill','#6e88a8');
-      t1.textContent = parts[0];
-      const t2 = document.createElementNS('http://www.w3.org/2000/svg','tspan');
-      t2.setAttribute('x', isLeft ? n.x0-8 : n.x1+8);
-      t2.setAttribute('dy','1.25em');
-      t2.setAttribute('font-size','10.5');
-      t2.setAttribute('fill', isLeft?'#c9d1d9':'#8b949e');
-      const nm2=parts[1]; t2.textContent = nm2.length>20 ? nm2.slice(0,20)+'…' : nm2;
-      lbl.appendChild(t1);
-      if(n.h > 13) lbl.appendChild(t2);
-    } else {
-      const txt = n.label.replace('\n',' ');
-      lbl.textContent = txt.length > 24 ? txt.slice(0,24)+'…' : txt;
-    }
-    ng.appendChild(lbl);
-    g.appendChild(ng);
+    lbl.setAttribute('x', isLeft ? n.x0-8 : n.x1+8);
+    lbl.setAttribute('y', (n.y0+n.y1)/2);
+    lbl.setAttribute('dy', '0.35em');
+    lbl.setAttribute('text-anchor', isLeft?'end':'start');
+    lbl.setAttribute('font-size', '11');
+    lbl.setAttribute('fill', isLeft?'#c9d1d9':'#8b949e');
+    lbl.setAttribute('pointer-events', 'none');
+    lbl.textContent = n.label.length > 20 ? n.label.slice(0,20)+'…' : n.label;
+    g.appendChild(lbl);
   });
-
-
 }
 
-const TT=document.getElementById('tt');
-function showTip(e,html){TT.innerHTML=html;TT.style.opacity='1';TT.style.left=(e.clientX+14)+'px';TT.style.top=(e.clientY-10)+'px';}
-function moveTip(e){TT.style.left=(e.clientX+14)+'px';TT.style.top=(e.clientY-10)+'px';}
-function hideTip(){TT.style.opacity='0';}
+const TT = document.getElementById('tt');
+function showTip(e, html){
+  TT.innerHTML = html;
+  TT.style.opacity = '1';
+  TT.style.left = (e.clientX+14)+'px';
+  TT.style.top = (e.clientY-10)+'px';
+}
+function moveTip(e){
+  TT.style.left = (e.clientX+14)+'px';
+  TT.style.top = (e.clientY-10)+'px';
+}
+function hideTip(){
+  TT.style.opacity = '0';
+}
 
 render();
-window.addEventListener('resize',render);
+window.addEventListener('resize', render);
 </script>
+
 </body>
 </html>
