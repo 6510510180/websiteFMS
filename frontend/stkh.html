@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Stakeholders' Needs to PLOs Mapping | FMS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;900&family=Sarabun:wght@300;400;500;600;700;800&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2eff9;--surface:#fff;--surface2:#faf8fd;
+  --border:#e8e2f5;--border2:#d6cef0;
+  --text:#1a0f2e;--text2:#5a5070;--text3:#9088a8;
+  --acc:#6d28d9;--acc2:#7c3aed;--acc-l:#ede9fe;
+  --F:#7c3aed;--Fb:#ede9fe;--Fc:#c4b5fd;
+  --M:#0369a1;--Mb:#e0f2fe;--Mc:#7dd3fc;
+  --P:#b45309;--Pb:#fef3c7;--Pc:#fcd34d;
+  --red:#dc2626;--redb:#fef2f2;
+  --green:#059669;--greenb:#ecfdf5;
+  --sh1:0 1px 3px rgba(109,40,217,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh2:0 4px 16px rgba(109,40,217,.10),0 2px 4px rgba(0,0,0,.05);
+  --sh3:0 12px 40px rgba(109,40,217,.14),0 4px 8px rgba(0,0,0,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:13px;}
+body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* TOPBAR */
+.tb{position:sticky;top:0;z-index:200;height:60px;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--sh1);display:flex;align-items:center;padding:0 26px;gap:0;}
+.tb-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:32px;flex-shrink:0;}
+.tb-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--acc),#a855f7);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(109,40,217,.35);}
+.tb-mark svg{width:18px;height:18px;fill:#fff;}
+.tb-brand{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+.tb-nav{display:flex;align-items:center;gap:2px;flex:1;}
+.tb-nav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;color:var(--text2);text-decoration:none;transition:.15s;white-space:nowrap;}
+.tb-nav a:hover{background:var(--acc-l);color:var(--acc);}
+.tb-nav a.active{color:var(--acc);font-weight:700;}
+.tb-r{display:flex;align-items:center;gap:9px;margin-left:auto;}
+.tb-srch{display:flex;align-items:center;gap:7px;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px;padding:6px 12px;transition:.15s;}
+.tb-srch:focus-within{background:#fff;border-color:var(--acc);}
+.tb-srch svg{width:13px;height:13px;fill:var(--text3);flex-shrink:0;}
+.tb-srch input{border:none;background:transparent;outline:none;font-family:inherit;font-size:12.5px;color:var(--text);width:145px;}
+.tb-srch input::placeholder{color:var(--text3);}
+.tb-ibtn{width:34px;height:34px;border-radius:8px;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.tb-ibtn:hover{background:var(--acc-l);}
+.tb-ibtn svg{width:15px;height:15px;fill:var(--text2);}
+.tb-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(109,40,217,.3);}
+
+/* LAYOUT */
+.layout{display:flex;flex:1;min-height:0;overflow:hidden;}
+.main{flex:1;overflow-y:auto;padding:24px 26px 60px;}
+.aside{width:258px;flex-shrink:0;border-left:1px solid var(--border);background:var(--surface);overflow-y:auto;padding:18px 15px;}
+
+/* PAGE HEADER */
+.ph{margin-bottom:16px;}
+.ph-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.ph-h{font-size:18px;font-weight:900;color:var(--text);line-height:1.35;letter-spacing:-.3px;}
+.ph-s{font-size:11.5px;color:var(--text2);margin-top:3px;font-style:italic;}
+.ph-acts{display:flex;gap:7px;align-items:center;flex-wrap:wrap;flex-shrink:0;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;border:none;white-space:nowrap;transition:all .16s;}
+.btn svg{width:13px;height:13px;fill:currentColor;flex-shrink:0;}
+.btn-p{background:linear-gradient(135deg,var(--acc),#8b5cf6);color:#fff;box-shadow:0 3px 10px rgba(109,40,217,.3);}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(109,40,217,.38);}
+.btn-o{background:#fff;color:var(--acc);border:1.5px solid var(--Fc);}
+.btn-o:hover{background:var(--acc-l);}
+.btn-g{background:linear-gradient(135deg,var(--green),#10b981);color:#fff;box-shadow:0 3px 10px rgba(5,150,105,.28);}
+.btn-g:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(5,150,105,.36);}
+.btn-sm{padding:6px 12px;font-size:11.5px;border-radius:7px;}
+
+/* CONTROLS */
+.ctrl{display:flex;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap;}
+.legend{display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+.leg-i{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--text2);}
+.lchip{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Lexend',sans-serif;font-size:10px;font-weight:800;}
+.lF{background:var(--Fb);color:var(--F);border:1px solid var(--Fc);}
+.lM{background:var(--Mb);color:var(--M);border:1px solid var(--Mc);}
+.lP{background:var(--Pb);color:var(--P);border:1px solid var(--Pc);}
+.vsep{width:1px;height:18px;background:var(--border2);}
+.tsel{padding:5px 10px;border:1.5px solid var(--border2);border-radius:8px;font-family:inherit;font-size:12px;background:#fff;color:var(--text);cursor:pointer;outline:none;transition:.15s;}
+.tsel:focus{border-color:var(--acc);}
+
+/* TABLE CARD */
+.tc{background:var(--surface);border-radius:14px;border:1px solid var(--border);box-shadow:var(--sh2);overflow:hidden;}
+.tscr{overflow-x:auto;}
+table{border-collapse:collapse;width:100%;}
+thead{position:sticky;top:0;z-index:10;}
+thead tr th{background:#f7f4fd;border-bottom:2px solid var(--border2);padding:10px 11px;font-family:'Lexend',sans-serif;font-size:10px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+.th-no{width:46px;text-align:center;}
+.th-plo{min-width:270px;max-width:370px;}
+.th-type{width:80px;text-align:center;}
+.th-sk{width:42px;min-width:42px;padding:5px 2px !important;vertical-align:bottom;text-align:center;}
+.th-sk-in{writing-mode:vertical-rl;transform:rotate(180deg);display:inline-block;font-family:'Noto Sans Thai',sans-serif;font-size:10.5px;font-weight:700;color:var(--text2);padding:5px 2px 9px;line-height:1.2;white-space:nowrap;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:#fdfcff;}
+tbody tr.hide{display:none;}
+td{padding:12px 11px;vertical-align:middle;}
+.td-no{text-align:center;font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;color:var(--text3);}
+.td-desc{font-size:12.5px;color:var(--text);line-height:1.6;}
+.td-type{text-align:center;}
+.td-c{text-align:center;padding:8px 2px !important;}
+
+/* TYPE BADGE */
+.bt{display:inline-block;padding:3px 9px;border-radius:999px;font-family:'Lexend',sans-serif;font-size:10px;font-weight:800;}
+.bt-Sp{background:#fce7f3;color:#be185d;}
+.bt-Ge{background:#fef3c7;color:#92400e;}
+
+/* CHIPS */
+.chip{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;font-family:'Lexend',sans-serif;font-size:10.5px;font-weight:800;cursor:pointer;transition:all .13s;user-select:none;border:1.5px solid transparent;}
+.chip:hover{transform:scale(1.18);box-shadow:0 2px 8px rgba(0,0,0,.14);}
+.cF{background:var(--Fb);color:var(--F);border-color:var(--Fc);}
+.cM{background:var(--Mb);color:var(--M);border-color:var(--Mc);}
+.cP{background:var(--Pb);color:var(--P);border-color:var(--Pc);}
+.cE{background:#f1f0f5;color:#c4bdd8;border-color:#e5e2ef;border-style:dashed;}
+.cE:hover{background:var(--acc-l);color:var(--acc);border-color:var(--Fc);}
+
+/* SAVE BAR */
+.sbar{display:flex;align-items:center;justify-content:center;gap:12px;padding:20px 0 0;}
+
+/* CONTEXT MENU */
+.ctx{position:fixed;z-index:500;background:#fff;border:1px solid var(--border2);border-radius:12px;padding:5px;box-shadow:var(--sh3);min-width:164px;opacity:0;pointer-events:none;transform:scale(.93) translateY(-4px);transition:opacity .14s,transform .14s;}
+.ctx.open{opacity:1;pointer-events:all;transform:none;}
+.ci{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--text);cursor:pointer;transition:background .11s;}
+.ci:hover{background:var(--acc-l);color:var(--acc);}
+.ci.d:hover{background:var(--redb);color:var(--red);}
+.cd{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Lexend',sans-serif;font-size:9.5px;font-weight:800;flex-shrink:0;}
+.cdF{background:var(--Fb);color:var(--F);}
+.cdM{background:var(--Mb);color:var(--M);}
+.cdP{background:var(--Pb);color:var(--P);}
+.cdX{background:var(--redb);color:var(--red);}
+.chr{height:1px;background:var(--border);margin:4px 0;}
+
+/* SIDEBAR */
+.sb-s{margin-bottom:21px;}
+.sb-h{display:flex;align-items:center;justify-content:space-between;font-family:'Lexend',sans-serif;font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;}
+.sb-h svg{width:12px;height:12px;fill:var(--acc);}
+.pbi{display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid #f5f3fb;}
+.pbi:last-child{border-bottom:none;}
+.pbc{font-family:'Lexend',sans-serif;font-size:10px;font-weight:800;color:var(--acc);width:38px;flex-shrink:0;}
+.pbtr{flex:1;height:5px;background:#ede9fe;border-radius:999px;overflow:hidden;}
+.pbf{height:100%;background:linear-gradient(90deg,var(--acc),#a855f7);border-radius:999px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.pbn{font-family:'Lexend',sans-serif;font-size:10px;font-weight:700;color:var(--text2);white-space:nowrap;min-width:70px;text-align:right;}
+.stg{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.stc{border-radius:11px;padding:13px 12px;text-align:center;}
+.stc-v{background:linear-gradient(135deg,var(--acc),#8b5cf6);}
+.stc-t{background:linear-gradient(135deg,#0369a1,#0ea5e9);}
+.stn{font-family:'Lexend',sans-serif;font-size:28px;font-weight:800;color:#fff;line-height:1;}
+.stl{font-size:10px;font-weight:700;color:rgba(255,255,255,.8);margin-top:3px;}
+.note{background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:10px;border:1px solid var(--Pc);padding:11px 12px;font-size:11px;color:#78350f;line-height:1.65;margin-bottom:15px;}
+.sk-add{display:flex;gap:6px;margin-bottom:8px;}
+.sk-inp{flex:1;padding:7px 9px;border:1.5px solid var(--border2);border-radius:8px;font-family:inherit;font-size:12px;color:var(--text);outline:none;transition:.15s;}
+.sk-inp:focus{border-color:var(--acc);}
+.sk-list{display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;}
+.sk-tag{display:flex;align-items:center;gap:7px;padding:5px 9px;background:#f5f3fb;border-radius:7px;}
+.sk-name{flex:1;font-size:11.5px;color:var(--text);}
+.sk-del{width:18px;height:18px;border:none;background:#fde8ef;border-radius:4px;cursor:pointer;color:var(--red);font-size:13px;display:flex;align-items:center;justify-content:center;transition:.12s;}
+.sk-del:hover{background:#fca5a5;}
+
+/* IMPORT MODAL */
+.mbg{position:fixed;inset:0;z-index:400;background:rgba(30,15,60,.55);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.mbg.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:18px;width:560px;max-width:96vw;box-shadow:var(--sh3);transform:translateY(24px) scale(.96);transition:transform .24s cubic-bezier(.34,1.56,.64,1);overflow:hidden;}
+.mbg.open .modal{transform:none;}
+.mh{padding:20px 22px 15px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;}
+.mht{font-family:'Lexend',sans-serif;font-size:17px;font-weight:800;color:var(--text);}
+.mhs{font-size:11.5px;color:var(--text2);margin-top:2px;}
+.mcls{width:28px;height:28px;border:none;background:var(--bg);border-radius:7px;cursor:pointer;font-size:15px;color:var(--text2);display:flex;align-items:center;justify-content:center;transition:.13s;}
+.mcls:hover{background:var(--redb);color:var(--red);}
+.mb{padding:18px 22px;}
+.mf{padding:13px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:9px;}
+.dz{border:2px dashed var(--Fc);border-radius:13px;padding:30px 20px;text-align:center;cursor:pointer;transition:all .17s;background:var(--surface2);}
+.dz:hover,.dz.drag{border-color:var(--acc);background:var(--acc-l);}
+.dz-ico{font-size:34px;margin-bottom:9px;}
+.dz-m{font-size:14px;font-weight:700;color:var(--text2);}
+.dz-s{font-size:12px;color:var(--text3);margin-top:3px;}
+.dz-s span{color:var(--acc);font-weight:700;}
+.dz-f{font-size:12px;font-weight:700;color:var(--green);margin-top:6px;}
+.ti{background:#f5f3fe;border:1px solid var(--Fc);border-radius:10px;padding:12px 13px;margin-top:13px;}
+.ti-t{font-size:11.5px;font-weight:800;color:var(--acc);margin-bottom:7px;}
+.ti-b{font-size:11px;color:var(--text2);line-height:1.85;}
+.ti-b code{background:#fff;padding:1px 5px;border-radius:4px;font-size:10.5px;color:var(--acc);border:1px solid var(--Fc);}
+.prev-w{margin-top:12px;}
+.prev-t{font-size:11.5px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.prev-s{overflow-x:auto;border-radius:8px;border:1px solid var(--border);max-height:145px;overflow-y:auto;}
+.prev-s table{width:100%;font-size:10.5px;}
+.prev-s thead th{background:#f7f4fd;padding:6px 8px;font-weight:700;color:var(--text2);white-space:nowrap;border-bottom:1px solid var(--border);}
+.prev-s tbody td{padding:4px 8px;border-bottom:1px solid var(--border);color:var(--text);}
+.prev-s tbody tr:last-child td{border-bottom:none;}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;z-index:900;background:var(--text);color:#fff;padding:11px 17px;border-radius:11px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:var(--sh3);transform:translateY(72px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+.toast.show{transform:none;opacity:1;}
+.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="tb">
+  <a class="tb-logo" href="#">
+    <div class="tb-mark"><svg viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg></div>
+    <span class="tb-brand">FMS</span>
+  </a>
+  <nav class="tb-nav">
+    <a href="#">หน้าหลัก</a>
+    <a href="#" class="active">Stakeholders</a>
+    <a href="#">PLO/MLO</a>
+    <a href="#">Alignment Matrix</a>
+    <a href="#">คะแนน PLO</a>
+  </nav>
+  <div class="tb-r">
+    <div class="tb-srch">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/></svg>
+      <input type="text" id="gs" placeholder="ค้นหาข้อมูลหลักสูตร..." oninput="filterTable(this.value)">
+    </div>
+    <button class="tb-ibtn"><svg viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg></button>
+    <div class="tb-av">A</div>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- MAIN -->
+  <main class="main">
+    <div class="ph">
+      <div class="ph-top">
+        <div>
+          <div class="ph-h">การวิเคราะห์ความต้องการของผู้มีส่วนได้ส่วนเสียต่อผลลัพธ์การเรียนรู้</div>
+          <div class="ph-s">Stakeholders' Needs to PLOs Mapping</div>
+        </div>
+        <div class="ph-acts">
+          <button class="btn btn-o btn-sm" onclick="exportExcel()">
+            <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            Export Excel
+          </button>
+          <button class="btn btn-p btn-sm" onclick="openModal()">
+            <svg viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
+            นำเข้าจาก Excel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="ctrl">
+      <div class="legend">
+        <span style="font-size:11.5px;font-weight:700;color:var(--text2);">ระดับความสำคัญ:</span>
+        <div class="leg-i"><span class="lchip lF">F</span>Foundational</div>
+        <div class="leg-i"><span class="lchip lM">M</span>Main</div>
+        <div class="leg-i"><span class="lchip lP">P</span>Peripheral</div>
+      </div>
+      <div class="vsep"></div>
+      <label style="font-size:11.5px;font-weight:700;color:var(--text2);">กรองประเภท:</label>
+      <select class="tsel" id="tf" onchange="filterTable(document.getElementById('gs').value)">
+        <option value="">ทั้งหมด</option>
+        <option value="Specific">Specific</option>
+        <option value="Generic">Generic</option>
+      </select>
+    </div>
+
+    <!-- TABLE -->
+    <div class="tc">
+      <div class="tscr">
+        <table id="mt">
+          <thead><tr id="tr-h"></tr></thead>
+          <tbody id="tb"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SAVE BAR -->
+    <div class="sbar">
+      <button class="btn btn-g" onclick="saveData()" style="padding:11px 36px;font-size:14px;">
+        <svg viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+        บันทึกข้อมูล
+      </button>
+    </div>
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="aside">
+    <div class="sb-s">
+      <div class="sb-h">
+        ความต้องการรายข้อ PLO
+        <svg viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+      </div>
+      <div id="plo-bars"></div>
+    </div>
+
+    <div class="note">
+      <strong>⚠ หมายเหตุ:</strong> PLO ที่ได้รับคะแนนสูงสุดสะท้อนความต้องการทักษะดิจิทัลและจริยธรรมวิชาชีพจากผู้มีส่วนได้ส่วนเสีย
+    </div>
+
+    <div class="sb-s">
+      <div class="sb-h">สถิติสรุป (Statistics)</div>
+      <div class="stg">
+        <div class="stc stc-v"><div class="stn" id="st-p">0</div><div class="stl">TOTAL PLOs</div></div>
+        <div class="stc stc-t"><div class="stn" id="st-s">0</div><div class="stl">STAKEHOLDERS</div></div>
+      </div>
+    </div>
+
+    <div class="sb-s">
+      <div class="sb-h">จัดการ Stakeholders</div>
+      <div class="sk-add">
+        <input class="sk-inp" id="nsk" type="text" placeholder="เพิ่ม Stakeholder..." onkeydown="if(event.key==='Enter')addSK()">
+        <button class="btn btn-p btn-sm" onclick="addSK()" style="padding:7px 12px;">+</button>
+      </div>
+      <div class="sk-list" id="sk-list"></div>
+    </div>
+  </aside>
+</div>
+
+<!-- CONTEXT MENU -->
+<div class="ctx" id="ctx">
+  <div class="ci" onclick="setM('F')"><span class="cd cdF">F</span>Foundational</div>
+  <div class="ci" onclick="setM('M')"><span class="cd cdM">M</span>Main</div>
+  <div class="ci" onclick="setM('P')"><span class="cd cdP">P</span>Peripheral</div>
+  <div class="chr"></div>
+  <div class="ci d" onclick="setM(null)"><span class="cd cdX">×</span>ล้างค่า</div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div class="mbg" id="mbg" onclick="bgClose(event)">
+  <div class="modal">
+    <div class="mh">
+      <div>
+        <div class="mht">นำเข้าข้อมูลจาก Excel</div>
+        <div class="mhs">รองรับไฟล์ .xlsx และ .xls — ลากวางหรือเลือกไฟล์</div>
+      </div>
+      <button class="mcls" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mb">
+      <div class="dz" id="dz" ondragover="dzO(event)" ondragleave="dzL()" ondrop="dzD(event)" onclick="document.getElementById('fi').click()">
+        <div class="dz-ico">📊</div>
+        <div class="dz-m">ลากไฟล์ Excel มาวางที่นี่</div>
+        <div class="dz-s">หรือ <span>คลิกเพื่อเลือกไฟล์</span></div>
+        <div class="dz-f" id="dz-f"></div>
+      </div>
+      <input type="file" id="fi" accept=".xlsx,.xls" style="display:none" onchange="fChosen(event)">
+      <div class="ti">
+        <div class="ti-t">📋 รูปแบบ Excel ที่รองรับ</div>
+        <div class="ti-b">
+          คอลัมน์ที่จำเป็น:<br>
+          • <code>plo_no</code> — หมายเลข PLO (1, 2, 3…)<br>
+          • <code>plo_description</code> — คำอธิบาย PLO<br>
+          • <code>type</code> — <code>Specific</code> หรือ <code>Generic</code><br>
+          • คอลัมน์ถัดไป = ชื่อ Stakeholder (ค่า: <code>F</code>, <code>M</code>, <code>P</code> หรือเว้นว่าง)
+        </div>
+        <button class="btn btn-o btn-sm" style="margin-top:10px;" onclick="dlTmpl()">
+          <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          ดาวน์โหลด Template
+        </button>
+      </div>
+      <div class="prev-w" id="prev-w" style="display:none">
+        <div class="prev-t">ตัวอย่างข้อมูล (5 แถวแรก)</div>
+        <div class="prev-s" id="prev-s"></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn btn-p btn-sm" id="do-imp" disabled onclick="doImport()">
+        <svg viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
+        นำเข้าข้อมูล
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="tdot" id="tdot"></span><span id="tmsg"></span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* ══ DATA ══ */
+const PLOS=[
+  {no:1,desc:'มีทักษะและความรู้พื้นฐานทางด้านเทคโนโลยีสารสนเทศ สามารถติดตั้งและจัดการระบบคอมพิวเตอร์เพื่อใช้งานได้อย่างต่อเนื่อง',type:'Specific'},
+  {no:2,desc:'มีความเข้าใจและสามารถวิเคราะห์ระบบสำหรับองค์กรและออกแบบระบบฐานข้อมูลสำหรับระบบสารสนเทศเพื่อการจัดการ',type:'Specific'},
+  {no:3,desc:'มีความเข้าใจและสามารถวิเคราะห์และออกแบบระบบเครือข่ายคอมพิวเตอร์และอุปกรณ์ต่อพ่วงและความปลอดภัยของระบบสารสนเทศ',type:'Specific'},
+  {no:4,desc:'มีความรู้หลักการบริหารจัดการและสามารถบูรณาการองค์ความรู้ทางบริหารธุรกิจและเทคโนโลยีสารสนเทศได้อย่างเหมาะสม',type:'Specific'},
+  {no:5,desc:'สามารถประยุกต์เครื่องมือทางซอฟต์แวร์เพื่อเพิ่มประสิทธิภาพการบริหารจัดการทางธุรกิจได้อย่างเหมาะสม',type:'Specific'},
+  {no:6,desc:'มีความสามารถในการพัฒนาแนวโน้มในสภาพแวดล้อมการทำงาน ธุรกิจที่สำคัญรองรับงาน อุปกรณ์คอมพิวเตอร์ อุปกรณ์พกพาและเว็บ',type:'Specific'},
+  {no:7,desc:'สามารถพัฒนาโครงงานทางระบบสารสนเทศโดยใช้กิจกรรมบูรณาการเชิงวิชาการจัดเป็นรูปธรรม',type:'Specific'},
+  {no:8,desc:'มีทักษะด้านการนำองค์กร และความรับผิดชอบ ตลอดตนมีวินัยในตนเอง',type:'Generic'},
+  {no:9,desc:'มีจรรยาบรรณ และจริยธรรมวิชาชีพ',type:'Generic'},
+  {no:10,desc:'มีความรู้และทักษะทั่วไปในด้านภาษาต่างประเทศ การใช้ชีวิตในสังคม และการจัดการ คิดวิเคราะห์สังเคราะห์',type:'Generic'},
+];
+const DEF_SK=['อาจารย์','นักศึกษา','ศิษย์เก่า','ผู้ประกอบการ','ผู้ใช้บัณฑิต','ชุมชน','ผอ./ผู้บริหาร ม.อ.','ราชการ/ท้องถิ่น','สถาบันฯ','สมาคม'];
+
+let SKS=[...DEF_SK];
+let MAP={}; // MAP[ploNo][skIdx]='F'|'M'|'P'|null
+let pending=null, ctxT=null;
+
+function initMap(){
+  PLOS.forEach(p=>{
+    if(!MAP[p.no]) MAP[p.no]={};
+    SKS.forEach((_,i)=>{ if(MAP[p.no][i]===undefined) MAP[p.no][i]=null; });
+  });
+}
+
+/* ══ RENDER ══ */
+function render(){
+  initMap();
+  rHead(); rBody(); rBars(); rSKList();
+  document.getElementById('st-p').textContent=PLOS.length;
+  document.getElementById('st-s').textContent=SKS.length;
+}
+
+function rHead(){
+  document.getElementById('tr-h').innerHTML=`
+    <th class="th-no">No.</th>
+    <th class="th-plo">Programme Learning Outcomes</th>
+    <th class="th-type">Type</th>
+    ${SKS.map(s=>`<th class="th-sk"><div class="th-sk-in">${s}</div></th>`).join('')}`;
+}
+
+function rBody(){
+  const tf=document.getElementById('tf').value;
+  const gs=(document.getElementById('gs').value||'').toLowerCase();
+  document.getElementById('tb').innerHTML=PLOS.map(p=>{
+    const hidden=(tf&&p.type!==tf)||(gs&&!p.desc.toLowerCase().includes(gs)&&!String(p.no).includes(gs))?'class="hide"':'';
+    const chips=SKS.map((_,i)=>{
+      const v=MAP[p.no]?.[i]||null;
+      return `<td class="td-c"><span class="chip ${v?'c'+v:'cE'}" onclick="ctxO(event,${p.no},${i})" title="${SKS[i]}: ${v||'ยังไม่ระบุ'}">${v||'+'}</span></td>`;
+    }).join('');
+    const bt=p.type==='Specific'?'bt-Sp':'bt-Ge';
+    return `<tr ${hidden}><td class="td-no">${p.no}</td><td class="td-desc">${p.desc}</td><td class="td-type"><span class="bt ${bt}">${p.type}</span></td>${chips}</tr>`;
+  }).join('');
+}
+
+function rBars(){
+  const max=SKS.length||1;
+  document.getElementById('plo-bars').innerHTML=PLOS.map(p=>{
+    const cnt=SKS.filter((_,i)=>MAP[p.no]?.[i]).length;
+    return `<div class="pbi"><span class="pbc">PLO ${p.no}</span><div class="pbtr"><div class="pbf" style="width:${Math.round(cnt/max*100)}%"></div></div><span class="pbn">${cnt} Stakeholders</span></div>`;
+  }).join('');
+}
+
+function rSKList(){
+  document.getElementById('sk-list').innerHTML=SKS.map((s,i)=>
+    `<div class="sk-tag"><span class="sk-name">${s}</span><button class="sk-del" onclick="delSK(${i})">×</button></div>`
+  ).join('');
+}
+
+/* ══ FILTER ══ */
+function filterTable(){ rBody(); }
+
+/* ══ STAKEHOLDERS ══ */
+function addSK(){
+  const inp=document.getElementById('nsk');
+  const name=inp.value.trim(); if(!name) return;
+  const idx=SKS.length;
+  SKS.push(name);
+  PLOS.forEach(p=>{ MAP[p.no][idx]=null; });
+  inp.value='';
+  render();
+  toast(`✓ เพิ่ม "${name}" แล้ว`,'#059669');
+}
+function delSK(i){
+  if(!confirm(`ลบ "${SKS[i]}" และข้อมูล mapping ทั้งหมด?`)) return;
+  const n=SKS[i];
+  SKS.splice(i,1);
+  PLOS.forEach(p=>{ const nm={}; SKS.forEach((_,ni)=>{ nm[ni]=MAP[p.no][(ni>=i?ni+1:ni)]??null; }); MAP[p.no]=nm; });
+  render();
+  toast(`ลบ "${n}" แล้ว`,'#dc2626');
+}
+
+/* ══ CONTEXT MENU ══ */
+function ctxO(e,pno,si){
+  e.preventDefault(); e.stopPropagation();
+  ctxT={pno,si};
+  const m=document.getElementById('ctx');
+  m.classList.add('open');
+  m.style.left=Math.min(e.clientX+4,window.innerWidth-180)+'px';
+  m.style.top=Math.min(e.clientY+4,window.innerHeight-170)+'px';
+}
+function setM(v){
+  if(!ctxT) return;
+  MAP[ctxT.pno][ctxT.si]=v;
+  ctxT=null;
+  document.getElementById('ctx').classList.remove('open');
+  rBody(); rBars();
+}
+document.addEventListener('click',()=>document.getElementById('ctx').classList.remove('open'));
+
+/* ══ MODAL ══ */
+function openModal(){ document.getElementById('mbg').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(){
+  document.getElementById('mbg').classList.remove('open');
+  document.body.style.overflow='';
+  document.getElementById('dz-f').textContent='';
+  document.getElementById('prev-w').style.display='none';
+  document.getElementById('do-imp').disabled=true;
+  pending=null;
+}
+function bgClose(e){ if(e.target===document.getElementById('mbg')) closeModal(); }
+function dzO(e){ e.preventDefault(); document.getElementById('dz').classList.add('drag'); }
+function dzL(){ document.getElementById('dz').classList.remove('drag'); }
+function dzD(e){ e.preventDefault(); document.getElementById('dz').classList.remove('drag'); const f=e.dataTransfer.files[0]; if(f) procFile(f); }
+function fChosen(e){ const f=e.target.files[0]; if(f) procFile(f); }
+
+function procFile(file){
+  if(!/\.(xlsx|xls)$/i.test(file.name)){ toast('กรุณาใช้ไฟล์ .xlsx หรือ .xls','#dc2626'); return; }
+  document.getElementById('dz-f').textContent=`📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+  const rd=new FileReader();
+  rd.onload=ev=>{
+    try{
+      const wb=XLSX.read(ev.target.result,{type:'array'});
+      const data=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
+      if(!data.length){ toast('ไม่พบข้อมูลในไฟล์','#dc2626'); return; }
+      pending=data;
+      // preview
+      const keys=Object.keys(data[0]);
+      document.getElementById('prev-s').innerHTML=`<table><thead><tr>${keys.map(k=>`<th>${k}</th>`).join('')}</tr></thead><tbody>${data.slice(0,5).map(r=>`<tr>${keys.map(k=>`<td>${r[k]}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+      document.getElementById('prev-w').style.display='block';
+      document.getElementById('do-imp').disabled=false;
+    } catch(err){ toast('อ่านไฟล์ไม่ได้: '+err.message,'#dc2626'); }
+  };
+  rd.readAsArrayBuffer(file);
+}
+
+function doImport(){
+  if(!pending) return;
+  const FIXED=['plo_no','no','plo_description','description','type'];
+  const keys=Object.keys(pending[0]);
+  const skKeys=keys.filter(k=>!FIXED.some(f=>k.toLowerCase().replace(/[\s_]/g,'').includes(f.replace('_',''))));
+  if(skKeys.length) SKS=[...skKeys];
+  MAP={};
+  pending.forEach((row,ri)=>{
+    const no=parseInt(row['plo_no']||row['no']||row['No']||(ri+1));
+    if(!MAP[no]) MAP[no]={};
+    skKeys.forEach((k,si)=>{ const v=String(row[k]||'').trim().toUpperCase(); MAP[no][si]=['F','M','P'].includes(v)?v:null; });
+  });
+  closeModal(); render();
+  toast(`✓ นำเข้าสำเร็จ: ${pending.length} PLO, ${skKeys.length} Stakeholders`,'#059669');
+}
+
+function dlTmpl(){
+  const hdr=['plo_no','plo_description','type',...SKS];
+  const rows=PLOS.map(p=>{ const r={plo_no:p.no,plo_description:p.desc,type:p.type}; SKS.forEach((s,i)=>{ r[s]=MAP[p.no]?.[i]||''; }); return r; });
+  const ws=XLSX.utils.json_to_sheet(rows,{header:hdr});
+  ws['!cols']=[{wch:6},{wch:55},{wch:10},...SKS.map(()=>({wch:14}))];
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Stakeholders Mapping');
+  XLSX.writeFile(wb,'stakeholders_template.xlsx');
+  toast('✓ ดาวน์โหลด Template แล้ว','#059669');
+}
+
+/* ══ EXPORT ══ */
+function exportExcel(){
+  const hdr=['No.','Programme Learning Outcomes','Type',...SKS];
+  const rows=PLOS.map(p=>{ const r={'No.':p.no,'Programme Learning Outcomes':p.desc,'Type':p.type}; SKS.forEach((s,i)=>{ r[s]=MAP[p.no]?.[i]||''; }); return r; });
+  const ws=XLSX.utils.json_to_sheet(rows,{header:hdr});
+  ws['!cols']=[{wch:5},{wch:60},{wch:10},...SKS.map(()=>({wch:14}))];
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Stakeholders Mapping');
+  XLSX.writeFile(wb,'stakeholders_plos_mapping.xlsx');
+  toast('✓ Export Excel สำเร็จ','#059669');
+}
+
+/* ══ SAVE ══ */
+function saveData(){
+  const payload={program_id:'BA-2566',stakeholders:SKS,mappings:PLOS.map(p=>({plo_no:p.no,plo_description:p.desc,type:p.type,needs:SKS.map((s,i)=>({stakeholder:s,level:MAP[p.no]?.[i]||null}))}))};
+  console.log('[FMS] Save:',payload);
+  // TODO: POST /api/stakeholder-mappings
+  toast('✓ บันทึกข้อมูลสำเร็จ','#059669');
+}
+
+/* ══ TOAST ══ */
+let _tt;
+function toast(msg,color='#059669'){
+  document.getElementById('tdot').style.background=color;
+  document.getElementById('tmsg').textContent=msg;
+  const el=document.getElementById('toast');
+  el.classList.add('show'); clearTimeout(_tt);
+  _tt=setTimeout(()=>el.classList.remove('show'),3200);
+}
+
+render();
+</script>
+</body>
+</html>

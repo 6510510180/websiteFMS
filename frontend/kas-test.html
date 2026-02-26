@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KAS to PLO/MLO Mapper - Relationship Finder</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Prompt', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    
+    .container { max-width: 1200px; margin: 0 auto; }
+    
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 32px;
+    }
+    
+    header h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 8px; }
+    header p { font-size: 1.05rem; opacity: 0.95; }
+    
+    .search-section {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      margin-bottom: 32px;
+    }
+    
+    .search-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    .search-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .search-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .search-group label {
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .search-input {
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+    }
+    
+    .autocomplete-list {
+      position: absolute;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      margin-top: 2px;
+    }
+    
+    .autocomplete-list.show { display: block; }
+    
+    .autocomplete-item {
+      padding: 10px 14px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.2s;
+      font-size: 0.9rem;
+    }
+    
+    .autocomplete-item:hover {
+      background: #f9fafb;
+    }
+    
+    .autocomplete-item .code {
+      font-weight: 700;
+      color: #667eea;
+      margin-right: 8px;
+    }
+    
+    .autocomplete-item .label {
+      color: #666;
+      font-size: 0.85rem;
+    }
+    
+    .search-group {
+      position: relative;
+    }
+    
+    .selected-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      min-height: 32px;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    
+    .badge.k { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .badge.a { background: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; }
+    .badge.s { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    
+    .badge .remove {
+      cursor: pointer;
+      font-weight: 700;
+      opacity: 0.6;
+    }
+    
+    .badge .remove:hover { opacity: 1; }
+    
+    .search-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    
+    .btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn.primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102,126,234,0.3);
+    }
+    
+    .btn.secondary {
+      background: #f3f4f6;
+      color: #555;
+    }
+    
+    .btn.secondary:hover {
+      background: #e5e7eb;
+    }
+    
+    .results-section {
+      display: none;
+    }
+    
+    .results-section.show { display: block; }
+    
+    .results-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .result-stat {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 18px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .result-stat .label {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+    
+    .result-stat .value {
+      font-size: 2.2rem;
+      font-weight: 800;
+    }
+    
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 20px;
+    }
+    
+    .result-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    
+    .result-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .plo-items, .mlo-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    
+    .lo-item {
+      background: #f9fafb;
+      border-left: 4px solid #667eea;
+      padding: 14px;
+      border-radius: 8px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    
+    .lo-item:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateX(4px);
+    }
+    
+    .lo-item.plo { border-left-color: #3b82f6; }
+    .lo-item.mlo { border-left-color: #10b981; }
+    
+    .lo-code {
+      font-weight: 800;
+      color: #667eea;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    
+    .lo-title {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    .type-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
+    
+    .type-badge.plo { background: #dbeafe; color: #1e40af; }
+    .type-badge.mlo { background: #dcfce7; color: #166534; }
+    
+    .kas-highlight {
+      background: #fef3c7;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+    
+    .no-results svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+    
+    @media (max-width: 1024px) {
+      .results-grid { grid-template-columns: 1fr; }
+    }
+    
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      header h1 { font-size: 1.8rem; }
+      .search-section { padding: 20px; }
+      .search-container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔗 KAS to PLO/MLO Mapper</h1>
+      <p>ค้นหา KAS แล้วดูว่าสัมพันธ์กับ PLO/MLO ไหนบ้าง</p>
+    </header>
+
+    <!-- Search Section -->
+    <div class="search-section">
+      <div class="search-title">ค้นหาความสัมพันธ์ระหว่าง KAS กับ PLO/MLO</div>
+      
+      <div class="search-container">
+        <!-- Knowledge Search -->
+        <div class="search-group">
+          <label>📚 Knowledge (K)</label>
+          <input 
+            type="text" 
+            class="search-input" 
+            id="kInput" 
+            placeholder="ค้นหา K1, K2, ..."
+            oninput="filterKItems()"
+            autocomplete="off"
+          >
+          <div class="autocomplete-list" id="kList"></div>
+          <div class="selected-badges" id="kBadges"></div>
+        </div>
+
+        <!-- Attitude Search -->
+        <div class="search-group">
+          <label>💝 Attitude (A)</label>
+          <input 
+            type="text" 
+            class="search-input" 
+            id="aInput" 
+            placeholder="ค้นหา A1, A2, ..."
+            oninput="filterAItems()"
+            autocomplete="off"
+          >
+          <div class="autocomplete-list" id="aList"></div>
+          <div class="selected-badges" id="aBadges"></div>
+        </div>
+
+        <!-- Skill Search -->
+        <div class="search-group">
+          <label>🎯 Skill (S)</label>
+          <input 
+            type="text" 
+            class="search-input" 
+            id="sInput" 
+            placeholder="ค้นหา S1, S2, ..."
+            oninput="filterSItems()"
+            autocomplete="off"
+          >
+          <div class="autocomplete-list" id="sList"></div>
+          <div class="selected-badges" id="sBadges"></div>
+        </div>
+      </div>
+
+      <div class="search-actions">
+        <button class="btn primary" onclick="search()">🔍 ค้นหาความสัมพันธ์</button>
+        <button class="btn secondary" onclick="clearAll()">🔄 ล้าง</button>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section" id="resultsSection">
+      <div class="result-stats" id="resultStats"></div>
+      <div class="results-title">📊 ผลการค้นหา</div>
+      <div id="resultsList"></div>
+    </div>
+  </div>
+
+  <script>
+    // KAS Data
+    const K_DATA = [
+      {code:'K1',label:'รูปแบบและคุณลักษณะการเป็นผู้นำ'},{code:'K2',label:'วิธีการปรับตัว'},{code:'K3',label:'บริหารธุรกิจ'},{code:'K4',label:'เทคโนโลยีสารสนเทศ'},{code:'K5',label:'รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร'},{code:'K6',label:'ธุรกิจอัจฉริยะ'},{code:'K7',label:'ระบบฐานข้อมูล'},{code:'K8',label:'กลยุทธ์ทางธุรกิจ'},{code:'K9',label:'การเป็นผู้ประกอบการ'},{code:'K10',label:'ระเบียบวิธีวิจัย'},
+      {code:'K11',label:'การอ้างอิงข้อมูล'},{code:'K12',label:'การเขียนโปรแกรมคอมพิวเตอร์'},{code:'K13',label:'จิตวิทยา'},{code:'K14',label:'แนวทางการทำงานเป็นทีม'},{code:'K15',label:'นวัตกรรม'},{code:'K16',label:'กฎหมายแรงงาน'},{code:'K17',label:'กฎหมายทางธุรกิจ'},{code:'K18',label:'จริยธรรม'},{code:'K19',label:'จรรยาบรรณ'},{code:'K20',label:'การเงิน'},
+      {code:'K21',label:'วิธีการสื่อสาร'},{code:'K22',label:'การลงทุน'},{code:'K23',label:'ภาษาอังกฤษ'},{code:'K24',label:'การกระจายการลงทุน'},{code:'K25',label:'หน้าที่พลเมือง'},{code:'K26',label:'การจำลองสถานการณ์'},{code:'K27',label:'กองทุนรวม'},{code:'K28',label:'การกำกับดูแลการฟอกเงิน'},{code:'K29',label:'การเงินระหว่างประเทศ'},{code:'K30',label:'การบริหารความเสี่ยงทางการเงิน'},
+      {code:'K31',label:'การประเมินมูลค่า'},{code:'K32',label:'การวางแผนธุรกิจ'},{code:'K33',label:'การวิเคราะห์ทางการเงิน'},{code:'K34',label:'การวิเคราะห์สภาพแวดล้อม'},{code:'K35',label:'งบการเงิน'},{code:'K36',label:'ตราสารทุน'},{code:'K37',label:'ตราสารหนี้'},{code:'K38',label:'ตราสารอนุพันธ์'},{code:'K39',label:'มูลค่าของเงินตามเวลา'},{code:'K40',label:'ระบบการเงินไทยและต่างประเทศ'},
+      {code:'K41',label:'วิเคราะห์แนวโน้ม'},{code:'K42',label:'ธุรกิจระหว่างประเทศ'},{code:'K43',label:'สินทรัพย์ลงทุนและสินทรัพย์ทางเลือก'},{code:'K44',label:'อัตราผลตอบแทนและความเสี่ยง'},{code:'K45',label:'การบริหารความเสี่ยง'},{code:'K46',label:'การประกันภัย'},{code:'K47',label:'การประมาณการทางการเงิน'},{code:'K48',label:'การวางแผนการเงินส่วนบุคคล'},{code:'K49',label:'การวางแผนการเงินสำหรับการเกษียณ'},{code:'K50',label:'การวางแผนการเงินองค์รวม'},
+      {code:'K51',label:'การวางแผนภาษี'},{code:'K52',label:'การวางแผนมรดก'},{code:'K53',label:'มาตรฐานการปฏิบัติวิชาชีพทางการเงิน'},{code:'K54',label:'ตลาดเงินและตลาดทุน'},{code:'K55',label:'การจัดหาเงินทุน'},{code:'K56',label:'การบริหารการเงิน'},{code:'K57',label:'การบริหารเงินทุนหมุนเวียน'},{code:'K58',label:'การบริหารสินเชื่อ'},{code:'K59',label:'งบลงทุน'},{code:'K60',label:'นโยบายการเงินและนโยบายการคลัง'},
+      {code:'K61',label:'บริหารต้นทุน'},{code:'K62',label:'บัญชีบริหาร'},{code:'K63',label:'สถาบันการเงิน'},{code:'K64',label:'การจัดการ'},{code:'K65',label:'การจัดการการดำเนินงาน'},{code:'K66',label:'การจัดการทรัพยากรมนุษย์'},{code:'K67',label:'การจัดการโลจิสติกส์และโซ่อุปทาน'},{code:'K68',label:'การตลาด'},{code:'K69',label:'การบัญชี'},{code:'K70',label:'พฤติกรรมผู้บริโภค'},
+      {code:'K71',label:'กลยุทธ์'},{code:'K72',label:'แบรนด์และผลิตภัณฑ์'},{code:'K73',label:'พหุวัฒนธรรม'},{code:'K74',label:'การวิเคราะห์ราคา'},{code:'K75',label:'การตลาดเพื่อสังคม'},{code:'K76',label:'การจัดการช่องทางการตลาดสมัยใหม่'},{code:'K77',label:'การวัดและการประเมินผลทางการตลาด'},{code:'K78',label:'การสื่อสารทางการตลาดเชิงบูรณาการ'},{code:'K79',label:'การตลาดดิจิทัล'},{code:'K80',label:'การตลาดบริการ'},
+      {code:'K81',label:'โครงสร้างข้อมูลและอัลกอริธึม'},{code:'K82',label:'การเขียนโปรแกรมระบบเว็บ'},{code:'K83',label:'การพยากรณ์กำลังคน'},{code:'K84',label:'การออกแบบและบริหารโครงการ'},{code:'K85',label:'ทฤษฎีและแนวเกี่ยวกับพฤติกรรมมนุษย์'},{code:'K86',label:'เครือข่ายคอมพิวเตอร์'},{code:'K87',label:'การวางแผนกำลังคน'},{code:'K88',label:'การฝึกอบรมและพัฒนา'},{code:'K89',label:'แรงจูงใจ'},{code:'K90',label:'ความมั่นคงของระบบสารสนเทศ'},
+      {code:'K91',label:'การจัดการความขัดแย้ง'},{code:'K92',label:'วางแผนระบบสารสนเทศทางธุรกิจ'},{code:'K93',label:'ออกแบบกราฟิก'},{code:'K94',label:'ระบบคอมพิวเตอร์'},{code:'K95',label:'การจัดการโครงการ'},{code:'K96',label:'การบริหารท่าเรือ'},{code:'K97',label:'การจัดระวางสินค้า'},{code:'K98',label:'การประกันคุณภาพ'},{code:'K99',label:'การบริหารคุณภาพ'},{code:'K100',label:'มาตรฐานการปฏิบัติทางโลจิสติกส์และโซ่อุปทาน'},
+      {code:'K101',label:'นโยบายโลจิสติกส์และโซ่อุปทาน'},{code:'K102',label:'การขนส่งสินค้าทางเรือ'},{code:'K103',label:'การค้าระหว่างประเทศ'},{code:'K104',label:'การบริหารสินค้าคงคลัง'},{code:'K105',label:'การจัดการคลังสินค้า'},{code:'K106',label:'การขนส่งสินค้าทางบก'},{code:'K107',label:'การกระจายสินค้า'},{code:'K108',label:'การจัดการโซ่อุปทานระดับโลก'},{code:'K109',label:'การขนส่งสินค้าทางอากาศ'},{code:'K110',label:'การจัดซื้อจัดหา'},
+      {code:'K111',label:'กระบวนการผลิตและการบริการ'},{code:'K112',label:'การวิเ���ราะห์เชิงปริมาณ'},{code:'K113',label:'พิธีการศุลกากร'},{code:'K114',label:'แบบจำลองโซ่อุปทาน'}
+    ];
+    
+    const A_DATA = [
+      {code:'A1',label:'การคิดเชิงบวก'},{code:'A2',label:'การยอมรับฟังความคิดเห็นของผู้อื่น'},{code:'A3',label:'ความฉลาดทางอารมณ์'},{code:'A4',label:'การรับรู้ความสามารถของตนเอง'},{code:'A5',label:'ความอดทนอดกลั้น'},{code:'A6',label:'ความรับผิดชอบ'},{code:'A7',label:'ความกระตือรือร้น'},{code:'A8',label:'ความรับผิดชอบต่อสังคม'},{code:'A9',label:'จริยธรรม'},{code:'A10',label:'ความใฝ่รู้'},
+      {code:'A11',label:'ความมีวินัย'},{code:'A12',label:'ความรอบคอบ'},{code:'A13',label:'การยอมรับความต่างทางพหุวัฒนธรรม'},{code:'A14',label:'ความอ่อนน้อมถ่อมตน'},{code:'A15',label:'เคารพผู้อื่น'},{code:'A16',label:'การมีวิสัยทัศน์'},{code:'A17',label:'การรู้จักกาละเทศะ'},{code:'A18',label:'ความเชื่อมั่นในตนเอง'},{code:'A19',label:'ความพยายามอุตสาหะ'},{code:'A20',label:'ความซื่อสัตย์'},
+      {code:'A21',label:'จิตอาสา'},{code:'A22',label:'ความเสียสละ'},{code:'A23',label:'ความยุติธรรม'}
+    ];
+    
+    const S_DATA = [
+      {code:'S1',label:'การปรับตัว'},{code:'S2',label:'การทำงานภายใต้แรงกดดัน'},{code:'S3',label:'การเข้าสังคม'},{code:'S4',label:'การคิดเชิงระบบ'},{code:'S5',label:'การคิดวิเคราะห์'},{code:'S6',label:'การนำเสนอ'},{code:'S7',label:'การตัดสินใจ'},{code:'S8',label:'การแก้ปัญหา'},{code:'S9',label:'การใช้โปรแกรมคอมพิวเตอร์'},{code:'S10',label:'การประเมินผล'},
+      {code:'S11',label:'การประยุกต์'},{code:'S12',label:'การสืบค้นข้อมูล'},{code:'S13',label:'การวางแผน'},{code:'S14',label:'การจัดการ'},{code:'S15',label:'ความคิดเชิงสร้างสรรค์'},{code:'S16',label:'การประสานงาน'},{code:'S17',label:'การสื่อสาร'},{code:'S18',label:'การเป็นผู้ประกอบการ'},{code:'S19',label:'ความคิดเชิงสังเคราะห์'},{code:'S20',label:'การใช้ภาษาไทยและภาษาอังกฤษ'},
+      {code:'S21',label:'การคิดอย่างมีเหตุมีผล'},{code:'S22',label:'การทำงานเป็นทีม'},{code:'S23',label:'การบริหารเวลา'},{code:'S24',label:'การใช้สื่อออนไลน์'},{code:'S25',label:'ความเป็นผู้นำ'},{code:'S26',label:'การคำนวณ'},{code:'S27',label:'การคาดการณ์'},{code:'S28',label:'การตั้งคำถามเชิงสร้างสรรค์'},{code:'S29',label:'การเจรจาต่อรอง'},{code:'S30',label:'การสังเกต'},
+      {code:'S31',label:'การจัดการความขัดแย้ง'},{code:'S32',label:'การรู้เท่าทัน'},{code:'S33',label:'ความยืดหยุ่น'},{code:'S34',label:'ความคิดเชิงวิพากษ์'},{code:'S35',label:'การกล้าแสดงออก'},{code:'S36',label:'มารยาทและบุคลิกภาพ'},{code:'S37',label:'การออกแบบ'}
+    ];
+
+    // PLO/MLO Data
+    const loData = {
+      PLO1: { type: "PLO", title: "พัฒนาตนเองจากการเรียนรู้เมื่อได้รับคำวิพากษ์วิจารณ์", K: ["K1","K2"], A: ["A1","A2","A3","A4"], S: ["S1","S2","S3"] },
+      PLO2: { type: "PLO", title: "วิเคราะห์และนำเสนอข้อมูลต่อผู้บริหาร", K: ["K3","K4","K5","K6","K7","K69"], A: ["A1","A6","A10","A12"], S: ["S4","S5","S6","S7","S8","S9","S10"] },
+      PLO3: { type: "PLO", title: "ประยุกต์ความรู้ทางธุรกิจเพื่อวางแผนกลยุทธ์", K: ["K3","K8"], A: ["A2","A8","A9","A12","A16"], S: ["S8","S11","S12","S13","S14"] },
+      PLO4: { type: "PLO", title: "ประยุกต์กรอบแนวคิดความเป็นผู้ประกอบการ", K: ["K1","K3","K9"], A: ["A4","A6","A8","A9","A10","A16"], S: ["S7","S8","S11","S13","S14","S15","S16","S17","S18"] },
+      PLO5: { type: "PLO", title: "ประยุกต์ใช้กระบวนการวิจัยเพื่อแก้ปัญหา", K: ["K3","K10","K11"], A: ["A9","A10","A11","A12"], S: ["S4","S5","S8","S10","S11","S12","S19","S21"] },
+      PLO6: { type: "PLO", title: "สื่อสารภายใต้ความหลากหลาย", K: ["K2","K5","K21"], A: ["A2","A13","A14","A15"], S: ["S1","S3","S17","S20"] },
+      PLO7: { type: "PLO", title: "ทำงานร่วมกับผู้อื่นในองค์กร", K: ["K1","K2","K13","K14","K64"], A: ["A2","A5","A14","A15","A17"], S: ["S1","S2","S3","S16","S17","S22","S23"] },
+      PLO8: { type: "PLO", title: "เลือกใช้เทคโนโลยีดิจิทัล", K: ["K4","K5","K15"], A: ["A6","A10","A12"], S: ["S5","S7","S9","S24"] },
+      PLO9: { type: "PLO", title: "แสดงพฤติกรรมจริยธรรมและรับผิดชอบสังคม", K: ["K2","K16","K17","K18","K19"], A: ["A6","A8","A9","A11"], S: ["S1","S4","S7","S25"] },
+      "MLO1.1": { type: "MLO", title: "เขียนบทวิเคราะห์ตราสารทางการเงิน", K: ["K4","K22","K24","K27","K30","K31","K33","K34","K35","K36","K37","K38","K39","K40","K41","K43","K44"], A: ["A4","A5","A6","A7","A8","A10","A11","A12","A15","A16","A17","A18","A20"], S: ["S2","S4","S5","S7","S8","S9","S10","S12","S13","S14","S16","S17","S19","S20","S21","S22","S23","S24","S26","S27","S28"] },
+      "MLO1.2": { type: "MLO", title: "วางแผนการเงินส่วนบุคคล", K: ["K4","K13","K21","K22","K24","K27","K30","K33","K35","K36","K37","K38","K39","K44","K45","K46","K47","K48","K49","K50","K51","K52","K53","K54"], A: ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A15","A16","A17","A18","A19","A20"], S: ["S1","S2","S4","S5","S6","S7","S8","S9","S12","S13","S14","S15","S16","S17","S21","S22","S23","S26","S27","S28","S29","S30","S33"] },
+      "MLO1.3": { type: "MLO", title: "วิเคราะห์ข้อมูลทางการเงิน", K: ["K4","K28","K29","K32","K33","K35","K39","K40","K41","K44","K45","K47","K54","K55","K56","K57","K58","K59","K60","K61","K62","K63"], A: ["A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A15","A16","A19","A20"], S: ["S2","S4","S5","S7","S8","S9","S10","S12","S14","S16","S18","S21","S22","S26","S27","S31","S32"] },
+      "MLO2.1": { type: "MLO", title: "วิเคราะห์กลยุทธ์ทางการตลาด", K: ["K1","K2","K3"], A: ["A2","A4","A5","A6"], S: ["S1","S4","S7","S8"] },
+      "MLO2.2": { type: "MLO", title: "วิเ��ราะห์แนวทางแก้ไขปัญหา", K: ["K5","K8","K10","K13","K18","K19","K64","K68","K70","K72","K73","K74","K75","K76","K77","K78","K79","K80"], A: ["A8","A9","A10","A11","A12","A14","A15","A16","A17","A19","A20"], S: ["S9","S12","S13","S15","S16","S18","S21","S24","S28","S32","S34","S35"] },
+      "MLO2.3": { type: "MLO", title: "กำหนดกลยุทธ์การตลาด", K: ["K1","K5","K8","K10","K14","K20","K21","K65","K66","K67"], A: ["A2","A4","A5","A6","A8","A9","A10","A11","A12","A14","A15","A16","A19","A20"], S: ["S1","S4","S7","S8","S9","S12","S13","S15","S16","S18","S21","S22","S24","S28","S32","S34","S35"] },
+      "MLO3.1": { type: "MLO", title: "ใช้แนวคิดการจัดการทรัพยากรมนุษย์", K: ["K1","K13","K14","K18","K21","K66","K83","K85","K87","K88","K89","K91"], A: ["A1","A2","A3","A5","A6","A7","A9","A12","A13","A15","A18"], S: ["S1","S2","S3","S5","S7","S8","S10","S11","S14","S15","S16","S17","S22","S23","S24","S31","S33","S35","S36"] },
+      "MLO3.2": { type: "MLO", title: "ใช้เทคโนโลยีดิจิทัล", K: ["K2","K4","K5","K15","K66","K85","K94"], A: ["A2","A6","A7","A9","A11","A12","A13","A19"], S: ["S4","S6","S8","S10","S12","S14","S15","S23","S24","S33"] },
+      "MLO4.1": { type: "MLO", title: "วางแผนลดต้นทุนและเพิ่มกำไร", K: ["K4","K5","K6","K10","K19","K21","K23","K26","K29","K42","K45","K61","K64","K65","K67","K95","K96","K97","K98","K99","K100","K101","K102","K103","K104","K105","K106","K107","K108","K109","K110","K111","K112","K113","K114"], A: ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16","A17","A18","A19","A20","A21","A22","A23"], S: ["S1","S2","S3","S4","S5","S6","S7","S8","S10","S11","S12","S13","S15","S16","S17","S18","S19","S20","S21","S22","S23","S25","S26","S27","S28","S29","S30","S32","S33","S34","S35","S36","S37"] },
+      "MLO4.2": { type: "MLO", title: "ประยุกต์ความรู้โลจิสติกส์", K: ["K4","K5","K6","K10","K19","K21","K23","K26","K29","K42","K45","K61","K64","K65","K67","K95","K96","K97","K98","K99","K100","K101","K102","K103","K104","K105","K106","K107","K108","K109","K110","K111","K112","K113","K114"], A: ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16","A17","A18","A19","A20","A21","A22","A23"], S: ["S1","S2","S3","S4","S5","S6","S7","S8","S10","S11","S12","S13","S15","S16","S17","S18","S19","S20","S21","S22","S23","S25","S26","S27","S28","S29","S30","S32","S33","S34","S35","S36","S37"] },
+      "MLO5.1": { type: "MLO", title: "พัฒนาระบบสารสนเทศ", K: ["K3","K4","K7","K12","K81","K82","K84","K93"], A: ["A1","A2","A4","A6","A9","A11","A12","A19","A20"], S: ["S2","S4","S5","S6","S7","S8","S9","S11","S13","S15","S16","S17","S19","S21","S22","S26","S28","S37"] },
+      "MLO5.2": { type: "MLO", title: "วางแผนติดตั้งระบบสารสนเทศ", K: ["K3","K4","K86","K90","K92","K94"], A: ["A2","A6","A8","A9","A10","A11","A12","A16","A19"], S: ["S2","S4","S5","S6","S7","S8","S9","S10","S11","S12","S13","S14","S15","S16","S17","S19","S21","S22","S31","S32","S37"] },
+      "MLO6.1": { type: "MLO", title: "จัดงานไมซ์ตาม SDGs", K: ["K1","K2","K14","K18","K19","K25","K64"], A: ["A1","A2","A3","A4","A7","A8","A10","A16","A18","A19"], S: ["S1","S2","S3","S4","S7","S8","S12","S15","S16","S21","S28","S34","S35"] },
+      "MLO6.2": { type: "MLO", title: "ปรับตัวในสถานการณ์จัดงาน", K: ["K1","K2","K14","K18","K19","K21","K25","K64"], A: ["A1","A2","A3","A4","A5","A7","A8","A10","A16","A18","A19"], S: ["S1","S2","S3","S4","S7","S8","S12","S15","S16","S21","S28","S29","S34","S35"] }
+    };
+
+    let selectedK = new Set();
+    let selectedA = new Set();
+    let selectedS = new Set();
+
+    function filterKItems() {
+      const q = document.getElementById('kInput').value.toUpperCase();
+      const list = document.getElementById('kList');
+      
+      if (!q) {
+        list.classList.remove('show');
+        return;
+      }
+
+      const filtered = K_DATA.filter(k => k.code.includes(q) || k.label.includes(q));
+      
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="autocomplete-item">ไม่พบ</div>';
+        list.classList.add('show');
+        return;
+      }
+
+      list.innerHTML = filtered.map(k => `
+        <div class="autocomplete-item" onclick="selectK('${k.code}')">
+          <span class="code">${k.code}</span>
+          <span class="label">${k.label}</span>
+        </div>
+      `).join('');
+      list.classList.add('show');
+    }
+
+    function filterAItems() {
+      const q = document.getElementById('aInput').value.toUpperCase();
+      const list = document.getElementById('aList');
+      
+      if (!q) {
+        list.classList.remove('show');
+        return;
+      }
+
+      const filtered = A_DATA.filter(a => a.code.includes(q) || a.label.includes(q));
+      
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="autocomplete-item">ไม่พบ</div>';
+        list.classList.add('show');
+        return;
+      }
+
+      list.innerHTML = filtered.map(a => `
+        <div class="autocomplete-item" onclick="selectA('${a.code}')">
+          <span class="code">${a.code}</span>
+          <span class="label">${a.label}</span>
+        </div>
+      `).join('');
+      list.classList.add('show');
+    }
+
+    function filterSItems() {
+      const q = document.getElementById('sInput').value.toUpperCase();
+      const list = document.getElementById('sList');
+      
+      if (!q) {
+        list.classList.remove('show');
+        return;
+      }
+
+      const filtered = S_DATA.filter(s => s.code.includes(q) || s.label.includes(q));
+      
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="autocomplete-item">ไม่พบ</div>';
+        list.classList.add('show');
+        return;
+      }
+
+      list.innerHTML = filtered.map(s => `
+        <div class="autocomplete-item" onclick="selectS('${s.code}')">
+          <span class="code">${s.code}</span>
+          <span class="label">${s.label}</span>
+        </div>
+      `).join('');
+      list.classList.add('show');
+    }
+
+    function selectK(code) {
+      selectedK.add(code);
+      document.getElementById('kInput').value = '';
+      document.getElementById('kList').classList.remove('show');
+      renderBadges();
+    }
+
+    function selectA(code) {
+      selectedA.add(code);
+      document.getElementById('aInput').value = '';
+      document.getElementById('aList').classList.remove('show');
+      renderBadges();
+    }
+
+    function selectS(code) {
+      selectedS.add(code);
+      document.getElementById('sInput').value = '';
+      document.getElementById('sList').classList.remove('show');
+      renderBadges();
+    }
+
+    function removeBadge(type, code) {
+      if (type === 'k') selectedK.delete(code);
+      if (type === 'a') selectedA.delete(code);
+      if (type === 's') selectedS.delete(code);
+      renderBadges();
+    }
+
+    function renderBadges() {
+      document.getElementById('kBadges').innerHTML = [...selectedK].map(k => 
+        `<span class="badge k">${k}<span class="remove" onclick="removeBadge('k','${k}')">×</span></span>`
+      ).join('');
+
+      document.getElementById('aBadges').innerHTML = [...selectedA].map(a => 
+        `<span class="badge a">${a}<span class="remove" onclick="removeBadge('a','${a}')">×</span></span>`
+      ).join('');
+
+      document.getElementById('sBadges').innerHTML = [...selectedS].map(s => 
+        `<span class="badge s">${s}<span class="remove" onclick="removeBadge('s','${s}')">×</span></span>`
+      ).join('');
+    }
+
+    function search() {
+      if (selectedK.size === 0 && selectedA.size === 0 && selectedS.size === 0) {
+        alert('กรุณาเลือกอย่างน้อย 1 รหัส KAS');
+        return;
+      }
+
+      const allSelected = [...selectedK, ...selectedA, ...selectedS];
+      const results = {};
+
+      Object.entries(loData).forEach(([code, data]) => {
+        const matchedK = [...selectedK].filter(k => data.K.includes(k));
+        const matchedA = [...selectedA].filter(a => data.A.includes(a));
+        const matchedS = [...selectedS].filter(s => data.S.includes(s));
+
+        const totalMatches = matchedK.length + matchedA.length + matchedS.length;
+
+        if (totalMatches > 0) {
+          results[code] = {
+            data: data,
+            matched: { K: matchedK, A: matchedA, S: matchedS },
+            totalMatches: totalMatches
+          };
+        }
+      });
+
+      displayResults(results);
+    }
+
+    function displayResults(results) {
+      const section = document.getElementById('resultsSection');
+      section.classList.add('show');
+
+      const plos = Object.entries(results).filter(([k, v]) => v.data.type === 'PLO');
+      const mlos = Object.entries(results).filter(([k, v]) => v.data.type === 'MLO');
+
+      document.getElementById('resultStats').innerHTML = `
+        <div class="result-stat">
+          <div class="label">รวม PLO/MLO</div>
+          <div class="value">${Object.keys(results).length}</div>
+        </div>
+        <div class="result-stat">
+          <div class="label">PLO</div>
+          <div class="value">${plos.length}</div>
+        </div>
+        <div class="result-stat">
+          <div class="label">MLO</div>
+          <div class="value">${mlos.length}</div>
+        </div>
+      `;
+
+      if (Object.keys(results).length === 0) {
+        document.getElementById('resultsList').innerHTML = `
+          <div class="no-results">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🔍</div>
+            <div>ไม่พบ PLO/MLO ที่สอดคล้องกับรหัสที่เลือก</div>
+          </div>
+        `;
+        return;
+      }
+
+      const sortedResults = Object.entries(results).sort((a, b) => b[1].totalMatches - a[1].totalMatches);
+
+      const html = `
+        <div class="results-grid">
+          ${sortedResults.map(([code, result]) => `
+            <div class="result-card">
+              <h3>
+                <span class="type-badge ${result.data.type.toLowerCase()}">${result.data.type}</span>
+                ${code}
+              </h3>
+              <p style="font-size: 0.9rem; color: #555; margin-bottom: 16px; line-height: 1.5;">${result.data.title}</p>
+              
+              ${result.matched.K.length > 0 ? `
+                <div class="plo-items">
+                  <strong style="color: #3b82f6; font-size: 0.9rem;">📚 Knowledge ที่ตรงกัน:</strong>
+                  ${result.matched.K.map(k => `<span class="kas-highlight">${k}</span>`).join(', ')}
+                </div>
+              ` : ''}
+              
+              ${result.matched.A.length > 0 ? `
+                <div class="plo-items">
+                  <strong style="color: #ec4899; font-size: 0.9rem;">💝 Attitude ที่ตรงกัน:</strong>
+                  ${result.matched.A.map(a => `<span class="kas-highlight">${a}</span>`).join(', ')}
+                </div>
+              ` : ''}
+              
+              ${result.matched.S.length > 0 ? `
+                <div class="plo-items">
+                  <strong style="color: #10b981; font-size: 0.9rem;">🎯 Skill ที่ตรงกัน:</strong>
+                  ${result.matched.S.map(s => `<span class="kas-highlight">${s}</span>`).join(', ')}
+                </div>
+              ` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      document.getElementById('resultsList').innerHTML = html;
+      setTimeout(() => {
+        document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+
+    function clearAll() {
+      selectedK.clear();
+      selectedA.clear();
+      selectedS.clear();
+      document.getElementById('kInput').value = '';
+      document.getElementById('aInput').value = '';
+      document.getElementById('sInput').value = '';
+      document.getElementById('kList').classList.remove('show');
+      document.getElementById('aList').classList.remove('show');
+      document.getElementById('sList').classList.remove('show');
+      renderBadges();
+      document.getElementById('resultsSection').classList.remove('show');
+    }
+
+    // Close autocomplete when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-group')) {
+        document.querySelectorAll('.autocomplete-list').forEach(list => {
+          list.classList.remove('show');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PLO/MLO Dashboard with KAS Labels</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Prompt', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    
+    .container { max-width: 1400px; margin: 0 auto; }
+    
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 32px;
+    }
+    
+    header h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 8px; }
+    header p { font-size: 1.05rem; opacity: 0.95; }
+    
+    .toolbar {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    select, input {
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+    
+    select:focus, input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .btn:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+    }
+    
+    .btn.export {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-box {
+      background: white;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      border-left: 4px solid #667eea;
+    }
+    
+    .stat-label { font-size: 0.85rem; color: #888; font-weight: 600; }
+    .stat-value { font-size: 2rem; font-weight: 800; color: #667eea; margin-top: 4px; }
+    
+    .charts-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .chart-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    
+    .chart-card h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 400px;
+      width: 100%;
+    }
+    
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    
+    .card h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .scroll-container {
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      border-radius: 10px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+    
+    .lo-item {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-left: 4px solid #667eea;
+    }
+    
+    .lo-item:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateX(2px);
+    }
+    
+    .lo-item.active {
+      background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);
+      border-left-color: #764ba2;
+    }
+    
+    .lo-code {
+      font-weight: 800;
+      color: #667eea;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    
+    .lo-title {
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.4;
+    }
+    
+    .kas-group {
+      background: #f9fafb;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .kas-group-title {
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .kas-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .kas-item {
+      background: white;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      cursor: help;
+      transition: all 0.2s;
+    }
+    
+    .kas-item:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transform: translateX(2px);
+    }
+    
+    .kas-item.k {
+      border-left-color: #3b82f6;
+      background: #f0f7ff;
+    }
+    
+    .kas-item.a {
+      border-left-color: #ec4899;
+      background: #fff5fb;
+    }
+    
+    .kas-item.s {
+      border-left-color: #10b981;
+      background: #f0fdf4;
+    }
+    
+    .kas-code {
+      font-weight: 800;
+      font-size: 0.9rem;
+      min-width: 45px;
+    }
+    
+    .kas-code.k { color: #1e40af; }
+    .kas-code.a { color: #be185d; }
+    .kas-code.s { color: #166534; }
+    
+    .kas-label {
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.4;
+      flex: 1;
+    }
+    
+    .empty-state {
+      text-align: center;
+      color: #999;
+      padding: 40px 20px;
+    }
+    
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1000;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -100px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    @media (max-width: 1024px) {
+      .content { grid-template-columns: 1fr; }
+      .charts-row { grid-template-columns: 1fr; }
+    }
+    
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      header h1 { font-size: 1.8rem; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      select, input { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 PLO/MLO Complete Dashboard</h1>
+      <p>ระบบแผนที่ความสัมพันธ์ผลลัพธ์การเรียนรู้ พร้อมรายละเอียด KAS</p>
+    </header>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <select id="typeFilter" onchange="filterLOs()">
+        <option value="">-- ทั้งหมด (PLO & MLO) --</option>
+        <option value="PLO">เฉพาะ PLO</option>
+        <option value="MLO">เฉพาะ MLO</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="ค้นหา PLO/MLO..." onkeyup="filterLOs()">
+      <button class="btn" onclick="toggleCharts()">📈 Show/Hide Charts</button>
+      <button class="btn export" onclick="exportData()">📥 Export CSV</button>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats-row" id="statsRow"></div>
+
+    <!-- Charts -->
+    <div id="chartsSection" style="display:none;">
+      <div class="charts-row">
+        <div class="chart-card">
+          <h2>📊 PLO & MLO Distribution</h2>
+          <div class="chart-container">
+            <canvas id="distributionChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h2>🏆 Top 10 KAS ที่ถูกอ้างอิงมากที่สุด</h2>
+          <div class="chart-container">
+            <canvas id="topKasChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <!-- List -->
+      <div class="card">
+        <h2>รายการ PLO & MLO</h2>
+        <div class="scroll-container" id="loList"></div>
+      </div>
+
+      <!-- Details -->
+      <div class="card">
+        <h2>รายละเอียด KAS (พร้อมความหมาย)</h2>
+        <div id="kasDetail" class="empty-state">เลือก PLO/MLO เพื่อดูรายละเอียด</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // KAS Data with Labels
+    const K_DATA = [
+      {code:'K1',label:'รูปแบบและคุณลักษณะการเป็นผู้นำ'},{code:'K2',label:'วิธีการปรับตัว'},{code:'K3',label:'บริหารธุรกิจ'},{code:'K4',label:'เทคโนโลยีสารสนเทศ'},{code:'K5',label:'รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร'},{code:'K6',label:'ธุรกิจอัจฉริยะ'},{code:'K7',label:'ระบบฐานข้อมูล'},{code:'K8',label:'กลยุทธ์ทางธุรกิจ'},{code:'K9',label:'การเป็นผู้ประกอบการ'},{code:'K10',label:'ระเบียบวิธีวิจัย'},
+      {code:'K11',label:'การอ้างอิงข้อมูล'},{code:'K12',label:'การเขียนโปรแกรมคอมพิวเตอร์'},{code:'K13',label:'จิตวิทยา'},{code:'K14',label:'แนวทางการทำงานเป็นทีม'},{code:'K15',label:'นวัตกรรม'},{code:'K16',label:'กฎหมายแรงงาน'},{code:'K17',label:'กฎหมายทางธุรกิจ'},{code:'K18',label:'จริยธรรม'},{code:'K19',label:'จรรยาบรรณ'},{code:'K20',label:'การเงิน'},
+      {code:'K21',label:'วิธีการสื่อสาร'},{code:'K22',label:'การลงทุน'},{code:'K23',label:'ภาษาอังกฤษ'},{code:'K24',label:'การกระจายการลงทุน'},{code:'K25',label:'หน้าที่พลเมือง'},{code:'K26',label:'การจำลองสถานการณ์'},{code:'K27',label:'กองทุนรวม'},{code:'K28',label:'การกำกับดูแลการฟอกเงิน'},{code:'K29',label:'การเงินระหว่างประเทศ'},{code:'K30',label:'การบริหารความเสี่ยงทางการเงิน'},
+      {code:'K31',label:'การประเมินมูลค่า'},{code:'K32',label:'การวางแผนธุรกิจ'},{code:'K33',label:'การวิเคราะห์ทางการเงิน'},{code:'K34',label:'การวิเคราะห์สภาพแวดล้อม'},{code:'K35',label:'งบการเงิน'},{code:'K36',label:'ตราสารทุน'},{code:'K37',label:'ตราสารหนี้'},{code:'K38',label:'ตราสารอนุพันธ์'},{code:'K39',label:'มูลค่าของเงินตามเวลา'},{code:'K40',label:'ระบบการเงินไทยและต่างประเทศ'},
+      {code:'K41',label:'วิเคราะห์แนวโน้ม'},{code:'K42',label:'ธุรกิจระหว่างประเทศ'},{code:'K43',label:'สินทรัพย์ลงทุนและสินทรัพย์ทางเลือก'},{code:'K44',label:'อัตราผลตอบแทนและความเสี่ยง'},{code:'K45',label:'การบริหารความเสี่ยง'},{code:'K46',label:'การประกันภัย'},{code:'K47',label:'การประมาณการทางการเงิน'},{code:'K48',label:'การวางแผนการเงินส่วนบุคคล'},{code:'K49',label:'การวางแผนการเงินสำหรับการเกษียณ'},{code:'K50',label:'การวางแผนการเงินองค์รวม'},
+      {code:'K51',label:'การวางแผนภาษี'},{code:'K52',label:'การวางแผนมรดก'},{code:'K53',label:'มาตรฐานการปฏิบัติวิชาชีพทางการเงิน'},{code:'K54',label:'ตลาดเงินและตลาดทุน'},{code:'K55',label:'การจัดหาเงินทุน'},{code:'K56',label:'การบริหารการเงิน'},{code:'K57',label:'การบริหารเงินทุนหมุนเวียน'},{code:'K58',label:'���ารบริหารสินเชื่อ'},{code:'K59',label:'งบลงทุน'},{code:'K60',label:'นโยบายการเงินและนโยบายการคลัง'},
+      {code:'K61',label:'บริหารต้นทุน'},{code:'K62',label:'บัญชีบริหาร'},{code:'K63',label:'สถาบันการเงิน'},{code:'K64',label:'การจัดการ'},{code:'K65',label:'การจัดการการดำเนินงาน'},{code:'K66',label:'การจัดการทรัพยากรมนุษย์'},{code:'K67',label:'การจัดการโลจิสติกส์และโซ่อุปทาน'},{code:'K68',label:'การตลาด'},{code:'K69',label:'การบัญชี'},{code:'K70',label:'พฤติกรรมผู้บริโภค'},
+      {code:'K71',label:'กลยุทธ์'},{code:'K72',label:'แบรนด์และผลิตภัณฑ์'},{code:'K73',label:'พหุวัฒนธรรม'},{code:'K74',label:'การวิเคราะห์ราคา'},{code:'K75',label:'การตลาดเพื่อสังคม'},{code:'K76',label:'การจัดการช่องทางการตลาดสมัยใหม่'},{code:'K77',label:'การวัดและการประเมินผลทางการตลาด'},{code:'K78',label:'การสื่อสารทางการตลาดเชิงบูรณาการ'},{code:'K79',label:'การตลาดดิจิทัล'},{code:'K80',label:'การตลาดบริการ'},
+      {code:'K81',label:'โครงสร้างข้อมูลและอัลกอริธึม'},{code:'K82',label:'การเขียนโปรแกรมระบบเว็บ'},{code:'K83',label:'การพยากรณ์กำลังคน'},{code:'K84',label:'การออกแบบและบริหารโครงการ'},{code:'K85',label:'ทฤษฎีและแนวเกี่ยวกับพฤติกรรมมนุษย์'},{code:'K86',label:'เครือข่ายคอมพิวเตอร์'},{code:'K87',label:'การวางแผนกำลังคน'},{code:'K88',label:'การฝึกอบรมและพัฒนา'},{code:'K89',label:'แรงจูงใจ'},{code:'K90',label:'ความมั่นคงของระบบสารสนเทศ'},
+      {code:'K91',label:'การจัดการความขัดแย้ง'},{code:'K92',label:'วางแผนระบบสารสนเทศทางธุรกิจ'},{code:'K93',label:'ออกแบบกราฟิก'},{code:'K94',label:'ระบบคอมพิวเตอร์'},{code:'K95',label:'การจัดการโครงการ'},{code:'K96',label:'การบริหารท่าเรือ'},{code:'K97',label:'การจัดระวางสินค้า'},{code:'K98',label:'การประกันคุณภาพ'},{code:'K99',label:'การบริหารคุณภาพ'},{code:'K100',label:'มาตรฐานการปฏิบัติทางโลจิสติกส์และโซ่อุปทาน'},
+      {code:'K101',label:'นโยบายโลจิสติกส์และโซ่อุปทาน'},{code:'K102',label:'การขนส่งสินค้าทางเรือ'},{code:'K103',label:'การค้าระหว่างประเทศ'},{code:'K104',label:'การบริหารสินค้าคงคลัง'},{code:'K105',label:'การจัดการคลังสินค้า'},{code:'K106',label:'การขนส่งสินค้าทางบก'},{code:'K107',label:'การกระจายสินค้า'},{code:'K108',label:'การจัดการโซ่อุปทานระดับโลก'},{code:'K109',label:'การขนส่งสินค้าทางอากาศ'},{code:'K110',label:'การจัดซื้อจัดหา'},
+      {code:'K111',label:'กระบวนการผลิตและการบริการ'},{code:'K112',label:'การวิเคราะห์เชิงปริมาณ'},{code:'K113',label:'พิธีการศุลกากร'},{code:'K114',label:'แบบจำลองโซ่อุปทาน'}
+    ];
+    
+    const A_DATA = [
+      {code:'A1',label:'การคิดเชิงบวก'},{code:'A2',label:'การยอมรับฟังความคิดเห็นของผู้อื่น'},{code:'A3',label:'ความฉลาดทางอารมณ์'},{code:'A4',label:'การรับร��้ความสามารถของตนเอง'},{code:'A5',label:'ความอดทนอดกลั้น'},{code:'A6',label:'ความรับผิดชอบ'},{code:'A7',label:'ความกระตือรือร้น'},{code:'A8',label:'ความรับผิดชอบต่อสังคม'},{code:'A9',label:'จริยธรรม'},{code:'A10',label:'ความใฝ่รู้'},
+      {code:'A11',label:'ความมีวินัย'},{code:'A12',label:'ความรอบคอบ'},{code:'A13',label:'การยอมรับความต่างทางพหุวัฒนธรรม'},{code:'A14',label:'ความอ่อนน้อมถ่อมตน'},{code:'A15',label:'เคารพผู้อื่น'},{code:'A16',label:'การมีวิสัยทัศน์'},{code:'A17',label:'การรู้จักกาละเทศะ'},{code:'A18',label:'ความเชื่อมั่นในตนเอง'},{code:'A19',label:'ความพยายามอุตสาหะ'},{code:'A20',label:'ความซื่อสัตย์'},
+      {code:'A21',label:'จิตอาสา'},{code:'A22',label:'ความเสียสละ'},{code:'A23',label:'ความยุติธรรม'}
+    ];
+    
+    const S_DATA = [
+      {code:'S1',label:'การปรับตัว'},{code:'S2',label:'การทำงานภายใต้แรงกดดัน'},{code:'S3',label:'การเข้าสังคม'},{code:'S4',label:'การคิดเชิงระบบ'},{code:'S5',label:'การคิดวิเคราะห์'},{code:'S6',label:'การนำเสนอ'},{code:'S7',label:'การตัดสินใจ'},{code:'S8',label:'การแก้ปัญหา'},{code:'S9',label:'การใช้โปรแกรมคอมพิวเตอร์'},{code:'S10',label:'การประเมินผล'},
+      {code:'S11',label:'การประยุกต์'},{code:'S12',label:'การสืบค้นข้อมูล'},{code:'S13',label:'การวางแผน'},{code:'S14',label:'การจัดการ'},{code:'S15',label:'ความคิดเชิงสร้างสรรค์'},{code:'S16',label:'การประสานงาน'},{code:'S17',label:'การสื่อสาร'},{code:'S18',label:'การเป็นผู้ประกอบการ'},{code:'S19',label:'ความคิดเชิงสังเคราะห์'},{code:'S20',label:'การใช้ภาษาไทยและภาษาอังกฤษ'},
+      {code:'S21',label:'การคิดอย่างมีเหตุมีผล'},{code:'S22',label:'การทำงานเป็นทีม'},{code:'S23',label:'การบริหารเวลา'},{code:'S24',label:'การใช้สื่อออนไลน์'},{code:'S25',label:'ความเป็นผู้นำ'},{code:'S26',label:'การคำนวณ'},{code:'S27',label:'การคาดการณ์'},{code:'S28',label:'การตั้งคำถามเชิงสร้างสรรค์'},{code:'S29',label:'การเจรจาต่อรอง'},{code:'S30',label:'การสังเกต'},
+      {code:'S31',label:'การจัดการความขัดแย้ง'},{code:'S32',label:'การรู้เท่าทัน'},{code:'S33',label:'ความยืดหยุ่น'},{code:'S34',label:'ความคิดเชิงวิพากษ์'},{code:'S35',label:'การกล้าแสดงออก'},{code:'S36',label:'มารยาทและบุคลิกภาพ'},{code:'S37',label:'การออกแบบ'}
+    ];
+
+    // Create KAS map for quick lookup
+    const kasMap = {};
+    K_DATA.forEach(k => kasMap[k.code] = {label: k.label, type: 'k'});
+    A_DATA.forEach(a => kasMap[a.code] = {label: a.label, type: 'a'});
+    S_DATA.forEach(s => kasMap[s.code] = {label: s.label, type: 's'});
+
+    // ข้อมูล PLO/MLO
+    const loData = {
+      PLO1: { type: "PLO", title: "พัฒนาตนเองจากการเรียนรู้เมื่อได้รับคำวิพากษ์วิจารณ์", K: ["K1","K2"], A: ["A1","A2","A3","A4"], S: ["S1","S2","S3"] },
+      PLO2: { type: "PLO", title: "วิเคราะห์และนำเสนอข้อมูลต่อผู้บริหารเพื่อการตัดสินใจ", K: ["K3","K4","K5","K6","K7","K69"], A: ["A1","A6","A10","A12"], S: ["S4","S5","S6","S7","S8","S9","S10"] },
+      PLO3: { type: "PLO", title: "ประยุกต์ความรู้ทางด้านบริหารธุรกิจเพื่อวางแผนกลยุทธ์ให้องค์กร", K: ["K3","K8"], A: ["A2","A8","A9","A12","A16"], S: ["S8","S11","S12","S13","S14"] },
+      PLO4: { type: "PLO", title: "ประยุกต์กรอบแนวคิดความเป็นผู้ประกอบการเพื่อการสร้างธุรกิจ", K: ["K1","K3","K9"], A: ["A4","A6","A8","A9","A10","A16"], S: ["S7","S8","S11","S13","S14","S15","S16","S17","S18"] },
+      PLO5: { type: "PLO", title: "ประยุกต์ใช้กระบวนการวิจัยเพื่อแก้ไขปัญหาทางธุรกิ��", K: ["K3","K10","K11"], A: ["A9","A10","A11","A12"], S: ["S4","S5","S8","S10","S11","S12","S19","S21"] },
+      PLO6: { type: "PLO", title: "สื่อสารภายใต้ความหลากหลายทางสังคมและวัฒนธรรม", K: ["K2","K5","K21"], A: ["A2","A13","A14","A15"], S: ["S1","S3","S17","S20"] },
+      PLO7: { type: "PLO", title: "ทำงานร่วมกับผู้อื่นในองค์กร", K: ["K1","K2","K13","K14","K64"], A: ["A2","A5","A14","A15","A17"], S: ["S1","S2","S3","S16","S17","S22","S23"] },
+      PLO8: { type: "PLO", title: "เลือกใช้เทคโนโลยีดิจิทัลในการทำงานให้บรรลุเป้าหมาย", K: ["K4","K5","K15"], A: ["A6","A10","A12"], S: ["S5","S7","S9","S24"] },
+      PLO9: { type: "PLO", title: "แสดงพฤติกรรมที่แสดงถึงการมีจริยธรรมและความรับผิดชอบต่อสังคม", K: ["K2","K16","K17","K18","K19"], A: ["A6","A8","A9","A11"], S: ["S1","S4","S7","S25"] },
+      "MLO1.1": { type: "MLO", title: "เขียนบทวิเคราะห์ตราสารทางการเงิน", K: ["K4","K22","K24","K27","K30","K31","K33","K34","K35","K36","K37","K38","K39","K40","K41","K43","K44"], A: ["A4","A5","A6","A7","A8","A10","A11","A12","A15","A16","A17","A18","A20"], S: ["S2","S4","S5","S7","S8","S9","S10","S12","S13","S14","S16","S17","S19","S20","S21","S22","S23","S24","S26","S27","S28"] },
+      "MLO1.2": { type: "MLO", title: "วางแผนการเงินส่วนบุคคล", K: ["K4","K13","K21","K22","K24","K27","K30","K33","K35","K36","K37","K38","K39","K44","K45","K46","K47","K48","K49","K50","K51","K52","K53","K54"], A: ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A15","A16","A17","A18","A19","A20"], S: ["S1","S2","S4","S5","S6","S7","S8","S9","S12","S13","S14","S15","S16","S17","S21","S22","S23","S26","S27","S28","S29","S30","S33"] },
+      "MLO1.3": { type: "MLO", title: "วิเคราะห์ข้อมูลทางการเงิน", K: ["K4","K28","K29","K32","K33","K35","K39","K40","K41","K44","K45","K47","K54","K55","K56","K57","K58","K59","K60","K61","K62","K63"], A: ["A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A15","A16","A19","A20"], S: ["S2","S4","S5","S7","S8","S9","S10","S12","S14","S16","S18","S21","S22","S26","S27","S31","S32"] },
+      "MLO2.1": { type: "MLO", title: "วิเคราะห์กลยุทธ์ทางการตลาด", K: ["K1","K2","K3"], A: ["A2","A4","A5","A6"], S: ["S1","S4","S7","S8"] },
+      "MLO2.2": { type: "MLO", title: "วิเคราะห์แนวทางแก้ไขปัญหา", K: ["K5","K8","K10","K13","K18","K19","K64","K68","K70","K72","K73","K74","K75","K76","K77","K78","K79","K80"], A: ["A8","A9","A10","A11","A12","A14","A15","A16","A17","A19","A20"], S: ["S9","S12","S13","S15","S16","S18","S21","S24","S28","S32","S34","S35"] },
+      "MLO2.3": { type: "MLO", title: "กำหนดกลยุทธ์การตลาด", K: ["K1","K5","K8","K10","K14","K20","K21","K65","K66","K67"], A: ["A2","A4","A5","A6","A8","A9","A10","A11","A12","A14","A15","A16","A19","A20"], S: ["S1","S4","S7","S8","S9","S12","S13","S15","S16","S18","S21","S22","S24","S28","S32","S34","S35"] },
+      "MLO3.1": { type: "MLO", title: "ใช้แนวคิดการจัดการทรัพยากรมนุษย์", K: ["K1","K13","K14","K18","K21","K66","K83","K85","K87","K88","K89","K91"], A: ["A1","A2","A3","A5","A6","A7","A9","A12","A13","A15","A18"], S: ["S1","S2","S3","S5","S7","S8","S10","S11","S14","S15","S16","S17","S22","S23","S24","S31","S33","S35","S36"] },
+      "MLO3.2": { type: "MLO", title: "ใช้เทคโนโลยีดิจิทัลในการบริหาร", K: ["K2","K4","K5","K15","K66","K85","K94"], A: ["A2","A6","A7","A9","A11","A12","A13","A19"], S: ["S4","S6","S8","S10","S12","S14","S15","S23","S24","S33"] },
+      "MLO4.1": { type: "MLO", title: "วางแผนลดต้นทุนเพิ่มกำไร", K: ["K4","K5","K6","K10","K19","K21","K23","K26","K29","K42","K45","K61","K64","K65","K67","K95","K96","K97","K98","K99","K100","K101","K102","K103","K104","K105","K106","K107","K108","K109","K110","K111","K112","K113","K114"], A: ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16","A17","A18","A19","A20","A21","A22","A23"], S: ["S1","S2","S3","S4","S5","S6","S7","S8","S10","S11","S12","S13","S15","S16","S17","S18","S19","S20","S21","S22","S23","S25","S26","S27","S28","S29","S30","S32","S33","S34","S35","S36","S37"] },
+      "MLO4.2": { type: "MLO", title: "ประยุกต์ความรู้โลจิสติกส์", K: ["K4","K5","K6","K10","K19","K21","K23","K26","K29","K42","K45","K61","K64","K65","K67","K95","K96","K97","K98","K99","K100","K101","K102","K103","K104","K105","K106","K107","K108","K109","K110","K111","K112","K113","K114"], A: ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16","A17","A18","A19","A20","A21","A22","A23"], S: ["S1","S2","S3","S4","S5","S6","S7","S8","S10","S11","S12","S13","S15","S16","S17","S18","S19","S20","S21","S22","S23","S25","S26","S27","S28","S29","S30","S32","S33","S34","S35","S36","S37"] },
+      "MLO5.1": { type: "MLO", title: "พัฒนาระบบสารสนเทศ", K: ["K3","K4","K7","K12","K81","K82","K84","K93"], A: ["A1","A2","A4","A6","A9","A11","A12","A19","A20"], S: ["S2","S4","S5","S6","S7","S8","S9","S11","S13","S15","S16","S17","S19","S21","S22","S26","S28","S37"] },
+      "MLO5.2": { type: "MLO", title: "วางแผนติดตั้งระบบสารสนเทศ", K: ["K3","K4","K86","K90","K92","K94"], A: ["A2","A6","A8","A9","A10","A11","A12","A16","A19"], S: ["S2","S4","S5","S6","S7","S8","S9","S10","S11","S12","S13","S14","S15","S16","S17","S19","S21","S22","S31","S32","S37"] },
+      "MLO6.1": { type: "MLO", title: "จัดงานไมซ์ตาม SDGs", K: ["K1","K2","K14","K18","K19","K25","K64"], A: ["A1","A2","A3","A4","A7","A8","A10","A16","A18","A19"], S: ["S1","S2","S3","S4","S7","S8","S12","S15","S16","S21","S28","S34","S35"] },
+      "MLO6.2": { type: "MLO", title: "ปรับตัวในสถานการณ์จัดงาน", K: ["K1","K2","K14","K18","K19","K21","K25","K64"], A: ["A1","A2","A3","A4","A5","A7","A8","A10","A16","A18","A19"], S: ["S1","S2","S3","S4","S7","S8","S12","S15","S16","S21","S28","S29","S34","S35"] }
+    };
+
+    let selectedLO = null;
+    let chartsVisible = false;
+    let chartInstances = {};
+
+    function init() {
+      renderStats();
+      renderLOList();
+    }
+
+    function renderStats() {
+      const entries = Object.entries(loData);
+      const plos = entries.filter(([k, v]) => v.type === "PLO").length;
+      const mlos = entries.filter(([k, v]) => v.type === "MLO").length;
+      const allK = new Set(entries.flatMap(([k, v]) => v.K)).size;
+      const allA = new Set(entries.flatMap(([k, v]) => v.A)).size;
+      const allS = new Set(entries.flatMap(([k, v]) => v.S)).size;
+
+      document.getElementById("statsRow").innerHTML = `
+        <div class="stat-box"><div class="stat-label">PLO</div><div class="stat-value">${plos}</div></div>
+        <div class="stat-box"><div class="stat-label">MLO</div><div class="stat-value">${mlos}</div></div>
+        <div class="stat-box"><div class="stat-label">Knowledge</div><div class="stat-value">${allK}</div></div>
+        <div class="stat-box"><div class="stat-label">Attitude</div><div class="stat-value">${allA}</div></div>
+        <div class="stat-box"><div class="stat-label">Skill</div><div class="stat-value">${allS}</div></div>
+      `;
+    }
+
+    function renderLOList() {
+      const typeFilter = document.getElementById("typeFilter").value;
+      const searchText = document.getElementById("searchInput").value.toUpperCase();
+
+      let filtered = Object.entries(loData);
+
+      if (typeFilter) {
+        filtered = filtered.filter(([k, v]) => v.type === typeFilter);
+      }
+
+      if (searchText) {
+        filtered = filtered.filter(([k, v]) => k.toUpperCase().includes(searchText) || v.title.toUpperCase().includes(searchText));
+      }
+
+      const html = filtered.map(([code, data]) => `
+        <div class="lo-item ${selectedLO === code ? 'active' : ''}" onclick="selectLO('${code}')">
+          <div class="lo-code">[${data.type}] ${code}</div>
+          <div class="lo-title">${data.title}</div>
+        </div>
+      `).join('');
+
+      document.getElementById("loList").innerHTML = html || '<div class="empty-state">ไม่พบข้อมูล</div>';
+    }
+
+    function selectLO(code) {
+      selectedLO = code;
+      renderLOList();
+      displayKASDetail(code);
+    }
+
+    function displayKASDetail(code) {
+      const data = loData[code];
+      let html = `
+        <div style="margin-bottom: 16px; padding-bottom: 16px; border-bottom: 2px solid #f0f0f0;">
+          <div style="font-size: 1.1rem; font-weight: 700; color: #667eea; margin-bottom: 6px;">${code}</div>
+          <div style="color: #555; font-size: 0.95rem; line-height: 1.6;">${data.title}</div>
+        </div>
+      `;
+
+      html += `
+        <div class="kas-group">
+          <div class="kas-group-title">📚 Knowledge (${data.K.length})</div>
+          <div class="kas-items">
+            ${data.K.map(code => `
+              <div class="kas-item k">
+                <div class="kas-code k">${code}</div>
+                <div class="kas-label">${kasMap[code]?.label || 'ไม่พบข้อมูล'}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      html += `
+        <div class="kas-group">
+          <div class="kas-group-title">💝 Attitude (${data.A.length})</div>
+          <div class="kas-items">
+            ${data.A.map(code => `
+              <div class="kas-item a">
+                <div class="kas-code a">${code}</div>
+                <div class="kas-label">${kasMap[code]?.label || 'ไม่พบข้อมูล'}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      html += `
+        <div class="kas-group">
+          <div class="kas-group-title">🎯 Skill (${data.S.length})</div>
+          <div class="kas-items">
+            ${data.S.map(code => `
+              <div class="kas-item s">
+                <div class="kas-code s">${code}</div>
+                <div class="kas-label">${kasMap[code]?.label || 'ไม่พบข้อมูล'}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      document.getElementById("kasDetail").innerHTML = html;
+    }
+
+    function filterLOs() {
+      renderLOList();
+    }
+
+    function toggleCharts() {
+      chartsVisible = !chartsVisible;
+      document.getElementById("chartsSection").style.display = chartsVisible ? "block" : "none";
+      
+      if (chartsVisible) {
+        setTimeout(() => {
+          initCharts();
+        }, 100);
+      }
+    }
+
+    function initCharts() {
+      Object.keys(chartInstances).forEach(key => {
+        if (chartInstances[key]) chartInstances[key].destroy();
+      });
+      chartInstances = {};
+
+      // Distribution Chart
+      const plos = Object.values(loData).filter(v => v.type === "PLO").length;
+      const mlos = Object.values(loData).filter(v => v.type === "MLO").length;
+
+      const distCtx = document.getElementById("distributionChart");
+      if (distCtx) {
+        chartInstances.distribution = new Chart(distCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["PLO", "MLO"],
+            datasets: [{
+              data: [plos, mlos],
+              backgroundColor: ["#3b82f6", "#10b981"],
+              borderColor: "white",
+              borderWidth: 3
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { usePointStyle: true, padding: 20, font: { size: 13, weight: 600 } }
+              }
+            }
+          }
+        });
+      }
+
+      // Top 10 KAS Chart
+      const kasCountMap = {};
+      
+      Object.values(loData).forEach(data => {
+        [...data.K, ...data.A, ...data.S].forEach(kas => {
+          kasCountMap[kas] = (kasCountMap[kas] || 0) + 1;
+        });
+      });
+
+      const top10Kas = Object.entries(kasCountMap)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10)
+        .map(([code, count]) => ({
+          code: code,
+          count: count,
+          type: code[0]
+        }));
+
+      const topKasCtx = document.getElementById("topKasChart");
+      if (topKasCtx) {
+        const colors = {
+          K: "#3b82f6",
+          A: "#ec4899",
+          S: "#10b981"
+        };
+
+        chartInstances.topKas = new Chart(topKasCtx, {
+          type: "bar",
+          data: {
+            labels: top10Kas.map(d => d.code),
+            datasets: [{
+              label: "จำนวนการอ้างอิง",
+              data: top10Kas.map(d => d.count),
+              backgroundColor: top10Kas.map(d => colors[d.type]),
+              borderRadius: 6,
+              borderSkipped: false
+            }]
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                labels: { padding: 15, font: { size: 12, weight: 600 } }
+              }
+            },
+            scales: {
+              x: {
+                beginAtZero: true,
+                ticks: { font: { size: 11 } }
+              },
+              y: {
+                ticks: { font: { size: 12, weight: 600 } }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    function exportData() {
+      let csv = "Code,Type,Title,K-Count,A-Count,S-Count,Knowledge,Attitude,Skill\n";
+      Object.entries(loData).forEach(([code, data]) => {
+        csv += `${code},${data.type},"${data.title}",${data.K.length},${data.A.length},${data.S.length},"${data.K.join('|')}","${data.A.join('|')}","${data.S.join('|')}"\n`;
+      });
+
+      const el = document.createElement('a');
+      el.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      el.download = `PLO-MLO-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(el);
+      el.click();
+      document.body.removeChild(el);
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>

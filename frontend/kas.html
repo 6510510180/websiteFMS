@@ -32,7 +32,11 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .avatar{width:36px;height:36px;border-radius:50%;background:var(--purple-bg);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--purple);cursor:pointer;margin-left:auto;}
 
 /* PAGE */
-.page{flex:1;padding:0 40px 80px;}
+.page{flex:1;max-width:100%;padding:32px 40px 80px;}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
+.page-title{font-size:26px;font-weight:900;color:var(--text);}
+.page-subtitle{font-size:14px;color:var(--text-sub);margin-top:4px;max-width:580px;line-height:1.5;}
+.header-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;}
 
 /* MAIN TABS */
 .main-tabs{display:flex;border-bottom:2px solid #e8deff;padding-top:20px;}
@@ -44,25 +48,29 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .panel{display:none;padding-top:20px;}
 .panel.active{display:block;}
 
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.18s;white-space:nowrap;}
+.btn svg{width:15px;height:15px;fill:currentColor;}
+.btn-purple{background:var(--purple);color:white;box-shadow:0 4px 10px rgba(127,19,236,.2);}
+.btn-purple:hover{background:var(--purple-dark);transform:translateY(-1px);}
+.btn-outline{background:white;color:var(--purple);border:1.5px solid var(--purple);}
+.btn-outline:hover{background:var(--purple-light);}
+.btn-green{background:#16a34a;color:white;}
+.btn-green:hover{background:#15803d;}
+.btn-amber{background:#d97706;color:white;}
+.btn-amber:hover{background:#b45309;}
+#fileInput{display:none;}
+
 /* ── PLO / MLO LAYOUT ── */
 .lo-frame{border:1.5px dashed #c4b5fd;border-radius:16px;overflow:hidden;display:flex;min-height:500px;}
-
-/* SIDEBAR */
 .lo-sidebar{width:210px;flex-shrink:0;border-right:1px solid #ede8f5;background:#fdfbff;padding:8px 0;}
 .sb-item{display:flex;align-items:center;gap:9px;padding:12px 16px;font-size:13px;font-weight:500;color:var(--text-sub);cursor:pointer;border-left:3px solid transparent;transition:.15s;}
 .sb-item:hover{background:var(--purple-light);color:var(--purple);}
 .sb-item.active{background:var(--purple-light);color:var(--purple);font-weight:700;border-left-color:var(--purple);}
 .sb-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
-
-/* CONTENT AREA */
 .lo-content{flex:1;overflow:auto;}
-
-/* TABLE HEADER */
 .lo-thead{display:grid;grid-template-columns:1fr 170px 155px 155px;padding:11px 20px;border-bottom:2px solid #ede8f5;background:#faf7ff;font-size:10.5px;font-weight:800;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;gap:8px;align-items:center;}
 .th-kas-cell{display:flex;align-items:center;justify-content:center;gap:5px;}
 .th-icon{font-size:13px;}
-
-/* LO ROWS */
 .lo-row{display:grid;grid-template-columns:1fr 170px 155px 155px;padding:15px 20px;border-bottom:1px solid #f5eeff;gap:8px;align-items:center;transition:background .12s;}
 .lo-row:last-child{border-bottom:none;}
 .lo-row:hover{background:#fdfbff;}
@@ -71,8 +79,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .lo-badge.mlo{background:#e0f7fa;color:var(--teal);}
 .lo-text{font-size:12.5px;color:var(--text);line-height:1.55;}
 .kas-cell{display:flex;justify-content:center;align-items:center;}
-
-/* ADD/EDIT BUTTONS */
 .ae-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:999px;font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;transition:.15s;white-space:nowrap;}
 .ae-btn.K{color:var(--k-color);border-color:var(--k-color);background:var(--k-bg);}
 .ae-btn.A{color:var(--a-color);border-color:var(--a-color);background:var(--a-bg);}
@@ -95,17 +101,37 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .inner-tab{padding:8px 18px;border:none;background:#f3eeff;font-family:'Noto Sans Thai',sans-serif;font-size:12px;font-weight:700;color:var(--purple-mid);cursor:pointer;border-radius:8px 8px 0 0;transition:.15s;}
 .inner-tab.active{background:var(--purple);color:white;}
 
-/* CLO table */
+/* ── CLO TABLE — แก้ grid ให้ K/A/S เรียงในแถวเดียวกัน ── */
 .clo-table-wrap{background:var(--white);border-radius:0 0 14px 14px;border:1px solid var(--border);border-top:none;overflow:hidden;}
-.clo-thead{display:grid;grid-template-columns:1fr 200px 115px 115px;padding:10px 20px;border-bottom:1px solid #ede8f5;background:#faf7ff;font-size:10px;font-weight:800;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;gap:8px;align-items:center;}
+
+/* thead: Description | PLO+MLO | K | A | S */
+.clo-thead{
+  display:grid;
+  grid-template-columns:1fr 160px 110px 110px 110px;
+  padding:10px 20px;
+  border-bottom:1px solid #ede8f5;
+  background:#faf7ff;
+  font-size:10px;font-weight:800;color:var(--text-sub);
+  text-transform:uppercase;letter-spacing:.5px;
+  gap:8px;align-items:center;
+}
 .clo-th-kas{display:flex;align-items:center;justify-content:center;gap:4px;}
-.clo-row{display:grid;grid-template-columns:1fr 200px 115px 115px;padding:14px 20px;border-bottom:1px solid #f5eeff;gap:8px;align-items:center;transition:background .12s;}
+
+/* row: same 5 cols */
+.clo-row{
+  display:grid;
+  grid-template-columns:1fr 160px 110px 110px 110px;
+  padding:14px 20px;
+  border-bottom:1px solid #f5eeff;
+  gap:8px;align-items:center;
+  transition:background .12s;
+}
 .clo-row:last-child{border-bottom:none;}
 .clo-row:hover{background:#fdfbff;}
 .clo-num{font-family:'Lexend',sans-serif;font-size:13px;font-weight:800;color:var(--purple);}
 .clo-th{font-size:13px;color:var(--text);line-height:1.45;}
 .clo-en{font-size:11px;color:var(--text-sub);margin-top:2px;}
-.linked-cell{display:flex;justify-content:center;}
+.linked-cell{display:flex;justify-content:center;flex-wrap:wrap;gap:3px;}
 .linked-badge{font-family:'Lexend',sans-serif;font-size:10px;font-weight:700;background:var(--purple-bg);color:var(--purple);padding:2px 8px;border-radius:999px;white-space:nowrap;}
 
 /* side panel */
@@ -128,8 +154,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .modal-overlay.show{opacity:1;pointer-events:all;}
 .modal{background:var(--white);border-radius:18px;width:920px;max-width:96vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 28px 72px rgba(0,0,0,0.22);transform:translateY(22px) scale(.97);transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
 .modal-overlay.show .modal{transform:translateY(0) scale(1);}
-
-/* modal header */
 .m-header{padding:20px 24px 0;flex-shrink:0;}
 .m-top-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
 .m-badge{display:inline-block;background:var(--purple-bg);color:var(--purple);font-family:'Lexend',sans-serif;font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px;margin-right:8px;}
@@ -137,16 +161,10 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .m-sub{font-size:12px;color:var(--text-sub);margin-top:3px;}
 .m-close{width:30px;height:30px;border:none;background:#f1f5f9;border-radius:8px;cursor:pointer;font-size:16px;color:var(--text-sub);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;}
 .m-close:hover{background:#fee2e2;color:#ef4444;}
-
-/* modal top tab toggle */
 .m-toggle{display:flex;background:#f3eeff;border-radius:10px;padding:4px;gap:2px;width:fit-content;margin-bottom:2px;}
 .m-toggle-btn{padding:7px 22px;border:none;background:transparent;font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;color:var(--purple-mid);border-radius:8px;cursor:pointer;transition:.15s;}
 .m-toggle-btn.active{background:white;color:var(--purple);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
-
-/* modal body */
 .m-body{flex:1;overflow:hidden;display:flex;min-height:0;}
-
-/* PLO/MLO panel - two columns */
 .pm-col{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden;}
 .pm-col:last-child{border-right:none;}
 .pm-col-head{padding:10px 16px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
@@ -168,8 +186,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .pm-code{font-family:'Lexend',sans-serif;font-size:11px;font-weight:800;color:var(--purple);flex-shrink:0;min-width:48px;}
 .pm-code.mlo-code{color:var(--teal);}
 .pm-desc{font-size:12px;color:var(--text);line-height:1.45;}
-
-/* KAS panel - three columns */
 .kas-col{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden;}
 .kas-col:last-child{border-right:none;}
 .kas-col-head{padding:10px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
@@ -195,8 +211,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .kas-code.S{color:var(--s-color);}
 .kas-label{font-size:12px;color:var(--text);line-height:1.4;}
 .kas-item.hidden,.pm-item.hidden{display:none;}
-
-/* modal footer */
 .m-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .m-sel-count{font-size:12px;color:var(--text-sub);}
 .m-sel-count strong{color:var(--purple);}
@@ -210,6 +224,105 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .toast{position:fixed;bottom:28px;right:28px;background:#1a1a2e;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* PDF PROGRESS OVERLAY */
+.pdf-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.92);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;opacity:0;pointer-events:none;transition:opacity .25s;}
+.pdf-overlay.show{opacity:1;pointer-events:all;}
+.pdf-spinner{width:44px;height:44px;border:4px solid #e8deff;border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pdf-msg{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:var(--purple);}
+
+/* ═══ PRINT / PDF STYLES ═══ */
+@media print {
+  /* reset layout */
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{background:white;font-size:10pt;min-height:unset;display:block;}
+  .topbar,.header-actions,.main-tabs,.clo-side,.status-bar,
+  .modal-overlay,.toast,.pdf-overlay,
+  button,.btn,#fileInput{display:none!important;}
+
+  .page{padding:0;max-width:100%;}
+  .page-header{margin-bottom:12pt;}
+  .page-title{font-size:16pt;font-weight:900;}
+  .page-subtitle{font-size:9pt;}
+
+  /* show only active panel */
+  .panel{display:none!important;}
+  .panel.print-active{display:block!important;}
+
+  /* ── PLO/MLO print ── */
+  .lo-frame{border:1pt solid #ccc;border-radius:0;display:block;}
+  .lo-sidebar{display:none!important;}
+  .lo-content{display:block;}
+  .lo-thead{
+    display:grid!important;
+    grid-template-columns:1fr 130pt 100pt 100pt;
+    background:#f3eeff!important;
+    padding:6pt 10pt;
+    font-size:7pt;
+    border-bottom:1pt solid #c4b5fd;
+  }
+  .lo-row{
+    display:grid!important;
+    grid-template-columns:1fr 130pt 100pt 100pt;
+    padding:8pt 10pt;
+    border-bottom:.5pt solid #f0ebfa;
+    page-break-inside:avoid;
+    gap:6pt;
+    align-items:start;
+  }
+  .lo-info{gap:7pt;}
+  .lo-badge{font-size:8pt;padding:2pt 6pt;}
+  .lo-text{font-size:9pt;line-height:1.4;}
+  .kas-cell{display:block!important;}
+  .ae-btn{display:none!important;}
+
+  /* print KAS tags */
+  .kas-print{display:flex!important;flex-wrap:wrap;gap:2pt;justify-content:center;}
+  .kp-tag{font-size:7.5pt;font-weight:700;padding:1.5pt 5pt;border-radius:3pt;white-space:nowrap;}
+  .kp-tag.K{background:#f3e8ff;color:#7c3aed;}
+  .kp-tag.A{background:#ffe4e6;color:#e11d48;}
+  .kp-tag.S{background:#dcfce7;color:#16a34a;}
+
+  /* ── CLO print ── */
+  .clo-wrap{display:block!important;}
+  .clo-main{width:100%;}
+  .course-card{border-radius:0;border:1pt solid #ccc;padding:10pt 14pt 0;}
+  .course-name{font-size:12pt;}
+  .inner-tabs,.inner-tab{display:none!important;}
+  .clo-table-wrap{border-radius:0;border:1pt solid #ccc;border-top:none;}
+  .clo-thead{
+    display:grid!important;
+    grid-template-columns:1fr 120pt 80pt 80pt 80pt;
+    background:#faf7ff!important;
+    padding:5pt 10pt;
+    font-size:7pt;
+    border-bottom:1pt solid #ede8f5;
+  }
+  .clo-row{
+    display:grid!important;
+    grid-template-columns:1fr 120pt 80pt 80pt 80pt;
+    padding:7pt 10pt;
+    border-bottom:.5pt solid #f5eeff;
+    page-break-inside:avoid;
+    gap:6pt;
+    align-items:start;
+  }
+  .clo-num{font-size:10pt;}
+  .clo-th{font-size:9pt;}
+  .clo-en{font-size:8pt;}
+  .linked-cell{justify-content:flex-start;flex-wrap:wrap;gap:2pt;}
+  .linked-badge{font-size:7pt;padding:1.5pt 5pt;}
+
+  /* print section header */
+  .print-section-title{display:block!important;font-family:'Lexend',sans-serif;font-size:12pt;font-weight:800;color:var(--purple);margin:12pt 0 6pt;padding-bottom:4pt;border-bottom:1.5pt solid var(--purple);}
+
+  /* page breaks */
+  .lo-frame + .print-section-title{page-break-before:always;}
+  .lo-row:nth-child(15n){page-break-after:always;}
+}
+.print-section-title{display:none;}
+.kas-print{display:none;}
 </style>
 </head>
 <body>
@@ -225,13 +338,64 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <a href="plo.html">จัดการ PLO/MLO</a>
     <a href="matrix.html">Alignment Matrix</a>
     <a href="score-plo.html">คะแนนผลลัพธ์ PLO</a>
-    <a href="kas.html"class="active">KAS</a>
+    <a href="kas.html" class="active">KAS</a>
   </nav>
   <div class="avatar">A</div>
 </header>
 
 <!-- PAGE -->
 <div class="page">
+  <div class="page-header">
+    <div>
+      <div class="page-title">ตารางวิเคราะห์ความสอดคล้อง (Alignment Matrix)</div>
+      <div class="page-subtitle">PLOs &amp; MLOs กับวิสัยทัศน์ พันธกิจ คุณลักษณะของบัณฑิต และความต้องการของผู้มีส่วนได้ส่วนเสีย</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" onclick="downloadTemplate()">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        Template
+      </button>
+      <button class="btn btn-purple" onclick="document.getElementById('fileInput').click()">
+        <svg viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
+        Import Excel
+      </button>
+      <button class="btn btn-green" onclick="exportExcel()">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"/></svg>
+        Export Excel
+      </button>
+
+      <!-- ▼ PDF BUTTON — dropdown style -->
+      <div style="position:relative;" id="pdf-wrap">
+        <button class="btn btn-amber" onclick="togglePdfMenu()">
+          <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/></svg>
+          Export PDF
+          <svg viewBox="0 0 20 20" style="width:11px;height:11px;"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <div id="pdf-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:180px;overflow:hidden;z-index:400;">
+          <button onclick="exportPDF('PLO')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);transition:.12s;" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'">
+            <span style="color:var(--purple);font-weight:800;font-family:'Lexend',sans-serif;font-size:11px;">PLO</span> ตาราง PLO
+          </button>
+          <button onclick="exportPDF('MLO')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);transition:.12s;" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'">
+            <span style="color:var(--teal);font-weight:800;font-family:'Lexend',sans-serif;font-size:11px;">MLO</span> ตาราง MLO
+          </button>
+          <button onclick="exportPDF('CLO')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);transition:.12s;" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'">
+            <span style="color:#16a34a;font-weight:800;font-family:'Lexend',sans-serif;font-size:11px;">CLO</span> ตาราง CLO
+          </button>
+          <div style="border-top:1px solid var(--border);"></div>
+          <button onclick="exportPDF('ALL')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;color:var(--purple);transition:.12s;" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
+            ทั้งหมด (PLO+MLO+CLO)
+          </button>
+        </div>
+      </div>
+
+      <button class="btn btn-outline" onclick="saveData()" style="color:#16a34a;border-color:#16a34a;">
+        <svg viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+        บันทึก
+      </button>
+    </div>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="importExcel(event)">
+  </div>
 
   <!-- MAIN TABS -->
   <div class="main-tabs">
@@ -258,12 +422,10 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   <!-- ══ MLO PANEL ══ -->
   <div class="panel" id="panel-MLO">
     <div class="lo-frame">
-      <!-- sidebar -->
       <div class="lo-sidebar" id="mlo-sidebar"></div>
-      <!-- content -->
       <div class="lo-content">
         <div class="lo-thead">
-          <div>PLO &amp; DESCRIPTION</div>
+          <div>MLO &amp; DESCRIPTION</div>
           <div class="th-kas-cell" style="color:var(--k-color)"><span class="th-icon">📖</span> KNOWLEDGE (K)</div>
           <div class="th-kas-cell" style="color:var(--a-color)"><span class="th-icon">♥</span> ATTITUDE (A)</div>
           <div class="th-kas-cell" style="color:var(--s-color)"><span class="th-icon">⚙</span> SKILL (S)</div>
@@ -276,9 +438,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   <!-- ══ CLO PANEL ══ -->
   <div class="panel" id="panel-CLO">
     <div class="clo-wrap">
-      <!-- main course card -->
       <div class="clo-main" id="clo-main"></div>
-      <!-- side -->
       <div class="clo-side">
         <div class="sp-label">COURSE SELECTOR</div>
         <div class="sp-card">
@@ -313,25 +473,20 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 <!-- ══ MODAL ══ -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeBg(event)">
   <div class="modal">
-
-    <!-- header -->
     <div class="m-header">
       <div class="m-top-row">
         <div>
           <span class="m-badge" id="m-badge">CLO1</span>
           <span class="m-title">Selection Mapping</span>
-          <div class="m-sub" id="m-sub">Select the Knowledge, Attitude, and Skill components associated with CLO1.</div>
+          <div class="m-sub" id="m-sub">Select the Knowledge, Attitude, and Skill components.</div>
         </div>
         <button class="m-close" onclick="closeModal()">✕</button>
       </div>
-      <!-- tab toggle (PLO/MLO | KAS) — shown only for CLO -->
       <div class="m-toggle" id="m-toggle" style="display:none">
         <button class="m-toggle-btn active" id="t-plomlo" onclick="switchMTab('PLO_MLO',this)">PLO/MLO</button>
         <button class="m-toggle-btn" id="t-kas" onclick="switchMTab('KAS',this)">KAS</button>
       </div>
     </div>
-
-    <!-- PLO/MLO panel -->
     <div class="m-body" id="panel-pm" style="display:none">
       <div class="pm-col">
         <div class="pm-col-head plo">PLO <span style="font-size:10px;font-weight:600;opacity:.7" id="cnt-plo">0 เลือก</span></div>
@@ -344,8 +499,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
         <div class="pm-list" id="list-mlo"></div>
       </div>
     </div>
-
-    <!-- KAS panel -->
     <div class="m-body" id="panel-kas" style="display:none">
       <div class="kas-col">
         <div class="kas-col-head K">KNOWLEDGE (K) <span style="font-size:10px;font-weight:600;opacity:.75" id="cnt-k">0 เลือก</span></div>
@@ -363,8 +516,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
         <div class="kas-list" id="list-s"></div>
       </div>
     </div>
-
-    <!-- footer -->
     <div class="m-footer">
       <div class="m-sel-count" id="m-count"><strong>0</strong> items selected total</div>
       <div class="m-btns">
@@ -373,6 +524,12 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
       </div>
     </div>
   </div>
+</div>
+
+<!-- PDF PROGRESS -->
+<div class="pdf-overlay" id="pdf-overlay">
+  <div class="pdf-spinner"></div>
+  <div class="pdf-msg" id="pdf-msg">กำลังเตรียม PDF...</div>
 </div>
 
 <div class="toast" id="toast"><div class="toast-dot" id="toast-dot"></div><span id="toast-msg"></span></div>
@@ -392,29 +549,29 @@ const PLO_LIST = [
 ];
 
 const MLO_GROUPS = [
-  {label:'การเงินและการลงทุน', icon:'💰', items:[
+  {label:'การเงินและการลงทุน',icon:'💰',items:[
     {code:'MLO1.1',desc:'เขียนบทวิเคราะห์ตราสารทางการเงินภายใต้หลักเกณฑ์ของคณะกรรมการกำกับหลักทรัพย์และตลาดหลักทรัพย์'},
     {code:'MLO1.2',desc:'วางแผนการเงินส่วนบุคคลตามมาตรฐานของสมาคมนักวางแผนการเงินไทย'},
     {code:'MLO1.3',desc:'วิเคราะห์ข้อมูลทางการเงินเพื่อการบริหารการเงินขององค์กร'},
   ]},
-  {label:'การตลาดและการสื่อสาร', icon:'📢', items:[
+  {label:'การตลาดและการสื่อสาร',icon:'📢',items:[
     {code:'MLO2.1',desc:'วิเคราะห์กลยุทธ์ทางการตลาดอย่างสร้างสรรค์'},
     {code:'MLO2.2',desc:'วิเคราะห์แนวทางการแก้ไขปัญหาทางการตลาดเชิงนวัตกรรม'},
     {code:'MLO2.3',desc:'กำหนดกลยุทธ์การตลาดเพื่อใช้ในธุรกิจ'},
   ]},
-  {label:'การจัดการทรัพยากรมนุษย์', icon:'👥', items:[
+  {label:'การจัดการทรัพยากรมนุษย์',icon:'👥',items:[
     {code:'MLO3.1',desc:'ใช้แนวคิดการจัดการทรัพยากรมนุษย์ในการสร้างกิจกรรมเพื่อพัฒนาคน'},
     {code:'MLO3.2',desc:'ใช้เทคโนโลยีดิจิทัลในการบริหารทรัพยากรมนุษย์'},
   ]},
-  {label:'การจัดการโลจิสติกส์', icon:'🚚', items:[
+  {label:'การจัดการโลจิสติกส์',icon:'🚚',items:[
     {code:'MLO4.1',desc:'วางแผนในการลดต้นทุนและเพิ่มกำไรโดยใช้ความรู้ด้านการจัดการโลจิสติกส์และโซ่อุปทานให้กับธุรกิจ'},
-    {code:'MLO4.2',desc:'ประยุกต์ความรู้ทางด้านการจัดการโลจิสติกส์และโซ่อุปทานในการแก้ไขปัญหาของธุรกิจในฝั่ง Outbound และบริบทพื้นที่ภาคใต้'},
+    {code:'MLO4.2',desc:'ประยุกต์ความรู้ทางด้านการจัดการโลจิสติกส์และโซ่อุปทานในการแก้ไขปัญหาของธุรกิจ'},
   ]},
-  {label:'ระบบสารสนเทศทางธุรกิจ', icon:'💻', items:[
+  {label:'ระบบสารสนเทศทางธุรกิจ',icon:'💻',items:[
     {code:'MLO5.1',desc:'พัฒนาระบบสารสนเทศทางธุรกิจเพื่อใช้ในการวางแผนธุรกิจ'},
     {code:'MLO5.2',desc:'วางแผนและติดตั้งระบบสารสนเทศได้ถูกต้องตามกฎหมาย'},
   ]},
-  {label:'การจัดการไมซ์ (MICE)', icon:'🎪', items:[
+  {label:'การจัดการไมซ์ (MICE)',icon:'🎪',items:[
     {code:'MLO6.1',desc:'จัดงานไมซ์ได้ตามเป้าหมายการพัฒนาที่ยั่งยืน (SDGs) และสอดคล้องกับความต้องการของผู้มีส่วนได้ส่วนเสีย'},
     {code:'MLO6.2',desc:'ปรับตัวในสถานการณ์การจัดงานไมซ์ที่มีความกดดันและหาทางแก้ไขปัญหาผ่านความคิดสร้างสรรค์'},
   ]},
@@ -464,14 +621,21 @@ const S_DATA=[
 ];
 
 /* ═══════════════ STATE ═══════════════ */
-// KAS mappings
 const ploKas={};PLO_LIST.forEach(p=>{ploKas[p.code]={K:new Set(),A:new Set(),S:new Set()};});
 const mloKas={};MLO_GROUPS.forEach(g=>g.items.forEach(m=>{mloKas[m.code]={K:new Set(),A:new Set(),S:new Set()};}));
+let curTab='PLO',curMloGroup=0,curCourseIdx=0;
+let mCtx=null,mPanel='PLO_MLO';
+let tKas={K:new Set(),A:new Set(),S:new Set()},tPlo=new Set(),tMlo=new Set();
 
-let curTab='PLO', curMloGroup=0, curCourseIdx=0;
-let mCtx=null; // {type:'PLO'|'MLO'|'CLO'|'IMPORT_PLO', code?, courseIdx?, cloIdx?}
-let mPanel='PLO_MLO'; // current modal panel
-let tKas={K:new Set(),A:new Set(),S:new Set()}, tPlo=new Set(), tMlo=new Set();
+/* close pdf menu on outside click */
+document.addEventListener('click',e=>{
+  const wrap=document.getElementById('pdf-wrap');
+  if(wrap && !wrap.contains(e.target)) document.getElementById('pdf-menu').style.display='none';
+});
+function togglePdfMenu(){
+  const m=document.getElementById('pdf-menu');
+  m.style.display=m.style.display==='none'?'block':'none';
+}
 
 /* ═══════════════ MAIN TABS ═══════════════ */
 function switchTab(tab,btn){
@@ -485,50 +649,65 @@ function switchTab(tab,btn){
   else renderCLO();
 }
 
-/* ═══════════════ PLO TAB ═══════════════ */
+/* ═══════════════ PLO ═══════════════ */
 function renderPLO(){
-  document.getElementById('plo-rows').innerHTML=PLO_LIST.map(p=>{
-    const k=ploKas[p.code];
-    return ploRow(p.code,p.desc,'PLO',k);
-  }).join('');
+  document.getElementById('plo-rows').innerHTML=PLO_LIST.map(p=>ploRow(p.code,p.desc,'PLO',ploKas[p.code])).join('');
 }
+
+function kasTagsHtml(k,type){
+  const data=type==='K'?K_DATA:type==='A'?A_DATA:S_DATA;
+  const codes=[...k[type]];
+  if(!codes.length) return '<span style="color:#94a3b8;font-size:10px">—</span>';
+  return codes.map(c=>{
+    const item=data.find(d=>d.code===c);
+    return `<span class="ae-cnt" style="background:${type==='K'?'var(--k-bg)':type==='A'?'var(--a-bg)':'var(--s-bg)'}; color:${type==='K'?'var(--k-color)':type==='A'?'var(--a-color)':'var(--s-color)'}; border-radius:999px; padding:2px 7px; font-size:10px; font-weight:700; display:inline-block;">${c}</span>`;
+  }).join(' ');
+}
+
 function ploRow(code,desc,type,k){
   const kn=k.K.size,an=k.A.size,sn=k.S.size;
   const ctx=JSON.stringify({type,code}).replace(/"/g,'&quot;');
+  // KAS print tags (hidden on screen, shown in print)
+  const kPrint=t=>[...k[t]].map(c=>`<span class="kp-tag ${t}">${c}</span>`).join('');
   return `<div class="lo-row">
     <div class="lo-info">
       <span class="lo-badge${type==='MLO'?' mlo':''}">${code}</span>
       <span class="lo-text">${desc}</span>
     </div>
-    <div class="kas-cell"><button class="ae-btn K" onclick='openModal(${ctx},"KAS","K")'>
-      <span>⊕</span> Add/Edit${kn?` <span class="ae-cnt">${kn}</span>`:''}
-    </button></div>
-    <div class="kas-cell"><button class="ae-btn A" onclick='openModal(${ctx},"KAS","A")'>
-      <span>⊕</span> Add/Edit${an?` <span class="ae-cnt">${an}</span>`:''}
-    </button></div>
-    <div class="kas-cell"><button class="ae-btn S" onclick='openModal(${ctx},"KAS","S")'>
-      <span>⊕</span> Add/Edit${sn?` <span class="ae-cnt">${sn}</span>`:''}
-    </button></div>
+    <div class="kas-cell">
+      <button class="ae-btn K" onclick='openModal(${ctx},"KAS","K")'>
+        <span>⊕</span> Add/Edit${kn?` <span class="ae-cnt">${kn}</span>`:''}
+      </button>
+      <div class="kas-print">${kPrint('K')||'<span class="kp-tag K" style="opacity:.35">—</span>'}</div>
+    </div>
+    <div class="kas-cell">
+      <button class="ae-btn A" onclick='openModal(${ctx},"KAS","A")'>
+        <span>⊕</span> Add/Edit${an?` <span class="ae-cnt">${an}</span>`:''}
+      </button>
+      <div class="kas-print">${kPrint('A')||'<span class="kp-tag A" style="opacity:.35">—</span>'}</div>
+    </div>
+    <div class="kas-cell">
+      <button class="ae-btn S" onclick='openModal(${ctx},"KAS","S")'>
+        <span>⊕</span> Add/Edit${sn?` <span class="ae-cnt">${sn}</span>`:''}
+      </button>
+      <div class="kas-print">${kPrint('S')||'<span class="kp-tag S" style="opacity:.35">—</span>'}</div>
+    </div>
   </div>`;
 }
 
-/* ═══════════════ MLO TAB ═══════════════ */
+/* ═══════════════ MLO ═══════════════ */
 function renderMLO(){
-  // sidebar
   document.getElementById('mlo-sidebar').innerHTML=MLO_GROUPS.map((g,i)=>`
     <div class="sb-item${i===curMloGroup?' active':''}" onclick="selMloGroup(${i})">
-      <span class="sb-icon">${g.icon}</span>
-      <span>${g.label}</span>
+      <span class="sb-icon">${g.icon}</span><span>${g.label}</span>
     </div>`).join('');
-  // rows
   const g=MLO_GROUPS[curMloGroup];
   document.getElementById('mlo-rows').innerHTML=g.items.map(m=>ploRow(m.code,m.desc,'MLO',mloKas[m.code])).join('');
 }
 function selMloGroup(i){curMloGroup=i;renderMLO();}
 
-/* ═══════════════ CLO TAB ═══════════════ */
+/* ═══════════════ CLO ═══════════════ */
 function renderCLO(){
-  // populate selector once
   const sel=document.getElementById('course-sel');
   if(!sel.options.length){
     COURSES.forEach((c,i)=>{
@@ -560,15 +739,15 @@ function renderCourseCard(){
         <button class="inner-tab active" onclick="showInner('clo',this)">Course Outcomes (CLO)</button>
       </div>
     </div>
-    <div class="clo-table-wrap" id="clo-table-wrap">
+    <div class="clo-table-wrap">
       <div id="inner-info" style="display:none;padding:18px 24px;color:var(--text-sub);font-size:15px">ข้อมูลรายวิชาแสดงที่นี่</div>
       <div id="inner-clo">
         <div class="clo-thead">
           <div>CLO &amp; DESCRIPTION</div>
-          <div class="clo-th-kas">LINKED OUTCOME DETAILS</div>
-          <div class="clo-th-kas" style="color:var(--k-color)">📖 K</div>
-          <div class="clo-th-kas" style="color:var(--a-color)">♥ A</div>
-          <div class="clo-th-kas" style="color:var(--s-color)">⚙ S</div>
+          <div class="clo-th-kas">LINKED PLO/MLO</div>
+          <div class="clo-th-kas" style="color:var(--k-color)">📖 KNOWLEDGE (K)</div>
+          <div class="clo-th-kas" style="color:var(--a-color)">♥ ATTITUDE (A)</div>
+          <div class="clo-th-kas" style="color:var(--s-color)">⚙ SKILL (S)</div>
         </div>
         <div id="clo-rows">${renderCloRows(c)}</div>
       </div>
@@ -581,21 +760,45 @@ function renderCloRows(c){
     const kn=cl.kas.K.size,an=cl.kas.A.size,sn=cl.kas.S.size;
     const pln=cl.plo.size,mln=cl.mlo.size;
     const ctx=JSON.stringify({type:'CLO',courseIdx:curCourseIdx,cloIdx:i}).replace(/"/g,'&quot;');
-    const linked=pln+mln>0?[...cl.plo,...cl.mlo].slice(0,3).map(c=>`<span class="linked-badge">${c}</span>`).join(' ')+
-      (pln+mln>3?`<span class="linked-badge">+${pln+mln-3}</span>`:''): '<span style="color:#94a3b8;font-size:11px">—</span>';
+
+    // linked badges
+    const linked=pln+mln>0
+      ? [...cl.plo,...cl.mlo].slice(0,4).map(code=>`<span class="linked-badge">${code}</span>`).join('')
+        +(pln+mln>4?`<span class="linked-badge">+${pln+mln-4}</span>`:'')
+      : '<span style="color:#94a3b8;font-size:11px">—</span>';
+
+    // KAS pill render helper
+    const kasPills=(type)=>{
+      const codes=[...cl.kas[type]];
+      if(!codes.length) return `<span style="color:#94a3b8;font-size:10px">—</span>`;
+      const clr=type==='K'?'var(--k-color)':type==='A'?'var(--a-color)':'var(--s-color)';
+      const bg=type==='K'?'var(--k-bg)':type==='A'?'var(--a-bg)':'var(--s-bg)';
+      return codes.map(c=>`<span style="display:inline-block;background:${bg};color:${clr};border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700;">${c}</span>`).join(' ');
+    };
+
     return `<div class="clo-row">
       <div>
-        <div class="clo-num">${i+1}.</div>
+        <div class="clo-num">CLO ${i+1}</div>
         <div class="clo-th">${cl.th}</div>
         <div class="clo-en">${cl.en}</div>
       </div>
-      <div class="linked-cell" style="gap:4px;flex-wrap:wrap">${linked}</div>
-      <div class="kas-cell"><button class="ae-btn K" onclick='openModal(${ctx},"KAS","K")'>
-        <span>⊕</span> Add/Edit${kn?` <span class="ae-cnt">${kn}</span>`:''}
-      </button></div>
-      <div class="kas-cell"><button class="ae-btn A" onclick='openModal(${ctx},"KAS","A")'>
-        <span>⊕</span> Add/Edit${an?` <span class="ae-cnt">${an}</span>`:''}
-      </button></div>
+      <div class="linked-cell" onclick='openModal(${ctx},"PLO_MLO")'
+           style="cursor:pointer;flex-direction:column;gap:3px;${pln+mln===0?'':''}">
+        ${linked}
+        <span style="font-size:9px;color:#b0a0cc;margin-top:2px">คลิกเพื่อแก้ไข</span>
+      </div>
+      <div class="kas-cell" style="flex-direction:column;gap:4px;cursor:pointer;" onclick='openModal(${ctx},"KAS","K")'>
+        ${kasPills('K')}
+        <button class="ae-btn K" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${kn?`แก้ไข (${kn})`:'Add K'}</button>
+      </div>
+      <div class="kas-cell" style="flex-direction:column;gap:4px;cursor:pointer;" onclick='openModal(${ctx},"KAS","A")'>
+        ${kasPills('A')}
+        <button class="ae-btn A" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${an?`แก้ไข (${an})`:'Add A'}</button>
+      </div>
+      <div class="kas-cell" style="flex-direction:column;gap:4px;cursor:pointer;" onclick='openModal(${ctx},"KAS","S")'>
+        ${kasPills('S')}
+        <button class="ae-btn S" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${sn?`แก้ไข (${sn})`:'Add S'}</button>
+      </div>
     </div>`;
   }).join('');
 }
@@ -618,12 +821,9 @@ function addCloRow(){
 }
 
 /* ═══════════════ MODAL ═══════════════ */
-function openModal(ctx, mode='KAS', focusType=''){
-  // ctx can come as string from inline onclick
+function openModal(ctx,mode='KAS',focusType=''){
   if(typeof ctx==='string') ctx=JSON.parse(ctx);
   mCtx=ctx; mPanel=mode;
-
-  // setup badge/sub
   let badge='';
   if(ctx.type==='PLO') badge=ctx.code;
   else if(ctx.type==='MLO') badge=ctx.code;
@@ -631,31 +831,22 @@ function openModal(ctx, mode='KAS', focusType=''){
   else badge='Import';
   document.getElementById('m-badge').textContent=badge;
   document.getElementById('m-sub').textContent=`Select the Knowledge, Attitude, and Skill components associated with ${badge}.`;
-
-  // show/hide PLO/MLO toggle tab — only for CLO
   const isClo=ctx.type==='CLO'||ctx.type==='IMPORT_PLO';
   document.getElementById('m-toggle').style.display=isClo?'flex':'none';
-
-  // load temp state
   if(ctx.type==='PLO'){tKas={K:new Set(ploKas[ctx.code].K),A:new Set(ploKas[ctx.code].A),S:new Set(ploKas[ctx.code].S)};tPlo=new Set();tMlo=new Set();}
   else if(ctx.type==='MLO'){tKas={K:new Set(mloKas[ctx.code].K),A:new Set(mloKas[ctx.code].A),S:new Set(mloKas[ctx.code].S)};tPlo=new Set();tMlo=new Set();}
   else if(ctx.type==='CLO'){const cl=COURSES[ctx.courseIdx].clos[ctx.cloIdx];tKas={K:new Set(cl.kas.K),A:new Set(cl.kas.A),S:new Set(cl.kas.S)};tPlo=new Set(cl.plo);tMlo=new Set(cl.mlo);}
   else{tKas={K:new Set(),A:new Set(),S:new Set()};tPlo=new Set();tMlo=new Set();}
-
-  // decide initial panel
-  const startPanel=isClo?'PLO_MLO':'KAS';
-  switchMTab(startPanel, startPanel==='PLO_MLO'?document.getElementById('t-plomlo'):document.getElementById('t-kas'));
-
+  const startPanel = mode==='PLO_MLO' ? 'PLO_MLO' : (isClo?'PLO_MLO':'KAS');
+  const actualMode = mode==='PLO_MLO' ? 'PLO_MLO' : 'KAS';
+  switchMTab(actualMode, actualMode==='PLO_MLO'?document.getElementById('t-plomlo'):document.getElementById('t-kas'));
   buildKasLists(); buildPmLists(); updateCount();
-
   document.getElementById('modal-overlay').classList.add('show');
   document.body.style.overflow='hidden';
-  if(focusType){setTimeout(()=>{const el=document.getElementById('s-'+focusType.toLowerCase());if(el)el.focus();},80);}
+  if(focusType) setTimeout(()=>{const el=document.getElementById('s-'+focusType.toLowerCase());if(el)el.focus();},80);
 }
-
 function closeModal(){document.getElementById('modal-overlay').classList.remove('show');document.body.style.overflow='';}
 function closeBg(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
-
 function switchMTab(panel,btn){
   mPanel=panel;
   document.querySelectorAll('.m-toggle-btn').forEach(b=>b.classList.remove('active'));
@@ -663,33 +854,26 @@ function switchMTab(panel,btn){
   document.getElementById('panel-pm').style.display=panel==='PLO_MLO'?'flex':'none';
   document.getElementById('panel-kas').style.display=panel==='KAS'?'flex':'none';
 }
-
-/* build PLO/MLO list */
 function buildPmLists(){
   document.getElementById('list-plo').innerHTML=PLO_LIST.map(p=>{
     const sel=tPlo.has(p.code);
     return `<div class="pm-item${sel?' selected':''}" id="pi-${p.code}" onclick="togPM('PLO','${p.code}')">
       <div class="pm-check"><div class="pm-check-tick"></div></div>
-      <span class="pm-code">${p.code}</span>
-      <span class="pm-desc">${p.desc}</span>
+      <span class="pm-code">${p.code}</span><span class="pm-desc">${p.desc}</span>
     </div>`;
   }).join('');
   document.getElementById('s-plo').value='';
-
   const allMlos=MLO_GROUPS.flatMap(g=>g.items);
   document.getElementById('list-mlo').innerHTML=allMlos.map(m=>{
     const sel=tMlo.has(m.code);
     const sid=m.code.replace(/\./g,'_');
     return `<div class="pm-item mlo-sel${sel?' selected':''}" id="mi-${sid}" onclick="togPM('MLO','${m.code}')">
       <div class="pm-check"><div class="pm-check-tick"></div></div>
-      <span class="pm-code mlo-code">${m.code}</span>
-      <span class="pm-desc">${m.desc}</span>
+      <span class="pm-code mlo-code">${m.code}</span><span class="pm-desc">${m.desc}</span>
     </div>`;
   }).join('');
   document.getElementById('s-mlo').value='';
 }
-
-/* build KAS lists */
 function buildKasLists(){
   ['K','A','S'].forEach(t=>{
     const data=t==='K'?K_DATA:t==='A'?A_DATA:S_DATA;
@@ -697,24 +881,22 @@ function buildKasLists(){
       const sel=tKas[t].has(item.code);
       return `<div class="kas-item ${t}${sel?' selected':''}" id="ki-${item.code}" onclick="togKas('${t}','${item.code}')">
         <div class="kas-check"><div class="kas-check-tick"></div></div>
-        <span class="kas-code ${t}">${item.code}</span>
-        <span class="kas-label">${item.label}</span>
+        <span class="kas-code ${t}">${item.code}</span><span class="kas-label">${item.label}</span>
       </div>`;
     }).join('');
     document.getElementById('s-'+t.toLowerCase()).value='';
   });
 }
-
 function togPM(type,code){
   const ref=type==='PLO'?tPlo:tMlo;
-  if(ref.has(code))ref.delete(code); else ref.add(code);
+  if(ref.has(code))ref.delete(code);else ref.add(code);
   const sid=(type==='PLO'?'pi-':'mi-')+code.replace(/\./g,'_');
   const el=document.getElementById(sid);
   if(el) el.classList.toggle('selected',ref.has(code));
   updateCount();
 }
 function togKas(t,code){
-  if(tKas[t].has(code))tKas[t].delete(code); else tKas[t].add(code);
+  if(tKas[t].has(code))tKas[t].delete(code);else tKas[t].add(code);
   const el=document.getElementById('ki-'+code);
   if(el){el.classList.toggle('selected',tKas[t].has(code));el.classList.toggle(t,true);}
   updateCount();
@@ -738,7 +920,6 @@ function updateCount(){
   document.getElementById('cnt-plo').textContent=`${pln} เลือก`;
   document.getElementById('cnt-mlo').textContent=`${mln} เลือก`;
 }
-
 function saveModal(){
   if(!mCtx){closeModal();return;}
   if(mCtx.type==='PLO'){ploKas[mCtx.code]={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)};renderPLO();}
@@ -746,12 +927,51 @@ function saveModal(){
   else if(mCtx.type==='CLO'){
     const cl=COURSES[mCtx.courseIdx].clos[mCtx.cloIdx];
     cl.kas={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)};
-    cl.plo=new Set(tPlo); cl.mlo=new Set(tMlo);
+    cl.plo=new Set(tPlo);cl.mlo=new Set(tMlo);
     renderCourseCard();
   }
   closeModal();
   toast(`✓ บันทึกสำเร็จ (${tKas.K.size+tKas.A.size+tKas.S.size+tPlo.size+tMlo.size} รายการ)`);
 }
+
+/* ═══════════════ EXPORT PDF ═══════════════ */
+function exportPDF(section='ALL'){
+  document.getElementById('pdf-menu').style.display='none';
+  const overlay=document.getElementById('pdf-overlay');
+  const msg=document.getElementById('pdf-msg');
+  overlay.classList.add('show');
+  msg.textContent='กำลังเตรียม PDF...';
+
+  setTimeout(()=>{
+    // mark panels to print
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active'));
+    const panels=section==='ALL'?['PLO','MLO','CLO']:
+                 section==='PLO'?['PLO']:
+                 section==='MLO'?['MLO']:['CLO'];
+    panels.forEach(id=>document.getElementById('panel-'+id)?.classList.add('print-active'));
+
+    // if CLO: make sure all CLO courses are visible for print (render all)
+    if(section==='CLO'||section==='ALL'){
+      // already rendered current course; for ALL we'd need to render all — leave as-is for now
+    }
+
+    msg.textContent='กำลังพิมพ์...';
+    setTimeout(()=>{
+      overlay.classList.remove('show');
+      window.print();
+      // cleanup after print
+      setTimeout(()=>{
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active'));
+      },500);
+    },300);
+  },200);
+}
+
+/* ═══════════════ OTHER STUBS ═══════════════ */
+function downloadTemplate(){toast('ดาวน์โหลด Template...','#f59e0b');}
+function importExcel(e){toast('นำเข้าไฟล์: '+e.target.files[0]?.name,'#0891b2');}
+function exportExcel(){toast('กำลัง Export Excel...','#16a34a');}
+function saveData(){toast('✓ บันทึกข้อมูลแล้ว');}
 
 /* ═══════════════ TOAST ═══════════════ */
 let _tt;

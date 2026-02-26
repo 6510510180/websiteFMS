@@ -1,217 +1,746 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLO-MLO KAS Dashboard</title>
-
-<style>
-:root {
-    --primary: #6A1B9A;
-    --secondary: #8E24AA;
-    --light: #F3E5F5;
-    --accent: #BA68C8;
-    --white: #ffffff;
-    --shadow: rgba(106, 27, 154, 0.2);
-}
-
-body {
-    margin: 0;
-    font-family: "Segoe UI", sans-serif;
-    background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
-}
-
-/* Header */
-header {
-    background: var(--primary);
-    color: var(--white);
-    padding: 20px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    box-shadow: 0 4px 10px var(--shadow);
-}
-
-/* Container */
-.container {
-    padding: 40px;
-    max-width: 1200px;
-    margin: auto;
-}
-
-/* Card Layout */
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-}
-
-/* Card */
-.card {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 8px 20px var(--shadow);
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px var(--shadow);
-}
-
-.card h2 {
-    color: var(--primary);
-    margin-bottom: 15px;
-}
-
-/* Table */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th {
-    background: var(--secondary);
-    color: white;
-    padding: 10px;
-}
-
-td {
-    padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-}
-
-tr:hover {
-    background: var(--light);
-}
-
-/* Button */
-.button {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 20px;
-    background: var(--accent);
-    color: white;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.button:hover {
-    background: var(--primary);
-}
-
-footer {
-    text-align: center;
-    padding: 15px;
-    margin-top: 40px;
-    color: var(--primary);
-    font-size: 14px;
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KAS Complete Dashboard - K/A/S Reference Analysis</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Prompt', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 24px;
+      color: #222;
+    }
+    
+    .container { max-width: 1500px; margin: 0 auto; }
+    
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 32px;
+      animation: slideDown 0.6s ease-out;
+    }
+    
+    header h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+      font-weight: 300;
+    }
+    
+    .tab-chooser {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+      min-width: 140px;
+      padding: 14px 28px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .tab-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.3);
+    }
+    
+    .tab-btn.active {
+      background: white;
+      color: #667eea;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      transform: scale(1.05);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(100,100,150,0.1);
+      transition: all 0.3s;
+      border-left: 5px solid #e5e7eb;
+      animation: slideUp 0.6s ease-out;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(100,100,150,0.15);
+    }
+    
+    .stat-card.primary { border-left-color: #667eea; }
+    .stat-card.success { border-left-color: #10b981; }
+    .stat-card.warning { border-left-color: #f59e0b; }
+    .stat-card.info { border-left-color: #3b82f6; }
+    
+    .stat-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #8b5cf6;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    
+    .stat-value {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .stat-sublabel {
+      font-size: 0.95rem;
+      color: #999;
+    }
+    
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .chart-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(100,100,150,0.1);
+      animation: slideUp 0.7s ease-out;
+    }
+    
+    .chart-card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 380px;
+      margin-bottom: 14px;
+    }
+    
+    .chart-legend {
+      display: flex;
+      gap: 28px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #f0f0f0;
+      flex-wrap: wrap;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: #555;
+      font-weight: 500;
+    }
+    
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+    
+    .legend-dot.plo { background: #ef4444; }
+    .legend-dot.mlo { background: #3b82f6; }
+    
+    .divider {
+      height: 2px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+      margin: 40px 0;
+    }
+    
+    .table-section {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(100,100,150,0.1);
+      animation: slideUp 0.8s ease-out;
+    }
+    
+    .table-section h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .search-input {
+      flex: 1;
+      min-width: 240px;
+      padding: 12px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+      background: #f9fafb;
+    }
+    
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 10px 18px;
+      background: #f3f4f6;
+      color: #555;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+    }
+    
+    .filter-btn:hover {
+      background: #f0f0f0;
+      border-color: #d1d5db;
+    }
+    
+    .filter-btn.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+      box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+    }
+    
+    .export-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .export-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16,185,129,0.3);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.96rem;
+    }
+    
+    thead th {
+      background: linear-gradient(to right, #f9fafb, #f3f4f6);
+      padding: 16px 14px;
+      text-align: right;
+      font-weight: 700;
+      color: #374151;
+      border-bottom: 2px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+    }
+    
+    thead th:first-child {
+      text-align: left;
+    }
+    
+    tbody td {
+      padding: 14px;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: right;
+    }
+    
+    tbody td:first-child {
+      text-align: left;
+      font-weight: 700;
+      color: #667eea;
+    }
+    
+    tbody tr {
+      transition: background 0.2s;
+    }
+    
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    
+    .badge.high {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .badge.medium {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .badge.low {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .footnote {
+      color: #888;
+      font-size: 0.9rem;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid #f0f0f0;
+      font-style: italic;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @media (max-width: 1024px) {
+      .charts-grid { grid-template-columns: 1fr; }
+      header h1 { font-size: 2rem; }
+    }
+    
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      header h1 { font-size: 1.5rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .stat-card { padding: 18px; }
+      .stat-value { font-size: 2rem; }
+      .controls { flex-direction: column; align-items: stretch; }
+      .search-input { min-width: 100%; }
+      .filter-buttons { justify-content: flex-start; }
+      table { font-size: 0.85rem; }
+      thead th, tbody td { padding: 10px 8px; }
+    }
+    
+    .total-summary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: 600;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1>📊 KAS Reference Dashboard</h1>
+      <p>วิเคราะห์จำนวนการอ้างอิง PLO/MLO สำหรับระบบ Learning Outcomes</p>
+    </header>
 
-<header>
-PLO – MLO – KAS Dashboard
-</header>
-
-<div class="container">
-    <div class="card-grid">
-
-        <!-- Knowledge Card -->
-        <div class="card">
-            <h2>Knowledge (K)</h2>
-            <table>
-                <tr>
-                    <th>Code</th>
-                    <th>PLO</th>
-                    <th>MLO</th>
-                </tr>
-                <tr>
-                    <td>K1</td>
-                    <td>3</td>
-                    <td>6</td>
-                </tr>
-                <tr>
-                    <td>K4</td>
-                    <td>2</td>
-                    <td>8</td>
-                </tr>
-                <tr>
-                    <td>K21</td>
-                    <td>1</td>
-                    <td>6</td>
-                </tr>
-            </table>
-            <a href="#" class="button">ดูทั้งหมด</a>
-        </div>
-
-        <!-- Attitude Card -->
-        <div class="card">
-            <h2>Attitude (A)</h2>
-            <table>
-                <tr>
-                    <th>Code</th>
-                    <th>PLO</th>
-                    <th>MLO</th>
-                </tr>
-                <tr>
-                    <td>A6</td>
-                    <td>5</td>
-                    <td>8</td>
-                </tr>
-                <tr>
-                    <td>A9</td>
-                    <td>5</td>
-                    <td>8</td>
-                </tr>
-                <tr>
-                    <td>A10</td>
-                    <td>4</td>
-                    <td>8</td>
-                </tr>
-            </table>
-            <a href="#" class="button">ดูทั้งหมด</a>
-        </div>
-
-        <!-- Skill Card -->
-        <div class="card">
-            <h2>Skill (S)</h2>
-            <table>
-                <tr>
-                    <th>Code</th>
-                    <th>PLO</th>
-                    <th>MLO</th>
-                </tr>
-                <tr>
-                    <td>S4</td>
-                    <td>4</td>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <td>S5</td>
-                    <td>3</td>
-                    <td>8</td>
-                </tr>
-                <tr>
-                    <td>S12</td>
-                    <td>2</td>
-                    <td>9</td>
-                </tr>
-            </table>
-            <a href="#" class="button">ดูทั้งหมด</a>
-        </div>
-
+    <!-- Tab Chooser -->
+    <div class="tab-chooser">
+      <button class="tab-btn active" data-tab="K" onclick="switchTab('K')">
+        📚 Knowledge (K1-K114)
+      </button>
+      <button class="tab-btn" data-tab="A" onclick="switchTab('A')">
+        💝 Attitude (A1-A37)
+      </button>
+      <button class="tab-btn" data-tab="S" onclick="switchTab('S')">
+        🎯 Skills (S1-S37)
+      </button>
     </div>
-</div>
 
-<footer>
-© 2026 Curriculum Mapping System | Purple Mangosteen Theme
-</footer>
+    <!-- Statistics Grid -->
+    <div class="stats-grid" id="statsGrid"></div>
 
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h2>🔝 Top 10 รหัสที่ถูกอ้างอิงมากที่สุด</h2>
+        <div class="chart-container">
+          <canvas id="topChart"></canvas>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <span class="legend-dot plo"></span> PLO (Program Level)
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot mlo"></span> MLO (Major Level)
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h2>📊 สัดส่วน PLO vs MLO</h2>
+        <div class="chart-container">
+          <canvas id="distChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Table Section -->
+    <div class="table-section">
+      <h2>📋 ตารางสรุปรายละเอียด</h2>
+      
+      <div class="controls">
+        <input 
+          type="text" 
+          class="search-input" 
+          id="searchInput" 
+          placeholder="🔍 ค้นหารหัส (เช่น K1, A5, S10)..."
+        >
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">
+            ทั้งหมด
+          </button>
+          <button class="filter-btn" data-filter="high" onclick="setFilter('high')">
+            สูง (≥8)
+          </button>
+          <button class="filter-btn" data-filter="medium" onclick="setFilter('medium')">
+            ปานกลาง (4-7)
+          </button>
+          <button class="filter-btn" data-filter="low" onclick="setFilter('low')">
+            ต่ำ (≤3)
+          </button>
+        </div>
+        <button class="export-btn" onclick="exportToCSV()">📥 Export CSV</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>รหัส</th>
+            <th>PLO 📌</th>
+            <th>MLO 🎯</th>
+            <th>รวม ✨</th>
+            <th>ระดับ</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+
+      <div id="summary" class="total-summary"></div>
+      
+      <div class="footnote">
+        💡 หมายเหตุ: นับจำนวนครั้งที่รหัส ปรากฏในแต่ละ PLO/MLO (ไม่นับซ้ำภายใน block เดียวกัน)
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ข้อมูล K/A/S ทั้งหมด
+    const kasData = {
+      K: [
+        {code:"K1",plo:3,mlo:6,total:9},{code:"K2",plo:4,mlo:5,total:9},{code:"K3",plo:4,mlo:3,total:7},{code:"K4",plo:2,mlo:8,total:10},{code:"K5",plo:3,mlo:6,total:9},{code:"K6",plo:1,mlo:2,total:3},{code:"K7",plo:1,mlo:1,total:2},{code:"K8",plo:1,mlo:3,total:4},{code:"K9",plo:1,mlo:0,total:1},{code:"K10",plo:1,mlo:5,total:6},{code:"K11",plo:1,mlo:0,total:1},{code:"K12",plo:0,mlo:1,total:1},{code:"K13",plo:1,mlo:3,total:4},{code:"K14",plo:1,mlo:5,total:6},{code:"K15",plo:1,mlo:1,total:2},{code:"K16",plo:1,mlo:1,total:2},{code:"K17",plo:1,mlo:0,total:1},{code:"K18",plo:1,mlo:4,total:5},{code:"K19",plo:1,mlo:5,total:6},{code:"K20",plo:0,mlo:1,total:1},{code:"K21",plo:1,mlo:7,total:8},{code:"K22",plo:0,mlo:2,total:2},{code:"K23",plo:0,mlo:2,total:2},{code:"K24",plo:0,mlo:2,total:2},{code:"K25",plo:0,mlo:2,total:2},{code:"K26",plo:0,mlo:2,total:2},{code:"K27",plo:0,mlo:2,total:2},{code:"K28",plo:0,mlo:1,total:1},{code:"K29",plo:0,mlo:3,total:3},{code:"K30",plo:0,mlo:2,total:2},{code:"K31",plo:0,mlo:1,total:1},{code:"K32",plo:0,mlo:1,total:1},{code:"K33",plo:0,mlo:3,total:3},{code:"K34",plo:0,mlo:1,total:1},{code:"K35",plo:0,mlo:3,total:3},{code:"K36",plo:0,mlo:2,total:2},{code:"K37",plo:0,mlo:2,total:2},{code:"K38",plo:0,mlo:2,total:2},{code:"K39",plo:0,mlo:3,total:3},{code:"K40",plo:0,mlo:2,total:2},{code:"K41",plo:0,mlo:2,total:2},{code:"K42",plo:0,mlo:2,total:2},{code:"K43",plo:0,mlo:1,total:1},{code:"K44",plo:0,mlo:3,total:3},{code:"K45",plo:0,mlo:4,total:4},{code:"K46",plo:0,mlo:1,total:1},{code:"K47",plo:0,mlo:2,total:2},{code:"K48",plo:0,mlo:1,total:1},{code:"K49",plo:0,mlo:1,total:1},{code:"K50",plo:0,mlo:1,total:1},{code:"K51",plo:0,mlo:1,total:1},{code:"K52",plo:0,mlo:1,total:1},{code:"K53",plo:0,mlo:1,total:1},{code:"K54",plo:0,mlo:2,total:2},{code:"K55",plo:0,mlo:1,total:1},{code:"K56",plo:0,mlo:1,total:1},{code:"K57",plo:0,mlo:1,total:1},{code:"K58",plo:0,mlo:1,total:1},{code:"K59",plo:0,mlo:1,total:1},{code:"K60",plo:0,mlo:1,total:1},{code:"K61",plo:0,mlo:3,total:3},{code:"K62",plo:0,mlo:1,total:1},{code:"K63",plo:0,mlo:1,total:1},{code:"K64",plo:1,mlo:5,total:6},{code:"K65",plo:0,mlo:3,total:3},{code:"K66",plo:0,mlo:3,total:3},{code:"K67",plo:0,mlo:3,total:3},{code:"K68",plo:0,mlo:2,total:2},{code:"K69",plo:1,mlo:0,total:1},{code:"K70",plo:0,mlo:2,total:2},{code:"K71",plo:0,mlo:1,total:1},{code:"K72",plo:0,mlo:1,total:1},{code:"K73",plo:0,mlo:1,total:1},{code:"K74",plo:0,mlo:1,total:1},{code:"K75",plo:0,mlo:1,total:1},{code:"K76",plo:0,mlo:1,total:1},{code:"K77",plo:0,mlo:1,total:1},{code:"K78",plo:0,mlo:1,total:1},{code:"K79",plo:0,mlo:1,total:1},{code:"K80",plo:0,mlo:1,total:1},{code:"K81",plo:0,mlo:1,total:1},{code:"K82",plo:0,mlo:1,total:1},{code:"K83",plo:0,mlo:1,total:1},{code:"K84",plo:0,mlo:1,total:1},{code:"K85",plo:0,mlo:2,total:2},{code:"K86",plo:0,mlo:1,total:1},{code:"K87",plo:0,mlo:1,total:1},{code:"K88",plo:0,mlo:1,total:1},{code:"K89",plo:0,mlo:1,total:1},{code:"K90",plo:0,mlo:1,total:1},{code:"K91",plo:0,mlo:1,total:1},{code:"K92",plo:0,mlo:1,total:1},{code:"K93",plo:0,mlo:1,total:1},{code:"K94",plo:0,mlo:2,total:2},{code:"K95",plo:0,mlo:2,total:2},{code:"K96",plo:0,mlo:2,total:2},{code:"K97",plo:0,mlo:2,total:2},{code:"K98",plo:0,mlo:2,total:2},{code:"K99",plo:0,mlo:2,total:2},{code:"K100",plo:0,mlo:2,total:2},{code:"K101",plo:0,mlo:2,total:2},{code:"K102",plo:0,mlo:2,total:2},{code:"K103",plo:0,mlo:2,total:2},{code:"K104",plo:0,mlo:2,total:2},{code:"K105",plo:0,mlo:2,total:2},{code:"K106",plo:0,mlo:2,total:2},{code:"K107",plo:0,mlo:2,total:2},{code:"K108",plo:0,mlo:2,total:2},{code:"K109",plo:0,mlo:2,total:2},{code:"K110",plo:0,mlo:2,total:2},{code:"K111",plo:0,mlo:2,total:2},{code:"K112",plo:0,mlo:2,total:2},{code:"K113",plo:0,mlo:2,total:2},{code:"K114",plo:0,mlo:2,total:2}
+      ],
+      A: [
+        {code:"A1",plo:2,mlo:7,total:9},{code:"A2",plo:4,mlo:12,total:16},{code:"A3",plo:1,mlo:6,total:7},{code:"A4",plo:2,mlo:11,total:13},{code:"A5",plo:1,mlo:9,total:10},{code:"A6",plo:4,mlo:12,total:16},{code:"A7",plo:0,mlo:9,total:9},{code:"A8",plo:3,mlo:11,total:14},{code:"A9",plo:4,mlo:11,total:15},{code:"A10",plo:4,mlo:11,total:15},{code:"A11",plo:2,mlo:11,total:13},{code:"A12",plo:4,mlo:12,total:16},{code:"A13",plo:1,mlo:6,total:7},{code:"A14",plo:2,mlo:5,total:7},{code:"A15",plo:2,mlo:9,total:11},{code:"A16",plo:2,mlo:11,total:13},{code:"A17",plo:1,mlo:5,total:6},{code:"A18",plo:0,mlo:7,total:7},{code:"A19",plo:0,mlo:12,total:12},{code:"A20",plo:0,mlo:9,total:9},{code:"A21",plo:0,mlo:2,total:2},{code:"A22",plo:0,mlo:2,total:2},{code:"A23",plo:0,mlo:2,total:2},{code:"A24",plo:0,mlo:0,total:0},{code:"A25",plo:0,mlo:0,total:0},{code:"A26",plo:0,mlo:0,total:0},{code:"A27",plo:0,mlo:0,total:0},{code:"A28",plo:0,mlo:0,total:0},{code:"A29",plo:0,mlo:0,total:0},{code:"A30",plo:0,mlo:0,total:0},{code:"A31",plo:0,mlo:0,total:0},{code:"A32",plo:0,mlo:0,total:0},{code:"A33",plo:0,mlo:0,total:0},{code:"A34",plo:0,mlo:0,total:0},{code:"A35",plo:0,mlo:0,total:0},{code:"A36",plo:0,mlo:0,total:0},{code:"A37",plo:0,mlo:0,total:0}
+      ],
+      S: [
+        {code:"S1",plo:4,mlo:9,total:13},{code:"S2",plo:2,mlo:9,total:11},{code:"S3",plo:3,mlo:5,total:8},{code:"S4",plo:3,mlo:12,total:15},{code:"S5",plo:3,mlo:7,total:10},{code:"S6",plo:1,mlo:5,total:6},{code:"S7",plo:4,mlo:12,total:16},{code:"S8",plo:4,mlo:13,total:17},{code:"S9",plo:2,mlo:8,total:10},{code:"S10",plo:2,mlo:7,total:9},{code:"S11",plo:3,mlo:5,total:8},{code:"S12",plo:2,mlo:12,total:14},{code:"S13",plo:2,mlo:9,total:11},{code:"S14",plo:2,mlo:6,total:8},{code:"S15",plo:1,mlo:12,total:13},{code:"S16",plo:2,mlo:13,total:15},{code:"S17",plo:3,mlo:7,total:10},{code:"S18",plo:1,mlo:6,total:7},{code:"S19",plo:1,mlo:5,total:6},{code:"S20",plo:1,mlo:3,total:4},{code:"S21",plo:1,mlo:12,total:13},{code:"S22",plo:1,mlo:10,total:11},{code:"S23",plo:1,mlo:6,total:7},{code:"S24",plo:1,mlo:6,total:7},{code:"S25",plo:1,mlo:2,total:3},{code:"S26",plo:0,mlo:6,total:6},{code:"S27",plo:0,mlo:5,total:5},{code:"S28",plo:0,mlo:10,total:10},{code:"S29",plo:0,mlo:4,total:4},{code:"S30",plo:0,mlo:3,total:3},{code:"S31",plo:0,mlo:3,total:3},{code:"S32",plo:0,mlo:7,total:7},{code:"S33",plo:0,mlo:5,total:5},{code:"S34",plo:0,mlo:7,total:7},{code:"S35",plo:0,mlo:8,total:8},{code:"S36",plo:0,mlo:3,total:3},{code:"S37",plo:0,mlo:4,total:4}
+      ]
+    };
+
+    let currentTab = 'K';
+    let currentFilter = 'all';
+    let topChartInstance = null;
+    let distChartInstance = null;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      renderStats();
+      renderTable();
+      renderCharts();
+      document.getElementById('searchInput').addEventListener('input', renderTable);
+    });
+
+    // Switch Tab
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+      });
+      renderStats();
+      renderTable();
+      renderCharts();
+    }
+
+    // Set Filter
+    function setFilter(f) {
+      currentFilter = f;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === f);
+      });
+      renderTable();
+    }
+
+    // Render Stats
+    function renderStats() {
+      const data = kasData[currentTab];
+      const used = data.filter(x => x.total > 0).length;
+      const total = data.length;
+      const sumTotal = data.reduce((s, x) => s + x.total, 0);
+      const sumPlo = data.reduce((s, x) => s + x.plo, 0);
+      const sumMlo = data.reduce((s, x) => s + x.mlo, 0);
+      const avg = (sumTotal / total).toFixed(2);
+      const topItem = [...data].sort((a, b) => b.total - a.total)[0];
+
+      document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card primary">
+          <div class="stat-label">📊 รหัสที่ถูกอ้างอิง</div>
+          <div class="stat-value">${used}</div>
+          <div class="stat-sublabel">จาก ${total} รหัส (${Math.round(used/total*100)}%)</div>
+        </div>
+        <div class="stat-card success">
+          <div class="stat-label">🔗 ผลรวมทั้งหมด</div>
+          <div class="stat-value">${sumTotal}</div>
+          <div class="stat-sublabel">PLO (${sumPlo}) + MLO (${sumMlo})</div>
+        </div>
+        <div class="stat-card warning">
+          <div class="stat-label">📈 ค่าเฉลี่ย</div>
+          <div class="stat-value">${avg}</div>
+          <div class="stat-sublabel">อ้างอิงต่อรหัส</div>
+        </div>
+        <div class="stat-card info">
+          <div class="stat-label">⭐ Top Reference</div>
+          <div class="stat-value">${topItem.code}</div>
+          <div class="stat-sublabel">${topItem.total} ครั้ง (${topItem.plo} PLO + ${topItem.mlo} MLO)</div>
+        </div>
+      `;
+    }
+
+    // Render Table
+    function renderTable() {
+      let data = kasData[currentTab];
+      const query = document.getElementById('searchInput').value.toUpperCase();
+
+      if (query) {
+        data = data.filter(x => x.code.toUpperCase().includes(query));
+      }
+
+      if (currentFilter === 'high') {
+        data = data.filter(x => x.total >= 8);
+      } else if (currentFilter === 'medium') {
+        data = data.filter(x => x.total >= 4 && x.total < 8);
+      } else if (currentFilter === 'low') {
+        data = data.filter(x => x.total <= 3);
+      }
+
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = data.map(item => {
+        let badgeClass = item.total >= 8 ? 'high' : item.total >= 4 ? 'medium' : 'low';
+        let levelText = item.total >= 8 ? 'สูง' : item.total >= 4 ? 'ปานกลาง' : 'ต่ำ';
+        return `
+          <tr>
+            <td>${item.code}</td>
+            <td>${item.plo}</td>
+            <td>${item.mlo}</td>
+            <td><strong>${item.total}</strong></td>
+            <td><span class="badge ${badgeClass}">${levelText}</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      // Summary
+      const sumPlo = data.reduce((s, x) => s + x.plo, 0);
+      const sumMlo = data.reduce((s, x) => s + x.mlo, 0);
+      document.getElementById('summary').innerHTML = 
+        `ผลรวมข้อมูลที่ปรากฏ: PLO ${sumPlo} + MLO ${sumMlo} = ${sumPlo + sumMlo} ครั้ง`;
+    }
+
+    // Render Charts
+    function renderCharts() {
+      const data = kasData[currentTab];
+      const top10 = [...data].sort((a, b) => b.total - a.total).slice(0, 10);
+      const sumPlo = data.reduce((s, x) => s + x.plo, 0);
+      const sumMlo = data.reduce((s, x) => s + x.mlo, 0);
+
+      // Destroy old charts
+      if (topChartInstance) topChartInstance.destroy();
+      if (distChartInstance) distChartInstance.destroy();
+
+      // Top 10 Chart
+      const topCtx = document.getElementById('topChart').getContext('2d');
+      topChartInstance = new Chart(topCtx, {
+        type: 'bar',
+        data: {
+          labels: top10.map(x => x.code),
+          datasets: [
+            {
+              label: 'PLO',
+              data: top10.map(x => x.plo),
+              backgroundColor: '#ef4444',
+              borderRadius: 8,
+              borderSkipped: false
+            },
+            {
+              label: 'MLO',
+              data: top10.map(x => x.mlo),
+              backgroundColor: '#3b82f6',
+              borderRadius: 8,
+              borderSkipped: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                usePointStyle: true,
+                padding: 16,
+                font: { size: 12, weight: '600' }
+              }
+            }
+          },
+          scales: {
+            x: {
+              stacked: true,
+              grid: { display: false },
+              ticks: { font: { size: 11 } }
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              ticks: { font: { size: 11 } }
+            }
+          }
+        }
+      });
+
+      // Distribution Chart
+      const distCtx = document.getElementById('distChart').getContext('2d');
+      distChartInstance = new Chart(distCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['PLO', 'MLO'],
+          datasets: [{
+            data: [sumPlo, sumMlo],
+            backgroundColor: ['#ef4444', '#3b82f6'],
+            borderColor: 'white',
+            borderWidth: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                usePointStyle: true,
+                padding: 20,
+                font: { size: 12, weight: '600' }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Export CSV
+    function exportToCSV() {
+      let data = kasData[currentTab];
+      const query = document.getElementById('searchInput').value.toUpperCase();
+
+      if (query) {
+        data = data.filter(x => x.code.toUpperCase().includes(query));
+      }
+
+      if (currentFilter === 'high') {
+        data = data.filter(x => x.total >= 8);
+      } else if (currentFilter === 'medium') {
+        data = data.filter(x => x.total >= 4 && x.total < 8);
+      } else if (currentFilter === 'low') {
+        data = data.filter(x => x.total <= 3);
+      }
+
+      let csv = 'รหัส,PLO,MLO,รวม\n';
+      csv += data.map(x => `${x.code},${x.plo},${x.mlo},${x.total}`).join('\n');
+
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+      element.setAttribute('download', `KAS-${currentTab}-${new Date().toISOString().split('T')[0]}.csv`);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+  </script>
 </body>
 </html>

@@ -8,263 +8,122 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root {
-  --purple: #7F13EC;
-  --purple-dark: #5c0db0;
-  --purple-mid: #9B6DD1;
-  --purple-light: #F3EEFF;
-  --purple-bg: #EDE7F3;
-  --teal: #0891b2;
-  --teal-light: #e0f7fa;
-  --text: #21111C;
-  --text-sub: #64748B;
-  --border: rgba(0,0,0,0.10);
-  --white: #FFFFFF;
-  --bg: #F7F4FC;
-  --red: #EF4444;
-  --green: #22c55e;
-  --amber: #f59e0b;
+  --purple:#7F13EC; --purple-dark:#5c0db0; --purple-mid:#9B6DD1;
+  --purple-light:#F3EEFF; --purple-bg:#EDE7F3;
+  --teal:#0891b2; --teal-light:#e0f7fa;
+  --text:#21111C; --text-sub:#64748B; --border:rgba(0,0,0,0.10);
+  --white:#FFFFFF; --bg:#F7F4FC;
+  --red:#EF4444; --green:#22c55e; --amber:#f59e0b;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Noto Sans Thai', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; font-size: 14px; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:14px;}
 
-/* ── TOPBAR ── */
-.topbar {
-  width: 100%; height: 64px;
-  background: var(--white); border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; padding: 0 40px; gap: 16px;
-  position: sticky; top: 0; z-index: 200;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-}
-.topbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.topbar-logo-icon {
-  width: 32px; height: 32px; background: var(--purple);
-  border-radius: 8px; display: flex; align-items: center; justify-content: center;
-}
-.topbar-logo-icon svg { width: 18px; height: 18px; fill: white; }
-.topbar-brand { font-family: 'Lexend', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); }
-.topbar-nav { display: flex; align-items: center; gap: 4px; margin-left: 32px; flex: 1; }
-.topbar-nav a {
-  padding: 8px 16px; border-radius: 8px;
-  font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 600;
-  color: var(--text-sub); text-decoration: none; transition: .18s; white-space: nowrap;
-}
-.topbar-nav a:hover { background: var(--purple-light); color: var(--purple); }
-.topbar-nav a.active { color: var(--purple); border-bottom: 2px solid var(--purple); border-radius: 0; padding-bottom: 6px; }
-.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-.avatar {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--purple-bg); border: 2px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px; color: var(--purple); cursor: pointer;
-}
+.topbar{width:100%;height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;gap:16px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+.topbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.topbar-logo-icon{width:32px;height:32px;background:var(--purple);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.topbar-logo-icon svg{width:18px;height:18px;fill:white;}
+.topbar-brand{font-family:'Lexend',sans-serif;font-size:17px;font-weight:700;color:var(--text);}
+.topbar-nav{display:flex;align-items:center;gap:4px;margin-left:32px;flex:1;}
+.topbar-nav a{padding:8px 16px;border-radius:8px;font-family:'Lexend',sans-serif;font-size:14px;font-weight:600;color:var(--text-sub);text-decoration:none;transition:.18s;white-space:nowrap;}
+.topbar-nav a:hover{background:var(--purple-light);color:var(--purple);}
+.topbar-nav a.active{color:var(--purple);border-bottom:2px solid var(--purple);border-radius:0;padding-bottom:6px;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--purple-bg);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--purple);cursor:pointer;}
 
-/* ── PAGE ── */
-.page { max-width: 100%; padding: 32px 40px 80px; }
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.18s;white-space:nowrap;}
+.btn svg{width:15px;height:15px;fill:currentColor;}
+.btn-purple{background:var(--purple);color:white;box-shadow:0 4px 10px rgba(127,19,236,.2);}
+.btn-purple:hover{background:var(--purple-dark);transform:translateY(-1px);}
+.btn-outline{background:white;color:var(--purple);border:1.5px solid var(--purple);}
+.btn-outline:hover{background:var(--purple-light);}
+.btn-green{background:#16a34a;color:white;}
+.btn-green:hover{background:#15803d;}
+.btn-amber{background:#d97706;color:white;}
+.btn-amber:hover{background:#b45309;}
+#fileInput{display:none;}
 
-.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
-.page-title { font-size: 26px; font-weight: 900; color: var(--text); }
-.page-subtitle { font-size: 14px; color: var(--text-sub); margin-top: 4px; max-width: 580px; line-height: 1.5; }
+/* Unsaved */
+.unsaved-badge{display:inline-flex;align-items:center;gap:6px;background:#fff7ed;border:1.5px solid #fed7aa;color:#c2410c;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;transition:opacity .25s;}
+.unsaved-badge.show{opacity:1;}
+.unsaved-dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-.header-actions { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
-.btn-import {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--purple); color: white; border: none;
-  padding: 10px 20px; border-radius: 10px;
-  font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700;
-  cursor: pointer; box-shadow: 0 4px 12px rgba(127,19,236,0.25);
-  transition: .18s; white-space: nowrap;
-}
-.btn-import:hover { background: var(--purple-dark); transform: translateY(-1px); }
-.btn-import svg { width: 16px; height: 16px; fill: white; }
-.btn-template {
-  display: flex; align-items: center; gap: 8px;
-  background: white; color: var(--purple);
-  border: 1.5px solid var(--purple);
-  padding: 9px 18px; border-radius: 10px;
-  font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: .18s; white-space: nowrap;
-}
-.btn-template:hover { background: var(--purple-light); }
-.btn-template svg { width: 16px; height: 16px; fill: var(--purple); }
-#fileInput { display: none; }
+.page{max-width:100%;padding:32px 40px 80px;}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
+.page-title{font-size:26px;font-weight:900;color:var(--text);}
+.page-subtitle{font-size:14px;color:var(--text-sub);margin-top:4px;max-width:580px;line-height:1.5;}
+.header-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;}
 
-/* ── TABLE WRAPPER ── */
-.table-wrapper {
-  background: var(--white);
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(127,19,236,0.08);
-  overflow: auto;
-  border: 1px solid var(--border);
-}
+.table-wrapper{background:var(--white);border-radius:14px;box-shadow:0 2px 12px rgba(127,19,236,.08);overflow:auto;border:1px solid var(--border);}
+.matrix-table{border-collapse:collapse;min-width:100%;font-size:12px;}
+.matrix-table th,.matrix-table td{border:1px solid #ede8f5;white-space:nowrap;}
+.th-empty{background:#fafafa;min-width:280px;max-width:300px;padding:10px 16px;font-size:13px;font-weight:700;color:var(--text);border-bottom:2px solid #ddd;text-align:left;position:sticky;left:0;z-index:10;white-space:normal;}
+.th-group-plo{background:#f3e8ff;color:var(--purple);text-align:center;padding:10px 8px;font-weight:700;font-size:12px;}
+.th-group-mlo{background:#e0f7fa;color:var(--teal);text-align:center;padding:10px 8px;font-weight:700;font-size:12px;}
+.th-col-plo{background:#faf0ff;color:var(--purple);text-align:center;padding:10px 10px;font-weight:700;font-size:11px;min-width:40px;}
+.th-col-mlo{background:#f0fafd;color:var(--teal);text-align:center;padding:10px 8px;font-weight:700;font-size:11px;min-width:38px;}
+.td-label{background:var(--white);position:sticky;left:0;z-index:5;padding:10px 16px;min-width:280px;max-width:300px;border-right:2px solid #e0d8f0;white-space:normal;line-height:1.5;}
+.td-label .row-group{font-size:11px;font-weight:700;color:var(--purple);margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px;}
+.td-label .row-title{font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.td-label .row-desc{font-size:11px;color:var(--text-sub);line-height:1.4;white-space:normal;max-width:260px;}
+.td-check{text-align:center;padding:0;vertical-align:middle;cursor:pointer;transition:background .12s;}
+.td-check:hover{background:var(--purple-light);}
+.check-circle{width:22px;height:22px;border-radius:50%;border:2px solid #d1c4e9;margin:0 auto;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.check-circle.checked{background:var(--purple);border-color:var(--purple);}
+.check-circle.checked::after{content:'';width:10px;height:6px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translateY(-1px);display:block;}
+.td-check.mlo-col .check-circle.checked{background:var(--teal);border-color:var(--teal);}
+.td-check.mlo-col:hover{background:var(--teal-light);}
+tbody tr:nth-child(even) .td-label{background:#fdfbff;}
+tbody tr:nth-child(even){background:#fdfbff;}
+tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
 
-/* ── MATRIX TABLE ── */
-.matrix-table {
-  border-collapse: collapse;
-  min-width: 100%;
-  font-size: 12px;
-}
-.matrix-table th, .matrix-table td {
-  border: 1px solid #ede8f5;
-  white-space: nowrap;
-}
+.stats-bar{display:flex;align-items:center;gap:20px;padding:12px 20px;border-top:1px solid var(--border);background:#faf7ff;font-size:13px;}
+.stat-pill{display:flex;align-items:center;gap:6px;font-weight:600;}
+.stat-dot{width:8px;height:8px;border-radius:50%;}
+.stat-dot.plo{background:var(--purple);}
+.stat-dot.mlo{background:var(--teal);}
 
-/* group headers */
-.th-empty {
-  background: #fafafa; min-width: 280px; max-width: 300px;
-  padding: 10px 16px; font-size: 13px; font-weight: 700;
-  color: var(--text); border-bottom: 2px solid #ddd;
-  text-align: left; position: sticky; left: 0; z-index: 10;
-  white-space: normal;
-}
-.th-group-plo {
-  background: #f3e8ff; color: var(--purple);
-  text-align: center; padding: 10px 8px; font-weight: 700; font-size: 12px;
-}
-.th-group-mlo {
-  background: #e0f7fa; color: var(--teal);
-  text-align: center; padding: 10px 8px; font-weight: 700; font-size: 12px;
-}
-.th-col-plo {
-  background: #faf0ff; color: var(--purple);
-  text-align: center; padding: 10px 10px; font-weight: 700; font-size: 11px;
-  min-width: 40px;
-}
-.th-col-mlo {
-  background: #f0fafd; color: var(--teal);
-  text-align: center; padding: 10px 8px; font-weight: 700; font-size: 11px;
-  min-width: 38px;
-}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px;}
+.info-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:16px 18px;display:flex;gap:12px;align-items:flex-start;}
+.info-card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.info-card-icon svg{width:18px;height:18px;}
+.info-card-icon.blue{background:#eff6ff;}
+.info-card-icon.blue svg{fill:#3b82f6;}
+.info-card-icon.amber{background:#fffbeb;}
+.info-card-icon.amber svg{fill:var(--amber);}
+.info-card-icon.green{background:#f0fdf4;}
+.info-card-icon.green svg{fill:var(--green);}
+.info-card strong{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.info-card p{font-size:12px;color:var(--text-sub);line-height:1.5;}
 
-/* row */
-.td-label {
-  background: var(--white); position: sticky; left: 0; z-index: 5;
-  padding: 10px 16px; min-width: 280px; max-width: 300px;
-  border-right: 2px solid #e0d8f0;
-  white-space: normal; line-height: 1.5;
-}
-.td-label .row-group {
-  font-size: 11px; font-weight: 700; color: var(--purple);
-  margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.3px;
-}
-.td-label .row-title {
-  font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 2px;
-}
-.td-label .row-desc {
-  font-size: 11px; color: var(--text-sub); line-height: 1.4;
-  white-space: normal; max-width: 260px;
-}
-.td-check {
-  text-align: center; padding: 0; vertical-align: middle;
-  cursor: pointer; transition: background .12s;
-}
-.td-check:hover { background: var(--purple-light); }
-.check-circle {
-  width: 22px; height: 22px; border-radius: 50%;
-  border: 2px solid #d1c4e9;
-  margin: 0 auto; transition: all .15s;
-  display: flex; align-items: center; justify-content: center;
-}
-.check-circle.checked {
-  background: var(--purple); border-color: var(--purple);
-}
-.check-circle.checked::after {
-  content: '';
-  width: 10px; height: 6px;
-  border-left: 2px solid white; border-bottom: 2px solid white;
-  transform: rotate(-45deg) translateY(-1px);
-  display: block;
-}
-.td-check.mlo-col .check-circle.checked {
-  background: var(--teal); border-color: var(--teal);
-}
-.td-check.mlo-col:hover { background: var(--teal-light); }
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 20px;border-top:1px solid var(--border);font-size:13px;color:var(--text-sub);}
+.page-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:white;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:.15s;color:var(--text-sub);}
+.page-btn:hover{background:var(--purple-light);color:var(--purple);border-color:var(--purple);}
+.page-btn.active{background:var(--purple);color:white;border-color:var(--purple);}
+.page-btn:disabled{opacity:.4;cursor:not-allowed;}
 
-tbody tr:nth-child(even) .td-label { background: #fdfbff; }
-tbody tr:nth-child(even) { background: #fdfbff; }
-tbody tr:hover .td-label, tbody tr:hover { background: #f5eeff !important; }
+.toast{position:fixed;bottom:28px;right:28px;background:#1a1a2e;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-/* ── STATS BAR ── */
-.stats-bar {
-  display: flex; align-items: center; gap: 20px;
-  padding: 12px 20px;
-  border-top: 1px solid var(--border);
-  background: #faf7ff;
-  font-size: 13px;
+/* ── PRINT ── */
+@media print {
+  .topbar,.header-actions,.info-grid,.pagination,.unsaved-badge{display:none!important;}
+  body{background:white;}
+  .page{padding:10px;}
+  .table-wrapper{box-shadow:none;border:1px solid #ccc;overflow:visible;}
+  .matrix-table{font-size:8px;}
+  .td-label{position:relative;min-width:160px;}
+  .stats-bar{background:white;}
+  .th-empty{position:relative;}
 }
-.stat-pill {
-  display: flex; align-items: center; gap: 6px;
-  font-weight: 600;
-}
-.stat-dot { width: 8px; height: 8px; border-radius: 50%; }
-.stat-dot.plo { background: var(--purple); }
-.stat-dot.mlo { background: var(--teal); }
-
-/* ── INFO CARDS ── */
-.info-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 14px; margin-top: 20px;
-}
-.info-card {
-  background: var(--white); border-radius: 12px;
-  border: 1px solid var(--border);
-  padding: 16px 18px;
-  display: flex; gap: 12px; align-items: flex-start;
-}
-.info-card-icon {
-  width: 36px; height: 36px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.info-card-icon svg { width: 18px; height: 18px; }
-.info-card-icon.blue { background: #eff6ff; }
-.info-card-icon.blue svg { fill: #3b82f6; }
-.info-card-icon.amber { background: #fffbeb; }
-.info-card-icon.amber svg { fill: var(--amber); }
-.info-card-icon.green { background: #f0fdf4; }
-.info-card-icon.green svg { fill: var(--green); }
-.info-card strong { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-.info-card p { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
-
-/* ── TOAST ── */
-.toast {
-  position: fixed; bottom: 28px; right: 28px;
-  background: #1a1a2e; color: white;
-  padding: 12px 18px; border-radius: 12px;
-  font-size: 13px; font-weight: 600;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  display: flex; align-items: center; gap: 10px;
-  transform: translateY(80px); opacity: 0;
-  transition: all .3s cubic-bezier(.34,1.56,.64,1);
-  z-index: 9999; pointer-events: none;
-}
-.toast.show { transform: translateY(0); opacity: 1; }
-.toast-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-
-/* ── PAGINATION ── */
-.pagination {
-  display: flex; align-items: center; justify-content: flex-end;
-  gap: 8px; padding: 12px 20px;
-  border-top: 1px solid var(--border);
-  font-size: 13px; color: var(--text-sub);
-}
-.page-btn {
-  width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
-  background: white; cursor: pointer; font-size: 13px; font-weight: 600;
-  display: flex; align-items: center; justify-content: center;
-  transition: .15s; color: var(--text-sub);
-}
-.page-btn:hover { background: var(--purple-light); color: var(--purple); border-color: var(--purple); }
-.page-btn.active { background: var(--purple); color: white; border-color: var(--purple); }
-.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 </style>
 </head>
 <body>
 
-<!-- ── TOPBAR ── -->
 <header class="topbar">
   <a class="topbar-logo" href="#">
-    <div class="topbar-logo-icon">
-      <svg viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg>
-    </div>
+    <div class="topbar-logo-icon"><svg viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg></div>
     <span class="topbar-brand">ระบบจัดการผลลัพธ์การเรียนรู้</span>
   </a>
   <nav class="topbar-nav">
@@ -275,11 +134,11 @@ tbody tr:hover .td-label, tbody tr:hover { background: #f5eeff !important; }
     <a href="kas.html">KAS</a>
   </nav>
   <div class="topbar-right">
+    <div class="unsaved-badge" id="unsavedBadge"><div class="unsaved-dot"></div>ยังไม่ได้บันทึก</div>
     <div class="avatar">A</div>
   </div>
 </header>
 
-<!-- ── PAGE ── -->
 <main class="page">
   <div class="page-header">
     <div>
@@ -287,19 +146,30 @@ tbody tr:hover .td-label, tbody tr:hover { background: #f5eeff !important; }
       <div class="page-subtitle">PLOs & MLOs กับวิสัยทัศน์ พันธกิจ คุณลักษณะของบัณฑิต และความต้องการของผู้มีส่วนได้ส่วนเสีย</div>
     </div>
     <div class="header-actions">
-      <button class="btn-template" onclick="downloadTemplate()">
+      <button class="btn btn-outline" onclick="downloadTemplate()">
         <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
         Template
       </button>
-      <button class="btn-import" onclick="document.getElementById('fileInput').click()">
+      <button class="btn btn-purple" onclick="document.getElementById('fileInput').click()">
         <svg viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
         Import Excel
+      </button>
+      <button class="btn btn-green" onclick="exportExcel()">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"/></svg>
+        Export Excel
+      </button>
+      <button class="btn btn-amber" onclick="exportPDF()">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/></svg>
+        Export PDF
+      </button>
+      <button class="btn btn-outline" onclick="saveData()" style="color:#16a34a;border-color:#16a34a;">
+        <svg viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+        บันทึก
       </button>
     </div>
     <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="importExcel(event)">
   </div>
 
-  <!-- TABLE -->
   <div class="table-wrapper">
     <div style="overflow:auto">
       <table class="matrix-table" id="matrixTable">
@@ -307,285 +177,76 @@ tbody tr:hover .td-label, tbody tr:hover { background: #f5eeff !important; }
         <tbody id="matrixBody"></tbody>
       </table>
     </div>
-
-    <!-- STATS -->
     <div class="stats-bar" id="statsBar"></div>
-
-    <!-- PAGINATION -->
     <div class="pagination" id="pagination"></div>
   </div>
 
-  <!-- INFO CARDS -->
   <div class="info-grid">
     <div class="info-card">
-      <div class="info-card-icon blue">
-        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-      </div>
-      <div>
-        <strong>วิธีใช้งาน</strong>
-        <p>คลิกที่ช่องตัดกันระหว่างวิสัยทัศน์/พันธกิจ กับ PLOs/MLOs เพื่อเลือกความสอดคล้อง ระบบจะบันทึกทันทีโดยอัตโนมัติ</p>
-      </div>
+      <div class="info-card-icon blue"><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg></div>
+      <div><strong>วิธีใช้งาน</strong><p>คลิกที่ช่องตัดกันเพื่อเลือกความสอดคล้อง แล้วกด "บันทึก" เพื่อเก็บข้อมูล</p></div>
     </div>
     <div class="info-card">
-      <div class="info-card-icon amber">
-        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-      </div>
-      <div>
-        <strong>ข้อสังเกต</strong>
-        <p>มาตรฐาน AUN-QA วิสัยทัศน์และพันธกิจควรสอดคล้องกับ PLOs อย่างน้อย 1 ข้อเพื่อให้มั่นใจว่าหลักสูตรตอบสนองความต้องการของสังคม</p>
-      </div>
+      <div class="info-card-icon amber"><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div>
+      <div><strong>ข้อสังเกต</strong><p>มาตรฐาน AUN-QA วิสัยทัศน์และพันธกิจควรสอดคล้องกับ PLOs อย่างน้อย 1 ข้อ</p></div>
     </div>
     <div class="info-card">
-      <div class="info-card-icon green">
-        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h4a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
-      </div>
-      <div>
-        <strong>การนำไปใช้</strong>
-        <p>สามารถ Export ตารางนี้เพื่อประกอบในรายงาน Self-Assessment Report (SAR) หมวดที่ 1 ได้โดยตรง</p>
-      </div>
+      <div class="info-card-icon green"><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h4a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg></div>
+      <div><strong>การนำไปใช้</strong><p>Export ตารางนี้เพื่อประกอบใน Self-Assessment Report (SAR) หมวดที่ 1</p></div>
     </div>
   </div>
 </main>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <div class="toast-dot" id="toastDot"></div>
-  <span id="toastMsg">บันทึกสำเร็จ</span>
-</div>
+<div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
 
 <script>
-// ── PLO / MLO columns from PDF ──
+const STORAGE_KEY = 'fms_alignment_matrix';
 const PLO_COLS = ['1','2','3','4','5','6','7','8','9'];
 const MLO_COLS = ['1.1','1.2','1.3','2.1','2.2','2.3','3.1','3.2','4.1','4.2','5.1','5.2','6.1','6.2'];
-const ALL_COLS = [...PLO_COLS.map(c=>'PLO '+c), ...MLO_COLS.map(c=>'MLO '+c)];
+const ALL_COLS = [...PLO_COLS.map(c=>'PLO '+c),...MLO_COLS.map(c=>'MLO '+c)];
 
-// ── Initial data from PDF ──
 const DEFAULT_ROWS = [
-  {
-    group: 'Vision (ระดับมหาวิทยาลัย)',
-    title: 'Vision (ระดับมหาวิทยาลัย)',
-    desc: 'มหาวิทยาลัยแห่งคุณค่าเพื่อขับเคลื่อนการพัฒนาที่ยั่งยืนระดับแนวหน้าของโลก',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Vision (ระดับคณะ)',
-    title: 'Vision (ระดับคณะ)',
-    desc: 'สถาบันการศึกษาชั้นนำระดับประเทศด้านการจัดการ',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1, 0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Mission (ระดับมหาวิทยาลัย)',
-    title: 'Mission 1 (ระดับมหาวิทยาลัย)',
-    desc: 'สร้างความเป็นผู้นำทางวิชาการและนวัตกรรม โดยมีการวิจัยเป็นฐาน เพื่อการพัฒนาภาคใต้และประเทศ',
-    checks: [1,1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Mission (ระดับมหาวิทยาลัย)',
-    title: 'Mission 2 (ระดับมหาวิทยาลัย)',
-    desc: 'สร้างทรัพยากรมนุษย์ที่มีสมรรถนะทางวิชาการและวิชาชีพ ซื่อสัตย์มีวินัย ใฝ่ปัญญา จิตสาธารณะ และมีทักษะในศตวรรษที่ 21',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1, 0,0,0]
-  },
-  {
-    group: 'Mission (ระดับมหาวิทยาลัย)',
-    title: 'Mission 3 (ระดับมหาวิทยาลัย)',
-    desc: 'พัฒนามหาวิทยาลัยให้เป็นสังคมฐานความรู้บนพื้นฐานพหุวัฒนธรรมและหลักปรัชญาเศรษฐกิจพอเพียง',
-    checks: [1,1,1,1,1,1,1,1, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Mission (ระดับคณะ)',
-    title: 'Mission 1 (ระดับคณะ)',
-    desc: 'สร้างบัณฑิต นักบริหาร และผู้ประกอบการที่มีภาวะผู้นำ มีสมรรถนะดิจิทัล มีความคิดสร้างสรรค์',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-  },
-  {
-    group: 'อัตลักษณ์ / GE',
-    title: 'อัตลักษณ์ของมหาวิทยาลัย / GE',
-    desc: 'ผลการเรียนรู้ของหมวดวิชาศึกษาทั่วไปของมหาวิทยาลัย',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-  },
-  {
-    group: 'Stakeholder Need 1 : ผู้ใช้บัณฑิต',
-    title: '1. คิดวิเคราะห์',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1, 0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 1 : ผู้ใช้บัณฑิต',
-    title: '2. คิดอย่างเป็นระบบ',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1, 0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 1 : ผู้ใช้บัณฑิต',
-    title: '3. การวิเคราะห์ข้อมูล (Data Analysis)',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 1 : ผู้ใช้บัณฑิต',
-    title: '4. การคิดเชิงบวก (Growth Mindset)',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 1 : ผู้ใช้บัณฑิต',
-    title: '5. การเป็นผู้ประกอบการ',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 1 : ผู้ใช้บัณฑิต',
-    title: '6. การแก้ปัญหา',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 1 : ผู้ใช้บัณฑิต',
-    title: '7. ความรับผิดชอบต่อสังคม',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 2 : ศิษย์เก่า',
-    title: '1. การสื่อสาร/ภาษาที่ 3',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 2 : ศิษย์เก่า',
-    title: '2. ก้าวทันเทคโนโลยี',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 2 : ศิษย์เก่า',
-    title: '3. ภาวะผู้นำ',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 2 : ศิษย์เก่า',
-    title: '4. การวิเคราะห์ข้อมูล (Data Analysis)',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 2 : ศิษย์เก่า',
-    title: '5. ความรับผิดชอบต่อสังคม',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 3 : ศิษย์ปัจจุบัน',
-    title: '1. การสื่อสาร/ภาษาที่ 3',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 3 : ศิษย์ปัจจุบัน',
-    title: '2. การทำงานเป็นทีม',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 3 : ศิษย์ปัจจุบัน',
-    title: '3. ก้าวทันเทคโนโลยี',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 3 : ศิษย์ปัจจุบัน',
-    title: '4. การวิเคราะห์ข้อมูล (Data Analysis)',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 3 : ศิษย์ปัจจุบัน',
-    title: '5. การแก้ปัญหา',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 4 : ผู้สอน',
-    title: '1. คิดวิเคราะห์',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1, 0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 4 : ผู้สอน',
-    title: '2. การสื่อสาร/ภาษาที่ 3',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 4 : ผู้สอน',
-    title: '3. ก้าวทันเทคโนโลยี',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 4 : ผู้สอน',
-    title: '4. การวิเคราะห์ข้อมูล (Data Analysis)',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 4 : ผู้สอน',
-    title: '5. การแก้ปัญหา',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 5 : สมาคมที่เกี่ยวข้อง',
-    title: '1. การวิเคราะห์ข้อมูล (Data Analysis)',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 5 : สมาคมที่เกี่ยวข้อง',
-    title: '2. ก้าวทันเทคโนโลยี',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 5 : สมาคมที่เกี่ยวข้อง',
-    title: '3. การคิดเชิงบวก (Growth Mindset)',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 5 : สมาคมที่เกี่ยวข้อง',
-    title: '4. การแก้ปัญหา',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 5 : สมาคมที่เกี่ยวข้อง',
-    title: '5. การสื่อสาร/ภาษาที่ 3',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1, 0,0,0,0,0,0,0,0]
-  },
-  {
-    group: 'Stakeholder Need 5 : สมาคมที่เกี่ยวข้อง',
-    title: '6. คิดวิเคราะห์',
-    desc: '',
-    checks: [1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1, 0,0,0,0,0,0,0]
-  },
+  {group:'Vision (ระดับมหาวิทยาลัย)',title:'Vision (ระดับมหาวิทยาลัย)',desc:'มหาวิทยาลัยแห่งคุณค่าเพื่อขับเคลื่อนการพัฒนาที่ยั่งยืนระดับแนวหน้าของโลก',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]},
+  {group:'Vision (ระดับคณะ)',title:'Vision (ระดับคณะ)',desc:'สถาบันการศึกษาชั้นนำระดับประเทศด้านการจัดการ',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0]},
+  {group:'Mission (ระดับมหาวิทยาลัย)',title:'Mission 1 (ระดับมหาวิทยาลัย)',desc:'สร้างความเป็นผู้นำทางวิชาการและนวัตกรรม โดยมีการวิจัยเป็นฐาน เพื่อการพัฒนาภาคใต้และประเทศ',checks:[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+  {group:'Mission (ระดับมหาวิทยาลัย)',title:'Mission 2 (ระดับมหาวิทยาลัย)',desc:'สร้างทรัพยากรมนุษย์ที่มีสมรรถนะทางวิชาการและวิชาชีพ',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0]},
+  {group:'Mission (ระดับมหาวิทยาลัย)',title:'Mission 3 (ระดับมหาวิทยาลัย)',desc:'พัฒนามหาวิทยาลัยให้เป็นสังคมฐานความรู้บนพื้นฐานพหุวัฒนธรรม',checks:[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+  {group:'Mission (ระดับคณะ)',title:'Mission 1 (ระดับคณะ)',desc:'สร้างบัณฑิต นักบริหาร และผู้ประกอบการที่มีภาวะผู้นำ',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},
+  {group:'อัตลักษณ์ / GE',title:'อัตลักษณ์ของมหาวิทยาลัย / GE',desc:'ผลการเรียนรู้ของหมวดวิชาศึกษาทั่วไปของมหาวิทยาลัย',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},
+  {group:'Stakeholder Need 1 : ผู้ใช้บัณฑิต',title:'1. คิดวิเคราะห์',desc:'',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0]},
+  {group:'Stakeholder Need 1 : ผู้ใช้บัณฑิต',title:'2. คิดอย่างเป็นระบบ',desc:'',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0]},
+  {group:'Stakeholder Need 1 : ผู้ใช้บัณฑิต',title:'3. การวิเคราะห์ข้อมูล',desc:'',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]},
+  {group:'Stakeholder Need 2 : ศิษย์เก่า',title:'1. การสื่อสาร/ภาษาที่ 3',desc:'',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]},
+  {group:'Stakeholder Need 2 : ศิษย์เก่า',title:'2. ก้าวทันเทคโนโลยี',desc:'',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]},
+  {group:'Stakeholder Need 3 : ศิษย์ปัจจุบัน',title:'1. การสื่อสาร/ภาษาที่ 3',desc:'',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]},
+  {group:'Stakeholder Need 3 : ศิษย์ปัจจุบัน',title:'2. การทำงานเป็นทีม',desc:'',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]},
+  {group:'Stakeholder Need 4 : ผู้สอน',title:'1. คิดวิเคราะห์',desc:'',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0]},
+  {group:'Stakeholder Need 5 : สมาคมที่เกี่ยวข้อง',title:'1. การวิเคราะห์ข้อมูล',desc:'',checks:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]},
 ];
 
-let rows = DEFAULT_ROWS.map(r => ({...r, checks: [...r.checks]}));
-const PAGE_SIZE = 10;
+let rows;
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  rows = saved ? JSON.parse(saved) : DEFAULT_ROWS.map(r=>({...r,checks:[...r.checks]}));
+} catch { rows = DEFAULT_ROWS.map(r=>({...r,checks:[...r.checks]})); }
+
+let hasUnsaved = false;
+const PAGE_SIZE = 12;
 let currentPage = 1;
 
-function totalPages() { return Math.ceil(rows.length / PAGE_SIZE); }
-function pageRows() {
-  const start = (currentPage-1)*PAGE_SIZE;
-  return rows.slice(start, start+PAGE_SIZE);
+function markUnsaved() { hasUnsaved=true; document.getElementById('unsavedBadge').classList.add('show'); }
+function markSaved()   { hasUnsaved=false; document.getElementById('unsavedBadge').classList.remove('show'); }
+
+function saveData() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(rows)); markSaved(); showToast('✓ บันทึกข้อมูลสำเร็จ'); }
+  catch { showToast('❌ บันทึกไม่สำเร็จ','#ef4444'); }
 }
 
+function totalPages() { return Math.ceil(rows.length/PAGE_SIZE); }
+function pageRows()   { const s=(currentPage-1)*PAGE_SIZE; return rows.slice(s,s+PAGE_SIZE); }
+
 function renderHead() {
-  const head = document.getElementById('matrixHead');
-  head.innerHTML = `
+  document.getElementById('matrixHead').innerHTML=`
     <tr>
       <th class="th-empty" rowspan="2">ผู้มีส่วนได้ส่วนเสียของหลักสูตร</th>
       <th class="th-group-plo" colspan="${PLO_COLS.length}">Program Learning Outcomes (PLOs)</th>
@@ -594,29 +255,22 @@ function renderHead() {
     <tr>
       ${PLO_COLS.map(c=>`<th class="th-col-plo">${c}</th>`).join('')}
       ${MLO_COLS.map(c=>`<th class="th-col-mlo">${c}</th>`).join('')}
-    </tr>
-  `;
+    </tr>`;
 }
 
 function renderBody() {
-  const body = document.getElementById('matrixBody');
-  const pr = pageRows();
-  const offset = (currentPage-1)*PAGE_SIZE;
-  let lastGroup = '';
-  body.innerHTML = pr.map((row, ri) => {
-    const gi = offset + ri;
-    let groupCell = '';
-    if (row.group !== lastGroup) {
-      lastGroup = row.group;
-    }
+  const pr=pageRows();
+  const offset=(currentPage-1)*PAGE_SIZE;
+  document.getElementById('matrixBody').innerHTML=pr.map((row,ri)=>{
+    const gi=offset+ri;
     return `<tr>
       <td class="td-label">
         <div class="row-group">${row.group}</div>
         <div class="row-title">${row.title}</div>
-        ${row.desc ? `<div class="row-desc">${row.desc}</div>` : ''}
+        ${row.desc?`<div class="row-desc">${row.desc}</div>`:''}
       </td>
-      ${row.checks.map((v, ci) => {
-        const isMlo = ci >= PLO_COLS.length;
+      ${row.checks.map((v,ci)=>{
+        const isMlo=ci>=PLO_COLS.length;
         return `<td class="td-check${isMlo?' mlo-col':''}" onclick="toggleCheck(${gi},${ci})" title="${ALL_COLS[ci]}">
           <div class="check-circle${v?' checked':''}"></div>
         </td>`;
@@ -626,118 +280,102 @@ function renderBody() {
 }
 
 function renderStats() {
-  const ploCount = PLO_COLS.length;
-  const mloCount = MLO_COLS.length;
-  // count which PLOs/MLOs have at least 1 check
-  const ploCovered = PLO_COLS.filter((_, ci) => rows.some(r => r.checks[ci])).length;
-  const mloCovered = MLO_COLS.filter((_, ci) => rows.some(r => r.checks[PLO_COLS.length+ci])).length;
-  document.getElementById('statsBar').innerHTML = `
-    <span class="stat-pill"><span class="stat-dot plo"></span> PLOs Covered: <b>${ploCovered}/${ploCount}</b></span>
-    <span class="stat-pill"><span class="stat-dot mlo"></span> MLOs Covered: <b>${mloCovered}/${mloCount}</b></span>
-    <span style="margin-left:auto;color:var(--text-sub)">แสดง ${Math.min((currentPage-1)*PAGE_SIZE+1, rows.length)}–${Math.min(currentPage*PAGE_SIZE, rows.length)} จาก ${rows.length} รายการ</span>
-  `;
+  const ploCovered=PLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[ci])).length;
+  const mloCovered=MLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[PLO_COLS.length+ci])).length;
+  document.getElementById('statsBar').innerHTML=`
+    <span class="stat-pill"><span class="stat-dot plo"></span>PLOs Covered: <b>${ploCovered}/${PLO_COLS.length}</b></span>
+    <span class="stat-pill"><span class="stat-dot mlo"></span>MLOs Covered: <b>${mloCovered}/${MLO_COLS.length}</b></span>
+    <span style="margin-left:auto;color:var(--text-sub)">แสดง ${Math.min((currentPage-1)*PAGE_SIZE+1,rows.length)}–${Math.min(currentPage*PAGE_SIZE,rows.length)} จาก ${rows.length} รายการ</span>`;
 }
 
 function renderPagination() {
-  const tp = totalPages();
-  const p = document.getElementById('pagination');
-  if (tp <= 1) { p.innerHTML = ''; return; }
-  let btns = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
-  for (let i=1; i<=tp; i++) {
-    btns += `<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
-  }
-  btns += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}>›</button>`;
-  p.innerHTML = btns;
+  const tp=totalPages();
+  const p=document.getElementById('pagination');
+  if(tp<=1){p.innerHTML='';return;}
+  let h=`<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  for(let i=1;i<=tp;i++) h+=`<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
+  h+=`<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}>›</button>`;
+  p.innerHTML=h;
 }
 
-function goPage(p) {
-  currentPage = Math.max(1, Math.min(p, totalPages()));
-  renderBody(); renderStats(); renderPagination();
-}
+function goPage(p){currentPage=Math.max(1,Math.min(p,totalPages()));renderBody();renderStats();renderPagination();}
+function render(){renderHead();renderBody();renderStats();renderPagination();}
+function toggleCheck(ri,ci){rows[ri].checks[ci]=rows[ri].checks[ci]?0:1;markUnsaved();renderBody();renderStats();}
 
-function render() { renderHead(); renderBody(); renderStats(); renderPagination(); }
-
-function toggleCheck(rowIdx, colIdx) {
-  rows[rowIdx].checks[colIdx] = rows[rowIdx].checks[colIdx] ? 0 : 1;
-  renderBody(); renderStats();
-}
-
-/* ── EXCEL IMPORT ── */
-function importExcel(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      const wb = XLSX.read(ev.target.result, { type: 'binary' });
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-
-      if (json.length < 2) { showToast('⚠️ ไม่พบข้อมูลในไฟล์', '#f59e0b'); return; }
-
-      // header row: col0=group, col1=title, col2=desc, col3..=PLO1..9, MLO1.1..6.2
-      const imported = [];
-      for (let i = 1; i < json.length; i++) {
-        const row = json[i];
-        const group = String(row[0]||'').trim();
-        const title = String(row[1]||'').trim();
-        const desc  = String(row[2]||'').trim();
-        const checks = [];
-        for (let c = 3; c < 3+PLO_COLS.length+MLO_COLS.length; c++) {
-          const v = String(row[c]||'').trim();
-          checks.push(v==='1'||v.toLowerCase()==='✓'||v.toLowerCase()==='true'||v==='x'?1:0);
-        }
-        // pad checks to full length
-        while (checks.length < PLO_COLS.length+MLO_COLS.length) checks.push(0);
-        if (group||title) imported.push({ group, title, desc, checks });
-      }
-      if (!imported.length) { showToast('⚠️ ไม่พบข้อมูลที่ถูกต้อง', '#f59e0b'); return; }
-      rows = [...rows, ...imported];
-      currentPage = 1;
-      render();
-      showToast(`✓ นำเข้าสำเร็จ ${imported.length} รายการ`);
-    } catch(err) {
-      showToast('❌ ไม่สามารถอ่านไฟล์ได้', '#ef4444');
-    }
-  };
-  reader.readAsBinaryString(file);
-  e.target.value = '';
-}
-
-/* ── TEMPLATE DOWNLOAD ── */
-function downloadTemplate() {
-  const header = ['กลุ่ม/หมวดหมู่', 'ชื่อรายการ', 'คำอธิบาย',
+// ── Export Excel ──
+function exportExcel() {
+  const header=['กลุ่ม/หมวดหมู่','ชื่อรายการ','คำอธิบาย',
     ...PLO_COLS.map(c=>'PLO '+c),
     ...MLO_COLS.map(c=>'MLO '+c)
   ];
-  const example = [
-    'Vision (ระดับมหาวิทยาลัย)',
-    'Vision ตัวอย่าง',
-    'คำอธิบายของ Vision',
-    ...PLO_COLS.map(()=>'1'),
-    ...MLO_COLS.map((_,i)=>i<6?'1':'0')
-  ];
-  const ws = XLSX.utils.aoa_to_sheet([header, example]);
-  ws['!cols'] = [
-    {wch:30},{wch:35},{wch:40},
-    ...PLO_COLS.map(()=>({wch:8})),
-    ...MLO_COLS.map(()=>({wch:8}))
-  ];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Alignment Matrix');
-  XLSX.writeFile(wb, 'alignment_matrix_template.xlsx');
+  const body=rows.map(r=>[r.group,r.title,r.desc,...r.checks]);
+  const ws=XLSX.utils.aoa_to_sheet([header,...body]);
+  ws['!cols']=[{wch:30},{wch:35},{wch:40},...ALL_COLS.map(()=>({wch:7}))];
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Alignment Matrix');
+  XLSX.writeFile(wb,`alignment_matrix_${new Date().toISOString().slice(0,10)}.xlsx`);
+  showToast('✓ Export Excel สำเร็จ');
+}
+
+// ── Export PDF ──
+function exportPDF() { window.print(); }
+
+// ── Template ──
+function downloadTemplate() {
+  const header=['กลุ่ม/หมวดหมู่','ชื่อรายการ','คำอธิบาย',
+    ...PLO_COLS.map(c=>'PLO '+c),...MLO_COLS.map(c=>'MLO '+c)];
+  const example=['Vision (ระดับมหาวิทยาลัย)','Vision ตัวอย่าง','คำอธิบาย',
+    ...PLO_COLS.map(()=>'1'),...MLO_COLS.map((_,i)=>i<6?'1':'0')];
+  const ws=XLSX.utils.aoa_to_sheet([header,example]);
+  ws['!cols']=[{wch:30},{wch:35},{wch:40},...ALL_COLS.map(()=>({wch:7}))];
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Alignment Matrix');
+  XLSX.writeFile(wb,'alignment_matrix_template.xlsx');
   showToast('✓ ดาวน์โหลด Template สำเร็จ');
 }
 
-/* ── TOAST ── */
-let toastTimer;
-function showToast(msg, color='#22c55e') {
-  const t = document.getElementById('toast');
-  document.getElementById('toastDot').style.background = color;
-  document.getElementById('toastMsg').textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
+// ── Import Excel ──
+function importExcel(e) {
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try {
+      const wb=XLSX.read(ev.target.result,{type:'binary'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      if(json.length<2){showToast('⚠️ ไม่พบข้อมูล','#f59e0b');return;}
+      const imported=[];
+      for(let i=1;i<json.length;i++){
+        const row=json[i];
+        const group=String(row[0]||'').trim();
+        const title=String(row[1]||'').trim();
+        const desc=String(row[2]||'').trim();
+        const checks=[];
+        for(let c=3;c<3+PLO_COLS.length+MLO_COLS.length;c++){
+          const v=String(row[c]||'').trim();
+          checks.push(v==='1'||v==='✓'||v.toLowerCase()==='true'||v.toLowerCase()==='x'?1:0);
+        }
+        while(checks.length<PLO_COLS.length+MLO_COLS.length)checks.push(0);
+        if(group||title)imported.push({group,title,desc,checks});
+      }
+      if(!imported.length){showToast('⚠️ ไม่พบข้อมูลที่ถูกต้อง','#f59e0b');return;}
+      rows=[...rows,...imported];
+      markUnsaved();
+      currentPage=1;
+      render();
+      showToast(`✓ นำเข้า ${imported.length} รายการสำเร็จ`);
+    } catch{showToast('❌ ไม่สามารถอ่านไฟล์ได้','#ef4444');}
+  };
+  reader.readAsBinaryString(file);
+  e.target.value='';
+}
+
+let _tt;
+function showToast(msg,color='#22c55e'){
+  document.getElementById('toastDot').style.background=color;
+  document.getElementById('toastMsg').textContent=msg;
+  const t=document.getElementById('toast');t.classList.add('show');
+  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
 render();

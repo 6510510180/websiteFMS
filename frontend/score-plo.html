@@ -55,6 +55,17 @@ body { font-family: 'Noto Sans Thai', sans-serif; background: var(--bg); color: 
 .page-title { font-size: 20px; font-weight: 900; color: var(--text); line-height: 1.3; margin-bottom: 20px; }
 .page-title span { color: var(--purple); }
 
+/* ── UNSAVED BADGE ── */
+.unsaved-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #fff7ed; border: 1.5px solid #fed7aa; color: #c2410c;
+  padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 700;
+  margin-bottom: 16px; opacity: 0; transition: opacity .25s;
+}
+.unsaved-badge.show { opacity: 1; }
+.unsaved-dot { width: 7px; height: 7px; border-radius: 50%; background: #f97316; animation: pulse 1.2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
 /* ── CARD ── */
 .card {
   background: var(--white); border-radius: 14px;
@@ -100,15 +111,20 @@ td.label-cell { font-size: 12.5px; color: var(--text); max-width: 280px; line-he
 td.label-cell .lo-code { font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700; color: var(--purple); margin-bottom: 2px; }
 td.label-cell .lo-desc { font-size: 11.5px; color: var(--text-sub); }
 td.score-cell { text-align: center; }
+
+/* ✅ แก้: input ทศนิยม ใช้ type=text แทน number */
 td.score-cell input {
-  width: 64px; height: 34px; border: 1.5px solid #e0d8f0; border-radius: 8px;
-  text-align: center; font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 700;
+  width: 72px; height: 36px;
+  border: 1.5px solid #e0d8f0; border-radius: 8px;
+  text-align: center;
+  font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 700;
   color: var(--text); background: #faf8ff; outline: none; transition: .15s;
+  /* ✅ ไม่ใช้ type=number เพื่อป้องกัน re-render ขัดการพิมพ์ทศนิยม */
 }
 td.score-cell input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(127,19,236,0.08); background: white; }
+td.score-cell input.invalid { border-color: var(--red); background: #fff5f5; }
 td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
 .score-avg { font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 800; }
-.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 700; }
 
 /* section rows */
 .section-row td { background: #f5eeff; font-size: 12px; font-weight: 700; color: var(--purple); padding: 8px 14px; border-bottom: 1px solid #e8deff; }
@@ -124,38 +140,21 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
 }
 .side-card h3 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
 .side-card h3 svg { width: 15px; height: 15px; }
-
-/* compare bars */
 .compare-item { margin-bottom: 10px; }
 .compare-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
 .compare-label span:first-child { color: var(--text-sub); }
 .compare-label strong { font-family: 'Lexend', sans-serif; font-weight: 700; }
 .bar-bg { height: 8px; background: #f0ebfa; border-radius: 999px; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 999px; background: var(--purple); transition: width .5s ease; }
-.bar-fill.teal { background: var(--teal); }
-
-/* stat blocks */
 .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
 .stat-block { background: var(--purple-bg); border-radius: 10px; padding: 12px; text-align: center; }
 .stat-block .stat-val { font-family: 'Lexend', sans-serif; font-size: 24px; font-weight: 800; color: var(--purple); }
 .stat-block .stat-label { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
-
-/* summary bullets */
 .summary-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .summary-list li { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; line-height: 1.5; color: var(--text-sub); }
 .bullet { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
 .bullet.green { background: var(--green); }
 .bullet.amber { background: var(--amber); }
-
-/* quick nav */
-.quick-nav { display: flex; flex-direction: column; gap: 6px; }
-.nav-link {
-  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
-  text-decoration: none; font-size: 13px; font-weight: 600; color: var(--text-sub);
-  background: #faf7ff; transition: .15s;
-}
-.nav-link:hover, .nav-link.active { background: var(--purple-light); color: var(--purple); }
-.nav-link svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
 
 /* ── TOAST ── */
 .toast {
@@ -194,6 +193,12 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
   <!-- MAIN COLUMN -->
   <div class="main-col">
     <div class="page-title">สรุปจากระบบการประเมินผลการเรียนรู้และการทวนสอบผลสัมฤทธิ์ของนักศึกษา<br><span>ปีการศึกษา 2567</span></div>
+
+    <!-- Unsaved indicator -->
+    <div class="unsaved-badge" id="unsavedBadge">
+      <div class="unsaved-dot"></div>
+      มีข้อมูลที่ยังไม่ได้บันทึก
+    </div>
 
     <div class="action-row">
       <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
@@ -242,8 +247,6 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
 
   <!-- SIDE COLUMN -->
   <div class="side-col">
-
-    <!-- COMPARE -->
     <div class="side-card">
       <h3>
         <svg viewBox="0 0 20 20" fill="var(--purple)"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
@@ -252,7 +255,6 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
       <div id="compareSection"></div>
     </div>
 
-    <!-- STATS -->
     <div class="side-card">
       <h3>
         <svg viewBox="0 0 20 20" fill="var(--purple)"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
@@ -267,7 +269,6 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
       </div>
     </div>
 
-    <!-- SUMMARY -->
     <div class="side-card">
       <h3>
         <svg viewBox="0 0 20 20" fill="var(--amber)"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
@@ -275,16 +276,22 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
       </h3>
       <ul class="summary-list" id="summaryList"></ul>
     </div>
-
+  </div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
 
 <script>
-// ── DATA MODEL ──
-// type: 'section' | 'row' | 'subtotal' | 'total' | 'grand'
-// section rows have no scores; subtotal/total rows auto-calculate
-let tableData = [
+// ═══════════════════════════════════════════════
+//  KEY สำหรับ localStorage
+// ═══════════════════════════════════════════════
+const STORAGE_KEY = 'fms_plo_scores_2567';
+
+// ═══════════════════════════════════════════════
+//  DEFAULT DATA
+// ═══════════════════════════════════════════════
+const DEFAULT_DATA = [
   { type:'section', label:'ผลลัพธ์การเรียนรู้ระดับหลักสูตร (BA)' },
   { type:'row', code:'PLO1', desc:'การบูรณาการประยุกต์ศาสตร์ด้านบริหารธุรกิจ', sem1:null, sem2:null },
   { type:'row', code:'PLO2', desc:'การใช้ผู้ประกอบการที่มีจิตสำนึกด้วยความรับผิดชอบต่อสังคม', sem1:null, sem2:null },
@@ -305,7 +312,7 @@ let tableData = [
   { type:'section', label:'ผลลัพธ์หลักสูตร (Multi-disciplinary)' },
   { type:'row', code:'ด้านความรู้', desc:'', sem1:null, sem2:null },
   { type:'row', code:'ด้านความรู้และทักษะทางวิชาชีพปฎิบัติ', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', ssem1:null, sem2:null },
+  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', sem1:null, sem2:null },
   { type:'row', code:'ด้านทักษะการวิเคราะห์เชิงปริมาณ', desc:'การสื่อสารและการใช้เทคโนโลยีสารสนเทศ', sem1:null, sem2:null },
   { type:'row', code:'ด้านทักษะความสัมพันธ์ระหว่างบุคคล', desc:'', sem1:null, sem2:null },
   { type:'subtotal', label:'ผลลัพธ์หลักสูตร Total', refRows:'multi' },
@@ -313,100 +320,218 @@ let tableData = [
   { type:'grand', label:'Grand Total', refRows:'all' },
 ];
 
+// ═══════════════════════════════════════════════
+//  LOAD จาก localStorage (ถ้ามี) หรือใช้ DEFAULT
+// ═══════════════════════════════════════════════
+let tableData;
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  tableData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+} catch {
+  tableData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+
+let hasUnsaved = false;
+
+function markUnsaved() {
+  hasUnsaved = true;
+  document.getElementById('unsavedBadge').classList.add('show');
+}
+function markSaved() {
+  hasUnsaved = false;
+  document.getElementById('unsavedBadge').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════
+//  HELPER
+// ═══════════════════════════════════════════════
+function parseScore(v) {
+  if (v === null || v === undefined || String(v).trim() === '') return null;
+  // รับ comma เป็น dot ด้วย
+  const n = parseFloat(String(v).replace(',', '.'));
+  return isNaN(n) ? null : n;
+}
+
 function avg(vals) {
-  const v = vals.filter(x => x !== null && x !== undefined && x !== '');
+  const v = vals.filter(x => x !== null && x !== undefined);
   if (!v.length) return null;
-  return v.reduce((a,b)=>a+parseFloat(b),0)/v.length;
+  return v.reduce((a, b) => a + b, 0) / v.length;
 }
 
 function fmt(v) {
-  if (v === null || v === undefined || v === '') return '<span style="color:#ccc">—</span>';
-  const n = parseFloat(v);
-  if (isNaN(n)) return '<span style="color:#ccc">—</span>';
-  const color = n >= 4.5 ? 'var(--green)' : n >= 4.0 ? 'var(--amber)' : 'var(--red)';
-  return `<span class="score-avg" style="color:${color}">${n.toFixed(2)}</span>`;
+  if (v === null || v === undefined) return '<span style="color:#ccc">—</span>';
+  const color = v >= 4.5 ? 'var(--green)' : v >= 4.0 ? 'var(--amber)' : 'var(--red)';
+  return `<span class="score-avg" style="color:${color}">${v.toFixed(2)}</span>`;
 }
 
 function scoreColor(n) {
-  if (n === null) return '';
+  if (n === null) return 'var(--purple)';
   return n >= 4.5 ? 'var(--green)' : n >= 4.0 ? 'var(--amber)' : 'var(--red)';
+}
+
+function getRowGrand(row) {
+  return avg([row.sem1, row.sem2].filter(x => x !== null));
 }
 
 function computeGrand(refRows) {
   let rows;
-  if (refRows === 'ba') rows = tableData.filter((r,i)=>r.type==='row' && i < 16);
-  else if (refRows === 'multi') rows = tableData.filter((r,i)=>r.type==='row' && i >= 16);
-  else rows = tableData.filter(r=>r.type==='row');
-  const s1 = avg(rows.map(r=>r.sem1));
-  const s2 = avg(rows.map(r=>r.sem2));
-  const gt = avg([s1, s2].filter(x=>x!==null));
+  const multiSectionIdx = tableData.findIndex(t => t.type === 'section' && t.label.includes('Multi'));
+  if (refRows === 'ba') {
+    rows = tableData.filter((r, i) => r.type === 'row' && i < multiSectionIdx);
+  } else if (refRows === 'multi') {
+    rows = tableData.filter((r, i) => r.type === 'row' && i > multiSectionIdx);
+  } else {
+    rows = tableData.filter(r => r.type === 'row');
+  }
+  const s1 = avg(rows.map(r => r.sem1).filter(x => x !== null));
+  const s2 = avg(rows.map(r => r.sem2).filter(x => x !== null));
+  const gt = avg([s1, s2].filter(x => x !== null));
   return { sem1: s1, sem2: s2, grand: gt };
 }
 
-function getRowGrand(row) {
-  return avg([row.sem1, row.sem2].filter(x=>x!==null && x!==''));
-}
-
+// ═══════════════════════════════════════════════
+//  RENDER TABLE (สร้าง DOM ครั้งเดียว)
+// ═══════════════════════════════════════════════
 function renderTable() {
   const tbody = document.getElementById('tableBody');
   let html = '';
-  let rowIdx = 0;
 
   tableData.forEach((item, idx) => {
     if (item.type === 'section') {
       html += `<tr class="section-row"><td colspan="5">${item.label}</td></tr>`;
     } else if (item.type === 'row') {
       const grand = getRowGrand(item);
-      const ri = rowIdx++;
       html += `<tr>
         <td class="label-cell">
           ${item.code ? `<div class="lo-code">${item.code}</div>` : ''}
           ${item.desc ? `<div class="lo-desc">${item.desc}</div>` : ''}
         </td>
-        <td class="score-cell"><input type="number" step="0.01" min="0" max="5" value="${item.sem1??''}" placeholder="—" data-idx="${idx}" data-sem="1" oninput="onScoreInput(this)"></td>
-        <td class="score-cell"><input type="number" step="0.01" min="0" max="5" value="${item.sem2??''}" placeholder="—" data-idx="${idx}" data-sem="2" oninput="onScoreInput(this)"></td>
-        <td class="score-cell">${fmt(grand)}</td>
+        <td class="score-cell">
+          <input type="text" inputmode="decimal"
+            value="${item.sem1 !== null ? item.sem1 : ''}"
+            placeholder="—"
+            data-idx="${idx}" data-sem="1"
+            onblur="onScoreBlur(this)"
+            oninput="onScoreTyping(this)">
+        </td>
+        <td class="score-cell">
+          <input type="text" inputmode="decimal"
+            value="${item.sem2 !== null ? item.sem2 : ''}"
+            placeholder="—"
+            data-idx="${idx}" data-sem="2"
+            onblur="onScoreBlur(this)"
+            oninput="onScoreTyping(this)">
+        </td>
+        <td class="score-cell" id="grand-${idx}">${fmt(grand)}</td>
         <td style="text-align:center">
-          <button onclick="deleteRow(${idx})" title="ลบ" style="border:none;background:none;cursor:pointer;color:#ccc;font-size:16px;padding:4px 6px;border-radius:6px;transition:.15s" onmouseover="this.style.color='#ef4444';this.style.background='#fee2e2'" onmouseout="this.style.color='#ccc';this.style.background='none'">🗑</button>
+          <button onclick="deleteRow(${idx})" title="ลบ"
+            style="border:none;background:none;cursor:pointer;color:#ccc;font-size:16px;padding:4px 6px;border-radius:6px;transition:.15s"
+            onmouseover="this.style.color='#ef4444';this.style.background='#fee2e2'"
+            onmouseout="this.style.color='#ccc';this.style.background='none'">🗑</button>
         </td>
       </tr>`;
     } else if (item.type === 'subtotal') {
       const c = computeGrand(item.refRows);
       html += `<tr class="subtotal-row">
         <td>${item.label}</td>
-        <td style="text-align:center">${fmt(c.sem1)}</td>
-        <td style="text-align:center">${fmt(c.sem2)}</td>
-        <td style="text-align:center">${fmt(c.grand)}</td>
+        <td style="text-align:center" id="sub1-${idx}">${fmt(c.sem1)}</td>
+        <td style="text-align:center" id="sub2-${idx}">${fmt(c.sem2)}</td>
+        <td style="text-align:center" id="subg-${idx}">${fmt(c.grand)}</td>
         <td></td>
       </tr>`;
     } else if (item.type === 'total' || item.type === 'grand') {
       const c = computeGrand(item.refRows);
       html += `<tr class="total-row">
         <td>${item.label}</td>
-        <td style="text-align:center">${fmt(c.sem1)}</td>
-        <td style="text-align:center">${fmt(c.sem2)}</td>
-        <td style="text-align:center">${fmt(c.grand)}</td>
+        <td style="text-align:center" id="tot1-${idx}">${fmt(c.sem1)}</td>
+        <td style="text-align:center" id="tot2-${idx}">${fmt(c.sem2)}</td>
+        <td style="text-align:center" id="totg-${idx}">${fmt(c.grand)}</td>
         <td></td>
       </tr>`;
     }
   });
+
   tbody.innerHTML = html;
   updateSidePanel();
 }
 
-function onScoreInput(el) {
+// ═══════════════════════════════════════════════
+//  INPUT HANDLERS
+//  ✅ onScoreTyping = แค่ validate สี ไม่ re-render
+//  ✅ onScoreBlur   = บันทึกค่า + อัปเดตเฉพาะ cell ที่เกี่ยวข้อง
+// ═══════════════════════════════════════════════
+function onScoreTyping(el) {
+  const raw = el.value.replace(',', '.');
+  // ถ้ายังพิมพ์ไม่จบ เช่น "4." ให้ผ่าน
+  if (raw === '' || raw === '-' || raw.endsWith('.')) {
+    el.classList.remove('invalid');
+    return;
+  }
+  const n = parseFloat(raw);
+  if (isNaN(n) || n < 0 || n > 5) {
+    el.classList.add('invalid');
+  } else {
+    el.classList.remove('invalid');
+  }
+}
+
+function onScoreBlur(el) {
   const idx = parseInt(el.dataset.idx);
   const sem = el.dataset.sem;
-  const val = el.value === '' ? null : parseFloat(el.value);
-  if (sem === '1') tableData[idx].sem1 = val;
-  else tableData[idx].sem2 = val;
-  // re-render only computed cells
-  renderTable();
+  const raw = el.value.replace(',', '.');
+  const n = raw === '' ? null : parseFloat(raw);
+
+  // ถ้าค่าไม่ valid ให้ clear
+  if (n !== null && (isNaN(n) || n < 0 || n > 5)) {
+    el.value = '';
+    el.classList.remove('invalid');
+    if (sem === '1') tableData[idx].sem1 = null;
+    else tableData[idx].sem2 = null;
+  } else {
+    if (sem === '1') tableData[idx].sem1 = n;
+    else tableData[idx].sem2 = n;
+    // แสดงค่าจัดรูปแบบ
+    if (n !== null) el.value = n;
+    el.classList.remove('invalid');
+  }
+
+  markUnsaved();
+
+  // ✅ อัปเดตเฉพาะ grand total ของ row นี้ (ไม่ re-render ทั้งหน้า)
+  const grandCell = document.getElementById(`grand-${idx}`);
+  if (grandCell) grandCell.innerHTML = fmt(getRowGrand(tableData[idx]));
+
+  // อัปเดต subtotal / total / grand rows
+  updateComputedRows();
+  updateSidePanel();
+}
+
+function updateComputedRows() {
+  tableData.forEach((item, idx) => {
+    if (item.type === 'subtotal') {
+      const c = computeGrand(item.refRows);
+      const e1 = document.getElementById(`sub1-${idx}`);
+      const e2 = document.getElementById(`sub2-${idx}`);
+      const eg = document.getElementById(`subg-${idx}`);
+      if (e1) e1.innerHTML = fmt(c.sem1);
+      if (e2) e2.innerHTML = fmt(c.sem2);
+      if (eg) eg.innerHTML = fmt(c.grand);
+    } else if (item.type === 'total' || item.type === 'grand') {
+      const c = computeGrand(item.refRows);
+      const e1 = document.getElementById(`tot1-${idx}`);
+      const e2 = document.getElementById(`tot2-${idx}`);
+      const eg = document.getElementById(`totg-${idx}`);
+      if (e1) e1.innerHTML = fmt(c.sem1);
+      if (e2) e2.innerHTML = fmt(c.sem2);
+      if (eg) eg.innerHTML = fmt(c.grand);
+    }
+  });
 }
 
 function deleteRow(idx) {
   if (!confirm('ต้องการลบรายการนี้?')) return;
   tableData.splice(idx, 1);
+  markUnsaved();
   renderTable();
 }
 
@@ -414,89 +539,104 @@ function addRowModal() {
   const code = prompt('รหัส/ชื่อ PLO-MLO (เช่น PLO7):');
   if (!code) return;
   const desc = prompt('คำอธิบาย:') || '';
-  tableData.splice(tableData.findIndex(r=>r.type==='subtotal'||r.type==='total'||r.type==='grand')-1, 0,
-    { type:'row', code, desc, sem1:null, sem2:null }
+  // แทรกก่อน subtotal แรก
+  const insertIdx = tableData.findIndex(r => r.type === 'subtotal' || r.type === 'total' || r.type === 'grand');
+  tableData.splice(insertIdx > 0 ? insertIdx - 1 : tableData.length, 0,
+    { type: 'row', code, desc, sem1: null, sem2: null }
   );
+  markUnsaved();
   renderTable();
   showToast('เพิ่มรายการสำเร็จ');
 }
 
-// ── SIDE PANEL ──
+// ═══════════════════════════════════════════════
+//  SIDE PANEL
+// ═══════════════════════════════════════════════
 function updateSidePanel() {
-  const rows = tableData.filter(r=>r.type==='row');
-  const allGrands = rows.map(r=>getRowGrand(r)).filter(v=>v!==null);
+  const rows = tableData.filter(r => r.type === 'row');
+  const allGrands = rows.map(r => getRowGrand(r)).filter(v => v !== null);
   const overallAvg = avg(allGrands);
-  const baRows = rows.slice(0, rows.findIndex((r,i,a)=> {
-    const sectionIdx = tableData.findIndex(t=>t.type==='section' && t.label.includes('Multi'));
-    return tableData.indexOf(r) > sectionIdx;
-  }));
-  const multiRows = rows.filter(r=>!baRows.includes(r));
-  const baAvg = avg(baRows.map(r=>getRowGrand(r)).filter(v=>v!==null));
-  const multiAvg = avg(multiRows.map(r=>getRowGrand(r)).filter(v=>v!==null));
 
-  // compare bars
+  const multiSectionIdx = tableData.findIndex(t => t.type === 'section' && t.label.includes('Multi'));
+  const baRows = tableData.filter((r, i) => r.type === 'row' && i < multiSectionIdx);
+  const baAvg = avg(baRows.map(r => getRowGrand(r)).filter(v => v !== null));
+
   const compareData = [
-    { label:'Grand Total', val: overallAvg, max:5, color:'var(--purple)' },
-    { label:'รวมผลลัพธ์วิชาเอกธุรกิจ', val: baAvg, max:5, color:'var(--teal)' },
+    { label: 'Grand Total', val: overallAvg, color: 'var(--purple)' },
+    { label: 'รวมผลลัพธ์วิชาเอกธุรกิจ', val: baAvg, color: 'var(--teal)' },
   ];
-  document.getElementById('compareSection').innerHTML = compareData.map(c=>`
+
+  document.getElementById('compareSection').innerHTML = compareData.map(c => `
     <div class="compare-item">
       <div class="compare-label">
         <span>${c.label}</span>
-        <strong style="color:${c.color}">${c.val!==null?c.val.toFixed(2)+' / 5.0':'—'}</strong>
+        <strong style="color:${c.color}">${c.val !== null ? c.val.toFixed(2) + ' / 5.0' : '—'}</strong>
       </div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${c.val?((c.val/5)*100).toFixed(1):0}%;background:${c.color}"></div></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${c.val ? ((c.val / 5) * 100).toFixed(1) : 0}%;background:${c.color}"></div></div>
     </div>
   `).join('');
 
-  // stat grid
-  const pct = overallAvg ? Math.round((overallAvg/5)*100) : 0;
+  const pct = overallAvg ? Math.round((overallAvg / 5) * 100) : 0;
   document.getElementById('statGrid').innerHTML = `
     <div class="stat-block">
       <div class="stat-val" style="color:${scoreColor(overallAvg)}">${pct}%</div>
       <div class="stat-label">TARGET ACHIEVED</div>
     </div>
     <div class="stat-block">
-      <div class="stat-val" style="color:${scoreColor(overallAvg)}">${overallAvg!==null?overallAvg.toFixed(2):'—'}</div>
+      <div class="stat-val" style="color:${scoreColor(overallAvg)}">${overallAvg !== null ? overallAvg.toFixed(2) : '—'}</div>
       <div class="stat-label">OVERALL AVG</div>
     </div>
   `;
 
-  // summary
-  const low = rows.filter(r=>{ const g=getRowGrand(r); return g!==null && g<4.33; });
-  const high = rows.filter(r=>{ const g=getRowGrand(r); return g!==null && g>=4.5; });
+  const low = rows.filter(r => { const g = getRowGrand(r); return g !== null && g < 4.33; });
   let bullets = `<li><span class="bullet green"></span>สอบผ่านมาตรฐานและกระบวนการกลั่นกรองมีมิติมากขึ้น กรอบมาตรฐาน AUN-QA ได้รับการตรวจสอบทุกรายวิชา (5.0)</li>`;
   if (low.length > 0) {
-    bullets += `<li><span class="bullet amber"></span>วิชาเอกบางหมวด (MLO) มีคะแนนต่ำกว่าเกณฑ์ขั้นต่ำ 2 (${low.map(r=>r.code).join(', ')}) ควรดำเนินการแผนพัฒนาคุณภาพ</li>`;
-  } else {
+    bullets += `<li><span class="bullet amber"></span>PLO/MLO บางรายการมีคะแนนต่ำกว่าเกณฑ์ (${low.map(r => r.code).join(', ')}) ควรดำเนินการแผนพัฒนาคุณภาพ</li>`;
+  } else if (allGrands.length > 0) {
     bullets += `<li><span class="bullet green"></span>ทุก PLO/MLO ผ่านเกณฑ์ขั้นต่ำที่กำหนด</li>`;
   }
   document.getElementById('summaryList').innerHTML = bullets;
 }
 
-// ── IMPORT EXCEL ──
+// ═══════════════════════════════════════════════
+//  ✅ SAVE → localStorage
+// ═══════════════════════════════════════════════
+function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tableData));
+    markSaved();
+    showToast('✓ บันทึกข้อมูลสำเร็จ', '#22c55e');
+  } catch (e) {
+    showToast('❌ บันทึกไม่สำเร็จ', '#ef4444');
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  IMPORT EXCEL
+// ═══════════════════════════════════════════════
 function importExcel(e) {
-  const file = e.target.files[0]; if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
     try {
-      const wb = XLSX.read(ev.target.result, { type:'binary' });
+      const wb = XLSX.read(ev.target.result, { type: 'binary' });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(ws, { header:1, defval:'' });
-      // Expected: col0=code, col1=desc, col2=sem1, col3=sem2
+      const json = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
       let imported = 0;
-      const insertIdx = tableData.findIndex(r=>r.type==='subtotal'||r.type==='total'||r.type==='grand');
+      const insertIdx = tableData.findIndex(r => r.type === 'subtotal' || r.type === 'total' || r.type === 'grand');
       for (let i = 1; i < json.length; i++) {
         const row = json[i];
-        const code = String(row[0]||'').trim();
-        const desc = String(row[1]||'').trim();
-        const sem1 = row[2]!=='' && !isNaN(parseFloat(row[2])) ? parseFloat(row[2]) : null;
-        const sem2 = row[3]!=='' && !isNaN(parseFloat(row[3])) ? parseFloat(row[3]) : null;
+        const code = String(row[0] || '').trim();
+        const desc = String(row[1] || '').trim();
+        const sem1 = parseScore(row[2]);
+        const sem2 = parseScore(row[3]);
         if (!code && !desc) continue;
-        tableData.splice(insertIdx + imported, 0, { type:'row', code, desc, sem1, sem2 });
+        tableData.splice((insertIdx > 0 ? insertIdx : tableData.length) + imported, 0, { type: 'row', code, desc, sem1, sem2 });
         imported++;
       }
       if (!imported) { showToast('⚠️ ไม่พบข้อมูลในไฟล์', '#f59e0b'); return; }
+      markUnsaved();
       renderTable();
       showToast(`✓ นำเข้า ${imported} รายการสำเร็จ`);
     } catch { showToast('❌ ไม่สามารถอ่านไฟล์ได้', '#ef4444'); }
@@ -505,23 +645,24 @@ function importExcel(e) {
   e.target.value = '';
 }
 
-// ── DOWNLOAD TEMPLATE ──
+// ═══════════════════════════════════════════════
+//  TEMPLATE & EXPORT
+// ═══════════════════════════════════════════════
 function downloadTemplate() {
   const header = ['รหัส (Code)', 'คำอธิบาย (Description)', 'คะแนน SEM 1', 'คะแนน SEM 2'];
   const examples = [
-    ['PLO1','การบูรณาการประยุกต์ศาสตร์ด้านบริหารธุรกิจ', 4.60, 4.54],
-    ['PLO2','การใช้ผู้ประกอบการที่มีจิตสำนึกด้วยความรับผิดชอบ', 4.57, 4.59],
-    ['MLO1.1','วิชาเอกการจัดการทรัพยากรมนุษย์', '', 4.66],
+    ['PLO1', 'การบูรณาการประยุกต์ศาสตร์ด้านบริหารธุรกิจ', 4.60, 4.54],
+    ['PLO2', 'การใช้ผู้ประกอบการที่มีจิตสำนึกด้วยความรับผิดชอบ', 4.57, 4.59],
+    ['MLO1.1', 'วิชาเอกการจัดการทรัพยากรมนุษย์', '', 4.66],
   ];
   const ws = XLSX.utils.aoa_to_sheet([header, ...examples]);
-  ws['!cols'] = [{wch:14},{wch:50},{wch:14},{wch:14}];
+  ws['!cols'] = [{ wch: 14 }, { wch: 50 }, { wch: 14 }, { wch: 14 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'PLO Score Template');
   XLSX.writeFile(wb, 'plo_score_template.xlsx');
   showToast('✓ ดาวน์โหลด Template สำเร็จ');
 }
 
-// ── EXPORT EXCEL ──
 function exportExcel() {
   const header = ['รหัส/ชื่อ', 'คำอธิบาย', 'SEM 1', 'SEM 2', 'Grand Total'];
   const dataRows = [];
@@ -530,35 +671,36 @@ function exportExcel() {
       dataRows.push([item.label, '', '', '', '']);
     } else if (item.type === 'row') {
       const g = getRowGrand(item);
-      dataRows.push([item.code, item.desc, item.sem1??'', item.sem2??'', g!==null?parseFloat(g.toFixed(2)):'']);
+      dataRows.push([item.code, item.desc, item.sem1 ?? '', item.sem2 ?? '', g !== null ? parseFloat(g.toFixed(2)) : '']);
     } else if (item.type === 'subtotal' || item.type === 'total' || item.type === 'grand') {
       const c = computeGrand(item.refRows);
-      dataRows.push([item.label,'',c.sem1?parseFloat(c.sem1.toFixed(2)):'',c.sem2?parseFloat(c.sem2.toFixed(2)):'',c.grand?parseFloat(c.grand.toFixed(2)):'']);
+      dataRows.push([item.label, '', c.sem1 ? parseFloat(c.sem1.toFixed(2)) : '', c.sem2 ? parseFloat(c.sem2.toFixed(2)) : '', c.grand ? parseFloat(c.grand.toFixed(2)) : '']);
     }
   });
   const ws = XLSX.utils.aoa_to_sheet([header, ...dataRows]);
-  ws['!cols'] = [{wch:30},{wch:50},{wch:12},{wch:12},{wch:14}];
+  ws['!cols'] = [{ wch: 30 }, { wch: 50 }, { wch: 12 }, { wch: 12 }, { wch: 14 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'PLO Score Report');
   XLSX.writeFile(wb, 'plo_score_report_2567.xlsx');
   showToast('✓ Export Excel สำเร็จ');
 }
 
-function saveData() {
-  showToast('✓ บันทึกข้อมูลสำเร็จ');
-}
-
-// ── TOAST ──
+// ═══════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════
 let toastTimer;
-function showToast(msg, color='#22c55e') {
+function showToast(msg, color = '#22c55e') {
   const t = document.getElementById('toast');
   document.getElementById('toastDot').style.background = color;
   document.getElementById('toastMsg').textContent = msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
 renderTable();
 </script>
 </body>

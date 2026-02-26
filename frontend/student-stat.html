@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบสถิตินักศึกษา — BBA PSU</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══ RESET & TOKENS ══════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f1fb;
+  --white:#ffffff;
+  --sidebar:#2d1b69;
+  --sidebar-dark:#1e1147;
+  --nav:#ffffff;
+  --card:#ffffff;
+  --card2:#f9f7fe;
+  --border:#e8e1f5;
+  --border2:rgba(109,40,217,.12);
+  --text:#1a0f2e;
+  --text2:#5a4d7a;
+  --muted:#9585b8;
+  --acc:#7c3aed;
+  --acc2:#8b5cf6;
+  --acc3:#a78bfa;
+  --acc-l:#ede9fe;
+  --acc-ll:#f5f3ff;
+  --fin:#3b82f6; --mkt:#f97316; --hrm:#8b5cf6;
+  --log:#22c55e; --bis:#eab308; --mice:#ef4444;
+  --sh:0 2px 12px rgba(109,40,217,.08),0 1px 3px rgba(0,0,0,.05);
+  --sh2:0 8px 32px rgba(109,40,217,.12),0 2px 8px rgba(0,0,0,.06);
+  --sh3:0 20px 60px rgba(109,40,217,.15),0 4px 12px rgba(0,0,0,.07);
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:13.5px;overflow:hidden}
+
+/* ═══ SCROLLBARS ══════════════════════════════════════════════ */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--acc3)}
+
+/* ═══ TOPNAV ══════════════════════════════════════════════════ */
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  height:56px;background:var(--nav);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 1px 8px rgba(109,40,217,.07);
+  display:flex;align-items:center;padding:0 20px;gap:12px;
+}
+.tn-logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0;margin-right:12px}
+.tn-badge{
+  width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,var(--acc),#6d28d9);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anuphan',sans-serif;font-size:10px;font-weight:800;color:#fff;
+  box-shadow:0 3px 10px rgba(109,40,217,.35);
+  flex-shrink:0;
+}
+.tn-brand{font-family:'Anuphan',sans-serif;font-size:13px;font-weight:700;color:var(--text);line-height:1.25}
+.tn-brand small{display:block;font-size:10px;font-weight:400;color:var(--muted)}
+.tn-nav{display:flex;align-items:center;gap:2px;flex:1;overflow-x:auto}
+.tn-nav::-webkit-scrollbar{display:none}
+.tn-a{
+  padding:6px 13px;border-radius:7px;font-size:12.5px;
+  font-weight:500;color:var(--text2);cursor:pointer;
+  white-space:nowrap;transition:all .15s;border:none;background:none;
+  font-family:'Sarabun',sans-serif;
+}
+.tn-a:hover{background:var(--acc-l);color:var(--acc)}
+.tn-a.active{background:var(--acc-l);color:var(--acc);font-weight:700}
+.tn-r{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+.tn-qa{
+  padding:5px 12px;border-radius:6px;font-size:11.5px;font-weight:800;
+  background:var(--acc);color:#fff;cursor:pointer;border:none;
+  font-family:'Sarabun',sans-serif;
+}
+.tn-srch{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:8px;padding:5px 11px;transition:.15s;
+}
+.tn-srch:focus-within{background:#fff;border-color:var(--acc)}
+.tn-srch svg{width:12px;height:12px;fill:var(--muted);flex-shrink:0}
+.tn-srch input{border:none;background:transparent;outline:none;font-family:inherit;font-size:12px;color:var(--text);width:130px}
+.tn-srch input::placeholder{color:var(--muted)}
+.tn-icon{width:32px;height:32px;border-radius:8px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+.tn-icon:hover{background:var(--acc-l)}
+.tn-icon svg{width:14px;height:14px;fill:var(--text2)}
+.tn-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(109,40,217,.3)}
+
+/* ═══ LAYOUT ══════════════════════════════════════════════════ */
+.app{display:flex;height:100vh;padding-top:56px}
+.sidebar{
+  width:185px;flex-shrink:0;background:var(--sidebar);
+  overflow-y:auto;padding:14px 10px;display:flex;flex-direction:column;gap:3px;
+}
+.sb-section{
+  font-size:10px;font-weight:700;color:rgba(255,255,255,.35);
+  text-transform:uppercase;letter-spacing:.8px;
+  padding:8px 10px 5px;margin-top:8px;
+}
+.sb-section:first-child{margin-top:0}
+.sb-item{
+  display:flex;align-items:center;gap:9px;
+  padding:8px 10px;border-radius:8px;
+  cursor:pointer;font-size:12px;color:rgba(255,255,255,.55);
+  transition:all .15s;
+}
+.sb-item svg{width:14px;height:14px;flex-shrink:0}
+.sb-item:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9)}
+.sb-item.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600}
+.sb-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.content{flex:1;overflow-y:auto;background:var(--bg)}
+
+/* ═══ VIEWS ══════════════════════════════════════════════════ */
+.view{display:none;padding:22px 24px 48px;min-height:100%}
+.view.active{display:block}
+
+/* ═══ PAGE HEADER ════════════════════════════════════════════ */
+.ph{margin-bottom:18px}
+.ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ph-title{font-family:'Anuphan',sans-serif;font-size:22px;font-weight:800;color:var(--text);line-height:1.25}
+.ph-sub{font-size:11.5px;color:var(--muted);margin-top:3px;font-style:italic}
+.ph-acts{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+
+/* ═══ BUTTONS ════════════════════════════════════════════════ */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 15px;border-radius:8px;
+  font-family:'Sarabun',sans-serif;font-size:12.5px;font-weight:700;
+  cursor:pointer;border:none;white-space:nowrap;transition:all .16s;
+}
+.btn svg{width:12px;height:12px;fill:currentColor;flex-shrink:0}
+.btn-acc{background:var(--acc);color:#fff;box-shadow:0 3px 10px rgba(124,58,237,.3)}
+.btn-acc:hover{background:#6d28d9;transform:translateY(-1px)}
+.btn-out{background:#fff;color:var(--acc);border:1.5px solid #c4b5fd}
+.btn-out:hover{background:var(--acc-l)}
+.btn-ghost{background:rgba(0,0,0,.04);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--acc-l);color:var(--acc)}
+.btn-sm{padding:5px 11px;font-size:11.5px;border-radius:6px}
+.btn-xs{padding:4px 9px;font-size:11px;border-radius:5px}
+
+/* ═══ DATE PILL ══════════════════════════════════════════════ */
+.date-pill{
+  display:flex;align-items:center;gap:7px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:8px;padding:6px 12px;font-size:12px;color:var(--text2);
+  box-shadow:var(--sh);
+}
+.date-pill svg{width:13px;height:13px;fill:var(--acc)}
+.date-pill select{
+  border:none;background:transparent;outline:none;
+  font-family:inherit;font-size:12px;color:var(--acc);
+  font-weight:700;cursor:pointer;
+}
+
+/* ═══ KPI CARDS ══════════════════════════════════════════════ */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.kpi-card{
+  background:#fff;border-radius:12px;padding:16px 18px;
+  border:1px solid var(--border);box-shadow:var(--sh);
+  display:flex;align-items:flex-start;gap:12px;
+  position:relative;overflow:hidden;
+}
+.kpi-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--acc),var(--acc3));
+}
+.kpi-icon-wrap{
+  width:42px;height:42px;border-radius:10px;
+  background:var(--acc-l);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.kpi-body{flex:1;min-width:0}
+.kpi-val{
+  font-family:'Anuphan',sans-serif;font-size:28px;font-weight:800;
+  color:var(--text);line-height:1;
+}
+.kpi-label{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.35}
+.kpi-delta{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:11px;font-weight:700;padding:2px 7px;
+  border-radius:999px;margin-top:5px;
+}
+.kpi-delta.up{background:#dcfce7;color:#16a34a}
+.kpi-delta.down{background:#fee2e2;color:#dc2626}
+.kpi-delta.neu{background:var(--acc-l);color:var(--acc)}
+
+/* ═══ CHART CARD ═════════════════════════════════════════════ */
+.chart-card{
+  background:#fff;border-radius:12px;padding:16px 18px;
+  border:1px solid var(--border);box-shadow:var(--sh);
+  margin-bottom:14px;
+}
+.cc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
+.cc-title{font-family:'Anuphan',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)}
+.cc-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.cc-acts{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+
+/* ═══ LEGEND ═════════════════════════════════════════════════ */
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:8px}
+.leg-i{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.leg-line{width:20px;height:3px;border-radius:99px;flex-shrink:0}
+
+/* ═══ MAJOR TABS ═════════════════════════════════════════════ */
+.mj-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.mj-tab{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:6px;
+  border:1px solid var(--border);background:#fff;
+  font-size:11.5px;font-weight:500;color:var(--text2);
+  cursor:pointer;transition:all .15s;
+  font-family:'Sarabun',sans-serif;
+}
+.mj-tab .dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.mj-tab:hover{border-color:var(--acc3);color:var(--acc)}
+.mj-tab.active{background:var(--acc-l);border-color:var(--acc);color:var(--acc);font-weight:700}
+
+/* ═══ FORM STYLES ════════════════════════════════════════════ */
+.form-section{
+  background:#fff;border-radius:12px;padding:18px 20px;
+  border:1px solid var(--border);box-shadow:var(--sh);
+  margin-bottom:14px;
+}
+.fs-header{
+  display:flex;align-items:center;gap:9px;
+  margin-bottom:14px;padding-bottom:11px;
+  border-bottom:1px solid var(--border);
+}
+.fs-num{
+  width:24px;height:24px;border-radius:6px;
+  background:var(--acc);color:#fff;
+  font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.fs-title{font-family:'Anuphan',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.fs-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.form-row{display:grid;gap:12px;margin-bottom:12px}
+.form-row.c2{grid-template-columns:1fr 1fr}
+.form-row.c3{grid-template-columns:1fr 1fr 1fr}
+.form-row.c5{grid-template-columns:repeat(5,1fr)}
+.form-row.c6{grid-template-columns:repeat(6,1fr)}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:4px}
+.fg label .req{color:#ef4444;margin-left:2px}
+.fg input,.fg select{
+  width:100%;padding:8px 11px;
+  background:#fafafa;border:1.5px solid var(--border);
+  border-radius:7px;font-family:'Sarabun',sans-serif;
+  font-size:12.5px;color:var(--text);outline:none;
+  transition:.15s;
+}
+.fg input:focus,.fg select:focus{border-color:var(--acc);background:#fff}
+.fg .hint{font-size:10.5px;color:var(--muted);margin-top:3px}
+.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+
+/* ═══ SAVED BOX ══════════════════════════════════════════════ */
+.saved-preview{
+  background:var(--acc-ll);border:1px solid #c4b5fd;
+  border-radius:9px;padding:12px 14px;margin-top:12px;
+}
+.sp-title{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:700;color:var(--acc);
+  margin-bottom:9px;
+}
+.sp-dot{width:7px;height:7px;border-radius:2px;background:var(--acc);flex-shrink:0}
+.sp-vals{display:flex;gap:20px;flex-wrap:wrap}
+.sp-item .sp-num{
+  font-family:'Anuphan',sans-serif;font-size:22px;
+  font-weight:800;color:var(--text);line-height:1;
+}
+.sp-item .sp-lbl{font-size:10.5px;color:var(--muted);margin-top:2px}
+
+/* ═══ TABLE ══════════════════════════════════════════════════ */
+.tbl-wrap{border-radius:10px;overflow:auto;border:1px solid var(--border);box-shadow:var(--sh)}
+table{width:100%;border-collapse:collapse;min-width:500px}
+thead th{
+  background:var(--acc-ll);font-size:11.5px;color:var(--text2);
+  font-weight:700;padding:9px 12px;text-align:left;
+  border-bottom:1px solid #c4b5fd;white-space:nowrap;
+}
+tbody td{padding:9px 12px;font-size:12.5px;border-bottom:1px solid var(--border);color:var(--text)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--acc-ll)}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.b-green{background:#dcfce7;color:#15803d}
+.b-blue{background:#dbeafe;color:#1d4ed8}
+.b-red{background:#fee2e2;color:#dc2626}
+.b-yellow{background:#fef9c3;color:#854d0e}
+
+/* ═══ PROGRESS BAR ══════════════════════════════════════════ */
+.prog{height:4px;background:var(--border);border-radius:99px;margin-top:4px;overflow:hidden}
+.prog-f{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc),var(--acc3));transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* ═══ DROP ZONE ══════════════════════════════════════════════ */
+.dz{
+  border:2px dashed #c4b5fd;border-radius:10px;
+  padding:24px 20px;text-align:center;cursor:pointer;transition:.18s;
+  background:var(--acc-ll);
+}
+.dz:hover,.dz.drag{border-color:var(--acc);background:var(--acc-l)}
+.dz-ico{font-size:28px;margin-bottom:8px}
+.dz p{font-size:12.5px;color:var(--muted)}
+.dz b{color:var(--acc);cursor:pointer}
+
+/* ═══ PARTNER LOGOS ═════════════════════════════════════════ */
+.partner-strip{
+  display:flex;align-items:center;gap:12px;
+  flex-wrap:wrap;padding:12px 0;
+}
+.partner-logo{
+  width:56px;height:32px;background:var(--bg);
+  border:1px solid var(--border);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:800;color:var(--muted);
+}
+
+/* ═══ STAT NUMBER ROWS ══════════════════════════════════════ */
+.stat-row-nums{
+  display:flex;gap:0;border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;margin-bottom:14px;
+}
+.srn-item{
+  flex:1;padding:12px 14px;text-align:center;
+  border-right:1px solid var(--border);
+  background:#fff;transition:.15s;
+}
+.srn-item:last-child{border-right:none}
+.srn-item:hover{background:var(--acc-ll)}
+.srn-num{font-family:'Anuphan',sans-serif;font-size:22px;font-weight:800;color:var(--text)}
+.srn-lbl{font-size:10.5px;color:var(--muted);margin-top:2px}
+
+/* ═══ TOAST ══════════════════════════════════════════════════ */
+#toast{
+  position:fixed;bottom:20px;right:20px;z-index:9999;
+  background:var(--sidebar);color:#fff;
+  padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:var(--sh3);
+  transform:translateY(60px);opacity:0;pointer-events:none;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+#toast.show{transform:none;opacity:1}
+#toast .tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* ═══ FOOTER ════════════════════════════════════════════════ */
+.yr-add-row{display:flex;align-items:center;gap:7px;margin-top:8px}
+.yr-add-row input{width:90px;padding:6px 9px;border:1.5px solid var(--border);border-radius:7px;font-family:inherit;font-size:12px;color:var(--text);outline:none;transition:.15s}
+.yr-add-row input:focus{border-color:var(--acc)}
+.footer-note{
+  margin-top:20px;padding:10px 14px;
+  background:linear-gradient(90deg,var(--acc-l),#fff);
+  border-radius:8px;border:1px solid #c4b5fd;
+  font-size:11px;color:var(--acc);font-weight:600;
+  display:flex;align-items:center;gap:7px;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ TOPNAV ══════════════════════════════════════════════════ -->
+<header class="topnav">
+  <a class="tn-logo" href="#">
+    <div class="tn-badge">
+      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4a/PSU_logo.png/200px-PSU_logo.png"
+           onerror="this.style.display='none';this.parentNode.textContent='PSU'"
+           style="width:22px;height:22px;object-fit:contain">
+    </div>
+    <div class="tn-brand">
+      คณะวิทยาการจัดการ
+      <small>Prince of Songkla University</small>
+    </div>
+  </a>
+
+  <nav class="tn-nav">
+    <button class="tn-a" onclick="gotoView('input',this)">หน้าหลัก</button>
+    <button class="tn-a active" onclick="gotoView('students',this)">จำนวนนักศึกษา</button>
+    <button class="tn-a" onclick="gotoView('status',this)">สถิตินักศึกษา</button>
+    <button class="tn-a" onclick="gotoView('coop',this)">สหกิจศึกษา</button>
+    <button class="tn-a" onclick="gotoView('intern',this)">การฝึกงาน</button>
+    <button class="tn-a">แผนการศึกษา</button>
+    <button class="tn-qa">QA</button>
+  </nav>
+
+  <div class="tn-r">
+    <div class="tn-srch">
+      <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 2a4 4 0 100 8 4 4 0 000-8zM0 6a6 6 0 1110.89 3.477l4.817 4.816a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 010 6z"/></svg>
+      <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร...">
+    </div>
+    <div class="tn-icon">
+      <svg viewBox="0 0 16 16"><path d="M8 16a2 2 0 001.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 008 16zm.104-14.096A5.001 5.001 0 003 7c0 1.104-.23 2.458-.988 3.57-.761 1.116-1.886 1.43-1.886 1.43H13.874s-1.125-.314-1.886-1.43C11.23 9.458 11 8.104 11 7a5.001 5.001 0 00-2.896-4.596z"/></svg>
+    </div>
+    <div class="tn-av">A</div>
+  </div>
+</header>
+
+<!-- ══ APP LAYOUT ══════════════════════════════════════════════ -->
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sb-section">ภาพรวม</div>
+    <div class="sb-item active" onclick="gotoView('students',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6z"/><path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 015 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 005 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/><path d="M4.5 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg>
+      จำนวนนักศึกษา
+    </div>
+    <div class="sb-item" onclick="gotoView('status',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 4a.5.5 0 01.5.5V6a.5.5 0 01-1 0V4.5A.5.5 0 018 4zM3.732 5.732a.5.5 0 011.5 1.5l-.707.707a.5.5 0 01-.707-.707l.707-.707zM2 10a.5.5 0 01.5-.5h1.586a.5.5 0 010 1H2.5A.5.5 0 012 10zm9.5 0a.5.5 0 01.5-.5h1.5a.5.5 0 010 1H12a.5.5 0 01-.5-.5zm.754-4.246a.389.389 0 00-.527-.02L7.547 9.31a.91.91 0 101.302 1.258l3.434-4.297a.389.389 0 00-.029-.518z"/></svg>
+      สถิตินักศึกษา
+    </div>
+    <div class="sb-item" onclick="gotoView('coop',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6z"/></svg>
+      สหกิจศึกษา
+    </div>
+    <div class="sb-item" onclick="gotoView('intern',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 2a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H2a2 2 0 01-2-2V2zm5 3v2h6V5H5zm0 3v2h6V8H5zm0 3v2h6v-2H5zM3 5H1v2h2V5zm0 3H1v2h2V8zm0 3H1v2h2v-2z"/></svg>
+      การฝึกงาน
+    </div>
+
+    <div class="sb-section">จัดการข้อมูล</div>
+    <div class="sb-item" onclick="gotoView('input',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 3.5a.5.5 0 00-1 0V7H3.5a.5.5 0 000 1H7v3.5a.5.5 0 001 0V8h3.5a.5.5 0 000-1H8V3.5z"/></svg>
+      บันทึกข้อมูล
+    </div>
+    <div class="sb-item" onclick="gotoView('import',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V4h3v4H12L8 12z"/><path d="M2 14h12v1.5H2z"/></svg>
+      นำเข้า Excel
+    </div>
+  </nav>
+
+  <!-- SCROLLABLE CONTENT -->
+  <div class="content" id="content">
+
+    <!-- ════════════════════════════════════════════
+         VIEW: จำนวนนักศึกษา (Dashboard 3)
+    ════════════════════════════════════════════ -->
+    <div class="view active" id="view-students">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-title">จำนวนนักศึกษา</div>
+            <div class="ph-sub">Student Data Analytics Overview — Comprehensive QA Insights</div>
+          </div>
+          <div class="ph-acts">
+            <div class="date-pill">
+              <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 01.5.5V1h8V.5a.5.5 0 011 0V1h1a2 2 0 012 2v11a2 2 0 01-2 2H2a2 2 0 01-2-2V3a2 2 0 012-2h1V.5a.5.5 0 01.5-.5z"/></svg>
+              ปีการศึกษา
+              <select id="stdYr" onchange="renderStudents()">
+                <option>2577</option><option>2576</option><option>2575</option><option>2574</option><option>2573</option><option>2572</option><option>2571</option><option>2570</option><option>2569</option><option>2568</option><option>2567</option><option>2566</option><option>2565</option><option>2564</option><option>2563</option><option>2562</option><option>2561</option><option>2560</option><option>2559</option><option>2558</option><option>2557</option><option>2556</option><option>2555</option>
+              </select>
+            </div>
+            <button class="btn btn-acc btn-sm" onclick="exportStudentsXlsx()">
+              <svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V4h3v4H12L8 12z"/></svg>
+              Export Report
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">👥</div>
+          <div class="kpi-body">
+            <div class="kpi-val" id="kpi-total">1,944</div>
+            <div class="kpi-label">จำนวนนักศึกษาทั้งหมด (ปี 2564–2567)</div>
+            <span class="kpi-delta neu">6 วิชาเอก</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">🏛️</div>
+          <div class="kpi-body">
+            <div class="kpi-val">6</div>
+            <div class="kpi-label">จำนวนวิชาเอก</div>
+            <span class="kpi-delta neu">หลักสูตรบริหารธุรกิจ</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">📅</div>
+          <div class="kpi-body">
+            <div class="kpi-val">4 ปี</div>
+            <div class="kpi-label">ระยะเวลาหลักสูตรเฉลี่ย</div>
+            <span class="kpi-delta neu">ระดับปริญญาตรี</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row: Pie + Bar -->
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="cc-head">
+            <div>
+              <div class="cc-title">จำนวนนักศึกษาหลักสูตรบริหารธุรกิจบัณฑิต ปี 2564–2567</div>
+              <div class="cc-sub">สัดส่วนรายวิชาเอก</div>
+            </div>
+            <div class="cc-acts">
+              <span style="font-size:10.5px;color:var(--muted)">ทุกสาขา ▾</span>
+            </div>
+          </div>
+          <div class="leg" id="std-pie-leg"></div>
+          <div style="max-width:280px;margin:0 auto">
+            <canvas id="cStdPie"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="cc-head">
+            <div>
+              <div class="cc-title">จำนวนนักศึกษาแต่ละสาขา</div>
+              <div class="cc-sub">เปรียบเทียบจำนวนนักศึกษารายงานตัว ปี 2564–2567</div>
+            </div>
+            <span style="font-size:10.5px;color:var(--muted)">ทุกสาขา ▾</span>
+          </div>
+          <canvas id="cStdBar"></canvas>
+        </div>
+      </div>
+
+      <!-- Line Chart: รับเข้าแต่ละปี -->
+      <div class="chart-card">
+        <div class="cc-head">
+          <div>
+            <div class="cc-title">จำนวนนักศึกษาหลักสูตรบริหารธุรกิจบัณฑิต รับเข้าแต่ละปี</div>
+            <div class="cc-sub">แสดงข้อมูลแผนรับ / สัมภาษณ์ / ยืนยัน / รายงานตัว / ไม่รายงานตัว</div>
+          </div>
+          <div class="cc-acts">
+            <span style="font-size:10.5px;color:var(--muted)">ทุกวิชาเอก ▾</span>
+          </div>
+        </div>
+        <div class="mj-tabs" id="std-mj-tabs"></div>
+        <canvas id="cStdLine" height="160"></canvas>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         VIEW: สถิตินักศึกษา (Dashboard 1)
+    ════════════════════════════════════════════ -->
+    <div class="view" id="view-status">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-title">สถิตินักศึกษาและความสำเร็จทางการศึกษา</div>
+            <div class="ph-sub">Student Data Analytics Overview — Comprehensive QA Insights</div>
+          </div>
+          <div class="ph-acts">
+            <div class="date-pill">
+              <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 01.5.5V1h8V.5a.5.5 0 011 0V1h1a2 2 0 012 2v11a2 2 0 01-2 2H2a2 2 0 01-2-2V3a2 2 0 012-2h1V.5a.5.5 0 01.5-.5z"/></svg>
+              ปีการศึกษา
+              <select id="statusYr" onchange="renderStatus()">
+                <option>2567</option><option>2566</option><option>2565</option><option>2564</option>
+              </select>
+            </div>
+            <button class="btn btn-acc btn-sm" onclick="exportStudentsXlsx()">
+              <svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V4h3v4H12L8 12z"/></svg>
+              Export Report
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">📈</div>
+          <div class="kpi-body">
+            <div class="kpi-val" id="kpi-retention">95.95%</div>
+            <div class="kpi-label">อัตราคงอยู่ (Retention Rate)</div>
+            <span class="kpi-delta up">↑ +1.2%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">📉</div>
+          <div class="kpi-body">
+            <div class="kpi-val" id="kpi-dropout">4.05%</div>
+            <div class="kpi-label">อัตราออกกลางคัน (Dropout Rate)</div>
+            <span class="kpi-delta down">↑ −0.5%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">⏱️</div>
+          <div class="kpi-body">
+            <div class="kpi-val">4 ปี</div>
+            <div class="kpi-label">ระยะเวลาเฉลี่ยสำเร็จการศึกษา</div>
+            <span class="kpi-delta neu">+0.1ปี</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Line chart: จำนวนนักศึกษาเปรียบเทียบ -->
+      <div class="chart-card">
+        <div class="cc-head">
+          <div>
+            <div class="cc-title">แนวโน้มจำนวนนักศึกษาเทียบกับผู้สำเร็จการศึกษา</div>
+            <div class="cc-sub">สถิติย้อนหลัง 5 ปีการศึกษา (2563 – 2567)</div>
+          </div>
+          <div class="date-pill" style="font-size:11px">
+            ทุกวิชาเอก <select style="border:none;background:transparent;font-size:11px;color:var(--acc);font-weight:700;outline:none;cursor:pointer"><option>ทุกวิชาเอก</option></select>
+          </div>
+        </div>
+        <canvas id="cStatusLine" height="160"></canvas>
+        <div class="leg" style="margin-top:10px">
+          <div class="leg-i"><span class="leg-line" style="background:var(--acc)"></span>จำนวนนักศึกษาลงทะเบียน</div>
+          <div class="leg-i"><span class="leg-line" style="background:#fb923c"></span>นักศึกษาที่สำเร็จการศึกษา</div>
+        </div>
+      </div>
+
+      <!-- Pie: สถิติสถานะการศึกษา -->
+      <div class="chart-card">
+        <div class="cc-head">
+          <div>
+            <div class="cc-title">สถิติสถานะการศึกษา</div>
+            <div class="cc-sub">จำแนกตามสถานะปัจจุบันของนักศึกษา</div>
+          </div>
+          <div class="date-pill" style="font-size:11px">
+            <select id="statusPieYr" onchange="buildStatusPie()" style="border:none;background:transparent;font-size:11px;color:var(--acc);font-weight:700;outline:none;cursor:pointer">
+              <option>2577</option><option>2576</option><option>2575</option><option>2574</option><option>2573</option><option>2572</option><option>2571</option><option>2570</option><option>2569</option><option>2568</option><option>2567</option><option>2566</option><option>2565</option><option>2564</option><option>2563</option><option>2562</option><option>2561</option><option>2560</option><option>2559</option><option>2558</option><option>2557</option><option>2556</option><option>2555</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-bottom:0">
+          <div>
+            <canvas id="cStatusPie"></canvas>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:center;gap:5px" id="status-leg-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         VIEW: สหกิจศึกษา (Dashboard 2 Right)
+    ════════════════════════════════════════════ -->
+    <div class="view" id="view-coop">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-title">สหกิจศึกษา</div>
+            <div class="ph-sub">Student Data Analytics Overview — Comprehensive QA Insights</div>
+          </div>
+          <div class="ph-acts">
+            <button class="btn btn-acc btn-sm" onclick="exportStudentsXlsx()">
+              <svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V4h3v4H12L8 12z"/></svg>
+              Export Report
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">🎓</div>
+          <div class="kpi-body">
+            <div class="kpi-val">715</div>
+            <div class="kpi-label">นักศึกษาสหกิจ (ปี 2564–2568)</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">🏢</div>
+          <div class="kpi-body">
+            <div class="kpi-val">174</div>
+            <div class="kpi-label">สถานประกอบการ(ปี 2564–)</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">⏰</div>
+          <div class="kpi-body">
+            <div class="kpi-val">4 เดือน</div>
+            <div class="kpi-label">ระยะเวลาสหกิจโดยเฉลี่ย</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bar chart -->
+      <div class="chart-card">
+        <div class="cc-head">
+          <div>
+            <div class="cc-title">สถิตินักศึกษาสหกิจศึกษา คณะวิทยาการจัดการ ม.อ. (แยกสาขา)</div>
+            <div class="cc-sub">จำนวนนักศึกษาแยกตามวิชาเอก ปี 2564–2568</div>
+          </div>
+          <div class="date-pill" style="font-size:11px">
+            ทุกสาขา
+            <select id="coopYrSel" onchange="buildCoopBar()" style="border:none;background:transparent;font-size:11px;color:var(--acc);font-weight:700;outline:none;cursor:pointer">
+              <option value="all">ทุกปี</option><option>2577</option><option>2576</option><option>2575</option><option>2574</option><option>2573</option><option>2572</option><option>2571</option><option>2570</option><option>2569</option><option>2568</option><option>2567</option><option>2566</option><option>2565</option><option>2564</option><option>2563</option><option>2562</option><option>2561</option><option>2560</option><option>2559</option><option>2558</option><option>2557</option><option>2556</option><option>2555</option>
+            </select>
+          </div>
+        </div>
+        <canvas id="cCoopBar" height="180"></canvas>
+      </div>
+
+      <div class="grid-2">
+        <!-- Pie -->
+        <div class="chart-card" style="margin-bottom:0">
+          <div class="cc-head">
+            <div>
+              <div class="cc-title">สถิตินักศึกษาสหกิจ ม.อ. (ปี 2564–2568)</div>
+            </div>
+          </div>
+          <div style="max-width:260px;margin:0 auto">
+            <canvas id="cCoopPie"></canvas>
+          </div>
+        </div>
+        <!-- Top 5 provinces + companies -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="chart-card" style="margin-bottom:0;flex:1">
+            <div class="cc-title" style="margin-bottom:9px;font-size:12px">5 อันดับจังหวัดยอดนิยม</div>
+            <div id="top-provinces" style="display:flex;flex-direction:column;gap:5px"></div>
+          </div>
+          <div class="chart-card" style="margin-bottom:0;flex:1">
+            <div class="cc-title" style="margin-bottom:9px;font-size:12px">5 อันดับประเภทบริษัทที่นักศึกษานิยมไป</div>
+            <div id="top-companies" style="display:flex;flex-direction:column;gap:5px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Partner strip -->
+      <div class="chart-card" style="margin-top:14px">
+        <div class="cc-title" style="margin-bottom:11px">ความร่วมมือทางวิชาการ</div>
+        <div class="partner-strip" id="partners-coop"></div>
+      </div>
+
+      <div class="footer-note">📊 สามารถดูข้อมูลสถิติฝึกงานเพิ่มเติมได้ที่ : สถิติสหกิจศึกษา</div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         VIEW: การฝึกงาน (Dashboard 2 Left)
+    ════════════════════════════════════════════ -->
+    <div class="view" id="view-intern">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-title">การฝึกงาน</div>
+            <div class="ph-sub">Student Data Analytics Overview — Comprehensive QA Insights</div>
+          </div>
+          <div class="ph-acts">
+            <div class="date-pill">
+              <svg viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 01.5.5V1h8V.5a.5.5 0 011 0V1h1a2 2 0 012 2v11a2 2 0 01-2 2H2a2 2 0 01-2-2V3a2 2 0 012-2h1V.5a.5.5 0 01.5-.5z"/></svg>
+              ปีการศึกษา <select style="border:none;background:transparent;font-size:12px;color:var(--acc);font-weight:700;outline:none;cursor:pointer"><option>2567</option><option>2566</option></select>
+            </div>
+            <button class="btn btn-acc btn-sm">
+              <svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V4h3v4H12L8 12z"/></svg>
+              Export Report
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">👤</div>
+          <div class="kpi-body">
+            <div class="kpi-val">1,735</div>
+            <div class="kpi-label">จำนวนนักศึกษา</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">🏭</div>
+          <div class="kpi-body">
+            <div class="kpi-val">635</div>
+            <div class="kpi-label">สถานประกอบการทั้งหมด</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap">📆</div>
+          <div class="kpi-body">
+            <div class="kpi-val">2 เดือน</div>
+            <div class="kpi-label">ระยะเวลาฝึกงานโดยเฉลี่ย</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bar by major -->
+      <div class="chart-card">
+        <div class="cc-head">
+          <div>
+            <div class="cc-title">สถิติข้อมูลการฝึกงาน คณะวิทยาการจัดการ</div>
+            <div class="cc-sub">จำนวนนักศึกษาแยกตามวิชาเอก ปี 2563–2567</div>
+          </div>
+          <div class="date-pill" style="font-size:11px">
+            ทุกสาขา <select style="border:none;background:transparent;font-size:11px;color:var(--acc);font-weight:700;outline:none;cursor:pointer"><option>ทุกสาขา</option></select>
+          </div>
+        </div>
+        <canvas id="cInternBar" height="180"></canvas>
+      </div>
+
+      <div class="grid-2">
+        <div class="chart-card" style="margin-bottom:0">
+          <div class="cc-title" style="margin-bottom:10px;font-size:12px">สถิติข้อมูลการฝึกงาน ม.อ. (2563–2567)</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="position:relative;width:140px;flex-shrink:0">
+              <canvas id="cInternPie"></canvas>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+                <div style="font-family:'Anuphan',sans-serif;font-size:22px;font-weight:800;color:var(--text)">1735</div>
+              </div>
+            </div>
+            <div id="intern-pie-leg" style="display:flex;flex-direction:column;gap:4px"></div>
+          </div>
+        </div>
+        <div class="chart-card" style="margin-bottom:0">
+          <div class="cc-title" style="margin-bottom:10px;font-size:12px">สถิติแผนภูมิประสบการณ์นักศึกษา (2563–2567)</div>
+          <canvas id="cInternPieDest"></canvas>
+        </div>
+      </div>
+
+      <!-- Yearly bar -->
+      <div class="chart-card" style="margin-top:12px">
+        <div class="cc-title" style="margin-bottom:10px;font-size:12px">รวมจำนวนนักศึกษาที่ฝึกงานแต่ละปี</div>
+        <canvas id="cInternYr" height="160"></canvas>
+      </div>
+
+      <!-- Partners -->
+      <div class="chart-card" style="margin-top:4px">
+        <div class="cc-title" style="margin-bottom:11px">ความร่วมมือทางวิชาการ</div>
+        <div class="partner-strip" id="partners-intern"></div>
+      </div>
+
+      <div class="footer-note">📊 สามารถดูข้อมูลสถิติฝึกงานเพิ่มเติมได้ที่ : สถิติการฝึกงาน</div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         VIEW: บันทึกข้อมูล (Input Form)
+    ════════════════════════════════════════════ -->
+    <div class="view" id="view-input">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-title">บันทึกข้อมูลสถิตินักศึกษา</div>
+            <div class="ph-sub">กรอกหรือนำเข้าข้อมูลเพื่ออัปเดต Dashboard อัตโนมัติ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1 -->
+      <div class="form-section">
+        <div class="fs-header">
+          <div class="fs-num">1</div>
+          <div><div class="fs-title">ข้อมูลเบื้องต้นจำนวนนักศึกษา</div><div class="fs-sub">จำนวนนักศึกษาทั้งหมด ณ ปัจจุบัน</div></div>
+        </div>
+        <div class="form-row c2">
+          <div class="fg">
+            <label>ปีการศึกษา <span class="req">*</span></label>
+            <select id="f1yr"><option value="">เลือกปีการศึกษา</option><option>2577</option><option>2576</option><option>2575</option><option>2574</option><option>2573</option><option>2572</option><option>2571</option><option>2570</option><option>2569</option><option>2568</option><option>2567</option><option>2566</option><option>2565</option><option>2564</option><option>2563</option><option>2562</option><option>2561</option><option>2560</option><option>2559</option><option>2558</option><option>2557</option><option>2556</option><option>2555</option></select>
+          </div>
+          <div class="fg">
+            <label>สาขาวิชาเอก <span class="req">*</span></label>
+            <select id="f1mj"><option value="">เลือกสาขาวิชาเอก</option><option value="fin">การเงินและการลงทุน</option><option value="mkt">การตลาดและการสื่อสาร</option><option value="hrm">การจัดการทรัพยากรมนุษย์</option><option value="log">การจัดการโลจิสติกส์</option><option value="bis">ระบบสารสนเทศทางธุรกิจ</option><option value="mice">การจัดการไมซ์</option></select>
+          </div>
+        </div>
+        <div class="fg">
+          <label>จำนวนนักศึกษาทั้งหมด</label>
+          <input type="number" id="f1total" placeholder="0" min="0">
+          <div class="hint">ระบุจำนวนนักศึกษาทั้งหมดที่ลงทะเบียนในปีการศึกษานี้</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 0 2px;border-top:1px dashed var(--border);margin-top:8px">
+          <span style="font-size:11.5px;font-weight:700;color:var(--text2)">➕ เพิ่มปีการศึกษา:</span>
+          <input type="number" id="customYrInput" placeholder="เช่น 2578" min="2550" max="2599"
+            style="width:110px;padding:6px 9px;border:1.5px solid var(--border);border-radius:7px;font-family:inherit;font-size:12.5px;color:var(--text);outline:none"
+            onkeydown="if(event.key==='Enter')addCustomYear()">
+          <button class="btn btn-ghost btn-xs" onclick="addCustomYear()">เพิ่ม</button>
+          <span style="font-size:10.5px;color:var(--muted)">ปีที่เพิ่มจะปรากฏในทุกช่องเลือกปีการศึกษา</span>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-ghost btn-sm" onclick="clearForm(1)">ล้างข้อมูล</button>
+          <button class="btn btn-acc btn-sm" onclick="saveForm1()">บันทึกข้อมูล</button>
+        </div>
+        <div class="saved-preview" id="sp1">
+          <div class="sp-title"><span class="sp-dot"></span><span id="sp1t">การเงินและการลงทุน ปีการศึกษา 2567</span></div>
+          <div class="sp-vals">
+            <div class="sp-item"><div class="sp-num" id="sp1v">287</div><div class="sp-lbl">นักศึกษา (คน)</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="form-section">
+        <div class="fs-header">
+          <div class="fs-num">2</div>
+          <div><div class="fs-title">ข้อมูลการรับนักศึกษาแต่ละปี</div><div class="fs-sub">แผนรับ / สัมภาษณ์ / ยืนยัน / รายงานตัว</div></div>
+        </div>
+        <div class="form-row c2">
+          <div class="fg">
+            <label>ปีการศึกษา <span class="req">*</span></label>
+            <select id="f2yr"><option value="">เลือกปีการศึกษา</option><option>2577</option><option>2576</option><option>2575</option><option>2574</option><option>2573</option><option>2572</option><option>2571</option><option>2570</option><option>2569</option><option>2568</option><option>2567</option><option>2566</option><option>2565</option><option>2564</option><option>2563</option><option>2562</option><option>2561</option><option>2560</option><option>2559</option><option>2558</option><option>2557</option><option>2556</option><option>2555</option></select>
+          </div>
+          <div class="fg">
+            <label>สาขาวิชาเอก <span class="req">*</span></label>
+            <select id="f2mj"><option value="">เลือกสาขาวิชาเอก</option><option value="fin">การเงินและการลงทุน</option><option value="mkt">การตลาดและการสื่อสาร</option><option value="hrm">การจัดการทรัพยากรมนุษย์</option><option value="log">การจัดการโลจิสติกส์</option><option value="bis">ระบบสารสนเทศทางธุรกิจ</option><option value="mice">การจัดการไมซ์</option></select>
+          </div>
+        </div>
+        <div class="form-row c5">
+          <div class="fg"><label>แผนรับ</label><input type="number" id="f2pl" placeholder="0" min="0"><div class="hint">คน</div></div>
+          <div class="fg"><label>สัมภาษณ์</label><input type="number" id="f2in" placeholder="0" min="0"><div class="hint">คน</div></div>
+          <div class="fg"><label>ยืนยัน</label><input type="number" id="f2co" placeholder="0" min="0"><div class="hint">คน</div></div>
+          <div class="fg"><label>รายงานตัว</label><input type="number" id="f2re" placeholder="0" min="0"><div class="hint">คน</div></div>
+          <div class="fg"><label>ไม่รายงานตัว</label><input type="number" id="f2nr" placeholder="0" min="0"><div class="hint">คน</div></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-ghost btn-sm" onclick="clearForm(2)">ล้างข้อมูล</button>
+          <button class="btn btn-acc btn-sm" onclick="saveForm2()">บันทึกข้อมูล</button>
+        </div>
+        <div class="saved-preview" id="sp2">
+          <div class="sp-title"><span class="sp-dot"></span><span id="sp2t">การเงินและการลงทุน ปีการศึกษา 2567</span></div>
+          <div class="sp-vals" id="sp2v">
+            <div class="sp-item"><div class="sp-num">80</div><div class="sp-lbl">แผนรับ</div></div>
+            <div class="sp-item"><div class="sp-num">122</div><div class="sp-lbl">สัมภาษณ์</div></div>
+            <div class="sp-item"><div class="sp-num">80</div><div class="sp-lbl">ยืนยัน</div></div>
+            <div class="sp-item"><div class="sp-num">76</div><div class="sp-lbl">รายงานตัว</div></div>
+            <div class="sp-item"><div class="sp-num">4</div><div class="sp-lbl">ไม่รายงานตัว</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3A: จำนวนนักศึกษาลงทะเบียน (→ Line chart เส้นบน) -->
+      <div class="form-section">
+        <div class="fs-header">
+          <div class="fs-num">3</div>
+          <div>
+            <div class="fs-title">จำนวนนักศึกษาลงทะเบียน (รายปี)</div>
+            <div class="fs-sub">ใช้แสดงกราฟเส้น <strong>"จำนวนนักศึกษาลงทะเบียน"</strong> ในหน้าสถิตินักศึกษา</div>
+          </div>
+        </div>
+
+        <!-- callout box อธิบายความต่าง -->
+        <div style="background:#fef9c3;border:1px solid #fcd34d;border-radius:8px;padding:11px 14px;margin-bottom:14px;font-size:12px;color:#78350f;line-height:1.7">
+          <strong>⚠️ ข้อมูลนี้ต่างจาก "รายงานตัว" ในส่วนที่ 2</strong><br>
+          • <strong>รายงานตัว (ส่วน 2)</strong> = นับตอนเปิดเทอมใหม่ ปีนั้นๆ เฉพาะนักศึกษาชั้นปี 1<br>
+          • <strong>ลงทะเบียน (ส่วน 3)</strong> = นับนักศึกษาทุกชั้นปีที่ยังเรียนอยู่จริง ณ ปีนั้น (รวม ปี 1–4)
+        </div>
+
+        <div class="form-row c2">
+          <div class="fg">
+            <label>ปีการศึกษา <span class="req">*</span></label>
+            <select id="f3a_yr"><option value="">เลือกปีการศึกษา</option><option>2577</option><option>2576</option><option>2575</option><option>2574</option><option>2573</option><option>2572</option><option>2571</option><option>2570</option><option>2569</option><option>2568</option><option>2567</option><option>2566</option><option>2565</option><option>2564</option><option>2563</option><option>2562</option><option>2561</option><option>2560</option><option>2559</option><option>2558</option><option>2557</option><option>2556</option><option>2555</option></select>
+          </div>
+          <div class="fg">
+            <label>จำนวนนักศึกษาลงทะเบียนทั้งหมด <span class="req">*</span></label>
+            <input type="number" id="f3a_enrolled" placeholder="เช่น 524" min="0">
+            <div class="hint">นับนักศึกษาทุกชั้นปีที่ยังเรียนอยู่ในปีการศึกษานี้ (คน)</div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-ghost btn-sm" onclick="clearForm('3a')">ล้างข้อมูล</button>
+          <button class="btn btn-acc btn-sm" onclick="saveForm3A()">บันทึกข้อมูล</button>
+        </div>
+
+        <!-- preview table: แสดงข้อมูลที่บันทึกแล้วทุกปี -->
+        <div style="margin-top:14px">
+          <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:7px">ข้อมูลที่บันทึกแล้ว</div>
+          <div class="tbl-wrap">
+            <table id="tbl-enrolled">
+              <thead><tr><th>ปีการศึกษา</th><th>จำนวนนักศึกษาลงทะเบียน (คน)</th><th></th></tr></thead>
+              <tbody id="tbody-enrolled"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3B: จำนวนสำเร็จการศึกษา (→ Line chart เส้นล่าง) -->
+      <div class="form-section">
+        <div class="fs-header">
+          <div class="fs-num" style="background:#059669">4</div>
+          <div>
+            <div class="fs-title">จำนวนนักศึกษาสำเร็จการศึกษา (รายปี)</div>
+            <div class="fs-sub">ใช้แสดงกราฟเส้น <strong>"นักศึกษาที่สำเร็จการศึกษา"</strong> ในหน้าสถิตินักศึกษา</div>
+          </div>
+        </div>
+
+        <div style="background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:11px 14px;margin-bottom:14px;font-size:12px;color:#14532d;line-height:1.7">
+          <strong>📋 หมายเหตุ</strong><br>
+          ข้อมูลนี้คือจำนวนนักศึกษาที่ <strong>สำเร็จการศึกษาจริง</strong> ในปีนั้น (ผ่านครบทุกรายวิชา + ยื่นจบ)<br>
+          ปกติจะน้อยกว่าจำนวนลงทะเบียน เนื่องจากไม่ใช่ทุกคนจบในปีเดียวกัน
+        </div>
+
+        <div class="form-row c2">
+          <div class="fg">
+            <label>ปีการศึกษา <span class="req">*</span></label>
+            <select id="f3b_yr"><option value="">เลือกปีการศึกษา</option><option>2577</option><option>2576</option><option>2575</option><option>2574</option><option>2573</option><option>2572</option><option>2571</option><option>2570</option><option>2569</option><option>2568</option><option>2567</option><option>2566</option><option>2565</option><option>2564</option><option>2563</option><option>2562</option><option>2561</option><option>2560</option><option>2559</option><option>2558</option><option>2557</option><option>2556</option><option>2555</option></select>
+          </div>
+          <div class="fg">
+            <label>จำนวนนักศึกษาสำเร็จการศึกษา <span class="req">*</span></label>
+            <input type="number" id="f3b_grad" placeholder="เช่น 420" min="0">
+            <div class="hint">นับเฉพาะผู้ที่สำเร็จการศึกษาในปีการศึกษานี้ (คน)</div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-ghost btn-sm" onclick="clearForm('3b')">ล้างข้อมูล</button>
+          <button class="btn btn-acc btn-sm" onclick="saveForm3B()">บันทึกข้อมูล</button>
+        </div>
+
+        <div style="margin-top:14px">
+          <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:7px">ข้อมูลที่บันทึกแล้ว</div>
+          <div class="tbl-wrap">
+            <table id="tbl-graduated">
+              <thead><tr><th>ปีการศึกษา</th><th>จำนวนสำเร็จการศึกษา (คน)</th><th></th></tr></thead>
+              <tbody id="tbody-graduated"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5 (เดิม 3): สถานะการศึกษา (→ Pie chart) -->
+      <div class="form-section">
+        <div class="fs-header">
+          <div class="fs-num" style="background:#7c3aed">5</div>
+          <div>
+            <div class="fs-title">สถานะการศึกษา (แยกรายสถานะ)</div>
+            <div class="fs-sub">ใช้แสดง <strong>Pie chart สถานะนักศึกษา</strong> ในหน้าสถิตินักศึกษา</div>
+          </div>
+        </div>
+
+        <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:8px;padding:11px 14px;margin-bottom:14px;font-size:12px;color:#0c4a6e;line-height:1.7">
+          <strong>📊 ข้อมูลนี้คือ snapshot ณ สิ้นปีการศึกษานั้น</strong><br>
+          ใส่จำนวนสะสมทุกชั้นปีรวมกัน ไม่ใช่เฉพาะชั้นปีใดชั้นปีหนึ่ง
+        </div>
+
+        <div class="form-row c2" style="margin-bottom:12px">
+          <div class="fg">
+            <label>ปีการศึกษา <span class="req">*</span></label>
+            <select id="f5yr"><option value="">เลือกปีการศึกษา</option><option>2577</option><option>2576</option><option>2575</option><option>2574</option><option>2573</option><option>2572</option><option>2571</option><option>2570</option><option>2569</option><option>2568</option><option>2567</option><option>2566</option><option>2565</option><option>2564</option><option>2563</option><option>2562</option><option>2561</option><option>2560</option><option>2559</option><option>2558</option><option>2557</option><option>2556</option><option>2555</option></select>
+          </div>
+        </div>
+
+        <div style="background:var(--acc-ll);border-radius:9px;padding:14px 16px;margin-bottom:12px">
+          <div style="font-size:11.5px;font-weight:700;color:var(--acc);margin-bottom:10px">กรอกจำนวนนักศึกษาแยกตามสถานะ</div>
+          <div class="form-row c3" style="margin-bottom:0">
+            <div class="fg">
+              <label>🟣 ยังเป็นนักศึกษา</label>
+              <input type="number" id="f5cur" placeholder="0" min="0">
+              <div class="hint">กำลังเรียนอยู่ปัจจุบัน</div>
+            </div>
+            <div class="fg">
+              <label>🔵 สำเร็จการศึกษา</label>
+              <input type="number" id="f5grad" placeholder="0" min="0">
+              <div class="hint">จบการศึกษาแล้ว (สะสม)</div>
+            </div>
+            <div class="fg">
+              <label>🟠 ไม่รายงานตัว</label>
+              <input type="number" id="f5nr" placeholder="0" min="0">
+              <div class="hint">รับเข้าแต่ไม่มารายงานตัว</div>
+            </div>
+          </div>
+          <div class="form-row c3" style="margin-bottom:0;margin-top:10px">
+            <div class="fg">
+              <label>🟢 โอนย้าย</label>
+              <input type="number" id="f5tr" placeholder="0" min="0">
+              <div class="hint">โอนย้ายออกไปสาขาอื่น</div>
+            </div>
+            <div class="fg">
+              <label>🟡 ออกกลางคัน</label>
+              <input type="number" id="f5dr" placeholder="0" min="0">
+              <div class="hint">ลาออก / ถูกคัดออก</div>
+            </div>
+            <div class="fg">
+              <label>🔴 พักการศึกษา / ลา</label>
+              <input type="number" id="f5lv" placeholder="0" min="0">
+              <div class="hint">ยังไม่จบ แต่ไม่ได้ลงทะเบียน</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-ghost btn-sm" onclick="clearForm(5)">ล้างข้อมูล</button>
+          <button class="btn btn-acc btn-sm" onclick="saveForm5()">บันทึกข้อมูล</button>
+        </div>
+
+        <div style="margin-top:14px">
+          <div style="font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:7px">ข้อมูลที่บันทึกแล้ว</div>
+          <div class="tbl-wrap">
+            <table id="tbl-status">
+              <thead><tr><th>ปีการศึกษา</th><th>🟣 เรียนอยู่</th><th>🔵 จบแล้ว</th><th>🟠 ไม่รายงานตัว</th><th>🟢 โอนย้าย</th><th>🟡 ออกกลางคัน</th><th>🔴 พัก/ลา</th></tr></thead>
+              <tbody id="tbody-status"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Coop/Intern -->
+      <div class="form-section">
+        <div class="fs-header">
+          <div class="fs-num">6</div>
+          <div><div class="fs-title">สหกิจศึกษา / ฝึกงาน</div><div class="fs-sub">จำนวนนักศึกษาออกฝึกงานและสหกิจ</div></div>
+        </div>
+        <div class="form-row c2">
+          <div class="fg">
+            <label>ปีการศึกษา <span class="req">*</span></label>
+            <select id="f4yr"><option value="">เลือกปีการศึกษา</option><option>2577</option><option>2576</option><option>2575</option><option>2574</option><option>2573</option><option>2572</option><option>2571</option><option>2570</option><option>2569</option><option>2568</option><option>2567</option><option>2566</option><option>2565</option><option>2564</option><option>2563</option><option>2562</option><option>2561</option><option>2560</option><option>2559</option><option>2558</option><option>2557</option><option>2556</option><option>2555</option></select>
+          </div>
+          <div class="fg">
+            <label>สาขาวิชาเอก <span class="req">*</span></label>
+            <select id="f4mj"><option value="">เลือกสาขาวิชาเอก</option><option value="fin">การเงินและการลงทุน</option><option value="mkt">การตลาดและการสื่อสาร</option><option value="hrm">การจัดการทรัพยากรมนุษย์</option><option value="log">การจัดการโลจิสติกส์</option><option value="bis">ระบบสารสนเทศทางธุรกิจ</option><option value="mice">การจัดการไมซ์</option></select>
+          </div>
+        </div>
+        <div class="form-row c2">
+          <div class="fg"><label>จำนวนนักศึกษาสหกิจศึกษา</label><input type="number" id="f4coop" placeholder="0" min="0"></div>
+          <div class="fg"><label>จำนวนนักศึกษาฝึกงาน</label><input type="number" id="f4intern" placeholder="0" min="0"></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-ghost btn-sm" onclick="clearForm(4)">ล้างข้อมูล</button>
+          <button class="btn btn-acc btn-sm" onclick="saveForm4()">บันทึกข้อมูล</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         VIEW: นำเข้า Excel
+    ════════════════════════════════════════════ -->
+    <div class="view" id="view-import">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-title">นำเข้าข้อมูลจาก Excel</div>
+            <div class="ph-sub">อัปโหลดไฟล์ .xlsx เพื่ออัปเดตข้อมูลทั้งหมดอัตโนมัติ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="fs-header">
+          <div class="fs-num">📂</div>
+          <div><div class="fs-title">อัปโหลดไฟล์ Excel</div><div class="fs-sub">รองรับ .xlsx / .xls</div></div>
+        </div>
+        <div class="dz" id="dz" ondragover="dzO(event)" ondragleave="dzL()" ondrop="dzD(event)" onclick="document.getElementById('xlf').click()">
+          <div class="dz-ico">📊</div>
+          <p>ลากไฟล์ Excel มาวางที่นี่</p>
+          <p>หรือ <b>คลิกเพื่อเลือกไฟล์</b></p>
+          <p id="dz-fn" style="margin-top:6px;font-size:11px;color:var(--acc);font-weight:700"></p>
+        </div>
+        <input type="file" id="xlf" accept=".xlsx,.xls" style="display:none" onchange="handleXL(event)">
+
+        <div style="background:var(--acc-ll);border:1px solid #c4b5fd;border-radius:9px;padding:14px 16px;margin-top:14px">
+          <div style="font-size:12px;font-weight:800;color:var(--acc);margin-bottom:9px">📋 รูปแบบ Excel ที่รองรับ</div>
+          <div style="font-size:11.5px;color:var(--text2);line-height:1.9">
+            <strong>Sheet ที่รองรับ:</strong><br>
+            • <code style="background:#fff;padding:1px 5px;border-radius:4px;font-size:10.5px;color:var(--acc)">Intake</code> — รับนักศึกษา: <span style="color:var(--text)">ปีการศึกษา, วิชาเอก, แผนรับ, สัมภาษณ์, ยืนยัน, รายงานตัว, ไม่รายงานตัว</span><br>
+            • <code style="background:#fff;padding:1px 5px;border-radius:4px;font-size:10.5px;color:#059669">Enrolled</code> — ลงทะเบียน: <span style="color:var(--text)">ปีการศึกษา, จำนวนลงทะเบียนทั้งหมด</span> → Line chart เส้นบน<br>
+            • <code style="background:#fff;padding:1px 5px;border-radius:4px;font-size:10.5px;color:#059669">Graduated</code> — สำเร็จการศึกษา: <span style="color:var(--text)">ปีการศึกษา, จำนวนสำเร็จการศึกษา</span> → Line chart เส้นล่าง<br>
+            • <code style="background:#fff;padding:1px 5px;border-radius:4px;font-size:10.5px;color:#7c3aed">Status</code> — สถานะนักศึกษา: <span style="color:var(--text)">ปีการศึกษา, ยังเป็นนักศึกษา, สำเร็จการศึกษา, ไม่รายงานตัว, โอนย้าย, ออกกลางคัน, พัก/ลา</span> → Pie chart<br>
+            • <code style="background:#fff;padding:1px 5px;border-radius:4px;font-size:10.5px;color:#f97316">Coop</code> — สหกิจ: <span style="color:var(--text)">ปีการศึกษา, วิชาเอก, จำนวน</span><br>
+            • <code style="background:#fff;padding:1px 5px;border-radius:4px;font-size:10.5px;color:#f97316">Intern</code> — ฝึกงาน: <span style="color:var(--text)">ปีการศึกษา, วิชาเอก, จำนวน</span><br>
+            • หรือ Sheet ชื่อสาขา: <code style="background:#fff;padding:1px 5px;border-radius:4px;font-size:10.5px;color:var(--acc)">fin / mkt / hrm / log / bis / mice</code>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <button class="btn btn-out btn-sm" onclick="exportTemplate()">
+              <svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V4h3v4H12L8 12z"/></svg>
+              ดาวน์โหลด Template (ทุก Sheet)
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="exportTemplateStatus()">
+              <svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V4h3v4H12L8 12z"/></svg>
+              Template สถิตินักศึกษา
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview -->
+      <div class="form-section" id="import-preview" style="display:none">
+        <div class="fs-header">
+          <div class="fs-num">👁</div>
+          <div><div class="fs-title">ตัวอย่างข้อมูลที่จะนำเข้า (5 แถวแรก)</div><div class="fs-sub" id="prev-sheet-name"></div></div>
+        </div>
+        <!-- Sheet tabs -->
+        <div id="prev-sheet-tabs" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px"></div>
+        <div class="tbl-wrap" id="prev-tbl"></div>
+        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:10px 13px;margin-top:10px;font-size:11.5px;color:#14532d" id="import-summary"></div>
+        <div class="form-actions">
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-preview').style.display='none'">ยกเลิก</button>
+          <button class="btn btn-acc btn-sm" id="confirm-import-btn">✓ ยืนยันนำเข้าข้อมูลทั้งหมด</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+</div><!-- end app -->
+
+<div id="toast"><span class="tdot" id="tdot"></span><span id="tmsg"></span></div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════════ */
+const MJ = {
+  fin:  {name:'การเงินและการลงทุน',        short:'FIN',  color:'#3b82f6'},
+  mkt:  {name:'การตลาดและการสื่อสาร',      short:'MKT',  color:'#f97316'},
+  hrm:  {name:'การจัดการทรัพยากรมนุษย์',  short:'HRM',  color:'#8b5cf6'},
+  log:  {name:'โลจิสติกส์และโซ่อุปทาน',   short:'LSM',  color:'#22c55e'},
+  bis:  {name:'ระบบสารสนเทศทางธุรกิจ',    short:'BIS',  color:'#eab308'},
+  mice: {name:'การจัดการไมซ์ (MICE)',      short:'MICE', color:'#ef4444'},
+};
+
+// [year, plan, interview, confirm, reported, no-show]
+let DB = {
+  fin:  [[2562,60,88,52,50,2],[2563,60,118,71,70,1],[2564,60,118,71,72,1],[2565,70,139,57,56,1],[2566,70,199,80,79,1],[2567,70,122,80,76,4]],
+  mkt:  [[2563,60,104,71,69,2],[2564,60,96,74,71,3],[2565,70,134,71,67,4],[2566,70,143,78,76,2],[2567,70,139,93,90,3]],
+  hrm:  [[2563,60,106,73,71,2],[2564,60,131,73,72,1],[2565,70,104,56,54,2],[2566,70,102,96,94,2],[2567,70,132,97,94,3]],
+  log:  [[2563,60,113,79,77,2],[2564,60,107,85,81,4],[2565,70,139,75,74,1],[2566,70,145,100,99,1],[2567,70,120,90,90,0]],
+  bis:  [[2563,60,102,70,67,3],[2564,60,101,89,88,1],[2565,70,121,76,73,3],[2566,70,142,99,98,1],[2567,70,123,91,87,4]],
+  mice: [[2563,60,114,77,76,1],[2564,60,105,73,72,1],[2565,70,116,76,75,1],[2566,70,108,78,77,1],[2567,70,118,80,80,0]],
+};
+
+const COOP_DATA = [
+  {key:'fin',  name:'การเงินและการลงทุน',           color:'#3b82f6', v:[9,5,7,7,23,12,22]},
+  {key:'hrm',  name:'การจัดการทรัพยากรมนุษย์',     color:'#8b5cf6', v:[13,5,2,6,6,10,32]},
+  {key:'mice', name:'การจัดการไมซ์',                color:'#ef4444', v:[12,17,30,10,18,15,7]},
+  {key:'log',  name:'โลจิสติกส์และโซ่อุปทาน',      color:'#22c55e', v:[16,25,21,38,60,57,49]},
+  {key:'mkt',  name:'การตลาดและการสื่อสาร',         color:'#f97316', v:[38,34,11,25,22,37,30]},
+  {key:'bis',  name:'ระบบสารสนเทศทางธุรกิจ',       color:'#eab308', v:[8,22,17,26,33,48,34]},
+];
+const COOP_YRS = [2562,2563,2564,2565,2566,2567,2568];
+
+const INTERN_DATA = [
+  {key:'fin',  color:'#3b82f6', v:[29,28,25,40,41]},
+  {key:'mkt',  color:'#f97316', v:[58,45,68,65,65]},
+  {key:'hrm',  color:'#8b5cf6', v:[26,33,27,39,40]},
+  {key:'log',  color:'#22c55e', v:[51,52,60,66,70]},
+  {key:'bis',  color:'#eab308', v:[38,36,45,48,50]},
+  {key:'mice', color:'#ef4444', v:[41,36,38,52,60]},
+];
+const INTERN_YRS = [2563,2564,2565,2566,2567];
+
+const STATUS_DATA = {
+  2567: [{label:'ยังเป็นนักศึกษา', val:532, color:'#8b5cf6'},{label:'สำเร็จการศึกษา', val:518, color:'#3b82f6'},{label:'ไม่รายงานตัว', val:14, color:'#f97316'},{label:'โอนย้าย', val:8, color:'#22c55e'},{label:'ออกกลางคัน', val:21, color:'#eab308'},{label:'ลา', val:3, color:'#ef4444'},{label:'พักการศึกษา', val:2, color:'#a855f7'}],
+  2566: [{label:'ยังเป็นนักศึกษา', val:495, color:'#8b5cf6'},{label:'สำเร็จการศึกษา', val:480, color:'#3b82f6'},{label:'ไม่รายงานตัว', val:12, color:'#f97316'},{label:'โอนย้าย', val:6, color:'#22c55e'},{label:'ออกกลางคัน', val:18, color:'#eab308'},{label:'ลา', val:2, color:'#ef4444'},{label:'พักการศึกษา', val:2, color:'#a855f7'}],
+  2565: [{label:'ยังเป็นนักศึกษา', val:460, color:'#8b5cf6'},{label:'สำเร็จการศึกษา', val:445, color:'#3b82f6'},{label:'ไม่รายงานตัว', val:10, color:'#f97316'},{label:'โอนย้าย', val:5, color:'#22c55e'},{label:'ออกกลางคัน', val:15, color:'#eab308'},{label:'ลา', val:1, color:'#ef4444'},{label:'พักการศึกษา', val:1, color:'#a855f7'}],
+};
+
+// TREND_DB: keyed by year { enrolled, graduated }
+let TREND_DB = {
+  2563:{enrolled:434,graduated:434},
+  2564:{enrolled:458,graduated:458},
+  2565:{enrolled:389,graduated:389},
+  2566:{enrolled:529,graduated:0},
+  2567:{enrolled:524,graduated:0},
+};
+function getTrendData(){
+  const yrs=Object.keys(TREND_DB).map(Number).sort((a,b)=>b-a);
+  return{labels:yrs.map(String),enrolled:yrs.map(y=>TREND_DB[y].enrolled||0),graduated:yrs.map(y=>TREND_DB[y].graduated||0)};
+}
+
+const PROVINCES = ['กรุงเทพมหานคร','สงขลา','ภูเก็ต','สุราษฎร์ธานี','นครศรีธรรมราช'];
+const COMPANIES = ['96 แอนด์ โค','สมาคมนักบัญชี','ภูเก็ต','บริษัท ไทยโอฬาร','บริษัทไพร้ซวอเตอร์','บริษัท เอ็ น ไล'];
+const PARTNERS = ['UOB','THA','2S','TBH','AKIRA+','CPALL'];
+const INTAKE_YRS = [2563,2564,2565,2566,2567];
+
+let charts = {}, activeMjStd = 'fin';
+
+/* ══════════════════════════════════════════════════
+   CHART DEFAULTS
+══════════════════════════════════════════════════ */
+Chart.defaults.color = '#5a4d7a';
+Chart.defaults.borderColor = 'rgba(0,0,0,0.06)';
+Chart.defaults.font.family = "'Sarabun', sans-serif";
+Chart.defaults.font.size = 11;
+const GRID = {color:'rgba(0,0,0,0.05)',drawBorder:false};
+const kill = id => { if(charts[id]){charts[id].destroy();delete charts[id];} };
+
+/* ══════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════ */
+function gotoView(name, navEl, sbEl) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(navEl){document.querySelectorAll('.tn-a').forEach(e=>e.classList.remove('active'));navEl.classList.add('active');}
+  if(sbEl){document.querySelectorAll('.sb-item').forEach(e=>e.classList.remove('active'));sbEl.classList.add('active');}
+  const renders = {students:renderStudents,status:renderStatus,coop:renderCoop,intern:renderIntern};
+  if(renders[name]) renders[name]();
+}
+
+/* ══════════════════════════════════════════════════
+   VIEW: จำนวนนักศึกษา
+══════════════════════════════════════════════════ */
+function renderStudents() {
+  const yr = parseInt(document.getElementById('stdYr').value)||2567;
+  let total = 0;
+  Object.values(DB).forEach(rows=>rows.forEach(r=>{if(r[0]>=2564&&r[0]<=2567)total+=r[4];}));
+  document.getElementById('kpi-total').textContent = total.toLocaleString();
+  buildStdPie();
+  buildStdBar();
+  buildStdMjTabs();
+  buildStdLine(activeMjStd);
+}
+
+function buildStdPie() {
+  kill('std-pie');
+  const yrs=[2564,2565,2566,2567];
+  const data=[],colors=[],labels=[];
+  Object.entries(MJ).forEach(([k,m])=>{
+    const s=(DB[k]||[]).filter(r=>yrs.includes(r[0])).reduce((a,r)=>a+r[4],0);
+    data.push(s); colors.push(m.color); labels.push(m.short);
+  });
+  // legend
+  document.getElementById('std-pie-leg').innerHTML=Object.entries(MJ).map(([k,m],i)=>`
+    <div class="leg-i"><span class="leg-dot" style="background:${m.color}"></span>${m.short} ${data[i]} คน (${(data[i]/data.reduce((a,b)=>a+b,0)*100).toFixed(1)}%)</div>
+  `).join('');
+  charts['std-pie']=new Chart(document.getElementById('cStdPie'),{
+    type:'pie',
+    data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed} คน`}}}}
+  });
+}
+
+function buildStdBar() {
+  kill('std-bar');
+  const ds=Object.entries(MJ).map(([k,m])=>({
+    label:m.short,
+    data:INTAKE_YRS.map(y=>{const r=(DB[k]||[]).find(x=>x[0]===y);return r?r[4]:0;}),
+    backgroundColor:m.color+'cc',borderRadius:4,
+  }));
+  charts['std-bar']=new Chart(document.getElementById('cStdBar'),{
+    type:'bar',
+    data:{labels:INTAKE_YRS.map(String),datasets:ds},
+    options:{responsive:true,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},
+      scales:{x:{grid:{display:false}},y:{grid:GRID,beginAtZero:true}}
+    }
+  });
+}
+
+function buildStdMjTabs() {
+  document.getElementById('std-mj-tabs').innerHTML=Object.entries(MJ).map(([k,m])=>`
+    <button class="mj-tab ${k===activeMjStd?'active':''}" onclick="activeMjStd='${k}';buildStdMjTabs();buildStdLine('${k}')">
+      <span class="dot" style="background:${m.color}"></span>${m.name}
+    </button>`).join('');
+}
+
+function buildStdLine(mid) {
+  kill('std-line');
+  const m=MJ[mid];
+  const rows=(DB[mid]||[]).filter(r=>INTAKE_YRS.includes(r[0])).sort((a,b)=>a[0]-b[0]);
+  const yrs=rows.map(r=>r[0].toString());
+  const LBLS=['แผนรับ','เรียกสัมภาษณ์','ยืนยัน','รายงานตัว','ไม่รายงานตัว'];
+  const COLS=['rgba(0,0,0,.15)',m.color+'55',m.color+'88',m.color,'#ef4444aa'];
+  charts['std-line']=new Chart(document.getElementById('cStdLine'),{
+    type:'bar',
+    data:{labels:yrs,datasets:LBLS.map((l,i)=>({label:l,data:rows.map(r=>r[i+1]),backgroundColor:COLS[i],borderRadius:4}))},
+    options:{responsive:true,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},
+      scales:{x:{grid:{display:false}},y:{grid:GRID,beginAtZero:true}}
+    }
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   VIEW: สถิตินักศึกษา
+══════════════════════════════════════════════════ */
+function renderStatus() {
+  buildStatusLine();
+  buildStatusPie();
+}
+
+function buildStatusLine() {
+  kill('status-line');
+  const d = getTrendData();
+  charts['status-line']=new Chart(document.getElementById('cStatusLine'),{
+    type:'line',
+    data:{
+      labels:d.labels,
+      datasets:[
+        {label:'จำนวนนักศึกษาลงทะเบียน',data:d.enrolled,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.12)',fill:true,tension:.4,borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#7c3aed'},
+        {label:'นักศึกษาที่สำเร็จการศึกษา',data:d.graduated,borderColor:'#fb923c',backgroundColor:'rgba(249,115,22,.08)',fill:true,tension:.4,borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#fb923c'},
+      ]
+    },
+    options:{responsive:true,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false}},y:{grid:GRID,beginAtZero:true,max:700}}
+    }
+  });
+}
+
+function buildStatusPie() {
+  kill('status-pie');
+  const yr = parseInt(document.getElementById('statusPieYr').value)||2567;
+  const d = STATUS_DATA[yr]||STATUS_DATA[2567];
+  const vals=d.map(x=>x.val), colors=d.map(x=>x.color), labels=d.map(x=>x.label);
+  const total=vals.reduce((a,b)=>a+b,0);
+  charts['status-pie']=new Chart(document.getElementById('cStatusPie'),{
+    type:'pie',
+    data:{labels,datasets:[{data:vals,backgroundColor:colors,borderWidth:2,borderColor:'#fff',hoverOffset:5}]},
+    options:{responsive:true,plugins:{legend:{display:false}}}
+  });
+  document.getElementById('status-leg-right').innerHTML=d.map(item=>`
+    <div style="display:flex;align-items:center;gap:7px">
+      <span style="width:10px;height:10px;border-radius:3px;background:${item.color};flex-shrink:0"></span>
+      <span style="font-size:11px;color:var(--text2);flex:1">${item.label}</span>
+      <span style="font-family:'Anuphan',sans-serif;font-size:13px;font-weight:800;color:var(--text)">${item.val}</span>
+      <span style="font-size:10.5px;color:var(--muted)">${(item.val/total*100).toFixed(1)}%</span>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════════════
+   VIEW: สหกิจศึกษา
+══════════════════════════════════════════════════ */
+function renderCoop() {
+  buildCoopBar();
+  buildCoopPie();
+  renderTopLists();
+  renderPartners('coop');
+}
+
+function buildCoopBar() {
+  kill('coop-bar');
+  const sel = document.getElementById('coopYrSel')?.value||'all';
+  let ds;
+  if(sel==='all'){
+    ds=COOP_DATA.map(c=>({
+      label:MJ[c.key]?.short||c.key.toUpperCase(),
+      data:COOP_YRS.map((_,i)=>c.v[i]),
+      backgroundColor:c.color+'cc',borderRadius:4,
+    }));
+    charts['coop-bar']=new Chart(document.getElementById('cCoopBar'),{
+      type:'bar',
+      data:{labels:COOP_YRS.map(String),datasets:ds},
+      options:{responsive:true,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:10,font:{size:10}}}},
+        scales:{x:{grid:{display:false}},y:{grid:GRID,beginAtZero:true}}}
+    });
+  }
+}
+
+function buildCoopPie() {
+  kill('coop-pie');
+  const totals=COOP_DATA.map(c=>({label:MJ[c.key]?.short||c.key,val:c.v.reduce((a,b)=>a+b,0),color:c.color}));
+  charts['coop-pie']=new Chart(document.getElementById('cCoopPie'),{
+    type:'pie',
+    data:{labels:totals.map(t=>t.label),datasets:[{data:totals.map(t=>t.val),backgroundColor:totals.map(t=>t.color),borderWidth:2,borderColor:'#fff',hoverOffset:5}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}}}}
+  });
+}
+
+function renderTopLists() {
+  document.getElementById('top-provinces').innerHTML=PROVINCES.map((p,i)=>`
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-family:'Anuphan',sans-serif;font-size:12px;font-weight:800;color:var(--muted);width:16px">${i+1}</span>
+      <span style="flex:1;font-size:11.5px;color:var(--text2)">${p}</span>
+    </div>`).join('');
+  document.getElementById('top-companies').innerHTML=COMPANIES.map((c,i)=>`
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-family:'Anuphan',sans-serif;font-size:12px;font-weight:800;color:var(--muted);width:16px">${i+1}</span>
+      <span style="flex:1;font-size:11.5px;color:var(--text2)">${c}</span>
+    </div>`).join('');
+}
+
+function renderPartners(id) {
+  const el=document.getElementById('partners-'+id);
+  if(!el) return;
+  el.innerHTML=PARTNERS.map(p=>`<div class="partner-logo">${p}</div>`).join('');
+}
+
+/* ══════════════════════════════════════════════════
+   VIEW: ฝึกงาน
+══════════════════════════════════════════════════ */
+function renderIntern() {
+  buildInternBar();
+  buildInternPie();
+  buildInternYr();
+  renderPartners('intern');
+}
+
+function buildInternBar() {
+  kill('intern-bar');
+  const ds=INTERN_DATA.map(c=>({
+    label:MJ[c.key]?.short||c.key,
+    data:c.v,
+    backgroundColor:c.color+'cc',borderRadius:4,
+  }));
+  charts['intern-bar']=new Chart(document.getElementById('cInternBar'),{
+    type:'bar',
+    data:{labels:INTERN_YRS.map(String),datasets:ds},
+    options:{responsive:true,
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}}},
+      scales:{x:{grid:{display:false}},y:{grid:GRID,beginAtZero:true}}
+    }
+  });
+}
+
+function buildInternPie() {
+  kill('intern-pie');
+  const totals=INTERN_DATA.map(c=>({key:c.key,val:c.v.reduce((a,b)=>a+b,0),color:c.color}));
+  const labels=totals.map(t=>MJ[t.key]?.short||t.key);
+  charts['intern-pie']=new Chart(document.getElementById('cInternPie'),{
+    type:'doughnut',
+    data:{labels,datasets:[{data:totals.map(t=>t.val),backgroundColor:totals.map(t=>t.color),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+    options:{responsive:true,cutout:'65%',plugins:{legend:{display:false}}}
+  });
+  document.getElementById('intern-pie-leg').innerHTML=totals.map((t,i)=>`
+    <div style="display:flex;align-items:center;gap:5px">
+      <span style="width:8px;height:8px;border-radius:2px;background:${t.color};flex-shrink:0"></span>
+      <span style="font-size:10.5px;color:var(--text2)">${labels[i]}</span>
+      <span style="font-family:'Anuphan',sans-serif;font-size:11px;font-weight:800;color:var(--text);margin-left:auto">${t.val}</span>
+    </div>`).join('');
+
+  // Destination pie
+  kill('intern-pie-dest');
+  const dest=[{label:'ภายในจังหวัด',val:60,color:'#8b5cf6'},{label:'ต่างจังหวัด',val:30,color:'#3b82f6'},{label:'ต่างประเทศ',val:10,color:'#f97316'}];
+  charts['intern-pie-dest']=new Chart(document.getElementById('cInternPieDest'),{
+    type:'pie',
+    data:{labels:dest.map(d=>d.label),datasets:[{data:dest.map(d=>d.val),backgroundColor:dest.map(d=>d.color),borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:8,font:{size:10}}}}}
+  });
+}
+
+function buildInternYr() {
+  kill('intern-yr');
+  const totals=INTERN_YRS.map(y=>INTERN_DATA.reduce((sum,c)=>{
+    const idx=INTERN_YRS.indexOf(y); return sum+(idx>=0?c.v[idx]:0);
+  },0));
+  charts['intern-yr']=new Chart(document.getElementById('cInternYr'),{
+    type:'bar',
+    data:{labels:INTERN_YRS.map(String),datasets:[{
+      label:'จำนวนนักศึกษาฝึกงาน',
+      data:totals,
+      backgroundColor:'rgba(124,58,237,.7)',borderRadius:5,
+      borderSkipped:false,
+    }]},
+    options:{responsive:true,
+      plugins:{legend:{display:false},datalabels:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} คน`}}},
+      scales:{x:{grid:{display:false}},y:{grid:GRID,beginAtZero:true}}
+    }
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   FORMS
+══════════════════════════════════════════════════ */
+function saveForm1() {
+  const yr=+document.getElementById('f1yr').value, mid=document.getElementById('f1mj').value;
+  if(!yr||!mid){toast('กรุณาเลือกปีการศึกษาและสาขาวิชาเอก','#ef4444');return;}
+  const v=+document.getElementById('f1total').value||0;
+  document.getElementById('sp1t').textContent=MJ[mid].name+' ปีการศึกษา '+yr;
+  document.getElementById('sp1v').textContent=v.toLocaleString();
+  toast('✓ บันทึกข้อมูลสำเร็จ');
+}
+
+function saveForm2() {
+  const yr=+document.getElementById('f2yr').value, mid=document.getElementById('f2mj').value;
+  if(!yr||!mid){toast('กรุณาเลือกปีการศึกษาและสาขาวิชาเอก','#ef4444');return;}
+  const pl=+document.getElementById('f2pl').value||0, inn=+document.getElementById('f2in').value||0,
+        co=+document.getElementById('f2co').value||0, re=+document.getElementById('f2re').value||0,
+        nr=+document.getElementById('f2nr').value||0;
+  const rows=DB[mid]||[]; const idx=rows.findIndex(r=>r[0]===yr);
+  const row=[yr,pl,inn,co,re,nr];
+  if(idx>=0) rows[idx]=row; else rows.push(row);
+  DB[mid]=rows;
+  document.getElementById('sp2t').textContent=MJ[mid].name+' ปีการศึกษา '+yr;
+  document.getElementById('sp2v').innerHTML=[['แผนรับ',pl],['สัมภาษณ์',inn],['ยืนยัน',co],['รายงานตัว',re],['ไม่รายงานตัว',nr]]
+    .map(([l,v])=>`<div class="sp-item"><div class="sp-num">${v}</div><div class="sp-lbl">${l}</div></div>`).join('');
+  toast('✓ บันทึกและอัปเดต Dashboard แล้ว');
+}
+
+/* ── Form 3A: จำนวนลงทะเบียน ─────────────────────── */
+function saveForm3A(){
+  const yr=+document.getElementById('f3a_yr').value;
+  const v=+document.getElementById('f3a_enrolled').value||0;
+  if(!yr){toast('กรุณาเลือกปีการศึกษา','#ef4444');return;}
+  if(!TREND_DB[yr]) TREND_DB[yr]={enrolled:0,graduated:0};
+  TREND_DB[yr].enrolled=v;
+  renderEnrolledTable();
+  if(document.getElementById('view-status').classList.contains('active')) buildStatusLine();
+  toast('✓ บันทึกจำนวนลงทะเบียน ปี '+yr+' = '+v.toLocaleString()+' คน');
+}
+function renderEnrolledTable(){
+  const yrs=Object.keys(TREND_DB).map(Number).sort((a,b)=>b-a);
+  document.getElementById('tbody-enrolled').innerHTML=yrs.map(y=>`<tr>
+    <td><strong>${y}</strong></td>
+    <td>${(TREND_DB[y].enrolled||0).toLocaleString()} คน</td>
+    <td><button class="btn btn-ghost btn-xs" onclick="delTrendRow(${y},'enrolled')">ลบ</button></td>
+  </tr>`).join('');
+}
+
+/* ── Form 3B: จำนวนสำเร็จการศึกษา ──────────────── */
+function saveForm3B(){
+  const yr=+document.getElementById('f3b_yr').value;
+  const v=+document.getElementById('f3b_grad').value||0;
+  if(!yr){toast('กรุณาเลือกปีการศึกษา','#ef4444');return;}
+  if(!TREND_DB[yr]) TREND_DB[yr]={enrolled:0,graduated:0};
+  TREND_DB[yr].graduated=v;
+  renderGraduatedTable();
+  if(document.getElementById('view-status').classList.contains('active')) buildStatusLine();
+  toast('✓ บันทึกจำนวนสำเร็จการศึกษา ปี '+yr+' = '+v.toLocaleString()+' คน');
+}
+function renderGraduatedTable(){
+  const yrs=Object.keys(TREND_DB).map(Number).sort((a,b)=>b-a);
+  document.getElementById('tbody-graduated').innerHTML=yrs.map(y=>`<tr>
+    <td><strong>${y}</strong></td>
+    <td>${(TREND_DB[y].graduated||0).toLocaleString()} คน</td>
+    <td><button class="btn btn-ghost btn-xs" onclick="delTrendRow(${y},'graduated')">ลบ</button></td>
+  </tr>`).join('');
+}
+function delTrendRow(yr,field){
+  if(TREND_DB[yr]) TREND_DB[yr][field]=0;
+  renderEnrolledTable(); renderGraduatedTable();
+  if(document.getElementById('view-status').classList.contains('active')) buildStatusLine();
+}
+
+/* ── Form 5: สถานะการศึกษา ──────────────────────── */
+function saveForm5(){
+  const yr=+document.getElementById('f5yr').value;
+  if(!yr){toast('กรุณาเลือกปีการศึกษา','#ef4444');return;}
+  const row={
+    cur:+document.getElementById('f5cur').value||0,
+    grad:+document.getElementById('f5grad').value||0,
+    nr:+document.getElementById('f5nr').value||0,
+    tr:+document.getElementById('f5tr').value||0,
+    dr:+document.getElementById('f5dr').value||0,
+    lv:+document.getElementById('f5lv').value||0,
+  };
+  const SD=STATUS_DATA; SD[yr]=[
+    {label:'ยังเป็นนักศึกษา', val:row.cur,  color:'#8b5cf6'},
+    {label:'สำเร็จการศึกษา',  val:row.grad, color:'#3b82f6'},
+    {label:'ไม่รายงานตัว',    val:row.nr,   color:'#f97316'},
+    {label:'โอนย้าย',          val:row.tr,   color:'#22c55e'},
+    {label:'ออกกลางคัน',       val:row.dr,   color:'#eab308'},
+    {label:'พัก/ลา',           val:row.lv,   color:'#ef4444'},
+  ].filter(x=>x.val>0);
+  renderStatusTable();
+  if(document.getElementById('view-status').classList.contains('active')) buildStatusPie();
+  toast('✓ บันทึกสถานะการศึกษา ปี '+yr+' สำเร็จ');
+}
+function renderStatusTable(){
+  const yrs=Object.keys(STATUS_DATA).map(Number).sort((a,b)=>b-a);
+  document.getElementById('tbody-status').innerHTML=yrs.map(yr=>{
+    const d=STATUS_DATA[yr]||[];
+    const g=k=>d.find(x=>x.label.includes(k))?.val||0;
+    return `<tr>
+      <td><strong>${yr}</strong></td>
+      <td>${g('เป็นนักศึกษา').toLocaleString()}</td>
+      <td>${g('สำเร็จ').toLocaleString()}</td>
+      <td>${g('ไม่รายงานตัว').toLocaleString()}</td>
+      <td>${g('โอน').toLocaleString()}</td>
+      <td>${g('กลางคัน').toLocaleString()}</td>
+      <td>${g('พัก').toLocaleString()}</td>
+    </tr>`;
+  }).join('');
+}
+
+function saveForm4() {
+  const yr=+document.getElementById('f4yr').value, mid=document.getElementById('f4mj').value;
+  if(!yr||!mid){toast('กรุณาเลือกปีการศึกษาและสาขาวิชาเอก','#ef4444');return;}
+  const coop=+document.getElementById('f4coop').value||0;
+  const intern=+document.getElementById('f4intern').value||0;
+  // Update coop data
+  const ci=COOP_DATA.findIndex(c=>c.key===mid);
+  if(ci>=0){
+    const yi=COOP_YRS.indexOf(yr);
+    if(yi>=0) COOP_DATA[ci].v[yi]=coop;
+  }
+  // Update intern data
+  const ii=INTERN_DATA.findIndex(c=>c.key===mid);
+  if(ii>=0){
+    const yi=INTERN_YRS.indexOf(yr);
+    if(yi>=0) INTERN_DATA[ii].v[yi]=intern;
+  }
+  toast('✓ บันทึกข้อมูลสหกิจ/ฝึกงานสำเร็จ');
+}
+
+function clearForm(n) {
+  const ids={1:['f1yr','f1mj','f1total'],2:['f2yr','f2mj','f2pl','f2in','f2co','f2re','f2nr'],'3a':['f3a_yr','f3a_enrolled'],'3b':['f3b_yr','f3b_grad'],5:['f5yr','f5cur','f5grad','f5nr','f5tr','f5dr','f5lv'],6:['f4yr','f4mj','f4coop','f4intern']};
+  (ids[n]||[]).forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+}
+
+/* ══════════════════════════════════════════════════
+   EXCEL IMPORT
+══════════════════════════════════════════════════ */
+function dzO(e){e.preventDefault();document.getElementById('dz').classList.add('drag');}
+function dzL(){document.getElementById('dz').classList.remove('drag');}
+/* ══ CUSTOM YEAR ════════════════════════════════════════════ */
+const ALL_YR_SELECT_IDS = ['f1yr','f2yr','f3a_yr','f3b_yr','f5yr','f4yr'];
+function addCustomYear(){
+  const inp=document.getElementById('customYrInput');
+  const yr=parseInt(inp.value);
+  if(!yr||yr<2530||yr>2620){toast('ปีการศึกษาไม่ถูกต้อง (2530–2620)','#ef4444');return;}
+  ALL_YR_SELECT_IDS.forEach(id=>{
+    const sel=document.getElementById(id);
+    if(!sel) return;
+    if([...sel.options].some(o=>+o.value===yr||+o.textContent===yr)) return; // already exists
+    const opt=document.createElement('option');
+    opt.value=yr; opt.textContent=yr;
+    // insert in descending order after placeholder
+    let inserted=false;
+    for(let i=1;i<sel.options.length;i++){
+      if(parseInt(sel.options[i].value||sel.options[i].text)<yr){
+        sel.insertBefore(opt,sel.options[i]); inserted=true; break;
+      }
+    }
+    if(!inserted) sel.appendChild(opt);
+  });
+  inp.value='';
+  toast('✓ เพิ่มปีการศึกษา '+yr+' แล้ว');
+}
+
+/* ══ EXCEL IMPORT ════════════════════════════════════════════ */
+function dzD(e){e.preventDefault();document.getElementById('dz').classList.remove('drag');if(e.dataTransfer.files[0])procXL(e.dataTransfer.files[0]);}
+function handleXL(e){if(e.target.files[0])procXL(e.target.files[0]);}
+
+let pendingImport = null;
+let prevActiveSheet = null;
+
+const MJ_MAP = {
+  'Finance_Investment':'fin','fin':'fin','FIN':'fin',
+  'Marketing_Communication':'mkt','mkt':'mkt','MKT':'mkt',
+  'HR_Management':'hrm','hrm':'hrm','HRM':'hrm',
+  'Logistics':'log','log':'log','LOG':'log','LSM':'log',
+  'Business_IT':'bis','bis':'bis','BIS':'bis',
+  'MICE_Management':'mice','mice':'mice','MICE':'mice',
+  'Intake':'intake','intake':'intake',
+  'Enrolled':'enrolled','enrolled':'enrolled',
+  'Graduated':'graduated','graduated':'graduated',
+  'Status':'status','status':'status',
+  'Coop':'coop','coop':'coop','สหกิจ':'coop',
+  'Intern':'intern','intern':'intern','ฝึกงาน':'intern',
+};
+
+function procXL(file) {
+  if(!/\.(xlsx|xls)$/i.test(file.name)){toast('กรุณาใช้ไฟล์ .xlsx หรือ .xls','#ef4444');return;}
+  document.getElementById('dz-fn').textContent='📄 '+file.name+' ('+(file.size/1024).toFixed(1)+' KB)';
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try {
+      const wb=XLSX.read(ev.target.result,{type:'array'});
+      pendingImport={wb};
+
+      // Build sheet tabs
+      const sheetTabs=document.getElementById('prev-sheet-tabs');
+      sheetTabs.innerHTML=wb.SheetNames.map((sn,i)=>`
+        <button class="mj-tab ${i===0?'active':''}" onclick="showSheetPreview('${sn}',this)">${sn}</button>
+      `).join('');
+
+      // Show first sheet preview
+      showSheetPreview(wb.SheetNames[0], sheetTabs.querySelector('.mj-tab'));
+
+      // Build summary
+      const detected=wb.SheetNames.map(sn=>{
+        const k=MJ_MAP[sn]||MJ_MAP[sn.trim()];
+        const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1}).filter(r=>r.length>0);
+        return k?`✓ <strong>${sn}</strong> → ${getSheetTypeName(k)} (${Math.max(0,rows.length-1)} แถว)`:null;
+      }).filter(Boolean);
+      document.getElementById('import-summary').innerHTML=
+        '<strong>พบข้อมูลที่นำเข้าได้:</strong><br>'+detected.join('<br>')||'⚠️ ไม่พบ Sheet ที่รู้จัก';
+
+      document.getElementById('import-preview').style.display='block';
+      document.getElementById('confirm-import-btn').onclick=confirmImport;
+    } catch(err){toast('อ่านไฟล์ไม่ได้: '+err.message,'#ef4444');}
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function showSheetPreview(sheetName, tabEl){
+  if(!pendingImport) return;
+  // update tabs
+  document.querySelectorAll('#prev-sheet-tabs .mj-tab').forEach(t=>t.classList.remove('active'));
+  if(tabEl) tabEl.classList.add('active');
+  document.getElementById('prev-sheet-name').textContent='Sheet: '+sheetName;
+  const rows=XLSX.utils.sheet_to_json(pendingImport.wb.Sheets[sheetName],{header:1}).slice(0,6);
+  if(!rows.length){document.getElementById('prev-tbl').innerHTML='<p style="padding:12px;color:var(--muted)">ไม่มีข้อมูล</p>';return;}
+  const keys=rows[0];
+  let html='<table><thead><tr>'+keys.map(k=>`<th>${k||''}</th>`).join('')+'</tr></thead><tbody>';
+  rows.slice(1).forEach(r=>{html+='<tr>'+keys.map((_,i)=>`<td>${r[i]??''}</td>`).join('')+'</tr>';});
+  html+='</tbody></table>';
+  document.getElementById('prev-tbl').innerHTML=html;
+}
+
+function getSheetTypeName(k){
+  const m={'intake':'ข้อมูลรับนักศึกษา','enrolled':'จำนวนลงทะเบียน','graduated':'จำนวนสำเร็จการศึกษา','status':'สถานะนักศึกษา','coop':'สหกิจศึกษา','intern':'ฝึกงาน'};
+  return m[k]||(MJ[k]?'ข้อมูลรับ ('+MJ[k].name+')':'ไม่รู้จัก');
+}
+
+function confirmImport() {
+  if(!pendingImport) return;
+  const {wb}=pendingImport;
+  let counts={intake:0,enrolled:0,graduated:0,status:0,coop:0,intern:0};
+
+  wb.SheetNames.forEach(sn=>{
+    const k=MJ_MAP[sn]||MJ_MAP[sn.trim()];
+    if(!k) return;
+    const data=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:''});
+
+    /* ── Intake ── */
+    if(k==='intake'||MJ[k]){
+      data.forEach(row=>{
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||row['Year']||0);
+        const rawKey=String(row['วิชาเอก']||row['major']||row['Major']||k);
+        const mid=MJ_MAP[rawKey.trim()]||rawKey;
+        if(!yr||yr<2530||yr>2620||!MJ[mid]) return;
+        const r=[yr,+row['แผนรับ']||0,+row['สัมภาษณ์']||+row['เรียกสัมภาษณ์']||0,
+          +row['ยืนยัน']||0,+row['รายงานตัว']||0,+row['ไม่รายงานตัว']||0];
+        if(!DB[mid]) DB[mid]=[];
+        const idx=DB[mid].findIndex(x=>x[0]===yr);
+        if(idx>=0) DB[mid][idx]=r; else DB[mid].push(r);
+        counts.intake++;
+      });
+    }
+
+    /* ── Enrolled ── */
+    if(k==='enrolled'){
+      data.forEach(row=>{
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
+        const v=+row['จำนวนลงทะเบียน']||+row['จำนวนนักศึกษาลงทะเบียน']||+row['enrolled']||0;
+        if(!yr||yr<2530||yr>2620) return;
+        if(!TREND_DB[yr]) TREND_DB[yr]={enrolled:0,graduated:0};
+        TREND_DB[yr].enrolled=v;
+        counts.enrolled++;
+      });
+      renderEnrolledTable();
+    }
+
+    /* ── Graduated ── */
+    if(k==='graduated'){
+      data.forEach(row=>{
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
+        const v=+row['จำนวนสำเร็จการศึกษา']||+row['สำเร็จการศึกษา']||+row['graduated']||0;
+        if(!yr||yr<2530||yr>2620) return;
+        if(!TREND_DB[yr]) TREND_DB[yr]={enrolled:0,graduated:0};
+        TREND_DB[yr].graduated=v;
+        counts.graduated++;
+      });
+      renderGraduatedTable();
+    }
+
+    /* ── Status ── */
+    if(k==='status'){
+      data.forEach(row=>{
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
+        if(!yr||yr<2530||yr>2620) return;
+        STATUS_DATA[yr]=[
+          {label:'ยังเป็นนักศึกษา', val:+row['ยังเป็นนักศึกษา']||+row['ยังเรียนอยู่']||0, color:'#8b5cf6'},
+          {label:'สำเร็จการศึกษา',  val:+row['สำเร็จการศึกษา']||0,                          color:'#3b82f6'},
+          {label:'ไม่รายงานตัว',    val:+row['ไม่รายงานตัว']||0,                            color:'#f97316'},
+          {label:'โอนย้าย',          val:+row['โอนย้าย']||0,                                 color:'#22c55e'},
+          {label:'ออกกลางคัน',       val:+row['ออกกลางคัน']||0,                              color:'#eab308'},
+          {label:'พัก/ลา',           val:+row['พักการศึกษา']||+row['พัก/ลา']||+row['ลา']||0,color:'#ef4444'},
+        ].filter(x=>x.val>0);
+        counts.status++;
+      });
+      renderStatusTable();
+    }
+
+    /* ── Coop ── */
+    if(k==='coop'){
+      data.forEach(row=>{
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
+        const rawKey=String(row['วิชาเอก']||row['major']||'');
+        const mid=MJ_MAP[rawKey.trim()]||rawKey;
+        const v=+row['จำนวน']||+row['จำนวนนักศึกษาสหกิจ']||+row['coop']||0;
+        if(!yr||!MJ[mid]) return;
+        const ci=COOP_DATA.findIndex(c=>c.key===mid);
+        const yi=COOP_YRS.indexOf(yr);
+        if(ci>=0&&yi>=0){COOP_DATA[ci].v[yi]=v; counts.coop++;}
+        else if(ci>=0&&!COOP_YRS.includes(yr)){COOP_YRS.push(yr);COOP_DATA[ci].v.push(v);counts.coop++;}
+      });
+    }
+
+    /* ── Intern ── */
+    if(k==='intern'){
+      data.forEach(row=>{
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
+        const rawKey=String(row['วิชาเอก']||row['major']||'');
+        const mid=MJ_MAP[rawKey.trim()]||rawKey;
+        const v=+row['จำนวน']||+row['จำนวนนักศึกษาฝึกงาน']||+row['intern']||0;
+        if(!yr||!MJ[mid]) return;
+        const ii=INTERN_DATA.findIndex(c=>c.key===mid);
+        const yi=INTERN_YRS.indexOf(yr);
+        if(ii>=0&&yi>=0){INTERN_DATA[ii].v[yi]=v; counts.intern++;}
+        else if(ii>=0&&!INTERN_YRS.includes(yr)){INTERN_YRS.push(yr);INTERN_DATA[ii].v.push(v);counts.intern++;}
+      });
+    }
+  });
+
+  pendingImport=null;
+  document.getElementById('import-preview').style.display='none';
+  const total=Object.values(counts).reduce((a,b)=>a+b,0);
+  const detail=Object.entries(counts).filter(([,v])=>v>0).map(([k,v])=>getSheetTypeName(k)+' '+v+' แถว').join(', ');
+  toast(`✓ นำเข้าสำเร็จ ${total} แถว (${detail})`);
+  // Re-render visible view
+  const active=document.querySelector('.view.active')?.id?.replace('view-','');
+  if(active&&active!=='import'&&active!=='input'){const r={students:renderStudents,status:renderStatus,coop:renderCoop,intern:renderIntern};if(r[active])r[active]();}
+}
+
+/* ══════════════════════════════════════════════════
+   EXPORT
+══════════════════════════════════════════════════ */
+function exportStudentsXlsx() {
+  const wb=XLSX.utils.book_new();
+  Object.entries(DB).forEach(([mid,rows])=>{
+    const ws=XLSX.utils.aoa_to_sheet([['ปีการศึกษา','แผนรับ','เรียกสัมภาษณ์','ยืนยัน','รายงานตัว','ไม่รายงานตัว'],...rows.sort((a,b)=>a[0]-b[0])]);
+    ws['!cols']=[{wch:14},{wch:10},{wch:14},{wch:10},{wch:12},{wch:14}];
+    XLSX.utils.book_append_sheet(wb,ws,MJ[mid].short);
+  });
+  // Coop sheet
+  const coopRows=[['สาขา',...COOP_YRS,'รวม'],...COOP_DATA.map(c=>[MJ[c.key]?.name||c.key,...c.v,c.v.reduce((a,b)=>a+b,0)])];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(coopRows),'สหกิจศึกษา');
+  // Intern sheet
+  const intRows=[['สาขา',...INTERN_YRS,'รวม'],...INTERN_DATA.map(c=>[MJ[c.key]?.name||c.key,...c.v,c.v.reduce((a,b)=>a+b,0)])];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(intRows),'ฝึกงาน');
+  // Enrolled sheet
+  const enrYrs=Object.keys(TREND_DB).map(Number).sort((a,b)=>a-b);
+  const enrRows=[['ปีการศึกษา','จำนวนลงทะเบียนทั้งหมด'],...enrYrs.map(y=>[y,TREND_DB[y].enrolled||0])];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(enrRows),'Enrolled');
+  // Graduated sheet
+  const gradRows=[['ปีการศึกษา','จำนวนสำเร็จการศึกษา'],...enrYrs.map(y=>[y,TREND_DB[y].graduated||0])];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(gradRows),'Graduated');
+  // Status sheet
+  const stYrs=Object.keys(STATUS_DATA).map(Number).sort((a,b)=>a-b);
+  const stHead=['ปีการศึกษา','ยังเป็นนักศึกษา','สำเร็จการศึกษา','ไม่รายงานตัว','โอนย้าย','ออกกลางคัน','พัก/ลา'];
+  const stRows=[stHead,...stYrs.map(yr=>{
+    const d=STATUS_DATA[yr]||[];
+    const g=k=>d.find(x=>x.label.includes(k))?.val||0;
+    return [yr,g('เป็นนักศึกษา'),g('สำเร็จ'),g('ไม่รายงานตัว'),g('โอน'),g('กลางคัน'),g('พัก')];
+  })];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(stRows),'Status');
+  XLSX.writeFile(wb,'student_statistics_report.xlsx');
+  toast('✓ Export Excel ครบทุก Sheet สำเร็จ');
+}
+
+function exportTemplate() {
+  const wb=XLSX.utils.book_new();
+
+  // ── Sheet 1: Intake
+  const intakeTpl=[
+    ['ปีการศึกษา','วิชาเอก','แผนรับ','สัมภาษณ์','ยืนยัน','รายงานตัว','ไม่รายงานตัว'],
+    [2567,'fin',70,122,80,76,4],[2567,'mkt',70,139,93,90,3],[2567,'hrm',70,132,97,94,3],
+    [2566,'fin',70,199,80,79,1],[2566,'mkt',70,143,78,76,2],
+    ['','','','','','',''],
+    ['หมายเหตุ: วิชาเอก = fin / mkt / hrm / log / bis / mice','','','','','',''],
+  ];
+  const ws1=XLSX.utils.aoa_to_sheet(intakeTpl);
+  ws1['!cols']=[{wch:14},{wch:8},{wch:9},{wch:11},{wch:8},{wch:11},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,ws1,'Intake');
+
+  // ── Sheet 2: Enrolled (จำนวนลงทะเบียน → Line chart เส้นบน)
+  const enrolledTpl=[
+    ['ปีการศึกษา','จำนวนลงทะเบียนทั้งหมด'],
+    ['','(นักศึกษาทุกชั้นปีที่ยังเรียนอยู่ รวมทุกวิชาเอก)'],
+    [2567,524],[2566,529],[2565,389],[2564,458],[2563,434],
+  ];
+  const ws2=XLSX.utils.aoa_to_sheet(enrolledTpl);
+  ws2['!cols']=[{wch:14},{wch:36}];
+  XLSX.utils.book_append_sheet(wb,ws2,'Enrolled');
+
+  // ── Sheet 3: Graduated (จำนวนสำเร็จการศึกษา → Line chart เส้นล่าง)
+  const graduatedTpl=[
+    ['ปีการศึกษา','จำนวนสำเร็จการศึกษา'],
+    ['','(นักศึกษาที่จบจริงในปีนั้น รวมทุกวิชาเอก)'],
+    [2567,0],[2566,0],[2565,389],[2564,458],[2563,434],
+  ];
+  const ws3=XLSX.utils.aoa_to_sheet(graduatedTpl);
+  ws3['!cols']=[{wch:14},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,ws3,'Graduated');
+
+  // ── Sheet 4: Status (สถานะนักศึกษา → Pie chart)
+  const statusTpl=[
+    ['ปีการศึกษา','ยังเป็นนักศึกษา','สำเร็จการศึกษา','ไม่รายงานตัว','โอนย้าย','ออกกลางคัน','พักการศึกษา'],
+    ['','(กำลังเรียนอยู่)','(จบแล้วสะสม)','(รับเข้าไม่มา)','(ย้ายสาขา)','(ลาออก/คัดออก)','(หยุดพัก)'],
+    [2567,532,518,14,8,21,3],
+    [2566,495,480,12,6,18,2],
+    [2565,460,445,10,5,15,1],
+  ];
+  const ws4=XLSX.utils.aoa_to_sheet(statusTpl);
+  ws4['!cols']=[{wch:14},{wch:16},{wch:16},{wch:14},{wch:10},{wch:13},{wch:13}];
+  XLSX.utils.book_append_sheet(wb,ws4,'Status');
+
+  // ── Sheet 5: Coop
+  const coopTpl=[
+    ['ปีการศึกษา','วิชาเอก','จำนวนนักศึกษาสหกิจ'],
+    [2567,'fin',12],[2567,'mkt',37],[2567,'hrm',10],[2567,'log',57],[2567,'bis',48],[2567,'mice',15],
+  ];
+  const ws5=XLSX.utils.aoa_to_sheet(coopTpl);
+  ws5['!cols']=[{wch:14},{wch:8},{wch:20}];
+  XLSX.utils.book_append_sheet(wb,ws5,'Coop');
+
+  // ── Sheet 6: Intern
+  const internTpl=[
+    ['ปีการศึกษา','วิชาเอก','จำนวนนักศึกษาฝึกงาน'],
+    [2567,'fin',41],[2567,'mkt',65],[2567,'hrm',40],[2567,'log',70],[2567,'bis',50],[2567,'mice',60],
+  ];
+  const ws6=XLSX.utils.aoa_to_sheet(internTpl);
+  ws6['!cols']=[{wch:14},{wch:8},{wch:20}];
+  XLSX.utils.book_append_sheet(wb,ws6,'Intern');
+
+  XLSX.writeFile(wb,'template_student_data.xlsx');
+  toast('✓ ดาวน์โหลด Template ครบ 6 Sheet แล้ว');
+}
+
+function exportTemplateStatus() {
+  const wb=XLSX.utils.book_new();
+  const statusTpl=[
+    ['ปีการศึกษา','ยังเป็นนักศึกษา','สำเร็จการศึกษา','ไม่รายงานตัว','โอนย้าย','ออกกลางคัน','พักการศึกษา'],
+    ['','(กำลังเรียนอยู่)','(จบแล้วสะสม)','(รับเข้าไม่มา)','(ย้ายสาขา)','(ลาออก/คัดออก)','(หยุดพัก)'],
+    [2567,532,518,14,8,21,3],[2566,495,480,12,6,18,2],[2565,460,445,10,5,15,1],
+  ];
+  const ws=XLSX.utils.aoa_to_sheet(statusTpl);
+  ws['!cols']=[{wch:14},{wch:16},{wch:16},{wch:14},{wch:10},{wch:13},{wch:13}];
+  XLSX.utils.book_append_sheet(wb,ws,'Status');
+  const enrolledTpl=[['ปีการศึกษา','จำนวนลงทะเบียนทั้งหมด'],[2567,524],[2566,529],[2565,389],[2564,458],[2563,434]];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(enrolledTpl),'Enrolled');
+  const gradTpl=[['ปีการศึกษา','จำนวนสำเร็จการศึกษา'],[2567,0],[2566,0],[2565,389],[2564,458],[2563,434]];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(gradTpl),'Graduated');
+  XLSX.writeFile(wb,'template_student_status.xlsx');
+  toast('✓ ดาวน์โหลด Template สถิตินักศึกษา (3 Sheet) แล้ว');
+}
+
+/* ══════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════ */
+let _tt;
+function toast(msg, color='#7c3aed') {
+  document.getElementById('tdot').style.background=color;
+  document.getElementById('tmsg').textContent=msg;
+  const el=document.getElementById('toast');
+  el.classList.add('show');
+  clearTimeout(_tt);
+  _tt=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
+// Render initial view
+setTimeout(()=>{
+  renderStudents();
+  renderEnrolledTable();
+  renderGraduatedTable();
+  renderStatusTable();
+}, 120);
+</script>
+</body>
+</html>
