@@ -127,7 +127,7 @@ app.post("/api/courses", async (req, res) => {
     name_th, name_en, degree_level, status,
     program_type, study_system, award_title,
     total_credits, short_detail, hero_image,
-    info_image, student_range              // ✅ รับค่า student_range
+    info_image, student_range
   } = req.body;
 
   if (!name_th) return res.status(400).json({ message: "กรอกข้อมูลไม่ครบ" });
@@ -140,15 +140,23 @@ app.post("/api/courses", async (req, res) => {
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
       RETURNING id`,
       [
-        name_th, name_en, degree_level, status,
-        program_type, study_system, award_title,
-        total_credits, short_detail, hero_image,
-        info_image, student_range             // ✅ เพิ่ม student_range
+        name_th,
+        name_en || null,
+        degree_level || null,
+        status,
+        program_type || null,
+        study_system || null,
+        award_title || null,
+        total_credits || null,   // ✅ แก้แล้ว: "" → null ป้องกัน integer error
+        short_detail || null,
+        hero_image || null,
+        info_image || null,
+        student_range || null
       ]
     );
     res.json({ message: "เพิ่มหลักสูตรสำเร็จ", id: result.rows[0].id });
   } catch (err) {
-    console.error("Add course error:", err.message, err.detail); // เพิ่ม detail
+    console.error("Add course error:", err.message, err.detail);
     res.status(500).json({ message: err.message });
   }
 });
@@ -208,7 +216,6 @@ app.delete("/api/courses/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    // ลบหลักสูตร (majors จะถูกลบอัตโนมัติ เพราะ ON DELETE CASCADE)
     const result = await pool.query(
       "DELETE FROM courses WHERE id = $1 RETURNING *",
       [id]
@@ -278,14 +285,14 @@ app.post("/api/majors", async (req, res) => {
       [
         course_id,
         name_th,
-        name_en,
-        intro,
-        image_url,
-        career_path,
-        plan_1,
-        plan_2,
-        plan_3,
-        plan_4
+        name_en || null,
+        intro || null,
+        image_url || null,
+        career_path || null,
+        plan_1 || null,
+        plan_2 || null,
+        plan_3 || null,
+        plan_4 || null
       ]
     );
 
@@ -332,14 +339,14 @@ app.put("/api/majors/:id", async (req, res) => {
       WHERE id=$10`,
       [
         name_th,
-        name_en,
-        intro,
-        image_url,
-        career_path,
-        plan_1,
-        plan_2,
-        plan_3,
-        plan_4,
+        name_en || null,
+        intro || null,
+        image_url || null,
+        career_path || null,
+        plan_1 || null,
+        plan_2 || null,
+        plan_3 || null,
+        plan_4 || null,
         id
       ]
     );
@@ -351,6 +358,7 @@ app.put("/api/majors/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 // ======================
 // UPDATE COURSE
 // ======================
@@ -377,7 +385,6 @@ app.put("/api/courses/:id", async (req, res) => {
   }
 
   try {
-    // ===== PUT /api/courses/:id =====
     const result = await pool.query(
       `UPDATE courses SET
         name_th=$1,
@@ -395,10 +402,19 @@ app.put("/api/courses/:id", async (req, res) => {
       WHERE id=$13
       RETURNING id`,
       [
-        name_th, name_en, degree_level, status,
-        program_type, study_system, award_title,
-        total_credits, short_detail, hero_image,
-        info_image, student_range, id
+        name_th,
+        name_en || null,
+        degree_level || null,
+        status,
+        program_type || null,
+        study_system || null,
+        award_title || null,
+        total_credits || null,   // ✅ แก้แล้ว: "" → null ป้องกัน integer error
+        short_detail || null,
+        hero_image || null,
+        info_image || null,
+        student_range || null,
+        id
       ]
     );
 
@@ -412,8 +428,8 @@ app.put("/api/courses/:id", async (req, res) => {
     });
 
   } catch (err) {
-    console.error("Update course error:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Update course error:", err.message, err.detail);
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -489,7 +505,6 @@ app.get("/api/courses/:courseId/study-plans", async (req, res) => {
     values.push(status);
   }
   if (search) {
-    // ให้ค้นหาในชื่อหลักสูตร/รหัสวิชา/ชื่อวิชา ภายในแผนนี้
     where += ` AND EXISTS (
       SELECT 1 FROM semesters s
       JOIN semester_subjects ss ON ss.semester_id = s.id
@@ -824,9 +839,9 @@ app.delete("/api/semester-subjects/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 // LIST แผนของสาขา + ค้นหา/แบ่งหน้า
 // GET /api/majors/:majorId/study-plans?search=&year_no=&status=&page=1&pageSize=10
-
 app.get("/api/majors/:majorId/study-plans", async (req, res) => {
   const { majorId } = req.params;
   const { search = "", year_no, status, page = 1, pageSize = 10 } = req.query;
@@ -879,24 +894,17 @@ app.post("/api/majors/:majorId/study-plans", async (req, res) => {
     console.error(e); res.status(500).json({ message: "Server error" });
   }
 });
-// GET รายละเอียดแผน (รวม semester + subjects)
-// GET /api/study-plans/:planId
-// (ใช้ของเดิมได้เลย)
-
 
 // เพิ่มรายวิชาเข้าเทอม (ภาคเรียน)
 // POST /api/semesters/:semesterId/subjects
-// body: { subject_id OR (code,name_th,default_credits,...), category, credits, hour_structure, sort_order }
 app.post("/api/semesters/:semesterId/subjects", async (req, res) => {
   const { semesterId } = req.params;
   let {
     subject_id,
-    // ถ้ายังไม่มี subject จะใช้ชุดนี้สร้างใหม่
     code, name_th, name_en,
     default_credits, default_hour_structure,
     description_th, description_en,
     outcomes_th, outcomes_en,
-    // ข้อมูลผูกกับเทอม
     category = "Core", credits, hour_structure, sort_order = 1
   } = req.body;
 
@@ -931,7 +939,6 @@ app.post("/api/semesters/:semesterId/subjects", async (req, res) => {
       [semesterId, subject_id, category, credits ?? null, hour_structure || null, sort_order]
     );
 
-    // อัปเดตรวมหน่วยกิตของเทอม
     await pool.query(
       `UPDATE semesters s
        SET total_credits = COALESCE((
