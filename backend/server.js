@@ -1,7 +1,28 @@
 // ============================================================
-//  server.js — ส่วนที่ต้องเพิ่มทั้งหมด (FMS PLO System)
-//  คัดลอกไปต่อท้าย server.js ที่มีอยู่
+//  server.js  —  FMS Backend
 // ============================================================
+
+const express = require("express");
+const { Pool } = require("pg");
+const cors    = require("cors");
+
+const app  = express();
+const PORT = process.env.PORT || 3000;
+
+// ── Middleware ───────────────────────────────────────────────
+app.use(cors());
+app.use(express.json());
+
+// ── Database ─────────────────────────────────────────────────
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === "production"
+    ? { rejectUnauthorized: false }
+    : false,
+});
+
+// ── Health check ─────────────────────────────────────────────
+app.get("/", (req, res) => res.json({ status: "ok" }));
 
 
 // ============================================================
@@ -75,7 +96,6 @@ app.post("/api/plo-kas", async (req, res) => {
     return res.status(400).json({ message: "ต้องส่ง plo_id และ kas_ids (array)" });
   }
   try {
-    // ลบ mapping เดิมทั้งหมดของ PLO นี้แล้ว insert ใหม่
     await pool.query("DELETE FROM plo_kas WHERE plo_id = $1", [plo_id]);
     const values = kas_ids.map((_, i) => `($1, $${i + 2})`).join(", ");
     await pool.query(
@@ -105,7 +125,7 @@ app.delete("/api/plo-kas", async (req, res) => {
 
 
 // ============================================================
-//  [2] KAS Items — PUT / DELETE (GET & POST มีอยู่แล้ว)
+//  [2] KAS Items — PUT / DELETE
 // ============================================================
 
 // PUT /api/kas-items/:id
@@ -242,7 +262,6 @@ app.get("/api/major-groups/:groupId/mlos", async (req, res) => {
       [groupId]
     );
 
-    // ดึง KAS ที่ map ไว้พร้อมกัน
     const mloIds = mlos.rows.map(m => m.id);
     let kasMap = {};
     if (mloIds.length > 0) {
@@ -259,10 +278,7 @@ app.get("/api/major-groups/:groupId/mlos", async (req, res) => {
       });
     }
 
-    const result = mlos.rows.map(m => ({
-      ...m,
-      kas: kasMap[m.id] || []
-    }));
+    const result = mlos.rows.map(m => ({ ...m, kas: kasMap[m.id] || [] }));
     res.json(result);
   } catch (err) {
     console.error("Get MLOs error:", err);
@@ -382,7 +398,6 @@ app.get("/api/subjects/:subjectId/clos", async (req, res) => {
     const cloIds = clos.rows.map(c => c.id);
     if (cloIds.length === 0) return res.json([]);
 
-    // ดึง PLO, MLO, KAS ที่ map ไว้ทั้งหมดพร้อมกัน
     const [ploMaps, mloMaps, kasMaps] = await Promise.all([
       pool.query(
         `SELECT cp.clo_id, p.id, p.code, p.description
@@ -404,7 +419,6 @@ app.get("/api/subjects/:subjectId/clos", async (req, res) => {
       )
     ]);
 
-    // สร้าง map id → array
     const buildMap = (rows, key = "clo_id") =>
       rows.reduce((acc, r) => {
         if (!acc[r[key]]) acc[r[key]] = [];
@@ -431,7 +445,7 @@ app.get("/api/subjects/:subjectId/clos", async (req, res) => {
   }
 });
 
-// GET /api/clos/:id  — ดูรายละเอียด CLO เดียว
+// GET /api/clos/:id
 app.get("/api/clos/:id", async (req, res) => {
   try {
     const clo = await pool.query("SELECT * FROM clos WHERE id = $1", [req.params.id]);
@@ -501,7 +515,6 @@ app.delete("/api/clos/:id", async (req, res) => {
   }
 });
 
-// ----- CLO-KAS -----
 // POST /api/clo-kas  body: { clo_id, kas_ids: ["uuid", ...] }  (replace all)
 app.post("/api/clo-kas", async (req, res) => {
   const { clo_id, kas_ids } = req.body;
@@ -536,7 +549,6 @@ app.delete("/api/clo-kas", async (req, res) => {
   }
 });
 
-// ----- CLO-PLO -----
 // POST /api/clo-plo  body: { clo_id, plo_ids: ["uuid", ...] }  (replace all)
 app.post("/api/clo-plo", async (req, res) => {
   const { clo_id, plo_ids } = req.body;
@@ -571,7 +583,6 @@ app.delete("/api/clo-plo", async (req, res) => {
   }
 });
 
-// ----- CLO-MLO -----
 // POST /api/clo-mlo  body: { clo_id, mlo_ids: ["uuid", ...] }  (replace all)
 app.post("/api/clo-mlo", async (req, res) => {
   const { clo_id, mlo_ids } = req.body;
@@ -611,7 +622,7 @@ app.delete("/api/clo-mlo", async (req, res) => {
 //  [6] Alignment Matrix
 // ============================================================
 
-// GET /api/programs/:programId/alignment-rows  (พร้อม plo_checks + mlo_checks)
+// GET /api/programs/:programId/alignment-rows
 app.get("/api/programs/:programId/alignment-rows", async (req, res) => {
   const { programId } = req.params;
   try {
@@ -623,7 +634,6 @@ app.get("/api/programs/:programId/alignment-rows", async (req, res) => {
     const rowIds = rows.rows.map(r => r.id);
     if (rowIds.length === 0) return res.json([]);
 
-    // ดึง PLO checks และ MLO checks พร้อมกัน
     const [ploChecks, mloChecks] = await Promise.all([
       pool.query(
         `SELECT apc.alignment_row_id, p.id AS plo_id, p.code AS plo_code, apc.checked
@@ -724,7 +734,7 @@ app.delete("/api/alignment-rows/:id", async (req, res) => {
   }
 });
 
-// PUT /api/alignment-rows/:id/plo-checks  — toggle PLO check (upsert)
+// PUT /api/alignment-rows/:id/plo-checks
 // body: { plo_id, checked }
 app.put("/api/alignment-rows/:id/plo-checks", async (req, res) => {
   const { id } = req.params;
@@ -746,7 +756,7 @@ app.put("/api/alignment-rows/:id/plo-checks", async (req, res) => {
   }
 });
 
-// PUT /api/alignment-rows/:id/mlo-checks  — toggle MLO check (upsert)
+// PUT /api/alignment-rows/:id/mlo-checks
 // body: { mlo_id, checked }
 app.put("/api/alignment-rows/:id/mlo-checks", async (req, res) => {
   const { id } = req.params;
@@ -782,14 +792,8 @@ app.get("/api/programs/:programId/plo-scores", async (req, res) => {
   const values = [programId];
   let idx = 2;
 
-  if (year) {
-    where += ` AND academic_year = $${idx++}`;
-    values.push(year);
-  }
-  if (lo_level) {
-    where += ` AND lo_level = $${idx++}`;
-    values.push(lo_level);
-  }
+  if (year)     { where += ` AND academic_year = $${idx++}`; values.push(year); }
+  if (lo_level) { where += ` AND lo_level = $${idx++}`;      values.push(lo_level); }
 
   try {
     const result = await pool.query(
@@ -803,17 +807,14 @@ app.get("/api/programs/:programId/plo-scores", async (req, res) => {
   }
 });
 
-// GET /api/programs/:programId/plo-score-summary?year=2567  (ใช้ View)
+// GET /api/programs/:programId/plo-score-summary?year=2567
 app.get("/api/programs/:programId/plo-score-summary", async (req, res) => {
   const { programId } = req.params;
   const { year } = req.query;
 
   let where = "WHERE program_id = $1";
   const values = [programId];
-  if (year) {
-    where += " AND academic_year = $2";
-    values.push(year);
-  }
+  if (year) { where += " AND academic_year = $2"; values.push(year); }
 
   try {
     const result = await pool.query(
@@ -827,7 +828,7 @@ app.get("/api/programs/:programId/plo-score-summary", async (req, res) => {
   }
 });
 
-// POST /api/plo-scores  — สร้างหรืออัปเดต (upsert)
+// POST /api/plo-scores  — upsert
 // body: { program_id, lo_level, lo_code, lo_description, academic_year, semester_1, semester_2, note }
 app.post("/api/plo-scores", async (req, res) => {
   const {
@@ -907,7 +908,7 @@ app.delete("/api/plo-scores/:id", async (req, res) => {
 
 
 // ============================================================
-//  [8] Subjects — PUT / DELETE (เพิ่มเติมจากที่มีอยู่)
+//  [8] Subjects — GET / PUT / DELETE
 // ============================================================
 
 // GET /api/subjects/:id
@@ -959,7 +960,7 @@ app.put("/api/subjects/:id", async (req, res) => {
   }
 });
 
-// DELETE /api/subjects/:id  ⚠️ ระวัง cascade ไปที่ clos และ semester_subjects
+// DELETE /api/subjects/:id
 app.delete("/api/subjects/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -974,11 +975,10 @@ app.delete("/api/subjects/:id", async (req, res) => {
 
 
 // ============================================================
-//  [9] View Helpers (ใช้ Views จาก Schema โดยตรง)
+//  [9] View Helpers
 // ============================================================
 
-// GET /api/programs/:programId/clo-full  — CLO พร้อม PLO, MLO, KAS (via v_clo_full)
-// query: ?subject_id=3
+// GET /api/programs/:programId/clo-full?subject_id=xxx
 app.get("/api/programs/:programId/clo-full", async (req, res) => {
   const { subject_id } = req.query;
   try {
@@ -994,10 +994,7 @@ app.get("/api/programs/:programId/clo-full", async (req, res) => {
       WHERE pr.id = $1
     `;
     const values = [req.params.programId];
-    if (subject_id) {
-      query += " AND vcf.subject_id = $2";
-      values.push(subject_id);
-    }
+    if (subject_id) { query += " AND vcf.subject_id = $2"; values.push(subject_id); }
     query += " ORDER BY vcf.subject_code, vcf.seq";
 
     const result = await pool.query(query, values);
@@ -1008,7 +1005,7 @@ app.get("/api/programs/:programId/clo-full", async (req, res) => {
   }
 });
 
-// GET /api/study-plans/:planId/full  — แผนการศึกษาพร้อมวิชาครบ (via v_study_plan_full)
+// GET /api/study-plans/:planId/full
 app.get("/api/study-plans/:planId/full", async (req, res) => {
   try {
     const result = await pool.query(
@@ -1022,6 +1019,12 @@ app.get("/api/study-plans/:planId/full", async (req, res) => {
   }
 });
 
+
+// ============================================================
+//  [10] Stakeholders & Surveys
+// ============================================================
+
+// GET /api/programs/:programId/stakeholders
 app.get("/api/programs/:programId/stakeholders", async (req, res) => {
   try {
     const r = await pool.query(
@@ -1029,62 +1032,64 @@ app.get("/api/programs/:programId/stakeholders", async (req, res) => {
       [req.params.programId]
     );
     res.json(r.rows);
-  } catch(e){ res.status(500).json({message:"Server error"}); }
+  } catch (e) { res.status(500).json({ message: "Server error" }); }
 });
 
-// ── POST /api/stakeholders
+// POST /api/stakeholders
 // body: { program_id, name_th, name_en, sort_order }
 app.post("/api/stakeholders", async (req, res) => {
-  const { program_id, name_th, name_en, sort_order=0 } = req.body;
-  if (!program_id || !name_th) return res.status(400).json({message:"ต้องส่ง program_id และ name_th"});
+  const { program_id, name_th, name_en, sort_order = 0 } = req.body;
+  if (!program_id || !name_th) return res.status(400).json({ message: "ต้องส่ง program_id และ name_th" });
   try {
     const r = await pool.query(
       "INSERT INTO stakeholders (program_id,name_th,name_en,sort_order) VALUES($1,$2,$3,$4) RETURNING *",
-      [program_id, name_th, name_en||null, sort_order]
+      [program_id, name_th, name_en || null, sort_order]
     );
-    res.status(201).json({message:"เพิ่ม Stakeholder สำเร็จ", stakeholder:r.rows[0]});
-  } catch(e){
-    if(e.code==="23505") return res.status(409).json({message:"ชื่อ Stakeholder ซ้ำ"});
-    res.status(500).json({message:"Server error"});
+    res.status(201).json({ message: "เพิ่ม Stakeholder สำเร็จ", stakeholder: r.rows[0] });
+  } catch (e) {
+    if (e.code === "23505") return res.status(409).json({ message: "ชื่อ Stakeholder ซ้ำ" });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// ── DELETE /api/stakeholders/:id
+// DELETE /api/stakeholders/:id  (soft delete)
 app.delete("/api/stakeholders/:id", async (req, res) => {
   try {
     await pool.query("UPDATE stakeholders SET is_active=false WHERE id=$1", [req.params.id]);
-    res.json({message:"ลบ Stakeholder แล้ว"});
-  } catch(e){ res.status(500).json({message:"Server error"}); }
+    res.json({ message: "ลบ Stakeholder แล้ว" });
+  } catch (e) { res.status(500).json({ message: "Server error" }); }
 });
 
-// ── GET /api/surveys?program_id=&year=
+// GET /api/surveys?program_id=&year=
 app.get("/api/surveys", async (req, res) => {
   const { program_id, year } = req.query;
-  let where="WHERE 1=1", vals=[];
-  if(program_id){ where+=" AND program_id=$"+(vals.length+1); vals.push(program_id); }
-  if(year){ where+=" AND academic_year=$"+(vals.length+1); vals.push(year); }
+  let where = "WHERE 1=1", vals = [];
+  if (program_id) { where += " AND program_id=$" + (vals.length + 1); vals.push(program_id); }
+  if (year)       { where += " AND academic_year=$" + (vals.length + 1); vals.push(year); }
   try {
-    const r = await pool.query(`SELECT * FROM stakeholder_surveys ${where} ORDER BY academic_year DESC,created_at DESC`, vals);
+    const r = await pool.query(
+      `SELECT * FROM stakeholder_surveys ${where} ORDER BY academic_year DESC,created_at DESC`,
+      vals
+    );
     res.json(r.rows);
-  } catch(e){ res.status(500).json({message:"Server error"}); }
+  } catch (e) { res.status(500).json({ message: "Server error" }); }
 });
 
-// ── POST /api/surveys
+// POST /api/surveys
 // body: { program_id, title, academic_year, survey_date, note }
 app.post("/api/surveys", async (req, res) => {
   const { program_id, title, academic_year, survey_date, note } = req.body;
-  if (!program_id||!title||!academic_year) return res.status(400).json({message:"ข้อมูลไม่ครบ"});
+  if (!program_id || !title || !academic_year) return res.status(400).json({ message: "ข้อมูลไม่ครบ" });
   try {
     const r = await pool.query(
       "INSERT INTO stakeholder_surveys (program_id,title,academic_year,survey_date,note) VALUES($1,$2,$3,$4,$5) RETURNING *",
-      [program_id, title, academic_year, survey_date||null, note||null]
+      [program_id, title, academic_year, survey_date || null, note || null]
     );
-    res.status(201).json({message:"สร้าง Survey สำเร็จ", survey:r.rows[0]});
-  } catch(e){ res.status(500).json({message:"Server error"}); }
+    res.status(201).json({ message: "สร้าง Survey สำเร็จ", survey: r.rows[0] });
+  } catch (e) { res.status(500).json({ message: "Server error" }); }
 });
 
-// ── GET /api/surveys/:surveyId/matrix
-// ดึง mapping ทั้งหมดของ survey นี้ (flat rows)
+// GET /api/surveys/:surveyId/matrix
 app.get("/api/surveys/:surveyId/matrix", async (req, res) => {
   try {
     const r = await pool.query(
@@ -1092,24 +1097,23 @@ app.get("/api/surveys/:surveyId/matrix", async (req, res) => {
       [req.params.surveyId]
     );
     res.json(r.rows);
-  } catch(e){ res.status(500).json({message:"Server error"}); }
+  } catch (e) { res.status(500).json({ message: "Server error" }); }
 });
 
-// ── POST /api/surveys/:surveyId/mappings
+// POST /api/surveys/:surveyId/mappings  (replace all)
 // body: { mappings: [{stakeholder_id, plo_id, level}] }
-// Replace-all pattern: ลบเดิมทั้งหมด แล้ว insert ใหม่
 app.post("/api/surveys/:surveyId/mappings", async (req, res) => {
   const { surveyId } = req.params;
   const { mappings } = req.body;
-  if (!Array.isArray(mappings)) return res.status(400).json({message:"ต้องส่ง mappings (array)"});
+  if (!Array.isArray(mappings)) return res.status(400).json({ message: "ต้องส่ง mappings (array)" });
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
     await client.query("DELETE FROM stakeholder_plo_mappings WHERE survey_id=$1", [surveyId]);
-    const valid = mappings.filter(m => m.level && ['F','M','P'].includes(m.level));
+    const valid = mappings.filter(m => m.level && ["F", "M", "P"].includes(m.level));
     if (valid.length > 0) {
-      const vals = valid.map((_,i) => `($1,$${i*3+2},$${i*3+3},$${i*3+4})`).join(",");
-      const params = [surveyId, ...valid.flatMap(m=>[m.stakeholder_id, m.plo_id, m.level])];
+      const vals = valid.map((_, i) => `($1,$${i * 3 + 2},$${i * 3 + 3},$${i * 3 + 4})`).join(",");
+      const params = [surveyId, ...valid.flatMap(m => [m.stakeholder_id, m.plo_id, m.level])];
       await client.query(
         `INSERT INTO stakeholder_plo_mappings (survey_id,stakeholder_id,plo_id,level) VALUES ${vals}
          ON CONFLICT (survey_id,stakeholder_id,plo_id) DO UPDATE SET level=EXCLUDED.level,updated_at=now()`,
@@ -1117,21 +1121,21 @@ app.post("/api/surveys/:surveyId/mappings", async (req, res) => {
       );
     }
     await client.query("COMMIT");
-    res.json({message:`บันทึก ${valid.length} mapping สำเร็จ`});
-  } catch(e){
+    res.json({ message: `บันทึก ${valid.length} mapping สำเร็จ` });
+  } catch (e) {
     await client.query("ROLLBACK");
-    res.status(500).json({message:"Server error: "+e.message});
+    res.status(500).json({ message: "Server error: " + e.message });
   } finally { client.release(); }
 });
 
-// ── PUT /api/surveys/:surveyId/mappings/single
-// body: { stakeholder_id, plo_id, level } — upsert รายคู่
+// PUT /api/surveys/:surveyId/mappings/single  (upsert รายคู่)
+// body: { stakeholder_id, plo_id, level }
 app.put("/api/surveys/:surveyId/mappings/single", async (req, res) => {
   const { surveyId } = req.params;
   const { stakeholder_id, plo_id, level } = req.body;
-  if (!stakeholder_id||!plo_id) return res.status(400).json({message:"ต้องส่ง stakeholder_id และ plo_id"});
+  if (!stakeholder_id || !plo_id) return res.status(400).json({ message: "ต้องส่ง stakeholder_id และ plo_id" });
   try {
-    if (!level || !['F','M','P'].includes(level)) {
+    if (!level || !["F", "M", "P"].includes(level)) {
       await pool.query(
         "DELETE FROM stakeholder_plo_mappings WHERE survey_id=$1 AND stakeholder_id=$2 AND plo_id=$3",
         [surveyId, stakeholder_id, plo_id]
@@ -1144,12 +1148,11 @@ app.put("/api/surveys/:surveyId/mappings/single", async (req, res) => {
         [surveyId, stakeholder_id, plo_id, level]
       );
     }
-    res.json({message:"บันทึกสำเร็จ"});
-  } catch(e){ res.status(500).json({message:"Server error"}); }
+    res.json({ message: "บันทึกสำเร็จ" });
+  } catch (e) { res.status(500).json({ message: "Server error" }); }
 });
 
-// ── GET /api/surveys/:surveyId/summary
-// PLO summary: จำนวน stakeholders + breakdown F/M/P
+// GET /api/surveys/:surveyId/summary
 app.get("/api/surveys/:surveyId/summary", async (req, res) => {
   try {
     const r = await pool.query(
@@ -1157,22 +1160,21 @@ app.get("/api/surveys/:surveyId/summary", async (req, res) => {
       [req.params.surveyId]
     );
     res.json(r.rows);
-  } catch(e){ res.status(500).json({message:"Server error"}); }
+  } catch (e) { res.status(500).json({ message: "Server error" }); }
 });
 
-// ── POST /api/surveys/:surveyId/import-excel
-// รับ JSON ที่ parse จาก Excel แล้ว (client-side XLSX.js)
+// POST /api/surveys/:surveyId/import-excel
 // body: { stakeholders:["ชื่อ1",...], rows:[{plo_no, type, ชื่อ1:"F", ...}] }
 app.post("/api/surveys/:surveyId/import-excel", async (req, res) => {
   const { surveyId } = req.params;
   const { stakeholders: skNames, rows } = req.body;
-  if (!Array.isArray(skNames)||!Array.isArray(rows)) return res.status(400).json({message:"ข้อมูลไม่ถูกต้อง"});
+  if (!Array.isArray(skNames) || !Array.isArray(rows))
+    return res.status(400).json({ message: "ข้อมูลไม่ถูกต้อง" });
 
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
 
-    // ดึง program_id จาก survey
     const sv = await client.query("SELECT program_id FROM stakeholder_surveys WHERE id=$1", [surveyId]);
     if (!sv.rows.length) throw new Error("ไม่พบ survey");
     const programId = sv.rows[0].program_id;
@@ -1189,30 +1191,28 @@ app.post("/api/surveys/:surveyId/import-excel", async (req, res) => {
       skMap[name] = r.rows[0].id;
     }
 
-    // ดึง PLO map (code → id)
+    // PLO map
     const ploR = await client.query("SELECT id,code FROM plos WHERE program_id=$1", [programId]);
     const ploMap = {};
     ploR.rows.forEach(r => { ploMap[r.code] = r.id; });
 
-    // ลบ mapping เดิม
     await client.query("DELETE FROM stakeholder_plo_mappings WHERE survey_id=$1", [surveyId]);
 
-    // Insert ใหม่
     const inserts = [];
     rows.forEach((row, ri) => {
-      const ploCode = `PLO${row['plo_no'] || row['no'] || (ri+1)}`;
+      const ploCode = `PLO${row["plo_no"] || row["no"] || (ri + 1)}`;
       const ploId = ploMap[ploCode];
       if (!ploId) return;
       skNames.forEach(sk => {
-        const level = String(row[sk]||'').trim().toUpperCase();
-        if (['F','M','P'].includes(level)) {
+        const level = String(row[sk] || "").trim().toUpperCase();
+        if (["F", "M", "P"].includes(level)) {
           inserts.push([surveyId, skMap[sk], ploId, level]);
         }
       });
     });
 
     if (inserts.length > 0) {
-      const vals = inserts.map((_,i) => `($${i*4+1},$${i*4+2},$${i*4+3},$${i*4+4})`).join(",");
+      const vals = inserts.map((_, i) => `($${i * 4 + 1},$${i * 4 + 2},$${i * 4 + 3},$${i * 4 + 4})`).join(",");
       await client.query(
         `INSERT INTO stakeholder_plo_mappings (survey_id,stakeholder_id,plo_id,level) VALUES ${vals}
          ON CONFLICT DO NOTHING`,
@@ -1221,9 +1221,17 @@ app.post("/api/surveys/:surveyId/import-excel", async (req, res) => {
     }
 
     await client.query("COMMIT");
-    res.json({message:`นำเข้าสำเร็จ: ${inserts.length} mapping`, count:inserts.length});
-  } catch(e){
+    res.json({ message: `นำเข้าสำเร็จ: ${inserts.length} mapping`, count: inserts.length });
+  } catch (e) {
     await client.query("ROLLBACK");
-    res.status(500).json({message:"Server error: "+e.message});
+    res.status(500).json({ message: "Server error: " + e.message });
   } finally { client.release(); }
+});
+
+
+// ============================================================
+//  Start Server
+// ============================================================
+app.listen(PORT, () => {
+  console.log(`🚀 FMS backend listening on port ${PORT}`);
 });
