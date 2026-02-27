@@ -1022,7 +1022,6 @@ app.get("/api/study-plans/:planId/full", async (req, res) => {
   }
 });
 
-GET /api/programs/programId/stakeholders
 app.get("/api/programs/:programId/stakeholders", async (req, res) => {
   try {
     const r = await pool.query(
