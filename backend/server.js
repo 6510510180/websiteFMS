@@ -1231,12 +1231,11 @@ app.post("/api/surveys/:surveyId/import-excel", async (req, res) => {
 const path = require("path");
 
 // Serve frontend static files
-app.use(express.static(path.join(__dirname, "../frontend")));
-
-// Fallback: ทุก route ที่ไม่ใช่ /api → ส่ง index.html
+// ✅ ถูก — ชี้ไปที่ frontend/dist ที่ build แล้ว
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 app.get("*", (req, res) => {
   if (!req.path.startsWith("/api")) {
-    res.sendFile(path.join(__dirname, "../frontend/index.html"));
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
   }
 });
 // ============================================================
