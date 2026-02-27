@@ -31,7 +31,9 @@
             z-index: 1000;
         }
 
-        .navbar .logo img { height: 40px; }
+        .navbar .logo img {
+            height: 40px;
+        }
 
         .navbar ul {
             display: flex;
@@ -79,19 +81,18 @@
 
         .welcome-text {
             color: black !important;
-            margin: 0;
+            margin: 0; 
             font-size: 24px;
             line-height: 1.2;
         }
 
         .sub-text {
             color: #9b51e0;
-            margin: 10px 0 0 0;
+            margin: 10px 0 0 0; 
             font-size: 20px;
             font-weight: bold;
         }
 
-        /* ── Course Grid ── */
         .course-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -106,13 +107,11 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
             position: relative;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .course-card:hover {
+        .course-card:has(a):hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(155,81,224,0.18);
         }
 
         .badge-new {
@@ -128,79 +127,52 @@
             z-index: 10;
         }
 
-        /* รูปภาพหลักสูตร */
-        .course-img-wrap {
+        .img-placeholder {
+            background-color: #ddd;
+            height: 100px;
             width: 100%;
-            height: 140px;
-            overflow: hidden;
-            background: #e8d5ff;
-            position: relative;
-        }
-
-        .course-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* placeholder ถ้าไม่มีรูป */
-        .course-img-placeholder {
-            width: 100%;
-            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #e8d5ff 0%, #d4b8ff 100%);
         }
 
-        .course-img-placeholder i {
-            font-size: 40px;
-            color: #9b51e0;
-            opacity: 0.5;
-        }
-
-        /* label แบบ overlay ซ้อนบนรูป (เหมือนในรูป) */
-        .course-label-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(155,81,224,0.95) 60%, transparent 100%);
+        .course-label {
+            background-color: #c084fc;
             color: #fff;
-            padding: 28px 12px 14px;
+            padding: 12px;
             font-size: 13px;
-            font-weight: 700;
-            line-height: 1.4;
-            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
         }
 
-        /* badge สถานะ */
-        .badge-status {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: bold;
-            z-index: 10;
+        .no-link .course-label {
+            cursor: default;
         }
 
-        .badge-status.active { background: #e6ffe8; color: #2e9a52; }
-        .badge-status.draft { background: #fff3cd; color: #856404; }
-        .badge-status.maintenance { background: #ffe6e6; color: #c0392b; }
-
-        /* Loading / empty state */
-        .course-grid-loading {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-            color: #aaa;
-            font-size: 15px;
+        .no-link .course-label:hover {
+            background-color: #c084fc; 
         }
 
-        /* ── Announcement Box ── */
+        .course-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .course-link:hover .course-label {
+            background-color: #a855f7; 
+        }
+
+        .course-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* ทำให้รูปไม่เบี้ยว */
+            display: block;
+        }
+
         .announcement-box {
             background: #fff;
             border-radius: 15px;
@@ -212,9 +184,15 @@
             justify-content: space-between;
         }
 
-        .bold-text { font-weight: bold; font-size: 18px; }
+        .bold-text {
+            font-weight: bold;
+            font-size: 18px;
+        }
 
-        .announce-list { list-style: none; padding: 0; }
+        .announce-list {
+            list-style: none;
+            padding: 0;
+        }
 
         .announce-list li {
             margin-bottom: 15px;
@@ -244,7 +222,7 @@
             color: #9b51e0;
             text-decoration: none;
             font-size: 13px;
-            margin-right: 5%;
+            margin-right: 5%; 
         }
 
         .more-options {
@@ -272,10 +250,13 @@
             color: white;
         }
 
-        .resources-box h4 { margin: 0 0 15px 0; font-size: 18px; }
+        .resources-box h4 {
+            margin: 0 0 15px 0; 
+            font-size: 18px;
+        }
 
         .resources-box a {
-            display: flex;
+            display: flex; 
             align-items: center;
             gap: 10px;
             color: white;
@@ -286,13 +267,21 @@
             transition: 0.2s;
         }
 
-        .resources-box a:hover { opacity: 1; transform: translateX(5px); }
+        .resources-box a:hover {
+            opacity: 1;
+            transform: translateX(5px);
+        }
 
-        /* ── Footer ── */
         .footer {
             background: #fff;
             padding: 50px 5%;
             border-top: 1px solid #eee;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 40px;
         }
 
         .footer-grid {
@@ -310,14 +299,43 @@
             font-weight: bold;
         }
 
-        .footer-logo-col p { font-size: 13px; line-height: 1.6; color: #777; }
+        .footer-logo-col p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #777;
+        }
 
-        .footer-col h4 { margin-bottom: 20px; font-size: 15px; font-weight: bold; }
-        .footer-col ul { margin: 0; padding: 0; list-style: none; }
-        .footer-col li { margin-bottom: 10px; font-size: 13px; color: #666; cursor: pointer; }
-        .footer-col p { margin: 5px 0; font-size: 13px; color: #666; }
+        .footer-col h4 {
+            margin-bottom: 20px;
+            font-size: 15px;
+            font-weight: bold;
+        }
 
-        .social-icons { display: flex; gap: 15px; margin-top: 20px; color: #999; }
+        .footer-col ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .footer-col p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            color: #999;
+        }
 
         .footer-bottom {
             display: flex;
@@ -329,8 +347,15 @@
             color: #bbb;
         }
 
-        .footer-legal { display: flex; gap: 25px; }
-        .footer-legal a { text-decoration: none; color: #999; }
+        .footer-legal {
+            display: flex;
+            gap: 25px;
+        }
+
+        .footer-legal a {
+            text-decoration: none;
+            color: #999;
+        }
     </style>
 </head>
 <body>
@@ -361,73 +386,47 @@
         <div class="main-content">
             <div class="left-column">
                 <h3 class="section-title">หลักสูตร</h3>
-
-                <!-- Course Grid: static cards + dynamic จาก API -->
                 <div class="course-grid" id="courseGrid">
 
-                    <!-- Static cards (hardcode) -->
-                    <div class="course-card" onclick="window.location.href='info.html'">
+                    <!-- ── card ปี 2567 (เพื่อนทำไว้ — อย่าแตะ) ── -->
+                    <div class="course-card" data-static="true">
                         <span class="badge-new">NEW</span>
-                        <div class="course-img-wrap">
-                            <img src="p1.jpg" alt="p1">
-                            <div class="course-label-overlay">
-                                หลักสูตรบริหารธุรกิจบัณฑิต
-                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2567</span>
-                            </div>
-                        </div>
+                        <div class="img-placeholder"><img src="p1.jpg" alt="p1" class="course-img"></div>
+                        <a href="info.html" class="course-link">
+                            <div class="course-label">หลักสูตรบริหารธุรกิจบัณฑิต<br>ปีหลักสูตร 2567</div>
+                        </a>
                     </div>
 
-                    <div class="course-card" onclick="window.location.href='bba-2563.html'">
-                        <div class="course-img-wrap">
-                            <img src="p2.jpg" alt="p2">
-                            <div class="course-label-overlay">
-                                หลักสูตรบริหารธุรกิจบัณฑิต
-                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2563</span>
-                            </div>
-                        </div>
+                    <!-- ── card ปี 2563 (เพื่อนทำไว้ — อย่าแตะ) ── -->
+                    <div class="course-card" data-static="true">
+                        <div class="img-placeholder"><img src="p2.jpg" alt="p2" class="course-img"></div>
+                        <a href="bba-2563.html" class="course-link">
+                            <div class="course-label">หลักสูตรบริหารธุรกิจบัณฑิต<br>ปีหลักสูตร 2563</div>
+                        </a>
                     </div>
 
-                    <div class="course-card">
-                        <div class="course-img-wrap">
-                            <img src="p3.jpg" alt="p3">
-                            <div class="course-label-overlay">
-                                การจัดการความเป็นผู้ประกอบการ
-                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2565</span>
-                            </div>
-                        </div>
+                    <div class="course-card no-link" data-static="true">
+                        <div class="img-placeholder"><img src="p3.jpg" alt="p3" class="course-img"></div>
+                        <div class="course-label">การจัดการความเป็นผู้ประกอบการ<br>ปีหลักสูตร 2565</div>
                     </div>
 
-                    <div class="course-card">
-                        <div class="course-img-wrap">
-                            <img src="p4.jpg" alt="p4">
-                            <div class="course-label-overlay">
-                                หลักสูตรบัญชีบัณฑิต
-                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2568</span>
-                            </div>
-                        </div>
+                    <div class="course-card no-link" data-static="true">
+                        <div class="img-placeholder"><img src="p4.jpg" alt="p4" class="course-img"></div>
+                        <div class="course-label">หลักสูตรบัญชีบัณฑิต<br>ปีหลักสูตร 2568</div>
                     </div>
 
-                    <div class="course-card">
-                        <div class="course-img-wrap">
-                            <img src="p5.jpg" alt="p5">
-                            <div class="course-label-overlay">
-                                หลักสูตรบัญชีบัณฑิต
-                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2564</span>
-                            </div>
-                        </div>
+                    <div class="course-card no-link" data-static="true">
+                        <div class="img-placeholder"><img src="p5.jpg" alt="p5" class="course-img"></div>
+                        <div class="course-label">หลักสูตรบัญชีบัณฑิต<br>ปีหลักสูตร 2564</div>
                     </div>
 
-                    <div class="course-card">
-                        <div class="course-img-wrap">
-                            <img src="p6.jpg" alt="p6">
-                            <div class="course-label-overlay">
-                                หลักสูตรรัฐประศาสนศาสตรบัณฑิต
-                                <br><span style="font-size:11px;opacity:0.85;">ปีหลักสูตร 2564</span>
-                            </div>
-                        </div>
+                    <div class="course-card no-link" data-static="true">
+                        <div class="img-placeholder"><img src="p6.jpg" alt="p6" class="course-img"></div>
+                        <div class="course-label">หลักสูตรรัฐประศาสนศาสตรบัณฑิต<br>ปีหลักสูตร 2564</div>
                     </div>
 
-                    <!-- Dynamic cards จาก API จะ append ต่อท้ายนี้ -->
+                    <!-- ── หลักสูตรใหม่จาก API จะถูก append ต่อท้ายตรงนี้ ── -->
+
                 </div>
 
                 <div class="more-header">
@@ -436,21 +435,21 @@
                 </div>
                 <div class="more-options">
                     <div class="option-card">
-                        <i class="fa-regular fa-calendar-days" style="color:#9b51e0;"></i>
+                        <i class="fa-regular fa-calendar-days" style="color: #9b51e0;"></i>
                         <div>
                             <strong>แผนการศึกษา</strong>
                             <p>แผนการศึกษาหลักสูตรบริหาร</p>
                         </div>
                     </div>
                     <div class="option-card">
-                        <i class="fa-solid fa-users" style="color:#f2994a;"></i>
+                        <i class="fa-solid fa-users" style="color: #f2994a;"></i>
                         <div>
                             <strong>นักศึกษา</strong>
                             <p>ข้อมูลทั่วไปที่นักศึกษาควรรู้</p>
                         </div>
                     </div>
                     <div class="option-card">
-                        <i class="fa-solid fa-magnifying-glass" style="color:#27ae60;"></i>
+                        <i class="fa-solid fa-magnifying-glass" style="color: #27ae60;"></i>
                         <div>
                             <strong>ค้นหา</strong>
                             <p>ค้นหาข้อมูลภายในระบบ</p>
@@ -464,7 +463,7 @@
                     <div>
                         <div class="announce-header">
                             <span class="bold-text">ประกาศ</span>
-                            <i class="fa-regular fa-bell" style="color:#9b51e0;"></i>
+                            <i class="fa-regular fa-bell" style="color: #9b51e0;"></i>
                         </div>
                         <ul class="announce-list">
                             <li>
@@ -527,7 +526,7 @@
                 </div>
                 <div class="footer-col">
                     <h4>ติดต่อเรา</h4>
-                    <p>fms-info@group.psu.ac.th</p>
+                    <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d0b6bda3fdb9beb6bf90b7a2bfa5a0fea0a3a5feb1b3fea4b8">[email&#160;protected]</a></p>
                     <p>+66-7428-7815</p>
                     <p>15 ถนนกาญจนวณิชย์ อำเภอหาดใหญ่ จังหวัดสงขลา 90112</p>
                 </div>
@@ -536,82 +535,69 @@
                 <p>© 2026 University Name. All rights reserved.</p>
                 <div class="footer-legal">
                     <p>Policy</p>
-                    <p>Terms of Service</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+         
+<script>
+const BASE_URL = "https://websitefms.onrender.com";
+const API = BASE_URL + "/api";
 
-    <script>
-    const BASE_URL = "https://websitefms.onrender.com";
-    const API = BASE_URL + "/api";
+// ── append เฉพาะหลักสูตรใหม่จาก API (ไม่แตะ card เดิมของเพื่อน) ──
+async function appendNewCourses() {
+  const grid = document.getElementById("courseGrid");
 
-    async function loadCourses() {
-        const grid = document.getElementById("courseGrid");
+  try {
+    const res = await fetch(`${API}/courses`);
+    if (!res.ok) return; // ถ้า API ล้ม ไม่แสดง error ให้ user เห็น
+    const courses = await res.json();
+    if (!courses || courses.length === 0) return;
 
-        try {
-            const res = await fetch(`${API}/courses`);
-            const courses = await res.json();
+    // หา id ใหม่สุดใน API → ใช้แปะ badge NEW
+    const newestId = Math.max(...courses.map(c => c.id));
 
-            // กรองเฉพาะที่ active หรือแสดงทั้งหมด
-            // ถ้าอยากแสดงเฉพาะ active: courses.filter(c => c.status === 'active')
-            const list = courses;
+    let addedCount = 0;
+    courses.forEach(course => {
+      // สร้าง card
+      const card = document.createElement("div");
+      const isNew = course.id === newestId;
+      const isActive = course.status === "active";
 
-            if (!list.length) {
-                return; // static cards ยังแสดงอยู่
-            }
+      card.className = `course-card${isActive ? "" : " no-link"}`;
+      card.dataset.courseId = course.id;
 
-            // append ต่อท้าย static cards
-            grid.insertAdjacentHTML('beforeend', list.map(course => {
-                // รูปภาพ: ใช้ hero_image ก่อน ถ้าไม่มีใช้ info_image ถ้าไม่มีเลยแสดง placeholder
-                const imgSrc = course.hero_image
-                    ? BASE_URL + course.hero_image
-                    : course.info_image
-                        ? BASE_URL + course.info_image
-                        : null;
+      // รูปภาพ
+      const imgHTML = course.hero_image
+        ? `<img src="${BASE_URL}${course.hero_image}" alt="${course.name_th}" class="course-img">`
+        : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e9d8fd;color:#9b51e0;font-size:32px;">
+             <i class="fa-solid fa-graduation-cap"></i>
+           </div>`;
 
-                const imgHtml = imgSrc
-                    ? `<img src="${imgSrc}" alt="${course.name_th}" onerror="this.parentElement.innerHTML='<div class=\\'course-img-placeholder\\'><i class=\\'fa-solid fa-graduation-cap\\'></i></div>'">`
-                    : `<div class="course-img-placeholder"><i class="fa-solid fa-graduation-cap"></i></div>`;
+      // ชื่อ + ปี
+      const yearLine = course.student_range
+        ? `<br><small style="opacity:0.85;">${course.student_range}</small>`
+        : "";
 
-                // badge NEW = active, badge สีอื่น = draft/maintenance
-                const badgeHtml = course.status === 'active'
-                    ? `<span class="badge-new">NEW</span>`
-                    : course.status === 'draft'
-                        ? `<span class="badge-status draft">Draft</span>`
-                        : course.status === 'maintenance'
-                            ? `<span class="badge-status maintenance">ปรับปรุง</span>`
-                            : '';
+      const labelHTML = isActive
+        ? `<a href="course-info.html?courseId=${course.id}" class="course-link">
+             <div class="course-label">${course.name_th}${yearLine}</div>
+           </a>`
+        : `<div class="course-label" style="cursor:default;">${course.name_th}${yearLine}</div>`;
 
-                // ชื่อที่แสดงบนการ์ด: ชื่อไทย + ปีหลักสูตร (จาก student_range ถ้ามี)
-                const yearLabel = course.student_range
-                    ? `<br><span style="font-size:11px;opacity:0.85;">${course.student_range}</span>`
-                    : course.degree_level
-                        ? `<br><span style="font-size:11px;opacity:0.85;">${course.degree_level}</span>`
-                        : '';
+      card.innerHTML = `
+        ${isNew ? '<span class="badge-new">NEW</span>' : ""}
+        <div class="img-placeholder">${imgHTML}</div>
+        ${labelHTML}
+      `;
 
-                // คลิกแล้วไปหน้า course-info.html
-                return `
-                <div class="course-card" onclick="window.location.href='course-info.html?courseId=${course.id}'">
-                    ${badgeHtml}
-                    <div class="course-img-wrap">
-                        ${imgHtml}
-                        <div class="course-label-overlay">
-                            ${course.name_th || 'ไม่มีชื่อหลักสูตร'}
-                            ${yearLabel}
-                        </div>
-                    </div>
-                </div>`;
-            }).join("") );
+      grid.appendChild(card);
+      addedCount++;
+    });
 
-        } catch (err) {
-            // static cards ยังแสดงอยู่ถึงแม้ API ล้มเหลว
-            console.error("API load failed:", err);
-            console.error(err);
-        }
-    }
+    console.log(`✅ เพิ่ม ${addedCount} หลักสูตรจาก API`);
 
-    loadCourses();
-    </script>
-</body>
-</html>
+  } catch (err) {
+    // API ยังไม่พร้อม หรือ network error — ไม่ทำอะไร card เดิมยังอยู่ครบ
+    console.warn("appendNewCourses: API ไม่ตอบสนอง ใช้ข้อมูล static แทน", err);
+  }
+}
+
+appendNewCourses();
+</script>

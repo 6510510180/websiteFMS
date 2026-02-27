@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<title>เพิ่มผลงานใหม่ | FMS Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<style>
+:root {
+  --bg:       #0f0d1a;
+  --surface:  #1a1728;
+  --surface2: #221e35;
+  --border:   #2e2847;
+  --purple:   #7c3aed;
+  --purple2:  #9d5cf5;
+  --purple3:  #c4b5fd;
+  --accent:   #a78bfa;
+  --text:     #e2e0ee;
+  --muted:    #7c7a8e;
+  --green:    #10b981;
+  --red:      #ef4444;
+  --amber:    #f59e0b;
+  --sidebar-w: 220px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans Thai', 'Sarabun', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+  font-size: 14px;
+}
+
+/* ── SIDEBAR ─────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--surface);
+  height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  z-index: 100;
+}
+
+.sidebar-brand {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-icon {
+  width: 32px; height: 32px;
+  background: var(--purple);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.brand-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.brand-sub   { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+.sidebar-section {
+  padding: 16px 16px 6px;
+  font-size: 10px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px;
+}
+
+.sidebar-nav { flex: 1; padding: 4px 10px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; color: var(--muted);
+  text-decoration: none; transition: all .18s; cursor: pointer;
+}
+.nav-item:hover  { background: rgba(124,58,237,.15); color: var(--accent); }
+.nav-item.active { background: rgba(124,58,237,.2);  color: var(--purple2); font-weight: 600; }
+.nav-item i { width: 16px; text-align: center; font-size: 14px; }
+
+.sidebar-footer { padding: 10px; border-top: 1px solid var(--border); }
+.sidebar-footer .nav-item { color: var(--red); }
+.sidebar-footer .nav-item:hover { background: rgba(239,68,68,.1); }
+
+/* ── TOPBAR ──────────────────────────────────── */
+.topbar {
+  position: fixed; top: 0;
+  left: var(--sidebar-w); right: 0;
+  height: 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 28px; gap: 16px;
+  z-index: 90;
+}
+.topbar-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); }
+.topbar-breadcrumb a { color: var(--muted); text-decoration: none; }
+.topbar-breadcrumb a:hover { color: var(--accent); }
+.topbar-breadcrumb .sep { opacity: .4; }
+.topbar-breadcrumb .current { color: var(--text); font-weight: 500; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.topbar-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 12px; width: 200px;
+}
+.topbar-search input { background: none; border: none; outline: none; color: var(--text); font-size: 13px; width: 100%; font-family: inherit; }
+.topbar-search i { color: var(--muted); font-size: 13px; }
+.topbar-avatar {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--purple), var(--purple2));
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+}
+
+/* ── MAIN ────────────────────────────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  margin-top: 56px;
+  flex: 1; padding: 28px 32px;
+  min-width: 0;
+}
+
+.page-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+}
+.page-head-left h1 { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -.3px; }
+.page-head-left p  { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.page-head-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ── BUTTONS ─────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: 8px; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: all .18s; text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primary  { background: var(--purple); color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,.35); }
+.btn-primary:hover  { background: var(--purple2); transform: translateY(-1px); }
+.btn-outline  { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+.btn-outline:hover  { border-color: var(--accent); color: var(--accent); background: rgba(124,58,237,.08); }
+.btn-success  { background: var(--green); color: #fff; box-shadow: 0 4px 14px rgba(16,185,129,.3); }
+.btn-success:hover  { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-danger   { background: rgba(239,68,68,.12); color: var(--red); border: 1px solid rgba(239,68,68,.2); }
+.btn-danger:hover   { background: rgba(239,68,68,.2); }
+.btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
+
+/* ── LAYOUT ──────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ── CARD ─────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+.card:last-child { margin-bottom: 0; }
+.card-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.card-head-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+.card-head-icon.blue   { background: rgba(59,130,246,.15);  color: #60a5fa; }
+.card-head-icon.purple { background: rgba(124,58,237,.15);  color: var(--accent); }
+.card-head-icon.green  { background: rgba(16,185,129,.15);  color: #34d399; }
+.card-head-icon.amber  { background: rgba(245,158,11,.15);  color: #fbbf24; }
+.card-title { font-size: 15px; font-weight: 600; color: var(--text); }
+
+/* ── FORM ─────────────────────────────────────── */
+.field { margin-bottom: 16px; }
+.field:last-child { margin-bottom: 0; }
+
+.field label {
+  display: block; font-size: 12.5px; font-weight: 600;
+  color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px;
+}
+.field label .req { color: var(--red); margin-left: 3px; }
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%; padding: 10px 14px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit;
+  outline: none; transition: border-color .18s, box-shadow .18s;
+  appearance: none;
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(124,58,237,.15);
+}
+.field input::placeholder,
+.field textarea::placeholder { color: var(--muted); opacity: .6; }
+textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+.select-wrap { position: relative; }
+.select-wrap select { padding-right: 36px; }
+.select-wrap::after {
+  content: "▾"; position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%); color: var(--muted); pointer-events: none; font-size: 12px;
+}
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ── FILE UPLOAD ──────────────────────────────── */
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: 10px;
+  padding: 28px 20px; text-align: center;
+  cursor: pointer; transition: all .2s;
+  background: var(--surface2);
+  position: relative; overflow: hidden;
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--purple); background: rgba(124,58,237,.07);
+}
+.upload-zone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.upload-icon {
+  width: 44px; height: 44px; margin: 0 auto 10px;
+  background: rgba(124,58,237,.15); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--accent);
+}
+.upload-text   { font-size: 13px; color: var(--text); font-weight: 500; }
+.upload-hint   { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+.upload-status { font-size: 12px; margin-top: 8px; }
+
+#uploadedFiles { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.file-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; font-size: 12.5px;
+}
+.file-item-icon { color: var(--accent); font-size: 16px; flex-shrink: 0; }
+.file-item-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+.file-item-size { color: var(--muted); font-size: 11px; flex-shrink: 0; }
+.file-item-del  {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(239,68,68,.1); border: none; cursor: pointer;
+  color: var(--red); font-size: 10px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background .15s;
+}
+.file-item-del:hover { background: rgba(239,68,68,.25); }
+
+/* ── TAGS INPUT ───────────────────────────────── */
+.tags-wrap {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; min-height: 44px;
+  transition: border-color .18s, box-shadow .18s; cursor: text;
+}
+.tags-wrap:focus-within {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(124,58,237,.15);
+}
+.tag-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(124,58,237,.2); color: var(--accent);
+  padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;
+}
+.tag-chip button {
+  background: none; border: none; cursor: pointer;
+  color: var(--accent); font-size: 10px; padding: 0; line-height: 1;
+}
+.tags-wrap input {
+  flex: 1; min-width: 80px; background: none; border: none;
+  outline: none; color: var(--text); font-size: 13px; font-family: inherit;
+  padding: 0;
+}
+
+/* ── LIVE PREVIEW ─────────────────────────────── */
+.preview-card {
+  background: linear-gradient(145deg, #1e1835, #16132a);
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+.preview-img {
+  width: 100%; height: 140px; object-fit: cover;
+  background: linear-gradient(135deg, #2a1f4a, #1a1535);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 13px;
+  position: relative; overflow: hidden;
+}
+.preview-img img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.preview-img-placeholder { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
+.preview-img-placeholder i { font-size: 28px; color: var(--border); }
+.preview-body { padding: 14px 16px; }
+.preview-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .5px; margin-bottom: 8px;
+}
+.preview-badge.gold   { background: rgba(245,158,11,.15); color: #fbbf24; }
+.preview-badge.silver { background: rgba(148,163,184,.15); color: #94a3b8; }
+.preview-badge.normal { background: rgba(124,58,237,.15); color: var(--accent); }
+.preview-date  { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.preview-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
+.preview-people { font-size: 11.5px; color: var(--muted); }
+
+/* ── LEVEL PILLS ──────────────────────────────── */
+.level-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.level-pill {
+  padding: 7px 16px; border-radius: 8px;
+  border: 1.5px solid var(--border); background: var(--surface2);
+  font-size: 12.5px; font-weight: 500; color: var(--muted);
+  cursor: pointer; transition: all .18s; user-select: none;
+}
+.level-pill:hover { border-color: var(--accent); color: var(--accent); }
+.level-pill.active { border-color: var(--purple); background: rgba(124,58,237,.2); color: var(--accent); font-weight: 600; }
+
+/* ── TOAST ────────────────────────────────────── */
+#toast {
+  position: fixed; bottom: 24px; right: 24px;
+  padding: 12px 20px; border-radius: 10px;
+  font-size: 13.5px; font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  display: none; align-items: center; gap: 10px;
+  z-index: 999; animation: slideUp .3s ease;
+}
+#toast.show { display: flex; }
+#toast.success { background: #052e16; border: 1px solid #166534; color: #4ade80; }
+#toast.error   { background: #1c0606; border: 1px solid #7f1d1d; color: #f87171; }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* ── SPINNER ─────────────────────────────────── */
+.spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── EXCEL SECTION ───────────────────────────── */
+.excel-drop {
+  border: 2px dashed rgba(16,185,129,.3); border-radius: 10px;
+  padding: 20px; text-align: center; background: rgba(16,185,129,.04);
+  cursor: pointer; transition: all .2s; position: relative;
+}
+.excel-drop:hover { border-color: var(--green); background: rgba(16,185,129,.08); }
+.excel-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.excel-icon { font-size: 28px; color: var(--green); margin-bottom: 6px; }
+
+/* ── PROGRESS ────────────────────────────────── */
+.progress-bar {
+  height: 3px; background: var(--border); border-radius: 2px; overflow: hidden;
+  margin-top: 8px; display: none;
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--purple), var(--purple2));
+  width: 0%; transition: width .3s; border-radius: 2px;
+}
+
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:translateY(0);} }
+.card { animation: fadeIn .35s ease both; }
+.card:nth-child(2) { animation-delay: .05s; }
+.card:nth-child(3) { animation-delay: .1s; }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon">🎓</div>
+    <div>
+      <div class="brand-title">FMS Admin</div>
+      <div class="brand-sub">PSU Management</div>
+    </div>
+  </div>
+  <div class="sidebar-section">เมนูหลัก</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="dashboard.html"><i class="fa-solid fa-gauge-high"></i> แดชบอร์ด</a>
+    <a class="nav-item" href="course-list.html"><i class="fa-solid fa-book-open"></i> หลักสูตร</a>
+    <a class="nav-item" href="study-plan.html"><i class="fa-solid fa-list-check"></i> แผนการศึกษา</a>
+    <a class="nav-item active" href="#"><i class="fa-solid fa-trophy"></i> ผลงาน</a>
+    <a class="nav-item" href="qa-dashboard.html"><i class="fa-solid fa-shield-check"></i> ประกันคุณภาพ</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</a>
+  </div>
+</aside>
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+  <div class="topbar-breadcrumb">
+    <a href="dashboard.html"><i class="fa-solid fa-house" style="font-size:11px;"></i></a>
+    <span class="sep">/</span>
+    <a href="achievements.html">ผลงาน</a>
+    <span class="sep">/</span>
+    <span class="current" id="topbarTitle">เพิ่มผลงานใหม่</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="ค้นหาข้อมูล..."/>
+    </div>
+    <div class="topbar-avatar">A</div>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- Page Header -->
+  <div class="page-head">
+    <div class="page-head-left">
+      <h1 id="pageTitle">เพิ่มผลงานใหม่</h1>
+      <p>บันทึกรางวัลนักศึกษา ข้อมูลการมีงานทำ และความสำเร็จต่างๆ เพื่อแสดงผลลัพธ์ที่โดดเด่น</p>
+    </div>
+    <div class="page-head-actions">
+      <button class="btn btn-outline" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i> ยกเลิก</button>
+      <button class="btn btn-primary" id="saveBtn" onclick="submitForm()">
+        <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล
+      </button>
+    </div>
+  </div>
+
+  <!-- Layout -->
+  <div class="layout">
+
+    <!-- LEFT COLUMN -->
+    <div>
+      <!-- Card 1: ข้อมูลหลัก -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon blue"><i class="fa-solid fa-file-lines"></i></div>
+          <div class="card-title">ข้อมูลรายละเอียด</div>
+        </div>
+
+        <div class="field">
+          <label>ชื่อรางวัลหรือโครงการ <span class="req">*</span></label>
+          <input type="text" id="title" placeholder="ระบุชื่อรางวัล การแข่งขัน หรือโครงการ" oninput="updatePreview()"/>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>วันที่ได้รับรางวัล / เริ่มงาน <span class="req">*</span></label>
+            <input type="date" id="achieve_date" oninput="updatePreview()"/>
+          </div>
+          <div class="field">
+            <label>ระดับรางวัล (คัดนี้) <span class="req">*</span></label>
+            <div class="select-wrap">
+              <select id="level" onchange="updatePreview()">
+                <option value="">เลือกประเภทระดับ</option>
+                <option value="international">🌐 ระดับนานาชาติ</option>
+                <option value="national">🏆 ระดับชาติ</option>
+                <option value="regional">🥈 ระดับภูมิภาค</option>
+                <option value="university">🎓 ระดับมหาวิทยาลัย</option>
+                <option value="faculty">📋 ระดับคณะ</option>
+                <option value="employment">💼 การมีงานทำ</option>
+                <option value="other">📌 อื่นๆ</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>รายชื่อนักศึกษา / ผู้ได้รับรางวัล <span class="req">*</span></label>
+          <div class="tags-wrap" id="tagsWrap" onclick="document.getElementById('tagInput').focus()">
+            <input id="tagInput" type="text" placeholder="พิมพ์ชื่อ-นามสกุล แล้วกด Enter" onkeydown="handleTag(event)"/>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:5px;">กด Enter หรือ , เพื่อเพิ่มชื่อถัดไป</div>
+        </div>
+
+        <div class="field">
+          <label>ข้อมูลเพิ่มเติม / รายละเอียด</label>
+          <textarea id="description" placeholder="อธิบายรายละเอียดผลงาน บริบท หรือความสำเร็จที่น่าสนใจ..." oninput="updatePreview()"></textarea>
+        </div>
+
+        <div class="field">
+          <label>หลักสูตรที่เกี่ยวข้อง</label>
+          <div class="select-wrap">
+            <select id="course_id">
+              <option value="">เลือกหลักสูตร (ถ้ามี)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Excel Import -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon green"><i class="fa-solid fa-file-excel"></i></div>
+          <div class="card-title">นำเข้าจาก Excel</div>
+          <span style="margin-left:auto;font-size:11px;background:rgba(16,185,129,.1);color:var(--green);padding:3px 8px;border-radius:4px;font-weight:600;">ทางเลือก</span>
+        </div>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px;">อัปโหลดไฟล์ Excel เพื่อเพิ่มผลงานหลายรายการพร้อมกัน (รองรับ .xlsx, .xls)</p>
+
+        <div class="excel-drop" id="excelDrop">
+          <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" onchange="handleExcel(this)"/>
+          <div class="excel-icon"><i class="fa-solid fa-file-excel"></i></div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">คลิกหรือลากไฟล์ Excel มาวาง</div>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:4px;">.xlsx, .xls, .csv — สูงสุด 5MB</div>
+        </div>
+        <div class="progress-bar" id="excelProgress"><div class="progress-fill" id="excelFill"></div></div>
+        <div id="excelStatus" style="font-size:12px;margin-top:8px;color:var(--muted);"></div>
+
+        <div style="margin-top:14px;padding:12px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;">📋 รูปแบบคอลัมน์ที่รองรับ</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:11px;background:rgba(124,58,237,.1);color:var(--accent);padding:2px 8px;border-radius:4px;">title</span>
+            <span style="font-size:11px;background:rgba(124,58,237,.1);color:var(--accent);padding:2px 8px;border-radius:4px;">achieve_date</span>
+            <span style="font-size:11px;background:rgba(124,58,237,.1);color:var(--accent);padding:2px 8px;border-radius:4px;">level</span>
+            <span style="font-size:11px;background:rgba(124,58,237,.1);color:var(--accent);padding:2px 8px;border-radius:4px;">students</span>
+            <span style="font-size:11px;background:rgba(124,58,237,.1);color:var(--accent);padding:2px 8px;border-radius:4px;">description</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div>
+
+      <!-- Card: Upload รูป -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon amber"><i class="fa-solid fa-image"></i></div>
+          <div class="card-title">สื่อประกอบและหลักฐาน</div>
+        </div>
+
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="fileInput" accept="image/*,.pdf" multiple onchange="handleFiles(this.files)"/>
+          <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <div class="upload-text">คลิก หรือลากไฟล์มาวางที่นี่</div>
+          <div class="upload-hint">รองรับ JPG, PNG หรือ PDF (สูงสุด 10MB)</div>
+          <div class="upload-status" id="uploadStatus"></div>
+        </div>
+        <div class="progress-bar" id="uploadProgress"><div class="progress-fill" id="uploadFill"></div></div>
+        <div id="uploadedFiles"></div>
+
+        <div style="margin-top:14px;padding:12px;background:rgba(124,58,237,.07);border-radius:8px;border:1px solid rgba(124,58,237,.15);">
+          <div style="font-size:11.5px;color:var(--accent);line-height:1.6;">
+            <i class="fa-solid fa-circle-info" style="margin-right:5px;"></i>
+            <strong>คำแนะนำ:</strong> แนบรูปภาพหรือเกียรติบัตรที่ชัดเจน จะช่วยให้ข้อมูลน่าเชื่อถือและใช้ประกอบการแสดงผลใน Landing Page ของหลักสูตรได้ดียิ่งขึ้น
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Live Preview -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon purple"><i class="fa-solid fa-eye"></i></div>
+          <div class="card-title">Live Preview (Card Display)</div>
+        </div>
+
+        <div class="preview-card" id="previewCard">
+          <div class="preview-img" id="previewImgWrap">
+            <img id="previewImg" alt="preview"/>
+            <div class="preview-img-placeholder" id="previewPlaceholder">
+              <i class="fa-solid fa-image"></i>
+              <span>ยังไม่มีรูปภาพ</span>
+            </div>
+          </div>
+          <div class="preview-body">
+            <span class="preview-badge normal" id="previewBadge">ระดับ</span>
+            <div class="preview-date" id="previewDate">วันที่รับรางวัล</div>
+            <div class="preview-title" id="previewTitle">ชื่อรางวัลหรือโครงการจะแสดงที่นี่...</div>
+            <div class="preview-people" id="previewPeople"><i class="fa-solid fa-users" style="margin-right:5px;"></i>รายชื่อนักศึกษา</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end layout -->
+
+</main>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+const BASE_URL = "https://websitefms.onrender.com";
+const API = BASE_URL + "/api";
+
+// ── Auth check ────────────────────────────────
+if (!localStorage.getItem("user")) {
+  alert("กรุณาเข้าสู่ระบบก่อน");
+  window.location.href = "login.html";
+}
+document.getElementById("logoutBtn").addEventListener("click", e => {
+  e.preventDefault();
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
+});
+
+// ── State ─────────────────────────────────────
+const params    = new URLSearchParams(window.location.search);
+const achieveId = params.get("achieveId");
+const isEdit    = !!achieveId;
+let   tags      = [];
+let   uploadedUrls = [];
+
+if (isEdit) {
+  document.getElementById("pageTitle").textContent = "แก้ไขผลงาน";
+  document.getElementById("topbarTitle").textContent = "แก้ไขผลงาน";
+  document.getElementById("saveBtn").innerHTML = '<i class="fa-solid fa-pen"></i> อัปเดตข้อมูล';
+  loadAchievement();
+}
+
+// ── Load courses for dropdown ─────────────────
+async function loadCourses() {
+  try {
+    const res = await fetch(`${API}/courses`);
+    if (!res.ok) return;
+    const courses = await res.json();
+    const sel = document.getElementById("course_id");
+    courses.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.textContent = c.name_th;
+      sel.appendChild(opt);
+    });
+  } catch {}
+}
+loadCourses();
+
+// ── Load existing data if edit ─────────────────
+async function loadAchievement() {
+  try {
+    const res = await fetch(`${API}/achievements/${achieveId}`);
+    const d   = await res.json();
+    document.getElementById("title").value        = d.title || "";
+    document.getElementById("achieve_date").value = d.achieve_date?.slice(0,10) || "";
+    document.getElementById("level").value        = d.level || "";
+    document.getElementById("description").value  = d.description || "";
+    if (d.course_id) document.getElementById("course_id").value = d.course_id;
+    if (d.students) {
+      d.students.split(",").forEach(s => s.trim() && addTag(s.trim()));
+    }
+    if (d.image_url) {
+      showPreviewImage(BASE_URL + d.image_url);
+      uploadedUrls = [d.image_url];
+    }
+    updatePreview();
+  } catch { showToast("โหลดข้อมูลไม่สำเร็จ", "error"); }
+}
+
+// ── Tags input ────────────────────────────────
+function handleTag(e) {
+  if (e.key === "Enter" || e.key === ",") {
+    e.preventDefault();
+    const val = e.target.value.trim().replace(/,/g,"");
+    if (val) { addTag(val); e.target.value = ""; updatePreview(); }
+  }
+}
+function addTag(name) {
+  if (tags.includes(name)) return;
+  tags.push(name);
+  const wrap = document.getElementById("tagsWrap");
+  const chip = document.createElement("span");
+  chip.className = "tag-chip";
+  chip.innerHTML = `${name} <button onclick="removeTag('${name}',this.parentElement)">✕</button>`;
+  wrap.insertBefore(chip, document.getElementById("tagInput"));
+}
+function removeTag(name, el) {
+  tags = tags.filter(t => t !== name);
+  el.remove();
+  updatePreview();
+}
+
+// ── File upload ───────────────────────────────
+const uploadZone = document.getElementById("uploadZone");
+uploadZone.addEventListener("dragover",  e => { e.preventDefault(); uploadZone.classList.add("drag-over"); });
+uploadZone.addEventListener("dragleave", () => uploadZone.classList.remove("drag-over"));
+uploadZone.addEventListener("drop", e => {
+  e.preventDefault(); uploadZone.classList.remove("drag-over");
+  handleFiles(e.dataTransfer.files);
+});
+
+async function handleFiles(files) {
+  for (const file of files) {
+    if (file.size > 10 * 1024 * 1024) { showToast(`ไฟล์ ${file.name} ใหญ่เกิน 10MB`, "error"); continue; }
+    await uploadFile(file);
+  }
+}
+
+async function uploadFile(file) {
+  const prog = document.getElementById("uploadProgress");
+  const fill = document.getElementById("uploadFill");
+  prog.style.display = "block";
+
+  // Animate progress (mock for UX while uploading)
+  let pct = 0;
+  const ticker = setInterval(() => { if (pct < 85) { pct += 5; fill.style.width = pct + "%"; } }, 80);
+
+  try {
+    const fd = new FormData();
+    fd.append("image", file);
+    const res  = await fetch(`${API}/upload`, { method: "POST", body: fd });
+    const data = await res.json();
+    clearInterval(ticker);
+    fill.style.width = "100%";
+    if (!res.ok) throw new Error(data.message);
+
+    uploadedUrls.push(data.url);
+    addFileItem(file, data.url);
+
+    // Show first image in preview
+    if (file.type.startsWith("image/") && uploadedUrls.length === 1) {
+      showPreviewImage(BASE_URL + data.url);
+    }
+    showToast("อัปโหลดสำเร็จ", "success");
+  } catch(err) {
+    clearInterval(ticker);
+    showToast("อัปโหลดไม่สำเร็จ: " + err.message, "error");
+  }
+  setTimeout(() => { prog.style.display = "none"; fill.style.width = "0"; }, 1000);
+}
+
+function addFileItem(file, url) {
+  const list = document.getElementById("uploadedFiles");
+  const icon = file.type.includes("pdf") ? "fa-file-pdf" : "fa-image";
+  const size  = (file.size / 1024).toFixed(0) + " KB";
+  const item  = document.createElement("div");
+  item.className = "file-item";
+  item.innerHTML = `
+    <i class="fa-solid ${icon} file-item-icon"></i>
+    <span class="file-item-name">${file.name}</span>
+    <span class="file-item-size">${size}</span>
+    <button class="file-item-del" onclick="removeFile('${url}',this.parentElement)" title="ลบ">✕</button>`;
+  list.appendChild(item);
+}
+
+function removeFile(url, el) {
+  uploadedUrls = uploadedUrls.filter(u => u !== url);
+  el.remove();
+  if (uploadedUrls.length === 0) {
+    document.getElementById("previewImg").style.display = "none";
+    document.getElementById("previewPlaceholder").style.display = "flex";
+  }
+}
+
+function showPreviewImage(src) {
+  const img = document.getElementById("previewImg");
+  img.src = src; img.style.display = "block";
+  document.getElementById("previewPlaceholder").style.display = "none";
+}
+
+// ── Excel import ──────────────────────────────
+async function handleExcel(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const prog = document.getElementById("excelProgress");
+  const fill = document.getElementById("excelFill");
+  const stat = document.getElementById("excelStatus");
+  prog.style.display = "block"; fill.style.width = "30%";
+  stat.textContent = "กำลังอ่านไฟล์..."; stat.style.color = "var(--muted)";
+  try {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res  = await fetch(`${API}/achievements/import`, { method: "POST", body: fd });
+    fill.style.width = "100%";
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "นำเข้าไม่สำเร็จ");
+    stat.style.color = "var(--green)";
+    stat.textContent = `✅ นำเข้าสำเร็จ ${data.count || "?"} รายการ`;
+    showToast(`นำเข้า Excel สำเร็จ ${data.count} รายการ`, "success");
+    setTimeout(() => window.location.href = "achievements.html", 1500);
+  } catch(err) {
+    fill.style.width = "0";
+    stat.style.color = "var(--red)";
+    stat.textContent = "❌ " + err.message;
+    showToast(err.message, "error");
+  }
+  setTimeout(() => { prog.style.display = "none"; fill.style.width = "0"; }, 2000);
+}
+
+// ── Live Preview ──────────────────────────────
+const LEVEL_LABEL = {
+  international: "🌐 นานาชาติ",
+  national:      "🏆 ระดับชาติ",
+  regional:      "🥈 ภูมิภาค",
+  university:    "🎓 มหาวิทยาลัย",
+  faculty:       "📋 ระดับคณะ",
+  employment:    "💼 การมีงานทำ",
+  other:         "📌 อื่นๆ",
+};
+const LEVEL_CLASS = {
+  international: "gold", national: "gold",
+  regional: "silver", university: "silver",
+  faculty: "normal", employment: "normal", other: "normal",
+};
+
+function updatePreview() {
+  const title = document.getElementById("title").value || "ชื่อรางวัลหรือโครงการจะแสดงที่นี่...";
+  const date  = document.getElementById("achieve_date").value;
+  const level = document.getElementById("level").value;
+
+  document.getElementById("previewTitle").textContent   = title;
+  document.getElementById("previewPeople").innerHTML    =
+    `<i class="fa-solid fa-users" style="margin-right:5px;"></i>${tags.length > 0 ? tags.join(", ") : "รายชื่อนักศึกษา"}`;
+
+  const badge = document.getElementById("previewBadge");
+  badge.textContent  = LEVEL_LABEL[level] || "ระดับ";
+  badge.className    = `preview-badge ${LEVEL_CLASS[level] || "normal"}`;
+
+  if (date) {
+    const d = new Date(date);
+    document.getElementById("previewDate").textContent =
+      d.toLocaleDateString("th-TH", { year: "numeric", month: "long", day: "numeric" });
+  } else {
+    document.getElementById("previewDate").textContent = "วันที่รับรางวัล";
+  }
+}
+
+// ── Submit ────────────────────────────────────
+async function submitForm() {
+  const title = document.getElementById("title").value.trim();
+  const date  = document.getElementById("achieve_date").value;
+  const level = document.getElementById("level").value;
+
+  if (!title) { showToast("กรุณากรอกชื่อรางวัลหรือโครงการ", "error"); document.getElementById("title").focus(); return; }
+  if (!date)  { showToast("กรุณาเลือกวันที่", "error"); return; }
+  if (!level) { showToast("กรุณาเลือกระดับรางวัล", "error"); return; }
+  if (tags.length === 0) { showToast("กรุณาเพิ่มรายชื่อนักศึกษาอย่างน้อย 1 คน", "error"); return; }
+
+  const saveBtn = document.getElementById("saveBtn");
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '<div class="spinner"></div> กำลังบันทึก...';
+
+  const body = {
+    title,
+    achieve_date: date,
+    level,
+    students:    tags.join(", "),
+    description: document.getElementById("description").value.trim(),
+    course_id:   document.getElementById("course_id").value || null,
+    image_url:   uploadedUrls[0] || null,
+    attachments: uploadedUrls.join(","),
+  };
+
+  const url    = isEdit ? `${API}/achievements/${achieveId}` : `${API}/achievements`;
+  const method = isEdit ? "PUT" : "POST";
+
+  try {
+    const res  = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "บันทึกไม่สำเร็จ");
+    showToast(isEdit ? "อัปเดตสำเร็จ ✓" : "บันทึกสำเร็จ ✓", "success");
+    setTimeout(() => window.location.href = "achievements.html", 1200);
+  } catch(err) {
+    showToast("เกิดข้อผิดพลาด: " + err.message, "error");
+    saveBtn.disabled = false;
+    saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูล';
+  }
+}
+
+// ── Toast ─────────────────────────────────────
+function showToast(msg, type = "success") {
+  const t = document.getElementById("toast");
+  t.textContent = (type === "success" ? "✓ " : "✕ ") + msg;
+  t.className   = `show ${type}`;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.className = "", 3500);
+}
+
+// Init preview
+updatePreview();
+</script>
+</body>
+</html>
