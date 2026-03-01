@@ -4,7 +4,6 @@ const express = require("express");
 const { Pool } = require("pg");
 const cors    = require("cors");
 const path    = require("path");
-const bcrypt  = require("bcryptjs");
 const multer  = require("multer");
 const fs      = require("fs");
 
@@ -71,8 +70,9 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" });
 
     const user = result.rows[0];
-    const match = await bcrypt.compare(password, user.password_hash);
-    if (!match)
+
+    // เปรียบเทียบ plain text ตรงๆ
+    if (user.password_hash !== password)
       return res.status(401).json({ message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" });
 
     const { password_hash: _, ...safeUser } = user;
