@@ -6,6 +6,7 @@ const express = require("express");
 const { Pool } = require("pg");
 const cors    = require("cors");
 const path = require("path");
+const bcrypt = require("bcrypt");
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -41,12 +42,12 @@ app.post("/api/login", async (req, res) => {
     }
     const user = result.rows[0];
 
-    // ถ้า password เก็บเป็น plain text (ชั่วคราว):
-    if (user.password !== password) {
+    const match = await bcrypt.compare(password, user.password_hash);
+    if (!match) {
       return res.status(401).json({ message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" });
     }
 
-    const { password: _, ...safeUser } = user;
+    const { password_hash: _, ...safeUser } = user;
     res.json({ message: "เข้าสู่ระบบสำเร็จ", user: safeUser });
   } catch (err) {
     console.error("Login error:", err);
