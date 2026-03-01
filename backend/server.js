@@ -1229,8 +1229,6 @@ app.post("/api/surveys/:surveyId/import-excel", async (req, res) => {
   } finally { client.release(); }
 });
 
-const path = require("path");
-
 // Serve frontend static files
 // ✅ ถูก — ชี้ไปที่ frontend/dist ที่ build แล้ว
 // Root Directory ว่าง → __dirname = /opt/render/project/src/backend
