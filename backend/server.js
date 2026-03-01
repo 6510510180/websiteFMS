@@ -226,6 +226,187 @@ app.delete("/api/majors/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+// ============================================================
+//  เพิ่ม routes เหล่านี้เข้าไปใน server.js
+// ============================================================
+
+// ============================================================
+//  KAS REFERENCES API
+// ============================================================
+
+// GET /api/kas?type=K|A|S
+app.get("/api/kas", async (req, res) => {
+  const { type } = req.query;
+  try {
+    let query = "SELECT * FROM kas_references";
+    let values = [];
+    if (type) { query += " WHERE type=$1"; values.push(type); }
+    query += " ORDER BY type, code";
+    const result = await pool.query(query, values);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/kas  — upsert
+// body: { type, code, plo_count, mlo_count }
+app.post("/api/kas", async (req, res) => {
+  const { type, code, plo_count, mlo_count } = req.body;
+  if (!type || !code) return res.status(400).json({ message: "ต้องส่ง type และ code" });
+  try {
+    const result = await pool.query(
+      `INSERT INTO kas_references (type, code, plo_count, mlo_count)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (type, code) DO UPDATE SET
+         plo_count = EXCLUDED.plo_count,
+         mlo_count = EXCLUDED.mlo_count,
+         updated_at = now()
+       RETURNING *`,
+      [type, code, plo_count || 0, mlo_count || 0]
+    );
+    res.json({ message: "บันทึกสำเร็จ", item: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// PUT /api/kas/:id
+app.put("/api/kas/:id", async (req, res) => {
+  const { plo_count, mlo_count } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE kas_references SET
+         plo_count = COALESCE($1, plo_count),
+         mlo_count = COALESCE($2, mlo_count),
+         updated_at = now()
+       WHERE id = $3 RETURNING *`,
+      [plo_count, mlo_count, req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "อัปเดตสำเร็จ", item: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// DELETE /api/kas/:id
+app.delete("/api/kas/:id", async (req, res) => {
+  try {
+    const result = await pool.query("DELETE FROM kas_references WHERE id=$1 RETURNING *", [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "ลบสำเร็จ" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/kas/bulk  — import all at once
+// body: { items: [{type, code, plo_count, mlo_count}] }
+app.post("/api/kas/bulk", async (req, res) => {
+  const { items } = req.body;
+  if (!Array.isArray(items) || items.length === 0)
+    return res.status(400).json({ message: "ต้องส่ง items (array)" });
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    for (const item of items) {
+      await client.query(
+        `INSERT INTO kas_references (type, code, plo_count, mlo_count)
+         VALUES ($1, $2, $3, $4)
+         ON CONFLICT (type, code) DO UPDATE SET
+           plo_count = EXCLUDED.plo_count,
+           mlo_count = EXCLUDED.mlo_count,
+           updated_at = now()`,
+        [item.type, item.code, item.plo_count || 0, item.mlo_count || 0]
+      );
+    }
+    await client.query("COMMIT");
+    res.json({ message: `นำเข้าสำเร็จ ${items.length} รายการ` });
+  } catch (err) {
+    await client.query("ROLLBACK");
+    res.status(500).json({ message: "Server error: " + err.message });
+  } finally {
+    client.release();
+  }
+});
+
+// ============================================================
+//  SANKEY COURSES API
+// ============================================================
+
+// GET /api/sankey-courses?major=fin
+app.get("/api/sankey-courses", async (req, res) => {
+  const { major } = req.query;
+  try {
+    let query = "SELECT * FROM sankey_courses";
+    let values = [];
+    if (major) { query += " WHERE major=$1"; values.push(major); }
+    query += " ORDER BY major, group_type, code";
+    const result = await pool.query(query, values);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/sankey-courses  — upsert
+// body: { major, code, name, group_type, plo_mapping }
+app.post("/api/sankey-courses", async (req, res) => {
+  const { major, code, name, group_type, plo_mapping } = req.body;
+  if (!major || !code || !name || !group_type)
+    return res.status(400).json({ message: "ข้อมูลไม่ครบ" });
+  try {
+    const result = await pool.query(
+      `INSERT INTO sankey_courses (major, code, name, group_type, plo_mapping)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (major, code) DO UPDATE SET
+         name = EXCLUDED.name,
+         group_type = EXCLUDED.group_type,
+         plo_mapping = EXCLUDED.plo_mapping,
+         updated_at = now()
+       RETURNING *`,
+      [major, code, name, group_type, JSON.stringify(plo_mapping || {})]
+    );
+    res.json({ message: "บันทึกสำเร็จ", course: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// PUT /api/sankey-courses/:id
+app.put("/api/sankey-courses/:id", async (req, res) => {
+  const { name, group_type, plo_mapping } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE sankey_courses SET
+         name = COALESCE($1, name),
+         group_type = COALESCE($2, group_type),
+         plo_mapping = COALESCE($3, plo_mapping),
+         updated_at = now()
+       WHERE id = $4 RETURNING *`,
+      [name, group_type, plo_mapping ? JSON.stringify(plo_mapping) : null, req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "อัปเดตสำเร็จ", course: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// DELETE /api/sankey-courses/:id
+app.delete("/api/sankey-courses/:id", async (req, res) => {
+  try {
+    const result = await pool.query("DELETE FROM sankey_courses WHERE id=$1 RETURNING *", [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "ลบสำเร็จ" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 // ============================================================
 //  STUDY PLANS

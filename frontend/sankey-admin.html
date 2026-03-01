@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จัดการข้อมูล Sankey | FMS Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #6B3FA0; --purple-dark: #4A2870; --purple-light: #F3EEFF;
+  --purple-mid: #E8DEFF; --accent: #9B6DD1; --bg: #F7F5FA;
+  --white: #FFFFFF; --text: #181117; --text-sub: #64748B;
+  --border: #EDE8F5; --red: #EF4444; --red-bg: #FEE2E2;
+  --blue: #3B82F6; --blue-bg: #EFF6FF;
+  --green: #10B981; --green-bg: #ECFDF5;
+  --amber: #F59E0B; --amber-bg: #FFFBEB;
+  --sidebar-w: 240px; --topbar-h: 64px; --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.07);
+  --shadow-md: 0 4px 12px rgba(107,63,160,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans Thai','Lexend',sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+.sidebar { width: var(--sidebar-w); background: var(--white); height: 100vh; position: fixed; left: 0; top: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; }
+.sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+.sidebar-brand-title { font-family: 'Lexend',sans-serif; font-size: 16px; font-weight: 700; }
+.sidebar-brand-sub { font-size: 11.5px; color: var(--purple); font-weight: 500; margin-top: 2px; }
+.sidebar-nav { flex: 1; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--text-sub); text-decoration: none; transition: all 0.18s; cursor: pointer; }
+.nav-item:hover, .nav-item.active { background: var(--purple-light); color: var(--purple); font-weight: 600; }
+.sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
+.sidebar-footer .nav-item { color: var(--red); }
+.sidebar-footer .nav-item:hover { background: var(--red-bg); }
+
+.topbar { position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: var(--topbar-h); background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; z-index: 90; }
+.topbar-title { font-family: 'Lexend',sans-serif; font-size: 16px; font-weight: 700; }
+.topbar-breadcrumb { font-size: 11.5px; color: var(--text-sub); margin-top: 1px; }
+
+.main { margin-left: var(--sidebar-w); padding-top: var(--topbar-h); flex: 1; }
+.page-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+
+.toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.select-wrap { display: flex; align-items: center; gap: 8px; }
+.select-wrap label { font-size: 13px; font-weight: 600; color: var(--text-sub); }
+.form-select { padding: 8px 32px 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; background: var(--white); cursor: pointer; transition: border-color 0.15s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
+.form-select:focus { border-color: var(--purple); }
+
+.btn { padding: 9px 18px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary { background: var(--purple); color: white; }
+.btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+.btn-success { background: var(--green); color: white; }
+.btn-success:hover { background: #059669; }
+.btn-danger { background: var(--red); color: white; }
+.btn-danger:hover { background: #DC2626; }
+.btn-outline { background: var(--white); color: var(--text-sub); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--purple); color: var(--purple); }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+
+.stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; box-shadow: var(--shadow); cursor: pointer; transition: all 0.2s; }
+.stat-card:hover, .stat-card.active { border-color: var(--purple); box-shadow: var(--shadow-md); }
+.stat-card.active { background: var(--purple-light); }
+.stat-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.stat-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-sub); margin-bottom: 6px; display: flex; align-items: center; }
+.stat-value { font-family: 'Lexend',sans-serif; font-size: 24px; font-weight: 800; color: var(--purple); }
+.stat-sub { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+
+.table-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.table-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.table-title { font-family: 'Lexend',sans-serif; font-size: 15px; font-weight: 700; }
+.search-wrap { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; width: 220px; }
+.search-wrap input { border: none; background: none; outline: none; font-size: 13px; font-family: inherit; width: 100%; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { background: var(--bg); padding: 11px 14px; text-align: left; font-weight: 700; color: var(--text-sub); font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--bg); }
+
+.badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.badge-ge { background: #E0F2FE; color: #0369A1; }
+.badge-core { background: var(--purple-light); color: var(--purple); }
+.badge-required { background: var(--amber-bg); color: #92400e; }
+.badge-elective { background: var(--green-bg); color: #065F46; }
+
+.plo-tags { display: flex; flex-wrap: wrap; gap: 4px; max-width: 300px; }
+.plo-tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+.plo-tag-I { background: #F3F4F6; color: #6B7280; }
+.plo-tag-R { background: #DBEAFE; color: #1D4ED8; }
+.plo-tag-M { background: #DCFCE7; color: #15803D; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 200; display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 16px; padding: 32px; width: 640px; max-width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
+@keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.modal-title { font-family: 'Lexend',sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+.form-group { margin-bottom: 16px; }
+.form-label { font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; display: block; }
+.form-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.15s; }
+.form-input:focus { border-color: var(--purple); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* PLO mapping editor */
+.plo-editor { border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; }
+.plo-editor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.plo-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); }
+.plo-item-code { font-size: 12px; font-weight: 700; color: var(--text); }
+.plo-level-select { padding: 3px 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 11px; font-family: inherit; background: var(--white); cursor: pointer; }
+
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+.toast { position: fixed; bottom: 24px; right: 24px; padding: 14px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; color: white; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; max-width: 320px; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--green); }
+.toast.error { background: var(--red); }
+.empty-row td { text-align: center; padding: 40px; color: var(--text-sub); }
+
+.major-colors { fin: '#3B82F6'; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-title">FMS Admin</div>
+    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="dashboard.html">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+      แดชบอร์ด
+    </a>
+    <a class="nav-item" href="kas-admin.html">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+      จัดการ KAS
+    </a>
+    <a class="nav-item active" href="sankey-admin.html">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+      จัดการ Sankey
+    </a>
+    <a class="nav-item" href="qa-dashboard.html">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      ประกันคุณภาพ
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+</aside>
+
+<header class="topbar">
+  <div>
+    <div class="topbar-title">จัดการข้อมูล Sankey</div>
+    <div class="topbar-breadcrumb">ประกันคุณภาพ · PLO/MLO ↔ รายวิชา</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="font-size:13px;font-weight:600;color:var(--purple)" id="userLabel">Administrator</div>
+    <div style="width:34px;height:34px;border-radius:50%;background:var(--purple-mid);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--purple)">A</div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="page-body">
+
+    <div>
+      <h1 style="font-family:'Lexend',sans-serif;font-size:24px;font-weight:800;color:var(--purple)">จัดการรายวิชา Sankey</h1>
+      <p style="font-size:14px;color:var(--text-sub);margin-top:4px">เพิ่ม แก้ไข และลบรายวิชาพร้อม PLO/MLO mapping สำหรับแต่ละวิชาเอก</p>
+    </div>
+
+    <!-- Major stats -->
+    <div class="stats-row" id="statsRow"></div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="select-wrap">
+        <label>วิชาเอก:</label>
+        <select class="form-select" id="majorFilter" onchange="loadData()">
+          <option value="">ทั้งหมด</option>
+          <option value="fin">การเงินและการลงทุน</option>
+          <option value="mkt">การตลาดและการสื่อสาร</option>
+          <option value="hrm">การจัดการทรัพยากรมนุษย์</option>
+          <option value="log">โลจิสติกส์และโซ่อุปทาน</option>
+          <option value="bis">ระบบสารสนเทศทางธุรกิจ</option>
+          <option value="mice">การจัดการไมซ์</option>
+        </select>
+      </div>
+      <div class="select-wrap">
+        <label>กลุ่มวิชา:</label>
+        <select class="form-select" id="groupFilter" onchange="renderTable()">
+          <option value="">ทั้งหมด</option>
+          <option value="ge">GE</option>
+          <option value="core">วิชาแกน</option>
+          <option value="required">วิชาชีพบังคับ</option>
+          <option value="elective">วิชาชีพเลือก</option>
+        </select>
+      </div>
+      <div class="search-wrap" style="margin-left:0">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg>
+        <input type="text" placeholder="ค้นหารหัส/ชื่อ..." id="searchInput" oninput="renderTable()">
+      </div>
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+        เพิ่มรายวิชา
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title" id="tableTitle">รายวิชาทั้งหมด</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:12px;color:var(--text-sub)" id="tableCount"></span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>รหัสวิชา</th>
+              <th>ชื่อวิชา</th>
+              <th>วิชาเอก</th>
+              <th>กลุ่มวิชา</th>
+              <th>PLO/MLO Mapping</th>
+              <th>จำนวน LO</th>
+              <th>จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">เพิ่มรายวิชาใหม่</div>
+    <input type="hidden" id="editId">
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">วิชาเอก</label>
+        <select class="form-input form-select" id="fieldMajor">
+          <option value="fin">การเงินและการลงทุน</option>
+          <option value="mkt">การตลาดและการสื่อสาร</option>
+          <option value="hrm">การจัดการทรัพยากรมนุษย์</option>
+          <option value="log">โลจิสติกส์และโซ่อุปทาน</option>
+          <option value="bis">ระบบสารสนเทศทางธุรกิจ</option>
+          <option value="mice">การจัดการไมซ์</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">กลุ่มวิชา</label>
+        <select class="form-input form-select" id="fieldGroup">
+          <option value="ge">GE · วิชาทั่วไป</option>
+          <option value="core">วิชาแกน</option>
+          <option value="required">วิชาชีพบังคับ</option>
+          <option value="elective">วิชาชีพเลือก</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">รหัสวิชา</label>
+        <input class="form-input" type="text" id="fieldCode" placeholder="460-101">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ชื่อวิชา (ย่อ)</label>
+        <input class="form-input" type="text" id="fieldName" placeholder="หลักการตลาด">
+      </div>
+    </div>
+
+    <!-- PLO/MLO mapping editor -->
+    <div class="form-group">
+      <label class="form-label">PLO/MLO Mapping</label>
+      <div class="plo-editor">
+        <div style="font-size:12px;color:var(--text-sub);margin-bottom:8px">เลือกระดับ: <strong>I</strong> = Intro · <strong>R</strong> = Reinforce · <strong>M</strong> = Mastery · <strong>—</strong> = ไม่มี</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-sub);margin-bottom:6px">PLO</div>
+        <div class="plo-editor-grid" id="ploEditorGrid"></div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-sub);margin:12px 0 6px">MLO</div>
+        <div class="plo-editor-grid" id="mloEditorGrid"></div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveItem()">💾 บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = "https://websitefms.onrender.com";
+let allData = [];
+
+const MAJOR_LABELS = { fin:'การเงินฯ', mkt:'การตลาดฯ', hrm:'HRM', log:'โลจิสติกส์', bis:'BIS', mice:'ไมซ์' };
+const MAJOR_COLORS = { fin:'#3B82F6', mkt:'#EF4444', hrm:'#BC8CFF', log:'#10B981', bis:'#F59E0B', mice:'#F97316' };
+const GROUP_LABELS = { ge:'GE', core:'วิชาแกน', required:'วิชาชีพบังคับ', elective:'วิชาชีพเลือก' };
+const GROUP_BADGE = { ge:'badge-ge', core:'badge-core', required:'badge-required', elective:'badge-elective' };
+
+const PLO_LIST = ['PLO1','PLO2','PLO3','PLO4','PLO5','PLO6','PLO7','PLO8','PLO9'];
+const MLO_LIST = ['MLO1_1','MLO1_2','MLO1_3','MLO2_1','MLO2_2','MLO2_3','MLO3_1','MLO3_2','MLO4_1','MLO4_2','MLO5_1','MLO5_2','MLO6_1','MLO6_2'];
+const MLO_DISPLAY = { MLO1_1:'MLO1.1',MLO1_2:'MLO1.2',MLO1_3:'MLO1.3',MLO2_1:'MLO2.1',MLO2_2:'MLO2.2',MLO2_3:'MLO2.3',MLO3_1:'MLO3.1',MLO3_2:'MLO3.2',MLO4_1:'MLO4.1',MLO4_2:'MLO4.2',MLO5_1:'MLO5.1',MLO5_2:'MLO5.2',MLO6_1:'MLO6.1',MLO6_2:'MLO6.2' };
+
+// Auth
+if (!localStorage.getItem("user")) window.location.href = "login.html";
+document.getElementById("logoutBtn").addEventListener("click", e => {
+  e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html";
+});
+try { const u = JSON.parse(localStorage.getItem("user")); if (u?.email) document.getElementById("userLabel").textContent = u.email; } catch {}
+
+// Build PLO editor grid
+function buildPloEditorGrid() {
+  document.getElementById("ploEditorGrid").innerHTML = PLO_LIST.map(plo => `
+    <div class="plo-item">
+      <span class="plo-item-code">${plo}</span>
+      <select class="plo-level-select" id="plo_${plo}">
+        <option value="">—</option>
+        <option value="I">I</option>
+        <option value="R">R</option>
+        <option value="M">M</option>
+      </select>
+    </div>
+  `).join("");
+
+  document.getElementById("mloEditorGrid").innerHTML = MLO_LIST.map(mlo => `
+    <div class="plo-item">
+      <span class="plo-item-code">${MLO_DISPLAY[mlo]||mlo}</span>
+      <select class="plo-level-select" id="mlo_${mlo}">
+        <option value="">—</option>
+        <option value="I">I</option>
+        <option value="R">R</option>
+        <option value="M">M</option>
+      </select>
+    </div>
+  `).join("");
+}
+
+function getPloMapping() {
+  const mapping = {};
+  PLO_LIST.forEach(plo => {
+    const val = document.getElementById(`plo_${plo}`)?.value;
+    if (val) mapping[plo] = val;
+  });
+  MLO_LIST.forEach(mlo => {
+    const val = document.getElementById(`mlo_${mlo}`)?.value;
+    if (val) mapping[mlo] = val;
+  });
+  return mapping;
+}
+
+function setPloMapping(mapping) {
+  PLO_LIST.forEach(plo => {
+    const el = document.getElementById(`plo_${plo}`);
+    if (el) el.value = mapping[plo] || "";
+  });
+  MLO_LIST.forEach(mlo => {
+    const el = document.getElementById(`mlo_${mlo}`);
+    if (el) el.value = mapping[mlo] || "";
+  });
+}
+
+// Load data
+async function loadData() {
+  const major = document.getElementById("majorFilter").value;
+  try {
+    const url = major ? `${API}/api/sankey-courses?major=${major}` : `${API}/api/sankey-courses`;
+    const res = await fetch(url);
+    allData = await res.json();
+    renderStats();
+    renderTable();
+  } catch {
+    showToast("โหลดข้อมูลไม่สำเร็จ", "error");
+  }
+}
+
+function renderStats() {
+  const majors = ['fin','mkt','hrm','log','bis','mice'];
+  document.getElementById("statsRow").innerHTML = majors.map(m => {
+    const count = allData.filter(d => d.major === m).length;
+    const isActive = document.getElementById("majorFilter").value === m;
+    return `
+      <div class="stat-card ${isActive ? 'active' : ''}" onclick="filterByMajor('${m}')">
+        <div class="stat-label">
+          <span class="stat-dot" style="background:${MAJOR_COLORS[m]}"></span>
+          ${MAJOR_LABELS[m]}
+        </div>
+        <div class="stat-value" style="color:${MAJOR_COLORS[m]}">${count}</div>
+        <div class="stat-sub">รายวิชา</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function filterByMajor(major) {
+  document.getElementById("majorFilter").value = major;
+  loadData();
+}
+
+function renderTable() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  const groupFilter = document.getElementById("groupFilter").value;
+  let data = [...allData];
+  if (query) data = data.filter(d => d.code.toLowerCase().includes(query) || d.name.toLowerCase().includes(query));
+  if (groupFilter) data = data.filter(d => d.group_type === groupFilter);
+
+  document.getElementById("tableCount").textContent = `${data.length} รายวิชา`;
+
+  const tbody = document.getElementById("tableBody");
+  if (data.length === 0) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">ไม่พบข้อมูล</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(item => {
+    const mapping = typeof item.plo_mapping === 'string' ? JSON.parse(item.plo_mapping) : (item.plo_mapping || {});
+    const loCount = Object.keys(mapping).length;
+    const tags = Object.entries(mapping).slice(0, 8).map(([k, v]) =>
+      `<span class="plo-tag plo-tag-${v}">${k.replace('_','.')} ${v}</span>`
+    ).join("") + (Object.keys(mapping).length > 8 ? `<span style="font-size:10px;color:var(--text-sub)">+${Object.keys(mapping).length - 8}</span>` : "");
+
+    return `
+      <tr>
+        <td style="font-family:'Lexend',sans-serif;font-weight:700;color:var(--purple)">${item.code}</td>
+        <td style="font-weight:500">${item.name}</td>
+        <td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:${MAJOR_COLORS[item.major]||'#6B7280'}">
+          <span style="width:8px;height:8px;border-radius:50%;background:${MAJOR_COLORS[item.major]||'#6B7280'}"></span>
+          ${MAJOR_LABELS[item.major]||item.major}
+        </span></td>
+        <td><span class="badge ${GROUP_BADGE[item.group_type]||''}">${GROUP_LABELS[item.group_type]||item.group_type}</span></td>
+        <td><div class="plo-tags">${tags || '<span style="font-size:11px;color:var(--text-sub)">ไม่มี</span>'}</div></td>
+        <td style="text-align:center;font-weight:700;color:var(--purple)">${loCount}</td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-outline btn-sm" onclick="openEditModal('${item.id}')">✏️ แก้ไข</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteItem('${item.id}','${item.code}')">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+// Modal
+function openAddModal() {
+  document.getElementById("modalTitle").textContent = "เพิ่มรายวิชาใหม่";
+  document.getElementById("editId").value = "";
+  document.getElementById("fieldCode").value = "";
+  document.getElementById("fieldName").value = "";
+  document.getElementById("fieldCode").disabled = false;
+  document.getElementById("fieldMajor").disabled = false;
+  const major = document.getElementById("majorFilter").value;
+  if (major) document.getElementById("fieldMajor").value = major;
+  buildPloEditorGrid();
+  setPloMapping({});
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function openEditModal(id) {
+  const item = allData.find(d => d.id === id);
+  if (!item) return;
+  document.getElementById("modalTitle").textContent = `แก้ไข ${item.code}`;
+  document.getElementById("editId").value = item.id;
+  document.getElementById("fieldMajor").value = item.major;
+  document.getElementById("fieldGroup").value = item.group_type;
+  document.getElementById("fieldCode").value = item.code;
+  document.getElementById("fieldName").value = item.name;
+  document.getElementById("fieldCode").disabled = true;
+  document.getElementById("fieldMajor").disabled = true;
+  buildPloEditorGrid();
+  const mapping = typeof item.plo_mapping === 'string' ? JSON.parse(item.plo_mapping) : (item.plo_mapping || {});
+  setPloMapping(mapping);
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("modalOverlay").classList.remove("open");
+}
+document.getElementById("modalOverlay").addEventListener("click", e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+async function saveItem() {
+  const id = document.getElementById("editId").value;
+  const major = document.getElementById("fieldMajor").value;
+  const group_type = document.getElementById("fieldGroup").value;
+  const code = document.getElementById("fieldCode").value.trim();
+  const name = document.getElementById("fieldName").value.trim();
+  const plo_mapping = getPloMapping();
+
+  if (!code || !name) { showToast("กรุณากรอกรหัสและชื่อวิชา", "error"); return; }
+
+  try {
+    let res;
+    if (id) {
+      res = await fetch(`${API}/api/sankey-courses/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, group_type, plo_mapping })
+      });
+    } else {
+      res = await fetch(`${API}/api/sankey-courses`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ major, code, name, group_type, plo_mapping })
+      });
+    }
+    const data = await res.json();
+    if (!res.ok) { showToast(data.message || "เกิดข้อผิดพลาด", "error"); return; }
+    showToast(data.message || "บันทึกสำเร็จ", "success");
+    closeModal();
+    loadData();
+  } catch { showToast("เชื่อมต่อ server ไม่ได้", "error"); }
+}
+
+async function deleteItem(id, code) {
+  if (!confirm(`ต้องการลบ ${code}?`)) return;
+  try {
+    const res = await fetch(`${API}/api/sankey-courses/${id}`, { method: "DELETE" });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.message, "error"); return; }
+    showToast("ลบสำเร็จ", "success");
+    loadData();
+  } catch { showToast("เกิดข้อผิดพลาด", "error"); }
+}
+
+function showToast(msg, type = "success") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+loadData();
+</script>
+</body>
+</html>

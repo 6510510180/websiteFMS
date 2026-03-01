@@ -4,132 +4,108 @@
   <meta charset="UTF-8">
   <title>Add Major | FMS Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-    /* ── SIDEBAR (QA-Dashboard style) ── */
     :root {
       --purple:#6B3FA0;--purple-dark:#4A2870;--purple-light:#F3EEFF;--purple-mid:#E8DEFF;
       --accent:#9B6DD1;--bg-base:#F7F5FA;--white:#FFFFFF;--text-main:#181117;--text-sub:#64748B;
-      --border-col:#EDE8F5;--red:#EF4444;--red-bg:#FEE2E2;--sidebar-w:240px;--topbar-h:64px;
+      --border-col:#EDE8F5;--red:#EF4444;--red-bg:#FEE2E2;--sidebar-w:240px;
+      --primary:#7c3aed;--primary-light:#ede9fe;
+      --text:#1e1b2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f5f4fa;
     }
-    .sidebar-qa {
-      width:var(--sidebar-w);background:var(--white);height:100vh;position:fixed;
-      left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border-col);z-index:100;
-    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Noto Sans Thai','Segoe UI',sans-serif;background:var(--bg);display:flex;min-height:100vh;}
+
+    /* SIDEBAR */
+    .sidebar-qa{width:var(--sidebar-w);background:var(--white);height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border-col);z-index:100;}
     .sidebar-brand{padding:20px 20px 16px;border-bottom:1px solid var(--border-col);}
     .sidebar-brand-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text-main);letter-spacing:-0.2px;}
     .sidebar-brand-sub{font-size:11.5px;color:var(--purple);font-weight:500;margin-top:2px;}
     .sidebar-section-label{padding:20px 20px 6px;font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1.2px;}
     .sidebar-nav-qa{flex:1;padding:8px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
-    .nav-item-qa{
-      display:flex;align-items:center;gap:10px;
-      padding:10px 12px;border-radius:8px;
-      font-size:13.5px;font-weight:500;color:var(--text-sub);
-      text-decoration:none;transition:all 0.18s;cursor:pointer;user-select:none;
-    }
+    .nav-item-qa{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--text-sub);text-decoration:none;transition:all .18s;cursor:pointer;user-select:none;}
     .nav-item-qa:hover{background:var(--purple-light);color:var(--purple);}
     .nav-item-qa.active{background:var(--purple-light);color:var(--purple);font-weight:600;}
-    .nav-icon-qa{width:18px;height:18px;flex-shrink:0;opacity:0.75;}
+    .nav-icon-qa{width:18px;height:18px;flex-shrink:0;opacity:.75;}
     .nav-item-qa.active .nav-icon-qa,.nav-item-qa:hover .nav-icon-qa{opacity:1;}
     .sidebar-footer-qa{padding:12px;border-top:1px solid var(--border-col);}
     .sidebar-footer-qa .nav-item-qa{color:var(--red);}
     .sidebar-footer-qa .nav-item-qa:hover{background:var(--red-bg);color:#DC2626;}
     svg{display:block;}
 
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);flex:1;padding:32px;display:flex;flex-direction:column;min-width:0;}
+    .page-header small{color:#999;font-size:13px;}
+    .page-header h2{margin:4px 0;font-size:22px;color:var(--text);}
+    .page-header p{font-size:13px;color:var(--muted);margin-bottom:20px;}
+    .card{background:white;border-radius:16px;padding:20px 22px;box-shadow:0 4px 12px rgba(0,0,0,.05);margin-bottom:20px;}
+    .card-title{font-size:18px;font-weight:600;margin-bottom:6px;}
+    .form-grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;margin-top:12px;margin-bottom:16px;}
+    .field label{display:block;font-size:13px;margin-bottom:4px;color:#555;}
+    .field input,.field textarea,.field select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ddd;background:#faf7ff;outline:none;font-size:14px;font-family:inherit;}
+    .field input:focus,.field textarea:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 2px rgba(124,58,237,.15);}
+    .editor-block{margin-top:12px;}
+    .editor-label{font-size:13px;margin-bottom:4px;color:#555;}
+    .fake-toolbar{display:flex;gap:12px;padding:6px 10px;border-radius:10px 10px 0 0;background:var(--primary-light);color:var(--primary);font-size:13px;}
+    .fake-toolbar span{cursor:default;}
+    .editor-textarea{width:100%;min-height:100px;border-radius:0 0 10px 10px;border:1px solid #e2d4ff;border-top:none;padding:10px 12px;resize:vertical;outline:none;background:#faf7ff;font-size:14px;font-family:inherit;}
+    .plan-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:12px;}
+    .plan-card{border-radius:14px;background:#f7f0ff;overflow:hidden;}
+    .plan-card .fake-toolbar{border-radius:14px 14px 0 0;}
+    .plan-card .editor-textarea{border-radius:0 0 14px 14px;border-color:#e2d4ff;}
+    .footer-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;}
+    .btn{border-radius:999px;padding:9px 22px;border:none;cursor:pointer;font-size:14px;font-family:inherit;font-weight:500;transition:opacity .15s;}
+    .btn:hover{opacity:.88;}
+    .btn-secondary{background:#ffdddd;color:#b33939;}
+    .btn-primary{background:var(--primary);color:white;box-shadow:0 5px 14px rgba(124,58,237,.3);}
+    #message{margin-top:8px;font-size:13px;}
 
-:root {
-  --primary: #7c3aed;
-  --primary-light: #ede9fe;
-  --sidebar-w: 230px;
-  --text: #1e1b2e;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --bg: #f5f4fa;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--bg); display: flex; min-height: 100vh; }
+    /* ── IMAGE UPLOAD (ใหม่) ── */
+    .img-upload-item{
+      border:2px dashed #c4b5fd;border-radius:14px;padding:18px;
+      background:#faf7ff;transition:.18s;
+      margin-top:8px; margin-bottom:20px;
+    }
+    .img-upload-item:hover{border-color:var(--primary);background:#f5f0ff;}
+    .img-upload-item.has-image{border-style:solid;border-color:#a78bfa;background:#fff;}
+    .img-upload-label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--primary);margin-bottom:5px;}
+    .badge-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:#fef9c3;color:#854d0e;}
+    .img-upload-desc{font-size:11.5px;color:var(--muted);margin-bottom:10px;line-height:1.55;}
+    .img-upload-btn{
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      width:100%;padding:9px;border-radius:9px;border:1.5px solid #c4b5fd;
+      background:#fff;color:var(--primary);font-size:13px;font-weight:600;
+      cursor:pointer;font-family:inherit;transition:.15s;
+    }
+    .img-upload-btn:hover{background:var(--primary-light);border-color:var(--primary);}
+    .upload-progress{margin-top:8px;font-size:11.5px;color:var(--muted);display:none;align-items:center;gap:6px;}
+    .upload-progress.show{display:flex;}
+    .prog-bar{flex:1;height:4px;background:#e9e2ff;border-radius:99px;overflow:hidden;}
+    .prog-fill{height:100%;width:0;border-radius:99px;background:var(--primary);transition:width .3s;}
+    .img-preview-wrap{position:relative;margin-top:12px;border-radius:10px;overflow:hidden;display:none;}
+    .img-preview-wrap img{width:100%;height:160px;object-fit:cover;display:block;border-radius:10px;}
+    .remove-btn{
+      position:absolute;top:8px;right:8px;width:26px;height:26px;
+      border-radius:50%;background:rgba(0,0,0,.55);border:none;cursor:pointer;
+      color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;
+    }
+    .remove-btn:hover{background:#ef4444;}
 
-/* ── SIDEBAR ── */
-.sidebar {
-  width: var(--sidebar-w);
-  background: #fff;
-  height: 100vh;
-  position: fixed;
-  left: 0; top: 0;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 2px 0 16px rgba(0,0,0,0.07);
-  border-radius: 0 20px 20px 0;
-  z-index: 100;
-  overflow: hidden;
-}
-.sidebar-logo { padding: 22px 24px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.sidebar-logo .brand { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
-.sidebar-logo .brand-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
-.sidebar-nav { flex: 1; padding: 16px 14px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
-.nav-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 14px; border-radius: 12px; cursor: pointer;
-  font-size: 14px; font-weight: 500; color: var(--muted);
-  text-decoration: none;
-  transition: background .18s, color .18s, transform .18s;
-  user-select: none;
-}
-.nav-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(3px); }
-.nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
-.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
-.sidebar-footer { padding: 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
-.sidebar-footer .nav-item { color: #ef4444; }
-.sidebar-footer .nav-item:hover { background: #fee2e2; color: #dc2626; transform: translateX(3px); }
-
-/* ── MAIN ── */
-/* ── MAIN ── */
-.main {
-  margin-left: var(--sidebar-w);
-  flex: 1;
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-.page-header small { color: #999; font-size: 13px; }
-.page-header h2 { margin: 4px 0; font-size: 22px; color: var(--text); }
-.page-header p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-
-.card { background: white; border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
-.card-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-.form-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px 24px; margin-top: 12px; margin-bottom: 16px; }
-.field label { display: block; font-size: 13px; margin-bottom: 4px; color: #555; }
-.field input, .field textarea, .field select {
-  width: 100%; padding: 10px 12px; border-radius: 10px;
-  border: 1px solid #ddd; background: #faf7ff;
-  outline: none; font-size: 14px; font-family: inherit;
-}
-.field input:focus, .field textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 2px rgba(124,58,237,0.15); }
-
-.editor-block { margin-top: 12px; }
-.editor-label { font-size: 13px; margin-bottom: 4px; color: #555; }
-.fake-toolbar { display: flex; gap: 12px; padding: 6px 10px; border-radius: 10px 10px 0 0; background: var(--primary-light); color: var(--primary); font-size: 13px; }
-.fake-toolbar span { cursor: default; }
-.editor-textarea { width: 100%; min-height: 100px; border-radius: 0 0 10px 10px; border: 1px solid #e2d4ff; border-top: none; padding: 10px 12px; resize: vertical; outline: none; background: #faf7ff; font-size: 14px; font-family: inherit; }
-
-.upload-box { border: 2px dashed #d6c5ff; border-radius: 12px; padding: 30px; text-align: center; color: #9c78e6; font-size: 13px; margin-top: 8px; margin-bottom: 20px; background: #fcf9ff; }
-
-.plan-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px; margin-top: 12px; }
-.plan-card { border-radius: 14px; background: #f7f0ff; padding: 0; overflow: hidden; }
-.plan-card .fake-toolbar { border-radius: 14px 14px 0 0; }
-.plan-card .editor-textarea { border-radius: 0 0 14px 14px; border-color: #e2d4ff; }
-
-.footer-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
-.btn { border-radius: 999px; padding: 9px 22px; border: none; cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 500; transition: opacity .15s; }
-.btn:hover { opacity: 0.88; }
-.btn-secondary { background: #ffdddd; color: #b33939; }
-.btn-primary { background: var(--primary); color: white; box-shadow: 0 5px 14px rgba(124,58,237,0.3); }
-#message { margin-top: 8px; font-size: 13px; }
-  </style>
+    /* simulate card preview */
+    .card-preview-wrap{margin-top:14px;border-radius:12px;overflow:hidden;border:1px solid #e8deff;display:none;}
+    .card-preview-header{padding:8px 14px;background:var(--primary-light);font-size:11px;font-weight:700;color:var(--purple);display:flex;align-items:center;gap:5px;}
+    .card-sim{background:#fff;display:grid;grid-template-columns:90px 1fr;min-height:78px;}
+    .card-sim-img{width:90px;height:78px;object-fit:cover;background:linear-gradient(135deg,#c084fc,#818cf8);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;}
+    .card-sim-img img{width:90px;height:78px;object-fit:cover;display:block;}
+    .card-sim-body{padding:10px 14px;display:flex;flex-direction:column;justify-content:center;}
+    .card-sim-title{font-size:12.5px;font-weight:700;color:var(--text-main);line-height:1.35;}
+    .card-sim-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+    .card-sim-link{font-size:11px;color:var(--primary);margin-top:5px;font-weight:600;}
+</style>
 </head>
 <body>
+
+<!-- SIDEBAR -->
 <aside class="sidebar-qa">
   <div class="sidebar-brand">
     <div class="sidebar-brand-title">FMS Admin</div>
@@ -162,8 +138,7 @@ body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--
   </div>
 </aside>
 
-
-<!-- ── MAIN ── -->
+<!-- MAIN -->
 <div class="main">
   <div class="page-header">
     <small>แดชบอร์ด / จัดการหลักสูตร / ข้อมูลทั่วไป</small>
@@ -191,15 +166,61 @@ body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--
         <textarea id="intro" class="editor-textarea" placeholder="เขียนคำอธิบายสาขาวิชา เช่น จุดเด่น รายวิชาสำคัญ กลุ่มเป้าหมาย ฯลฯ"></textarea>
       </div>
 
+      <!-- ══ รูปภาพพื้นหลังการ์ดสาขา (ใหม่) ══ -->
       <div style="margin-top:18px;">
-        <div class="editor-label">รูปภาพแนะนำ</div>
-        <div class="upload-box">
-          อัปโหลดไฟล์ หรือวาง<br>
-          <small>PNG, JPG, GIF ขนาดไม่เกิน 10MB</small>
+        <div class="editor-label">รูปภาพพื้นหลังการ์ดสาขาวิชา</div>
+
+        <div class="img-upload-item" id="wrap-img">
+          <div class="img-upload-label">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
+            พื้นหลังการ์ดสาขา
+            <span class="badge-tag">แสดงใน 6 การ์ดหน้าหลักสูตร</span>
+          </div>
+          <div class="img-upload-desc">
+            รูปนี้จะแสดงเป็นพื้นหลังของการ์ดสาขาวิชาในหน้าหลักสูตร<br>
+            แนะนำขนาด <strong>400×300px</strong> ขึ้นไป · รองรับ JPG, PNG, WEBP
+          </div>
+
+          <!-- ปุ่มเลือกรูป -->
+          <button type="button" class="img-upload-btn" onclick="document.getElementById('imgFile').click()">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+            เลือกรูปภาพ
+          </button>
+          <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="uploadImg()">
+          <input type="hidden" id="image_url">
+
+          <!-- Progress bar -->
+          <div class="upload-progress" id="prog-img">
+            <div class="prog-bar"><div class="prog-fill" id="progfill-img"></div></div>
+            <span id="prog-img-txt">กำลังอัปโหลด...</span>
+          </div>
+
+          <!-- Preview รูป -->
+          <div class="img-preview-wrap" id="prevImg">
+            <img id="prevImgEl" src="" alt="preview">
+            <button type="button" class="remove-btn" onclick="removeImg()">✕</button>
+          </div>
+
+          <!-- Simulate การ์ดบนเว็บ -->
+          <div class="card-preview-wrap" id="cardSimWrap">
+            <div class="card-preview-header">
+              👁 ตัวอย่างการ์ดบนหน้าเว็บ
+            </div>
+            <div class="card-sim">
+              <div class="card-sim-img" id="cardSimImg">
+                <svg width="26" height="26" viewBox="0 0 20 20" fill="rgba(255,255,255,0.7)"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
+              </div>
+              <div class="card-sim-body">
+                <div class="card-sim-title" id="cardSimTitle">ชื่อสาขาวิชา</div>
+                <div class="card-sim-sub" id="cardSimSub"></div>
+                <div class="card-sim-link">View Details →</div>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <input type="text" id="image_url" placeholder="(ถ้าต้องการ) ใส่ URL รูปภาพ หรือชื่อไฟล์"
-          style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #ddd; background:#faf7ff; font-family:inherit;">
       </div>
+      <!-- ══ จบส่วนรูปภาพ ══ -->
 
       <div class="editor-block">
         <div class="editor-label">แนวทางการประกอบอาชีพ</div>
@@ -211,7 +232,6 @@ body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--
     <div class="card">
       <div class="card-title">โครงสร้างแผนการศึกษา</div>
       <p style="font-size:13px;color:var(--muted);margin-top:0;margin-bottom:12px;">สามารถใช้แบ่งเป็น แผนปี 1–4 หรือ กลุ่มหมวดวิชา ตามที่ต้องการ</p>
-
       <div class="plan-grid">
         <div class="plan-card">
           <div class="fake-toolbar"><span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span></div>
@@ -230,10 +250,9 @@ body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--
           <textarea id="plan_4" class="editor-textarea" placeholder="เช่น แผนปีที่ 4"></textarea>
         </div>
       </div>
-
       <div class="footer-actions">
         <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
-        <button type="submit" class="btn btn-primary">Finish</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Finish</button>
       </div>
       <div id="message"></div>
     </div>
@@ -248,62 +267,160 @@ const token = localStorage.getItem("user");
 if (!token) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
 
 document.getElementById("logoutBtn").addEventListener("click", (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  window.location.href = "login.html";
+  e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html";
 });
 
-const params = new URLSearchParams(window.location.search);
+const params   = new URLSearchParams(window.location.search);
 const courseId = params.get("courseId");
-const majorId = params.get("majorId");
+const majorId  = params.get("majorId");
 
 if (!courseId) alert("ไม่พบข้อมูลหลักสูตรที่เชื่อมโยง (courseId)");
-if (majorId) loadMajor(majorId);
+if (majorId)  loadMajor(majorId);
 
+/* live preview ชื่อในการ์ดจำลอง */
+document.getElementById("major_name_th").addEventListener("input", e => {
+  document.getElementById("cardSimTitle").textContent = e.target.value || "ชื่อสาขาวิชา";
+});
+document.getElementById("major_name_en").addEventListener("input", e => {
+  document.getElementById("cardSimSub").textContent = e.target.value || "";
+});
+
+/* ══ UPLOAD IMAGE ══ */
+async function uploadImg() {
+  const file = document.getElementById("imgFile").files[0];
+  if (!file) return;
+
+  const prog     = document.getElementById("prog-img");
+  const progFill = document.getElementById("progfill-img");
+  const progTxt  = document.getElementById("prog-img-txt");
+
+  prog.classList.add("show");
+  progFill.style.width = "30%";
+  progTxt.textContent  = "กำลังอัปโหลด...";
+
+  const fd = new FormData();
+  fd.append("image", file);
+
+  try {
+    const res  = await fetch(`${API}/upload`, { method: "POST", body: fd });
+    const data = await res.json();
+    progFill.style.width = "100%";
+
+    if (!res.ok) {
+      progTxt.textContent = "อัปโหลดไม่สำเร็จ";
+      setTimeout(() => prog.classList.remove("show"), 2000);
+      return;
+    }
+
+    /* เก็บ URL ลง hidden input */
+    document.getElementById("image_url").value = data.url;
+
+    /* แสดง preview รูป */
+    const prevWrap = document.getElementById("prevImg");
+    document.getElementById("prevImgEl").src = BASE_URL + data.url;
+    prevWrap.style.display = "block";
+    document.getElementById("wrap-img").classList.add("has-image");
+
+    /* อัปเดตการ์ดจำลอง */
+    document.getElementById("cardSimImg").innerHTML =
+      `<img src="${BASE_URL + data.url}" style="width:90px;height:78px;object-fit:cover;display:block;">`;
+    document.getElementById("cardSimWrap").style.display = "block";
+
+    progTxt.textContent = "✓ อัปโหลดสำเร็จ";
+    setTimeout(() => { prog.classList.remove("show"); progFill.style.width = "0"; }, 2500);
+
+  } catch {
+    progFill.style.width = "0";
+    prog.classList.remove("show");
+    document.getElementById("message").textContent = "เชื่อมต่อ Server ไม่ได้";
+    document.getElementById("message").style.color = "red";
+  }
+}
+
+function removeImg() {
+  document.getElementById("image_url").value = "";
+  const prevWrap = document.getElementById("prevImg");
+  prevWrap.style.display = "none";
+  prevWrap.querySelector("img").src = "";
+  document.getElementById("wrap-img").classList.remove("has-image");
+  document.getElementById("cardSimImg").innerHTML =
+    `<svg width="26" height="26" viewBox="0 0 20 20" fill="rgba(255,255,255,0.7)"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>`;
+}
+
+/* ══ LOAD (edit mode) ══ */
 async function loadMajor(id) {
   try {
-    const res = await fetch(`${API}/majors/${id}`, { headers: { "Authorization": `Bearer ${token}` } });
+    const res = await fetch(`${API}/majors/${id}`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
     if (res.status === 401) { localStorage.removeItem("user"); window.location.href = "login.html"; return; }
     const m = await res.json();
     if (!res.ok) { alert(m.message || "ไม่สามารถดึงข้อมูลสาขาวิชาได้"); return; }
-    document.getElementById("major_name_th").value = m.name_th || "";
-    document.getElementById("major_name_en").value = m.name_en || "";
-    document.getElementById("intro").value = m.intro || "";
-    document.getElementById("image_url").value = m.image_url || "";
-    document.getElementById("career_path").value = m.career_path || "";
-    document.getElementById("plan_1").value = m.plan_1 || "";
-    document.getElementById("plan_2").value = m.plan_2 || "";
-    document.getElementById("plan_3").value = m.plan_3 || "";
-    document.getElementById("plan_4").value = m.plan_4 || "";
-    document.querySelector(".btn.btn-primary").textContent = "Update";
+
+    document.getElementById("major_name_th").value = m.name_th    || "";
+    document.getElementById("major_name_en").value = m.name_en    || "";
+    document.getElementById("intro").value         = m.intro       || "";
+    document.getElementById("career_path").value   = m.career_path || "";
+    document.getElementById("plan_1").value        = m.plan_1      || "";
+    document.getElementById("plan_2").value        = m.plan_2      || "";
+    document.getElementById("plan_3").value        = m.plan_3      || "";
+    document.getElementById("plan_4").value        = m.plan_4      || "";
+
+    /* restore รูปภาพ */
+    const imgUrl = m.image_url || "";
+    if (imgUrl) {
+      document.getElementById("image_url").value = imgUrl;
+      const src = imgUrl.startsWith("http") ? imgUrl : BASE_URL + imgUrl;
+      const prevWrap = document.getElementById("prevImg");
+      document.getElementById("prevImgEl").src = src;
+      prevWrap.style.display = "block";
+      document.getElementById("wrap-img").classList.add("has-image");
+      document.getElementById("cardSimImg").innerHTML =
+        `<img src="${src}" style="width:90px;height:78px;object-fit:cover;display:block;">`;
+      document.getElementById("cardSimWrap").style.display = "block";
+    }
+
+    /* update ชื่อในการ์ดจำลอง */
+    document.getElementById("cardSimTitle").textContent = m.name_th || "ชื่อสาขาวิชา";
+    document.getElementById("cardSimSub").textContent   = m.name_en || "";
+
+    document.getElementById("submitBtn").textContent = "Update";
+
   } catch { alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (โหลดข้อมูลสาขา)"); }
 }
 
+/* ══ SAVE / UPDATE ══ */
 const form = document.getElementById("majorForm");
-const msg = document.getElementById("message");
+const msg  = document.getElementById("message");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   msg.textContent = ""; msg.style.color = "red";
+
   const body = {
-    course_id: Number(courseId),
-    name_th: document.getElementById("major_name_th").value.trim(),
-    name_en: document.getElementById("major_name_en").value.trim(),
-    intro: document.getElementById("intro").value.trim(),
-    image_url: document.getElementById("image_url").value.trim(),
+    course_id:   Number(courseId),
+    name_th:     document.getElementById("major_name_th").value.trim(),
+    name_en:     document.getElementById("major_name_en").value.trim(),
+    intro:       document.getElementById("intro").value.trim(),
+    image_url:   document.getElementById("image_url").value.trim(),
     career_path: document.getElementById("career_path").value.trim(),
-    plan_1: document.getElementById("plan_1").value.trim(),
-    plan_2: document.getElementById("plan_2").value.trim(),
-    plan_3: document.getElementById("plan_3").value.trim(),
-    plan_4: document.getElementById("plan_4").value.trim()
+    plan_1:      document.getElementById("plan_1").value.trim(),
+    plan_2:      document.getElementById("plan_2").value.trim(),
+    plan_3:      document.getElementById("plan_3").value.trim(),
+    plan_4:      document.getElementById("plan_4").value.trim(),
   };
+
   try {
-    const url = majorId ? `${API}/majors/${majorId}` : `${API}/majors`;
+    const url    = majorId ? `${API}/majors/${majorId}` : `${API}/majors`;
     const method = majorId ? "PUT" : "POST";
-    const res = await fetch(url, { method, headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }, body: JSON.stringify(body) });
+    const res    = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      body: JSON.stringify(body)
+    });
     if (res.status === 401) { localStorage.removeItem("user"); window.location.href = "login.html"; return; }
     const data = await res.json();
-    if (!res.ok) { msg.textContent = data.message || (majorId ? "แก้ไขสาขาวิชาไม่สำเร็จ" : "บันทึกสาขาวิชาไม่สำเร็จ"); return; }
+    if (!res.ok) { msg.textContent = data.message || "บันทึกสาขาวิชาไม่สำเร็จ"; return; }
     msg.style.color = "green";
     msg.textContent = majorId ? "อัปเดตสาขาวิชาสำเร็จ" : "บันทึกสาขาวิชาสำเร็จ";
     window.location.href = `course-info.html?courseId=${courseId}`;

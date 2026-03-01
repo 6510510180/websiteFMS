@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จัดการข้อมูล KAS | FMS Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #6B3FA0; --purple-dark: #4A2870; --purple-light: #F3EEFF;
+  --purple-mid: #E8DEFF; --accent: #9B6DD1; --bg: #F7F5FA;
+  --white: #FFFFFF; --text: #181117; --text-sub: #64748B;
+  --border: #EDE8F5; --red: #EF4444; --red-bg: #FEE2E2;
+  --blue: #3B82F6; --blue-bg: #EFF6FF;
+  --green: #10B981; --green-bg: #ECFDF5;
+  --amber: #F59E0B; --amber-bg: #FFFBEB;
+  --sidebar-w: 240px; --topbar-h: 64px;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.07);
+  --shadow-md: 0 4px 12px rgba(107,63,160,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans Thai','Lexend',sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar { width: var(--sidebar-w); background: var(--white); height: 100vh; position: fixed; left: 0; top: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; }
+.sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+.sidebar-brand-title { font-family: 'Lexend',sans-serif; font-size: 16px; font-weight: 700; }
+.sidebar-brand-sub { font-size: 11.5px; color: var(--purple); font-weight: 500; margin-top: 2px; }
+.sidebar-nav { flex: 1; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--text-sub); text-decoration: none; cursor: pointer; transition: all 0.18s; }
+.nav-item:hover, .nav-item.active { background: var(--purple-light); color: var(--purple); font-weight: 600; }
+.sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
+.sidebar-footer .nav-item { color: var(--red); }
+.sidebar-footer .nav-item:hover { background: var(--red-bg); }
+
+/* Topbar */
+.topbar { position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: var(--topbar-h); background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; z-index: 90; }
+.topbar-title { font-family: 'Lexend',sans-serif; font-size: 16px; font-weight: 700; }
+.topbar-breadcrumb { font-size: 11.5px; color: var(--text-sub); margin-top: 1px; }
+
+/* Main */
+.main { margin-left: var(--sidebar-w); padding-top: var(--topbar-h); flex: 1; }
+.page-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+
+/* Tab bar */
+.tab-bar { display: flex; gap: 4px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; width: fit-content; }
+.tab-btn { padding: 8px 24px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; background: transparent; color: var(--text-sub); transition: all 0.18s; }
+.tab-btn.active { background: var(--purple); color: white; box-shadow: 0 2px 8px rgba(107,63,160,0.3); }
+
+/* Toolbar */
+.toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.search-wrap { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; width: 260px; }
+.search-wrap input { border: none; background: none; outline: none; font-size: 13px; font-family: inherit; width: 100%; }
+.btn { padding: 9px 18px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+.btn-primary { background: var(--purple); color: white; }
+.btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+.btn-success { background: var(--green); color: white; }
+.btn-success:hover { background: #059669; }
+.btn-danger { background: var(--red); color: white; }
+.btn-danger:hover { background: #DC2626; }
+.btn-outline { background: var(--white); color: var(--text-sub); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--purple); color: var(--purple); }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+
+/* Stats row */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); }
+.stat-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-sub); margin-bottom: 8px; }
+.stat-value { font-family: 'Lexend',sans-serif; font-size: 28px; font-weight: 800; color: var(--purple); }
+.stat-sub { font-size: 12px; color: var(--text-sub); margin-top: 4px; }
+
+/* Table card */
+.table-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.table-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.table-title { font-family: 'Lexend',sans-serif; font-size: 15px; font-weight: 700; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+thead th { background: var(--bg); padding: 12px 16px; text-align: left; font-weight: 700; color: var(--text-sub); font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid var(--border); }
+tbody td { padding: 13px 16px; border-bottom: 1px solid var(--border); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--bg); }
+.code-cell { font-family: 'Lexend',sans-serif; font-weight: 700; color: var(--purple); font-size: 14px; }
+.num-cell { font-weight: 600; text-align: center; }
+.total-cell { font-family: 'Lexend',sans-serif; font-weight: 800; font-size: 15px; color: var(--text); text-align: center; }
+.actions-cell { display: flex; gap: 6px; }
+
+/* Badge */
+.badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.badge-high { background: var(--red-bg); color: #991b1b; }
+.badge-medium { background: var(--amber-bg); color: #92400e; }
+.badge-low { background: var(--blue-bg); color: #1e40af; }
+
+/* Progress bar */
+.progress-wrap { display: flex; align-items: center; gap: 8px; }
+.progress-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+.fill-plo { background: #ef4444; }
+.fill-mlo { background: #3b82f6; }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 200; display: none; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 16px; padding: 32px; width: 460px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: modalIn 0.2s ease; }
+@keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.modal-title { font-family: 'Lexend',sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 24px; color: var(--text); }
+.form-group { margin-bottom: 16px; }
+.form-label { font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; display: block; }
+.form-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.15s; }
+.form-input:focus { border-color: var(--purple); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; cursor: pointer; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+/* Import section */
+.import-card { background: linear-gradient(135deg, var(--purple-light), var(--purple-mid)); border: 1.5px dashed var(--accent); border-radius: var(--radius); padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; }
+.import-card:hover { background: var(--purple-mid); }
+.import-card p { font-size: 13px; color: var(--text-sub); margin-top: 8px; }
+
+/* Toast */
+.toast { position: fixed; bottom: 24px; right: 24px; padding: 14px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; color: white; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; max-width: 320px; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--green); }
+.toast.error { background: var(--red); }
+
+/* Empty */
+.empty-row td { text-align: center; padding: 40px; color: var(--text-sub); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-title">FMS Admin</div>
+    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="dashboard.html">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+      แดชบอร์ด
+    </a>
+    <a class="nav-item active" href="kas-admin.html">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+      จัดการ KAS
+    </a>
+    <a class="nav-item" href="sankey-admin.html">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+      จัดการ Sankey
+    </a>
+    <a class="nav-item" href="qa-dashboard.html">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      ประกันคุณภาพ
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div>
+    <div class="topbar-title">จัดการข้อมูล KAS</div>
+    <div class="topbar-breadcrumb">ประกันคุณภาพ · KAS References</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="font-size:13px;font-weight:600;color:var(--purple)" id="userLabel">Administrator</div>
+    <div style="width:34px;height:34px;border-radius:50%;background:var(--purple-mid);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--purple)">A</div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="page-body">
+
+    <!-- Page heading -->
+    <div>
+      <h1 style="font-family:'Lexend',sans-serif;font-size:24px;font-weight:800;color:var(--purple)">จัดการ KAS References</h1>
+      <p style="font-size:14px;color:var(--text-sub);margin-top:4px">เพิ่ม แก้ไข และลบข้อมูลการอ้างอิง Knowledge / Attitude / Skills</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card"><div class="stat-label">K · Knowledge</div><div class="stat-value" id="countK">—</div><div class="stat-sub">รหัส</div></div>
+      <div class="stat-card"><div class="stat-label">A · Attitude</div><div class="stat-value" id="countA">—</div><div class="stat-sub">รหัส</div></div>
+      <div class="stat-card"><div class="stat-label">S · Skills</div><div class="stat-value" id="countS">—</div><div class="stat-sub">รหัส</div></div>
+      <div class="stat-card"><div class="stat-label">รวมทั้งหมด</div><div class="stat-value" id="countAll">—</div><div class="stat-sub">รหัส</div></div>
+    </div>
+
+    <!-- Import from current data -->
+    <div class="import-card" onclick="importDefaultData()">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" style="margin:0 auto"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <div style="font-size:14px;font-weight:700;color:var(--purple);margin-top:8px">นำเข้าข้อมูลเริ่มต้น (K1-K114, A1-A37, S1-S37)</div>
+      <p>คลิกเพื่อ import ข้อมูลจาก kas-show.html เข้า Supabase ครั้งแรก (จะ overwrite ข้อมูลเดิม)</p>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('K',this)">📚 K</button>
+        <button class="tab-btn" onclick="switchTab('A',this)">💝 A</button>
+        <button class="tab-btn" onclick="switchTab('S',this)">🎯 S</button>
+        <button class="tab-btn" onclick="switchTab('ALL',this)">ทั้งหมด</button>
+      </div>
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg>
+        <input type="text" placeholder="ค้นหารหัส..." id="searchInput" oninput="renderTable()">
+      </div>
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+        เพิ่มรหัสใหม่
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title" id="tableTitle">รายการ Knowledge (K)</div>
+        <div style="font-size:12px;color:var(--text-sub)" id="tableCount"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>รหัส</th>
+              <th style="text-align:center">PLO Count</th>
+              <th style="text-align:center">MLO Count</th>
+              <th style="text-align:center">Total</th>
+              <th>PLO</th>
+              <th>MLO</th>
+              <th>ระดับ</th>
+              <th>จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">เพิ่มรหัส KAS ใหม่</div>
+    <input type="hidden" id="editId">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">ประเภท</label>
+        <select class="form-input form-select" id="fieldType">
+          <option value="K">K · Knowledge</option>
+          <option value="A">A · Attitude</option>
+          <option value="S">S · Skills</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">รหัส (เช่น K1)</label>
+        <input class="form-input" type="text" id="fieldCode" placeholder="K1">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">PLO Count</label>
+        <input class="form-input" type="number" id="fieldPlo" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">MLO Count</label>
+        <input class="form-input" type="number" id="fieldMlo" placeholder="0" min="0">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveItem()">💾 บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const API = "https://websitefms.onrender.com";
+let allData = [];
+let currentTab = 'K';
+
+// ── Auth ─────────────────────────────────────────────────────
+if (!localStorage.getItem("user")) window.location.href = "login.html";
+document.getElementById("logoutBtn").addEventListener("click", e => {
+  e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html";
+});
+try {
+  const u = JSON.parse(localStorage.getItem("user"));
+  if (u?.email) document.getElementById("userLabel").textContent = u.email;
+} catch {}
+
+// ── Load data ─────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch(`${API}/api/kas`);
+    allData = await res.json();
+    updateStats();
+    renderTable();
+  } catch (err) {
+    showToast("โหลดข้อมูลไม่สำเร็จ", "error");
+  }
+}
+
+function updateStats() {
+  document.getElementById("countK").textContent = allData.filter(d => d.type === 'K').length;
+  document.getElementById("countA").textContent = allData.filter(d => d.type === 'A').length;
+  document.getElementById("countS").textContent = allData.filter(d => d.type === 'S').length;
+  document.getElementById("countAll").textContent = allData.length;
+}
+
+// ── Tab ───────────────────────────────────────────────────────
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  const labels = { K: "Knowledge (K)", A: "Attitude (A)", S: "Skills (S)", ALL: "ทั้งหมด" };
+  document.getElementById("tableTitle").textContent = `รายการ ${labels[tab] || tab}`;
+  renderTable();
+}
+
+// ── Render table ──────────────────────────────────────────────
+function renderTable() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  let data = allData;
+  if (currentTab !== 'ALL') data = data.filter(d => d.type === currentTab);
+  if (query) data = data.filter(d => d.code.toLowerCase().includes(query));
+
+  document.getElementById("tableCount").textContent = `${data.length} รายการ`;
+
+  const tbody = document.getElementById("tableBody");
+  if (data.length === 0) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="8">ไม่พบข้อมูล</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(item => {
+    const total = (item.plo_count || 0) + (item.mlo_count || 0);
+    const badgeClass = total >= 8 ? "badge-high" : total >= 4 ? "badge-medium" : "badge-low";
+    const badgeText = total >= 8 ? "สูง" : total >= 4 ? "ปานกลาง" : "ต่ำ";
+    const maxVal = Math.max(total, 1);
+    const ploW = Math.round((item.plo_count / maxVal) * 100);
+    const mloW = Math.round((item.mlo_count / maxVal) * 100);
+
+    return `
+      <tr>
+        <td class="code-cell">${item.code}</td>
+        <td class="num-cell">${item.plo_count}</td>
+        <td class="num-cell">${item.mlo_count}</td>
+        <td class="total-cell">${total}</td>
+        <td style="min-width:100px">
+          <div class="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill fill-plo" style="width:${ploW}%"></div></div>
+            <span style="font-size:11px;color:var(--text-sub);width:24px;text-align:right">${item.plo_count}</span>
+          </div>
+        </td>
+        <td style="min-width:100px">
+          <div class="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill fill-mlo" style="width:${mloW}%"></div></div>
+            <span style="font-size:11px;color:var(--text-sub);width:24px;text-align:right">${item.mlo_count}</span>
+          </div>
+        </td>
+        <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+        <td>
+          <div class="actions-cell">
+            <button class="btn btn-outline btn-sm" onclick="openEditModal('${item.id}')">✏️ แก้ไข</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteItem('${item.id}','${item.code}')">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+// ── Modal ─────────────────────────────────────────────────────
+function openAddModal() {
+  document.getElementById("modalTitle").textContent = "เพิ่มรหัส KAS ใหม่";
+  document.getElementById("editId").value = "";
+  document.getElementById("fieldType").value = currentTab === 'ALL' ? 'K' : currentTab;
+  document.getElementById("fieldCode").value = "";
+  document.getElementById("fieldPlo").value = "";
+  document.getElementById("fieldMlo").value = "";
+  document.getElementById("fieldCode").disabled = false;
+  document.getElementById("fieldType").disabled = false;
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function openEditModal(id) {
+  const item = allData.find(d => d.id === id);
+  if (!item) return;
+  document.getElementById("modalTitle").textContent = `แก้ไข ${item.code}`;
+  document.getElementById("editId").value = item.id;
+  document.getElementById("fieldType").value = item.type;
+  document.getElementById("fieldCode").value = item.code;
+  document.getElementById("fieldPlo").value = item.plo_count;
+  document.getElementById("fieldMlo").value = item.mlo_count;
+  document.getElementById("fieldCode").disabled = true;
+  document.getElementById("fieldType").disabled = true;
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("modalOverlay").classList.remove("open");
+}
+
+document.getElementById("modalOverlay").addEventListener("click", e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ── Save ──────────────────────────────────────────────────────
+async function saveItem() {
+  const id = document.getElementById("editId").value;
+  const type = document.getElementById("fieldType").value;
+  const code = document.getElementById("fieldCode").value.trim().toUpperCase();
+  const plo_count = parseInt(document.getElementById("fieldPlo").value) || 0;
+  const mlo_count = parseInt(document.getElementById("fieldMlo").value) || 0;
+
+  if (!code) { showToast("กรุณากรอกรหัส", "error"); return; }
+
+  try {
+    let res;
+    if (id) {
+      res = await fetch(`${API}/api/kas/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plo_count, mlo_count })
+      });
+    } else {
+      res = await fetch(`${API}/api/kas`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, code, plo_count, mlo_count })
+      });
+    }
+    const data = await res.json();
+    if (!res.ok) { showToast(data.message || "เกิดข้อผิดพลาด", "error"); return; }
+    showToast(data.message || "บันทึกสำเร็จ", "success");
+    closeModal();
+    loadData();
+  } catch (err) {
+    showToast("เชื่อมต่อ server ไม่ได้", "error");
+  }
+}
+
+// ── Delete ────────────────────────────────────────────────────
+async function deleteItem(id, code) {
+  if (!confirm(`ต้องการลบ ${code} ออกจากระบบ?`)) return;
+  try {
+    const res = await fetch(`${API}/api/kas/${id}`, { method: "DELETE" });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.message, "error"); return; }
+    showToast("ลบสำเร็จ", "success");
+    loadData();
+  } catch {
+    showToast("เกิดข้อผิดพลาด", "error");
+  }
+}
+
+// ── Import default data ───────────────────────────────────────
+async function importDefaultData() {
+  if (!confirm("ต้องการ import ข้อมูลเริ่มต้นทั้งหมด? (จะ overwrite ข้อมูลเดิม)")) return;
+
+  const defaultData = {
+    K: [{code:"K1",plo:3,mlo:6},{code:"K2",plo:4,mlo:5},{code:"K3",plo:4,mlo:3},{code:"K4",plo:2,mlo:8},{code:"K5",plo:3,mlo:6},{code:"K6",plo:1,mlo:2},{code:"K7",plo:1,mlo:1},{code:"K8",plo:1,mlo:3},{code:"K9",plo:1,mlo:0},{code:"K10",plo:1,mlo:5},{code:"K11",plo:1,mlo:0},{code:"K12",plo:0,mlo:1},{code:"K13",plo:1,mlo:3},{code:"K14",plo:1,mlo:5},{code:"K15",plo:1,mlo:1},{code:"K16",plo:1,mlo:1},{code:"K17",plo:1,mlo:0},{code:"K18",plo:1,mlo:4},{code:"K19",plo:1,mlo:5},{code:"K20",plo:0,mlo:1},{code:"K21",plo:1,mlo:7},{code:"K22",plo:0,mlo:2},{code:"K23",plo:0,mlo:2},{code:"K24",plo:0,mlo:2},{code:"K25",plo:0,mlo:2},{code:"K26",plo:0,mlo:2},{code:"K27",plo:0,mlo:2},{code:"K28",plo:0,mlo:1},{code:"K29",plo:0,mlo:3},{code:"K30",plo:0,mlo:2},{code:"K31",plo:0,mlo:1},{code:"K32",plo:0,mlo:1},{code:"K33",plo:0,mlo:3},{code:"K34",plo:0,mlo:1},{code:"K35",plo:0,mlo:3},{code:"K36",plo:0,mlo:2},{code:"K37",plo:0,mlo:2},{code:"K38",plo:0,mlo:2},{code:"K39",plo:0,mlo:3},{code:"K40",plo:0,mlo:2},{code:"K41",plo:0,mlo:2},{code:"K42",plo:0,mlo:2},{code:"K43",plo:0,mlo:1},{code:"K44",plo:0,mlo:3},{code:"K45",plo:0,mlo:4},{code:"K46",plo:0,mlo:1},{code:"K47",plo:0,mlo:2},{code:"K48",plo:0,mlo:1},{code:"K49",plo:0,mlo:1},{code:"K50",plo:0,mlo:1},{code:"K51",plo:0,mlo:1},{code:"K52",plo:0,mlo:1},{code:"K53",plo:0,mlo:1},{code:"K54",plo:0,mlo:2},{code:"K55",plo:0,mlo:1},{code:"K56",plo:0,mlo:1},{code:"K57",plo:0,mlo:1},{code:"K58",plo:0,mlo:1},{code:"K59",plo:0,mlo:1},{code:"K60",plo:0,mlo:1},{code:"K61",plo:0,mlo:3},{code:"K62",plo:0,mlo:1},{code:"K63",plo:0,mlo:1},{code:"K64",plo:1,mlo:5},{code:"K65",plo:0,mlo:3},{code:"K66",plo:0,mlo:3},{code:"K67",plo:0,mlo:3},{code:"K68",plo:0,mlo:2},{code:"K69",plo:1,mlo:0},{code:"K70",plo:0,mlo:2},{code:"K71",plo:0,mlo:1},{code:"K72",plo:0,mlo:1},{code:"K73",plo:0,mlo:1},{code:"K74",plo:0,mlo:1},{code:"K75",plo:0,mlo:1},{code:"K76",plo:0,mlo:1},{code:"K77",plo:0,mlo:1},{code:"K78",plo:0,mlo:1},{code:"K79",plo:0,mlo:1},{code:"K80",plo:0,mlo:1},{code:"K81",plo:0,mlo:1},{code:"K82",plo:0,mlo:1},{code:"K83",plo:0,mlo:1},{code:"K84",plo:0,mlo:1},{code:"K85",plo:0,mlo:2},{code:"K86",plo:0,mlo:1},{code:"K87",plo:0,mlo:1},{code:"K88",plo:0,mlo:1},{code:"K89",plo:0,mlo:1},{code:"K90",plo:0,mlo:1},{code:"K91",plo:0,mlo:1},{code:"K92",plo:0,mlo:1},{code:"K93",plo:0,mlo:1},{code:"K94",plo:0,mlo:2},{code:"K95",plo:0,mlo:2},{code:"K96",plo:0,mlo:2},{code:"K97",plo:0,mlo:2},{code:"K98",plo:0,mlo:2},{code:"K99",plo:0,mlo:2},{code:"K100",plo:0,mlo:2},{code:"K101",plo:0,mlo:2},{code:"K102",plo:0,mlo:2},{code:"K103",plo:0,mlo:2},{code:"K104",plo:0,mlo:2},{code:"K105",plo:0,mlo:2},{code:"K106",plo:0,mlo:2},{code:"K107",plo:0,mlo:2},{code:"K108",plo:0,mlo:2},{code:"K109",plo:0,mlo:2},{code:"K110",plo:0,mlo:2},{code:"K111",plo:0,mlo:2},{code:"K112",plo:0,mlo:2},{code:"K113",plo:0,mlo:2},{code:"K114",plo:0,mlo:2}],
+    A: [{code:"A1",plo:2,mlo:7},{code:"A2",plo:4,mlo:12},{code:"A3",plo:1,mlo:6},{code:"A4",plo:2,mlo:11},{code:"A5",plo:1,mlo:9},{code:"A6",plo:4,mlo:12},{code:"A7",plo:0,mlo:9},{code:"A8",plo:3,mlo:11},{code:"A9",plo:4,mlo:11},{code:"A10",plo:4,mlo:11},{code:"A11",plo:2,mlo:11},{code:"A12",plo:4,mlo:12},{code:"A13",plo:1,mlo:6},{code:"A14",plo:2,mlo:5},{code:"A15",plo:2,mlo:9},{code:"A16",plo:2,mlo:11},{code:"A17",plo:1,mlo:5},{code:"A18",plo:0,mlo:7},{code:"A19",plo:0,mlo:12},{code:"A20",plo:0,mlo:9},{code:"A21",plo:0,mlo:2},{code:"A22",plo:0,mlo:2},{code:"A23",plo:0,mlo:2},{code:"A24",plo:0,mlo:0},{code:"A25",plo:0,mlo:0},{code:"A26",plo:0,mlo:0},{code:"A27",plo:0,mlo:0},{code:"A28",plo:0,mlo:0},{code:"A29",plo:0,mlo:0},{code:"A30",plo:0,mlo:0},{code:"A31",plo:0,mlo:0},{code:"A32",plo:0,mlo:0},{code:"A33",plo:0,mlo:0},{code:"A34",plo:0,mlo:0},{code:"A35",plo:0,mlo:0},{code:"A36",plo:0,mlo:0},{code:"A37",plo:0,mlo:0}],
+    S: [{code:"S1",plo:4,mlo:9},{code:"S2",plo:2,mlo:9},{code:"S3",plo:3,mlo:5},{code:"S4",plo:3,mlo:12},{code:"S5",plo:3,mlo:7},{code:"S6",plo:1,mlo:5},{code:"S7",plo:4,mlo:12},{code:"S8",plo:4,mlo:13},{code:"S9",plo:2,mlo:8},{code:"S10",plo:2,mlo:7},{code:"S11",plo:3,mlo:5},{code:"S12",plo:2,mlo:12},{code:"S13",plo:2,mlo:9},{code:"S14",plo:2,mlo:6},{code:"S15",plo:1,mlo:12},{code:"S16",plo:2,mlo:13},{code:"S17",plo:3,mlo:7},{code:"S18",plo:1,mlo:6},{code:"S19",plo:1,mlo:5},{code:"S20",plo:1,mlo:3},{code:"S21",plo:1,mlo:12},{code:"S22",plo:1,mlo:10},{code:"S23",plo:1,mlo:6},{code:"S24",plo:1,mlo:6},{code:"S25",plo:1,mlo:2},{code:"S26",plo:0,mlo:6},{code:"S27",plo:0,mlo:5},{code:"S28",plo:0,mlo:10},{code:"S29",plo:0,mlo:4},{code:"S30",plo:0,mlo:3},{code:"S31",plo:0,mlo:3},{code:"S32",plo:0,mlo:7},{code:"S33",plo:0,mlo:5},{code:"S34",plo:0,mlo:7},{code:"S35",plo:0,mlo:8},{code:"S36",plo:0,mlo:3},{code:"S37",plo:0,mlo:4}]
+  };
+
+  const items = [];
+  Object.entries(defaultData).forEach(([type, list]) => {
+    list.forEach(d => items.push({ type, code: d.code, plo_count: d.plo, mlo_count: d.mlo }));
+  });
+
+  try {
+    const res = await fetch(`${API}/api/kas/bulk`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items })
+    });
+    const data = await res.json();
+    if (!res.ok) { showToast(data.message, "error"); return; }
+    showToast(data.message, "success");
+    loadData();
+  } catch {
+    showToast("เชื่อมต่อ server ไม่ได้", "error");
+  }
+}
+
+// ── Toast ─────────────────────────────────────────────────────
+function showToast(msg, type = "success") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+// ── Init ──────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
