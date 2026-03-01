@@ -22,6 +22,37 @@ const pool = new Pool({
     : false,
 });
 
+// ── Health check ─────────────────────────────────────────────
+app.get("/health", (req, res) => res.json({ status: "ok" }));  // ← เปลี่ยน / เป็น /health ด้วย
+
+// ── Auth ─────────────────────────────────────────────────────
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "กรุณากรอกอีเมลและรหัสผ่าน" });
+  }
+  try {
+    const result = await pool.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
+    );
+    if (result.rows.length === 0) {
+      return res.status(401).json({ message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" });
+    }
+    const user = result.rows[0];
+
+    // ถ้า password เก็บเป็น plain text (ชั่วคราว):
+    if (user.password !== password) {
+      return res.status(401).json({ message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" });
+    }
+
+    const { password: _, ...safeUser } = user;
+    res.json({ message: "เข้าสู่ระบบสำเร็จ", user: safeUser });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 // ============================================================
 //  [1] PLOs — CRUD + KAS mapping
 // ============================================================
