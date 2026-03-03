@@ -5,6 +5,8 @@
 <title>จัดการ PLO/MLO | FMS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- SheetJS for Excel generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root {
   --purple:#7F13EC; --purple-dark:#5c0db0; --purple-mid:#9B6DD1;
@@ -101,31 +103,10 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .inner-tab{padding:8px 18px;border:none;background:#f3eeff;font-family:'Noto Sans Thai',sans-serif;font-size:12px;font-weight:700;color:var(--purple-mid);cursor:pointer;border-radius:8px 8px 0 0;transition:.15s;}
 .inner-tab.active{background:var(--purple);color:white;}
 
-/* ── CLO TABLE — แก้ grid ให้ K/A/S เรียงในแถวเดียวกัน ── */
 .clo-table-wrap{background:var(--white);border-radius:0 0 14px 14px;border:1px solid var(--border);border-top:none;overflow:hidden;}
-
-/* thead: Description | PLO+MLO | K | A | S */
-.clo-thead{
-  display:grid;
-  grid-template-columns:1fr 160px 110px 110px 110px;
-  padding:10px 20px;
-  border-bottom:1px solid #ede8f5;
-  background:#faf7ff;
-  font-size:10px;font-weight:800;color:var(--text-sub);
-  text-transform:uppercase;letter-spacing:.5px;
-  gap:8px;align-items:center;
-}
+.clo-thead{display:grid;grid-template-columns:1fr 160px 110px 110px 110px;padding:10px 20px;border-bottom:1px solid #ede8f5;background:#faf7ff;font-size:10px;font-weight:800;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;gap:8px;align-items:center;}
 .clo-th-kas{display:flex;align-items:center;justify-content:center;gap:4px;}
-
-/* row: same 5 cols */
-.clo-row{
-  display:grid;
-  grid-template-columns:1fr 160px 110px 110px 110px;
-  padding:14px 20px;
-  border-bottom:1px solid #f5eeff;
-  gap:8px;align-items:center;
-  transition:background .12s;
-}
+.clo-row{display:grid;grid-template-columns:1fr 160px 110px 110px 110px;padding:14px 20px;border-bottom:1px solid #f5eeff;gap:8px;align-items:center;transition:background .12s;}
 .clo-row:last-child{border-bottom:none;}
 .clo-row:hover{background:#fdfbff;}
 .clo-num{font-family:'Lexend',sans-serif;font-size:13px;font-weight:800;color:var(--purple);}
@@ -234,90 +215,46 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 
 /* ═══ PRINT / PDF STYLES ═══ */
 @media print {
-  /* reset layout */
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   body{background:white;font-size:10pt;min-height:unset;display:block;}
   .topbar,.header-actions,.main-tabs,.clo-side,.status-bar,
   .modal-overlay,.toast,.pdf-overlay,
   button,.btn,#fileInput{display:none!important;}
-
   .page{padding:0;max-width:100%;}
   .page-header{margin-bottom:12pt;}
   .page-title{font-size:16pt;font-weight:900;}
   .page-subtitle{font-size:9pt;}
-
-  /* show only active panel */
   .panel{display:none!important;}
   .panel.print-active{display:block!important;}
-
-  /* ── PLO/MLO print ── */
   .lo-frame{border:1pt solid #ccc;border-radius:0;display:block;}
   .lo-sidebar{display:none!important;}
   .lo-content{display:block;}
-  .lo-thead{
-    display:grid!important;
-    grid-template-columns:1fr 130pt 100pt 100pt;
-    background:#f3eeff!important;
-    padding:6pt 10pt;
-    font-size:7pt;
-    border-bottom:1pt solid #c4b5fd;
-  }
-  .lo-row{
-    display:grid!important;
-    grid-template-columns:1fr 130pt 100pt 100pt;
-    padding:8pt 10pt;
-    border-bottom:.5pt solid #f0ebfa;
-    page-break-inside:avoid;
-    gap:6pt;
-    align-items:start;
-  }
+  .lo-thead{display:grid!important;grid-template-columns:1fr 130pt 100pt 100pt;background:#f3eeff!important;padding:6pt 10pt;font-size:7pt;border-bottom:1pt solid #c4b5fd;}
+  .lo-row{display:grid!important;grid-template-columns:1fr 130pt 100pt 100pt;padding:8pt 10pt;border-bottom:.5pt solid #f0ebfa;page-break-inside:avoid;gap:6pt;align-items:start;}
   .lo-info{gap:7pt;}
   .lo-badge{font-size:8pt;padding:2pt 6pt;}
   .lo-text{font-size:9pt;line-height:1.4;}
   .kas-cell{display:block!important;}
   .ae-btn{display:none!important;}
-
-  /* print KAS tags */
   .kas-print{display:flex!important;flex-wrap:wrap;gap:2pt;justify-content:center;}
   .kp-tag{font-size:7.5pt;font-weight:700;padding:1.5pt 5pt;border-radius:3pt;white-space:nowrap;}
   .kp-tag.K{background:#f3e8ff;color:#7c3aed;}
   .kp-tag.A{background:#ffe4e6;color:#e11d48;}
   .kp-tag.S{background:#dcfce7;color:#16a34a;}
-
-  /* ── CLO print ── */
   .clo-wrap{display:block!important;}
   .clo-main{width:100%;}
   .course-card{border-radius:0;border:1pt solid #ccc;padding:10pt 14pt 0;}
   .course-name{font-size:12pt;}
   .inner-tabs,.inner-tab{display:none!important;}
   .clo-table-wrap{border-radius:0;border:1pt solid #ccc;border-top:none;}
-  .clo-thead{
-    display:grid!important;
-    grid-template-columns:1fr 120pt 80pt 80pt 80pt;
-    background:#faf7ff!important;
-    padding:5pt 10pt;
-    font-size:7pt;
-    border-bottom:1pt solid #ede8f5;
-  }
-  .clo-row{
-    display:grid!important;
-    grid-template-columns:1fr 120pt 80pt 80pt 80pt;
-    padding:7pt 10pt;
-    border-bottom:.5pt solid #f5eeff;
-    page-break-inside:avoid;
-    gap:6pt;
-    align-items:start;
-  }
+  .clo-thead{display:grid!important;grid-template-columns:1fr 120pt 80pt 80pt 80pt;background:#faf7ff!important;padding:5pt 10pt;font-size:7pt;border-bottom:1pt solid #ede8f5;}
+  .clo-row{display:grid!important;grid-template-columns:1fr 120pt 80pt 80pt 80pt;padding:7pt 10pt;border-bottom:.5pt solid #f5eeff;page-break-inside:avoid;gap:6pt;align-items:start;}
   .clo-num{font-size:10pt;}
   .clo-th{font-size:9pt;}
   .clo-en{font-size:8pt;}
   .linked-cell{justify-content:flex-start;flex-wrap:wrap;gap:2pt;}
   .linked-badge{font-size:7pt;padding:1.5pt 5pt;}
-
-  /* print section header */
   .print-section-title{display:block!important;font-family:'Lexend',sans-serif;font-size:12pt;font-weight:800;color:var(--purple);margin:12pt 0 6pt;padding-bottom:4pt;border-bottom:1.5pt solid var(--purple);}
-
-  /* page breaks */
   .lo-frame + .print-section-title{page-break-before:always;}
   .lo-row:nth-child(15n){page-break-after:always;}
 }
@@ -364,7 +301,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
         Export Excel
       </button>
 
-      <!-- ▼ PDF BUTTON — dropdown style -->
       <div style="position:relative;" id="pdf-wrap">
         <button class="btn btn-amber" onclick="togglePdfMenu()">
           <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/></svg>
@@ -627,7 +563,6 @@ let curTab='PLO',curMloGroup=0,curCourseIdx=0;
 let mCtx=null,mPanel='PLO_MLO';
 let tKas={K:new Set(),A:new Set(),S:new Set()},tPlo=new Set(),tMlo=new Set();
 
-/* close pdf menu on outside click */
 document.addEventListener('click',e=>{
   const wrap=document.getElementById('pdf-wrap');
   if(wrap && !wrap.contains(e.target)) document.getElementById('pdf-menu').style.display='none';
@@ -654,20 +589,9 @@ function renderPLO(){
   document.getElementById('plo-rows').innerHTML=PLO_LIST.map(p=>ploRow(p.code,p.desc,'PLO',ploKas[p.code])).join('');
 }
 
-function kasTagsHtml(k,type){
-  const data=type==='K'?K_DATA:type==='A'?A_DATA:S_DATA;
-  const codes=[...k[type]];
-  if(!codes.length) return '<span style="color:#94a3b8;font-size:10px">—</span>';
-  return codes.map(c=>{
-    const item=data.find(d=>d.code===c);
-    return `<span class="ae-cnt" style="background:${type==='K'?'var(--k-bg)':type==='A'?'var(--a-bg)':'var(--s-bg)'}; color:${type==='K'?'var(--k-color)':type==='A'?'var(--a-color)':'var(--s-color)'}; border-radius:999px; padding:2px 7px; font-size:10px; font-weight:700; display:inline-block;">${c}</span>`;
-  }).join(' ');
-}
-
 function ploRow(code,desc,type,k){
   const kn=k.K.size,an=k.A.size,sn=k.S.size;
   const ctx=JSON.stringify({type,code}).replace(/"/g,'&quot;');
-  // KAS print tags (hidden on screen, shown in print)
   const kPrint=t=>[...k[t]].map(c=>`<span class="kp-tag ${t}">${c}</span>`).join('');
   return `<div class="lo-row">
     <div class="lo-info">
@@ -760,14 +684,10 @@ function renderCloRows(c){
     const kn=cl.kas.K.size,an=cl.kas.A.size,sn=cl.kas.S.size;
     const pln=cl.plo.size,mln=cl.mlo.size;
     const ctx=JSON.stringify({type:'CLO',courseIdx:curCourseIdx,cloIdx:i}).replace(/"/g,'&quot;');
-
-    // linked badges
     const linked=pln+mln>0
       ? [...cl.plo,...cl.mlo].slice(0,4).map(code=>`<span class="linked-badge">${code}</span>`).join('')
         +(pln+mln>4?`<span class="linked-badge">+${pln+mln-4}</span>`:'')
       : '<span style="color:#94a3b8;font-size:11px">—</span>';
-
-    // KAS pill render helper
     const kasPills=(type)=>{
       const codes=[...cl.kas[type]];
       if(!codes.length) return `<span style="color:#94a3b8;font-size:10px">—</span>`;
@@ -775,15 +695,13 @@ function renderCloRows(c){
       const bg=type==='K'?'var(--k-bg)':type==='A'?'var(--a-bg)':'var(--s-bg)';
       return codes.map(c=>`<span style="display:inline-block;background:${bg};color:${clr};border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700;">${c}</span>`).join(' ');
     };
-
     return `<div class="clo-row">
       <div>
         <div class="clo-num">CLO ${i+1}</div>
         <div class="clo-th">${cl.th}</div>
         <div class="clo-en">${cl.en}</div>
       </div>
-      <div class="linked-cell" onclick='openModal(${ctx},"PLO_MLO")'
-           style="cursor:pointer;flex-direction:column;gap:3px;${pln+mln===0?'':''}">
+      <div class="linked-cell" onclick='openModal(${ctx},"PLO_MLO")' style="cursor:pointer;flex-direction:column;gap:3px;">
         ${linked}
         <span style="font-size:9px;color:#b0a0cc;margin-top:2px">คลิกเพื่อแก้ไข</span>
       </div>
@@ -837,7 +755,6 @@ function openModal(ctx,mode='KAS',focusType=''){
   else if(ctx.type==='MLO'){tKas={K:new Set(mloKas[ctx.code].K),A:new Set(mloKas[ctx.code].A),S:new Set(mloKas[ctx.code].S)};tPlo=new Set();tMlo=new Set();}
   else if(ctx.type==='CLO'){const cl=COURSES[ctx.courseIdx].clos[ctx.cloIdx];tKas={K:new Set(cl.kas.K),A:new Set(cl.kas.A),S:new Set(cl.kas.S)};tPlo=new Set(cl.plo);tMlo=new Set(cl.mlo);}
   else{tKas={K:new Set(),A:new Set(),S:new Set()};tPlo=new Set();tMlo=new Set();}
-  const startPanel = mode==='PLO_MLO' ? 'PLO_MLO' : (isClo?'PLO_MLO':'KAS');
   const actualMode = mode==='PLO_MLO' ? 'PLO_MLO' : 'KAS';
   switchMTab(actualMode, actualMode==='PLO_MLO'?document.getElementById('t-plomlo'):document.getElementById('t-kas'));
   buildKasLists(); buildPmLists(); updateCount();
@@ -934,6 +851,286 @@ function saveModal(){
   toast(`✓ บันทึกสำเร็จ (${tKas.K.size+tKas.A.size+tKas.S.size+tPlo.size+tMlo.size} รายการ)`);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   DOWNLOAD TEMPLATE  —  สร้าง Excel จาก SheetJS โดยตรง
+═══════════════════════════════════════════════════════════ */
+function downloadTemplate() {
+  try {
+    const wb = XLSX.utils.book_new();
+
+    /* ── helper: styled cell (SheetJS Community ใช้ได้แค่ basic) ── */
+    const mkSheet = (rows) => XLSX.utils.aoa_to_sheet(rows);
+
+    /* ── color helpers for cell_styles (xlsx-js-style not available,
+          we use standard xlsx — add comments for user guidance) ── */
+
+    // ── SHEET 1: INSTRUCTIONS ──────────────────────────────────
+    const instrRows = [
+      ['📋 KAS MAPPING TEMPLATE — PLO / MLO / CLO  ←→  Knowledge · Attitude · Skill  v1.0'],
+      [''],
+      ['SHEET', 'ชื่อ Sheet', 'วิธีใช้'],
+      ['PLO_KAS',  'PLO → KAS',  'กรอก ✓ หรือ 1 ในคอลัมน์ K/A/S ที่ต้องการ Map กับ PLO1–PLO9'],
+      ['MLO_KAS',  'MLO → KAS',  'กรอก ✓ หรือ 1 ในคอลัมน์ K/A/S ที่ต้องการ Map กับ MLO ทั้งหมด'],
+      ['CLO_KAS',  'CLO → PLO/MLO/KAS',  'กรอก COURSE_CODE, CLO_CODE, คำอธิบาย, K_CODES, A_CODES, S_CODES, PLO_CODES, MLO_CODES คั่นด้วย comma'],
+      ['KAS_REF',  'KAS Reference',  'ตารางอ้างอิง K1-K114, A1-A23, S1-S37'],
+      [''],
+      ['⚠ หมายเหตุ:'],
+      ['', '• PLO_KAS / MLO_KAS: ใส่  ✓  หรือ  1  ในช่อง K/A/S ที่ต้องการ'],
+      ['', '• CLO_KAS: ใส่ codes คั่นด้วย comma  เช่น  K1,K4,K12  หรือ  PLO1,PLO3'],
+      ['', '• อย่าลบหรือเปลี่ยนแถว Header (แถวที่ 1 ของแต่ละ sheet)'],
+      ['', '• อย่าเปลี่ยนชื่อ Sheet'],
+      ['', '• Import กลับในระบบโดยกดปุ่ม "Import Excel"'],
+    ];
+    const wsInstr = mkSheet(instrRows);
+    wsInstr['!cols'] = [{wch:14},{wch:22},{wch:72}];
+    wsInstr['!rows'] = [{hpt:28}];
+    XLSX.utils.book_append_sheet(wb, wsInstr, 'INSTRUCTIONS');
+
+    // ── SHEET 2: PLO_KAS ──────────────────────────────────────
+    const kCodes = K_DATA.map(d=>d.code);
+    const aCodes = A_DATA.map(d=>d.code);
+    const sCodes = S_DATA.map(d=>d.code);
+
+    const ploHeader = ['PLO', 'DESCRIPTION', ...kCodes, ...aCodes, ...sCodes];
+    const ploRows = [ploHeader];
+    PLO_LIST.forEach(p => {
+      ploRows.push([p.code, p.desc, ...new Array(kCodes.length+aCodes.length+sCodes.length).fill('')]);
+    });
+    const wsPlo = mkSheet(ploRows);
+    wsPlo['!cols'] = [
+      {wch:8},{wch:50},
+      ...kCodes.map(()=>({wch:6})),
+      ...aCodes.map(()=>({wch:6})),
+      ...sCodes.map(()=>({wch:6})),
+    ];
+    wsPlo['!freeze'] = {xSplit:2, ySplit:1};
+    // freeze panes via sheetView
+    wsPlo['!sheetViews'] = [{state:'frozen', xSplit:2, ySplit:1, topLeftCell:'C2'}];
+    XLSX.utils.book_append_sheet(wb, wsPlo, 'PLO_KAS');
+
+    // ── SHEET 3: MLO_KAS ──────────────────────────────────────
+    const allMlos = MLO_GROUPS.flatMap(g=>g.items);
+    const mloHeader = ['MLO', 'DESCRIPTION', 'GROUP', ...kCodes, ...aCodes, ...sCodes];
+    const mloRows = [mloHeader];
+    MLO_GROUPS.forEach(g => {
+      g.items.forEach(m => {
+        mloRows.push([m.code, m.desc, g.label, ...new Array(kCodes.length+aCodes.length+sCodes.length).fill('')]);
+      });
+    });
+    const wsMlo = mkSheet(mloRows);
+    wsMlo['!cols'] = [
+      {wch:9},{wch:50},{wch:24},
+      ...kCodes.map(()=>({wch:6})),
+      ...aCodes.map(()=>({wch:6})),
+      ...sCodes.map(()=>({wch:6})),
+    ];
+    wsMlo['!sheetViews'] = [{state:'frozen', xSplit:3, ySplit:1, topLeftCell:'D2'}];
+    XLSX.utils.book_append_sheet(wb, wsMlo, 'MLO_KAS');
+
+    // ── SHEET 4: CLO_KAS ──────────────────────────────────────
+    const cloHeaderRow = [
+      'COURSE_CODE','CLO_CODE','CLO_TH','CLO_EN',
+      'K_CODES','A_CODES','S_CODES','PLO_CODES','MLO_CODES'
+    ];
+    const cloNoteRow = [
+      'รหัสวิชา\nเช่น 477-201',
+      'เช่น CLO1',
+      'คำอธิบาย (ไทย)',
+      'Description (EN)',
+      'คั่นด้วย comma\nเช่น K1,K4',
+      'คั่นด้วย comma\nเช่น A1,A6',
+      'คั่นด้วย comma\nเช่น S5,S8',
+      'คั่นด้วย comma\nเช่น PLO1,PLO3',
+      'คั่นด้วย comma\nเช่น MLO1.1',
+    ];
+    const cloDataRows = [cloHeaderRow, cloNoteRow];
+    COURSES.forEach(c => {
+      c.clos.forEach((cl,i) => {
+        cloDataRows.push([
+          c.code,
+          `CLO${i+1}`,
+          cl.th,
+          cl.en,
+          [...cl.kas.K].join(','),
+          [...cl.kas.A].join(','),
+          [...cl.kas.S].join(','),
+          [...cl.plo].join(','),
+          [...cl.mlo].join(','),
+        ]);
+      });
+    });
+    // Add empty rows for user input
+    for(let i=0;i<10;i++) cloDataRows.push(new Array(9).fill(''));
+
+    const wsClo = mkSheet(cloDataRows);
+    wsClo['!cols'] = [{wch:13},{wch:9},{wch:40},{wch:36},{wch:18},{wch:18},{wch:18},{wch:22},{wch:26}];
+    wsClo['!sheetViews'] = [{state:'frozen', xSplit:0, ySplit:2, topLeftCell:'A3'}];
+    XLSX.utils.book_append_sheet(wb, wsClo, 'CLO_KAS');
+
+    // ── SHEET 5: KAS_REFERENCE ────────────────────────────────
+    const refHeader = ['K CODE','KNOWLEDGE','','A CODE','ATTITUDE','','S CODE','SKILL'];
+    const refRows = [refHeader];
+    const maxLen = Math.max(kCodes.length, aCodes.length, sCodes.length);
+    for(let i=0;i<maxLen;i++){
+      refRows.push([
+        kCodes[i]||'', K_DATA[i]?K_DATA[i].label:'', '',
+        aCodes[i]||'', A_DATA[i]?A_DATA[i].label:'', '',
+        sCodes[i]||'', S_DATA[i]?S_DATA[i].label:'',
+      ]);
+    }
+    const wsRef = mkSheet(refRows);
+    wsRef['!cols'] = [{wch:9},{wch:36},{wch:3},{wch:9},{wch:30},{wch:3},{wch:9},{wch:30}];
+    XLSX.utils.book_append_sheet(wb, wsRef, 'KAS_REF');
+
+    // ── Download ──────────────────────────────────────────────
+    XLSX.writeFile(wb, 'KAS_Mapping_Template.xlsx');
+    toast('✓ ดาวน์โหลด Template สำเร็จ', '#16a34a');
+  } catch(err) {
+    console.error(err);
+    toast('❌ เกิดข้อผิดพลาด: ' + err.message, '#ef4444');
+  }
+}
+
+/* ═══════════════ IMPORT EXCEL ═══════════════ */
+function importExcel(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const wb = XLSX.read(ev.target.result, {type:'binary'});
+
+      // ── Read PLO_KAS sheet ──
+      if (wb.SheetNames.includes('PLO_KAS')) {
+        const ws = wb.Sheets['PLO_KAS'];
+        const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+        if (rows.length > 1) {
+          const header = rows[0];
+          const kStart = header.indexOf('K1');
+          const aStart = header.indexOf('A1');
+          const sStart = header.indexOf('S1');
+          rows.slice(1).forEach(row => {
+            const code = String(row[0]||'').trim();
+            if (!ploKas[code]) return;
+            if (kStart>=0) K_DATA.forEach((k,i)=>{ if(row[kStart+i]==='✓'||row[kStart+i]==1||row[kStart+i]==='1') ploKas[code].K.add(k.code); });
+            if (aStart>=0) A_DATA.forEach((a,i)=>{ if(row[aStart+i]==='✓'||row[aStart+i]==1||row[aStart+i]==='1') ploKas[code].A.add(a.code); });
+            if (sStart>=0) S_DATA.forEach((s,i)=>{ if(row[sStart+i]==='✓'||row[sStart+i]==1||row[sStart+i]==='1') ploKas[code].S.add(s.code); });
+          });
+        }
+      }
+
+      // ── Read MLO_KAS sheet ──
+      if (wb.SheetNames.includes('MLO_KAS')) {
+        const ws = wb.Sheets['MLO_KAS'];
+        const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+        if (rows.length > 1) {
+          const header = rows[0];
+          const kStart = header.indexOf('K1');
+          const aStart = header.indexOf('A1');
+          const sStart = header.indexOf('S1');
+          rows.slice(1).forEach(row => {
+            const code = String(row[0]||'').trim();
+            if (!mloKas[code]) return;
+            if (kStart>=0) K_DATA.forEach((k,i)=>{ if(row[kStart+i]==='✓'||row[kStart+i]==1||row[kStart+i]==='1') mloKas[code].K.add(k.code); });
+            if (aStart>=0) A_DATA.forEach((a,i)=>{ if(row[aStart+i]==='✓'||row[aStart+i]==1||row[aStart+i]==='1') mloKas[code].A.add(a.code); });
+            if (sStart>=0) S_DATA.forEach((s,i)=>{ if(row[sStart+i]==='✓'||row[sStart+i]==1||row[sStart+i]==='1') mloKas[code].S.add(s.code); });
+          });
+        }
+      }
+
+      // ── Read CLO_KAS sheet ──
+      if (wb.SheetNames.includes('CLO_KAS')) {
+        const ws = wb.Sheets['CLO_KAS'];
+        const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+        // skip row 0 (header) and row 1 (notes)
+        rows.slice(2).forEach(row => {
+          if (!row[0]) return;
+          const courseCode = String(row[0]).trim();
+          const cloCode    = String(row[1]).trim();
+          const cloTh      = String(row[2]).trim();
+          const cloEn      = String(row[3]).trim();
+          const kCodes2    = String(row[4]||'').split(',').map(s=>s.trim()).filter(Boolean);
+          const aCodes2    = String(row[5]||'').split(',').map(s=>s.trim()).filter(Boolean);
+          const sCodes2    = String(row[6]||'').split(',').map(s=>s.trim()).filter(Boolean);
+          const ploCodes   = String(row[7]||'').split(',').map(s=>s.trim()).filter(Boolean);
+          const mloCodes   = String(row[8]||'').split(',').map(s=>s.trim()).filter(Boolean);
+
+          // find or create course
+          let course = COURSES.find(c=>c.code===courseCode);
+          if (!course) {
+            course = {code:courseCode, name:courseCode, nameEn:'', units:'', desc:'', clos:[]};
+            COURSES.push(course);
+          }
+          // find or create clo by code
+          const cloIdx = parseInt((cloCode.match(/\d+/)||[1])[0]) - 1;
+          while (course.clos.length <= cloIdx) {
+            course.clos.push({th:'', en:'', kas:{K:new Set(),A:new Set(),S:new Set()}, plo:new Set(), mlo:new Set()});
+          }
+          const clo = course.clos[cloIdx];
+          if (cloTh) clo.th = cloTh;
+          if (cloEn) clo.en = cloEn;
+          kCodes2.forEach(k=>clo.kas.K.add(k));
+          aCodes2.forEach(a=>clo.kas.A.add(a));
+          sCodes2.forEach(s=>clo.kas.S.add(s));
+          ploCodes.forEach(p=>clo.plo.add(p));
+          mloCodes.forEach(m=>clo.mlo.add(m));
+        });
+      }
+
+      // Re-render current tab
+      if (curTab==='PLO') renderPLO();
+      else if (curTab==='MLO') renderMLO();
+      else renderCLO();
+
+      toast(`✓ Import สำเร็จ: ${file.name}`, '#0891b2');
+    } catch(err) {
+      console.error(err);
+      toast('❌ Import ล้มเหลว: ' + err.message, '#ef4444');
+    }
+  };
+  reader.readAsBinaryString(file);
+  e.target.value = '';
+}
+
+/* ═══════════════ EXPORT EXCEL (current data) ═══════════════ */
+function exportExcel(){
+  const wb = XLSX.utils.book_new();
+
+  // PLO sheet
+  const ploHeader = ['PLO','DESCRIPTION','K_CODES','A_CODES','S_CODES'];
+  const ploData = [ploHeader, ...PLO_LIST.map(p=>[
+    p.code, p.desc,
+    [...ploKas[p.code].K].join(','),
+    [...ploKas[p.code].A].join(','),
+    [...ploKas[p.code].S].join(','),
+  ])];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(ploData), 'PLO_KAS');
+
+  // MLO sheet
+  const mloHeader = ['MLO','DESCRIPTION','GROUP','K_CODES','A_CODES','S_CODES'];
+  const mloData = [mloHeader, ...MLO_GROUPS.flatMap(g=>g.items.map(m=>[
+    m.code, m.desc, g.label,
+    [...mloKas[m.code].K].join(','),
+    [...mloKas[m.code].A].join(','),
+    [...mloKas[m.code].S].join(','),
+  ]))];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(mloData), 'MLO_KAS');
+
+  // CLO sheet
+  const cloHeader = ['COURSE_CODE','CLO_CODE','CLO_TH','CLO_EN','K_CODES','A_CODES','S_CODES','PLO_CODES','MLO_CODES'];
+  const cloData = [cloHeader];
+  COURSES.forEach(c=>c.clos.forEach((cl,i)=>{
+    cloData.push([c.code,`CLO${i+1}`,cl.th,cl.en,
+      [...cl.kas.K].join(','),[...cl.kas.A].join(','),[...cl.kas.S].join(','),
+      [...cl.plo].join(',')+'',[...cl.mlo].join(',')+'',
+    ]);
+  }));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(cloData), 'CLO_KAS');
+
+  XLSX.writeFile(wb, 'KAS_Mapping_Export.xlsx');
+  toast('✓ Export Excel สำเร็จ','#16a34a');
+}
+
 /* ═══════════════ EXPORT PDF ═══════════════ */
 function exportPDF(section='ALL'){
   document.getElementById('pdf-menu').style.display='none';
@@ -941,36 +1138,21 @@ function exportPDF(section='ALL'){
   const msg=document.getElementById('pdf-msg');
   overlay.classList.add('show');
   msg.textContent='กำลังเตรียม PDF...';
-
   setTimeout(()=>{
-    // mark panels to print
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active'));
     const panels=section==='ALL'?['PLO','MLO','CLO']:
                  section==='PLO'?['PLO']:
                  section==='MLO'?['MLO']:['CLO'];
     panels.forEach(id=>document.getElementById('panel-'+id)?.classList.add('print-active'));
-
-    // if CLO: make sure all CLO courses are visible for print (render all)
-    if(section==='CLO'||section==='ALL'){
-      // already rendered current course; for ALL we'd need to render all — leave as-is for now
-    }
-
     msg.textContent='กำลังพิมพ์...';
     setTimeout(()=>{
       overlay.classList.remove('show');
       window.print();
-      // cleanup after print
-      setTimeout(()=>{
-        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active'));
-      },500);
+      setTimeout(()=>{document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active'));},500);
     },300);
   },200);
 }
 
-/* ═══════════════ OTHER STUBS ═══════════════ */
-function downloadTemplate(){toast('ดาวน์โหลด Template...','#f59e0b');}
-function importExcel(e){toast('นำเข้าไฟล์: '+e.target.files[0]?.name,'#0891b2');}
-function exportExcel(){toast('กำลัง Export Excel...','#16a34a');}
 function saveData(){toast('✓ บันทึกข้อมูลแล้ว');}
 
 /* ═══════════════ TOAST ═══════════════ */
@@ -981,7 +1163,7 @@ function toast(msg,color='#22c55e'){
   const t=document.getElementById('toast');
   t.classList.add('show');
   clearTimeout(_tt);
-  _tt=setTimeout(()=>t.classList.remove('show'),3000);
+  _tt=setTimeout(()=>t.classList.remove('show'),3200);
 }
 
 /* INIT */
