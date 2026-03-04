@@ -575,12 +575,13 @@ async function appendNewCourses() {
         ? `<br><small style="opacity:0.85;">${course.student_range}</small>`
         : "";
 
-      const labelHTML = isActive
-        ? `<a href="course-info.html?courseId=${course.id}" class="course-link">
-             <div class="course-label">${course.name_th}${yearLine}</div>
-           </a>`
-        : `<div class="course-label" style="cursor:default;">${course.name_th}${yearLine}</div>`;
-
+      // แก้ใหม่
+const labelHTML = isActive
+  ? `<a href="bba-public.html?courseId=${course.id}" class="course-link">
+       <div class="course-label">${course.name_th}${yearLine}</div>
+     </a>`
+  : `<div class="course-label" ...>...</div>`;
+  
       card.innerHTML = `
         ${isNew ? '<span class="badge-new">NEW</span>' : ""}
         <div class="img-placeholder">${imgHTML}</div>

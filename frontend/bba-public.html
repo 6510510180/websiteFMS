@@ -2,262 +2,420 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>Bachelor of Business Administration | FMS PSU</title>
+  <title>ข้อมูลหลักสูตร | FMS PSU</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: #f8f8fb;
-      color: #333;
+    :root {
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --purple-mid: #c4b5fd;
+      --text: #1e1b2e;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --white: #ffffff;
     }
 
-    header {
-      background: white;
-      padding: 12px 40px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Sarabun', sans-serif; background: #fff; color: var(--text); }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 5%; background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+      position: sticky; top: 0; z-index: 100;
     }
+    .navbar .logo img { height: 40px; }
+    .navbar .logo-text { font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 18px; color: var(--purple); }
+    .navbar ul { display: flex; gap: 22px; list-style: none; }
+    .navbar a { font-size: 14px; color: #555; text-decoration: none; transition: color .2s; }
+    .navbar a:hover, .navbar a.active { color: var(--purple); font-weight: 600; }
+    .nav-right { display: flex; align-items: center; gap: 15px; color: #666; cursor: pointer; }
 
-    .logo { font-weight: 700; color: #5c2ea6; }
-    nav a { margin-left: 18px; font-size: 14px; color: #666; text-decoration: none; }
-
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 24px 16px 40px;
-    }
-
-    /* HERO */
+    /* ── HERO ── */
     .hero {
       display: grid;
-      grid-template-columns: 2fr 3fr;
-      gap: 24px;
-      margin-bottom: 24px;
+      grid-template-columns: 1fr 1fr;
+      min-height: 300px;
+    }
+    .hero-left {
+      padding: 52px 5% 52px 6%;
+      display: flex; flex-direction: column; justify-content: center;
+      background: #fff;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--purple-light); color: var(--purple);
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      padding: 4px 14px; border-radius: 99px; margin-bottom: 20px;
+      width: fit-content; text-transform: uppercase;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--purple); border-radius: 50%;
+    }
+    .hero-title {
+      font-family: 'Prompt', sans-serif;
+      font-size: clamp(26px, 3.5vw, 44px);
+      font-weight: 800; line-height: 1.2;
+      color: var(--text); margin-bottom: 16px;
+    }
+    .hero-title .accent { color: var(--purple); display: block; }
+    .hero-meta { font-size: 13.5px; line-height: 2; color: var(--muted); max-width: 420px; }
+    .hero-meta span { display: block; }
+    .hero-right {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #e9d8fd, #ddd6fe);
+      min-height: 280px;
+    }
+    .hero-right img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-right .no-img {
+      width: 100%; height: 100%; min-height: 280px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 72px; color: #a78bfa;
     }
 
-    .hero-text {
-      background: linear-gradient(135deg,#f7e8ff,#fff);
-      border-radius: 18px;
-      padding: 24px;
-    }
+    /* ── STATS BAR ── */
+    .stats-bar { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: #fff; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); }
+    .stat-item { padding: 20px 24px; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-label { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; }
+    .stat-value { font-family: 'Prompt', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.4; }
+    .stat-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
 
-    .hero-text h1 {
-      font-size: 32px;
-      color: #4a258f;
-      margin-bottom: 10px;
-    }
-
-    .hero-text p {
-      font-size: 14px;
-      line-height: 1.5;
-      color: #555;
-    }
-
-    .hero-img {
-      border-radius: 18px;
-      background: #ddd;
-      background-size: cover;
-      background-position: center;
-      min-height: 220px;
-    }
-
-    /* INFO */
-    .info-row {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 16px;
-      margin: 28px 0;
-    }
-
-    .info-card {
-      background: white;
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
-      font-size: 13px;
-    }
-
-    .info-label { color: #888; }
-    .info-value { font-weight: 600; color: #4a258f; }
-
-    /* MAJORS */
+    /* ── MAJORS ── */
+    .section { padding: 52px 6%; max-width: 1200px; margin: 0 auto; }
     .section-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 14px;
+      font-family: 'Prompt', sans-serif;
+      font-size: 22px; font-weight: 700;
+      text-align: center; margin-bottom: 32px; color: var(--text);
     }
-
-    .majors-grid {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 18px;
-    }
-
+    .majors-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
     .major-card {
-      border-radius: 18px;
-      padding: 18px;
-      color: white;
-      min-height: 150px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: linear-gradient(135deg, rgba(147,84,219,0.9), rgba(220,141,255,0.9));
-      box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+      border-radius: 16px; overflow: hidden;
+      border: 1.5px solid var(--border); background: #fff;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
     }
-
-    .major-title { font-weight: 600; }
-    .major-sub { font-size: 13px; opacity: .9; }
-    .major-intro { font-size: 12px; margin-top: 6px; opacity: .9; }
-
-    .major-footer {
-      margin-top: 10px;
-      font-size: 12px;
-      text-align: right;
+    .major-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 34px rgba(124,58,237,0.14);
+      border-color: var(--purple);
     }
-
-    .major-footer a {
-      color: white;
-      text-decoration: none;
+    .major-thumb {
+      height: 130px; position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #ede9fe, #ddd6fe);
     }
+    .major-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .major-thumb .no-img {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; color: #a78bfa;
+    }
+    .major-icon {
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(124,58,237,0.85); color: #fff;
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; z-index: 1;
+    }
+    .major-body { padding: 14px 16px; flex: 1; }
+    .major-name { font-size: 13px; font-weight: 700; color: var(--purple); line-height: 1.5; margin-bottom: 7px; }
+    .major-desc { font-size: 12px; color: var(--muted); line-height: 1.65; }
+    .major-footer { padding: 10px 16px 12px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
+    .major-link { font-size: 12px; font-weight: 600; color: var(--purple); display: flex; align-items: center; gap: 5px; }
 
+    .empty-state { grid-column: 1/-1; text-align: center; padding: 48px; color: var(--muted); }
+    .empty-state i { font-size: 36px; margin-bottom: 12px; display: block; color: #d1d5db; }
+
+    /* ── TUITION ── */
+    .tuition-wrap { padding: 0 6% 56px; max-width: 1200px; margin: 0 auto; }
+    .tuition-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 32px; max-width: 520px; }
+    .tuition-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .tuition-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+    .tuition-amount { font-family: 'Prompt', sans-serif; font-size: 38px; font-weight: 800; color: var(--purple); }
+    .tuition-amount span { font-size: 16px; font-weight: 500; color: var(--muted); }
+    .tuition-note { font-size: 11px; color: #9ca3af; margin-top: 6px; }
+
+    /* ── LOADING / ERROR ── */
+    .loader-wrap { min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+    .spinner { width: 38px; height: 38px; border: 3px solid var(--purple-light); border-top-color: var(--purple); border-radius: 50%; animation: spin .65s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .err-wrap { text-align: center; padding: 80px 20px; color: var(--muted); }
+    .err-wrap i { font-size: 42px; color: #d1d5db; display: block; margin-bottom: 14px; }
+
+    /* ── FOOTER ── */
+    .footer { background: #fff; padding: 48px 6%; border-top: 1px solid var(--border); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; max-width: 1200px; margin: 0 auto; }
+    .footer-logo h4 { display: flex; align-items: center; gap: 10px; font-size: 15px; margin-bottom: 12px; }
+    .footer-logo p { font-size: 13px; line-height: 1.7; color: #777; }
+    .social { display: flex; gap: 14px; margin-top: 18px; color: #bbb; font-size: 16px; }
+    .fcol h4 { font-size: 14px; margin-bottom: 16px; }
+    .fcol ul { list-style: none; }
+    .fcol li { font-size: 13px; color: #666; margin-bottom: 9px; }
+    .fcol p { font-size: 13px; color: #666; margin-bottom: 5px; }
+    .footer-bottom { max-width: 1200px; margin: 40px auto 0; padding-top: 18px; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; font-size: 12px; color: #bbb; }
+    .footer-bottom a { color: #999; text-decoration: none; margin-left: 20px; }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .hero { grid-template-columns: 1fr; }
-      .info-row { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .majors-grid { grid-template-columns: repeat(2,1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
       .majors-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
 
-<header>
-  <div class="logo">FMS PSU</div>
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">
+    <img src="logo.jpg" alt="Logo" id="logoImg">
+    <span class="logo-text" id="logoText" style="display:none">FMS PSU</span>
+  </div>
   <nav>
-    <a href="#">Programs</a>
-    <a href="#">Admissions</a>
-    <a href="#">Contact</a>
+    <ul>
+      <li><a href="bba-home.html">หน้าหลัก</a></li>
+      <li><a href="info.html">ข้อมูลทั่วไป</a></li>
+      <li><a href="student.html">นักศึกษา</a></li>
+      <li><a href="plan.html">แผนการศึกษา</a></li>
+      <li><a href="#">QA</a></li>
+    </ul>
   </nav>
+  <div class="nav-right">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </div>
 </header>
 
-<div class="container">
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-text">
-      <h1 id="heroTitle">กำลังโหลด...</h1>
-      <p id="heroDesc"></p>
-    </div>
-    <div class="hero-img" id="heroImage"></div>
-  </section>
-
-  <!-- INFO -->
-  <section class="info-row">
-    <div class="info-card">
-      <div class="info-label">ระยะเวลาการศึกษา</div>
-      <div class="info-value" id="infoDuration"></div>
-    </div>
-    <div class="info-card">
-      <div class="info-label">จำนวนหน่วยกิต</div>
-      <div class="info-value" id="infoCredits"></div>
-    </div>
-    <div class="info-card">
-      <div class="info-label">การให้ปริญญา</div>
-      <div class="info-value" id="infoAward"></div>
-    </div>
-  </section>
-
-  <!-- MAJORS -->
-  <section>
-    <h2 class="section-title">สาขาวิชาที่เปิดสอน</h2>
-    <div class="majors-grid" id="majorsGrid"></div>
-  </section>
-
+<!-- DYNAMIC CONTENT -->
+<div id="app">
+  <div class="loader-wrap">
+    <div class="spinner"></div>
+    <p style="color:#9ca3af;font-size:14px;">กำลังโหลดข้อมูลหลักสูตร...</p>
+  </div>
 </div>
 
-<script>
-const API_BASE = "http://localhost:3000/api/public";
-const params = new URLSearchParams(window.location.search);
-const courseId = params.get("courseId") || 1;
-
-let course = null;
-
-// ---------- LOAD COURSE ----------
-async function loadCourse() {
-  const res = await fetch(`${API_BASE}/courses/${courseId}`);
-  course = await res.json();
-
-  document.getElementById("heroTitle").textContent =
-    course.name_en || "Bachelor of Business Administration";
-
-  document.getElementById("heroDesc").textContent =
-    course.short_detail || "";
-
-  document.getElementById("infoDuration").textContent =
-    course.program_type || "-";
-
-  document.getElementById("infoCredits").textContent =
-    course.total_credits ? course.total_credits + " หน่วยกิต" : "-";
-
-  document.getElementById("infoAward").textContent =
-    course.award_title || "-";
-
-  if (course.hero_image) {
-    const hero = document.getElementById("heroImage");
-    hero.style.backgroundImage =
-      `url('http://localhost:3000${course.hero_image}')`;
-  }
-}
-
-// ---------- LOAD MAJORS ----------
-async function loadMajors() {
-  const res = await fetch(`${API_BASE}/courses/${courseId}/majors`);
-  const majors = await res.json();
-
-  const grid = document.getElementById("majorsGrid");
-  grid.innerHTML = "";
-
-  if (!Array.isArray(majors) || majors.length === 0) {
-    grid.innerHTML = "<p>ยังไม่มีข้อมูลสาขาวิชา</p>";
-    return;
-  }
-
-  majors.forEach(m => {
-    const card = document.createElement("div");
-    card.className = "major-card";
-
-    if (m.image_url) {
-      card.style.backgroundImage =
-        `linear-gradient(135deg, rgba(147,84,219,0.9), rgba(220,141,255,0.9)),
-         url('http://localhost:3000${m.image_url}')`;
-      card.style.backgroundSize = "cover";
-      card.style.backgroundPosition = "center";
-    }
-
-    card.innerHTML = `
-      <div>
-        <div class="major-title">${m.name_th}</div>
-        <div class="major-sub">${m.name_en || ""}</div>
-        <div class="major-intro">${(m.intro || "").slice(0,120)}</div>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-logo">
+      <h4><i class="fa-solid fa-graduation-cap" style="color:var(--purple)"></i> มหาวิทยาลัยสงขลานครินทร์</h4>
+      <p>คณะวิทยาการจัดการ มุ่งเน้นการสร้างผู้นำธุรกิจรุ่นใหม่ที่มีคุณธรรมและนวัตกรรม</p>
+      <div class="social">
+        <i class="fa-brands fa-facebook"></i>
+        <i class="fa-brands fa-instagram"></i>
+        <i class="fa-solid fa-share-nodes"></i>
       </div>
-      <div class="major-footer">
-        <a href="bachelor-portal.html?majorId=${m.id}">รายละเอียด &gt;</a>
+    </div>
+    <div class="fcol"><h4>Programs</h4><ul><li>Bachelor's Degree</li><li>Master's Degree</li><li>PhD Programs</li><li>Online Courses</li></ul></div>
+    <div class="fcol"><h4>Resources</h4><ul><li>Admissions</li><li>Student Portal</li><li>Library</li><li>Career Center</li></ul></div>
+    <div class="fcol">
+      <h4>Contact</h4>
+      <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a13141c153a0f14130c1f0809130e03541f1e0f">[email&#160;protected]</a></p>
+      <p>+66-7428-7815</p>
+      <p>15 ถนนกาญจนวณิชย์ อ.หาดใหญ่ จ.สงขลา 90112</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 มหาวิทยาลัยสงขลานครินทร์. All rights reserved.</span>
+    <div><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const BASE_URL = "https://websitefms.onrender.com";
+  const API = BASE_URL + "/api";
+  const app = document.getElementById("app");
+
+  // Logo fallback
+  document.getElementById("logoImg").onerror = function() {
+    this.style.display = "none";
+    document.getElementById("logoText").style.display = "inline";
+  };
+
+  // Icon mapping by keyword
+  const ICONS = [
+    { keys: ["การเงิน","ลงทุน","finance","investment"], icon: "fa-chart-line" },
+    { keys: ["การตลาด","สื่อสาร","marketing","communication"], icon: "fa-bullhorn" },
+    { keys: ["ทรัพยากรมนุษย์","hrm","human resource"], icon: "fa-users" },
+    { keys: ["โลจิสติกส์","supply","chain","logistics"], icon: "fa-truck" },
+    { keys: ["สารสนเทศ","information","system","bis"], icon: "fa-database" },
+    { keys: ["mice","event"], icon: "fa-calendar-check" },
+    { keys: ["บัญชี","account"], icon: "fa-calculator" },
+    { keys: ["รัฐประศาสน","public admin"], icon: "fa-landmark" },
+  ];
+  function getIcon(name) {
+    const n = (name || "").toLowerCase();
+    for (const m of ICONS) if (m.keys.some(k => n.includes(k))) return m.icon;
+    return "fa-graduation-cap";
+  }
+
+  // Split title into two lines for display
+  function splitTitle(name) {
+    // English pattern: "Bachelor of ..." → ["Bachelor of", "Business Administration"]
+    const eng = name.match(/^(Bachelor of|Master of|Doctor of)\s+(.+)$/i);
+    if (eng) return [eng[1], eng[2]];
+
+    // Thai "หลักสูตร..." → split หลักสูตร ออกเป็นบรรทัดแรก ส่วนที่เหลือเป็น accent
+    const thaiMatch = name.match(/^(หลักสูตร[^\s]*)\s*(.*)$/);
+    if (thaiMatch && thaiMatch[2]) return [thaiMatch[1], thaiMatch[2]];
+
+    // Generic: split at last space group past midpoint
+    const words = name.trim().split(/\s+/);
+    if (words.length >= 3) {
+      const mid = Math.ceil(words.length / 2);
+      return [words.slice(0, mid).join(" "), words.slice(mid).join(" ")];
+    }
+    // Single word or short — all accent
+    return ["", name];
+  }
+
+  async function init() {
+    const params = new URLSearchParams(window.location.search);
+    const courseId = params.get("courseId");
+    if (!courseId) { renderError("ไม่พบ courseId ใน URL"); return; }
+
+    try {
+      const [courseRes, majorsRes] = await Promise.all([
+        fetch(`${API}/courses/${courseId}`),
+        fetch(`${API}/courses/${courseId}/majors`).catch(() => ({ ok: false }))
+      ]);
+      if (!courseRes.ok) throw new Error("course not found");
+      const course = await courseRes.json();
+      const majors = majorsRes.ok ? (await majorsRes.json()) : [];
+      render(course, Array.isArray(majors) ? majors : []);
+    } catch {
+      renderError("ไม่สามารถโหลดข้อมูลหลักสูตรได้ กรุณาลองใหม่อีกครั้ง");
+    }
+  }
+
+  function render(c, majors) {
+    // Hero image
+    const heroImgHTML = c.hero_image
+      ? `<img src="${BASE_URL}${c.hero_image}" alt="${c.name_th || ''}">`
+      : `<div class="no-img"><i class="fa-solid fa-graduation-cap"></i></div>`;
+
+    // Title split
+    const [t1, t2] = splitTitle(c.name_en || c.name_th || "หลักสูตร");
+
+    // Hero meta: always show key course info lines
+    const metaLines = [
+      c.name_th                  || null,
+      c.student_range            ? `หลักสูตรปรับปรุง พ.ศ. ${c.student_range}` : null,
+      c.degree_level             ? `มหาวิทยาลัยสงขลานครินทร์ คณะวิทยาการจัดการ` : "มหาวิทยาลัยสงขลานครินทร์ คณะวิทยาการจัดการ",
+      c.degree_level             ? `สาขาวิชา${c.degree_level}` : null,
+      c.short_detail             || null,
+    ].filter(Boolean);
+    const metaHTML = metaLines.map(l => `<span>${l}</span>`).join("");
+
+    // Stats — ดึงจากข้อมูลจริง ถ้าไม่มีแสดง —
+    const statsHTML = [
+      {
+        label: "รูปแบบ",
+        value: c.program_type || "—"
+      },
+      {
+        label: "จำนวนหน่วยกิตตลอดหลักสูตร",
+        value: c.total_credits ? `ไม่น้อยกว่า ${c.total_credits} หน่วยกิต` : "—"
+      },
+      {
+        label: "การให้ปริญญา",
+        value: c.award_title || "—",
+        sub: c.study_system || ""
+      },
+      {
+        label: "การรับสมัคร",
+        value: "รับนักศึกษาไทย<br>และนักศึกษาต่างชาติ",
+        sub: c.student_range ? `สำหรับนักศึกษา ${c.student_range}` : "ให้ปริญญาเฉพาะสาขาวิชาเดียว"
+      },
+    ].map(s => `
+      <div class="stat-item">
+        <div class="stat-label">${s.label}</div>
+        <div class="stat-value">${s.value}</div>
+        ${s.sub ? `<div class="stat-sub">${s.sub}</div>` : ""}
+      </div>`).join("");
+
+    // Majors
+    const majorsHTML = majors.length
+      ? majors.map(m => {
+          const icon = getIcon((m.name_th || "") + " " + (m.name_en || ""));
+          const imgSrc = m.hero_image || m.image_url || m.bg_image || m.info_image || null;
+          const thumbHTML = imgSrc
+            ? `<img src="${BASE_URL}${imgSrc}" alt="">`
+            : `<div class="no-img"><i class="fa-solid ${icon}" style="font-size:36px;color:#a78bfa;"></i></div>`;
+          const desc = (m.short_detail || m.intro || m.description || "").slice(0, 100);
+          return `
+            <a class="major-card" href="bachelor-portal.html?majorId=${m.id}&courseId=${m.course_id || ''}">
+              <div class="major-thumb">
+                ${thumbHTML}
+                <div class="major-icon"><i class="fa-solid ${icon}"></i></div>
+              </div>
+              <div class="major-body">
+                <div class="major-name">
+                  ${m.name_th || ""}
+                  ${m.name_en ? `<br><span style="font-weight:500;font-size:11.5px;opacity:.75;">(${m.name_en})</span>` : ""}
+                </div>
+                <div class="major-desc">${desc}${desc.length >= 100 ? "..." : ""}</div>
+              </div>
+              <div class="major-footer">
+                <span class="major-link">Details <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></span>
+              </div>
+            </a>`;
+        }).join("")
+      : `<div class="empty-state">
+           <i class="fa-solid fa-inbox"></i>
+           ยังไม่มีสาขาวิชาในหลักสูตรนี้
+         </div>`;
+
+    app.innerHTML = `
+      <div class="hero">
+        <div class="hero-left">
+          <div class="hero-badge">Accredited Program</div>
+          <h1 class="hero-title">${t1}<span class="accent">${t2}</span></h1>
+          <div class="hero-meta">${metaHTML}</div>
+        </div>
+        <div class="hero-right">${heroImgHTML}</div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stats-grid">${statsHTML}</div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">สาขาวิชาที่เปิดสอน</h2>
+        <div class="majors-grid">${majorsHTML}</div>
+      </div>
+
+      <div class="tuition-wrap">
+        <div class="tuition-card">
+          <h3>ค่าเทอม</h3>
+          <div class="tuition-sub">ค่าธรรมเนียมการศึกษาโดยประมาณต่อปีการศึกษา</div>
+          <div class="tuition-amount">32,000 <span>/ ปี</span></div>
+          <div class="tuition-note">*Estimates for local residents. Does not include housing.</div>
+        </div>
       </div>
     `;
+  }
 
-    grid.appendChild(card);
-  });
-}
+  function renderError(msg) {
+    app.innerHTML = `
+      <div class="err-wrap">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p style="font-size:15px;margin-bottom:10px;">${msg}</p>
+        <a href="bba-home.html" style="color:var(--purple);font-size:13px;">← กลับหน้าหลัก</a>
+      </div>`;
+  }
 
-loadCourse();
-loadMajors();
+  init();
 </script>
-
 </body>
 </html>
