@@ -258,13 +258,27 @@ body {
   padding: 14px 20px;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
-  cursor: pointer;
   user-select: none;
   transition: background 0.12s;
 }
 .semester-head:hover { background: var(--purple-light); }
 
-.semester-head-left { display: flex; align-items: center; gap: 10px; }
+.semester-head-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+
+.semester-head-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 .semester-name { font-family: 'Lexend', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
 .credits-badge {
   padding: 3px 10px;
@@ -277,6 +291,28 @@ body {
 .chevron { font-size: 11px; color: var(--text-sub); transition: transform 0.2s; }
 .semester-card.collapsed .chevron { transform: rotate(-90deg); }
 .semester-card.collapsed .semester-body { display: none; }
+
+/* Delete semester button */
+.del-sem-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: none;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-sub);
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.del-sem-btn:hover {
+  background: var(--red-bg);
+  border-color: var(--red);
+  color: var(--red);
+}
+.del-sem-btn svg { pointer-events: none; }
 
 /* Subject rows */
 .subject-row {
@@ -473,7 +509,7 @@ svg { display: block; }
       แผนการศึกษา
     </a>
     <a class="nav-item" href="course-list.html">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762z"/></svg>
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg>
       หลักสูตร
     </a>
     <a class="nav-item" href="qa-dashboard.html">
@@ -769,6 +805,7 @@ function renderSemesters(semesters, yearNo) {
 
   document.getElementById("semesterList").innerHTML = semesters.map(sem => {
     const semCred = (sem.subjects||[]).reduce((s,it) => s + Number(it.credits ?? it.default_credits ?? 0), 0);
+    const semTitle = sem.title || `Semester ${sem.term_no}`;
     const subjectsHtml = (sem.subjects||[]).map(it => {
       const catColor = { Core:"#6B3FA0", Elective:"#3B82F6", GE:"#10B981" }[it.category] || "#64748B";
       return `<div class="subject-row">
@@ -779,7 +816,7 @@ function renderSemesters(semesters, yearNo) {
         </div>
         <div class="subject-right">
           <div class="subject-credits">${it.credits ?? it.default_credits} <span>หน่วยกิต</span></div>
-          <button class="del-btn" onclick="deleteSubject(${it.id})" title="ลบ">
+          <button class="del-btn" onclick="deleteSubject(${it.id})" title="ลบรายวิชา">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
           </button>
         </div>
@@ -791,18 +828,29 @@ function renderSemesters(semesters, yearNo) {
       : "";
 
     return `<div class="semester-card" id="sem_${sem.id}">
-      <div class="semester-head" onclick="toggleSem(${sem.id})">
-        <div class="semester-head-left">
-          <div class="semester-name">${sem.title || `Semester ${sem.term_no}`}</div>
+      <div class="semester-head">
+        <div class="semester-head-left" onclick="toggleSem(${sem.id})">
+          <div class="semester-name">${semTitle}</div>
           <span class="credits-badge">${semCred} Credits</span>
+          <span class="chevron">▼</span>
         </div>
-        <span class="chevron">▼</span>
+        <div class="semester-head-right">
+          <button
+            class="del-sem-btn"
+            onclick="deleteSemester(${sem.id}, '${semTitle.replace(/'/g,"\\'")}')"
+            title="ลบภาคเรียน"
+          >
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </div>
       </div>
       <div class="semester-body">
         ${subjectsHtml}
         ${emptySubs}
         <div class="add-subject-row">
-          <button class="add-subject-btn" onclick="openModal(${sem.id}, '${(sem.title||'').replace(/'/g,"\\'")}')">
+          <button class="add-subject-btn" onclick="openModal(${sem.id}, '${semTitle.replace(/'/g,"\\'")}')">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
             Add Subject
           </button>
@@ -832,6 +880,26 @@ document.getElementById("btnAddSemester").addEventListener("click", async () => 
     renderSemesters(d.semesters||[], currentYear);
   } catch { toast("เกิดข้อผิดพลาด", "error"); }
 });
+
+/* ── Delete semester ── */
+async function deleteSemester(semId, semTitle) {
+  const subjectCount = document.querySelectorAll(`#sem_${semId} .subject-row`).length;
+  const confirmMsg = subjectCount > 0
+    ? `ต้องการลบ "${semTitle}" และรายวิชาทั้งหมด ${subjectCount} วิชาในภาคเรียนนี้ใช่หรือไม่?`
+    : `ต้องการลบ "${semTitle}" ใช่หรือไม่?`;
+
+  if (!confirm(confirmMsg)) return;
+
+  try {
+    const res = await fetch(`${API}/semesters/${semId}`, { method: "DELETE" });
+    if (!res.ok) throw new Error();
+    toast(`ลบ "${semTitle}" สำเร็จ`, "success");
+    const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+    renderSemesters(d.semesters||[], currentYear);
+  } catch {
+    toast("ลบภาคเรียนไม่สำเร็จ", "error");
+  }
+}
 
 /* ── Modal ── */
 function openModal(semId, semName) {
@@ -909,7 +977,7 @@ document.getElementById("modalSave").addEventListener("click", async () => {
   } catch { toast("บันทึกไม่สำเร็จ", "error"); }
 });
 
-/* Delete */
+/* Delete subject */
 async function deleteSubject(ssId) {
   if (!confirm("ต้องการลบรายวิชานี้?")) return;
   try {
