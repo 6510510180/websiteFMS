@@ -244,9 +244,9 @@ async function loadDashboard(){
 }
 function viewCourse(id){window.location.href=`course-info.html?courseId=${id}`;}
 new Chart(document.getElementById("chart1"),{type:"bar",data:{labels:["ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."],datasets:[{label:"ผู้เข้าชม",data:[710,670,590,640,730,800],backgroundColor:"#6B3FA0",borderColor:"transparent",borderWidth:0,borderRadius:8,borderSkipped:false}]},options:{maintainAspectRatio:true,aspectRatio:1.7,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{family:"'Noto Sans Thai'",size:13},color:"#64748B"}},y:{grid:{color:"#EDE8F5"},ticks:{font:{family:"'Noto Sans Thai'",size:12},color:"#64748B"},beginAtZero:true}}}});
-const d2Labels=["บริหารธุรกิจ","การเงิน","การตลาด","บัญชี","รัฐประศาสน์"];
-const d2Data=[35,20,22,15,8];
-const d2Colors=["#6B3FA0","#9B6DD1","#A78BCA","#3B82F6","#10B981"];
+const d2Labels=["MICE","FIN","MKT","LSM","BIS","HRM"];
+const d2Data=[35,20,22,15,8,12];
+const d2Colors=["#6B3FA0","#9B6DD1","#A78BCA","#3B82F6","#10B981","#10A345"];
 new Chart(document.getElementById("chart2"),{
   type:"doughnut",
   data:{labels:d2Labels,datasets:[{data:d2Data,backgroundColor:d2Colors,borderWidth:3,borderColor:"#fff",hoverOffset:6}]},
