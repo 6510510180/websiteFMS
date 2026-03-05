@@ -1,566 +1,1396 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8" />
-<title>Add / Edit Course | FMS Admin</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Data Hub — BBA PSU</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --purple:#6B3FA0;--purple-dark:#4A2870;--purple-light:#F3EEFF;--purple-mid:#E8DEFF;
-  --accent:#9B6DD1;--bg-base:#F7F5FA;--white:#FFFFFF;--text-main:#181117;--text-sub:#64748B;
-  --border-col:#EDE8F5;--red:#EF4444;--red-bg:#FEE2E2;--sidebar-w:240px;--topbar-h:64px;
-  --primary: #7c3aed;--primary-light: #ede9fe;--text: #1e1b2e;--muted: #6b7280;
-  --border: #e5e7eb;--bg: #f5f4fa;
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0edf8;--white:#fff;--sidebar:#1e1145;--card:#fff;--border:#e2daf0;
+  --text:#180e30;--text2:#4e3d72;--muted:#9585b8;
+  --acc:#6d28d9;--acc2:#7c3aed;--acc3:#a78bfa;--acc-l:#ede9fe;--acc-ll:#f5f3ff;
+  --green:#059669;--orange:#ea580c;--blue:#2563eb;--teal:#0891b2;
+  --sh:0 2px 16px rgba(109,40,217,.08),0 1px 4px rgba(0,0,0,.04);
+  --sh2:0 8px 32px rgba(109,40,217,.14),0 2px 8px rgba(0,0,0,.06);
+  --sh3:0 24px 64px rgba(109,40,217,.18),0 4px 16px rgba(0,0,0,.08);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--bg); display: flex; min-height: 100vh; }
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:13.5px;overflow:hidden}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--acc3)}
+.topnav{position:fixed;top:0;left:0;right:0;z-index:400;height:56px;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);box-shadow:0 1px 8px rgba(109,40,217,.08);display:flex;align-items:center;padding:0 20px;gap:12px}
+.tn-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:16px}
+.tn-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6d28d9,#4c1d95);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(109,40,217,.4);overflow:hidden}
+.tn-brand{font-family:'Anuphan',sans-serif;font-size:13.5px;font-weight:800;color:var(--text);line-height:1.2}
+.tn-brand small{display:block;font-size:10px;font-weight:400;color:var(--muted)}
+.tn-nav{display:flex;align-items:center;gap:3px;flex:1}
+.tn-a{padding:6px 14px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .15s;border:none;background:none;font-family:'Sarabun',sans-serif;display:flex;align-items:center;gap:6px}
+.tn-a:hover{background:var(--acc-l);color:var(--acc)}
+.tn-a.active{background:var(--acc-l);color:var(--acc);font-weight:700}
+.tn-a svg{width:13px;height:13px;flex-shrink:0}
+.tn-r{display:flex;align-items:center;gap:10px;margin-left:auto}
+.tn-pill{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--acc-ll);color:var(--acc);transition:.15s;font-family:'Sarabun',sans-serif}
+.tn-pill:hover{background:var(--acc-l);border-color:var(--acc3)}
+.tn-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(109,40,217,.3)}
+.app{display:flex;height:100vh;padding-top:56px}
+.sidebar{width:200px;flex-shrink:0;background:var(--sidebar);overflow-y:auto;padding:16px 10px;display:flex;flex-direction:column;gap:2px}
+.sb-section{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;padding:10px 10px 5px;margin-top:10px}
+.sb-section:first-child{margin-top:0}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:12px;color:rgba(255,255,255,.5);transition:all .15s}
+.sb-item svg{width:13px;height:13px;flex-shrink:0;opacity:.7}
+.sb-item:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.85)}
+.sb-item.active{background:rgba(255,255,255,.12);color:#fff;font-weight:600}
+.sb-item.active svg{opacity:1}
+.sb-badge{margin-left:auto;background:rgba(139,92,246,.4);color:#c4b5fd;font-size:10px;padding:1px 6px;border-radius:99px;font-weight:700}
+.content{flex:1;overflow-y:auto;background:var(--bg)}
+.view{display:none;padding:24px 26px 56px;min-height:100%;animation:fadein .2s ease}
+.view.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.ph{margin-bottom:20px}
+.ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ph-eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--acc);margin-bottom:3px}
+.ph-title{font-family:'Anuphan',sans-serif;font-size:24px;font-weight:800;color:var(--text);line-height:1.2}
+.ph-sub{font-size:11.5px;color:var(--muted);margin-top:4px}
+.ph-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);box-shadow:var(--sh);margin-bottom:16px}
+.card-hd{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.card-num{width:26px;height:26px;border-radius:7px;background:var(--acc);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-title{font-family:'Anuphan',sans-serif;font-size:14.5px;font-weight:800;color:var(--text)}
+.card-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.card-hd-r{margin-left:auto;display:flex;align-items:center;gap:8px}
+.card-body{padding:18px 20px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9px;font-family:'Sarabun',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;border:none;white-space:nowrap;transition:all .16s}
+.btn svg{width:13px;height:13px;fill:currentColor;flex-shrink:0}
+.btn-acc{background:var(--acc);color:#fff;box-shadow:0 4px 12px rgba(109,40,217,.3)}
+.btn-acc:hover{background:#5b21b6;transform:translateY(-1px)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:#047857;transform:translateY(-1px)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:#0e7490;transform:translateY(-1px)}
+.btn-out{background:#fff;color:var(--acc);border:2px solid #c4b5fd}
+.btn-out:hover{background:var(--acc-l)}
+.btn-ghost{background:rgba(0,0,0,.04);color:var(--text2);border:1.5px solid var(--border)}
+.btn-ghost:hover{background:var(--acc-l);color:var(--acc);border-color:var(--acc3)}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:7px}
+.btn-xs{padding:4px 9px;font-size:11px;border-radius:5px}
+.form-row{display:grid;gap:12px;margin-bottom:12px}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}.c4{grid-template-columns:1fr 1fr 1fr 1fr}.c5{grid-template-columns:repeat(5,1fr)}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;letter-spacing:.2px}
+.fg label .req{color:#ef4444;margin-left:2px}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 12px;background:#fafafa;border:1.5px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;color:var(--text);outline:none;transition:.15s}
+.fg input:focus,.fg select:focus{border-color:var(--acc);background:#fff;box-shadow:0 0 0 3px rgba(109,40,217,.08)}
+.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.tbl-wrap{border-radius:10px;overflow:auto;border:1px solid var(--border);box-shadow:var(--sh)}
+table{width:100%;border-collapse:collapse;min-width:300px}
+thead th{background:var(--acc-ll);font-size:11px;color:var(--text2);font-weight:700;padding:9px 13px;text-align:left;border-bottom:1px solid #c4b5fd;white-space:nowrap}
+tbody td{padding:9px 13px;font-size:12.5px;border-bottom:1px solid var(--border);color:var(--text)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--acc-ll)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:10.5px;font-weight:700}
+.badge-purple{background:#ede9fe;color:#6d28d9}.badge-green{background:#d1fae5;color:#065f46}.badge-blue{background:#dbeafe;color:#1e40af}.badge-orange{background:#fed7aa;color:#9a3412}
+.import-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px;gap:4px}
+.itab{padding:10px 18px;border-radius:9px 9px 0 0;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);border:none;background:none;font-family:'Sarabun',sans-serif;display:flex;align-items:center;gap:7px;transition:.15s;margin-bottom:-2px;border-bottom:2px solid transparent}
+.itab:hover{color:var(--acc);background:var(--acc-ll)}
+.itab.active{color:var(--acc);background:var(--acc-ll);border-bottom-color:var(--acc);font-weight:700}
+.itab svg{width:15px;height:15px;flex-shrink:0}
+.itab-panel{display:none}
+.itab-panel.active{display:block}
+.dz{border:2px dashed #c4b5fd;border-radius:12px;padding:32px 24px;text-align:center;cursor:pointer;transition:.2s;background:var(--acc-ll);position:relative;overflow:hidden}
+.dz::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(109,40,217,.04),rgba(168,85,247,.06));pointer-events:none}
+.dz:hover,.dz.drag{border-color:var(--acc);background:var(--acc-l);transform:scale(1.005)}
+.dz-ico{font-size:36px;margin-bottom:10px;display:block}
+.dz h3{font-family:'Anuphan',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
+.dz p{font-size:12px;color:var(--muted);line-height:1.6}
+.dz b{color:var(--acc)}
+.dz-fn{margin-top:8px;font-size:11.5px;color:var(--acc);font-weight:700;background:#fff;display:inline-block;padding:4px 12px;border-radius:99px;border:1px solid #c4b5fd}
+.sheet-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.stab{padding:5px 13px;border-radius:6px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--text2);font-family:'Sarabun',sans-serif;transition:.15s}
+.stab:hover{border-color:var(--acc3);color:var(--acc)}
+.stab.active{background:var(--acc-l);color:var(--acc);border-color:var(--acc3)}
+.looker-frame-wrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--sh2);background:#f8f7ff}
+.looker-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px;gap:12px;color:var(--muted)}
+.looker-placeholder-icon{font-size:48px;opacity:.5}
+.looker-placeholder h3{font-family:'Anuphan',sans-serif;font-size:18px;font-weight:700;color:var(--text2)}
+.looker-placeholder p{font-size:12px;text-align:center;max-width:340px;line-height:1.7}
+.looker-loading{position:absolute;inset:0;background:rgba(245,243,255,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:10}
+.spin{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.looker-embed{width:100%;border:none;border-radius:12px;display:block}
+.preview-wrap{background:#fff;border-radius:14px;border:1px solid var(--border);box-shadow:var(--sh2);overflow:hidden;margin-top:0}
+.preview-hd{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,var(--acc-ll),#fff)}
+.preview-title{font-family:'Anuphan',sans-serif;font-size:15px;font-weight:800;color:var(--acc);display:flex;align-items:center;gap:9px}
+.preview-body{padding:20px 22px}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--border);border-radius:11px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;bottom:-10px;right:-10px;width:60px;height:60px;border-radius:50%;background:var(--acc-ll);opacity:.5}
+.kpi-ico{font-size:20px;margin-bottom:5px}
+.kpi-lbl{font-size:10.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.kpi-val{font-family:'Anuphan',sans-serif;font-size:28px;font-weight:800;color:var(--text);line-height:1;position:relative;z-index:1}
+.kpi-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-top:5px}
+.kpi-up{background:#dcfce7;color:#15803d}
+.chart-card{background:#fff;border:1px solid var(--border);border-radius:11px;padding:16px 18px;margin-bottom:14px}
+.chart-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.chart-hd-l .chart-title{font-family:'Anuphan',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)}
+.chart-hd-l .chart-sub{font-size:10.5px;color:var(--muted);margin-top:2px}
+.chart-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.clegend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px}
+.cl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.cl-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.pie-layout{display:flex;align-items:center;gap:20px}
+.pie-canvas-wrap{position:relative;flex-shrink:0}
+.pie-legend{display:flex;flex-direction:column;gap:5px;flex:1}
+.pl-item{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text2)}
+.pl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pl-val{margin-left:auto;font-weight:700;font-size:11px;color:var(--text)}
+.top5{display:flex;flex-direction:column;gap:7px}
+.t5{display:flex;align-items:center;gap:9px;font-size:12px}
+.t5n{width:20px;height:20px;border-radius:5px;background:var(--acc-ll);color:var(--acc);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.t5val{font-weight:700;font-size:11px;color:var(--text);white-space:nowrap}
+.partner-row{display:flex;flex-wrap:wrap;gap:8px}
+.partner-chip{background:var(--acc-ll);border:1.5px solid #c4b5fd;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--acc)}
+.infobox{border-radius:10px;padding:12px 15px;margin-bottom:14px;font-size:12px;line-height:1.7}
+.infobox.yellow{background:#fef9c3;border:1px solid #fcd34d;color:#78350f}
+.infobox.blue{background:#eff6ff;border:1px solid #93c5fd;color:#1e3a5f}
+.infobox.green{background:#f0fdf4;border:1px solid #86efac;color:#14532d}
+.infobox.purple{background:var(--acc-ll);border:1px solid #c4b5fd;color:#4c1d95}
+.import-status{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:9px;font-size:12px;font-weight:600;margin-top:12px}
+.import-status.ok{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+.import-status.err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.import-status.info{background:#eff6ff;color:#1e40af;border:1px solid #93c5fd}
+.modal-overlay{position:fixed;inset:0;z-index:900;background:rgba(14,5,30,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:16px;padding:28px 30px;max-width:520px;width:90%;box-shadow:var(--sh3);transform:translateY(20px);transition:.25s}
+.modal-overlay.open .modal{transform:none}
+.modal-title{font-family:'Anuphan',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:5px}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
+#toast{position:fixed;bottom:22px;right:22px;z-index:9999;background:var(--sidebar);color:#fff;padding:11px 20px;border-radius:12px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:var(--sh3);transform:translateY(70px);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+#toast.show{transform:none;opacity:1}
+.tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ── SIDEBAR ── */
-.sidebar-qa {
-  width:var(--sidebar-w);background:var(--white);height:100vh;position:fixed;
-  left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border-col);z-index:100;
-}
-.sidebar-brand{padding:20px 20px 16px;border-bottom:1px solid var(--border-col);}
-.sidebar-brand-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text-main);letter-spacing:-0.2px;}
-.sidebar-brand-sub{font-size:11.5px;color:var(--purple);font-weight:500;margin-top:2px;}
-.sidebar-section-label{padding:20px 20px 6px;font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1.2px;}
-.sidebar-nav-qa{flex:1;padding:8px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
-.nav-item-qa{
-  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;
-  font-size:13.5px;font-weight:500;color:var(--text-sub);text-decoration:none;
-  transition:all 0.18s;cursor:pointer;user-select:none;
-}
-.nav-item-qa:hover{background:var(--purple-light);color:var(--purple);}
-.nav-item-qa.active{background:var(--purple-light);color:var(--purple);font-weight:600;}
-.nav-icon-qa{width:18px;height:18px;flex-shrink:0;opacity:0.75;}
-.nav-item-qa.active .nav-icon-qa,.nav-item-qa:hover .nav-icon-qa{opacity:1;}
-svg{display:block;}
-.sidebar-footer-qa{padding:12px;border-top:1px solid var(--border-col);}
-.sidebar-footer-qa .nav-item-qa{color:var(--red);}
-.sidebar-footer-qa .nav-item-qa:hover{background:var(--red-bg);color:#DC2626;}
+/* ── SHOW MORE ── */
+.show-more-row{display:none;align-items:center;gap:10px;margin-top:10px;padding:6px 2px}
+.show-more-row .btn-ghost{background:var(--acc-ll);border-color:#c4b5fd;color:var(--acc)}
+.show-more-row .btn-ghost:hover{background:var(--acc-l)}
+.show-more-count{font-size:11px;color:var(--muted);font-weight:500}
 
-/* ── MAIN ── */
-.main { margin-left: var(--sidebar-w); flex: 1; padding: 32px; display: flex; flex-direction: column; min-width: 0; }
-.page-header { margin-bottom: 24px; }
-.page-header small { color: #999; font-size: 13px; }
-.page-header h2 { margin: 4px 0; font-size: 22px; color: var(--text); }
-.page-header p { font-size: 13px; color: var(--muted); }
-
-.card { background: white; border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
-.card-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text); display:flex; align-items:center; gap:8px; }
-.card-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 16px; }
-
-.form-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; margin-top: 12px; margin-bottom: 16px; }
-.field { margin-bottom: 12px; }
-.field label { display: block; font-size: 13px; margin-bottom: 5px; color: #555; font-weight: 500; }
-.field label .req { color: #ef4444; margin-left: 2px; }
-.field input, .field textarea, .field select {
-  width: 100%; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #e0d8f0;
-  background: #faf7ff; outline: none; font-size: 14px; font-family: inherit; transition: .15s;
-}
-.field input:focus, .field textarea:focus, .field select:focus {
-  border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
-}
-textarea { resize: vertical; min-height: 80px; }
-
-/* ── IMAGE UPLOAD CARD ── */
-.img-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
-.img-upload-item {
-  border: 2px dashed #c4b5fd; border-radius: 14px; padding: 16px;
-  background: #faf7ff; transition: .18s; position: relative;
-}
-.img-upload-item:hover { border-color: var(--primary); background: #f5f0ff; }
-.img-upload-item.has-image { border-style: solid; border-color: #a78bfa; background: #fff; }
-.img-upload-label {
-  display: flex; align-items: center; gap: 7px;
-  font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 8px;
-}
-.img-upload-label .badge-tag {
-  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px;
-  background: var(--primary-light); color: var(--primary);
-}
-.img-upload-desc { font-size: 11.5px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
-.img-upload-btn {
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  width: 100%; padding: 9px; border-radius: 9px; border: 1.5px solid #c4b5fd;
-  background: #fff; color: var(--primary); font-size: 13px; font-weight: 600;
-  cursor: pointer; font-family: inherit; transition: .15s;
-}
-.img-upload-btn:hover { background: var(--primary-light); border-color: var(--primary); }
-.img-preview-wrap {
-  position: relative; margin-top: 10px; border-radius: 10px; overflow: hidden;
-  display: none;
-}
-.img-preview-wrap img { width: 100%; height: 120px; object-fit: cover; display: block; border-radius: 10px; }
-.img-preview-wrap .remove-btn {
-  position: absolute; top: 6px; right: 6px; width: 24px; height: 24px;
-  border-radius: 50%; background: rgba(0,0,0,.55); border: none; cursor: pointer;
-  color: #fff; font-size: 13px; display: flex; align-items: center; justify-content: center;
-}
-.img-preview-wrap .remove-btn:hover { background: #ef4444; }
-.upload-progress {
-  margin-top: 8px; font-size: 11.5px; color: var(--muted); display: none;
-  align-items: center; gap: 6px;
-}
-.upload-progress.show { display: flex; }
-.prog-bar { flex: 1; height: 4px; background: #e9e2ff; border-radius: 99px; overflow: hidden; }
-.prog-fill { height: 100%; width: 0; border-radius: 99px; background: var(--primary); transition: width .3s; }
-
-/* ── HOW-TO CALLOUT ── */
-.howto-box {
-  background: linear-gradient(135deg, #f5f0ff, #fdf4ff);
-  border: 1.5px solid #c4b5fd; border-radius: 12px;
-  padding: 14px 16px; margin-top: 4px; margin-bottom: 0;
-}
-.howto-box h5 { font-size: 12.5px; font-weight: 700; color: var(--purple); margin-bottom: 8px; }
-.howto-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-.howto-item { background: #fff; border-radius: 9px; padding: 10px 12px; border: 1px solid #e8deff; }
-.howto-item .hi-tag {
-  font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 99px; margin-bottom: 6px;
-  display: inline-block;
-}
-.howto-item .hi-title { font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 3px; }
-.howto-item .hi-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
-
-/* ── FOOTER ACTIONS ── */
-.footer-actions {
-  display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; flex-wrap: wrap;
-}
-.btn { border-radius: 999px; padding: 9px 22px; border: none; cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 600; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; }
-.btn:hover { opacity: 0.88; transform: translateY(-1px); }
-.btn-secondary { background: #ffdddd; color: #b33939; }
-.btn-primary { background: var(--primary); color: white; box-shadow: 0 5px 14px rgba(124,58,237,0.3); }
-.btn-success { background: #059669; color: #fff; box-shadow: 0 5px 14px rgba(5,150,105,0.3); }
-.btn-danger { background: #ffdddd; color: #b33939; }
-
-#message { margin-top: 8px; font-size: 13px; padding: 8px 12px; border-radius: 8px; display: none; }
-#message.success { display: block; background: #d1fae5; color: #065f46; }
-#message.error { display: block; background: #fee2e2; color: #991b1b; }
-#message.loading { display: block; background: #ede9fe; color: #5b21b6; }
+/* ── COOP/INTERN SECTION STYLES ── */
+.type-block{border-radius:12px;padding:16px;margin-bottom:14px}
+.type-block-coop{background:#eff6ff;border:2px solid #bfdbfe}
+.type-block-intern{background:#f0fdf4;border:2px solid #a7f3d0}
+.type-tag{display:inline-flex;align-items:center;padding:3px 12px;border-radius:99px;font-size:11px;font-weight:800}
+.type-tag-coop{background:#2563eb;color:#fff}
+.type-tag-intern{background:#059669;color:#fff}
+.kpi-block{border-radius:14px;padding:16px;border:2px solid}
+.kpi-block-coop{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#93c5fd}
+.kpi-block-intern{background:linear-gradient(135deg,#f0fdf4,#d1fae5);border-color:#6ee7b7}
+.kpi-block-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.coop-tables-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.charts-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.charts-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 </style>
 </head>
 <body>
 
-<!-- ══ SIDEBAR ══ -->
-<aside class="sidebar-qa">
-  <div class="sidebar-brand">
-    <div class="sidebar-brand-title">FMS Admin</div>
-    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
-  </div>
-  <div class="sidebar-section-label">เมนูหลัก</div>
-  <nav class="sidebar-nav-qa">
-    <a class="nav-item-qa" href="dashboard.html">
-      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
-      แดชบอร์ด
-    </a>
-    <a class="nav-item-qa" href="study-plan.html">
-      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
-      แผนการศึกษา
-    </a>
-    <a class="nav-item-qa active" href="course-list.html">
-      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
-      หลักสูตร
-    </a>
-    <a class="nav-item-qa" href="qa-dashboard.html">
-      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-      ประกันคุณภาพการศึกษา
-    </a>
+<header class="topnav">
+  <a class="tn-logo" href="#">
+    <div class="tn-badge">
+      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4a/PSU_logo.png/200px-PSU_logo.png"
+           onerror="this.style.display='none';this.parentNode.innerHTML='<span style=\'font-family:Anuphan,sans-serif;font-size:10px;font-weight:900;color:#fff\'>PSU</span>'"
+           style="width:22px;height:22px;object-fit:contain">
+    </div>
+    <div class="tn-brand">Student Data Hub<small>BBA · คณะวิทยาการจัดการ PSU</small></div>
+  </a>
+  <nav class="tn-nav">
+    <button class="tn-a active" onclick="gotoView('students',this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6z"/></svg>
+      จำนวนนักศึกษา
+    </button>
+    <button class="tn-a" onclick="gotoView('coop',this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6z"/></svg>
+      สหกิจ / ฝึกงาน
+    </button>
+    <button class="tn-a" onclick="gotoView('looker',this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 0h7v7H0zm9 0h7v7H9zM0 9h7v7H0zm9 0h7v7H9z"/></svg>
+      Looker Studio
+    </button>
   </nav>
-  <div class="sidebar-footer-qa">
-    <a class="nav-item-qa" href="login.html" id="logoutBtn">
-      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
-      ออกจากระบบ
-    </a>
+  <div class="tn-r">
+    <button class="tn-pill" onclick="openExportModal()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V4h3v4H12zm-6 2h12v1.5H2z"/></svg>
+      Export ทั้งหมด
+    </button>
+    <div class="tn-av">A</div>
   </div>
-</aside>
+</header>
 
-<!-- ══ MAIN ══ -->
-<div class="main">
-  <div class="page-header">
-    <small>แดชบอร์ด / เพิ่มหรือแก้ไขหลักสูตร</small>
-    <h2 id="pageTitle">เพิ่มหลักสูตรใหม่</h2>
-    <p id="pageSub">กรอกข้อมูลหลักสูตรให้ครบถ้วน แล้วกดบันทึก</p>
+<div class="app">
+  <nav class="sidebar">
+    <div class="sb-section">จำนวนนักศึกษา</div>
+    <div class="sb-item active" id="sb-students" onclick="gotoView('students',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6z"/></svg>
+      จำนวนนักศึกษา
+    </div>
+    <div class="sb-section">สหกิจ / ฝึกงาน</div>
+    <div class="sb-item" id="sb-coop" onclick="gotoView('coop',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7.5 1a6.5 6.5 0 100 13A6.5 6.5 0 007.5 1zM0 7.5a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z"/><path d="M7.5 3a1 1 0 01.894.553l2.5 5a1 1 0 11-1.788.894L7.5 5.618l-1.606 3.829a1 1 0 11-1.788-.894l2.5-5A1 1 0 017.5 3z"/></svg>
+      🏢 สหกิจ (4 เดือน)
+    </div>
+    <div class="sb-item" id="sb-intern" onclick="gotoView('intern',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7.5 1a6.5 6.5 0 100 13A6.5 6.5 0 007.5 1zM0 7.5a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z"/><path d="M7.5 3a1 1 0 01.894.553l2.5 5a1 1 0 11-1.788.894L7.5 5.618l-1.606 3.829a1 1 0 11-1.788-.894l2.5-5A1 1 0 017.5 3z"/></svg>
+      📋 ฝึกงาน (2 เดือน)
+    </div>
+    <div class="sb-section">Dashboard</div>
+    <div class="sb-item" id="sb-looker" onclick="gotoView('looker',null,this)">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 0h7v7H0zm9 0h7v7H9zM0 9h7v7H0zm9 0h7v7H9z"/></svg>
+      Looker Studio
+      <span class="sb-badge">NEW</span>
+    </div>
+  </nav>
+
+  <div class="content" id="main-content">
+
+    <!-- ══ VIEW: จำนวนนักศึกษา ══ -->
+    <div class="view active" id="view-students">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-eyebrow">Student Analytics</div>
+            <div class="ph-title">จำนวนนักศึกษา</div>
+            <div class="ph-sub">นำเข้า Excel หรือกรอกข้อมูลด้วยตนเอง แล้วกด Preview เพื่อดูแผนภาพ</div>
+          </div>
+          <div class="ph-actions">
+            <button class="btn btn-ghost btn-sm" onclick="downloadTemplate('students')">
+              <svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V4h3v4H12zm-6 2h12v1.5H2z"/></svg>Template Excel
+            </button>
+            <button class="btn btn-acc btn-sm" onclick="previewStudents()">
+              <svg viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"/></svg>Preview Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding-bottom:0">
+          <div class="import-tabs">
+            <button class="itab active" onclick="switchImportTab('excel-s',this)">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 4.5V14a2 2 0 01-2 2H4a2 2 0 01-2-2V2a2 2 0 012-2h5.5L14 4.5zm-3 0A1.5 1.5 0 019.5 3V1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V4.5h-2z"/></svg>นำเข้าจาก Excel
+            </button>
+            <button class="itab" onclick="switchImportTab('manual-s',this)">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z"/></svg>กรอกข้อมูลด้วยตนเอง
+            </button>
+          </div>
+          <div class="itab-panel active" id="panel-excel-s" style="padding:16px 0 18px">
+            <div class="infobox blue"><strong>📋 Sheets:</strong> <code style="background:#dbeafe;padding:1px 6px;border-radius:4px;font-size:11px">Intake</code> · <code style="background:#dbeafe;padding:1px 6px;border-radius:4px;font-size:11px">Enrolled</code> · <code style="background:#dbeafe;padding:1px 6px;border-radius:4px;font-size:11px">Graduated</code> · <code style="background:#dbeafe;padding:1px 6px;border-radius:4px;font-size:11px">Status</code></div>
+            <div class="dz" id="dz-s" ondragover="dzO(event,'dz-s')" ondragleave="dzL('dz-s')" ondrop="dzD(event,'students')" onclick="document.getElementById('xl-s').click()">
+              <span class="dz-ico">📊</span><h3>ลากไฟล์ Excel มาวางที่นี่</h3>
+              <p>รองรับ .xlsx / .xls</p><p>หรือ <b>คลิกเพื่อเลือกไฟล์</b></p>
+              <span id="dz-s-fn" class="dz-fn" style="display:none"></span>
+            </div>
+            <input type="file" id="xl-s" accept=".xlsx,.xls" style="display:none" onchange="handleXL(event,'students')">
+            <div id="students-import-status"></div>
+            <div id="xl-s-preview" style="display:none;margin-top:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div style="font-size:12px;font-weight:700;color:var(--text2)">ตัวอย่างข้อมูล</div>
+                <div id="xl-s-sheet-tabs" class="sheet-tabs"></div>
+              </div>
+              <div class="tbl-wrap" id="xl-s-tbl" style="max-height:200px;overflow:auto"></div>
+              <div class="form-actions">
+                <button class="btn btn-ghost btn-sm" onclick="cancelImport('s')">ยกเลิก</button>
+                <button class="btn btn-acc btn-sm" onclick="confirmImport('students')">✓ ยืนยันนำเข้า</button>
+              </div>
+            </div>
+          </div>
+          <div class="itab-panel" id="panel-manual-s" style="padding:16px 0 18px">
+            <div style="border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:16px">
+              <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">ข้อมูลรับเข้า (Intake)</div>
+              <div class="form-row c2">
+                <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fi_yr"></select></div>
+                <div class="fg"><label>สาขาวิชาเอก <span class="req">*</span></label>
+                  <select id="fi_mj"><option value="">— เลือกสาขา —</option>
+                    <option value="fin">FIN</option><option value="mkt">MKT</option><option value="hrm">HRM</option>
+                    <option value="log">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row c5">
+                <div class="fg"><label>แผนรับ</label><input type="number" id="fi_pl" placeholder="0" min="0"></div>
+                <div class="fg"><label>สัมภาษณ์</label><input type="number" id="fi_in" placeholder="0" min="0"></div>
+                <div class="fg"><label>ยืนยัน</label><input type="number" id="fi_co" placeholder="0" min="0"></div>
+                <div class="fg"><label>รายงานตัว</label><input type="number" id="fi_re" placeholder="0" min="0"></div>
+                <div class="fg"><label>ไม่รายงานตัว</label><input type="number" id="fi_nr" placeholder="0" min="0"></div>
+              </div>
+              <div style="display:flex;justify-content:flex-end"><button class="btn btn-acc btn-sm" onclick="saveIntake()">บันทึกข้อมูลรับเข้า</button></div>
+            </div>
+            <div style="border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:16px">
+              <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">ลงทะเบียน & สำเร็จการศึกษา</div>
+              <div class="form-row c3">
+                <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="ft_yr"></select></div>
+                <div class="fg"><label>ลงทะเบียน (คน)</label><input type="number" id="ft_enr" placeholder="0" min="0"></div>
+                <div class="fg"><label>สำเร็จการศึกษา (คน)</label><input type="number" id="ft_grad" placeholder="0" min="0"></div>
+              </div>
+              <div style="display:flex;justify-content:flex-end"><button class="btn btn-acc btn-sm" onclick="saveTrend()">บันทึก</button></div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">สถานะการศึกษา</div>
+              <div class="form-row c2"><div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fs_yr"></select></div></div>
+              <div class="form-row c3">
+                <div class="fg"><label>🟣 ยังเป็นนักศึกษา</label><input type="number" id="fs_cur" placeholder="0" min="0"></div>
+                <div class="fg"><label>🔵 สำเร็จการศึกษา</label><input type="number" id="fs_grad" placeholder="0" min="0"></div>
+                <div class="fg"><label>🟠 ไม่รายงานตัว</label><input type="number" id="fs_nr" placeholder="0" min="0"></div>
+              </div>
+              <div class="form-row c3">
+                <div class="fg"><label>🟢 โอนย้าย</label><input type="number" id="fs_tr" placeholder="0" min="0"></div>
+                <div class="fg"><label>🟡 ออกกลางคัน</label><input type="number" id="fs_dr" placeholder="0" min="0"></div>
+                <div class="fg"><label>🔴 พักการศึกษา</label><input type="number" id="fs_lv" placeholder="0" min="0"></div>
+              </div>
+              <div style="display:flex;justify-content:flex-end"><button class="btn btn-acc btn-sm" onclick="saveStatus()">บันทึกสถานะ</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-num">📋</div>
+          <div><div class="card-title">ข้อมูลที่บันทึกแล้ว</div><div class="card-sub">ข้อมูลรับเข้าทั้งหมด</div></div>
+          <div class="card-hd-r">
+            <select id="tbl_yr_filter" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:Sarabun,sans-serif;font-size:12px;background:#fafafa;outline:none" onchange="renderIntakeTable()"><option value="all">ทุกปี</option></select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>ปี</th><th>สาขา</th><th>แผนรับ</th><th>สัมภาษณ์</th><th>ยืนยัน</th><th>รายงานตัว</th><th>ไม่รายงานตัว</th><th></th></tr></thead>
+            <tbody id="tbody-intake"></tbody>
+          </table></div>
+          <div id="intake-show-more" class="show-more-row"></div>
+        </div>
+      </div>
+      <div id="preview-students" style="display:none">
+        <div class="preview-wrap">
+          <div class="preview-hd">
+            <div class="preview-title"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M10.5 8a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"/></svg>Preview — จำนวนนักศึกษา</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:11px;color:var(--muted)">ปีการศึกษา</span>
+              <select id="prev_yr" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:Sarabun,sans-serif;font-size:12px;background:#fafafa;outline:none" onchange="renderStudentCharts()"></select>
+              <button class="btn btn-ghost btn-xs" onclick="document.getElementById('preview-students').style.display='none'">✕ ปิด</button>
+            </div>
+          </div>
+          <div class="preview-body">
+            <div class="kpi-grid">
+              <div class="kpi"><div class="kpi-ico">🎓</div><div class="kpi-lbl">นักศึกษาที่รายงานตัว</div><div class="kpi-val" id="kpi-s1">—</div></div>
+              <div class="kpi"><div class="kpi-ico">📊</div><div class="kpi-lbl">สาขาวิชาเอก</div><div class="kpi-val" id="kpi-s2">6</div></div>
+              <div class="kpi"><div class="kpi-ico">⏱</div><div class="kpi-lbl">ระยะเวลาหลักสูตร</div><div class="kpi-val">4 ปี</div></div>
+            </div>
+            <div class="chart-row2">
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามสาขา</div><div class="chart-sub" id="pie-s-sub">—</div></div></div>
+                <div class="pie-layout">
+                  <div class="pie-canvas-wrap" style="width:170px;height:170px"><canvas id="chart-pie-s"></canvas></div>
+                  <div class="pie-legend" id="pie-s-legend"></div>
+                </div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">รายงานตัวแยกสาขา</div><div class="chart-sub" id="bar-s-sub">—</div></div></div>
+                <div style="height:170px"><canvas id="chart-bar-s"></canvas></div>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">ข้อมูลรับนักศึกษา (Intake) แยกสาขา</div></div></div>
+              <div style="height:220px"><canvas id="chart-intake-s"></canvas></div>
+              <div class="clegend" id="leg-intake-s"></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มลงทะเบียน vs สำเร็จการศึกษา</div><div class="chart-sub">สถิติย้อนหลัง</div></div></div>
+              <div style="height:200px"><canvas id="chart-trend-s"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สถานะการศึกษา</div><div class="chart-sub" id="status-sub">—</div></div></div>
+              <div class="pie-layout">
+                <div class="pie-canvas-wrap" style="width:160px;height:160px"><canvas id="chart-status-s"></canvas></div>
+                <div class="pie-legend" id="status-legend"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /view-students -->
+
+
+    <!-- ══ VIEW: สหกิจศึกษา (4 เดือน) ══ -->
+    <div class="view" id="view-coop">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-eyebrow">Cooperative Education</div>
+            <div class="ph-title" style="display:flex;align-items:center;gap:10px">
+              สหกิจศึกษา
+              <span class="type-tag type-tag-coop">4 เดือน</span>
+            </div>
+            <div class="ph-sub">ออกปฏิบัติงานเต็มเวลาในสถานประกอบการ — สถิติแยกอิสระจากฝึกงาน</div>
+          </div>
+          <div class="ph-actions">
+            <button class="btn btn-ghost btn-sm" onclick="downloadTemplate('coop')">
+              <svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V4h3v4H12zm-6 2h12v1.5H2z"/></svg>Template Excel
+            </button>
+            <button class="btn btn-sm" style="background:#2563eb;color:#fff" onclick="previewCoopType('coop')">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M10.5 8a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"/></svg>Preview Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="padding-bottom:0">
+          <div class="import-tabs">
+            <button class="itab active" onclick="switchImportTab('excel-coop',this)">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 4.5V14a2 2 0 01-2 2H4a2 2 0 01-2-2V2a2 2 0 012-2h5.5L14 4.5zm-3 0A1.5 1.5 0 019.5 3V1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V4.5h-2z"/></svg>นำเข้าจาก Excel
+            </button>
+            <button class="itab" onclick="switchImportTab('manual-coop',this)">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z"/></svg>กรอกข้อมูลด้วยตนเอง
+            </button>
+          </div>
+          <div class="itab-panel active" id="panel-excel-coop" style="padding:16px 0 18px">
+            <div class="infobox blue"><strong>📋 Sheet ที่ใช้:</strong> <code style="background:#dbeafe;padding:1px 6px;border-radius:4px;font-size:11px">Coop</code> — คอลัมน์: ปีการศึกษา, วิชาเอก, จำนวน</div>
+            <div class="dz" id="dz-coop" ondragover="dzO(event,'dz-coop')" ondragleave="dzL('dz-coop')" ondrop="dzD(event,'coopOnly')" onclick="document.getElementById('xl-coop').click()">
+              <span class="dz-ico">🏢</span><h3>ลากไฟล์ Excel (สหกิจ)</h3>
+              <p>Sheet: <strong>Coop</strong> (สหกิจ 4 เดือน), CoopTop5, Partners</p>
+              <p>หรือ <b>คลิกเพื่อเลือกไฟล์</b></p>
+              <span id="dz-coop-fn" class="dz-fn" style="display:none"></span>
+            </div>
+            <input type="file" id="xl-coop" accept=".xlsx,.xls" style="display:none" onchange="handleXL(event,'coopOnly')">
+            <div id="coop-import-status"></div>
+            <div id="xl-coop-preview" style="display:none;margin-top:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div style="font-size:12px;font-weight:700;color:var(--text2)">ตัวอย่างข้อมูล</div>
+                <div id="xl-coop-sheet-tabs" class="sheet-tabs"></div>
+              </div>
+              <div class="tbl-wrap" id="xl-coop-tbl" style="max-height:200px;overflow:auto"></div>
+              <div class="form-actions">
+                <button class="btn btn-ghost btn-sm" onclick="cancelImport('coop')">ยกเลิก</button>
+                <button class="btn btn-sm" style="background:#2563eb;color:#fff" onclick="confirmImport('coopOnly')">✓ ยืนยันนำเข้า</button>
+              </div>
+            </div>
+          </div>
+          <div class="itab-panel" id="panel-manual-coop" style="padding:16px 0 18px">
+            <div class="type-block type-block-coop">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+                <span class="type-tag type-tag-coop">สหกิจศึกษา · 4 เดือน</span>
+                <span style="font-size:11px;color:#1e40af">ออกปฏิบัติงานเต็มเวลา</span>
+              </div>
+              <div class="form-row c3">
+                <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fcoop_yr"></select></div>
+                <div class="fg"><label>สาขา <span class="req">*</span></label>
+                  <select id="fcoop_mj"><option value="">— เลือก —</option>
+                    <option value="fin">FIN</option><option value="mkt">MKT</option><option value="hrm">HRM</option>
+                    <option value="log">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
+                  </select>
+                </div>
+                <div class="fg"><label>จำนวนนักศึกษา (คน) <span class="req">*</span></label><input type="number" id="fcoop_n" placeholder="0" min="0"></div>
+              </div>
+              <div style="background:#dbeafe;border-radius:8px;padding:12px;margin-bottom:10px">
+                <div style="font-size:11px;font-weight:700;color:#1e40af;margin-bottom:8px">Top 5 สถานประกอบการ (สหกิจ)</div>
+                <div class="form-row c5" style="margin-bottom:0">
+                  <div class="fg"><label>อันดับ 1</label><input type="text" id="fcoop_co1" placeholder="ชื่อบริษัท"></div>
+                  <div class="fg"><label>อันดับ 2</label><input type="text" id="fcoop_co2" placeholder=""></div>
+                  <div class="fg"><label>อันดับ 3</label><input type="text" id="fcoop_co3" placeholder=""></div>
+                  <div class="fg"><label>อันดับ 4</label><input type="text" id="fcoop_co4" placeholder=""></div>
+                  <div class="fg"><label>อันดับ 5</label><input type="text" id="fcoop_co5" placeholder=""></div>
+                </div>
+              </div>
+              <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:12px;margin-bottom:10px">
+                <div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:8px">MOU พาร์ทเนอร์</div>
+                <div class="form-row c4" style="margin-bottom:0">
+                  <div class="fg"><label>พาร์ทเนอร์ 1</label><input type="text" id="fcoop_p1" placeholder="ชื่อบริษัท"></div>
+                  <div class="fg"><label>พาร์ทเนอร์ 2</label><input type="text" id="fcoop_p2" placeholder=""></div>
+                  <div class="fg"><label>พาร์ทเนอร์ 3</label><input type="text" id="fcoop_p3" placeholder=""></div>
+                  <div class="fg"><label>พาร์ทเนอร์ 4</label><input type="text" id="fcoop_p4" placeholder=""></div>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:flex-end">
+                <button class="btn btn-sm" style="background:#2563eb;color:#fff" onclick="saveCoopEntry('coop')">💾 บันทึกข้อมูลสหกิจ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table: สหกิจ -->
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-num" style="background:#2563eb">🏢</div>
+          <div><div class="card-title">ข้อมูลสหกิจที่บันทึกแล้ว</div><div class="card-sub" style="color:#2563eb;font-weight:700">ระยะเวลา 4 เดือน</div></div>
+          <div class="card-hd-r">
+            <select id="coop_yr_filter" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:Sarabun,sans-serif;font-size:12px;background:#fafafa;outline:none" onchange="renderCoopOnlyTable()"><option value="all">ทุกปี</option></select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>ปี</th><th>สาขา</th><th>จำนวน (คน)</th><th></th></tr></thead>
+            <tbody id="tbody-coop-only"></tbody>
+          </table></div>
+          <div id="coop-show-more" class="show-more-row"></div>
+          <div id="coop-total-row" style="margin-top:10px;text-align:right;font-size:12px;color:var(--muted)"></div>
+        </div>
+      </div>
+
+      <!-- Preview: สหกิจ -->
+      <div id="preview-coop-only" style="display:none">
+        <div class="preview-wrap">
+          <div class="preview-hd">
+            <div class="preview-title" style="color:#2563eb">🏢 Preview — สหกิจศึกษา (4 เดือน)</div>
+            <button class="btn btn-ghost btn-xs" onclick="document.getElementById('preview-coop-only').style.display='none'">✕ ปิด</button>
+          </div>
+          <div class="preview-body">
+            <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd;border-radius:14px;padding:18px;margin-bottom:18px">
+              <div style="font-size:11px;font-weight:800;color:#1e40af;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">🏢 สหกิจศึกษา · 4 เดือน</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                <div class="kpi" style="background:#fff"><div class="kpi-lbl">นักศึกษาทั้งหมด</div><div class="kpi-val" id="kpi-coop-total">—</div><div class="kpi-badge kpi-up">รวมทุกปี</div></div>
+                <div class="kpi" style="background:#fff"><div class="kpi-lbl">ปีล่าสุด</div><div class="kpi-val" id="kpi-coop-latest">—</div><div class="kpi-badge" style="background:#dbeafe;color:#1e40af" id="kpi-coop-yr">—</div></div>
+                <div class="kpi" style="background:#fff"><div class="kpi-lbl">ระยะเวลา</div><div class="kpi-val" style="font-size:22px;color:#2563eb">4 เดือน</div><div class="kpi-badge" style="background:#dbeafe;color:#1e40af">เต็มเวลา</div></div>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#2563eb">สถิตินักศึกษาสหกิจ แยกสาขาตามปี</div><div class="chart-sub">ระยะเวลา 4 เดือน</div></div></div>
+              <div style="height:240px"><canvas id="chart-coop-bar"></canvas></div>
+              <div class="clegend" id="leg-coop-bar"></div>
+            </div>
+            <div class="chart-row2">
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี (รวมทุกสาขา)</div></div></div>
+                <div style="height:180px"><canvas id="chart-coop-trend"></canvas></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามสาขา</div></div></div>
+                <div class="pie-layout">
+                  <div class="pie-canvas-wrap" style="width:150px;height:150px"><canvas id="chart-coop-pie"></canvas></div>
+                  <div class="pie-legend" id="coop-pie-leg"></div>
+                </div>
+              </div>
+            </div>
+            <div class="chart-row2">
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#2563eb">Top 5 สถานประกอบการ (สหกิจ)</div></div></div>
+                <div class="top5" id="top5-coop"></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">ความร่วมมือ MOU</div></div></div>
+                <div class="partner-row" id="partners-coop"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /view-coop -->
+
+
+    <!-- ══ VIEW: ฝึกงาน (2 เดือน) ══ -->
+    <div class="view" id="view-intern">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-eyebrow">Internship Program</div>
+            <div class="ph-title" style="display:flex;align-items:center;gap:10px">
+              ฝึกงาน
+              <span class="type-tag type-tag-intern">2 เดือน</span>
+            </div>
+            <div class="ph-sub">ฝึกประสบการณ์วิชาชีพระยะสั้น — สถิติแยกอิสระจากสหกิจ</div>
+          </div>
+          <div class="ph-actions">
+            <button class="btn btn-ghost btn-sm" onclick="downloadTemplate('intern')">
+              <svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V4h3v4H12zm-6 2h12v1.5H2z"/></svg>Template Excel
+            </button>
+            <button class="btn btn-sm" style="background:#059669;color:#fff" onclick="previewCoopType('intern')">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M10.5 8a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"/></svg>Preview Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="padding-bottom:0">
+          <div class="import-tabs">
+            <button class="itab active" onclick="switchImportTab('excel-intern',this)">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 4.5V14a2 2 0 01-2 2H4a2 2 0 01-2-2V2a2 2 0 012-2h5.5L14 4.5zm-3 0A1.5 1.5 0 019.5 3V1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V4.5h-2z"/></svg>นำเข้าจาก Excel
+            </button>
+            <button class="itab" onclick="switchImportTab('manual-intern',this)">
+              <svg viewBox="0 0 16 16" fill="currentColor"><path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z"/></svg>กรอกข้อมูลด้วยตนเอง
+            </button>
+          </div>
+          <div class="itab-panel active" id="panel-excel-intern" style="padding:16px 0 18px">
+            <div class="infobox green"><strong>📋 Sheet ที่ใช้:</strong> <code style="background:#d1fae5;padding:1px 6px;border-radius:4px;font-size:11px">Intern</code> — คอลัมน์: ปีการศึกษา, วิชาเอก, จำนวน</div>
+            <div class="dz" id="dz-intern" ondragover="dzO(event,'dz-intern')" ondragleave="dzL('dz-intern')" ondrop="dzD(event,'internOnly')" onclick="document.getElementById('xl-intern').click()" style="border-color:#6ee7b7;background:#f0fdf4">
+              <span class="dz-ico">📋</span><h3>ลากไฟล์ Excel (ฝึกงาน)</h3>
+              <p>Sheet: <strong>Intern</strong> (ฝึกงาน 2 เดือน), InternTop5, Partners</p>
+              <p>หรือ <b>คลิกเพื่อเลือกไฟล์</b></p>
+              <span id="dz-intern-fn" class="dz-fn" style="display:none"></span>
+            </div>
+            <input type="file" id="xl-intern" accept=".xlsx,.xls" style="display:none" onchange="handleXL(event,'internOnly')">
+            <div id="intern-import-status"></div>
+            <div id="xl-intern-preview" style="display:none;margin-top:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div style="font-size:12px;font-weight:700;color:var(--text2)">ตัวอย่างข้อมูล</div>
+                <div id="xl-intern-sheet-tabs" class="sheet-tabs"></div>
+              </div>
+              <div class="tbl-wrap" id="xl-intern-tbl" style="max-height:200px;overflow:auto"></div>
+              <div class="form-actions">
+                <button class="btn btn-ghost btn-sm" onclick="cancelImport('intern')">ยกเลิก</button>
+                <button class="btn btn-sm" style="background:#059669;color:#fff" onclick="confirmImport('internOnly')">✓ ยืนยันนำเข้า</button>
+              </div>
+            </div>
+          </div>
+          <div class="itab-panel" id="panel-manual-intern" style="padding:16px 0 18px">
+            <div class="type-block type-block-intern">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+                <span class="type-tag type-tag-intern">ฝึกงาน · 2 เดือน</span>
+                <span style="font-size:11px;color:#065f46">ฝึกประสบการณ์วิชาชีพระยะสั้น</span>
+              </div>
+              <div class="form-row c3">
+                <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fintern_yr"></select></div>
+                <div class="fg"><label>สาขา <span class="req">*</span></label>
+                  <select id="fintern_mj"><option value="">— เลือก —</option>
+                    <option value="fin">FIN</option><option value="mkt">MKT</option><option value="hrm">HRM</option>
+                    <option value="log">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
+                  </select>
+                </div>
+                <div class="fg"><label>จำนวนนักศึกษา (คน) <span class="req">*</span></label><input type="number" id="fintern_n" placeholder="0" min="0"></div>
+              </div>
+              <div style="background:#d1fae5;border-radius:8px;padding:12px;margin-bottom:10px">
+                <div style="font-size:11px;font-weight:700;color:#065f46;margin-bottom:8px">Top 5 สถานประกอบการ (ฝึกงาน)</div>
+                <div class="form-row c5" style="margin-bottom:0">
+                  <div class="fg"><label>อันดับ 1</label><input type="text" id="fintern_co1" placeholder="ชื่อบริษัท"></div>
+                  <div class="fg"><label>อันดับ 2</label><input type="text" id="fintern_co2" placeholder=""></div>
+                  <div class="fg"><label>อันดับ 3</label><input type="text" id="fintern_co3" placeholder=""></div>
+                  <div class="fg"><label>อันดับ 4</label><input type="text" id="fintern_co4" placeholder=""></div>
+                  <div class="fg"><label>อันดับ 5</label><input type="text" id="fintern_co5" placeholder=""></div>
+                </div>
+              </div>
+              <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:12px;margin-bottom:10px">
+                <div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:8px">MOU พาร์ทเนอร์</div>
+                <div class="form-row c4" style="margin-bottom:0">
+                  <div class="fg"><label>พาร์ทเนอร์ 1</label><input type="text" id="fintern_p1" placeholder="ชื่อบริษัท"></div>
+                  <div class="fg"><label>พาร์ทเนอร์ 2</label><input type="text" id="fintern_p2" placeholder=""></div>
+                  <div class="fg"><label>พาร์ทเนอร์ 3</label><input type="text" id="fintern_p3" placeholder=""></div>
+                  <div class="fg"><label>พาร์ทเนอร์ 4</label><input type="text" id="fintern_p4" placeholder=""></div>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:flex-end">
+                <button class="btn btn-sm" style="background:#059669;color:#fff" onclick="saveCoopEntry('intern')">💾 บันทึกข้อมูลฝึกงาน</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table: ฝึกงาน -->
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-num" style="background:#059669">📋</div>
+          <div><div class="card-title">ข้อมูลฝึกงานที่บันทึกแล้ว</div><div class="card-sub" style="color:#059669;font-weight:700">ระยะเวลา 2 เดือน</div></div>
+          <div class="card-hd-r">
+            <select id="intern_yr_filter" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:Sarabun,sans-serif;font-size:12px;background:#fafafa;outline:none" onchange="renderInternOnlyTable()"><option value="all">ทุกปี</option></select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>ปี</th><th>สาขา</th><th>จำนวน (คน)</th><th></th></tr></thead>
+            <tbody id="tbody-intern-only"></tbody>
+          </table></div>
+          <div id="intern-show-more" class="show-more-row"></div>
+          <div id="intern-total-row" style="margin-top:10px;text-align:right;font-size:12px;color:var(--muted)"></div>
+        </div>
+      </div>
+
+      <!-- Preview: ฝึกงาน -->
+      <div id="preview-intern-only" style="display:none">
+        <div class="preview-wrap">
+          <div class="preview-hd">
+            <div class="preview-title" style="color:#059669">📋 Preview — ฝึกงาน (2 เดือน)</div>
+            <button class="btn btn-ghost btn-xs" onclick="document.getElementById('preview-intern-only').style.display='none'">✕ ปิด</button>
+          </div>
+          <div class="preview-body">
+            <div style="background:linear-gradient(135deg,#f0fdf4,#d1fae5);border:2px solid #6ee7b7;border-radius:14px;padding:18px;margin-bottom:18px">
+              <div style="font-size:11px;font-weight:800;color:#065f46;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">📋 ฝึกงาน · 2 เดือน</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                <div class="kpi" style="background:#fff"><div class="kpi-lbl">นักศึกษาทั้งหมด</div><div class="kpi-val" id="kpi-intern-total">—</div><div class="kpi-badge kpi-up">รวมทุกปี</div></div>
+                <div class="kpi" style="background:#fff"><div class="kpi-lbl">ปีล่าสุด</div><div class="kpi-val" id="kpi-intern-latest">—</div><div class="kpi-badge" style="background:#d1fae5;color:#065f46" id="kpi-intern-yr">—</div></div>
+                <div class="kpi" style="background:#fff"><div class="kpi-lbl">ระยะเวลา</div><div class="kpi-val" style="font-size:22px;color:#059669">2 เดือน</div><div class="kpi-badge" style="background:#d1fae5;color:#065f46">ระยะสั้น</div></div>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#059669">สถิตินักศึกษาฝึกงาน แยกสาขาตามปี</div><div class="chart-sub">ระยะเวลา 2 เดือน</div></div></div>
+              <div style="height:240px"><canvas id="chart-intern-bar"></canvas></div>
+              <div class="clegend" id="leg-intern-bar"></div>
+            </div>
+            <div class="chart-row2">
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี (รวมทุกสาขา)</div></div></div>
+                <div style="height:180px"><canvas id="chart-intern-trend"></canvas></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามสาขา</div></div></div>
+                <div class="pie-layout">
+                  <div class="pie-canvas-wrap" style="width:150px;height:150px"><canvas id="chart-intern-pie"></canvas></div>
+                  <div class="pie-legend" id="intern-pie-leg"></div>
+                </div>
+              </div>
+            </div>
+            <div class="chart-row2">
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#059669">Top 5 สถานประกอบการ (ฝึกงาน)</div></div></div>
+                <div class="top5" id="top5-intern"></div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">ความร่วมมือ MOU</div></div></div>
+                <div class="partner-row" id="partners-intern"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /view-intern -->
+
+
+    <!-- ══ VIEW: Looker Studio ══ -->
+    <div class="view" id="view-looker">
+      <div class="ph">
+        <div class="ph-row">
+          <div>
+            <div class="ph-eyebrow">Business Intelligence</div>
+            <div class="ph-title">Looker Studio Dashboard</div>
+            <div class="ph-sub">ฝัง Looker Studio Report โดยตรงในหน้านี้</div>
+          </div>
+          <div class="ph-actions">
+            <button class="btn btn-teal btn-sm" id="btn-looker-fullscreen" onclick="openLookerFullscreen()" style="display:none">เต็มหน้าจอ</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-num" style="background:var(--teal)">🔗</div>
+          <div><div class="card-title">ตั้งค่า Looker Studio URL</div><div class="card-sub">วาง Embed URL จาก Looker Studio แล้วกด Load</div></div>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:14px">
+            <div class="fg" style="flex:1"><label>Looker Studio Embed URL</label><input type="text" id="looker_url" placeholder="https://lookerstudio.google.com/embed/reporting/..." style="font-size:12px"></div>
+            <button class="btn btn-teal btn-sm" onclick="loadLooker()" style="flex-shrink:0;height:38px">Load Report</button>
+          </div>
+          <div style="margin-top:12px">
+            <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">รายงานที่บันทึกไว้</div>
+            <div id="saved-reports" style="display:flex;flex-direction:column;gap:6px"></div>
+            <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="saveCurrentReport()">+ บันทึก URL ปัจจุบัน</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-num" style="background:#0891b2">📊</div>
+          <div><div class="card-title">Dashboard</div></div>
+          <div class="card-hd-r" id="looker-tab-btns" style="gap:6px"></div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="looker-frame-wrap" id="looker-frame-wrap">
+            <div class="looker-placeholder" id="looker-placeholder">
+              <div class="looker-placeholder-icon">📊</div>
+              <h3>ยังไม่มี Looker Studio Report</h3>
+              <p>วาง Embed URL ด้านบนแล้วกด Load Report</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /view-looker -->
+
   </div>
-
-  <form id="courseForm">
-
-    <!-- ══ CARD 1: ข้อมูลหลักสูตร ══ -->
-    <div class="card">
-      <div class="card-title">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="#7c3aed"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
-        ข้อมูลหลักสูตร
-      </div>
-      <div class="card-sub">ข้อมูลพื้นฐานของหลักสูตรที่จะแสดงบนเว็บไซต์</div>
-      <div class="form-grid-2">
-        <div class="field">
-          <label>ชื่อหลักสูตร (ภาษาไทย) <span class="req">*</span></label>
-          <input type="text" id="name_th" placeholder="เช่น หลักสูตรบริหารธุรกิจบัณฑิต" required />
-        </div>
-        <div class="field">
-          <label>ชื่อหลักสูตร (ภาษาอังกฤษ)</label>
-          <input type="text" id="name_en" placeholder="e.g. Bachelor of Business Administration" />
-        </div>
-        <div class="field">
-          <label>ระดับการศึกษา</label>
-          <input type="text" id="degree_level" placeholder="เช่น ปริญญาตรี" />
-        </div>
-        <div class="field">
-          <label>สถานะหลักสูตร</label>
-          <select id="status">
-            <option value="active">Active — แสดงบนเว็บ + มีลิงก์คลิกได้</option>
-            <option value="draft">Draft — ซ่อนจากหน้าเว็บ</option>
-            <option value="maintenance">Maintenance — แสดงแต่ปิดลิงก์</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>รูปแบบหลักสูตร</label>
-          <input type="text" id="program_type" placeholder="เช่น หลักสูตร 4 ปี" />
-        </div>
-        <div class="field">
-          <label>รูปแบบการจัดการศึกษา</label>
-          <input type="text" id="study_system" placeholder="เช่น ภาคปกติ" />
-        </div>
-        <div class="field">
-          <label>การให้ปริญญา</label>
-          <input type="text" id="award_title" placeholder="เช่น บริหารธุรกิจบัณฑิต (บธ.บ.)" />
-        </div>
-        <div class="field">
-          <label>จำนวนหน่วยกิตตลอดหลักสูตร</label>
-          <input type="number" id="total_credits" placeholder="เช่น 129" />
-        </div>
-        <div class="field">
-          <label>สำหรับนักศึกษา (รหัส)</label>
-          <input type="text" id="student_range" placeholder="เช่น รหัส 67-70" />
-        </div>
-      </div>
-      <div class="field">
-        <label>คำอธิบายสั้น ๆ ของหลักสูตร</label>
-        <textarea id="short_detail" placeholder="เช่น จุดเด่นของหลักสูตร กลุ่มเป้าหมาย ฯลฯ"></textarea>
-      </div>
-    </div>
-
-    <!-- ══ CARD 2: รูปภาพหลักสูตร ══ -->
-    <div class="card">
-      <div class="card-title">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="#7c3aed"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
-        รูปภาพหลักสูตร
-      </div>
-      <div class="card-sub">อัปโหลดรูปภาพที่ใช้แสดงในแต่ละส่วนของหน้าหลักสูตร</div>
-
-      <!-- How-to callout -->
-      <div class="howto-box">
-        <h5>📍 แต่ละรูปใช้แสดงที่ไหน?</h5>
-        <div class="howto-row">
-          <div class="howto-item">
-            <span class="hi-tag" style="background:#ede9fe;color:#7c3aed">Hero Image</span>
-            <div class="hi-title">รูปหน้าปก</div>
-            <div class="hi-desc">รูปใหญ่ด้านขวาบน ในหน้า course-info และหน้าสาขา<br>แนะนำขนาด <strong>800×500px</strong></div>
-          </div>
-          <div class="howto-item">
-            <span class="hi-tag" style="background:#fef9c3;color:#854d0e">Background</span>
-            <div class="hi-title">ภาพพื้นหลัง Banner</div>
-            <div class="hi-desc">รูปพื้นหลังของส่วน Banner/Header ด้านบนสุด<br>แนะนำขนาด <strong>1440×400px</strong> ภาพกว้าง</div>
-          </div>
-          <div class="howto-item">
-            <span class="hi-tag" style="background:#dcfce7;color:#166534">Info Image</span>
-            <div class="hi-title">รูปข้อมูลหลักสูตร</div>
-            <div class="hi-desc">รูปเพิ่มเติมในหน้ารายละเอียดหลักสูตร<br>แนะนำขนาด <strong>600×400px</strong></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3 upload boxes -->
-      <div class="img-upload-grid" style="margin-top:16px;">
-
-        <!-- Hero Image -->
-        <div class="img-upload-item" id="wrap-hero">
-          <div class="img-upload-label">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
-            รูปหน้าปก (Hero Image)
-            <span class="badge-tag">หน้าหลัก</span>
-          </div>
-          <div class="img-upload-desc">รูปใหญ่ด้านขวาบนในหน้าหลักสูตร<br>รองรับ JPG, PNG, WEBP</div>
-          <button type="button" class="img-upload-btn" onclick="document.getElementById('heroFile').click()">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
-            เลือกรูปภาพ
-          </button>
-          <input type="file" id="heroFile" accept="image/*" style="display:none" onchange="uploadImg('heroFile','hero_image','prevHero','wrap-hero','prog-hero')">
-          <input type="hidden" id="hero_image" />
-          <div class="upload-progress" id="prog-hero">
-            <div class="prog-bar"><div class="prog-fill" id="progfill-hero"></div></div>
-            <span id="prog-hero-txt">กำลังอัปโหลด...</span>
-          </div>
-          <div class="img-preview-wrap" id="prevHero">
-            <img id="prevHeroImg" src="" alt="hero preview">
-            <button type="button" class="remove-btn" onclick="removeImg('hero_image','prevHero','wrap-hero')">✕</button>
-          </div>
-        </div>
-
-        <!-- Background Image (NEW) -->
-        <div class="img-upload-item" id="wrap-bg">
-          <div class="img-upload-label">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-            ภาพพื้นหลัง Banner
-            <span class="badge-tag" style="background:#fef9c3;color:#854d0e">ใหม่</span>
-          </div>
-          <div class="img-upload-desc">รูปพื้นหลังส่วน Banner บนสุดในหน้าหลักสูตรและหน้าสาขา<br>รองรับ JPG, PNG, WEBP</div>
-          <button type="button" class="img-upload-btn" onclick="document.getElementById('bgFile').click()">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
-            เลือกรูปภาพ
-          </button>
-          <input type="file" id="bgFile" accept="image/*" style="display:none" onchange="uploadImg('bgFile','bg_image','prevBg','wrap-bg','prog-bg')">
-          <input type="hidden" id="bg_image" />
-          <div class="upload-progress" id="prog-bg">
-            <div class="prog-bar"><div class="prog-fill" id="progfill-bg"></div></div>
-            <span id="prog-bg-txt">กำลังอัปโหลด...</span>
-          </div>
-          <div class="img-preview-wrap" id="prevBg">
-            <img id="prevBgImg" src="" alt="bg preview">
-            <button type="button" class="remove-btn" onclick="removeImg('bg_image','prevBg','wrap-bg')">✕</button>
-          </div>
-        </div>
-
-        <!-- Info Image -->
-        <div class="img-upload-item" id="wrap-info">
-          <div class="img-upload-label">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-            รูปข้อมูลหลักสูตร
-            <span class="badge-tag" style="background:#dcfce7;color:#166534">เสริม</span>
-          </div>
-          <div class="img-upload-desc">รูปเพิ่มเติมในหน้ารายละเอียดหลักสูตร<br>รองรับ JPG, PNG, WEBP</div>
-          <button type="button" class="img-upload-btn" onclick="document.getElementById('infoFile').click()">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
-            เลือกรูปภาพ
-          </button>
-          <input type="file" id="infoFile" accept="image/*" style="display:none" onchange="uploadImg('infoFile','info_image','prevInfo','wrap-info','prog-info')">
-          <input type="hidden" id="info_image" />
-          <div class="upload-progress" id="prog-info">
-            <div class="prog-bar"><div class="prog-fill" id="progfill-info"></div></div>
-            <span id="prog-info-txt">กำลังอัปโหลด...</span>
-          </div>
-          <div class="img-preview-wrap" id="prevInfo">
-            <img id="prevInfoImg" src="" alt="info preview">
-            <button type="button" class="remove-btn" onclick="removeImg('info_image','prevInfo','wrap-info')">✕</button>
-          </div>
-        </div>
-
-      </div><!-- end img-upload-grid -->
-    </div><!-- end card 2 -->
-
-    <!-- ══ FOOTER ACTIONS ══ -->
-    <div class="footer-actions">
-      <button type="button" class="btn btn-secondary" onclick="history.back()">ยกเลิก</button>
-      <button type="button" class="btn btn-danger" id="deleteBtn" style="display:none">🗑 ลบหลักสูตร</button>
-      <button type="submit" class="btn btn-primary" id="saveBtn">
-        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293z"/></svg>
-        บันทึกหลักสูตร
-      </button>
-      <button type="button" class="btn btn-success" id="addMajorBtn">
-        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
-        บันทึกและเพิ่มสาขา
-      </button>
-    </div>
-    <div id="message"></div>
-
-  </form>
 </div>
 
-<!-- ══ SCRIPT ══ -->
+<!-- Export Modal -->
+<div class="modal-overlay" id="export-modal">
+  <div class="modal">
+    <div class="modal-title">Export ข้อมูลทั้งหมด</div>
+    <div class="modal-sub">เลือก Format ที่ต้องการ</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button class="btn btn-green" style="justify-content:center;padding:14px" onclick="exportXLSX();closeModal('export-modal')">Export Excel (.xlsx)</button>
+      <button class="btn btn-ghost" style="justify-content:center;padding:14px" onclick="exportCSV();closeModal('export-modal')">Export CSV</button>
+      <button class="btn btn-teal" style="justify-content:center;padding:14px;grid-column:1/-1" onclick="exportGSheets();closeModal('export-modal')">Export JSON</button>
+    </div>
+    <div class="modal-actions"><button class="btn btn-ghost btn-sm" onclick="closeModal('export-modal')">ปิด</button></div>
+  </div>
+</div>
+
+<div id="toast"><span class="tdot" id="tdot"></span><span id="tmsg"></span></div>
+
 <script>
-const BASE_URL = "https://websitefms.onrender.com";
-const API = BASE_URL + "/api";
+const MJ={
+  fin:{name:'การเงินและการลงทุน',short:'FIN',color:'#7c3aed'},
+  mkt:{name:'การตลาดและการสื่อสาร',short:'MKT',color:'#2563eb'},
+  hrm:{name:'จัดการทรัพยากรมนุษย์',short:'HRM',color:'#0891b2'},
+  log:{name:'โลจิสติกส์',short:'LSM',color:'#ea580c'},
+  mice:{name:'การจัดการไมซ์',short:'MICE',color:'#059669'},
+  bis:{name:'ระบบสารสนเทศ',short:'BIS',color:'#db2777'},
+};
+const MJ_KEYS=['fin','mkt','hrm','log','mice','bis'];
+const MJ_MAP={fin:'fin',mkt:'mkt',hrm:'hrm',log:'log',bis:'bis',mice:'mice',
+  FIN:'fin',MKT:'mkt',HRM:'hrm',LSM:'log',BIS:'bis',MICE:'mice',
+  'Finance_Investment':'fin','Marketing_Communication':'mkt','HR_Management':'hrm',
+  'Logistics':'log','Business_IT':'bis','MICE_Management':'mice'};
 
-/* ── Auth guard ── */
-const user = localStorage.getItem("user");
-if (!user) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
+let DB={
+  intake:{
+    fin:[[2562,60,88,52,50,2],[2563,60,118,71,70,1],[2564,60,118,71,72,1],[2565,70,139,57,56,1],[2566,70,199,80,79,1],[2567,70,122,80,76,4]],
+    mkt:[[2563,60,104,71,69,2],[2564,60,96,74,71,3],[2565,70,134,71,67,4],[2566,70,143,78,76,2],[2567,70,139,93,90,3]],
+    hrm:[[2563,60,106,73,71,2],[2564,60,131,73,72,1],[2565,70,104,56,54,2],[2566,70,102,96,94,2],[2567,70,132,97,94,3]],
+    log:[[2563,60,113,79,77,2],[2564,60,107,85,81,4],[2565,70,139,75,74,1],[2566,70,145,100,99,1],[2567,70,120,90,90,0]],
+    bis:[[2563,60,102,70,67,3],[2564,60,101,89,88,1],[2565,70,121,76,73,3],[2566,70,142,99,98,1],[2567,70,123,91,87,4]],
+    mice:[[2563,60,114,77,76,1],[2564,60,105,73,72,1],[2565,70,116,76,75,1],[2566,70,108,78,77,1],[2567,70,118,80,80,0]],
+  },
+  trend:{
+    2563:{enrolled:434,graduated:434},2564:{enrolled:458,graduated:458},
+    2565:{enrolled:389,graduated:389},2566:{enrolled:529,graduated:0},2567:{enrolled:524,graduated:0},
+  },
+  status:{
+    2567:[{label:'ยังเป็นนักศึกษา',val:532,color:'#7c3aed'},{label:'สำเร็จการศึกษา',val:518,color:'#2563eb'},{label:'ไม่รายงานตัว',val:14,color:'#ea580c'},{label:'โอนย้าย',val:8,color:'#059669'},{label:'ออกกลางคัน',val:21,color:'#eab308'},{label:'พัก/ลา',val:3,color:'#ef4444'}],
+    2566:[{label:'ยังเป็นนักศึกษา',val:495,color:'#7c3aed'},{label:'สำเร็จการศึกษา',val:480,color:'#2563eb'},{label:'ไม่รายงานตัว',val:12,color:'#ea580c'},{label:'โอนย้าย',val:6,color:'#059669'},{label:'ออกกลางคัน',val:18,color:'#eab308'},{label:'พัก/ลา',val:2,color:'#ef4444'}],
+  },
+  coop:{
+    fin:[9,5,7,7,23,12,22],mkt:[38,34,11,25,22,37,30],hrm:[13,5,2,6,6,10,32],
+    log:[16,25,21,38,60,57,49],bis:[8,22,17,26,33,48,34],mice:[12,17,30,10,18,15,7],
+  },
+  coopYrs:[2562,2563,2564,2565,2566,2567,2568],
+  top5Coop:['กรุงเทพมหานคร','สมุทรปราการ','ภูเก็ต','สงขลา','สุราษฎร์ธานี'],
+  partnersCoop:['UOB','Tops','JobsDB','2S'],
+  intern:{
+    fin:[29,28,25,40,41],mkt:[58,45,68,65,65],hrm:[26,33,27,39,40],
+    log:[51,52,60,66,70],bis:[38,36,45,48,50],mice:[41,36,38,52,60],
+  },
+  internYrs:[2563,2564,2565,2566,2567],
+  top5Intern:['บริษัท Tops จำกัด','สมาคมตลาดทุน','บริษัท ไทยออยล์ จำกัด','บริษัท โอสถสภา จำกัด','บริษัท เจมาร์ท จำกัด'],
+  partnersIntern:['TBH','AKIRA+','SCB','PTT'],
+};
 
-document.getElementById("logoutBtn").addEventListener("click", (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  window.location.href = "login.html";
-});
+let LOOKER_REPORTS=[];
+let pendingWB={s:null,coop:null,intern:null};
+const DEFAULT_YRS=[2577,2576,2575,2574,2573,2572,2571,2570,2569,2568,2567,2566,2565,2564,2563,2562,2561,2560];
 
-/* ── Read params ── */
-const params = new URLSearchParams(window.location.search);
-const courseId = params.get("courseId");
-const isEdit = !!courseId;
-const msg = document.getElementById("message");
+// ── แสดงผล: state สำหรับปุ่มดูเพิ่มเติม ──
+let _intakeShowAll=false;
+let _coopShowAll=false;
+let _internShowAll=false;
+const TABLE_LIMIT=6;
 
-if (isEdit) {
-  document.getElementById("pageTitle").textContent = "แก้ไขหลักสูตร";
-  document.getElementById("pageSub").textContent = "แก้ไขข้อมูลหลักสูตร แล้วกดอัปเดต";
-  document.getElementById("saveBtn").innerHTML = `
-    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
-    อัปเดตหลักสูตร`;
-  document.getElementById("deleteBtn").style.display = "inline-flex";
-  loadCourse();
+/* ── INIT ── */
+function initSelects(){
+  ['fi_yr','ft_yr','fs_yr','fcoop_yr','fintern_yr'].forEach(id=>{
+    const s=document.getElementById(id);if(!s)return;
+    s.innerHTML='<option value="">— เลือกปี —</option>';
+    DEFAULT_YRS.forEach(y=>{s.innerHTML+=`<option value="${y}">${y}</option>`;});
+  });
 }
 
-/* ══ UPLOAD IMAGE ══════════════════════════════════════ */
-async function uploadImg(fileInputId, hiddenId, previewWrapId, wrapId, progId) {
-  const fileInput = document.getElementById(fileInputId);
-  const file = fileInput.files[0];
-  if (!file) return;
+function init(){
+  initSelects();
+  renderIntakeTable();
+  renderCoopOnlyTable();
+  renderInternOnlyTable();
+  renderYrFilterDropdown();
+  renderSavedReports();
+}
 
-  // Show progress
-  const progEl = document.getElementById(progId);
-  const progFill = document.getElementById('progfill-' + progId.replace('prog-',''));
-  const progTxt = document.getElementById(progId + '-txt');
-  progEl.classList.add('show');
-  progFill.style.width = '30%';
-  progTxt.textContent = 'กำลังอัปโหลด...';
+/* ── NAV ── */
+function gotoView(name,navEl,sbEl){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(navEl){document.querySelectorAll('.tn-a').forEach(e=>e.classList.remove('active'));navEl.classList.add('active');}
+  document.querySelectorAll('.sb-item').forEach(e=>e.classList.remove('active'));
+  const sbId='sb-'+name;
+  if(document.getElementById(sbId))document.getElementById(sbId).classList.add('active');
+  if(sbEl)sbEl.classList.add('active');
+}
 
-  showMsg('กำลังอัปโหลดรูป...', 'loading');
+function switchImportTab(name,tabEl){
+  const parent=tabEl.closest('.card-body');
+  parent.querySelectorAll('.itab').forEach(t=>t.classList.remove('active'));
+  parent.querySelectorAll('.itab-panel').forEach(p=>p.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+}
 
-  const fd = new FormData();
-  fd.append("image", file);
+/* ── SAVE STUDENTS ── */
+function saveIntake(){
+  const yr=+document.getElementById('fi_yr').value,mid=document.getElementById('fi_mj').value;
+  if(!yr||!mid){toast('กรุณาเลือกปีและสาขา','#ef4444');return;}
+  const row=[yr,+document.getElementById('fi_pl').value||0,+document.getElementById('fi_in').value||0,+document.getElementById('fi_co').value||0,+document.getElementById('fi_re').value||0,+document.getElementById('fi_nr').value||0];
+  if(!DB.intake[mid])DB.intake[mid]=[];
+  const idx=DB.intake[mid].findIndex(r=>r[0]===yr);
+  if(idx>=0)DB.intake[mid][idx]=row;else DB.intake[mid].push(row);
+  _intakeShowAll=false;
+  renderIntakeTable();renderYrFilterDropdown();
+  toast('✓ บันทึก Intake '+MJ[mid].short+' ปี '+yr);
+}
+function saveTrend(){
+  const yr=+document.getElementById('ft_yr').value;if(!yr){toast('เลือกปีก่อน','#ef4444');return;}
+  if(!DB.trend[yr])DB.trend[yr]={enrolled:0,graduated:0};
+  DB.trend[yr].enrolled=+document.getElementById('ft_enr').value||0;
+  DB.trend[yr].graduated=+document.getElementById('ft_grad').value||0;
+  toast('✓ บันทึกแนวโน้ม ปี '+yr);
+}
+function saveStatus(){
+  const yr=+document.getElementById('fs_yr').value;if(!yr){toast('เลือกปีก่อน','#ef4444');return;}
+  DB.status[yr]=[
+    {label:'ยังเป็นนักศึกษา',val:+document.getElementById('fs_cur').value||0,color:'#7c3aed'},
+    {label:'สำเร็จการศึกษา',val:+document.getElementById('fs_grad').value||0,color:'#2563eb'},
+    {label:'ไม่รายงานตัว',val:+document.getElementById('fs_nr').value||0,color:'#ea580c'},
+    {label:'โอนย้าย',val:+document.getElementById('fs_tr').value||0,color:'#059669'},
+    {label:'ออกกลางคัน',val:+document.getElementById('fs_dr').value||0,color:'#eab308'},
+    {label:'พัก/ลา',val:+document.getElementById('fs_lv').value||0,color:'#ef4444'},
+  ].filter(x=>x.val>0);
+  toast('✓ บันทึกสถานะ ปี '+yr);
+}
 
-  try {
-    const res = await fetch(`${API}/upload`, { method: "POST", body: fd });
-    const data = await res.json();
+/* ── SAVE COOP / INTERN ── */
+function saveCoopEntry(type){
+  const prefix=type==='coop'?'fcoop':'fintern';
+  const yr=+document.getElementById(prefix+'_yr').value;
+  const mid=document.getElementById(prefix+'_mj').value;
+  const n=+document.getElementById(prefix+'_n').value||0;
+  if(!yr||!mid){toast('กรุณาเลือกปีและสาขา','#ef4444');return;}
 
-    progFill.style.width = '100%';
+  if(type==='coop'){
+    if(!DB.coopYrs.includes(yr)){DB.coopYrs.push(yr);DB.coopYrs.sort((a,b)=>a-b);}
+    const yi=DB.coopYrs.indexOf(yr);
+    MJ_KEYS.forEach(m=>{if(!DB.coop[m])DB.coop[m]=DB.coopYrs.map(()=>0);while(DB.coop[m].length<DB.coopYrs.length)DB.coop[m].splice(yi,0,0);});
+    DB.coop[mid][yi]=n;
+    const t5=[1,2,3,4,5].map(i=>document.getElementById('fcoop_co'+i)?.value||'').filter(Boolean);
+    if(t5.length)DB.top5Coop=t5;
+    const p=[1,2,3,4].map(i=>document.getElementById('fcoop_p'+i)?.value||'').filter(Boolean);
+    if(p.length)DB.partnersCoop=p;
+    _coopShowAll=false;
+    renderCoopOnlyTable();
+    updateCoopYrFilter();
+    toast('✓ บันทึกสหกิจ (4 เดือน) · '+MJ[mid].short+' · ปี '+yr+' = '+n+' คน');
+  } else {
+    if(!DB.internYrs.includes(yr)){DB.internYrs.push(yr);DB.internYrs.sort((a,b)=>a-b);}
+    const yi=DB.internYrs.indexOf(yr);
+    MJ_KEYS.forEach(m=>{if(!DB.intern[m])DB.intern[m]=DB.internYrs.map(()=>0);while(DB.intern[m].length<DB.internYrs.length)DB.intern[m].splice(yi,0,0);});
+    DB.intern[mid][yi]=n;
+    const t5=[1,2,3,4,5].map(i=>document.getElementById('fintern_co'+i)?.value||'').filter(Boolean);
+    if(t5.length)DB.top5Intern=t5;
+    const p=[1,2,3,4].map(i=>document.getElementById('fintern_p'+i)?.value||'').filter(Boolean);
+    if(p.length)DB.partnersIntern=p;
+    _internShowAll=false;
+    renderInternOnlyTable();
+    updateInternYrFilter();
+    toast('✓ บันทึกฝึกงาน (2 เดือน) · '+MJ[mid].short+' · ปี '+yr+' = '+n+' คน');
+  }
+}
 
-    if (!res.ok) {
-      progTxt.textContent = 'อัปโหลดไม่สำเร็จ';
-      showMsg(data.message || 'อัปโหลดไม่สำเร็จ', 'error');
-      setTimeout(() => progEl.classList.remove('show'), 2000);
-      return;
+/* ── ฟังก์ชัน show-more ── */
+function _renderShowMore(wrapperId, total, shown, showAll, toggleFn) {
+  const wrap = document.getElementById(wrapperId);
+  if (!wrap) return;
+  if (total > TABLE_LIMIT) {
+    wrap.style.display = 'flex';
+    if (showAll) {
+      wrap.innerHTML = `<button class="btn btn-ghost btn-xs" onclick="${toggleFn}(false)">▲ แสดงน้อยลง</button><span class="show-more-count">แสดงทั้งหมด ${total} รายการ</span>`;
+    } else {
+      wrap.innerHTML = `<button class="btn btn-ghost btn-xs" onclick="${toggleFn}(true)">+ ดูเพิ่มเติม ${total - TABLE_LIMIT} รายการ</button><span class="show-more-count">แสดง ${TABLE_LIMIT} จาก ${total} รายการ</span>`;
     }
-
-    // Set hidden value & show preview
-    document.getElementById(hiddenId).value = data.url;
-    const wrap = document.getElementById(previewWrapId);
-    const img = wrap.querySelector('img');
-    img.src = BASE_URL + data.url;
-    wrap.style.display = 'block';
-    document.getElementById(wrapId).classList.add('has-image');
-
-    progTxt.textContent = '✓ อัปโหลดสำเร็จ';
-    showMsg('✓ อัปโหลดรูปสำเร็จ', 'success');
-    setTimeout(() => { progEl.classList.remove('show'); progFill.style.width='0'; }, 2500);
-
-  } catch(err) {
-    progFill.style.width = '0';
-    progEl.classList.remove('show');
-    showMsg('เชื่อมต่อ Server ไม่ได้', 'error');
+  } else {
+    wrap.style.display = 'none';
   }
 }
 
-function removeImg(hiddenId, previewWrapId, wrapId) {
-  document.getElementById(hiddenId).value = '';
-  const wrap = document.getElementById(previewWrapId);
-  wrap.style.display = 'none';
-  wrap.querySelector('img').src = '';
-  document.getElementById(wrapId).classList.remove('has-image');
+function toggleIntake(v){_intakeShowAll=v;renderIntakeTable();}
+function toggleCoop(v){_coopShowAll=v;renderCoopOnlyTable();}
+function toggleIntern(v){_internShowAll=v;renderInternOnlyTable();}
+
+/* ── TABLE RENDERS ── */
+function renderYrFilterDropdown(){
+  const sel=document.getElementById('tbl_yr_filter');if(!sel)return;
+  const cur=sel.value;
+  const yrs=[...new Set(MJ_KEYS.flatMap(m=>(DB.intake[m]||[]).map(r=>r[0])))].sort((a,b)=>b-a);
+  sel.innerHTML='<option value="all">ทุกปี</option>'+yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
+  if(cur)sel.value=cur;
 }
 
-/* ══ LOAD COURSE (edit mode) ═══════════════════════════ */
-async function loadCourse() {
-  try {
-    const res = await fetch(`${API}/courses/${courseId}`);
-    if (!res.ok) throw new Error('load failed');
-    const c = await res.json();
-
-    const fields = ['name_th','name_en','degree_level','status','program_type',
-                    'study_system','award_title','total_credits','short_detail','student_range'];
-    fields.forEach(f => {
-      const el = document.getElementById(f);
-      if (el && c[f] != null) el.value = c[f];
-    });
-
-    // Load images
-    [
-      { field: 'hero_image', wrap: 'prevHero', wrapOuter: 'wrap-hero' },
-      { field: 'bg_image',   wrap: 'prevBg',   wrapOuter: 'wrap-bg'   },
-      { field: 'info_image', wrap: 'prevInfo',  wrapOuter: 'wrap-info' },
-    ].forEach(({ field, wrap, wrapOuter }) => {
-      if (c[field]) {
-        document.getElementById(field).value = c[field];
-        const wrapEl = document.getElementById(wrap);
-        wrapEl.querySelector('img').src = BASE_URL + c[field];
-        wrapEl.style.display = 'block';
-        document.getElementById(wrapOuter).classList.add('has-image');
-      }
-    });
-
-  } catch(err) {
-    showMsg('โหลดข้อมูลหลักสูตรไม่สำเร็จ', 'error');
-  }
+function updateCoopYrFilter(){
+  const sel=document.getElementById('coop_yr_filter');if(!sel)return;
+  const yrs=[...new Set(MJ_KEYS.flatMap(m=>(DB.coop[m]||[]).map((v,i)=>v>0?DB.coopYrs[i]:null).filter(Boolean)))].sort((a,b)=>b-a);
+  sel.innerHTML='<option value="all">ทุกปี</option>'+yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
 }
 
-/* ══ SAVE / UPDATE ══════════════════════════════════════ */
-let afterSave = "info";
-document.getElementById("saveBtn").addEventListener('click', () => { afterSave = "info"; });
-document.getElementById("addMajorBtn").addEventListener('click', () => {
-  afterSave = "major";
-  document.getElementById("courseForm").requestSubmit();
-});
+function updateInternYrFilter(){
+  const sel=document.getElementById('intern_yr_filter');if(!sel)return;
+  const yrs=[...new Set(MJ_KEYS.flatMap(m=>(DB.intern[m]||[]).map((v,i)=>v>0?DB.internYrs[i]:null).filter(Boolean)))].sort((a,b)=>b-a);
+  sel.innerHTML='<option value="all">ทุกปี</option>'+yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
+}
 
-document.getElementById("courseForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+function renderIntakeTable(){
+  const filter=document.getElementById('tbl_yr_filter')?.value||'all';
+  let rows=[];
+  MJ_KEYS.forEach(mid=>(DB.intake[mid]||[]).forEach(r=>rows.push({mid,r})));
+  if(filter!=='all')rows=rows.filter(({r})=>r[0]===+filter);
+  rows.sort((a,b)=>b.r[0]-a.r[0]||a.mid.localeCompare(b.mid));
+  const total=rows.length;
+  const shown=_intakeShowAll?rows:rows.slice(0,TABLE_LIMIT);
+  document.getElementById('tbody-intake').innerHTML=shown.map(({mid,r})=>`<tr>
+    <td><strong>${r[0]}</strong></td><td><span class="badge badge-purple">${MJ[mid].short}</span></td>
+    <td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td>
+    <td><button class="btn btn-ghost btn-xs" onclick="delIntake(${r[0]},'${mid}')">ลบ</button></td>
+  </tr>`).join('')||'<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>';
+  _renderShowMore('intake-show-more', total, shown.length, _intakeShowAll, 'toggleIntake');
+}
+function delIntake(yr,mid){DB.intake[mid]=(DB.intake[mid]||[]).filter(r=>r[0]!==yr);renderIntakeTable();}
 
-  const body = {
-    name_th:       document.getElementById("name_th").value,
-    name_en:       document.getElementById("name_en").value,
-    degree_level:  document.getElementById("degree_level").value,
-    status:        document.getElementById("status").value,
-    program_type:  document.getElementById("program_type").value,
-    study_system:  document.getElementById("study_system").value,
-    award_title:   document.getElementById("award_title").value,
-    total_credits: document.getElementById("total_credits").value,
-    short_detail:  document.getElementById("short_detail").value,
-    student_range: document.getElementById("student_range").value,
-    hero_image:    document.getElementById("hero_image").value  || null,
-    bg_image:      document.getElementById("bg_image").value    || null,   // ← ใหม่
-    info_image:    document.getElementById("info_image").value  || null,
+function renderCoopOnlyTable(){
+  updateCoopYrFilter();
+  const yrF=document.getElementById('coop_yr_filter')?.value||'all';
+  let rows=[];
+  MJ_KEYS.forEach(m=>DB.coopYrs.forEach((yr,yi)=>{const n=(DB.coop[m]||[])[yi]||0;if(n>0&&(yrF==='all'||+yrF===yr))rows.push({yr,mid:m,n});}));
+  rows.sort((a,b)=>b.yr-a.yr||a.mid.localeCompare(b.mid));
+  const total=rows.length;
+  const shown=_coopShowAll?rows:rows.slice(0,TABLE_LIMIT);
+  const totalPeople=rows.reduce((s,r)=>s+r.n,0);
+  document.getElementById('tbody-coop-only').innerHTML=shown.map(r=>`<tr>
+    <td><strong>${r.yr}</strong></td><td><span class="badge badge-blue">${MJ[r.mid].short}</span></td>
+    <td><strong>${r.n}</strong></td>
+    <td><button class="btn btn-ghost btn-xs" onclick="delCoopOnly(${r.yr},'${r.mid}')">ลบ</button></td>
+  </tr>`).join('')||'<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>';
+  _renderShowMore('coop-show-more', total, shown.length, _coopShowAll, 'toggleCoop');
+  document.getElementById('coop-total-row').innerHTML=rows.length?`รวมทั้งหมด <strong>${totalPeople.toLocaleString()} คน</strong>`:'';
+}
+function delCoopOnly(yr,mid){const yi=DB.coopYrs.indexOf(yr);if(yi>=0&&DB.coop[mid])DB.coop[mid][yi]=0;renderCoopOnlyTable();}
+
+function renderInternOnlyTable(){
+  updateInternYrFilter();
+  const yrF=document.getElementById('intern_yr_filter')?.value||'all';
+  let rows=[];
+  MJ_KEYS.forEach(m=>DB.internYrs.forEach((yr,yi)=>{const n=(DB.intern[m]||[])[yi]||0;if(n>0&&(yrF==='all'||+yrF===yr))rows.push({yr,mid:m,n});}));
+  rows.sort((a,b)=>b.yr-a.yr||a.mid.localeCompare(b.mid));
+  const total=rows.length;
+  const shown=_internShowAll?rows:rows.slice(0,TABLE_LIMIT);
+  const totalPeople=rows.reduce((s,r)=>s+r.n,0);
+  document.getElementById('tbody-intern-only').innerHTML=shown.map(r=>`<tr>
+    <td><strong>${r.yr}</strong></td><td><span class="badge badge-green">${MJ[r.mid].short}</span></td>
+    <td><strong>${r.n}</strong></td>
+    <td><button class="btn btn-ghost btn-xs" onclick="delInternOnly(${r.yr},'${r.mid}')">ลบ</button></td>
+  </tr>`).join('')||'<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>';
+  _renderShowMore('intern-show-more', total, shown.length, _internShowAll, 'toggleIntern');
+  document.getElementById('intern-total-row').innerHTML=rows.length?`รวมทั้งหมด <strong>${totalPeople.toLocaleString()} คน</strong>`:'';
+}
+function delInternOnly(yr,mid){const yi=DB.internYrs.indexOf(yr);if(yi>=0&&DB.intern[mid])DB.intern[mid][yi]=0;renderInternOnlyTable();}
+
+/* ── EXCEL IMPORT ── */
+function dzO(e,id){e.preventDefault();document.getElementById(id).classList.add('drag');}
+function dzL(id){document.getElementById(id).classList.remove('drag');}
+function dzD(e,target){e.preventDefault();const id=target==='students'?'dz-s':target==='coopOnly'?'dz-coop':'dz-intern';document.getElementById(id).classList.remove('drag');if(e.dataTransfer.files[0])procXL(e.dataTransfer.files[0],target);}
+function handleXL(e,target){if(e.target.files[0])procXL(e.target.files[0],target);}
+
+function procXL(file,target){
+  if(!/\.(xlsx|xls)$/i.test(file.name)){toast('กรุณาใช้ไฟล์ .xlsx / .xls','#ef4444');return;}
+  const sfx=target==='students'?'s':target==='coopOnly'?'coop':'intern';
+  const fn=document.getElementById('dz-'+sfx+'-fn');
+  fn.textContent='📄 '+file.name+' ('+(file.size/1024).toFixed(1)+' KB)';fn.style.display='inline-block';
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const wb=XLSX.read(ev.target.result,{type:'array'});
+      pendingWB[sfx]=wb;
+      buildSheetTabs(wb,sfx);
+      buildSheetPreview(wb.SheetNames[0],sfx);
+      document.getElementById('xl-'+sfx+'-preview').style.display='block';
+      const statusId=target==='students'?'students-import-status':target==='coopOnly'?'coop-import-status':'intern-import-status';
+      document.getElementById(statusId).innerHTML=`<div class="import-status info">📊 พบ ${wb.SheetNames.length} Sheet — ตรวจสอบแล้วกดยืนยัน</div>`;
+    }catch(err){toast('อ่านไฟล์ไม่ได้: '+err.message,'#ef4444');}
   };
-
-  if (!body.name_th.trim()) { showMsg('กรุณากรอกชื่อหลักสูตรภาษาไทย', 'error'); return; }
-
-  showMsg('กำลังบันทึก...', 'loading');
-  document.getElementById("saveBtn").disabled = true;
-
-  const url    = isEdit ? `${API}/courses/${courseId}` : `${API}/courses`;
-  const method = isEdit ? "PUT" : "POST";
-
-  try {
-    const res  = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    const data = await res.json();
-
-    if (!res.ok) { showMsg(data.message || 'บันทึกไม่สำเร็จ', 'error'); document.getElementById("saveBtn").disabled = false; return; }
-
-    showMsg('✓ บันทึกสำเร็จ! กำลังเปลี่ยนหน้า...', 'success');
-    const id = isEdit ? courseId : (data.id || data.courseId);
-    setTimeout(() => {
-      if (!isEdit && afterSave === "major") window.location.href = `add-major.html?courseId=${id}`;
-      else window.location.href = `course-info.html?courseId=${id}`;
-    }, 700);
-  } catch(err) {
-    showMsg('เชื่อมต่อ Server ไม่ได้', 'error');
-    document.getElementById("saveBtn").disabled = false;
-  }
-});
-
-/* ══ DELETE ════════════════════════════════════════════ */
-document.getElementById("deleteBtn").addEventListener('click', async () => {
-  if (!confirm(`ยืนยันลบหลักสูตรนี้?\nการลบจะไม่สามารถกู้คืนได้`)) return;
-  showMsg('กำลังลบ...', 'loading');
-  try {
-    const res = await fetch(`${API}/courses/${courseId}`, { method: 'DELETE' });
-    if (!res.ok) throw new Error();
-    showMsg('✓ ลบสำเร็จ', 'success');
-    setTimeout(() => window.location.href = 'course-list.html', 800);
-  } catch { showMsg('ลบไม่สำเร็จ', 'error'); }
-});
-
-/* ══ HELPERS ═══════════════════════════════════════════ */
-function showMsg(text, type) {
-  const el = document.getElementById('message');
-  el.className = type;
-  el.textContent = text;
+  reader.readAsArrayBuffer(file);
 }
+
+function buildSheetTabs(wb,sfx){
+  const wrap=document.getElementById('xl-'+sfx+'-sheet-tabs');
+  wrap.innerHTML=wb.SheetNames.map((sn,i)=>`<button class="stab${i===0?' active':''}" onclick="buildSheetPreview('${sn}','${sfx}',this)">${sn}</button>`).join('');
+}
+
+function buildSheetPreview(sn,sfx,tabEl){
+  if(!pendingWB[sfx])return;
+  if(tabEl){document.querySelectorAll('#xl-'+sfx+'-sheet-tabs .stab').forEach(b=>b.classList.remove('active'));tabEl.classList.add('active');}
+  const rows=XLSX.utils.sheet_to_json(pendingWB[sfx].Sheets[sn],{header:1}).slice(0,6);
+  if(!rows.length){document.getElementById('xl-'+sfx+'-tbl').innerHTML='<p style="padding:12px;color:var(--muted)">Sheet ว่างเปล่า</p>';return;}
+  let html='<table><thead><tr>'+rows[0].map(k=>`<th>${k||''}</th>`).join('')+'</tr></thead><tbody>';
+  rows.slice(1).forEach(r=>{html+='<tr>'+rows[0].map((_,i)=>`<td>${r[i]??''}</td>`).join('')+'</tr>';});
+  document.getElementById('xl-'+sfx+'-tbl').innerHTML=html+'</tbody></table>';
+}
+
+function cancelImport(sfx){pendingWB[sfx]=null;document.getElementById('xl-'+sfx+'-preview').style.display='none';}
+
+function confirmImport(target){
+  const sfx=target==='students'?'s':target==='coopOnly'?'coop':'intern';
+  const wb=pendingWB[sfx];if(!wb)return;
+  let cnt=0;
+  wb.SheetNames.forEach(sn=>{
+    const snl=sn.toLowerCase().trim();
+    const data=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:''});
+    if(target==='students'){
+      if(['intake','fin','mkt','hrm','log','bis','mice'].some(k=>snl.includes(k))){
+        data.forEach(row=>{
+          const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
+          const rawMid=String(row['วิชาเอก']||row['major']||snl);
+          const mid=MJ_MAP[rawMid.trim()]||MJ_MAP[rawMid.trim().toUpperCase()];
+          if(!yr||!mid)return;
+          const r=[yr,+row['แผนรับ']||0,+row['สัมภาษณ์']||0,+row['ยืนยัน']||0,+row['รายงานตัว']||0,+row['ไม่รายงานตัว']||0];
+          if(!DB.intake[mid])DB.intake[mid]=[];
+          const idx=DB.intake[mid].findIndex(x=>x[0]===yr);
+          if(idx>=0)DB.intake[mid][idx]=r;else DB.intake[mid].push(r);cnt++;
+        });
+      }
+    }
+    if(target==='coopOnly'&&(snl.includes('coop')||snl.includes('สหกิจ'))){
+      data.forEach(row=>{
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
+        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||'').trim()];
+        const n=+row['จำนวน']||0;
+        if(!yr||!mid)return;
+        if(!DB.coopYrs.includes(yr)){DB.coopYrs.push(yr);DB.coopYrs.sort((a,b)=>a-b);}
+        const yi=DB.coopYrs.indexOf(yr);
+        if(!DB.coop[mid])DB.coop[mid]=DB.coopYrs.map(()=>0);
+        while(DB.coop[mid].length<DB.coopYrs.length)DB.coop[mid].push(0);
+        DB.coop[mid][yi]=n;cnt++;
+      });
+      if(snl.includes('top5')||snl.includes('cooptop')){
+        const names=data.map(r=>r['บริษัท']||r['company']||r['name']||Object.values(r)[0]).filter(Boolean);
+        if(names.length)DB.top5Coop=names.slice(0,5);
+      }
+    }
+    if(target==='internOnly'&&(snl.includes('intern')||snl.includes('ฝึกงาน'))){
+      data.forEach(row=>{
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
+        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||'').trim()];
+        const n=+row['จำนวน']||0;
+        if(!yr||!mid)return;
+        if(!DB.internYrs.includes(yr)){DB.internYrs.push(yr);DB.internYrs.sort((a,b)=>a-b);}
+        const yi=DB.internYrs.indexOf(yr);
+        if(!DB.intern[mid])DB.intern[mid]=DB.internYrs.map(()=>0);
+        while(DB.intern[mid].length<DB.internYrs.length)DB.intern[mid].push(0);
+        DB.intern[mid][yi]=n;cnt++;
+      });
+      if(snl.includes('top5')||snl.includes('interntop')){
+        const names=data.map(r=>r['บริษัท']||r['company']||r['name']||Object.values(r)[0]).filter(Boolean);
+        if(names.length)DB.top5Intern=names.slice(0,5);
+      }
+    }
+  });
+  const statusId=target==='students'?'students-import-status':target==='coopOnly'?'coop-import-status':'intern-import-status';
+  document.getElementById(statusId).innerHTML=`<div class="import-status ok">✓ นำเข้าสำเร็จ ${cnt} แถว</div>`;
+  pendingWB[sfx]=null;
+  document.getElementById('xl-'+sfx+'-preview').style.display='none';
+  if(target==='students'){_intakeShowAll=false;renderIntakeTable();renderYrFilterDropdown();}
+  else if(target==='coopOnly'){_coopShowAll=false;renderCoopOnlyTable();}
+  else{_internShowAll=false;renderInternOnlyTable();}
+  toast(`✓ นำเข้าสำเร็จ ${cnt} แถว`);
+}
+
+/* ── CHARTS ── */
+const CH={};
+function dc(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
+
+/* ── PREVIEW: Students ── */
+function previewStudents(){
+  const yrs=[...new Set(MJ_KEYS.flatMap(m=>(DB.intake[m]||[]).map(r=>r[0]),...Object.keys(DB.status).map(Number)))].sort((a,b)=>b-a);
+  const sel=document.getElementById('prev_yr');
+  sel.innerHTML=yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
+  sel.value=yrs[0]||2567;
+  document.getElementById('preview-students').style.display='block';
+  document.getElementById('preview-students').scrollIntoView({behavior:'smooth',block:'start'});
+  renderStudentCharts();
+}
+
+function renderStudentCharts(){
+  const yr=+document.getElementById('prev_yr').value||2567;
+  const tot=MJ_KEYS.reduce((s,m)=>{const r=(DB.intake[m]||[]).find(x=>x[0]===yr);return s+(r?r[4]:0);},0);
+  document.getElementById('kpi-s1').textContent=tot.toLocaleString();
+  document.getElementById('pie-s-sub').textContent='ปีการศึกษา '+yr;
+  document.getElementById('bar-s-sub').textContent='ปีการศึกษา '+yr;
+  document.getElementById('status-sub').textContent='ปีการศึกษา '+yr;
+  const pL=[],pD=[],pC=[];
+  MJ_KEYS.forEach(m=>{const r=(DB.intake[m]||[]).find(x=>x[0]===yr);const v=r?r[4]:0;if(v>0){pL.push(MJ[m].short);pD.push(v);pC.push(MJ[m].color);}});
+  dc('pie-s');CH['pie-s']=new Chart(document.getElementById('chart-pie-s'),{type:'doughnut',data:{labels:pL,datasets:[{data:pD,backgroundColor:pC,borderWidth:2,borderColor:'#fff',hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'58%'}});
+  const pt=pD.reduce((a,b)=>a+b,0);
+  document.getElementById('pie-s-legend').innerHTML=pL.map((l,i)=>`<div class="pl-item"><div class="pl-dot" style="background:${pC[i]}"></div><span>${l}</span><span class="pl-val">${pD[i]} (${pt?((pD[i]/pt)*100).toFixed(0):0}%)</span></div>`).join('');
+  dc('bar-s');CH['bar-s']=new Chart(document.getElementById('chart-bar-s'),{type:'bar',data:{labels:pL,datasets:[{data:pD,backgroundColor:pC,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:10}}}}}});
+  const iL=MJ_KEYS.map(m=>MJ[m].short);
+  const colP='#a78bfa',colI='#60a5fa',colC='#34d399',colR='#fbbf24',colN='#f87171';
+  dc('intake-s');CH['intake-s']=new Chart(document.getElementById('chart-intake-s'),{type:'bar',data:{labels:iL,datasets:[
+    {label:'แผนรับ',data:MJ_KEYS.map(m=>{const r=(DB.intake[m]||[]).find(x=>x[0]===yr);return r?r[1]:0;}),backgroundColor:colP,borderRadius:3},
+    {label:'สัมภาษณ์',data:MJ_KEYS.map(m=>{const r=(DB.intake[m]||[]).find(x=>x[0]===yr);return r?r[2]:0;}),backgroundColor:colI,borderRadius:3},
+    {label:'ยืนยัน',data:MJ_KEYS.map(m=>{const r=(DB.intake[m]||[]).find(x=>x[0]===yr);return r?r[3]:0;}),backgroundColor:colC,borderRadius:3},
+    {label:'รายงานตัว',data:MJ_KEYS.map(m=>{const r=(DB.intake[m]||[]).find(x=>x[0]===yr);return r?r[4]:0;}),backgroundColor:colR,borderRadius:3},
+    {label:'ไม่รายงานตัว',data:MJ_KEYS.map(m=>{const r=(DB.intake[m]||[]).find(x=>x[0]===yr);return r?r[5]:0;}),backgroundColor:colN,borderRadius:3},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:10}}}}}});
+  document.getElementById('leg-intake-s').innerHTML=[['แผนรับ',colP],['สัมภาษณ์',colI],['ยืนยัน',colC],['รายงานตัว',colR],['ไม่รายงานตัว',colN]].map(([l,c])=>`<div class="cl-item"><div class="cl-dot" style="background:${c}"></div>${l}</div>`).join('');
+  const tYrs=Object.keys(DB.trend).map(Number).sort((a,b)=>a-b);
+  dc('trend-s');CH['trend-s']=new Chart(document.getElementById('chart-trend-s'),{type:'line',data:{labels:tYrs,datasets:[
+    {label:'ลงทะเบียน',data:tYrs.map(y=>DB.trend[y]?.enrolled||0),borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.1)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#7c3aed'},
+    {label:'สำเร็จการศึกษา',data:tYrs.map(y=>DB.trend[y]?.graduated||0),borderColor:'#ea580c',backgroundColor:'rgba(234,88,12,.06)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#ea580c',borderDash:[5,3]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:10,padding:12}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f3f4f6'},beginAtZero:false,ticks:{font:{size:10}}}}}});
+  const sd=DB.status[yr]||[];
+  dc('status-s');
+  if(sd.length>0){
+    CH['status-s']=new Chart(document.getElementById('chart-status-s'),{type:'doughnut',data:{labels:sd.map(x=>x.label),datasets:[{data:sd.map(x=>x.val),backgroundColor:sd.map(x=>x.color),borderWidth:2,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'55%'}});
+    const st=sd.reduce((a,b)=>a+b.val,0);
+    document.getElementById('status-legend').innerHTML=sd.map(x=>`<div class="pl-item"><div class="pl-dot" style="background:${x.color}"></div><span>${x.label}</span><span class="pl-val">${x.val.toLocaleString()} (${st?((x.val/st)*100).toFixed(1):0}%)</span></div>`).join('');
+  } else {
+    document.getElementById('status-legend').innerHTML='<p style="color:var(--muted);font-size:12px">ไม่มีข้อมูลสถานะสำหรับปีนี้</p>';
+  }
+}
+
+/* ── PREVIEW: Coop/Intern ── */
+function previewCoopType(type){
+  if(type==='coop'){
+    document.getElementById('preview-coop-only').style.display='block';
+    document.getElementById('preview-coop-only').scrollIntoView({behavior:'smooth',block:'start'});
+    renderCoopTypeCharts('coop');
+  } else {
+    document.getElementById('preview-intern-only').style.display='block';
+    document.getElementById('preview-intern-only').scrollIntoView({behavior:'smooth',block:'start'});
+    renderCoopTypeCharts('intern');
+  }
+}
+
+function renderCoopTypeCharts(type){
+  const isCoop=type==='coop';
+  const src=isCoop?DB.coop:DB.intern;
+  const yrs=isCoop?DB.coopYrs:DB.internYrs;
+  const color=isCoop?'#2563eb':'#059669';
+  const top5=isCoop?DB.top5Coop:DB.top5Intern;
+  const partners=isCoop?DB.partnersCoop:DB.partnersIntern;
+
+  const total=MJ_KEYS.reduce((s,m)=>(src[m]||[]).reduce((a,b)=>a+b,s),0);
+  const latestYr=yrs[yrs.length-1];
+  const latestYi=yrs.indexOf(latestYr);
+  const latest=latestYi>=0?MJ_KEYS.reduce((s,m)=>s+((src[m]||[])[latestYi]||0),0):0;
+
+  if(isCoop){
+    document.getElementById('kpi-coop-total').textContent=total.toLocaleString();
+    document.getElementById('kpi-coop-latest').textContent=latest.toLocaleString();
+    document.getElementById('kpi-coop-yr').textContent='ปี '+(latestYr||'—');
+  } else {
+    document.getElementById('kpi-intern-total').textContent=total.toLocaleString();
+    document.getElementById('kpi-intern-latest').textContent=latest.toLocaleString();
+    document.getElementById('kpi-intern-yr').textContent='ปี '+(latestYr||'—');
+  }
+
+  const barId=isCoop?'coop-bar':'intern-bar';
+  const legId=isCoop?'leg-coop-bar':'leg-intern-bar';
+  const trendId=isCoop?'coop-trend':'intern-trend';
+  const pieId=isCoop?'coop-pie':'intern-pie';
+  const pieLegId=isCoop?'coop-pie-leg':'intern-pie-leg';
+  const top5Id=isCoop?'top5-coop':'top5-intern';
+  const partnersId=isCoop?'partners-coop':'partners-intern';
+
+  dc(barId);
+  CH[barId]=new Chart(document.getElementById('chart-'+barId),{type:'bar',data:{labels:yrs,datasets:MJ_KEYS.map(m=>({label:MJ[m].short,data:yrs.map((_,yi)=>(src[m]||[])[yi]||0),backgroundColor:MJ[m].color,borderRadius:4}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:10}}}}}});
+  document.getElementById(legId).innerHTML=MJ_KEYS.map(m=>`<div class="cl-item"><div class="cl-dot" style="background:${MJ[m].color}"></div>${MJ[m].short}</div>`).join('');
+
+  const trendData=yrs.map((_,yi)=>MJ_KEYS.reduce((s,m)=>s+((src[m]||[])[yi]||0),0));
+  dc(trendId);
+  CH[trendId]=new Chart(document.getElementById('chart-'+trendId),{type:'line',data:{labels:yrs,datasets:[{label:isCoop?'สหกิจ':'ฝึกงาน',data:trendData,borderColor:color,backgroundColor:isCoop?'rgba(37,99,235,.1)':'rgba(5,150,105,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:color}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:9}}}}}});
+
+  const pieData=MJ_KEYS.map(m=>(src[m]||[]).reduce((a,b)=>a+b,0));
+  const pieTotal=pieData.reduce((a,b)=>a+b,0);
+  dc(pieId);
+  CH[pieId]=new Chart(document.getElementById('chart-'+pieId),{type:'doughnut',data:{labels:MJ_KEYS.map(m=>MJ[m].short),datasets:[{data:pieData,backgroundColor:MJ_KEYS.map(m=>MJ[m].color),borderWidth:2,borderColor:'#fff',hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'55%'}});
+  document.getElementById(pieLegId).innerHTML=MJ_KEYS.map((m,i)=>`<div class="pl-item"><div class="pl-dot" style="background:${MJ[m].color}"></div><span>${MJ[m].short}</span><span class="pl-val">${pieData[i]} (${pieTotal?((pieData[i]/pieTotal)*100).toFixed(0):0}%)</span></div>`).join('');
+
+  const t5=(top5||[]).slice(0,5);
+  document.getElementById(top5Id).innerHTML=t5.length?t5.map((c,i)=>`<div class="t5"><div class="t5n">${i+1}</div><span style="flex:1;font-size:12px">${c}</span><span class="t5val" style="color:${color}">${5-i}⭐</span></div>`).join(''):'<p style="font-size:12px;color:var(--muted)">ยังไม่มีข้อมูล</p>';
+  document.getElementById(partnersId).innerHTML=(partners||[]).map(p=>`<div class="partner-chip">${p}</div>`).join('')||'<p style="font-size:12px;color:var(--muted)">ยังไม่มีข้อมูล</p>';
+}
+
+/* ── LOOKER ── */
+function loadLooker(){
+  const url=document.getElementById('looker_url').value.trim();
+  if(!url){toast('กรุณาใส่ URL','#ef4444');return;}
+  const wrap=document.getElementById('looker-frame-wrap');
+  wrap.innerHTML=`<div class="looker-loading"><div class="spin"></div><p style="font-size:12px;color:var(--muted)">กำลังโหลด...</p></div>`;
+  setTimeout(()=>{
+    wrap.innerHTML=`<iframe class="looker-embed" src="${url}" style="height:580px" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>`;
+    document.getElementById('btn-looker-fullscreen').style.display='flex';
+    toast('✓ โหลด Looker Studio สำเร็จ');
+  },800);
+}
+function openLookerFullscreen(){const url=document.getElementById('looker_url').value.trim();if(url)window.open(url,'_blank');}
+function saveCurrentReport(){
+  const url=document.getElementById('looker_url').value.trim();if(!url){toast('กรุณาใส่ URL ก่อน','#ef4444');return;}
+  const name=prompt('ชื่อรายงานนี้คือ?','Dashboard '+new Date().getFullYear());if(!name)return;
+  LOOKER_REPORTS.push({name,url});renderSavedReports();toast('✓ บันทึก Report "'+name+'"');
+}
+function renderSavedReports(){
+  const wrap=document.getElementById('saved-reports');
+  if(!LOOKER_REPORTS.length){wrap.innerHTML='<p style="font-size:11.5px;color:var(--muted)">ยังไม่มีรายงาน</p>';return;}
+  wrap.innerHTML=LOOKER_REPORTS.map((r,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--acc-ll);border-radius:8px;border:1px solid #c4b5fd"><span style="font-size:12px;font-weight:600;flex:1">📊 ${r.name}</span><button class="btn btn-teal btn-xs" onclick="loadSavedReport(${i})">Load</button><button class="btn btn-ghost btn-xs" onclick="LOOKER_REPORTS.splice(${i},1);renderSavedReports()">ลบ</button></div>`).join('');
+  document.getElementById('looker-tab-btns').innerHTML=LOOKER_REPORTS.map((r,i)=>`<button class="btn btn-ghost btn-xs" onclick="loadSavedReport(${i})">${r.name}</button>`).join('');
+}
+function loadSavedReport(i){document.getElementById('looker_url').value=LOOKER_REPORTS[i].url;loadLooker();}
+
+/* ── EXPORT ── */
+function exportXLSX(){
+  const wb=XLSX.utils.book_new();
+  MJ_KEYS.forEach(m=>{if((DB.intake[m]||[]).length>0){const ws=XLSX.utils.aoa_to_sheet([['ปีการศึกษา','แผนรับ','สัมภาษณ์','ยืนยัน','รายงานตัว','ไม่รายงานตัว'],...DB.intake[m].sort((a,b)=>a[0]-b[0])]);XLSX.utils.book_append_sheet(wb,ws,MJ[m].short);}});
+  const tYrs=Object.keys(DB.trend).map(Number).sort((a,b)=>a-b);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','ลงทะเบียน','สำเร็จการศึกษา'],...tYrs.map(y=>[y,DB.trend[y].enrolled,DB.trend[y].graduated])]),'Trend');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['สาขา (สหกิจ 4 เดือน)',...DB.coopYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.coop[m]||DB.coopYrs.map(()=>0)),(DB.coop[m]||[]).reduce((a,b)=>a+b,0)])]),'Coop_4mo');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['สาขา (ฝึกงาน 2 เดือน)',...DB.internYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.intern[m]||DB.internYrs.map(()=>0)),(DB.intern[m]||[]).reduce((a,b)=>a+b,0)])]),'Intern_2mo');
+  XLSX.writeFile(wb,'student_data_hub_export.xlsx');
+  toast('✓ Export Excel สำเร็จ');
+}
+function exportCSV(){
+  let csv='ปีการศึกษา,สาขา,แผนรับ,สัมภาษณ์,ยืนยัน,รายงานตัว,ไม่รายงานตัว\n';
+  MJ_KEYS.forEach(m=>(DB.intake[m]||[]).forEach(r=>{csv+=`${r[0]},${MJ[m].short},${r.slice(1).join(',')}\n`;}));
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\ufeff'+encodeURIComponent(csv);a.download='intake_data.csv';a.click();
+  toast('✓ Export CSV สำเร็จ');
+}
+function exportGSheets(){
+  const data={intake:DB.intake,trend:DB.trend,status:DB.status,coop:DB.coop,coopYrs:DB.coopYrs,intern:DB.intern,internYrs:DB.internYrs};
+  const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));a.download='student_data.json';a.click();
+  toast('✓ Export JSON สำเร็จ');
+}
+function downloadTemplate(type){
+  const wb=XLSX.utils.book_new();
+  if(type==='students'){
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','วิชาเอก','แผนรับ','สัมภาษณ์','ยืนยัน','รายงานตัว','ไม่รายงานตัว'],[2567,'fin',70,122,80,76,4]]),'Intake');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','จำนวนลงทะเบียน'],[2567,524]]),'Enrolled');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','จำนวนสำเร็จการศึกษา'],[2567,0]]),'Graduated');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','ยังเป็นนักศึกษา','สำเร็จการศึกษา','ไม่รายงานตัว','โอนย้าย','ออกกลางคัน','พักการศึกษา'],[2567,532,518,14,8,21,3]]),'Status');
+    XLSX.writeFile(wb,'template_students.xlsx');
+  } else if(type==='coop'){
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','วิชาเอก','จำนวน'],[2567,'fin',12],[2567,'mkt',37]]),'Coop');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['บริษัท'],['กรุงเทพมหานคร'],['สมุทรปราการ']]),'CoopTop5');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['partner'],['UOB'],['Tops']]),'Partners');
+    XLSX.writeFile(wb,'template_coop_4month.xlsx');
+  } else {
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','วิชาเอก','จำนวน'],[2567,'fin',41],[2567,'mkt',65]]),'Intern');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['บริษัท'],['Tops'],['SCB']]),'InternTop5');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['partner'],['TBH'],['PTT']]),'Partners');
+    XLSX.writeFile(wb,'template_intern_2month.xlsx');
+  }
+  toast('✓ ดาวน์โหลด Template สำเร็จ');
+}
+
+/* ── MODAL / TOAST ── */
+function openExportModal(){document.getElementById('export-modal').classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+let _tt;
+function toast(msg,color='#6d28d9'){
+  document.getElementById('tdot').style.background=color;
+  document.getElementById('tmsg').textContent=msg;
+  const el=document.getElementById('toast');el.classList.add('show');clearTimeout(_tt);
+  _tt=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+init();
 </script>
 </body>
 </html>

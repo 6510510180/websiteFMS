@@ -66,6 +66,8 @@ body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);colo
 .btn-o:hover{background:var(--acc-l);}
 .btn-g{background:linear-gradient(135deg,var(--green),#10b981);color:#fff;box-shadow:0 3px 10px rgba(5,150,105,.28);}
 .btn-g:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(5,150,105,.36);}
+.btn-pdf{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;box-shadow:0 3px 10px rgba(220,38,38,.28);}
+.btn-pdf:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(220,38,38,.36);}
 .btn-sm{padding:6px 12px;font-size:11.5px;border-radius:7px;}
 
 /* CONTROLS */
@@ -192,9 +194,261 @@ td{padding:12px 11px;vertical-align:middle;}
 .toast{position:fixed;bottom:20px;right:20px;z-index:900;background:var(--text);color:#fff;padding:11px 17px;border-radius:11px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:var(--sh3);transform:translateY(72px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
 .toast.show{transform:none;opacity:1;}
 .tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+
+/* ══════════════════════════════════════════
+   PRINT / PDF STYLES
+   @media print จะซ่อน UI ที่ไม่จำเป็น
+   และจัด layout ให้เหมาะกับกระดาษ A4
+══════════════════════════════════════════ */
+@media print {
+  /* ── ซ่อน UI ที่ไม่ต้องการพิมพ์ ── */
+  .tb,
+  .aside,
+  .ctrl,
+  .sbar,
+  .ctx,
+  .mbg,
+  .toast,
+  .ph-acts,
+  .tb-srch,
+  .tb-ibtn,
+  .tb-av          { display: none !important; }
+
+  /* ── Reset layout ── */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  html, body {
+    background: #fff !important;
+    font-size: 10pt;
+    color: #000;
+  }
+
+  .layout {
+    display: block;
+    overflow: visible;
+  }
+
+  .main {
+    padding: 0;
+    overflow: visible;
+  }
+
+  /* ── Page setup ── */
+  @page {
+    size: A4 landscape;
+    margin: 12mm 10mm 14mm;
+  }
+
+  /* ── PDF Header (แสดงแทน topbar) ── */
+  .print-header {
+    display: block !important;
+    margin-bottom: 12pt;
+    padding-bottom: 8pt;
+    border-bottom: 2pt solid #6d28d9;
+  }
+
+  .print-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .print-title {
+    font-family: 'Noto Sans Thai', 'Sarabun', sans-serif;
+    font-size: 14pt;
+    font-weight: 900;
+    color: #1a0f2e;
+    line-height: 1.3;
+  }
+
+  .print-subtitle {
+    font-size: 9pt;
+    color: #5a5070;
+    margin-top: 2pt;
+    font-style: italic;
+  }
+
+  .print-meta {
+    text-align: right;
+    font-size: 8.5pt;
+    color: #5a5070;
+    line-height: 1.6;
+  }
+
+  /* Legend ใน PDF */
+  .print-legend {
+    display: flex !important;
+    align-items: center;
+    gap: 14pt;
+    margin-top: 8pt;
+    flex-wrap: wrap;
+  }
+
+  .print-legend-label {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #5a5070;
+  }
+
+  .print-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4pt;
+    font-size: 8.5pt;
+    font-weight: 600;
+    color: #5a5070;
+  }
+
+  .print-legend-chip {
+    width: 16pt;
+    height: 16pt;
+    border-radius: 3pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7pt;
+    font-weight: 800;
+    font-family: 'Lexend', sans-serif;
+  }
+
+  .plc-F { background: #ede9fe; color: #7c3aed; border: 0.5pt solid #c4b5fd; }
+  .plc-M { background: #e0f2fe; color: #0369a1; border: 0.5pt solid #7dd3fc; }
+  .plc-P { background: #fef3c7; color: #b45309; border: 0.5pt solid #fcd34d; }
+
+  /* ── Table ── */
+  .tc {
+    border-radius: 0;
+    box-shadow: none;
+    border: 1pt solid #d6cef0;
+    overflow: visible;
+  }
+
+  .tscr { overflow: visible; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8pt;
+    table-layout: fixed;
+  }
+
+  thead { position: static; }
+
+  thead tr th {
+    background: #f7f4fd !important;
+    color: #5a5070 !important;
+    font-size: 7.5pt !important;
+    padding: 5pt 5pt !important;
+    border: 0.5pt solid #d6cef0 !important;
+    white-space: normal !important;
+    word-break: break-word;
+  }
+
+  .th-no  { width: 24pt !important; }
+  .th-plo { width: auto !important; }
+  .th-type{ width: 38pt !important; }
+
+  /* หัวคอลัมน์ stakeholder: ลดขนาด writing-mode */
+  .th-sk {
+    width: 22pt !important;
+    min-width: 22pt !important;
+    padding: 4pt 2pt !important;
+  }
+
+  .th-sk-in {
+    font-size: 7pt !important;
+    padding: 3pt 1pt 6pt !important;
+  }
+
+  tbody tr { page-break-inside: avoid; }
+
+  td {
+    padding: 5pt 5pt !important;
+    border: 0.5pt solid #e8e2f5 !important;
+    vertical-align: middle !important;
+  }
+
+  .td-no {
+    font-size: 8pt !important;
+    text-align: center;
+    color: #9088a8 !important;
+  }
+
+  .td-desc {
+    font-size: 8pt !important;
+    line-height: 1.5 !important;
+    color: #1a0f2e !important;
+  }
+
+  .td-c { padding: 4pt 2pt !important; text-align: center; }
+
+  /* chip ใน print: แทน interactive chip ด้วยตัวอักษรเล็กๆ */
+  .chip {
+    width: 18pt !important;
+    height: 18pt !important;
+    font-size: 7.5pt !important;
+    border-radius: 3pt !important;
+    cursor: default !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .cF { background: #ede9fe !important; color: #7c3aed !important; border: 0.5pt solid #c4b5fd !important; }
+  .cM { background: #e0f2fe !important; color: #0369a1 !important; border: 0.5pt solid #7dd3fc !important; }
+  .cP { background: #fef3c7 !important; color: #b45309 !important; border: 0.5pt solid #fcd34d !important; }
+  .cE { background: #f1f0f5 !important; color: #c4bdd8 !important; border: 0.5pt dashed #e5e2ef !important; }
+
+  /* type badge */
+  .bt {
+    font-size: 7pt !important;
+    padding: 2pt 5pt !important;
+  }
+
+  /* ซ่อน chip ที่ว่าง (cE) ใน print เพื่อลดความยุ่งเหยิง */
+  .cE { visibility: hidden !important; }
+
+  /* ── Page number ── */
+  .print-footer {
+    display: block !important;
+    position: fixed;
+    bottom: 4mm;
+    right: 10mm;
+    font-size: 7.5pt;
+    color: #9088a8;
+  }
+}
+
+/* ซ่อน print-only elements ตอน screen */
+.print-header,
+.print-legend,
+.print-footer { display: none; }
 </style>
 </head>
 <body>
+
+<!-- PRINT-ONLY HEADER (ซ่อนบน screen, แสดงตอน print) -->
+<div class="print-header">
+  <div class="print-header-top">
+    <div>
+      <div class="print-title">การวิเคราะห์ความต้องการของผู้มีส่วนได้ส่วนเสียต่อผลลัพธ์การเรียนรู้</div>
+      <div class="print-subtitle">Stakeholders' Needs to PLOs Mapping — FMS, PSU Faculty of Management</div>
+    </div>
+    <div class="print-meta" id="print-meta">
+      วันที่พิมพ์: —<br>
+      โปรแกรม: BA-2566
+    </div>
+  </div>
+  <div class="print-legend">
+    <span class="print-legend-label">ระดับความสำคัญ:</span>
+    <div class="print-legend-item"><span class="print-legend-chip plc-F">F</span>Foundational — ต้องการสูงสุด</div>
+    <div class="print-legend-item"><span class="print-legend-chip plc-M">M</span>Main — ต้องการหลัก</div>
+    <div class="print-legend-item"><span class="print-legend-chip plc-P">P</span>Peripheral — ต้องการรอง</div>
+  </div>
+</div>
+
+<!-- PRINT-ONLY FOOTER -->
+<div class="print-footer" id="print-footer"></div>
 
 <!-- TOPBAR -->
 <header class="tb">
@@ -205,7 +459,6 @@ td{padding:12px 11px;vertical-align:middle;}
   <nav class="tb-nav">
     <a href="qa-add.html">หน้าหลัก</a>
     <a href="stakeholder.html" class="active">Stakeholders</a>
-
   </nav>
   <div class="tb-r">
     <div class="tb-srch">
@@ -230,6 +483,10 @@ td{padding:12px 11px;vertical-align:middle;}
           <button class="btn btn-o btn-sm" onclick="exportExcel()">
             <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
             Export Excel
+          </button>
+          <button class="btn btn-pdf btn-sm" onclick="exportPDF()">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"/></svg>
+            Export PDF
           </button>
           <button class="btn btn-p btn-sm" onclick="openModal()">
             <svg viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
@@ -384,7 +641,7 @@ const PLOS=[
 const DEF_SK=['อาจารย์','นักศึกษา','ศิษย์เก่า','ผู้ประกอบการ','ผู้ใช้บัณฑิต','ชุมชน','ผอ./ผู้บริหาร ม.อ.','ราชการ/ท้องถิ่น','สถาบันฯ','สมาคม'];
 
 let SKS=[...DEF_SK];
-let MAP={}; // MAP[ploNo][skIdx]='F'|'M'|'P'|null
+let MAP={};
 let pending=null, ctxT=null;
 
 function initMap(){
@@ -396,8 +653,7 @@ function initMap(){
 
 /* ══ RENDER ══ */
 function render(){
-  initMap();
-  rHead(); rBody(); rBars(); rSKList();
+  initMap(); rHead(); rBody(); rBars(); rSKList();
   document.getElementById('st-p').textContent=PLOS.length;
   document.getElementById('st-s').textContent=SKS.length;
 }
@@ -448,8 +704,7 @@ function addSK(){
   const idx=SKS.length;
   SKS.push(name);
   PLOS.forEach(p=>{ MAP[p.no][idx]=null; });
-  inp.value='';
-  render();
+  inp.value=''; render();
   toast(`✓ เพิ่ม "${name}" แล้ว`,'#059669');
 }
 function delSK(i){
@@ -505,7 +760,6 @@ function procFile(file){
       const data=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
       if(!data.length){ toast('ไม่พบข้อมูลในไฟล์','#dc2626'); return; }
       pending=data;
-      // preview
       const keys=Object.keys(data[0]);
       document.getElementById('prev-s').innerHTML=`<table><thead><tr>${keys.map(k=>`<th>${k}</th>`).join('')}</tr></thead><tbody>${data.slice(0,5).map(r=>`<tr>${keys.map(k=>`<td>${r[k]}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
       document.getElementById('prev-w').style.display='block';
@@ -541,7 +795,7 @@ function dlTmpl(){
   toast('✓ ดาวน์โหลด Template แล้ว','#059669');
 }
 
-/* ══ EXPORT ══ */
+/* ══ EXPORT EXCEL ══ */
 function exportExcel(){
   const hdr=['No.','Programme Learning Outcomes','Type',...SKS];
   const rows=PLOS.map(p=>{ const r={'No.':p.no,'Programme Learning Outcomes':p.desc,'Type':p.type}; SKS.forEach((s,i)=>{ r[s]=MAP[p.no]?.[i]||''; }); return r; });
@@ -552,11 +806,264 @@ function exportExcel(){
   toast('✓ Export Excel สำเร็จ','#059669');
 }
 
+/* ══ PDF DROPDOWN TOGGLE ══ */
+function togglePdfDD(e){
+  e.stopPropagation();
+  document.getElementById('pdf-wrap').classList.toggle('open');
+}
+function closePdfDD(){
+  document.getElementById('pdf-wrap').classList.remove('open');
+}
+document.addEventListener('click', ()=> closePdfDD());
+
+/* ══ EXPORT PDF — Print CSS ══ */
+function exportPDF(){
+  // อัปเดตวันที่และข้อมูล meta ก่อน print
+  const now = new Date();
+  const thDate = now.toLocaleDateString('th-TH', {
+    year:  'numeric',
+    month: 'long',
+    day:   'numeric'
+  });
+  document.getElementById('print-meta').innerHTML =
+    `วันที่พิมพ์: ${thDate}<br>` +
+    `โปรแกรม: BA-2566<br>` +
+    `จำนวน PLO: ${PLOS.length} | Stakeholders: ${SKS.length}`;
+
+  // เพิ่มข้อความ footer
+  document.getElementById('print-footer').textContent =
+    `FMS — Faculty Management System | PSU Faculty of Management | พิมพ์เมื่อ ${thDate}`;
+
+  // รอ DOM update แล้วค่อย print
+  setTimeout(() => {
+    window.print();
+    toast('✓ เปิดหน้าต่าง Print แล้ว — เลือก "Save as PDF"','#dc2626');
+  }, 100);
+}
+
+/* ══ FONT LOADER — โหลด Sarabun TTF แล้ว cache ไว้ ══ */
+let _thFontB64 = null;
+let _thFontBoldB64 = null;
+
+async function loadThaiFont() {
+  if (_thFontB64 && _thFontBoldB64) return true;
+  try {
+    // โหลด Sarabun Regular + Bold จาก Google Fonts API
+    const [r1, r2] = await Promise.all([
+      fetch('https://fonts.gstatic.com/s/sarabun/v13/DtVmJx26TKEr37c9YK5sulwm6gDXvwE.woff2'),
+      fetch('https://fonts.gstatic.com/s/sarabun/v13/DtVhJx26TKEr37c9YNpoiUkm5xhnAP4.woff2'),
+    ]);
+    if (!r1.ok || !r2.ok) throw new Error('fetch failed');
+    const [ab1, ab2] = await Promise.all([r1.arrayBuffer(), r2.arrayBuffer()]);
+    _thFontB64     = btoa(String.fromCharCode(...new Uint8Array(ab1)));
+    _thFontBoldB64 = btoa(String.fromCharCode(...new Uint8Array(ab2)));
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+/* ══ EXPORT PDF — jsPDF + AutoTable ══ */
+async function exportPDFjsPDF(){
+  toast('⏳ กำลังสร้าง PDF...', '#6d28d9');
+
+  // โหลด font ก่อน (ครั้งแรกใช้เวลานิดหน่อย ครั้งถัดไป cache แล้ว)
+  const fontOk = await loadThaiFont();
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+  // ── ลงทะเบียน font ภาษาไทย ──
+  const FONT = 'Sarabun';
+  if (fontOk) {
+    doc.addFileToVFS('Sarabun-Regular.woff2', _thFontB64);
+    doc.addFileToVFS('Sarabun-Bold.woff2',    _thFontBoldB64);
+    doc.addFont('Sarabun-Regular.woff2', FONT, 'normal');
+    doc.addFont('Sarabun-Bold.woff2',    FONT, 'bold');
+    doc.setFont(FONT, 'normal');
+  }
+
+  const now = new Date();
+  const thDate = now.toLocaleDateString('th-TH', { year:'numeric', month:'long', day:'numeric' });
+  const pageW = doc.internal.pageSize.getWidth();
+
+  // ── Header ──
+  doc.setFillColor(109, 40, 217);
+  doc.rect(0, 0, pageW, 18, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(11);
+  if (fontOk) doc.setFont(FONT, 'bold'); else doc.setFont('helvetica','bold');
+  doc.text('Stakeholders\' Needs to PLOs Mapping', 10, 7);
+  doc.setFontSize(7.5);
+  if (fontOk) doc.setFont(FONT, 'normal'); else doc.setFont('helvetica','normal');
+  doc.text('FMS - Faculty Management System | PSU Faculty of Management', 10, 12.5);
+  doc.text(`พิมพ์เมื่อ: ${thDate}  |  PLOs: ${PLOS.length}  |  Stakeholders: ${SKS.length}`, 10, 16.5);
+
+  // ── Legend ──
+  const legendY = 23;
+  doc.setFontSize(7);
+  doc.setTextColor(90, 80, 112);
+  if (fontOk) doc.setFont(FONT, 'bold'); else doc.setFont('helvetica','bold');
+  doc.text('ระดับ:', 10, legendY);
+
+  const legends = [
+    { label: 'F = Foundational (ต้องการสูงสุด)', bg: [237,233,254], text: [124,58,237] },
+    { label: 'M = Main (ต้องการหลัก)',            bg: [224,242,254], text: [3,105,161] },
+    { label: 'P = Peripheral (ต้องการรอง)',        bg: [254,243,199], text: [180,83,9] },
+  ];
+  let lx = 26;
+  legends.forEach(lg => {
+    doc.setFillColor(...lg.bg);
+    doc.setDrawColor(...lg.text);
+    doc.roundedRect(lx, legendY - 4, 3, 3, 0.5, 0.5, 'FD');
+    doc.setTextColor(...lg.text);
+    if (fontOk) doc.setFont(FONT, 'bold'); else doc.setFont('helvetica','bold');
+    doc.text(lg.label.split('=')[0].trim(), lx + 0.7, legendY - 1.3);
+    doc.setTextColor(90, 80, 112);
+    if (fontOk) doc.setFont(FONT, 'normal'); else doc.setFont('helvetica','normal');
+    doc.text('= ' + lg.label.split('=').slice(1).join('=').trim(), lx + 4, legendY - 1.3);
+    lx += 55;
+  });
+
+  // ── Table data ──
+  const head = [['No.', 'Programme Learning Outcomes', 'Type', ...SKS]];
+  const body = PLOS.map(p => {
+    const cells = [
+      p.no,
+      p.desc,
+      p.type,
+      ...SKS.map((_, i) => MAP[p.no]?.[i] || '')
+    ];
+    return cells;
+  });
+
+  // colour map for chips
+  const levelColors = {
+    F: { fill: [237,233,254], text: [124,58,237] },
+    M: { fill: [224,242,254], text: [3,105,161] },
+    P: { fill: [254,243,199], text: [180,83,9] },
+  };
+
+  const skCount = SKS.length;
+  const skColW = Math.min(14, Math.max(9, Math.floor((pageW - 10 - 18 - 80 - 22) / skCount)));
+
+  doc.autoTable({
+    startY: legendY + 4,
+    head,
+    body,
+    theme: 'grid',
+    styles: {
+      fontSize: 7,
+      cellPadding: 2,
+      font: fontOk ? FONT : 'helvetica',
+      textColor: [26, 15, 46],
+      lineColor: [214, 206, 240],
+      lineWidth: 0.2,
+      valign: 'middle',
+      halign: 'left',
+      overflow: 'linebreak',
+    },
+    headStyles: {
+      fillColor: [247, 244, 253],
+      textColor: [90, 80, 112],
+      fontStyle: 'bold',
+      font: fontOk ? FONT : 'helvetica',
+      fontSize: 6.5,
+      halign: 'center',
+      valign: 'bottom',
+    },
+    columnStyles: {
+      0: { cellWidth: 10, halign: 'center', fontStyle: 'bold', textColor: [144, 136, 168] },
+      1: { cellWidth: 'auto', minCellWidth: 70 },
+      2: { cellWidth: 18, halign: 'center' },
+      // stakeholder columns — set width dynamically below
+    },
+    // override per-column for stakeholders
+    didParseCell(data) {
+      if (data.column.index >= 3) {
+        data.cell.styles.cellWidth = skColW;
+        data.cell.styles.halign = 'center';
+      }
+    },
+    willDrawCell(data) {
+      // colour chips for F / M / P
+      if (data.section === 'body' && data.column.index >= 3) {
+        const val = String(data.cell.raw || '').trim().toUpperCase();
+        if (levelColors[val]) {
+          const { fill, text } = levelColors[val];
+          const { x, y, width, height } = data.cell;
+          const pad = 1.5;
+          const bw = width - pad * 2;
+          const bh = height - pad * 2;
+          doc.setFillColor(...fill);
+          doc.setDrawColor(...text);
+          doc.setLineWidth(0.3);
+          doc.roundedRect(x + pad, y + pad, bw, bh, 1, 1, 'FD');
+          doc.setTextColor(...text);
+          doc.setFont(fontOk ? FONT : 'helvetica', 'bold');
+          doc.setFontSize(6.5);
+          doc.text(val, x + width / 2, y + height / 2 + 0.5, { align: 'center', baseline: 'middle' });
+          // prevent autoTable from drawing default text
+          data.cell.text = [];
+        }
+      }
+      // type badge colour
+      if (data.section === 'body' && data.column.index === 2) {
+        const val = String(data.cell.raw || '');
+        const { x, y, width, height } = data.cell;
+        if (val === 'Specific') {
+          doc.setFillColor(252, 231, 243);
+          doc.setDrawColor(190, 24, 93);
+        } else {
+          doc.setFillColor(254, 243, 199);
+          doc.setDrawColor(146, 64, 14);
+        }
+        doc.setLineWidth(0.2);
+        doc.roundedRect(x + 1.5, y + 1.5, width - 3, height - 3, 1, 1, 'FD');
+        doc.setTextColor(val === 'Specific' ? 190 : 146, val === 'Specific' ? 24 : 64, val === 'Specific' ? 93 : 14);
+        doc.setFont(fontOk ? FONT : 'helvetica', 'bold');
+        doc.setFontSize(6);
+        doc.text(val, x + width / 2, y + height / 2 + 0.5, { align: 'center', baseline: 'middle' });
+        data.cell.text = [];
+      }
+    },
+    // alternating row shade
+    didDrawRow(data) {
+      if (data.section === 'body' && data.row.index % 2 === 0) {
+        // done via styles below
+      }
+    },
+    alternateRowStyles: { fillColor: [252, 250, 255] },
+    margin: { left: 10, right: 10 },
+    // footer with page numbers
+    didDrawPage(data) {
+      const pg = doc.internal.getCurrentPageInfo().pageNumber;
+      const total = doc.internal.getNumberOfPages();
+      doc.setFontSize(6.5);
+      doc.setTextColor(144, 136, 168);
+      if (fontOk) doc.setFont(FONT, 'normal'); else doc.setFont('helvetica','normal');
+      doc.text(`หน้า ${pg} / ${total}`, pageW - 10, doc.internal.pageSize.getHeight() - 5, { align: 'right' });
+      doc.text('FMS — Faculty Management System', 10, doc.internal.pageSize.getHeight() - 5);
+    },
+  });
+
+  doc.save('stakeholders_plos_mapping.pdf');
+  toast('✓ ดาวน์โหลด PDF (jsPDF) สำเร็จ' + (!fontOk ? ' ⚠ ไม่พบ font ภาษาไทย' : ''), '#dc2626');
+}
+
 /* ══ SAVE ══ */
 function saveData(){
-  const payload={program_id:'BA-2566',stakeholders:SKS,mappings:PLOS.map(p=>({plo_no:p.no,plo_description:p.desc,type:p.type,needs:SKS.map((s,i)=>({stakeholder:s,level:MAP[p.no]?.[i]||null}))}))};
+  const payload={
+    program_id:'BA-2566',
+    stakeholders:SKS,
+    mappings:PLOS.map(p=>({
+      plo_no:p.no,
+      plo_description:p.desc,
+      type:p.type,
+      needs:SKS.map((s,i)=>({stakeholder:s,level:MAP[p.no]?.[i]||null}))
+    }))
+  };
   console.log('[FMS] Save:',payload);
-  // TODO: POST /api/stakeholder-mappings
   toast('✓ บันทึกข้อมูลสำเร็จ','#059669');
 }
 

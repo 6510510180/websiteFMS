@@ -71,7 +71,6 @@ app.post("/api/login", async (req, res) => {
 
     const user = result.rows[0];
 
-    // เปรียบเทียบ plain text ตรงๆ
     if (user.password_hash !== password)
       return res.status(401).json({ message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" });
 
@@ -79,6 +78,49 @@ app.post("/api/login", async (req, res) => {
     res.json({ message: "เข้าสู่ระบบสำเร็จ", user: safeUser });
   } catch (err) {
     console.error("Login error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ============================================================
+//  PUBLIC API  (ไม่ต้อง token — ใช้โดย bba-public.html)
+// ============================================================
+
+// GET /api/public/courses/:id
+app.get("/api/public/courses/:id", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM courses WHERE id = $1 AND status = 'active'",
+      [req.params.id]
+    );
+    if (result.rows.length === 0)
+      return res.status(404).json({ message: "ไม่พบหลักสูตร" });
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/public/courses/:id/majors
+app.get("/api/public/courses/:id/majors", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM majors WHERE course_id = $1 ORDER BY id ASC",
+      [req.params.id]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/public/majors/:id
+app.get("/api/public/majors/:id", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM majors WHERE id = $1", [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบสาขาวิชา" });
+    res.json(result.rows[0]);
+  } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -161,7 +203,7 @@ app.delete("/api/courses/:id", async (req, res) => {
 });
 
 // ============================================================
-//  MAJORS
+//  MAJORS  (เพิ่ม hero_image ใน POST / PUT)
 // ============================================================
 app.get("/api/courses/:id/majors", async (req, res) => {
   try {
@@ -184,15 +226,17 @@ app.get("/api/majors/:id", async (req, res) => {
   }
 });
 
+// POST /api/majors  — รวม hero_image แล้ว
 app.post("/api/majors", async (req, res) => {
-  const { course_id, name_th, name_en, intro, image_url,
+  const { course_id, name_th, name_en, intro, hero_image, image_url,
           career_path, plan_1, plan_2, plan_3, plan_4 } = req.body;
   if (!course_id || !name_th) return res.status(400).json({ message: "ข้อมูลไม่ครบ" });
   try {
     const result = await pool.query(
-      `INSERT INTO majors (course_id,name_th,name_en,intro,image_url,career_path,plan_1,plan_2,plan_3,plan_4)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`,
-      [course_id, name_th, name_en||null, intro||null, image_url||null,
+      `INSERT INTO majors
+         (course_id,name_th,name_en,intro,hero_image,image_url,career_path,plan_1,plan_2,plan_3,plan_4)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id`,
+      [course_id, name_th, name_en||null, intro||null, hero_image||null, image_url||null,
        career_path||null, plan_1||null, plan_2||null, plan_3||null, plan_4||null]
     );
     res.json({ message: "เพิ่มสาขาสำเร็จ", majorId: result.rows[0].id });
@@ -201,16 +245,21 @@ app.post("/api/majors", async (req, res) => {
   }
 });
 
+// PUT /api/majors/:id  — รวม hero_image แล้ว
 app.put("/api/majors/:id", async (req, res) => {
-  const { name_th, name_en, intro, image_url, career_path,
+  const { name_th, name_en, intro, hero_image, image_url, career_path,
           plan_1, plan_2, plan_3, plan_4 } = req.body;
   try {
-    await pool.query(
-      `UPDATE majors SET name_th=$1,name_en=$2,intro=$3,image_url=$4,career_path=$5,
-       plan_1=$6,plan_2=$7,plan_3=$8,plan_4=$9 WHERE id=$10`,
-      [name_th, name_en||null, intro||null, image_url||null, career_path||null,
-       plan_1||null, plan_2||null, plan_3||null, plan_4||null, req.params.id]
+    const result = await pool.query(
+      `UPDATE majors SET
+         name_th=$1,name_en=$2,intro=$3,hero_image=$4,image_url=$5,career_path=$6,
+         plan_1=$7,plan_2=$8,plan_3=$9,plan_4=$10
+       WHERE id=$11 RETURNING id`,
+      [name_th, name_en||null, intro||null, hero_image||null, image_url||null,
+       career_path||null, plan_1||null, plan_2||null, plan_3||null, plan_4||null,
+       req.params.id]
     );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบสาขา" });
     res.json({ message: "อัปเดตสาขาสำเร็จ" });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
@@ -226,15 +275,350 @@ app.delete("/api/majors/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 // ============================================================
-//  เพิ่ม routes เหล่านี้เข้าไปใน server.js
+//  STUDENT STATS  (ใหม่ทั้งหมด)
 // ============================================================
+
+// GET /api/programs/:programId/student-stats?year=2567
+app.get("/api/programs/:programId/student-stats", async (req, res) => {
+  const { year, major_id } = req.query;
+  let where = "WHERE ss.program_id=$1";
+  const values = [req.params.programId];
+  let idx = 2;
+  if (year)     { where += ` AND ss.academic_year=$${idx++}`; values.push(year); }
+  if (major_id) { where += ` AND ss.major_id=$${idx++}`;      values.push(major_id); }
+  try {
+    const result = await pool.query(
+      `SELECT ss.*, m.name_th AS major_name, m.name_en AS major_name_en
+       FROM student_stats ss
+       LEFT JOIN majors m ON m.id = ss.major_id
+       ${where}
+       ORDER BY ss.academic_year DESC, m.name_th`,
+      values
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error("GET student-stats error:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/student-stats/:id
+app.get("/api/student-stats/:id", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM student_stats WHERE id=$1", [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/student-stats
+app.post("/api/student-stats", async (req, res) => {
+  const { program_id, academic_year, major_id,
+          plan_intake, interviewed, confirmed, reported, no_show_intake,
+          total_enrolled, total_graduated } = req.body;
+  if (!program_id || !academic_year)
+    return res.status(400).json({ message: "ต้องส่ง program_id และ academic_year" });
+  try {
+    const result = await pool.query(
+      `INSERT INTO student_stats
+         (program_id,academic_year,major_id,
+          plan_intake,interviewed,confirmed,reported,no_show_intake,
+          total_enrolled,total_graduated)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+       ON CONFLICT (program_id,academic_year,major_id) DO UPDATE SET
+         plan_intake=EXCLUDED.plan_intake, interviewed=EXCLUDED.interviewed,
+         confirmed=EXCLUDED.confirmed, reported=EXCLUDED.reported,
+         no_show_intake=EXCLUDED.no_show_intake, total_enrolled=EXCLUDED.total_enrolled,
+         total_graduated=EXCLUDED.total_graduated, updated_at=now()
+       RETURNING *`,
+      [program_id, academic_year, major_id||null,
+       plan_intake||0, interviewed||0, confirmed||0, reported||0, no_show_intake||0,
+       total_enrolled||0, total_graduated||0]
+    );
+    res.status(201).json({ message: "บันทึกสถิตินักศึกษาสำเร็จ", stat: result.rows[0] });
+  } catch (err) {
+    console.error("POST student-stats error:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// PUT /api/student-stats/:id
+app.put("/api/student-stats/:id", async (req, res) => {
+  const { plan_intake, interviewed, confirmed, reported, no_show_intake,
+          total_enrolled, total_graduated } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE student_stats SET
+         plan_intake=COALESCE($1,plan_intake), interviewed=COALESCE($2,interviewed),
+         confirmed=COALESCE($3,confirmed), reported=COALESCE($4,reported),
+         no_show_intake=COALESCE($5,no_show_intake), total_enrolled=COALESCE($6,total_enrolled),
+         total_graduated=COALESCE($7,total_graduated), updated_at=now()
+       WHERE id=$8 RETURNING *`,
+      [plan_intake, interviewed, confirmed, reported, no_show_intake,
+       total_enrolled, total_graduated, req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "อัปเดตสถิตินักศึกษาสำเร็จ", stat: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// DELETE /api/student-stats/:id
+app.delete("/api/student-stats/:id", async (req, res) => {
+  try {
+    const result = await pool.query("DELETE FROM student_stats WHERE id=$1 RETURNING *", [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "ลบสถิตินักศึกษาสำเร็จ" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/programs/:programId/student-stats/annual-summary  (ใช้ view)
+app.get("/api/programs/:programId/annual-summary", async (req, res) => {
+  const { year } = req.query;
+  let where = "WHERE program_id=$1";
+  const values = [req.params.programId];
+  if (year) { where += " AND academic_year=$2"; values.push(year); }
+  try {
+    const result = await pool.query(
+      `SELECT * FROM v_annual_summary ${where} ORDER BY academic_year DESC`,
+      values
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ============================================================
+//  STUDENT STATUS SNAPSHOTS  (ใหม่ทั้งหมด)
+// ============================================================
+
+// GET /api/programs/:programId/status-snapshots?year=2567
+app.get("/api/programs/:programId/status-snapshots", async (req, res) => {
+  const { year } = req.query;
+  let where = "WHERE program_id=$1";
+  const values = [req.params.programId];
+  if (year) { where += " AND academic_year=$2"; values.push(year); }
+  try {
+    const result = await pool.query(
+      `SELECT * FROM student_status_snapshots ${where} ORDER BY academic_year DESC`,
+      values
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/status-snapshots/:id
+app.get("/api/status-snapshots/:id", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM student_status_snapshots WHERE id=$1", [req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/status-snapshots
+app.post("/api/status-snapshots", async (req, res) => {
+  const { program_id, academic_year,
+          currently_enrolled, graduated, no_show, transferred, dropped_out, on_leave } = req.body;
+  if (!program_id || !academic_year)
+    return res.status(400).json({ message: "ต้องส่ง program_id และ academic_year" });
+  try {
+    const result = await pool.query(
+      `INSERT INTO student_status_snapshots
+         (program_id,academic_year,
+          currently_enrolled,graduated,no_show,transferred,dropped_out,on_leave)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+       ON CONFLICT (program_id,academic_year) DO UPDATE SET
+         currently_enrolled=EXCLUDED.currently_enrolled, graduated=EXCLUDED.graduated,
+         no_show=EXCLUDED.no_show, transferred=EXCLUDED.transferred,
+         dropped_out=EXCLUDED.dropped_out, on_leave=EXCLUDED.on_leave, updated_at=now()
+       RETURNING *`,
+      [program_id, academic_year,
+       currently_enrolled||0, graduated||0, no_show||0, transferred||0, dropped_out||0, on_leave||0]
+    );
+    res.status(201).json({ message: "บันทึก Snapshot สำเร็จ", snapshot: result.rows[0] });
+  } catch (err) {
+    console.error("POST status-snapshots error:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// PUT /api/status-snapshots/:id
+app.put("/api/status-snapshots/:id", async (req, res) => {
+  const { currently_enrolled, graduated, no_show, transferred, dropped_out, on_leave } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE student_status_snapshots SET
+         currently_enrolled=COALESCE($1,currently_enrolled),
+         graduated=COALESCE($2,graduated),
+         no_show=COALESCE($3,no_show),
+         transferred=COALESCE($4,transferred),
+         dropped_out=COALESCE($5,dropped_out),
+         on_leave=COALESCE($6,on_leave),
+         updated_at=now()
+       WHERE id=$7 RETURNING *`,
+      [currently_enrolled, graduated, no_show, transferred, dropped_out, on_leave, req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "อัปเดต Snapshot สำเร็จ", snapshot: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// DELETE /api/status-snapshots/:id
+app.delete("/api/status-snapshots/:id", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "DELETE FROM student_status_snapshots WHERE id=$1 RETURNING *", [req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "ลบ Snapshot สำเร็จ" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ============================================================
+//  COOP / INTERN STATS  (ใหม่ทั้งหมด)
+// ============================================================
+
+// GET /api/programs/:programId/coop-stats?year=2567
+app.get("/api/programs/:programId/coop-stats", async (req, res) => {
+  const { year, major_id } = req.query;
+  let where = "WHERE cs.program_id=$1";
+  const values = [req.params.programId];
+  let idx = 2;
+  if (year)     { where += ` AND cs.academic_year=$${idx++}`; values.push(year); }
+  if (major_id) { where += ` AND cs.major_id=$${idx++}`;      values.push(major_id); }
+  try {
+    const result = await pool.query(
+      `SELECT cs.*, m.name_th AS major_name, m.name_en AS major_name_en
+       FROM coop_intern_stats cs
+       LEFT JOIN majors m ON m.id = cs.major_id
+       ${where}
+       ORDER BY cs.academic_year DESC, m.name_th`,
+      values
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error("GET coop-stats error:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/coop-stats/:id
+app.get("/api/coop-stats/:id", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM coop_intern_stats WHERE id=$1", [req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/coop-stats
+app.post("/api/coop-stats", async (req, res) => {
+  const { program_id, academic_year, major_id, coop_count, intern_count } = req.body;
+  if (!program_id || !academic_year)
+    return res.status(400).json({ message: "ต้องส่ง program_id และ academic_year" });
+  try {
+    const result = await pool.query(
+      `INSERT INTO coop_intern_stats
+         (program_id,academic_year,major_id,coop_count,intern_count)
+       VALUES ($1,$2,$3,$4,$5)
+       ON CONFLICT (program_id,academic_year,major_id) DO UPDATE SET
+         coop_count=EXCLUDED.coop_count, intern_count=EXCLUDED.intern_count, updated_at=now()
+       RETURNING *`,
+      [program_id, academic_year, major_id||null, coop_count||0, intern_count||0]
+    );
+    res.status(201).json({ message: "บันทึกสถิติสหกิจ/ฝึกงานสำเร็จ", stat: result.rows[0] });
+  } catch (err) {
+    console.error("POST coop-stats error:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// PUT /api/coop-stats/:id
+app.put("/api/coop-stats/:id", async (req, res) => {
+  const { coop_count, intern_count } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE coop_intern_stats SET
+         coop_count=COALESCE($1,coop_count),
+         intern_count=COALESCE($2,intern_count),
+         updated_at=now()
+       WHERE id=$3 RETURNING *`,
+      [coop_count, intern_count, req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "อัปเดตสถิติสหกิจ/ฝึกงานสำเร็จ", stat: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// DELETE /api/coop-stats/:id
+app.delete("/api/coop-stats/:id", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "DELETE FROM coop_intern_stats WHERE id=$1 RETURNING *", [req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    res.json({ message: "ลบสถิติสหกิจ/ฝึกงานสำเร็จ" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/programs/:programId/coop-stats/bulk  — import หลายแถวพร้อมกัน
+app.post("/api/programs/:programId/coop-stats/bulk", async (req, res) => {
+  const { programId } = req.params;
+  const { academic_year, items } = req.body;
+  if (!academic_year || !Array.isArray(items) || items.length === 0)
+    return res.status(400).json({ message: "ต้องส่ง academic_year และ items (array)" });
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    for (const item of items) {
+      await client.query(
+        `INSERT INTO coop_intern_stats (program_id,academic_year,major_id,coop_count,intern_count)
+         VALUES ($1,$2,$3,$4,$5)
+         ON CONFLICT (program_id,academic_year,major_id) DO UPDATE SET
+           coop_count=EXCLUDED.coop_count, intern_count=EXCLUDED.intern_count, updated_at=now()`,
+        [programId, academic_year, item.major_id||null, item.coop_count||0, item.intern_count||0]
+      );
+    }
+    await client.query("COMMIT");
+    res.json({ message: `นำเข้าสำเร็จ ${items.length} รายการ` });
+  } catch (err) {
+    await client.query("ROLLBACK");
+    res.status(500).json({ message: "Server error: " + err.message });
+  } finally {
+    client.release();
+  }
+});
 
 // ============================================================
 //  KAS REFERENCES API
 // ============================================================
-
-// GET /api/kas?type=K|A|S
 app.get("/api/kas", async (req, res) => {
   const { type } = req.query;
   try {
@@ -250,8 +634,6 @@ app.get("/api/kas", async (req, res) => {
   }
 });
 
-// POST /api/kas  — upsert
-// body: { type, code, plo_count, mlo_count }
 app.post("/api/kas", async (req, res) => {
   const { type, code, plo_count, mlo_count } = req.body;
   if (!type || !code) return res.status(400).json({ message: "ต้องส่ง type และ code" });
@@ -273,7 +655,6 @@ app.post("/api/kas", async (req, res) => {
   }
 });
 
-// PUT /api/kas/:id
 app.put("/api/kas/:id", async (req, res) => {
   const { plo_count, mlo_count } = req.body;
   try {
@@ -292,7 +673,6 @@ app.put("/api/kas/:id", async (req, res) => {
   }
 });
 
-// DELETE /api/kas/:id
 app.delete("/api/kas/:id", async (req, res) => {
   try {
     const result = await pool.query("DELETE FROM kas_references WHERE id=$1 RETURNING *", [req.params.id]);
@@ -303,8 +683,6 @@ app.delete("/api/kas/:id", async (req, res) => {
   }
 });
 
-// POST /api/kas/bulk  — import all at once
-// body: { items: [{type, code, plo_count, mlo_count}] }
 app.post("/api/kas/bulk", async (req, res) => {
   const { items } = req.body;
   if (!Array.isArray(items) || items.length === 0)
@@ -336,8 +714,6 @@ app.post("/api/kas/bulk", async (req, res) => {
 // ============================================================
 //  SANKEY COURSES API
 // ============================================================
-
-// GET /api/sankey-courses?major=fin
 app.get("/api/sankey-courses", async (req, res) => {
   const { major } = req.query;
   try {
@@ -352,8 +728,6 @@ app.get("/api/sankey-courses", async (req, res) => {
   }
 });
 
-// POST /api/sankey-courses  — upsert
-// body: { major, code, name, group_type, plo_mapping }
 app.post("/api/sankey-courses", async (req, res) => {
   const { major, code, name, group_type, plo_mapping } = req.body;
   if (!major || !code || !name || !group_type)
@@ -377,7 +751,6 @@ app.post("/api/sankey-courses", async (req, res) => {
   }
 });
 
-// PUT /api/sankey-courses/:id
 app.put("/api/sankey-courses/:id", async (req, res) => {
   const { name, group_type, plo_mapping } = req.body;
   try {
@@ -397,7 +770,6 @@ app.put("/api/sankey-courses/:id", async (req, res) => {
   }
 });
 
-// DELETE /api/sankey-courses/:id
 app.delete("/api/sankey-courses/:id", async (req, res) => {
   try {
     const result = await pool.query("DELETE FROM sankey_courses WHERE id=$1 RETURNING *", [req.params.id]);
@@ -450,11 +822,12 @@ app.post("/api/courses/:courseId/study-plans", async (req, res) => {
 
 app.get("/api/majors/:majorId/study-plans", async (req, res) => {
   const { majorId } = req.params;
-  const { search = "", year_no, status, page = 1, pageSize = 10 } = req.query;
+  const { search = "", year_no, status, plan_type, page = 1, pageSize = 10 } = req.query;
   const values = [majorId]; let where = "WHERE sp.major_id=$1"; let idx = 2;
-  if (year_no) { where += ` AND sp.year_no=$${idx++}`; values.push(year_no); }
-  if (status)  { where += ` AND sp.status=$${idx++}`;  values.push(status); }
-  if (search)  {
+  if (year_no)   { where += ` AND sp.year_no=$${idx++}`;   values.push(year_no); }
+  if (status)    { where += ` AND sp.status=$${idx++}`;    values.push(status); }
+  if (plan_type) { where += ` AND sp.plan_type=$${idx++}`; values.push(plan_type); }
+  if (search) {
     where += ` AND EXISTS (SELECT 1 FROM semesters s JOIN semester_subjects ss ON ss.semester_id=s.id
       JOIN subjects sbj ON sbj.id=ss.subject_id WHERE s.study_plan_id=sp.id
       AND (sbj.code ILIKE $${idx} OR sbj.name_th ILIKE $${idx} OR sbj.name_en ILIKE $${idx}))`;
@@ -474,16 +847,20 @@ app.get("/api/majors/:majorId/study-plans", async (req, res) => {
 
 app.post("/api/majors/:majorId/study-plans", async (req, res) => {
   const { majorId } = req.params;
-  const { academic_year, year_no, status = "active" } = req.body;
-  if (!academic_year || !year_no) return res.status(400).json({ message: "ข้อมูลไม่ครบ" });
+  const { academic_year, year_no, status = "active", plan_type = "normal" } = req.body;
+  if (!academic_year || !year_no) return res.status(400).json({ message: "ข้อมูลไม่ครบ (academic_year, year_no)" });
+  if (!["normal", "coop"].includes(plan_type))
+    return res.status(400).json({ message: "plan_type ต้องเป็น 'normal' หรือ 'coop'" });
   try {
     const r = await pool.query(
-      `INSERT INTO study_plans(major_id,academic_year,year_no,status) VALUES($1,$2,$3,$4) RETURNING *`,
-      [majorId, academic_year, year_no, status]
+      `INSERT INTO study_plans (major_id,academic_year,year_no,status,plan_type)
+       VALUES ($1,$2,$3,$4,$5) RETURNING *`,
+      [majorId, academic_year, year_no, status, plan_type]
     );
     res.json({ message: "สร้างแผนการศึกษาสำเร็จ", plan: r.rows[0] });
   } catch (e) {
-    if (e.code === "23505") return res.status(409).json({ message: "แผนของสาขา ปี/ปีการศึกษานี้มีอยู่แล้ว" });
+    if (e.code === "23505")
+      return res.status(409).json({ message: `แผน${plan_type === "coop" ? "สหกิจ" : "ปกติ"}ของสาขานี้ ปี ${year_no} มีอยู่แล้ว` });
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -725,90 +1102,6 @@ app.delete("/api/semester-subjects/:id", async (req, res) => {
     res.json({ message: "ลบรายวิชาสำเร็จ" });
   } catch (err) { res.status(500).json({ message: "Server error" }); }
 });
-app.get("/api/majors/:majorId/study-plans", async (req, res) => {
-  const { majorId } = req.params;
-  const { search = "", year_no, status, plan_type, page = 1, pageSize = 10 } = req.query;
-
-  const values = [majorId];
-  let where = "WHERE sp.major_id=$1";
-  let idx = 2;
-
-  if (year_no)    { where += ` AND sp.year_no=$${idx++}`;    values.push(year_no); }
-  if (status)     { where += ` AND sp.status=$${idx++}`;     values.push(status); }
-  if (plan_type)  { where += ` AND sp.plan_type=$${idx++}`;  values.push(plan_type); }
-  if (search) {
-    where += ` AND EXISTS (
-      SELECT 1 FROM semesters s
-      JOIN semester_subjects ss ON ss.semester_id=s.id
-      JOIN subjects sbj ON sbj.id=ss.subject_id
-      WHERE s.study_plan_id=sp.id
-      AND (sbj.code ILIKE $${idx} OR sbj.name_th ILIKE $${idx} OR sbj.name_en ILIKE $${idx})
-    )`;
-    values.push(`%${search}%`);
-    idx++;
-  }
-
-  const offset = (Number(page) - 1) * Number(pageSize);
-  try {
-    const total = await pool.query(
-      `SELECT COUNT(*) FROM study_plans sp ${where}`, values
-    );
-    const rows = await pool.query(
-      `SELECT sp.*,
-         (SELECT COALESCE(SUM(total_credits),0) FROM semesters WHERE study_plan_id=sp.id) AS sum_credits
-       FROM study_plans sp ${where}
-       ORDER BY sp.academic_year DESC, sp.year_no ASC
-       LIMIT ${Number(pageSize)} OFFSET ${offset}`,
-      values
-    );
-    res.json({
-      data:     rows.rows,
-      total:    Number(total.rows[0].count),
-      page:     Number(page),
-      pageSize: Number(pageSize)
-    });
-  } catch (err) {
-    console.error("GET study-plans error:", err.message);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// POST /api/majors/:majorId/study-plans
-// body: { academic_year, year_no, status, plan_type }
-app.post("/api/majors/:majorId/study-plans", async (req, res) => {
-  const { majorId } = req.params;
-  const {
-    academic_year,
-    year_no,
-    status    = "active",
-    plan_type = "normal"   // 'normal' | 'coop'
-  } = req.body;
-
-  if (!academic_year || !year_no)
-    return res.status(400).json({ message: "ข้อมูลไม่ครบ (academic_year, year_no)" });
-
-  // ตรวจ plan_type
-  if (!["normal", "coop"].includes(plan_type))
-    return res.status(400).json({ message: "plan_type ต้องเป็น 'normal' หรือ 'coop'" });
-
-  try {
-    const r = await pool.query(
-      `INSERT INTO study_plans (major_id, academic_year, year_no, status, plan_type)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING *`,
-      [majorId, academic_year, year_no, status, plan_type]
-    );
-    res.json({ message: "สร้างแผนการศึกษาสำเร็จ", plan: r.rows[0] });
-  } catch (e) {
-    if (e.code === "23505")
-      return res.status(409).json({
-        message: `แผน${plan_type === "coop" ? "สหกิจ" : "ปกติ"}ของสาขานี้ ปี ${year_no} มีอยู่แล้ว`
-      });
-    console.error("POST study-plans error:", e.message);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
 
 // ============================================================
 //  PROGRAMS

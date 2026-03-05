@@ -169,7 +169,7 @@
         .course-img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* ทำให้รูปไม่เบี้ยว */
+            object-fit: cover;
             display: block;
         }
 
@@ -526,7 +526,7 @@
                 </div>
                 <div class="footer-col">
                     <h4>ติดต่อเรา</h4>
-                    <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d0b6bda3fdb9beb6bf90b7a2bfa5a0fea0a3a5feb1b3fea4b8">[email&#160;protected]</a></p>
+                    <p>fms@psu.ac.th</p>
                     <p>+66-7428-7815</p>
                     <p>15 ถนนกาญจนวณิชย์ อำเภอหาดใหญ่ จังหวัดสงขลา 90112</p>
                 </div>
@@ -534,32 +534,33 @@
             <div class="footer-bottom">
                 <p>© 2026 University Name. All rights reserved.</p>
                 <div class="footer-legal">
-                    <p>Policy</p>
-         
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 <script>
 const BASE_URL = "https://websitefms.onrender.com";
 const API = BASE_URL + "/api";
 
-// ── append เฉพาะหลักสูตรใหม่จาก API (ไม่แตะ card เดิมของเพื่อน) ──
 async function appendNewCourses() {
   const grid = document.getElementById("courseGrid");
 
   try {
     const res = await fetch(`${API}/courses`);
-    if (!res.ok) return; // ถ้า API ล้ม ไม่แสดง error ให้ user เห็น
+    if (!res.ok) return;
     const courses = await res.json();
     if (!courses || courses.length === 0) return;
 
-    // หา id ใหม่สุดใน API → ใช้แปะ badge NEW
     const newestId = Math.max(...courses.map(c => c.id));
 
-    let addedCount = 0;
     courses.forEach(course => {
-      // สร้าง card
-      const card = document.createElement("div");
       const isNew = course.id === newestId;
       const isActive = course.status === "active";
 
+      const card = document.createElement("div");
       card.className = `course-card${isActive ? "" : " no-link"}`;
       card.dataset.courseId = course.id;
 
@@ -575,13 +576,13 @@ async function appendNewCourses() {
         ? `<br><small style="opacity:0.85;">${course.student_range}</small>`
         : "";
 
-      // แก้ใหม่
-const labelHTML = isActive
-  ? `<a href="bba-public.html?courseId=${course.id}" class="course-link">
-       <div class="course-label">${course.name_th}${yearLine}</div>
-     </a>`
-  : `<div class="course-label" ...>...</div>`;
-  
+      // label — แยก active vs ไม่ active ให้ครบ
+      const labelHTML = isActive
+        ? `<a href="bba-public.html?courseId=${course.id}" class="course-link">
+             <div class="course-label">${course.name_th}${yearLine}</div>
+           </a>`
+        : `<div class="course-label">${course.name_th}${yearLine}</div>`;
+
       card.innerHTML = `
         ${isNew ? '<span class="badge-new">NEW</span>' : ""}
         <div class="img-placeholder">${imgHTML}</div>
@@ -589,16 +590,14 @@ const labelHTML = isActive
       `;
 
       grid.appendChild(card);
-      addedCount++;
     });
 
-    console.log(`✅ เพิ่ม ${addedCount} หลักสูตรจาก API`);
-
   } catch (err) {
-    // API ยังไม่พร้อม หรือ network error — ไม่ทำอะไร card เดิมยังอยู่ครบ
     console.warn("appendNewCourses: API ไม่ตอบสนอง ใช้ข้อมูล static แทน", err);
   }
 }
 
 appendNewCourses();
 </script>
+</body>
+</html>

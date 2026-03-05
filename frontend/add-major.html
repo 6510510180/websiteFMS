@@ -60,20 +60,34 @@
     .btn-primary{background:var(--primary);color:white;box-shadow:0 5px 14px rgba(124,58,237,.3);}
     #message{margin-top:8px;font-size:13px;}
 
-    /* ── IMAGE UPLOAD (ใหม่) ── */
+    /* ── IMAGE UPLOAD ── */
+    .img-section-title {
+      font-size: 14px; font-weight: 700; color: var(--text);
+      margin: 20px 0 12px; display: flex; align-items: center; gap: 8px;
+    }
+    .img-section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border-col);
+    }
+    .img-upload-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
     .img-upload-item{
-      border:2px dashed #c4b5fd;border-radius:14px;padding:18px;
+      border:2px dashed #c4b5fd;border-radius:14px;padding:16px;
       background:#faf7ff;transition:.18s;
-      margin-top:8px; margin-bottom:20px;
     }
     .img-upload-item:hover{border-color:var(--primary);background:#f5f0ff;}
     .img-upload-item.has-image{border-style:solid;border-color:#a78bfa;background:#fff;}
-    .img-upload-label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--primary);margin-bottom:5px;}
-    .badge-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:#fef9c3;color:#854d0e;}
-    .img-upload-desc{font-size:11.5px;color:var(--muted);margin-bottom:10px;line-height:1.55;}
+    .img-upload-label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--primary);margin-bottom:4px;}
+    .badge-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;}
+    .badge-hero{background:#ede9fe;color:#6d28d9;}
+    .badge-card{background:#fef9c3;color:#854d0e;}
+    .img-upload-desc{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
     .img-upload-btn{
       display:flex;align-items:center;justify-content:center;gap:6px;
-      width:100%;padding:9px;border-radius:9px;border:1.5px solid #c4b5fd;
+      width:100%;padding:8px;border-radius:9px;border:1.5px solid #c4b5fd;
       background:#fff;color:var(--primary);font-size:13px;font-weight:600;
       cursor:pointer;font-family:inherit;transition:.15s;
     }
@@ -82,25 +96,25 @@
     .upload-progress.show{display:flex;}
     .prog-bar{flex:1;height:4px;background:#e9e2ff;border-radius:99px;overflow:hidden;}
     .prog-fill{height:100%;width:0;border-radius:99px;background:var(--primary);transition:width .3s;}
-    .img-preview-wrap{position:relative;margin-top:12px;border-radius:10px;overflow:hidden;display:none;}
-    .img-preview-wrap img{width:100%;height:160px;object-fit:cover;display:block;border-radius:10px;}
+    .img-preview-wrap{position:relative;margin-top:10px;border-radius:10px;overflow:hidden;display:none;}
+    .img-preview-wrap img{width:100%;height:130px;object-fit:cover;display:block;border-radius:10px;}
     .remove-btn{
-      position:absolute;top:8px;right:8px;width:26px;height:26px;
+      position:absolute;top:6px;right:6px;width:24px;height:24px;
       border-radius:50%;background:rgba(0,0,0,.55);border:none;cursor:pointer;
-      color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;
+      color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;
     }
     .remove-btn:hover{background:#ef4444;}
 
-    /* simulate card preview */
-    .card-preview-wrap{margin-top:14px;border-radius:12px;overflow:hidden;border:1px solid #e8deff;display:none;}
-    .card-preview-header{padding:8px 14px;background:var(--primary-light);font-size:11px;font-weight:700;color:var(--purple);display:flex;align-items:center;gap:5px;}
-    .card-sim{background:#fff;display:grid;grid-template-columns:90px 1fr;min-height:78px;}
-    .card-sim-img{width:90px;height:78px;object-fit:cover;background:linear-gradient(135deg,#c084fc,#818cf8);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;}
-    .card-sim-img img{width:90px;height:78px;object-fit:cover;display:block;}
-    .card-sim-body{padding:10px 14px;display:flex;flex-direction:column;justify-content:center;}
-    .card-sim-title{font-size:12.5px;font-weight:700;color:var(--text-main);line-height:1.35;}
-    .card-sim-sub{font-size:11px;color:var(--muted);margin-top:3px;}
-    .card-sim-link{font-size:11px;color:var(--primary);margin-top:5px;font-weight:600;}
+    /* card sim */
+    .card-preview-wrap{margin-top:12px;border-radius:12px;overflow:hidden;border:1px solid #e8deff;display:none;}
+    .card-preview-header{padding:7px 12px;background:var(--primary-light);font-size:11px;font-weight:700;color:var(--purple);display:flex;align-items:center;gap:5px;}
+    .card-sim{background:#fff;display:grid;grid-template-columns:90px 1fr;min-height:72px;}
+    .card-sim-img{width:90px;height:72px;object-fit:cover;background:linear-gradient(135deg,#c084fc,#818cf8);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;}
+    .card-sim-img img{width:90px;height:72px;object-fit:cover;display:block;}
+    .card-sim-body{padding:9px 12px;display:flex;flex-direction:column;justify-content:center;}
+    .card-sim-title{font-size:12px;font-weight:700;color:var(--text-main);line-height:1.35;}
+    .card-sim-sub{font-size:10.5px;color:var(--muted);margin-top:2px;}
+    .card-sim-link{font-size:11px;color:var(--primary);margin-top:4px;font-weight:600;}
 </style>
 </head>
 <body>
@@ -166,49 +180,72 @@
         <textarea id="intro" class="editor-textarea" placeholder="เขียนคำอธิบายสาขาวิชา เช่น จุดเด่น รายวิชาสำคัญ กลุ่มเป้าหมาย ฯลฯ"></textarea>
       </div>
 
-      <!-- ══ รูปภาพพื้นหลังการ์ดสาขา (ใหม่) ══ -->
-      <div style="margin-top:18px;">
-        <div class="editor-label">รูปภาพพื้นหลังการ์ดสาขาวิชา</div>
+      <!-- ══ รูปภาพ ══ -->
+      <div class="img-section-title">รูปภาพสาขาวิชา</div>
 
-        <div class="img-upload-item" id="wrap-img">
+      <div class="img-upload-grid">
+
+        <!-- ── Hero Image (หน้าสาขาวิชา) ── -->
+        <div class="img-upload-item" id="wrap-hero">
           <div class="img-upload-label">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
-            พื้นหลังการ์ดสาขา
-            <span class="badge-tag">แสดงใน 6 การ์ดหน้าหลักสูตร</span>
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
+            ภาพหลัก (Hero)
+            <span class="badge-tag badge-hero">หน้าสาขาวิชา</span>
           </div>
           <div class="img-upload-desc">
-            รูปนี้จะแสดงเป็นพื้นหลังของการ์ดสาขาวิชาในหน้าหลักสูตร<br>
-            แนะนำขนาด <strong>400×300px</strong> ขึ้นไป · รองรับ JPG, PNG, WEBP
+            แสดงในส่วน Hero ของหน้าข้อมูลสาขา<br>
+            แนะนำขนาด <strong>800×500px</strong> · JPG, PNG, WEBP
           </div>
-
-          <!-- ปุ่มเลือกรูป -->
-          <button type="button" class="img-upload-btn" onclick="document.getElementById('imgFile').click()">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+          <button type="button" class="img-upload-btn" onclick="document.getElementById('heroFile').click()">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
             เลือกรูปภาพ
           </button>
-          <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="uploadImg()">
+          <input type="file" id="heroFile" accept="image/*" style="display:none" onchange="uploadImg('hero')">
+          <input type="hidden" id="hero_image">
+
+          <div class="upload-progress" id="prog-hero">
+            <div class="prog-bar"><div class="prog-fill" id="progfill-hero"></div></div>
+            <span id="prog-hero-txt">กำลังอัปโหลด...</span>
+          </div>
+          <div class="img-preview-wrap" id="prevHero">
+            <img id="prevHeroEl" src="" alt="preview">
+            <button type="button" class="remove-btn" onclick="removeImg('hero')">✕</button>
+          </div>
+        </div>
+
+        <!-- ── Card Image (การ์ดในหน้าหลักสูตร) ── -->
+        <div class="img-upload-item" id="wrap-img">
+          <div class="img-upload-label">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
+            ภาพการ์ดสาขา
+            <span class="badge-tag badge-card">หน้าหลักสูตร</span>
+          </div>
+          <div class="img-upload-desc">
+            แสดงเป็น thumbnail ในการ์ดสาขาวิชา<br>
+            แนะนำขนาด <strong>400×300px</strong> · JPG, PNG, WEBP
+          </div>
+          <button type="button" class="img-upload-btn" onclick="document.getElementById('imgFile').click()">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+            เลือกรูปภาพ
+          </button>
+          <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="uploadImg('card')">
           <input type="hidden" id="image_url">
 
-          <!-- Progress bar -->
           <div class="upload-progress" id="prog-img">
             <div class="prog-bar"><div class="prog-fill" id="progfill-img"></div></div>
             <span id="prog-img-txt">กำลังอัปโหลด...</span>
           </div>
-
-          <!-- Preview รูป -->
           <div class="img-preview-wrap" id="prevImg">
             <img id="prevImgEl" src="" alt="preview">
-            <button type="button" class="remove-btn" onclick="removeImg()">✕</button>
+            <button type="button" class="remove-btn" onclick="removeImg('card')">✕</button>
           </div>
 
-          <!-- Simulate การ์ดบนเว็บ -->
+          <!-- Card sim -->
           <div class="card-preview-wrap" id="cardSimWrap">
-            <div class="card-preview-header">
-              👁 ตัวอย่างการ์ดบนหน้าเว็บ
-            </div>
+            <div class="card-preview-header">👁 ตัวอย่างการ์ดบนหน้าเว็บ</div>
             <div class="card-sim">
               <div class="card-sim-img" id="cardSimImg">
-                <svg width="26" height="26" viewBox="0 0 20 20" fill="rgba(255,255,255,0.7)"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
+                <svg width="24" height="24" viewBox="0 0 20 20" fill="rgba(255,255,255,0.7)"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
               </div>
               <div class="card-sim-body">
                 <div class="card-sim-title" id="cardSimTitle">ชื่อสาขาวิชา</div>
@@ -217,8 +254,8 @@
               </div>
             </div>
           </div>
-
         </div>
+
       </div>
       <!-- ══ จบส่วนรูปภาพ ══ -->
 
@@ -286,13 +323,22 @@ document.getElementById("major_name_en").addEventListener("input", e => {
 });
 
 /* ══ UPLOAD IMAGE ══ */
-async function uploadImg() {
-  const file = document.getElementById("imgFile").files[0];
+async function uploadImg(type) {
+  const fileId  = type === 'hero' ? 'heroFile' : 'imgFile';
+  const progId  = type === 'hero' ? 'prog-hero' : 'prog-img';
+  const fillId  = type === 'hero' ? 'progfill-hero' : 'progfill-img';
+  const txtId   = type === 'hero' ? 'prog-hero-txt' : 'prog-img-txt';
+  const hiddenId = type === 'hero' ? 'hero_image' : 'image_url';
+  const prevWrapId = type === 'hero' ? 'prevHero' : 'prevImg';
+  const prevElId   = type === 'hero' ? 'prevHeroEl' : 'prevImgEl';
+  const wrapId     = type === 'hero' ? 'wrap-hero' : 'wrap-img';
+
+  const file = document.getElementById(fileId).files[0];
   if (!file) return;
 
-  const prog     = document.getElementById("prog-img");
-  const progFill = document.getElementById("progfill-img");
-  const progTxt  = document.getElementById("prog-img-txt");
+  const prog     = document.getElementById(progId);
+  const progFill = document.getElementById(fillId);
+  const progTxt  = document.getElementById(txtId);
 
   prog.classList.add("show");
   progFill.style.width = "30%";
@@ -312,19 +358,19 @@ async function uploadImg() {
       return;
     }
 
-    /* เก็บ URL ลง hidden input */
-    document.getElementById("image_url").value = data.url;
+    document.getElementById(hiddenId).value = data.url;
 
-    /* แสดง preview รูป */
-    const prevWrap = document.getElementById("prevImg");
-    document.getElementById("prevImgEl").src = BASE_URL + data.url;
+    const prevWrap = document.getElementById(prevWrapId);
+    document.getElementById(prevElId).src = BASE_URL + data.url;
     prevWrap.style.display = "block";
-    document.getElementById("wrap-img").classList.add("has-image");
+    document.getElementById(wrapId).classList.add("has-image");
 
-    /* อัปเดตการ์ดจำลอง */
-    document.getElementById("cardSimImg").innerHTML =
-      `<img src="${BASE_URL + data.url}" style="width:90px;height:78px;object-fit:cover;display:block;">`;
-    document.getElementById("cardSimWrap").style.display = "block";
+    // อัปเดต card sim เฉพาะ card image
+    if (type === 'card') {
+      document.getElementById("cardSimImg").innerHTML =
+        `<img src="${BASE_URL + data.url}" style="width:90px;height:72px;object-fit:cover;display:block;">`;
+      document.getElementById("cardSimWrap").style.display = "block";
+    }
 
     progTxt.textContent = "✓ อัปโหลดสำเร็จ";
     setTimeout(() => { prog.classList.remove("show"); progFill.style.width = "0"; }, 2500);
@@ -337,14 +383,22 @@ async function uploadImg() {
   }
 }
 
-function removeImg() {
-  document.getElementById("image_url").value = "";
-  const prevWrap = document.getElementById("prevImg");
-  prevWrap.style.display = "none";
-  prevWrap.querySelector("img").src = "";
-  document.getElementById("wrap-img").classList.remove("has-image");
-  document.getElementById("cardSimImg").innerHTML =
-    `<svg width="26" height="26" viewBox="0 0 20 20" fill="rgba(255,255,255,0.7)"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>`;
+function removeImg(type) {
+  if (type === 'hero') {
+    document.getElementById("hero_image").value = "";
+    const w = document.getElementById("prevHero");
+    w.style.display = "none";
+    w.querySelector("img").src = "";
+    document.getElementById("wrap-hero").classList.remove("has-image");
+  } else {
+    document.getElementById("image_url").value = "";
+    const w = document.getElementById("prevImg");
+    w.style.display = "none";
+    w.querySelector("img").src = "";
+    document.getElementById("wrap-img").classList.remove("has-image");
+    document.getElementById("cardSimImg").innerHTML =
+      `<svg width="24" height="24" viewBox="0 0 20 20" fill="rgba(255,255,255,0.7)"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>`;
+  }
 }
 
 /* ══ LOAD (edit mode) ══ */
@@ -366,24 +420,29 @@ async function loadMajor(id) {
     document.getElementById("plan_3").value        = m.plan_3      || "";
     document.getElementById("plan_4").value        = m.plan_4      || "";
 
-    /* restore รูปภาพ */
-    const imgUrl = m.image_url || "";
-    if (imgUrl) {
-      document.getElementById("image_url").value = imgUrl;
-      const src = imgUrl.startsWith("http") ? imgUrl : BASE_URL + imgUrl;
-      const prevWrap = document.getElementById("prevImg");
+    // restore hero_image
+    if (m.hero_image) {
+      const src = m.hero_image.startsWith("http") ? m.hero_image : BASE_URL + m.hero_image;
+      document.getElementById("hero_image").value = m.hero_image;
+      document.getElementById("prevHeroEl").src = src;
+      document.getElementById("prevHero").style.display = "block";
+      document.getElementById("wrap-hero").classList.add("has-image");
+    }
+
+    // restore image_url (card image)
+    if (m.image_url) {
+      const src = m.image_url.startsWith("http") ? m.image_url : BASE_URL + m.image_url;
+      document.getElementById("image_url").value = m.image_url;
       document.getElementById("prevImgEl").src = src;
-      prevWrap.style.display = "block";
+      document.getElementById("prevImg").style.display = "block";
       document.getElementById("wrap-img").classList.add("has-image");
       document.getElementById("cardSimImg").innerHTML =
-        `<img src="${src}" style="width:90px;height:78px;object-fit:cover;display:block;">`;
+        `<img src="${src}" style="width:90px;height:72px;object-fit:cover;display:block;">`;
       document.getElementById("cardSimWrap").style.display = "block";
     }
 
-    /* update ชื่อในการ์ดจำลอง */
     document.getElementById("cardSimTitle").textContent = m.name_th || "ชื่อสาขาวิชา";
     document.getElementById("cardSimSub").textContent   = m.name_en || "";
-
     document.getElementById("submitBtn").textContent = "Update";
 
   } catch { alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (โหลดข้อมูลสาขา)"); }
@@ -402,6 +461,7 @@ form.addEventListener("submit", async (e) => {
     name_th:     document.getElementById("major_name_th").value.trim(),
     name_en:     document.getElementById("major_name_en").value.trim(),
     intro:       document.getElementById("intro").value.trim(),
+    hero_image:  document.getElementById("hero_image").value.trim(),   // ← ใหม่
     image_url:   document.getElementById("image_url").value.trim(),
     career_path: document.getElementById("career_path").value.trim(),
     plan_1:      document.getElementById("plan_1").value.trim(),

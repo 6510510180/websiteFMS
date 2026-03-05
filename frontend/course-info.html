@@ -205,12 +205,20 @@
       line-height: 1.5;
     }
 
+    /* ── image-row: 3 columns on wide, 2 on medium, 1 on small ── */
     .image-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 24px;
       margin-top: 16px;
     }
+    @media (max-width: 1100px) {
+      .image-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .image-row { grid-template-columns: 1fr; }
+    }
+
     .image-box label {
       font-size: 13px;
       font-weight: 500;
@@ -235,6 +243,17 @@
       justify-content: center;
       color: var(--text-sub);
       font-size: 13px;
+    }
+
+    /* badge tag on image label */
+    .img-label-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+      margin-left: 6px;
+      vertical-align: middle;
     }
 
     table {
@@ -397,16 +416,37 @@
     <div class="card">
       <div class="card-title">ภาพประกอบหลักสูตร</div>
       <div class="image-row">
+
+        <!-- Hero Image -->
         <div class="image-box">
-          <label>Hero Image (หน้าปก)</label>
+          <label>
+            Hero Image
+            <span class="img-label-tag" style="background:#ede9fe;color:#7c3aed">หน้าปก</span>
+          </label>
           <img id="c_hero_image" src="" alt="Hero Image" style="display:none;">
           <div id="c_hero_placeholder" class="image-placeholder">ยังไม่มีรูปภาพ</div>
         </div>
+
+        <!-- Background Image (เพิ่มใหม่) -->
         <div class="image-box">
-          <label>Info Image (รายละเอียดหลักสูตร)</label>
+          <label>
+            Background Image
+            <span class="img-label-tag" style="background:#fef9c3;color:#854d0e">พื้นหลัง Banner</span>
+          </label>
+          <img id="c_bg_image" src="" alt="Background Image" style="display:none;">
+          <div id="c_bg_placeholder" class="image-placeholder">ยังไม่มีรูปภาพ</div>
+        </div>
+
+        <!-- Info Image -->
+        <div class="image-box">
+          <label>
+            Info Image
+            <span class="img-label-tag" style="background:#dcfce7;color:#166534">รายละเอียด</span>
+          </label>
           <img id="c_info_image" src="" alt="Info Image" style="display:none;">
           <div id="c_info_placeholder" class="image-placeholder">ยังไม่มีรูปภาพ</div>
         </div>
+
       </div>
     </div>
 
@@ -433,14 +473,12 @@
     const BASE_URL = "https://websitefms.onrender.com";
     const API_BASE = BASE_URL + "/api";
 
-    // ตรวจสอบ login
     const userData = localStorage.getItem("user");
     if (!userData) {
       alert("กรุณาเข้าสู่ระบบก่อน");
       window.location.href = "login.html";
     }
 
-    // ✅ แก้: logout ต้องมี preventDefault และลบ localStorage
     document.getElementById("logoutBtn").addEventListener("click", (e) => {
       e.preventDefault();
       localStorage.removeItem("user");
@@ -454,7 +492,6 @@
     if (!courseId) {
       msg.textContent = "ไม่พบรหัสหลักสูตร (courseId)";
     } else {
-      // ปุ่มต่าง ๆ
       document.getElementById("editCourseBtn").addEventListener("click", () => {
         window.location.href = `add-course.html?courseId=${courseId}`;
       });
@@ -466,7 +503,6 @@
       document.getElementById("deleteCourseBtn").addEventListener("click", async () => {
         if (!confirm("ต้องการลบหลักสูตรนี้พร้อมสาขาวิชาทั้งหมดใช่หรือไม่?")) return;
         try {
-          // ✅ แก้: ไม่ส่ง Authorization header เพราะ API ไม่ได้ใช้ JWT
           const res = await fetch(`${API_BASE}/courses/${courseId}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" }
@@ -485,10 +521,8 @@
       loadMajors(courseId);
     }
 
-    // โหลดข้อมูลหลักสูตร
     async function loadCourse(id) {
       try {
-        // ✅ แก้: ไม่ส่ง Authorization header
         const res = await fetch(`${API_BASE}/courses/${id}`);
         if (!res.ok) throw new Error("ไม่สามารถดึงข้อมูลได้");
 
@@ -502,7 +536,6 @@
         document.getElementById("c_study_system").textContent   = c.study_system   || "-";
         document.getElementById("c_award_title").textContent    = c.award_title    || "-";
         document.getElementById("c_total_credits").textContent  = c.total_credits  != null ? c.total_credits + " หน่วยกิต" : "-";
-        // ✅ เพิ่ม: student_range
         document.getElementById("c_student_range").textContent  = c.student_range  || "-";
 
         // สถานะ
@@ -516,19 +549,26 @@
         statusEl.innerHTML = `<span>${s.text}</span>`;
         statusEl.className = `toggle-status ${s.cls}`;
 
-        // รูปภาพ
+        // ── รูปภาพทั้ง 3 ──
         const heroImg         = document.getElementById("c_hero_image");
         const heroPlaceholder = document.getElementById("c_hero_placeholder");
+        const bgImg           = document.getElementById("c_bg_image");
+        const bgPlaceholder   = document.getElementById("c_bg_placeholder");
         const infoImg         = document.getElementById("c_info_image");
         const infoPlaceholder = document.getElementById("c_info_placeholder");
 
         if (c.hero_image) {
-          heroImg.src           = BASE_URL + c.hero_image;
+          heroImg.src = BASE_URL + c.hero_image;
           heroImg.style.display = "block";
           heroPlaceholder.style.display = "none";
         }
+        if (c.bg_image) {
+          bgImg.src = BASE_URL + c.bg_image;
+          bgImg.style.display = "block";
+          bgPlaceholder.style.display = "none";
+        }
         if (c.info_image) {
-          infoImg.src           = BASE_URL + c.info_image;
+          infoImg.src = BASE_URL + c.info_image;
           infoImg.style.display = "block";
           infoPlaceholder.style.display = "none";
         }
@@ -539,11 +579,9 @@
       }
     }
 
-    // โหลดสาขาวิชา
     async function loadMajors(id) {
       const tbody = document.getElementById("majorTable");
       try {
-        // ✅ แก้: ไม่ส่ง Authorization header
         const res = await fetch(`${API_BASE}/courses/${id}/majors`);
         if (!res.ok) throw new Error("ไม่สามารถดึงสาขาวิชาได้");
 
@@ -572,14 +610,12 @@
           tbody.appendChild(tr);
         });
 
-        // ปุ่มแก้ไขสาขา
         document.querySelectorAll(".edit-major").forEach(btn => {
           btn.addEventListener("click", () => {
             window.location.href = `add-major.html?courseId=${courseId}&majorId=${btn.dataset.id}`;
           });
         });
 
-        // ปุ่มลบสาขา
         document.querySelectorAll(".delete-major").forEach(btn => {
           btn.addEventListener("click", async () => {
             if (!confirm("ต้องการลบสาขาวิชานี้ใช่หรือไม่?")) return;
@@ -593,7 +629,7 @@
                 alert(data.message || "ลบไม่สำเร็จ");
                 return;
               }
-              loadMajors(courseId); // refresh ตาราง
+              loadMajors(courseId);
             } catch (err) {
               alert("เกิดข้อผิดพลาดในการลบสาขาวิชา");
             }
