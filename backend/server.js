@@ -725,6 +725,90 @@ app.delete("/api/semester-subjects/:id", async (req, res) => {
     res.json({ message: "ลบรายวิชาสำเร็จ" });
   } catch (err) { res.status(500).json({ message: "Server error" }); }
 });
+app.get("/api/majors/:majorId/study-plans", async (req, res) => {
+  const { majorId } = req.params;
+  const { search = "", year_no, status, plan_type, page = 1, pageSize = 10 } = req.query;
+
+  const values = [majorId];
+  let where = "WHERE sp.major_id=$1";
+  let idx = 2;
+
+  if (year_no)    { where += ` AND sp.year_no=$${idx++}`;    values.push(year_no); }
+  if (status)     { where += ` AND sp.status=$${idx++}`;     values.push(status); }
+  if (plan_type)  { where += ` AND sp.plan_type=$${idx++}`;  values.push(plan_type); }
+  if (search) {
+    where += ` AND EXISTS (
+      SELECT 1 FROM semesters s
+      JOIN semester_subjects ss ON ss.semester_id=s.id
+      JOIN subjects sbj ON sbj.id=ss.subject_id
+      WHERE s.study_plan_id=sp.id
+      AND (sbj.code ILIKE $${idx} OR sbj.name_th ILIKE $${idx} OR sbj.name_en ILIKE $${idx})
+    )`;
+    values.push(`%${search}%`);
+    idx++;
+  }
+
+  const offset = (Number(page) - 1) * Number(pageSize);
+  try {
+    const total = await pool.query(
+      `SELECT COUNT(*) FROM study_plans sp ${where}`, values
+    );
+    const rows = await pool.query(
+      `SELECT sp.*,
+         (SELECT COALESCE(SUM(total_credits),0) FROM semesters WHERE study_plan_id=sp.id) AS sum_credits
+       FROM study_plans sp ${where}
+       ORDER BY sp.academic_year DESC, sp.year_no ASC
+       LIMIT ${Number(pageSize)} OFFSET ${offset}`,
+      values
+    );
+    res.json({
+      data:     rows.rows,
+      total:    Number(total.rows[0].count),
+      page:     Number(page),
+      pageSize: Number(pageSize)
+    });
+  } catch (err) {
+    console.error("GET study-plans error:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/majors/:majorId/study-plans
+// body: { academic_year, year_no, status, plan_type }
+app.post("/api/majors/:majorId/study-plans", async (req, res) => {
+  const { majorId } = req.params;
+  const {
+    academic_year,
+    year_no,
+    status    = "active",
+    plan_type = "normal"   // 'normal' | 'coop'
+  } = req.body;
+
+  if (!academic_year || !year_no)
+    return res.status(400).json({ message: "ข้อมูลไม่ครบ (academic_year, year_no)" });
+
+  // ตรวจ plan_type
+  if (!["normal", "coop"].includes(plan_type))
+    return res.status(400).json({ message: "plan_type ต้องเป็น 'normal' หรือ 'coop'" });
+
+  try {
+    const r = await pool.query(
+      `INSERT INTO study_plans (major_id, academic_year, year_no, status, plan_type)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING *`,
+      [majorId, academic_year, year_no, status, plan_type]
+    );
+    res.json({ message: "สร้างแผนการศึกษาสำเร็จ", plan: r.rows[0] });
+  } catch (e) {
+    if (e.code === "23505")
+      return res.status(409).json({
+        message: `แผน${plan_type === "coop" ? "สหกิจ" : "ปกติ"}ของสาขานี้ ปี ${year_no} มีอยู่แล้ว`
+      });
+    console.error("POST study-plans error:", e.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 // ============================================================
 //  PROGRAMS
