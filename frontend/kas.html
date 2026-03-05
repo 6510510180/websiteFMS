@@ -582,8 +582,13 @@ function updateBanner(state) {
   } else if (state === 'notfound') {
     banner.className = 'data-banner default';
     dot.className = 'banner-dot default';
-    text.innerHTML = `⚠ ไม่พบข้อมูลใน localStorage — กรุณา <a class="banner-link" href="plo.html">บันทึกข้อมูลที่หน้า PLO/MLO</a> ก่อน`;
-    statusSrc.textContent = `แหล่งข้อมูล: ไม่พบข้อมูล`;
+    text.innerHTML = `⚠ ไม่พบข้อมูลใน localStorage — แสดงข้อมูล Default อยู่ กรุณา <a class="banner-link" href="plo.html">บันทึกข้อมูลที่หน้า PLO/MLO</a> ก่อน`;
+    statusSrc.textContent = `แหล่งข้อมูล: Default (ไม่พบใน localStorage)`;
+  } else if (state === 'default') {
+    banner.className = 'data-banner default';
+    dot.className = 'banner-dot default';
+    text.innerHTML = `แสดงข้อมูล Default — กดปุ่มเพื่อดึงข้อมูลจากหน้าจัดการ PLO/MLO`;
+    statusSrc.textContent = `แหล่งข้อมูล: Default`;
   } else {
     banner.className = 'data-banner idle';
     dot.className = 'banner-dot idle';
@@ -1108,10 +1113,13 @@ function toast(msg,color='#22c55e'){
 }
 
 /* ═══════════════ INIT ═══════════════ */
-// ไม่ดึงอัตโนมัติ — รอให้ผู้ใช้กดปุ่ม "ดึงข้อมูล PLO/MLO"
-updateBanner('idle');
-// โหลด KAS mapping ที่เคยบันทึกไว้ (ถ้ามี)
+// แสดงข้อมูล Default ก่อน รอให้ผู้ใช้กดปุ่มเพื่อดึงจาก localStorage
+PLO_LIST = DEFAULT_PLO;
+MLO_GROUPS = DEFAULT_MLO_GROUPS;
+isLiveData = false;
+initKasState();
 loadKasData();
+updateBanner('default');
 renderPLO();
 </script>
 </body>
