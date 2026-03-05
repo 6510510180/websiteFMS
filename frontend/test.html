@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>จัดการแผนการศึกษา | FMS Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple:       #6B3FA0;
+  --purple-dark:  #4A2870;
+  --purple-light: #F3EEFF;
+  --purple-mid:   #E8DEFF;
+  --accent:       #9B6DD1;
+  --bg:           #F7F5FA;
+  --white:        #FFFFFF;
+  --text:         #181117;
+  --text-sub:     #64748B;
+  --border:       #EDE8F5;
+  --red:          #EF4444;
+  --red-bg:       #FEE2E2;
+  --blue:         #3B82F6;
+  --blue-bg:      #EFF6FF;
+  --green:        #16a34a;
+  --green-bg:     #dcfce7;
+  --coop:         #0F766E;
+  --coop-light:   #F0FDFA;
+  --coop-mid:     #CCFBF1;
+  --sidebar-w:    240px;
+  --topbar-h:     64px;
+  --radius:       12px;
+  --shadow:       0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:    0 4px 12px rgba(107,63,160,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans Thai', 'Lexend', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--white);
+  height: 100vh;
+  position: fixed;
+  left: 0; top: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  z-index: 100;
+}
+.sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+.sidebar-brand-title { font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+.sidebar-brand-sub { font-size: 11.5px; color: var(--purple); font-weight: 500; margin-top: 2px; }
+.sidebar-section-label { padding: 20px 20px 6px; font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.2px; }
+.sidebar-nav { flex: 1; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--text-sub); text-decoration: none; transition: all 0.18s; cursor: pointer; }
+.nav-item:hover { background: var(--purple-light); color: var(--purple); }
+.nav-item.active { background: var(--purple-light); color: var(--purple); font-weight: 600; }
+.nav-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.75; }
+.nav-item.active .nav-icon, .nav-item:hover .nav-icon { opacity: 1; }
+.sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
+.sidebar-footer .nav-item { color: var(--red); }
+.sidebar-footer .nav-item:hover { background: var(--red-bg); color: #DC2626; }
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top: 0; left: var(--sidebar-w); right: 0;
+  height: var(--topbar-h); background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; z-index: 90;
+}
+.topbar-left { display: flex; flex-direction: column; }
+.topbar-title { font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+.topbar-breadcrumb { font-size: 11.5px; color: var(--text-sub); margin-top: 1px; }
+.topbar-breadcrumb a { color: var(--purple); text-decoration: none; cursor: pointer; }
+.topbar-breadcrumb a:hover { text-decoration: underline; }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.avatar-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 10px; border-radius: 8px; transition: background 0.15s; }
+.avatar-wrap:hover { background: var(--purple-light); }
+.avatar-name { font-size: 13px; font-weight: 600; color: var(--purple); }
+.avatar-circle { width: 34px; height: 34px; border-radius: 50%; background: var(--purple-mid); border: 2px solid var(--purple-light); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--purple); }
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  padding-top: var(--topbar-h);
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-body {
+  padding: 32px;
+  display: flex;
+  gap: 28px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Left column ── */
+.col-left {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.info-major-name {
+  font-family: 'Lexend', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.info-major-en {
+  font-size: 13px;
+  color: var(--text-sub);
+  margin-bottom: 14px;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--purple-light);
+  color: var(--purple);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.info-divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+.info-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; }
+.info-label { color: var(--text-sub); }
+.info-value { font-weight: 600; color: var(--text); text-align: right; }
+
+.plan-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.plan-type-badge.normal { background: var(--purple-light); color: var(--purple); }
+.plan-type-badge.coop   { background: var(--coop-light); color: var(--coop); }
+
+/* Year tabs */
+.year-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+.year-tab {
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--text-sub);
+  transition: all 0.15s;
+  text-align: center;
+}
+.year-tab:hover { background: var(--purple-light); color: var(--purple); border-color: var(--purple); }
+.year-tab.active { background: var(--purple); color: white; border-color: var(--purple); box-shadow: 0 3px 8px rgba(107,63,160,0.25); }
+
+body.coop-mode .year-tab:hover { background: var(--coop-light); color: var(--coop); border-color: var(--coop); }
+body.coop-mode .year-tab.active { background: var(--coop); border-color: var(--coop); box-shadow: 0 3px 8px rgba(15,118,110,0.25); }
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-sub);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+}
+.back-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+
+/* ── Plan Type Selector Card ── */
+.plan-type-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+}
+
+.plan-type-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.plan-type-toggle {
+  display: flex;
+  gap: 0;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.plan-type-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--text-sub);
+  transition: all 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.plan-type-btn .btn-icon {
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.22s ease;
+}
+
+.plan-type-btn:hover .btn-icon { transform: scale(1.15); }
+
+.plan-type-btn.active-normal {
+  background: var(--white);
+  color: var(--purple);
+  box-shadow: 0 1px 6px rgba(107,63,160,0.15);
+}
+
+.plan-type-btn.active-coop {
+  background: var(--white);
+  color: var(--coop);
+  box-shadow: 0 1px 6px rgba(15,118,110,0.15);
+}
+
+.plan-type-desc {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+  transition: all 0.25s;
+}
+.plan-type-desc.normal { background: var(--purple-light); color: var(--purple-dark); border: 1px solid var(--purple-mid); }
+.plan-type-desc.coop   { background: var(--coop-light);   color: var(--coop);         border: 1px solid var(--coop-mid); }
+
+/* ── Right column ── */
+.col-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.plan-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+.plan-banner.normal { background: var(--purple-light); border-color: var(--purple-mid); color: var(--purple-dark); }
+.plan-banner.coop   { background: var(--coop-light);   border-color: var(--coop-mid);   color: var(--coop); }
+.plan-banner-icon { font-size: 20px; line-height: 1; }
+.plan-banner-text { flex: 1; }
+.plan-banner-title { font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 1px; }
+.plan-banner-sub { font-size: 11.5px; font-weight: 500; opacity: 0.8; }
+
+.plan-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.plan-heading {
+  font-family: 'Lexend', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plan-heading-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--purple);
+  transition: background 0.25s;
+}
+body.coop-mode .plan-heading-dot { background: var(--coop); }
+
+.btn-add-sem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--purple-light);
+  color: var(--purple);
+  border: 1.5px solid var(--purple-mid);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.btn-add-sem:hover { background: var(--purple); color: white; border-color: var(--purple); }
+body.coop-mode .btn-add-sem { background: var(--coop-light); color: var(--coop); border-color: var(--coop-mid); }
+body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; border-color: var(--coop); }
+
+/* Semester card */
+.semester-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.semester-card.is-coop { border-color: var(--coop-mid); }
+.semester-card.is-coop .semester-head { background: var(--coop-light); }
+.semester-card.is-coop .semester-head:hover { background: #d1faf5; }
+.semester-card.is-coop .credits-badge { background: var(--coop-mid); color: var(--coop); }
+.semester-card.is-coop .add-subject-btn:hover { border-color: var(--coop); color: var(--coop); background: var(--coop-light); }
+
+.semester-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+  transition: background 0.12s;
+}
+.semester-head:hover { background: var(--purple-light); }
+
+.semester-head-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+
+.semester-head-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.semester-name { font-family: 'Lexend', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+
+.coop-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--coop-mid);
+  color: var(--coop);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.credits-badge {
+  padding: 3px 10px;
+  background: var(--purple-light);
+  color: var(--purple);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.chevron { font-size: 11px; color: var(--text-sub); transition: transform 0.2s; }
+.semester-card.collapsed .chevron { transform: rotate(-90deg); }
+.semester-card.collapsed .semester-body { display: none; }
+
+.del-sem-btn {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: none;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-sub);
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.del-sem-btn:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+.del-sem-btn svg { pointer-events: none; }
+
+/* Subject rows */
+.subject-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.subject-row:hover { background: var(--purple-light); }
+
+.subject-left { flex: 1; min-width: 0; }
+.subject-code { font-size: 12px; font-weight: 700; color: var(--purple); margin-bottom: 2px; letter-spacing: 0.3px; }
+.subject-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.subject-cat {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-sub);
+}
+.subject-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.subject-credits { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; }
+.subject-credits span { font-size: 11px; font-weight: 400; color: var(--text-sub); }
+
+/* Action buttons on subject row */
+.edit-btn {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  background: none;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-sub);
+  transition: all 0.12s;
+}
+.edit-btn:hover { background: var(--purple-light); border-color: var(--purple); color: var(--purple); }
+
+.del-btn {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  background: none;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-sub);
+  transition: all 0.12s;
+}
+.del-btn:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+
+.empty-subjects {
+  padding: 18px 20px;
+  font-size: 13px;
+  color: var(--text-sub);
+  font-style: italic;
+}
+
+.add-subject-row {
+  padding: 10px 16px;
+  border-top: 1px dashed var(--border);
+}
+.add-subject-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px;
+  border: 1.5px dashed var(--border);
+  border-radius: 8px;
+  background: none;
+  color: var(--text-sub);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.add-subject-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+
+/* Coop period block */
+.coop-period-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: var(--coop-light);
+  border-bottom: 1px solid var(--coop-mid);
+}
+.coop-period-icon { font-size: 24px; line-height: 1; }
+.coop-period-info { flex: 1; }
+.coop-period-title { font-size: 14px; font-weight: 700; color: var(--coop); margin-bottom: 2px; }
+.coop-period-sub { font-size: 12px; color: #0d9488; }
+
+.empty-state { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 48px 20px; text-align: center; color: var(--text-sub); box-shadow: var(--shadow); }
+.empty-icon { font-size: 36px; margin-bottom: 10px; }
+.empty-state p { font-size: 14px; }
+.loading-state { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
+
+/* ── MODAL (shared base styles) ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15,10,40,0.5);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--white);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 820px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.22);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: white; z-index: 1;
+  border-radius: 20px 20px 0 0;
+}
+.modal-title { font-family: 'Lexend', sans-serif; font-size: 18px; font-weight: 800; color: var(--text); }
+.modal-title-sub { font-size: 13px; font-weight: 400; color: var(--text-sub); margin-top: 2px; }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--bg); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--text-sub); transition: all 0.12s;
+}
+.modal-close:hover { background: var(--red-bg); color: var(--red); border-color: var(--red); }
+
+/* Edit mode header accent */
+.modal-header.edit-mode {
+  border-left: 4px solid var(--purple);
+}
+.modal-header.edit-mode .modal-title {
+  color: var(--purple-dark);
+}
+
+.modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 0; }
+
+.section-label {
+  font-size: 11px; font-weight: 700; color: var(--text-sub);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 14px; margin-top: 22px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.section-label:first-child { margin-top: 0; }
+
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; }
+.field input, .field select, .field textarea {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  background: var(--bg); font-size: 14px; font-family: inherit; color: var(--text);
+  outline: none; transition: all 0.15s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--purple); background: white;
+  box-shadow: 0 0 0 3px rgba(107,63,160,0.1);
+}
+.field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+.field-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field-row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; }
+
+.autofill-hint {
+  display: none;
+  font-size: 12px;
+  color: var(--purple);
+  font-weight: 600;
+  margin-top: 6px;
+  padding: 6px 12px;
+  background: var(--purple-light);
+  border-radius: 6px;
+}
+
+/* Edit mode notice banner inside modal */
+.edit-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--purple-light);
+  border: 1px solid var(--purple-mid);
+  border-radius: 10px;
+  margin-bottom: 18px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--purple-dark);
+}
+.edit-notice-icon { font-size: 16px; flex-shrink: 0; }
+
+.modal-footer {
+  padding: 16px 28px 24px;
+  display: flex; gap: 10px; justify-content: flex-end;
+  border-top: 1px solid var(--border);
+  position: sticky; bottom: 0; background: white;
+  border-radius: 0 0 20px 20px;
+}
+.btn-cancel { padding: 10px 22px; border-radius: 10px; background: var(--bg); border: 1.5px solid var(--border); font-size: 14px; font-family: inherit; cursor: pointer; color: var(--text); font-weight: 500; transition: background 0.12s; }
+.btn-cancel:hover { background: var(--border); }
+
+.btn-save {
+  padding: 10px 26px; border-radius: 10px; background: var(--purple); color: white;
+  border: none; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer;
+  transition: all 0.15s; box-shadow: 0 4px 12px rgba(107,63,160,0.3);
+  display: flex; align-items: center; gap: 7px;
+}
+.btn-save:hover { background: var(--purple-dark); }
+.btn-save.edit-save { background: var(--purple-dark); }
+.btn-save.edit-save:hover { background: var(--purple); }
+
+/* Toast */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; font-weight: 500; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: #16a34a; }
+.toast.error   { background: var(--red); }
+
+/* Topbar indicator */
+.topbar-plan-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.25s;
+}
+.topbar-plan-indicator.normal { background: var(--purple-light); color: var(--purple); }
+.topbar-plan-indicator.coop   { background: var(--coop-light);   color: var(--coop); }
+
+/* ── View Detail Modal ── */
+.vd-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 14px; border-radius: 999px;
+  font-size: 13px; font-weight: 700;
+}
+.vd-chip-purple { background: var(--purple-light); color: var(--purple); }
+.vd-chip-blue   { background: var(--blue-bg);      color: var(--blue); }
+.vd-chip-gray   { background: var(--bg);            color: var(--text-sub); border: 1px solid var(--border); }
+
+.vd-block {
+  margin-bottom: 18px;
+}
+.vd-label {
+  font-size: 11px; font-weight: 700; color: var(--text-sub);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.vd-value {
+  font-size: 15px; font-weight: 600; color: var(--text);
+}
+.vd-tabs {
+  display: flex; gap: 4px; margin-bottom: 10px;
+}
+.vd-tab {
+  padding: 4px 14px; border-radius: 999px; border: 1.5px solid var(--border);
+  background: var(--bg); font-size: 12px; font-weight: 600; font-family: inherit;
+  cursor: pointer; color: var(--text-sub); transition: all 0.15s;
+}
+.vd-tab.active { background: var(--purple); color: white; border-color: var(--purple); }
+.vd-text {
+  font-size: 13.5px; line-height: 1.75; color: var(--text);
+  background: var(--bg); border-radius: 10px; padding: 14px 16px;
+  border: 1px solid var(--border); white-space: pre-wrap;
+}
+.vd-empty {
+  padding: 20px; text-align: center; color: var(--text-sub);
+  font-size: 13px; font-style: italic;
+  background: var(--bg); border-radius: 10px; border: 1px dashed var(--border);
+  margin-bottom: 18px;
+}
+/* back button hover */
+#btnBackToView:hover { background: var(--purple-light) !important; border-color: var(--purple) !important; color: var(--purple) !important; }
+
+/* Only block-display SVGs that are standalone, not inside buttons */
+.nav-icon, .plan-banner svg, .plan-topbar svg { display: block; }
+.edit-btn svg, .del-btn svg, .del-sem-btn svg, .add-subject-btn svg,
+.btn-add-sem svg, .btn-save svg, .back-btn svg, .modal-close svg,
+.add-subject-row svg { display: inline-block; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-title">FMS Admin</div>
+    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
+  </div>
+  <div class="sidebar-section-label">เมนูหลัก</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="dashboard.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+      แดชบอร์ด
+    </a>
+    <a class="nav-item active" href="study-plan.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+      แผนการศึกษา
+    </a>
+    <a class="nav-item" href="course-list.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg>
+      หลักสูตร
+    </a>
+    <a class="nav-item" href="qa-dashboard.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      ประกันคุณภาพการศึกษา
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title" id="topbarTitle">จัดการแผนการศึกษา</div>
+    <div class="topbar-breadcrumb">
+      <a href="study-plan.html">แผนการศึกษา</a>
+      <span id="breadcrumbSub"> · <span id="breadcrumbMajor">-</span></span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-plan-indicator normal" id="topbarPlanIndicator">
+      <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
+      <span id="topbarPlanLabel">แผนปกติ</span>
+    </div>
+    <div class="avatar-wrap">
+      <div class="avatar-name">Administrator</div>
+      <div class="avatar-circle">A</div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="page-body">
+
+    <!-- Left -->
+    <div class="col-left">
+
+      <a class="back-btn" href="study-plan.html">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        กลับไปรายการ
+      </a>
+
+      <!-- Major Info -->
+      <div class="info-card">
+        <div class="info-major-name" id="majorName">-</div>
+        <div class="info-major-en" id="majorEn">-</div>
+        <div class="meta-chip" id="majorCourse">
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg>
+          <span id="majorCourseName">-</span>
+        </div>
+
+        <div class="info-divider"></div>
+
+        <div class="info-row">
+          <span class="info-label">ประเภทแผน</span>
+          <span class="info-value">
+            <span class="plan-type-badge normal" id="infoPlanType">📋 แผนปกติ</span>
+          </span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">ปีที่เลือก</span>
+          <span class="info-value" id="infoYear">ปี 1</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">จำนวนภาคเรียน</span>
+          <span class="info-value" id="infoSemCount">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">หน่วยกิตรวม</span>
+          <span class="info-value" id="infoTotalCredits">-</span>
+        </div>
+      </div>
+
+      <!-- Plan Type Selector -->
+      <div class="plan-type-card">
+        <div class="plan-type-label">ประเภทแผนการศึกษา</div>
+        <div class="plan-type-toggle">
+          <button class="plan-type-btn active-normal" id="btnNormal" onclick="selectPlanType('normal')">
+            <span class="btn-icon">📋</span>
+            <span>แผนปกติ</span>
+          </button>
+          <button class="plan-type-btn" id="btnCoop" onclick="selectPlanType('coop')">
+            <span class="btn-icon">🏭</span>
+            <span>สหกิจศึกษา</span>
+          </button>
+        </div>
+        <div class="plan-type-desc normal" id="planTypeDesc">
+          แผนการเรียนปกติ นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร
+        </div>
+      </div>
+
+      <!-- Year Tabs -->
+      <div class="info-card">
+        <div style="font-size:12px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">เลือกชั้นปี</div>
+        <div class="year-tabs" id="yearTabs">
+          <button class="year-tab active" data-year="1" onclick="selectYear(1)">ปี 1</button>
+          <button class="year-tab" data-year="2" onclick="selectYear(2)">ปี 2</button>
+          <button class="year-tab" data-year="3" onclick="selectYear(3)">ปี 3</button>
+          <button class="year-tab" data-year="4" onclick="selectYear(4)">ปี 4</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right -->
+    <div class="col-right">
+
+      <!-- Plan Banner -->
+      <div class="plan-banner normal" id="planBanner">
+        <div class="plan-banner-icon" id="planBannerIcon">📋</div>
+        <div class="plan-banner-text">
+          <div class="plan-banner-title" id="planBannerTitle">แผนการศึกษาปกติ</div>
+          <div class="plan-banner-sub" id="planBannerSub">นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร 4 ปี</div>
+        </div>
+      </div>
+
+      <div class="plan-topbar">
+        <div class="plan-heading">
+          <div class="plan-heading-dot"></div>
+          <span id="planHeading">ปี 1 — Study Plan</span>
+        </div>
+        <button class="btn-add-sem" id="btnAddSemester">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          เพิ่มภาคเรียน
+        </button>
+      </div>
+
+      <div id="semesterList">
+        <div class="loading-state">⏳ กำลังโหลด...</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════════════
+     Modal A: VIEW subject detail
+══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="viewModal">
+  <div class="modal" style="max-width:640px;">
+    <div class="modal-header" id="viewModalHeader">
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div class="modal-title" id="v_code_badge" style="font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;color:var(--purple);background:var(--purple-light);padding:3px 12px;border-radius:999px;"></div>
+          <div class="modal-title" id="v_title">-</div>
+        </div>
+        <div class="modal-title-sub" id="v_semname" style="margin-top:4px;">-</div>
+      </div>
+      <button class="modal-close" id="viewModalClose">✕</button>
+    </div>
+    <div class="modal-body" style="gap:0;padding:20px 28px 4px;">
+
+      <!-- hero row: credits + category + hours -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+        <div class="vd-chip vd-chip-purple" id="v_credits_chip"></div>
+        <div class="vd-chip vd-chip-blue"   id="v_cat_chip"></div>
+        <div class="vd-chip vd-chip-gray"   id="v_hours_chip" style="display:none;"></div>
+      </div>
+
+      <!-- EN name -->
+      <div class="vd-block" id="v_name_en_block" style="display:none;">
+        <div class="vd-label">ชื่อวิชา (EN)</div>
+        <div class="vd-value" id="v_name_en"></div>
+      </div>
+
+      <!-- Description -->
+      <div class="vd-block" id="v_desc_block" style="display:none;">
+        <div class="vd-label">คำอธิบายรายวิชา</div>
+        <div class="vd-tabs">
+          <button class="vd-tab active" onclick="switchVdTab(this,'v_desc_th_txt','v_desc_en_txt')">ภาษาไทย</button>
+          <button class="vd-tab"        onclick="switchVdTab(this,'v_desc_en_txt','v_desc_th_txt')">English</button>
+        </div>
+        <div class="vd-text" id="v_desc_th_txt"></div>
+        <div class="vd-text" id="v_desc_en_txt" style="display:none;"></div>
+      </div>
+
+      <!-- Outcomes -->
+      <div class="vd-block" id="v_out_block" style="display:none;">
+        <div class="vd-label">ผลลัพธ์การเรียนรู้</div>
+        <div class="vd-tabs">
+          <button class="vd-tab active" onclick="switchVdTab(this,'v_out_th_txt','v_out_en_txt')">ภาษาไทย</button>
+          <button class="vd-tab"        onclick="switchVdTab(this,'v_out_en_txt','v_out_th_txt')">English</button>
+        </div>
+        <div class="vd-text" id="v_out_th_txt"></div>
+        <div class="vd-text" id="v_out_en_txt" style="display:none;"></div>
+      </div>
+
+      <!-- empty hint -->
+      <div class="vd-empty" id="v_empty" style="display:none;">ไม่มีคำอธิบายหรือผลลัพธ์การเรียนรู้</div>
+
+    </div>
+    <div class="modal-footer" style="justify-content:space-between;">
+      <button class="btn-cancel" id="viewModalClose2">ปิด</button>
+      <button class="btn-save" id="btnSwitchToEdit" style="gap:7px;">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+        แก้ไขรายวิชา
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     Modal B: ADD / EDIT subject form
+══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="subjectModal">
+  <div class="modal">
+    <div class="modal-header" id="modalHeader">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button id="btnBackToView" style="display:none;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;width:32px;height:32px;cursor:pointer;display:none;align-items:center;justify-content:center;color:var(--text-sub);transition:all 0.15s;" title="กลับไปดูข้อมูล">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        </button>
+        <div>
+          <div class="modal-title" id="modalTitle">เพิ่มรายวิชา</div>
+          <div class="modal-title-sub" id="modalSemName">-</div>
+        </div>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="section-label">ข้อมูลรายวิชา</div>
+      <div class="field-row-3">
+        <div class="field" style="grid-column:span 2">
+          <label>รหัสวิชา *</label>
+          <input type="text" id="m_code" placeholder="เช่น 460-101" autocomplete="off" />
+          <div class="autofill-hint" id="autofillHint">✓ พบวิชาในระบบ — เติมข้อมูลให้แล้ว</div>
+        </div>
+        <div class="field">
+          <label>หน่วยกิต *</label>
+          <input type="number" id="m_credits" placeholder="3" min="1" max="9" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>ชื่อวิชา (ภาษาไทย) *</label>
+          <input type="text" id="m_name_th" placeholder="ชื่อวิชาภาษาไทย" />
+        </div>
+        <div class="field">
+          <label>ชื่อวิชา (ภาษาอังกฤษ)</label>
+          <input type="text" id="m_name_en" placeholder="Subject Name (EN)" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>โครงสร้างชั่วโมง</label>
+          <input type="text" id="m_hours" placeholder="เช่น 3(3-0-6)" />
+        </div>
+        <div class="field">
+          <label>หมวดวิชา</label>
+          <select id="m_category">
+            <option value="Core">Core Course (วิชาบังคับ)</option>
+            <option value="Elective">Elective (วิชาเลือก)</option>
+            <option value="GE">GE (วิชาศึกษาทั่วไป)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section-label">คำอธิบายรายวิชา</div>
+      <div class="field-row">
+        <div class="field">
+          <label>คำอธิบาย (ภาษาไทย)</label>
+          <textarea id="m_desc_th" placeholder="คำอธิบายรายวิชาภาษาไทย..."></textarea>
+        </div>
+        <div class="field">
+          <label>คำอธิบาย (ภาษาอังกฤษ)</label>
+          <textarea id="m_desc_en" placeholder="Course description in English..."></textarea>
+        </div>
+      </div>
+
+      <div class="section-label">ผลลัพธ์การเรียนรู้</div>
+      <div class="field-row">
+        <div class="field">
+          <label>ผลลัพธ์การเรียนรู้ (ภาษาไทย)</label>
+          <textarea id="m_out_th" placeholder="สิ่งที่ผู้เรียนจะได้รับหลังเรียนจบ..."></textarea>
+        </div>
+        <div class="field">
+          <label>ผลลัพธ์การเรียนรู้ (ภาษาอังกฤษ)</label>
+          <textarea id="m_out_en" placeholder="Learning outcomes after completing the course..."></textarea>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="modalCancel">ยกเลิก</button>
+      <button class="btn-save" id="modalSave">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" id="modalSaveIcon"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+        <span id="modalSaveLabel">บันทึกรายวิชา</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE = "https://websitefms.onrender.com";
+const API  = BASE + "/api";
+
+if (!localStorage.getItem("user")) { window.location.href = "login.html"; }
+document.getElementById("logoutBtn").addEventListener("click", e => {
+  e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html";
+});
+
+const params   = new URLSearchParams(window.location.search);
+const majorId  = params.get("majorId");
+const courseId = params.get("courseId");
+if (!majorId) { window.location.href = "study-plan.html"; }
+
+let major           = null;
+let currentYear     = 1;
+let currentPlanType = "normal";
+let planId          = null;
+let planCache       = {};
+
+/* ── Toast ── */
+function toast(msg, type = "") {
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.className = "toast show " + type;
+  setTimeout(() => el.className = "toast", 2800);
+}
+
+/* ── Plan Type Config ── */
+const PLAN_CONFIG = {
+  normal: {
+    icon: "📋",
+    label: "แผนปกติ",
+    bannerTitle: "แผนการศึกษาปกติ",
+    bannerSub: "นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร 4 ปี",
+    desc: "แผนการเรียนปกติ นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร",
+    coopSemesters: {}
+  },
+  coop: {
+    icon: "🏭",
+    label: "สหกิจศึกษา",
+    bannerTitle: "แผนการศึกษาสหกิจศึกษา",
+    bannerSub: "นักศึกษาออกปฏิบัติงานจริงในสถานประกอบการ ปี 4 ภาคเรียน 2",
+    desc: "แผนสหกิจศึกษา นักศึกษาออกปฏิบัติงานในสถานประกอบการ 1 ภาคเรียน (ปี 4 ภาค 2)",
+    coopSemesters: { 3: 2 }
+  }
+};
+
+/* ── Plan Type Switch ── */
+function selectPlanType(type) {
+  if (type === currentPlanType) return;
+  currentPlanType = type;
+  planId = null;
+  const cfg = PLAN_CONFIG[type];
+  const isCoop = type === "coop";
+
+  document.body.classList.toggle("coop-mode", isCoop);
+  document.getElementById("btnNormal").className = "plan-type-btn" + (isCoop ? "" : " active-normal");
+  document.getElementById("btnCoop").className   = "plan-type-btn" + (isCoop ? " active-coop" : "");
+
+  const descEl = document.getElementById("planTypeDesc");
+  descEl.textContent = cfg.desc;
+  descEl.className = `plan-type-desc ${type}`;
+
+  const badge = document.getElementById("infoPlanType");
+  badge.textContent = cfg.icon + " " + cfg.label;
+  badge.className = `plan-type-badge ${type}`;
+
+  const ind = document.getElementById("topbarPlanIndicator");
+  ind.className = `topbar-plan-indicator ${type}`;
+  document.getElementById("topbarPlanLabel").textContent = cfg.label;
+
+  const banner = document.getElementById("planBanner");
+  banner.className = `plan-banner ${type}`;
+  document.getElementById("planBannerTitle").textContent = cfg.bannerTitle;
+  document.getElementById("planBannerSub").textContent   = cfg.bannerSub;
+  document.getElementById("planBannerIcon").textContent  = cfg.icon;
+
+  loadPlanForYear(currentYear);
+}
+
+/* ── Year selection ── */
+function selectYear(year) {
+  currentYear = year;
+  planId = null;
+  document.querySelectorAll(".year-tab").forEach(b =>
+    b.classList.toggle("active", Number(b.dataset.year) === year)
+  );
+  document.getElementById("planHeading").textContent = `ปี ${year} — Study Plan`;
+  document.getElementById("infoYear").textContent    = `ปี ${year}`;
+  loadPlanForYear(year);
+}
+
+/* ── Init ── */
+async function init() {
+  try {
+    const majors = await fetch(`${API}/courses/${courseId}/majors`).then(r => r.json());
+    major = majors.find(m => String(m.id) === String(majorId));
+    if (!major) throw new Error("major not found");
+
+    const courses = await fetch(`${API}/courses`).then(r => r.json());
+    const course  = courses.find(c => String(c.id) === String(courseId));
+    const courseName = course?.name_th || `Course #${courseId}`;
+
+    document.getElementById("majorName").textContent       = major.name_th || "-";
+    document.getElementById("majorEn").textContent         = major.name_en || "";
+    document.getElementById("majorCourseName").textContent = courseName;
+    document.getElementById("breadcrumbMajor").textContent = major.name_th || "-";
+    document.getElementById("topbarTitle").textContent     = major.name_th || "จัดการแผนการศึกษา";
+    document.title = `${major.name_th} | FMS Admin`;
+
+    await loadPlanForYear(1);
+  } catch (e) {
+    document.getElementById("semesterList").innerHTML =
+      `<div class="empty-state"><div class="empty-icon">❌</div><p>โหลดข้อมูลไม่สำเร็จ</p></div>`;
+  }
+}
+
+/* ── Load plan ── */
+async function loadPlanForYear(yearNo) {
+  const list = document.getElementById("semesterList");
+  list.style.transition = "opacity 0.12s";
+  list.style.opacity = "0";
+  list.style.pointerEvents = "none";
+  await new Promise(r => setTimeout(r, 140));
+  const cacheKey = `${currentPlanType}_${yearNo}`;
+
+  if (planCache[cacheKey]) {
+    planId = planCache[cacheKey];
+    try {
+      const detail = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+      renderSemesters(detail.semesters || [], yearNo);
+    } catch { showPlanError(); }
+    restoreList();
+    return;
+  }
+
+  planId = null;
+  try {
+    const thaiYear = new Date().getFullYear() + 543;
+    const res  = await fetch(`${API}/majors/${majorId}/study-plans?page=1&pageSize=50`);
+    const json = await res.json();
+    const allPlans = json.data || [];
+
+    const matched = allPlans.find(p => {
+      const sameYear = Number(p.year_no) === Number(yearNo);
+      const pType    = p.plan_type || "normal";
+      return sameYear && pType === currentPlanType;
+    });
+
+    if (matched) {
+      planId = matched.id;
+    } else {
+      const created = await fetch(`${API}/majors/${majorId}/study-plans`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          academic_year: thaiYear,
+          year_no:       yearNo,
+          status:        "active",
+          plan_type:     currentPlanType
+        })
+      }).then(r => r.json());
+      planId = created?.plan?.id ?? null;
+    }
+
+    if (!planId) throw new Error("no planId");
+    planCache[cacheKey] = planId;
+
+    const detail = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+    renderSemesters(detail.semesters || [], yearNo);
+  } catch { showPlanError(); }
+  restoreList();
+}
+
+function restoreList() {
+  const list = document.getElementById("semesterList");
+  requestAnimationFrame(() => {
+    list.style.transition = "opacity 0.18s";
+    list.style.opacity = "1";
+    list.style.pointerEvents = "";
+  });
+}
+
+async function refreshSemesters() {
+  const list = document.getElementById("semesterList");
+  list.style.transition = "opacity 0.12s";
+  list.style.opacity = "0";
+  list.style.pointerEvents = "none";
+  await new Promise(r => setTimeout(r, 140));
+  const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+  renderSemesters(d.semesters||[], currentYear);
+  requestAnimationFrame(() => {
+    list.style.transition = "opacity 0.18s";
+    list.style.opacity = "1";
+    list.style.pointerEvents = "";
+  });
+}
+
+function showPlanError() {
+  planId = null;
+  document.getElementById("semesterList").innerHTML =
+    `<div class="empty-state"><div class="empty-icon">📭</div><p>ไม่พบแผนการศึกษา</p></div>`;
+}
+
+/* ── Render semesters ── */
+function renderSemesters(semesters, yearNo) {
+  const cfg       = PLAN_CONFIG[currentPlanType];
+  const coopTermNo = cfg.coopSemesters[yearNo];
+
+  const totalCred = semesters.reduce((s, sem) =>
+    s + (sem.subjects||[]).reduce((c, it) => c + Number(it.credits ?? it.default_credits ?? 0), 0), 0);
+  document.getElementById("infoSemCount").textContent    = `${semesters.length} ภาค`;
+  document.getElementById("infoTotalCredits").textContent = `${totalCred} หน่วยกิต`;
+
+  if (!semesters.length) {
+    document.getElementById("semesterList").innerHTML =
+      `<div class="empty-state">
+        <div class="empty-icon">${cfg.icon}</div>
+        <p>ยังไม่มีภาคเรียนใน ปี ${yearNo} (${cfg.label})<br>กด "เพิ่มภาคเรียน" เพื่อเริ่มต้น</p>
+      </div>`;
+    return;
+  }
+
+  document.getElementById("semesterList").innerHTML = semesters.map(sem => {
+    const semCred  = (sem.subjects||[]).reduce((s,it) => s + Number(it.credits ?? it.default_credits ?? 0), 0);
+    const semTitle  = sem.title || `Semester ${sem.term_no}`;
+    const isCoopSem = currentPlanType === "coop" && Number(sem.term_no) === coopTermNo;
+
+    /* ── Subject rows — now includes Edit button ── */
+    const subjectsHtml = (sem.subjects||[]).map(it => {
+      const catColor = { Core:"#6B3FA0", Elective:"#3B82F6", GE:"#10B981" }[it.category] || "#64748B";
+
+      // Encode subject data into data-attributes for the edit button
+      // Support both flat and nested subject object from API
+      const _s = it.subject || it;
+      const _subjectData = {
+        ssId:        it.id,
+        semId:       sem.id,
+        semName:     semTitle,
+        code:        it.code       || _s.code        || "",
+        name_th:     it.name_th    || _s.name_th     || "",
+        name_en:     it.name_en    || _s.name_en     || "",
+        credits:     it.credits    ?? it.default_credits ?? _s.default_credits ?? "",
+        hours:       it.hour_structure || it.default_hour_structure || _s.default_hour_structure || "",
+        category:    it.category   || "Core",
+        desc_th:     it.description_th || _s.description_th || "",
+        desc_en:     it.description_en || _s.description_en || "",
+        out_th:      it.outcomes_th    || _s.outcomes_th    || "",
+        out_en:      it.outcomes_en    || _s.outcomes_en    || "",
+      };
+      const _subjectKey = "sub_" + it.id;
+      window._subjectStore = window._subjectStore || {};
+      window._subjectStore[_subjectKey] = _subjectData;
+
+      return `<div class="subject-row">
+        <div class="subject-left">
+          <div class="subject-code">${it.code || _s.code}</div>
+          <div class="subject-name">${it.name_th || _s.name_th}</div>
+          <span class="subject-cat" style="background:${catColor}18;color:${catColor}">${it.category||"Core"}</span>
+        </div>
+        <div class="subject-right">
+          <div class="subject-credits">${it.credits ?? it.default_credits} <span>หน่วยกิต</span></div>
+          <button class="edit-btn" data-key="${_subjectKey}" title="ดูและแก้ไขรายวิชา">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" style="pointer-events:none;">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+            </svg>
+          </button>
+          <button class="del-btn" data-ssid="${it.id}" title="ลบรายวิชา">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="pointer-events:none;"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          </button>
+        </div>
+      </div>`;
+    }).join("");
+
+    const emptySubs = !sem.subjects?.length && !isCoopSem
+      ? `<div class="empty-subjects">ยังไม่มีรายวิชาในภาคเรียนนี้</div>`
+      : "";
+
+    const coopBlock = isCoopSem
+      ? `<div class="coop-period-row">
+          <div class="coop-period-icon">🏭</div>
+          <div class="coop-period-info">
+            <div class="coop-period-title">ช่วงออกปฏิบัติสหกิจศึกษา</div>
+            <div class="coop-period-sub">นักศึกษาออกปฏิบัติงานจริงในสถานประกอบการ ระยะเวลา 1 ภาคการศึกษา (16 สัปดาห์)</div>
+          </div>
+        </div>` : "";
+
+    const coopTagHtml = isCoopSem
+      ? `<span class="coop-tag">🏭 สหกิจศึกษา</span>` : "";
+
+    const semCardClass = `semester-card${isCoopSem ? " is-coop" : ""}`;
+
+    const addSubjectArea = isCoopSem ? ""
+      : `<div class="add-subject-row">
+          <button class="add-subject-btn" onclick="openAddModal(${sem.id}, '${semTitle.replace(/'/g,"\\'")}')">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+            Add Subject
+          </button>
+        </div>`;
+
+    return `<div class="${semCardClass}" id="sem_${sem.id}">
+      <div class="semester-head">
+        <div class="semester-head-left" onclick="toggleSem(${sem.id})">
+          <div class="semester-name">${semTitle}</div>
+          ${coopTagHtml}
+          <span class="credits-badge">${semCred} Credits</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="semester-head-right">
+          <button class="del-sem-btn"
+            onclick="deleteSemester(${sem.id}, '${semTitle.replace(/'/g,"\\'")}')"
+            title="ลบภาคเรียน">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="semester-body">
+        ${coopBlock}
+        ${subjectsHtml}
+        ${emptySubs}
+        ${addSubjectArea}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggleSem(id) { document.getElementById("sem_"+id)?.classList.toggle("collapsed"); }
+
+/* ── Event delegation for subject buttons ── */
+document.getElementById("semesterList").addEventListener("click", e => {
+  // Edit button
+  const editBtn = e.target.closest(".edit-btn");
+  if (editBtn) {
+    const key = editBtn.getAttribute("data-key");
+    const subjectData = window._subjectStore && window._subjectStore[key];
+    if (subjectData) openViewModal(encodeURIComponent(JSON.stringify(subjectData)));
+    return;
+  }
+  // Delete button
+  const delBtn = e.target.closest(".del-btn");
+  if (delBtn) {
+    const ssId = delBtn.getAttribute("data-ssid");
+    if (ssId) deleteSubject(Number(ssId));
+    return;
+  }
+});
+
+/* ── Add semester ── */
+document.getElementById("btnAddSemester").addEventListener("click", async () => {
+  if (!planId) return toast("ไม่พบแผนการศึกษา", "error");
+  try {
+    const detail   = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+    const existing = (detail.semesters||[]).map(s => Number(s.term_no));
+    const next     = [1,2,3].find(t => !existing.includes(t));
+    if (!next) return toast("มีครบทุกภาคเรียนแล้ว", "error");
+    const termNames = ["",`ปี ${currentYear} - ภาคเรียนที่ 1`,`ปี ${currentYear} - ภาคเรียนที่ 2`,`ปี ${currentYear} - ภาคฤดูร้อน`];
+    await fetch(`${API}/study-plans/${planId}/semesters`, {
+      method: "POST", headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ term_no: next, title: termNames[next], sort_order: next })
+    });
+    toast("เพิ่มภาคเรียนสำเร็จ ✓", "success");
+    await refreshSemesters();
+  } catch { toast("เกิดข้อผิดพลาด", "error"); }
+});
+
+/* ── Delete semester ── */
+async function deleteSemester(semId, semTitle) {
+  const subjectCount = document.querySelectorAll(`#sem_${semId} .subject-row`).length;
+  const confirmMsg   = subjectCount > 0
+    ? `ต้องการลบ "${semTitle}" และรายวิชาทั้งหมด ${subjectCount} วิชาในภาคเรียนนี้ใช่หรือไม่?`
+    : `ต้องการลบ "${semTitle}" ใช่หรือไม่?`;
+  if (!confirm(confirmMsg)) return;
+  try {
+    const res = await fetch(`${API}/semesters/${semId}`, { method: "DELETE" });
+    if (!res.ok) throw new Error();
+    toast(`ลบ "${semTitle}" สำเร็จ`, "success");
+    await refreshSemesters();
+  } catch { toast("ลบภาคเรียนไม่สำเร็จ", "error"); }
+}
+
+/* ════════════════════════════════════════
+   MODAL STATE
+════════════════════════════════════════ */
+const MODAL_FIELDS = ["m_code","m_name_th","m_name_en","m_credits","m_hours","m_desc_th","m_desc_en","m_out_th","m_out_en"];
+let modalMode    = "add";   // "add" | "edit"
+let modalSemId   = null;
+let modalSemName = "-";
+let editSsId     = null;
+let currentSubjectData = null; // เก็บ data ของวิชาที่กำลังดู/แก้
+
+/* ── View Modal ── */
+function openViewModal(encodedData) {
+  currentSubjectData = JSON.parse(decodeURIComponent(encodedData));
+  const d = currentSubjectData;
+
+  // Header
+  document.getElementById("v_code_badge").textContent = d.code;
+  document.getElementById("v_title").textContent      = d.name_th;
+  document.getElementById("v_semname").textContent    = d.semName;
+
+  // Chips
+  document.getElementById("v_credits_chip").textContent = `${d.credits} หน่วยกิต`;
+  const catLabel = { Core:"Core Course", Elective:"Elective", GE:"GE" }[d.category] || d.category;
+  document.getElementById("v_cat_chip").textContent = catLabel;
+  if (d.hours) {
+    document.getElementById("v_hours_chip").textContent = d.hours;
+    document.getElementById("v_hours_chip").style.display = "";
+  } else {
+    document.getElementById("v_hours_chip").style.display = "none";
+  }
+
+  // EN name
+  if (d.name_en) {
+    document.getElementById("v_name_en").textContent      = d.name_en;
+    document.getElementById("v_name_en_block").style.display = "";
+  } else {
+    document.getElementById("v_name_en_block").style.display = "none";
+  }
+
+  // Description
+  const hasDesc = d.desc_th || d.desc_en;
+  document.getElementById("v_desc_block").style.display = hasDesc ? "" : "none";
+  document.getElementById("v_desc_th_txt").textContent  = d.desc_th || "(ไม่มีข้อมูล)";
+  document.getElementById("v_desc_en_txt").textContent  = d.desc_en || "(no data)";
+
+  // Outcomes
+  const hasOut = d.out_th || d.out_en;
+  document.getElementById("v_out_block").style.display  = hasOut ? "" : "none";
+  document.getElementById("v_out_th_txt").textContent   = d.out_th || "(ไม่มีข้อมูล)";
+  document.getElementById("v_out_en_txt").textContent   = d.out_en || "(no data)";
+
+  // Empty hint
+  document.getElementById("v_empty").style.display = (!hasDesc && !hasOut) ? "" : "none";
+
+  // Reset tabs to TH
+  document.querySelectorAll("#v_desc_block .vd-tab, #v_out_block .vd-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll("#v_desc_block .vd-tab:first-child, #v_out_block .vd-tab:first-child").forEach(t => t.classList.add("active"));
+  document.getElementById("v_desc_th_txt").style.display = "";
+  document.getElementById("v_desc_en_txt").style.display = "none";
+  document.getElementById("v_out_th_txt").style.display  = "";
+  document.getElementById("v_out_en_txt").style.display  = "none";
+
+  document.getElementById("viewModal").classList.add("open");
+}
+
+function closeViewModal() {
+  document.getElementById("viewModal").classList.remove("open");
+}
+
+function switchVdTab(btn, showId, hideId) {
+  const parent = btn.closest(".vd-block");
+  parent.querySelectorAll(".vd-tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById(showId).style.display = "";
+  document.getElementById(hideId).style.display = "none";
+}
+
+// View modal close handlers
+document.getElementById("viewModalClose").addEventListener("click",  closeViewModal);
+document.getElementById("viewModalClose2").addEventListener("click", closeViewModal);
+document.getElementById("viewModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("viewModal")) closeViewModal();
+});
+
+// "แก้ไขรายวิชา" button in view modal → switch to edit form
+document.getElementById("btnSwitchToEdit").addEventListener("click", () => {
+  closeViewModal();
+  openEditModal(encodeURIComponent(JSON.stringify(currentSubjectData)));
+});
+
+/* ── Form Modal (Add / Edit) ── */
+function clearModal() {
+  MODAL_FIELDS.forEach(id => document.getElementById(id).value = "");
+  document.getElementById("m_category").value = "Core";
+  document.getElementById("autofillHint").style.display = "none";
+}
+
+function setModalMode(mode) {
+  modalMode = mode;
+  const isEdit = mode === "edit";
+  document.getElementById("modalTitle").textContent     = isEdit ? "แก้ไขรายวิชา" : "เพิ่มรายวิชา";
+  document.getElementById("modalHeader").className      = isEdit ? "modal-header edit-mode" : "modal-header";
+  document.getElementById("modalSaveLabel").textContent = isEdit ? "บันทึกการแก้ไข" : "บันทึกรายวิชา";
+  document.getElementById("modalSave").className        = isEdit ? "btn-save edit-save" : "btn-save";
+  document.getElementById("modalSaveIcon").innerHTML    = isEdit
+    ? `<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>`
+    : `<path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>`;
+
+  // back button: show only in edit mode
+  const backBtn = document.getElementById("btnBackToView");
+  backBtn.style.display = isEdit ? "flex" : "none";
+
+  // code field read-only in edit mode
+  document.getElementById("m_code").readOnly           = isEdit;
+  document.getElementById("m_code").style.background   = isEdit ? "var(--purple-light)" : "";
+  document.getElementById("m_code").style.color        = isEdit ? "var(--purple-dark)"  : "";
+  document.getElementById("m_code").style.fontWeight   = isEdit ? "700" : "";
+}
+
+function openAddModal(semId, semName) {
+  modalSemId   = semId;
+  modalSemName = semName;
+  editSsId     = null;
+  clearModal();
+  setModalMode("add");
+  document.getElementById("modalSemName").textContent = semName;
+  document.getElementById("subjectModal").classList.add("open");
+}
+
+function openEditModal(encodedData) {
+  const data   = JSON.parse(decodeURIComponent(encodedData));
+  modalSemId   = data.semId;
+  modalSemName = data.semName;
+  editSsId     = data.ssId;
+  clearModal();
+  setModalMode("edit");
+  document.getElementById("modalSemName").textContent = data.semName;
+  document.getElementById("m_code").value     = data.code;
+  document.getElementById("m_name_th").value  = data.name_th;
+  document.getElementById("m_name_en").value  = data.name_en;
+  document.getElementById("m_credits").value  = data.credits;
+  document.getElementById("m_hours").value    = data.hours;
+  document.getElementById("m_category").value = data.category || "Core";
+  document.getElementById("m_desc_th").value  = data.desc_th;
+  document.getElementById("m_desc_en").value  = data.desc_en;
+  document.getElementById("m_out_th").value   = data.out_th;
+  document.getElementById("m_out_en").value   = data.out_en;
+  document.getElementById("subjectModal").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("subjectModal").classList.remove("open");
+  editSsId = null;
+}
+
+// Back to view from edit form
+document.getElementById("btnBackToView").addEventListener("click", () => {
+  closeModal();
+  if (currentSubjectData) openViewModal(encodeURIComponent(JSON.stringify(currentSubjectData)));
+});
+
+document.getElementById("modalCancel").addEventListener("click", closeModal);
+document.getElementById("modalClose").addEventListener("click",  closeModal);
+document.getElementById("subjectModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("subjectModal")) closeModal();
+});
+
+/* Autofill on code blur (add mode only) */
+document.getElementById("m_code").addEventListener("blur", async () => {
+  if (modalMode === "edit") return;
+  const code = document.getElementById("m_code").value.trim();
+  if (!code) return;
+  try {
+    const items = await fetch(`${API}/subjects?query=${encodeURIComponent(code)}`).then(r => r.json());
+    const found = items.find(it => it.code.toLowerCase() === code.toLowerCase());
+    if (found) {
+      document.getElementById("m_name_th").value = found.name_th || "";
+      document.getElementById("m_name_en").value = found.name_en || "";
+      document.getElementById("m_credits").value = found.default_credits || "";
+      document.getElementById("m_hours").value   = found.default_hour_structure || "";
+      document.getElementById("m_desc_th").value = found.description_th || "";
+      document.getElementById("m_desc_en").value = found.description_en || "";
+      document.getElementById("m_out_th").value  = found.outcomes_th || "";
+      document.getElementById("m_out_en").value  = found.outcomes_en || "";
+      document.getElementById("autofillHint").style.display = "block";
+    }
+  } catch {}
+});
+
+/* ── Save (Add or Edit) ── */
+document.getElementById("modalSave").addEventListener("click", async () => {
+  const code    = document.getElementById("m_code").value.trim();
+  const name_th = document.getElementById("m_name_th").value.trim();
+  const credits = Number(document.getElementById("m_credits").value);
+  if (!code || !name_th || !credits) return toast("กรุณากรอก รหัสวิชา / ชื่อไทย / หน่วยกิต", "error");
+  if (modalMode === "edit") await saveEdit(code, name_th, credits);
+  else await saveAdd(code, name_th, credits);
+});
+
+async function saveAdd(code, name_th, credits) {
+  let subject_id = null;
+  try {
+    const items = await fetch(`${API}/subjects?query=${encodeURIComponent(code)}`).then(r => r.json());
+    const found = items.find(it => it.code.toLowerCase() === code.toLowerCase());
+    if (found) subject_id = found.id;
+  } catch {}
+  const payload = { category: document.getElementById("m_category").value, credits, hour_structure: document.getElementById("m_hours").value.trim() || null };
+  if (subject_id) {
+    payload.subject_id = subject_id;
+  } else {
+    Object.assign(payload, {
+      code, name_th, default_credits: credits,
+      name_en:                document.getElementById("m_name_en").value.trim() || null,
+      default_hour_structure: document.getElementById("m_hours").value.trim()   || null,
+      description_th:         document.getElementById("m_desc_th").value.trim() || null,
+      description_en:         document.getElementById("m_desc_en").value.trim() || null,
+      outcomes_th:            document.getElementById("m_out_th").value.trim()  || null,
+      outcomes_en:            document.getElementById("m_out_en").value.trim()  || null,
+    });
+  }
+  try {
+    const res = await fetch(`${API}/semesters/${modalSemId}/subjects`, {
+      method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error();
+    toast("บันทึกรายวิชาสำเร็จ ✓", "success");
+    closeModal();
+    await refreshSemesters();
+  } catch { toast("บันทึกไม่สำเร็จ", "error"); }
+}
+
+async function saveEdit(code, name_th, credits) {
+  if (!editSsId) return toast("ไม่พบ ID รายวิชา (editSsId null)", "error");
+  const payload = {
+    credits,
+    category:       document.getElementById("m_category").value,
+    hour_structure: document.getElementById("m_hours").value.trim() || null,
+    name_th,
+    name_en:        document.getElementById("m_name_en").value.trim()  || null,
+    description_th: document.getElementById("m_desc_th").value.trim()  || null,
+    description_en: document.getElementById("m_desc_en").value.trim()  || null,
+    outcomes_th:    document.getElementById("m_out_th").value.trim()   || null,
+    outcomes_en:    document.getElementById("m_out_en").value.trim()   || null,
+  };
+  console.log("[saveEdit] ssId:", editSsId, "payload:", payload);
+  // Try PATCH first, fall back to PUT
+  for (const method of ["PATCH", "PUT"]) {
+    try {
+      const res = await fetch(`${API}/semester-subjects/${editSsId}`, {
+        method, headers: {"Content-Type":"application/json"}, body: JSON.stringify(payload)
+      });
+      console.log("[saveEdit]", method, res.status);
+      if (res.ok) {
+        toast("แก้ไขรายวิชาสำเร็จ ✓", "success");
+        closeModal(); currentSubjectData = null;
+        await refreshSemesters();
+        return;
+      }
+      const errText = await res.text();
+      console.warn("[saveEdit]", method, "failed:", errText);
+    } catch(e) { console.error("[saveEdit]", method, "error:", e); }
+  }
+  toast("แก้ไขไม่สำเร็จ — ดู Console สำหรับรายละเอียด", "error");
+}
+
+/* ── Delete subject ── */
+async function deleteSubject(ssId) {
+  if (!confirm("ต้องการลบรายวิชานี้?")) return;
+  try {
+    await fetch(`${API}/semester-subjects/${ssId}`, { method: "DELETE" });
+    toast("ลบรายวิชาสำเร็จ", "success");
+    await refreshSemesters();
+  } catch { toast("ลบไม่สำเร็จ", "error"); }
+}
+
+init();
+</script>
+</body>
+</html>

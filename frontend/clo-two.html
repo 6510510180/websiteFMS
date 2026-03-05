@@ -47,8 +47,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .btn-purple:hover{background:var(--purple-dark);}
 .btn-outline{background:white;color:var(--purple);border:1.5px solid var(--purple);}
 .btn-outline:hover{background:var(--purple-light);}
-
-/* PLO/MLO */
 .lo-frame{border:1.5px dashed #c4b5fd;border-radius:16px;overflow:hidden;display:flex;min-height:500px;}
 .lo-sidebar{width:210px;flex-shrink:0;border-right:1px solid #ede8f5;background:#fdfbff;padding:8px 0;}
 .sb-item{display:flex;align-items:center;gap:9px;padding:12px 16px;font-size:13px;font-weight:500;color:var(--text-sub);cursor:pointer;border-left:3px solid transparent;transition:.15s;}
@@ -72,13 +70,9 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .ae-btn.S{color:var(--s-color);border-color:var(--s-color);background:var(--s-bg);}
 .ae-btn:hover{opacity:.82;}
 .ae-cnt{background:white;border-radius:999px;padding:1px 5px;font-size:10px;font-weight:800;}
-
-/* CLO layout */
 .clo-wrap{display:flex;gap:20px;}
 .clo-main{flex:1;min-width:0;}
 .clo-side{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;}
-
-/* Course card */
 .course-card{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:22px 24px 0;box-shadow:0 2px 8px rgba(127,19,236,0.05);overflow:hidden;}
 .course-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:14px;}
 .course-badge{font-family:'Lexend',sans-serif;font-size:13px;font-weight:800;background:#22c55e;color:white;padding:4px 12px;border-radius:8px;white-space:nowrap;flex-shrink:0;}
@@ -100,12 +94,8 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .clo-en{font-size:11px;color:var(--text-sub);margin-top:2px;}
 .linked-cell{display:flex;justify-content:center;flex-wrap:wrap;gap:3px;}
 .linked-badge{font-family:'Lexend',sans-serif;font-size:10px;font-weight:700;background:var(--purple-bg);color:var(--purple);padding:2px 8px;border-radius:999px;white-space:nowrap;}
-
-/* Side panel */
 .sp-section{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:18px;box-shadow:0 2px 8px rgba(127,19,236,0.05);}
 .sp-section-title{font-size:12px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
-
-/* Search & list */
 .search-box{position:relative;margin-bottom:10px;}
 .search-box input{width:100%;padding:9px 14px 9px 34px;border:1.5px solid var(--border);border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:12px;color:var(--text);outline:none;background:#fafafa;transition:.15s;}
 .search-box input:focus{border-color:var(--purple);background:white;box-shadow:0 0 0 3px rgba(127,19,236,0.08);}
@@ -116,22 +106,24 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .course-list-item.active{border-color:var(--purple);background:var(--purple-light);}
 .cli-badge{font-family:'Lexend',sans-serif;font-size:10px;font-weight:800;background:var(--purple);color:white;padding:2px 8px;border-radius:5px;white-space:nowrap;flex-shrink:0;}
 .cli-name{font-size:12px;font-weight:600;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-
-/* Spinner */
 .spin-wrap{display:flex;align-items:center;gap:8px;padding:12px;color:var(--text-sub);font-size:12px;}
 .spinner{width:16px;height:16px;border:2px solid #e8deff;border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* CLO source tag */
 .clo-source{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:#e0f7fa;color:var(--teal);margin-left:6px;}
-
-/* Btn */
 .btn-sp-primary{width:100%;padding:11px;background:var(--purple);color:white;border:none;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.18s;margin-bottom:8px;}
 .btn-sp-primary:hover{background:var(--purple-dark);}
 .btn-sp-outline{width:100%;padding:11px;background:white;color:var(--purple);border:1.5px solid var(--purple);border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.18s;margin-bottom:8px;}
 .btn-sp-outline:hover{background:var(--purple-light);}
 
-/* Modal */
+/* Debug panel */
+.debug-panel{background:#1e1e2e;color:#a6e3a1;font-family:monospace;font-size:11px;padding:12px 16px;border-radius:10px;max-height:180px;overflow-y:auto;margin-top:10px;line-height:1.6;display:none;}
+.debug-panel.show{display:block;}
+.debug-line{margin:1px 0;}
+.debug-line.warn{color:#f9e2af;}
+.debug-line.err{color:#f38ba8;}
+.debug-line.ok{color:#a6e3a1;}
+.debug-line.info{color:#89dceb;}
+
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .modal-overlay.show{opacity:1;pointer-events:all;}
 .modal{background:var(--white);border-radius:18px;width:920px;max-width:96vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 28px 72px rgba(0,0,0,0.22);transform:translateY(22px) scale(.97);transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
@@ -201,14 +193,10 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .btn-m-cancel:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-light);}
 .btn-m-save{padding:9px 24px;border:none;background:var(--purple);color:white;border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(127,19,236,.25);transition:.15s;}
 .btn-m-save:hover{background:var(--purple-dark);}
-
-/* Status bar */
 .status-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 40px;border-top:1px solid var(--border);background:var(--white);font-size:11px;color:var(--text-sub);flex-wrap:wrap;gap:8px;margin-top:auto;}
 .status-dots{display:flex;gap:16px;flex-wrap:wrap;}
 .sdot{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;}
 .dot{width:7px;height:7px;border-radius:50%;}
-
-/* Toast */
 .toast{position:fixed;bottom:28px;right:28px;background:#1a1a2e;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
@@ -242,7 +230,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn btn-outline" onclick="loadCoursesFromAPI()" id="btn-refresh">
+      <button class="btn btn-outline" onclick="loadCoursesFromAPI()">
         <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg>
         Refresh
       </button>
@@ -259,7 +247,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <button class="main-tab" onclick="switchTab('CLO',this)">Course Learning Outcomes (CLO)</button>
   </div>
 
-  <!-- PLO PANEL -->
   <div class="panel active" id="panel-PLO">
     <div class="lo-frame">
       <div class="lo-content">
@@ -274,7 +261,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     </div>
   </div>
 
-  <!-- MLO PANEL -->
   <div class="panel" id="panel-MLO">
     <div class="lo-frame">
       <div class="lo-sidebar" id="mlo-sidebar"></div>
@@ -290,14 +276,11 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     </div>
   </div>
 
-  <!-- CLO PANEL -->
   <div class="panel" id="panel-CLO">
     <div class="clo-wrap">
       <div class="clo-main" id="clo-main"></div>
-
       <div class="clo-side">
 
-        <!-- API Course Selector -->
         <div class="sp-section">
           <div class="sp-section-title">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="var(--teal)"><path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z"/><path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z"/><path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z"/></svg>
@@ -318,16 +301,19 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
           </div>
         </div>
 
-        <!-- CLO Info -->
         <div class="sp-section" id="clo-info-panel" style="display:none;">
           <div class="sp-section-title">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="var(--teal)"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
             CLO SOURCE
           </div>
           <div id="clo-source-info" style="font-size:12px;color:var(--text-sub);line-height:1.6;"></div>
+          <!-- Debug toggle -->
+          <div style="margin-top:8px;">
+            <button onclick="toggleDebug()" style="font-size:11px;color:var(--text-sub);background:none;border:1px solid var(--border);padding:4px 10px;border-radius:6px;cursor:pointer;">🔍 Debug Log</button>
+          </div>
+          <div class="debug-panel" id="debug-panel"></div>
         </div>
 
-        <!-- Add CLO (manual) -->
         <div class="sp-section">
           <div class="sp-section-title">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="var(--purple)"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm1 8a1 1 0 100 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h3a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
@@ -359,7 +345,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   <div id="api-status">API MODE • <span id="course-count">—</span> รายวิชา</div>
 </div>
 
-<!-- KAS / PLO-MLO MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeBg(event)">
   <div class="modal">
     <div class="m-header">
@@ -441,151 +426,338 @@ const A_DATA=[{code:'A1',label:'การคิดเชิงบวก'},{code:
 const S_DATA=[{code:'S1',label:'การปรับตัว'},{code:'S2',label:'การทำงานภายใต้แรงกดดัน'},{code:'S3',label:'การเข้าสังคม'},{code:'S4',label:'การคิดเชิงระบบ'},{code:'S5',label:'การคิดวิเคราะห์'},{code:'S6',label:'การนำเสนอ'},{code:'S7',label:'การตัดสินใจ'},{code:'S8',label:'การแก้ปัญหา'},{code:'S9',label:'การใช้โปรแกรมคอมพิวเตอร์'},{code:'S10',label:'การประเมินผล'},{code:'S11',label:'การประยุกต์'},{code:'S12',label:'การสืบค้นข้อมูล'},{code:'S13',label:'การวางแผน'},{code:'S14',label:'การจัดการ'},{code:'S15',label:'ความคิดเชิงสร้างสรรค์'}];
 
 /* ═══ STATE ═══ */
-let allCourses = []; // from API
-let filteredCourses = [];
-let COURSES = []; // with clos loaded
-let curCourseIdx = 0;
-let curTab='PLO', curMloGroup=0;
+let allCourses=[], filteredCourses=[], COURSES=[];
+let curCourseIdx=0, curTab='PLO', curMloGroup=0;
 let mCtx=null, mPanel='PLO_MLO';
 let tKas={K:new Set(),A:new Set(),S:new Set()}, tPlo=new Set(), tMlo=new Set();
 const ploKas={}, mloKas={};
 PLO_LIST.forEach(p=>{ploKas[p.code]={K:new Set(),A:new Set(),S:new Set()};});
 MLO_GROUPS.forEach(g=>g.items.forEach(m=>{mloKas[m.code]={K:new Set(),A:new Set(),S:new Set()};}));
 
-/* ═══ API FUNCTIONS ═══ */
-async function loadCoursesFromAPI(){
-  const list = document.getElementById('course-list');
-  list.innerHTML = `<div class="spin-wrap"><div class="spinner"></div> กำลังดึงรายวิชาจาก API...</div>`;
-  try {
-    const res = await fetch(`${API_BASE}/subjects?page=1&pageSize=100`);
-    const data = await res.json();
-    allCourses = Array.isArray(data) ? data : (data.data || data.subjects || []);
-    document.getElementById('course-count').textContent = allCourses.length;
-
-    // init COURSES with empty clos
-    COURSES = allCourses.map(s=>({
-      id: s.id,
-      code: s.code,
-      name: s.name_th || s.name || s.code,
-      nameEn: s.name_en || '',
-      units: s.default_hour_structure || s.default_credits || '',
-      desc: s.description_th || s.description_en || '',
-      outcomeTh: s.outcomes_th || '',
-      outcomeEn: s.outcomes_en || '',
-      clos: [],
-      _closLoaded: false,
-    }));
-    filteredCourses = [...COURSES];
-    renderCourseList();
-    if(COURSES.length){
-      curCourseIdx = 0;
-      await loadSubjectClos(0);
-    }
-    toast(`✓ โหลด ${COURSES.length} รายวิชาสำเร็จ`);
-  } catch(e){
-    list.innerHTML = `<div style="padding:12px;font-size:12px;color:var(--red);">❌ โหลดไม่สำเร็จ<br>${e.message}</div>`;
-    // Load demo data
-    loadDemoData();
+/* ═══ DEBUG ═══ */
+const debugLines = [];
+function dbg(msg, type='info'){
+  debugLines.push({msg, type});
+  const panel = document.getElementById('debug-panel');
+  if(panel){
+    panel.innerHTML = debugLines.slice(-30).map(l=>`<div class="debug-line ${l.type}">${l.msg}</div>`).join('');
+    panel.scrollTop = panel.scrollHeight;
   }
+  console.log(`[CLO ${type.toUpperCase()}]`, msg);
+}
+function toggleDebug(){
+  const p = document.getElementById('debug-panel');
+  p.classList.toggle('show');
 }
 
-/* ═══ Load CLO for a subject from outcomes field ═══ */
-async function loadSubjectClos(idx){
-  const c = COURSES[idx];
-  if(!c) return;
-  if(c._closLoaded) return;
+/* ═══ SMART FIELD FINDER ═══
+   API อาจใช้ชื่อ field ต่างกัน — ฟังก์ชันนี้ค้นหา field ที่น่าจะเป็น outcomes
+*/
+function findOutcomeFields(obj) {
+  if(!obj || typeof obj !== 'object') return {th:'', en:''};
+  const keys = Object.keys(obj);
+  dbg(`📦 API fields: ${keys.join(', ')}`, 'info');
 
-  // Try fetching detailed subject data (may have outcomes)
-  try {
-    const res = await fetch(`${API_BASE}/subjects/${c.id}`);
-    const detail = await res.json();
-    const subj = detail.subject || detail;
-    // Update with fresh data
-    c.outcomeTh = subj.outcomes_th || c.outcomeTh || '';
-    c.outcomeEn = subj.outcomes_en || c.outcomeEn || '';
-    c.desc = subj.description_th || c.desc || '';
-  } catch {}
+  // Priority list สำหรับ TH
+  const thCandidates = [
+    'outcomes_th','outcome_th','learning_outcomes_th','clo_th',
+    'objectives_th','objective_th','description_th',
+    'outcomes','learning_outcomes','objectives','clo'
+  ];
+  // Priority list สำหรับ EN
+  const enCandidates = [
+    'outcomes_en','outcome_en','learning_outcomes_en','clo_en',
+    'objectives_en','objective_en','description_en',
+  ];
 
-  // Parse CLOs from outcomes_th — split by newline, numbered list, or Thai bullet patterns
-  c.clos = parseCloFromOutcomes(c.outcomeTh, c.outcomeEn);
-  c._closLoaded = true;
-}
+  let th = '', en = '';
 
-function parseCloFromOutcomes(th, en){
-  const clos = [];
-  if(!th && !en) return clos;
-
-  // Split strategies: numbered (1. 2. 3.) / newlines / Thai patterns
-  const splitText = (text) => {
-    if(!text) return [];
-    // Try numbered list: "1. xxx" or "1) xxx"
-    const numPattern = /(?:^|\n)\s*\d+[.)]\s*/gm;
-    if(numPattern.test(text)){
-      return text.split(/\n?\s*\d+[.)]\s+/).map(s=>s.trim()).filter(Boolean);
+  for(const k of thCandidates){
+    if(obj[k] && typeof obj[k]==='string' && obj[k].trim()){
+      th = obj[k].trim();
+      dbg(`✅ TH field: "${k}" → "${th.slice(0,60)}..."`, 'ok');
+      break;
     }
-    // Try newlines
-    const lines = text.split('\n').map(s=>s.trim().replace(/^[-•*]\s*/,'')).filter(Boolean);
-    if(lines.length > 1) return lines;
-    // Single block
-    return [text.trim()].filter(Boolean);
+    // อาจเป็น array
+    if(obj[k] && Array.isArray(obj[k]) && obj[k].length){
+      th = obj[k].map(x=> typeof x==='string' ? x : (x.description_th||x.description||x.text||'')).filter(Boolean).join('\n');
+      dbg(`✅ TH array field: "${k}" → ${obj[k].length} items`, 'ok');
+      break;
+    }
+  }
+
+  for(const k of enCandidates){
+    if(obj[k] && typeof obj[k]==='string' && obj[k].trim()){
+      en = obj[k].trim();
+      dbg(`✅ EN field: "${k}" → "${en.slice(0,60)}..."`, 'ok');
+      break;
+    }
+    if(obj[k] && Array.isArray(obj[k]) && obj[k].length){
+      en = obj[k].map(x=> typeof x==='string' ? x : (x.description_en||x.description||x.text||'')).filter(Boolean).join('\n');
+      break;
+    }
+  }
+
+  // ถ้ายังไม่เจอ — ลอง scan หา field ที่มีคำว่า outcome/objective/clo
+  if(!th){
+    for(const k of keys){
+      const kl = k.toLowerCase();
+      if(kl.includes('outcome')||kl.includes('objective')||kl.includes('clo')||kl.includes('learning')){
+        const v = obj[k];
+        if(v && typeof v==='string' && v.trim().length>10){
+          th = v.trim();
+          dbg(`🔍 Auto-detected TH field: "${k}"`, 'warn');
+          break;
+        }
+        if(v && Array.isArray(v) && v.length){
+          th = v.map(x=> typeof x==='string' ? x : JSON.stringify(x)).join('\n');
+          dbg(`🔍 Auto-detected TH array: "${k}"`, 'warn');
+          break;
+        }
+      }
+    }
+  }
+
+  if(!th && !en){
+    dbg(`⚠️ ไม่พบ outcome fields ใน: ${keys.join(', ')}`, 'warn');
+  }
+
+  return {th, en};
+}
+
+/* ═══ ROBUST CLO PARSER ═══
+   แก้ bug regex lastIndex และรองรับรูปแบบ text หลากหลาย
+*/
+function parseCloFromOutcomes(th, en, debugLabel='') {
+  const clos = [];
+  if(!th && !en){
+    dbg(`${debugLabel} ไม่มีข้อมูล outcomes`, 'warn');
+    return clos;
+  }
+
+  dbg(`${debugLabel} parsing TH: "${(th||'').slice(0,80)}"`, 'info');
+
+  const splitText = (text) => {
+    if(!text || !text.trim()) return [];
+    const t = text.trim();
+
+    // Pattern 1: ขึ้นต้นด้วยตัวเลข+จุด/วงเล็บ เช่น "1. xxx" หรือ "1) xxx" หรือ "(1) xxx"
+    // ใช้ split โดยตรง ไม่ใช้ .test() ที่ทำลาย lastIndex
+    const numSplit = t.split(/\n?\s*(?:\(\d+\)|\d+[.):])\s+/);
+    if(numSplit.length > 1){
+      // numSplit[0] อาจเป็น empty string ถ้าขึ้นต้นด้วยตัวเลข
+      const parts = numSplit.map(s=>s.trim()).filter(Boolean);
+      dbg(`  → numbered list: ${parts.length} items`, 'ok');
+      return parts;
+    }
+
+    // Pattern 2: แยกด้วย newline
+    const lines = t.split(/\n+/).map(s=>s.trim().replace(/^[-•*–]\s*/,'')).filter(s=>s.length>2);
+    if(lines.length > 1){
+      dbg(`  → newline split: ${lines.length} lines`, 'ok');
+      return lines;
+    }
+
+    // Pattern 3: Thai sentence split — ประโยคที่มีคำว่า "และ/และ/รวมถึง" อาจแยกได้
+    // หรือใช้ / เป็น delimiter
+    if(t.includes(' / ') || t.includes('/')){
+      const slashParts = t.split(/\s*\/\s*/).map(s=>s.trim()).filter(Boolean);
+      if(slashParts.length > 1){
+        dbg(`  → slash split: ${slashParts.length}`, 'ok');
+        return slashParts;
+      }
+    }
+
+    // Pattern 4: ประโยคเดียว / ยาวมาก
+    dbg(`  → single block (${t.length} chars)`, 'info');
+    return [t];
   };
 
   const thParts = splitText(th);
   const enParts = splitText(en);
-  const max = Math.max(thParts.length, enParts.length, 1);
+  const maxLen = Math.max(thParts.length, enParts.length);
 
-  if(max === 1 && (th || en)){
-    clos.push({
-      th: th || '',
-      en: en || '',
-      kas:{K:new Set(),A:new Set(),S:new Set()},
-      plo:new Set(), mlo:new Set(),
-      _source:'api'
-    });
-  } else {
-    for(let i=0; i<max; i++){
+  if(maxLen === 0) return clos;
+
+  for(let i=0; i<maxLen; i++){
+    const thText = thParts[i] || '';
+    const enText = enParts[i] || '';
+    if(thText || enText){
       clos.push({
-        th: thParts[i] || '',
-        en: enParts[i] || '',
+        th: thText,
+        en: enText,
         kas:{K:new Set(),A:new Set(),S:new Set()},
         plo:new Set(), mlo:new Set(),
         _source:'api'
       });
     }
   }
-  return clos.filter(c=>c.th||c.en);
+
+  dbg(`${debugLabel} → ${clos.length} CLO parsed`, clos.length>0?'ok':'warn');
+  return clos;
+}
+
+/* ═══ API ═══ */
+async function loadCoursesFromAPI(){
+  const list = document.getElementById('course-list');
+  list.innerHTML = `<div class="spin-wrap"><div class="spinner"></div> กำลังดึงรายวิชา...</div>`;
+  debugLines.length = 0;
+  dbg('🚀 เริ่มดึง subjects จาก API...', 'info');
+
+  try {
+    const res = await fetch(`${API_BASE}/subjects?page=1&pageSize=100`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const raw = await res.json();
+
+    dbg(`📥 Raw response type: ${typeof raw}, isArray: ${Array.isArray(raw)}`, 'info');
+    if(typeof raw === 'object' && !Array.isArray(raw)){
+      dbg(`  keys: ${Object.keys(raw).join(', ')}`, 'info');
+    }
+
+    allCourses = Array.isArray(raw) ? raw : (raw.data || raw.subjects || raw.items || raw.results || []);
+    dbg(`✅ ได้ ${allCourses.length} รายวิชา`, 'ok');
+
+    if(allCourses.length > 0){
+      dbg(`📋 Sample subject keys: ${Object.keys(allCourses[0]).join(', ')}`, 'info');
+    }
+
+    document.getElementById('course-count').textContent = allCourses.length;
+
+    COURSES = allCourses.map(s=>{
+      const {th, en} = findOutcomeFields(s);
+      return {
+        id: s.id || s._id || s.subject_id,
+        code: s.code || s.subject_code || s.course_code || '?',
+        name: s.name_th || s.name || s.title_th || s.title || s.subject_name || s.code,
+        nameEn: s.name_en || s.title_en || '',
+        units: s.default_hour_structure || s.credits || s.default_credits || s.unit || '',
+        desc: s.description_th || s.description || '',
+        outcomeTh: th,
+        outcomeEn: en,
+        clos: [],
+        _closLoaded: false,
+        _rawSubject: s,
+      };
+    });
+
+    filteredCourses = [...COURSES];
+    renderCourseList();
+
+    if(COURSES.length){
+      curCourseIdx = 0;
+      await loadSubjectClos(0);
+      renderCLO();
+    }
+    toast(`✓ โหลด ${COURSES.length} รายวิชาสำเร็จ`);
+  } catch(e){
+    dbg(`❌ Error: ${e.message}`, 'err');
+    list.innerHTML = `<div style="padding:12px;font-size:12px;color:var(--red);">❌ ${e.message}<br><small>ใช้ข้อมูลตัวอย่างแทน</small></div>`;
+    loadDemoData();
+  }
+}
+
+async function loadSubjectClos(idx){
+  const c = COURSES[idx];
+  if(!c || c._closLoaded) return;
+
+  dbg(`\n--- loadSubjectClos: ${c.code} (id=${c.id}) ---`, 'info');
+
+  // ถ้าดึงมาจาก list แล้วมี outcomes → ใช้เลย
+  if(c.outcomeTh || c.outcomeEn){
+    dbg(`✅ ใช้ outcomes จาก subject list โดยตรง`, 'ok');
+    c.clos = parseCloFromOutcomes(c.outcomeTh, c.outcomeEn, `[${c.code}]`);
+    c._closLoaded = true;
+    return;
+  }
+
+  // ไม่มี outcomes → ดึง detail
+  dbg(`🔄 ดึง detail: /subjects/${c.id}`, 'info');
+  try {
+    const res = await fetch(`${API_BASE}/subjects/${c.id}`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const raw = await res.json();
+
+    // detail อาจ wrap ใน key ต่างๆ
+    const detail = raw.subject || raw.data || raw.item || raw;
+    dbg(`📥 Detail keys: ${Object.keys(detail).join(', ')}`, 'info');
+
+    const {th, en} = findOutcomeFields(detail);
+    c.outcomeTh = th;
+    c.outcomeEn = en;
+
+    // บางระบบมี endpoint /subjects/:id/outcomes แยก
+    if(!th && !en && c.id){
+      try {
+        dbg(`🔄 ลอง /subjects/${c.id}/outcomes`, 'info');
+        const r2 = await fetch(`${API_BASE}/subjects/${c.id}/outcomes`);
+        if(r2.ok){
+          const d2 = await r2.json();
+          dbg(`  outcomes endpoint keys: ${Object.keys(d2).join(', ')}`, 'info');
+          const arr = Array.isArray(d2) ? d2 : (d2.outcomes || d2.data || []);
+          if(arr.length){
+            c.clos = arr.map((o,i)=>({
+              th: o.description_th||o.outcome_th||o.text_th||o.description||'',
+              en: o.description_en||o.outcome_en||o.text_en||'',
+              kas:{K:new Set(),A:new Set(),S:new Set()},
+              plo:new Set(), mlo:new Set(),
+              _source:'api'
+            })).filter(cl=>cl.th||cl.en);
+            dbg(`✅ /outcomes endpoint: ${c.clos.length} CLO`, 'ok');
+            c._closLoaded = true;
+            return;
+          }
+        }
+      } catch{}
+    }
+
+    c.clos = parseCloFromOutcomes(c.outcomeTh, c.outcomeEn, `[${c.code}]`);
+  } catch(e){
+    dbg(`⚠️ detail fetch failed: ${e.message}`, 'warn');
+    c.clos = parseCloFromOutcomes(c.outcomeTh, c.outcomeEn, `[${c.code}]`);
+  }
+
+  c._closLoaded = true;
 }
 
 async function reloadCloFromAPI(){
   if(!COURSES.length){ toast('ไม่มีรายวิชาที่เลือก','#ef4444'); return; }
   const c = COURSES[curCourseIdx];
   c._closLoaded = false;
-  document.getElementById('clo-main').innerHTML = `<div style="padding:40px;text-align:center;"><div class="spinner" style="margin:auto"></div></div>`;
+  c.clos = [];
+  document.getElementById('clo-main').innerHTML = `<div style="padding:40px;text-align:center;"><div class="spinner" style="margin:auto;width:28px;height:28px;border-width:3px;"></div><div style="margin-top:12px;color:var(--text-sub);">กำลังดึง CLO...</div></div>`;
   await loadSubjectClos(curCourseIdx);
   renderCourseCard();
-  toast(`✓ ดึง CLO จาก API: ${c.clos.length} รายการ`);
+  document.getElementById('clo-info-panel').style.display='block';
+  toast(`✓ ${c.clos.length} CLO จาก API`);
 }
 
 function loadDemoData(){
-  // Fallback demo if API is down
   COURSES = [
     {id:1,code:'477-201',name:'การเขียนโปรแกรมเบื้องต้นทางธุรกิจ',nameEn:'Introduction to Programming in Business',units:'3((2)-2-5)',
-     desc:'การติดตั้งโปรแกรมตัวแปลภาษาและสภาพแวดล้อมที่ใช้ในการเขียนโปรแกรม ตัวแปรและคำสงวน โครงสร้างทำงานแบบเงื่อนไข',
-     outcomeTh:'1. อธิบายหลักการของการเขียนโปรแกรม\n2. ประยุกต์ใช้การเขียนโปรแกรมในงานธุรกิจ\n3. ทำงานร่วมกับผู้อื่นเพื่อบรรลุเป้าหมาย',
-     outcomeEn:'1. Explain principles of programming\n2. Apply programming in business context\n3. Collaborate with others to achieve goals',
+     desc:'การติดตั้งโปรแกรมตัวแปลภาษา การเขียนโค้ด โครงสร้างทำงานแบบเงื่อนไข',
+     outcomeTh:'1. อธิบายหลักการของการเขียนโปรแกรม\n2. ประยุกต์ใช้การเขียนโปรแกรมในงานธุรกิจ\n3. ทำงานร่วมกับผู้อื่นเพื่อบรรลุเป้าหมาย\n4. วิเคราะห์และแก้ไขข้อผิดพลาดในโปรแกรม',
+     outcomeEn:'1. Explain principles of programming\n2. Apply programming in business context\n3. Collaborate with others to achieve goals\n4. Analyze and debug program errors',
      clos:[], _closLoaded:false},
     {id:2,code:'MG-301',name:'การจัดการเชิงกลยุทธ์',nameEn:'Strategic Management',units:'3(3-0-6)',
      desc:'แนวคิดและกระบวนการจัดการเชิงกลยุทธ์',
-     outcomeTh:'1. วิเคราะห์สภาพแวดล้อมภายในและภายนอกองค์กร\n2. กำหนดกลยุทธ์ระดับองค์กร',
-     outcomeEn:'1. Analyze organizational environment\n2. Formulate corporate strategy',
+     outcomeTh:'1. วิเคราะห์สภาพแวดล้อมภายในและภายนอกองค์กร\n2. กำหนดกลยุทธ์ระดับองค์กร\n3. ประเมินผลการดำเนินกลยุทธ์',
+     outcomeEn:'1. Analyze internal and external organizational environment\n2. Formulate corporate strategy\n3. Evaluate strategy implementation',
+     clos:[], _closLoaded:false},
+    {id:3,code:'MK-201',name:'หลักการตลาด',nameEn:'Principles of Marketing',units:'3(3-0-6)',
+     desc:'แนวคิดการตลาด ส่วนประสมทางการตลาด พฤติกรรมผู้บริโภค',
+     outcomeTh:'1. อธิบายแนวคิดและหลักการตลาดสมัยใหม่\n2. วิเคราะห์พฤติกรรมผู้บริโภคได้\n3. วางแผนกลยุทธ์การตลาดเบื้องต้น',
+     outcomeEn:'1. Explain modern marketing concepts\n2. Analyze consumer behavior\n3. Plan basic marketing strategies',
      clos:[], _closLoaded:false},
   ];
   allCourses = COURSES;
   filteredCourses = [...COURSES];
   document.getElementById('course-count').textContent = `${COURSES.length} (demo)`;
+  COURSES.forEach(c=>{
+    c.clos = parseCloFromOutcomes(c.outcomeTh, c.outcomeEn, `[${c.code}]`);
+    c._closLoaded = true;
+  });
   renderCourseList();
   curCourseIdx = 0;
-  COURSES.forEach((_,i)=>{ COURSES[i].clos = parseCloFromOutcomes(COURSES[i].outcomeTh, COURSES[i].outcomeEn); COURSES[i]._closLoaded=true; });
   renderCLO();
   toast('⚠️ API offline — ใช้ข้อมูลตัวอย่าง','#f59e0b');
 }
@@ -604,7 +776,7 @@ function switchTab(tab,btn){
 
 /* ═══ PLO ═══ */
 function renderPLO(){
-  document.getElementById('plo-rows').innerHTML = PLO_LIST.map(p => loRow(p.code,p.desc,'PLO',ploKas[p.code])).join('');
+  document.getElementById('plo-rows').innerHTML=PLO_LIST.map(p=>loRow(p.code,p.desc,'PLO',ploKas[p.code])).join('');
 }
 function loRow(code,desc,type,k){
   const kn=k.K.size,an=k.A.size,sn=k.S.size;
@@ -636,64 +808,56 @@ function renderCLO(){
   renderCourseList();
   renderCourseCard();
 }
-
 function renderCourseList(){
-  const list = document.getElementById('course-list');
-  if(!filteredCourses.length){
-    list.innerHTML = `<div style="padding:12px;text-align:center;color:var(--text-sub);font-size:12px;">ไม่พบรายวิชา</div>`;
-    return;
-  }
-  list.innerHTML = filteredCourses.map((c,fi)=>{
-    const realIdx = COURSES.indexOf(c);
-    return `<div class="course-list-item${realIdx===curCourseIdx?' active':''}" onclick="selectCourse(${realIdx})">
+  const list=document.getElementById('course-list');
+  if(!filteredCourses.length){list.innerHTML=`<div style="padding:12px;text-align:center;color:var(--text-sub);font-size:12px;">ไม่พบรายวิชา</div>`;return;}
+  list.innerHTML=filteredCourses.map(c=>{
+    const ri=COURSES.indexOf(c);
+    return `<div class="course-list-item${ri===curCourseIdx?' active':''}" onclick="selectCourse(${ri})">
       <span class="cli-badge">${c.code}</span>
       <span class="cli-name" title="${c.name}">${c.name}</span>
     </div>`;
   }).join('');
 }
-
 function filterCourseList(q){
-  const ql = q.toLowerCase();
-  filteredCourses = ql
-    ? COURSES.filter(c=>c.code.toLowerCase().includes(ql)||c.name.toLowerCase().includes(ql))
-    : [...COURSES];
+  const ql=q.toLowerCase();
+  filteredCourses=ql?COURSES.filter(c=>c.code.toLowerCase().includes(ql)||c.name.toLowerCase().includes(ql)):[...COURSES];
   renderCourseList();
 }
-
 async function selectCourse(i){
-  curCourseIdx = i;
+  curCourseIdx=i;
   renderCourseList();
   if(!COURSES[i]._closLoaded){
-    document.getElementById('clo-main').innerHTML = `<div style="padding:40px;text-align:center;"><div class="spinner" style="margin:auto;width:28px;height:28px;border-width:3px;"></div><div style="margin-top:12px;color:var(--text-sub);font-size:13px;">กำลังดึงผลลัพธ์การเรียนรู้...</div></div>`;
+    document.getElementById('clo-main').innerHTML=`<div style="padding:40px;text-align:center;"><div class="spinner" style="margin:auto;width:28px;height:28px;border-width:3px;"></div><div style="margin-top:12px;color:var(--text-sub);font-size:13px;">กำลังดึงข้อมูล...</div></div>`;
     await loadSubjectClos(i);
   }
   renderCourseCard();
 }
 
 function renderCourseCard(){
-  const main = document.getElementById('clo-main');
+  const main=document.getElementById('clo-main');
   if(!COURSES.length){
-    main.innerHTML = `<div style="background:var(--white);border-radius:14px;border:2px dashed #c4b5fd;padding:60px 20px;text-align:center;color:var(--text-sub);">
-      <div style="font-size:36px;margin-bottom:12px;">🔌</div>
-      <div style="font-size:15px;font-weight:700;">รอข้อมูลจาก API</div>
-      <div style="font-size:13px;margin-top:6px;">กด "โหลดรายวิชาใหม่" เพื่อดึงข้อมูล</div>
-    </div>`;
+    main.innerHTML=`<div style="background:var(--white);border-radius:14px;border:2px dashed #c4b5fd;padding:60px 20px;text-align:center;color:var(--text-sub);"><div style="font-size:36px;margin-bottom:12px;">🔌</div><div style="font-size:15px;font-weight:700;">รอข้อมูลจาก API</div></div>`;
     return;
   }
-  const c = COURSES[curCourseIdx] || COURSES[0];
+  const c=COURSES[curCourseIdx]||COURSES[0];
+  const infoPanel=document.getElementById('clo-info-panel');
+  const sourceInfo=document.getElementById('clo-source-info');
+  const apiClos=c.clos.filter(cl=>cl._source==='api').length;
+  const manualClos=c.clos.filter(cl=>cl._source==='manual').length;
+  infoPanel.style.display='block';
 
-  // Show CLO source info
-  const infoPanel = document.getElementById('clo-info-panel');
-  const sourceInfo = document.getElementById('clo-source-info');
-  const apiClos = c.clos.filter(cl=>cl._source==='api').length;
-  const manualClos = c.clos.filter(cl=>cl._source==='manual').length;
-  infoPanel.style.display = 'block';
-  sourceInfo.innerHTML = `
+  const hasOutcomes = !!(c.outcomeTh||c.outcomeEn);
+  sourceInfo.innerHTML=`
     <span style="color:var(--teal);font-weight:700;">📡 จาก API:</span> ${apiClos} CLO<br>
     <span style="color:var(--purple);font-weight:700;">✏️ เพิ่มเอง:</span> ${manualClos} CLO<br>
-    <span style="color:var(--text-sub);">รวม: ${c.clos.length} CLO</span>`;
+    <span style="color:var(--text-sub);">รวม: ${c.clos.length} CLO</span><br>
+    ${hasOutcomes
+      ? `<span style="color:var(--green);font-size:11px;">✅ มีข้อมูล outcomes</span>`
+      : `<span style="color:var(--red);font-size:11px;">⚠️ ไม่พบ outcomes field — ลองกด "ดึง CLO จาก API"</span>`
+    }`;
 
-  main.innerHTML = `
+  main.innerHTML=`
     <div class="course-card">
       <div class="course-top">
         <span class="course-badge">${c.code}</span>
@@ -706,7 +870,7 @@ function renderCourseCard(){
       ${c.desc?`<div class="course-desc">${c.desc}</div>`:''}
       <div class="inner-tabs">
         <button class="inner-tab active" onclick="showInner('clo',this)">Course Outcomes (CLO)</button>
-        <button class="inner-tab" onclick="showInner('outcomes',this)">ผลลัพธ์การเรียนรู้ (Raw)</button>
+        <button class="inner-tab" onclick="showInner('outcomes',this)">ผลลัพธ์ Raw</button>
         <button class="inner-tab" onclick="showInner('info',this)">ข้อมูล</button>
       </div>
     </div>
@@ -717,6 +881,8 @@ function renderCourseCard(){
         <pre style="font-size:12px;color:var(--text);line-height:1.7;white-space:pre-wrap;background:#f8f4ff;padding:14px;border-radius:10px;">${c.outcomeTh||'(ไม่มีข้อมูล)'}</pre>
         <div style="font-size:12px;font-weight:700;color:var(--teal);margin:14px 0 8px;">📡 outcomes_en จาก API:</div>
         <pre style="font-size:12px;color:var(--text);line-height:1.7;white-space:pre-wrap;background:#f8f4ff;padding:14px;border-radius:10px;">${c.outcomeEn||'(ไม่มีข้อมูล)'}</pre>
+        <div style="font-size:12px;font-weight:700;color:var(--amber);margin:14px 0 8px;">🔍 Raw API Object:</div>
+        <pre style="font-size:11px;color:#555;line-height:1.6;white-space:pre-wrap;background:#fffbeb;padding:14px;border-radius:10px;max-height:200px;overflow-y:auto;">${JSON.stringify(c._rawSubject||{},null,2)}</pre>
       </div>
       <div id="inner-clo">
         <div class="clo-thead">
@@ -733,46 +899,44 @@ function renderCourseCard(){
 
 function renderCloRows(c){
   if(!c.clos.length) return `<div style="text-align:center;padding:40px;color:#94a3b8;font-size:13px;">
-    ยังไม่มี CLO — กด "ดึง CLO จาก API" หรือ "เพิ่ม CLO เอง"
+    <div style="font-size:28px;margin-bottom:8px;">📭</div>
+    ยังไม่มี CLO — กด <strong>"ดึง CLO จาก API"</strong> หรือ <strong>"เพิ่ม CLO เอง"</strong><br>
+    <small style="color:#b0c0cc">หรือดูแท็บ "ผลลัพธ์ Raw" เพื่อตรวจสอบข้อมูลจาก API</small>
   </div>`;
   return c.clos.map((cl,i)=>{
     const kn=cl.kas.K.size,an=cl.kas.A.size,sn=cl.kas.S.size;
     const pln=cl.plo.size,mln=cl.mlo.size;
     const ctx=JSON.stringify({type:'CLO',courseIdx:curCourseIdx,cloIdx:i}).replace(/"/g,'&quot;');
-    const linked = pln+mln>0
+    const linked=pln+mln>0
       ? [...cl.plo,...cl.mlo].slice(0,4).map(code=>`<span class="linked-badge">${code}</span>`).join('')+(pln+mln>4?`<span class="linked-badge">+${pln+mln-4}</span>`:'')
       : '<span style="color:#94a3b8;font-size:11px">—</span>';
-    const kasPills=(type)=>{
-      const codes=[...cl.kas[type]];
+    const kasPills=(t)=>{
+      const codes=[...cl.kas[t]];
       if(!codes.length) return `<span style="color:#94a3b8;font-size:10px">—</span>`;
-      const clr=type==='K'?'var(--k-color)':type==='A'?'var(--a-color)':'var(--s-color)';
-      const bg=type==='K'?'var(--k-bg)':type==='A'?'var(--a-bg)':'var(--s-bg)';
+      const clr=t==='K'?'var(--k-color)':t==='A'?'var(--a-color)':'var(--s-color)';
+      const bg=t==='K'?'var(--k-bg)':t==='A'?'var(--a-bg)':'var(--s-bg)';
       return codes.map(c=>`<span style="display:inline-block;background:${bg};color:${clr};border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700;">${c}</span>`).join(' ');
     };
-    const srcTag = cl._source==='api'
+    const srcTag=cl._source==='api'
       ? `<span class="clo-source">📡 API</span>`
       : `<span class="clo-source" style="background:var(--purple-light);color:var(--purple);">✏️ Manual</span>`;
     return `<div class="clo-row">
       <div>
         <div class="clo-num">CLO ${i+1} ${srcTag}</div>
-        <div class="clo-th">${cl.th}</div>
-        <div class="clo-en">${cl.en}</div>
+        <div class="clo-th">${cl.th||'—'}</div>
+        ${cl.en?`<div class="clo-en">${cl.en}</div>`:''}
       </div>
       <div class="linked-cell" onclick='openModal(${ctx},"PLO_MLO")' style="cursor:pointer;flex-direction:column;gap:3px;">
-        ${linked}
-        <span style="font-size:9px;color:#b0a0cc;margin-top:2px">คลิกแก้ไข</span>
+        ${linked}<span style="font-size:9px;color:#b0a0cc;margin-top:2px">คลิกแก้ไข</span>
       </div>
       <div class="kas-cell" style="flex-direction:column;gap:4px;cursor:pointer;" onclick='openModal(${ctx},"KAS","K")'>
-        ${kasPills('K')}
-        <button class="ae-btn K" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${kn?`(${kn})`:'Add'}</button>
+        ${kasPills('K')}<button class="ae-btn K" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${kn?`(${kn})`:'Add'}</button>
       </div>
       <div class="kas-cell" style="flex-direction:column;gap:4px;cursor:pointer;" onclick='openModal(${ctx},"KAS","A")'>
-        ${kasPills('A')}
-        <button class="ae-btn A" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${an?`(${an})`:'Add'}</button>
+        ${kasPills('A')}<button class="ae-btn A" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${an?`(${an})`:'Add'}</button>
       </div>
       <div class="kas-cell" style="flex-direction:column;gap:4px;cursor:pointer;" onclick='openModal(${ctx},"KAS","S")'>
-        ${kasPills('S')}
-        <button class="ae-btn S" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${sn?`(${sn})`:'Add'}</button>
+        ${kasPills('S')}<button class="ae-btn S" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${sn?`(${sn})`:'Add'}</button>
       </div>
     </div>`;
   }).join('');
@@ -786,15 +950,14 @@ function showInner(tab,btn){
   document.getElementById('inner-clo').style.display=tab==='clo'?'block':'none';
 }
 
-/* ═══ Add Manual CLO ═══ */
 function addManualClo(){
-  if(!COURSES.length){ toast('กรุณาโหลดรายวิชาก่อน','#ef4444'); return; }
-  const th = prompt('CLO (ภาษาไทย):');
+  if(!COURSES.length){toast('กรุณาโหลดรายวิชาก่อน','#ef4444');return;}
+  const th=prompt('CLO (ภาษาไทย):');
   if(!th) return;
-  const en = prompt('CLO (English):','') || '';
+  const en=prompt('CLO (English):','')||'';
   COURSES[curCourseIdx].clos.push({th,en,kas:{K:new Set(),A:new Set(),S:new Set()},plo:new Set(),mlo:new Set(),_source:'manual'});
   renderCourseCard();
-  toast(`✓ เพิ่ม CLO Manual สำเร็จ`);
+  toast(`✓ เพิ่ม CLO Manual`);
 }
 
 /* ═══ MODAL ═══ */
@@ -813,7 +976,7 @@ function openModal(ctx,mode='KAS',focusType=''){
   else if(ctx.type==='CLO'){const cl=COURSES[ctx.courseIdx].clos[ctx.cloIdx];tKas={K:new Set(cl.kas.K),A:new Set(cl.kas.A),S:new Set(cl.kas.S)};tPlo=new Set(cl.plo);tMlo=new Set(cl.mlo);}
   const actualMode=mode==='PLO_MLO'?'PLO_MLO':'KAS';
   switchMTab(actualMode,actualMode==='PLO_MLO'?document.getElementById('t-plomlo'):document.getElementById('t-kas'));
-  buildKasLists(); buildPmLists(); updateCount();
+  buildKasLists();buildPmLists();updateCount();
   document.getElementById('modal-overlay').classList.add('show');
   document.body.style.overflow='hidden';
 }
@@ -836,8 +999,7 @@ function buildPmLists(){
   }).join('');
   const allMlos=MLO_GROUPS.flatMap(g=>g.items);
   document.getElementById('list-mlo').innerHTML=allMlos.map(m=>{
-    const sel=tMlo.has(m.code);
-    const sid=m.code.replace(/\./g,'_');
+    const sel=tMlo.has(m.code);const sid=m.code.replace(/\./g,'_');
     return `<div class="pm-item mlo-sel${sel?' selected':''}" id="mi-${sid}" onclick="togPM('MLO','${m.code}')">
       <div class="pm-check"><div class="pm-check-tick"></div></div>
       <span class="pm-code mlo-code">${m.code}</span><span class="pm-desc">${m.desc}</span>
@@ -900,7 +1062,7 @@ function saveModal(){
     renderCourseCard();
   }
   closeModal();
-  toast(`✓ บันทึกสำเร็จ (${tKas.K.size+tKas.A.size+tKas.S.size+tPlo.size+tMlo.size} รายการ)`);
+  toast(`✓ บันทึกสำเร็จ`);
 }
 
 let _tt;
@@ -908,11 +1070,10 @@ function toast(msg,color='#22c55e'){
   document.getElementById('toast-dot').style.background=color;
   document.getElementById('toast-msg').textContent=msg;
   const t=document.getElementById('toast');
-  t.classList.add('show');
-  clearTimeout(_tt);
+  t.classList.add('show');clearTimeout(_tt);
   _tt=setTimeout(()=>t.classList.remove('show'),3500);
 }
-function saveData(){ toast('✓ บันทึกข้อมูลแล้ว'); }
+function saveData(){toast('✓ บันทึกข้อมูลแล้ว');}
 
 /* INIT */
 renderPLO();

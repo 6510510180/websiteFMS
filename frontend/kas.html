@@ -107,7 +107,26 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 /* CLO */
 .clo-wrap{display:flex;gap:20px;}
 .clo-main{flex:1;min-width:0;}
-.clo-side{width:255px;flex-shrink:0;}
+.clo-side{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:0;}
+.clo-selector-step{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;}
+.sp-label{font-size:11px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.sp-item-list{display:flex;flex-direction:column;gap:4px;max-height:240px;overflow-y:auto;}
+.sp-item{padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:.15s;font-size:13px;font-weight:500;color:var(--text);}
+.sp-item:hover{border-color:var(--purple);background:var(--purple-light);color:var(--purple);}
+.sp-item.active{border-color:var(--purple);background:var(--purple-light);color:var(--purple);font-weight:700;}
+.sp-item-code{font-family:'Lexend',sans-serif;font-size:11px;font-weight:800;color:var(--purple);margin-bottom:2px;}
+.sp-item-name{font-size:12.5px;color:var(--text);}
+.sp-item-sub{font-size:11px;color:var(--text-sub);margin-top:1px;}
+.sp-selected-badge{display:inline-flex;align-items:center;padding:4px 12px;background:var(--purple-light);color:var(--purple);border-radius:999px;font-size:12px;font-weight:700;margin-bottom:10px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sp-badge-blue{background:#e0f7fa;color:var(--teal);}
+.sp-back-btn{width:26px;height:26px;border-radius:7px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sub);flex-shrink:0;padding:0;transition:.15s;}
+.sp-back-btn:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-light);}
+.sp-spinner{width:14px;height:14px;border:2px solid #e8deff;border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+.sp-search-wrap{position:relative;margin-bottom:8px;}
+.sp-search-wrap input{width:100%;padding:7px 10px 7px 28px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:12px;outline:none;background:var(--bg);transition:.15s;}
+.sp-search-wrap input:focus{border-color:var(--purple);background:white;}
+.sp-empty{padding:16px;text-align:center;color:var(--text-sub);font-size:12px;font-style:italic;}
+.sp-loading{display:flex;align-items:center;gap:8px;padding:10px 0;font-size:12px;color:var(--text-sub);}
 .course-card{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:22px 24px 0;box-shadow:0 2px 8px rgba(127,19,236,0.05);overflow:hidden;}
 .course-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:14px;}
 .course-badge{font-family:'Lexend',sans-serif;font-size:13px;font-weight:800;background:#22c55e;color:white;padding:4px 12px;border-radius:8px;white-space:nowrap;flex-shrink:0;}
@@ -377,20 +396,52 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   <!-- CLO PANEL -->
   <div class="panel" id="panel-CLO">
     <div class="clo-wrap">
-      <div class="clo-main" id="clo-main"></div>
-      <div class="clo-side">
-        <div class="sp-label">COURSE SELECTOR</div>
-        <div class="sp-card">
-          <select class="sp-select" id="course-sel" onchange="selectCourse(+this.value)"></select>
+      <div class="clo-main" id="clo-main">
+        <div style="text-align:center;padding:60px 20px;color:var(--text-sub);">
+          <div style="font-size:36px;margin-bottom:12px;">🔍</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);">เลือกหลักสูตรและรายวิชา</div>
+          <div style="font-size:13px;margin-top:6px;">ใช้แผงด้านขวาเพื่อเลือกหลักสูตร → Major → รายวิชา</div>
         </div>
-        <button class="btn-sp-primary" onclick="addCloRow()">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
-          + Add CLO
-        </button>
-        <button class="btn-sp-outline" onclick="openModal({type:'IMPORT_PLO'},'PLO_MLO')">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
-          Import from PLO
-        </button>
+      </div>
+      <div class="clo-side" id="clo-side-panel">
+
+        <!-- Step 1: Course -->
+        <div class="clo-selector-step" id="step-course">
+          <div class="sp-label">1. เลือกหลักสูตร</div>
+          <div id="course-loading" style="display:none;padding:10px;font-size:12px;color:var(--text-sub);display:flex;align-items:center;gap:8px;">
+            <div class="sp-spinner"></div> กำลังโหลด...
+          </div>
+          <div id="course-list-clo" class="sp-item-list"></div>
+        </div>
+
+        <!-- Step 2: Major -->
+        <div class="clo-selector-step" id="step-major" style="display:none">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <button class="sp-back-btn" onclick="backToStep('course')">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </button>
+            <div class="sp-label" style="margin:0">2. เลือก Major</div>
+          </div>
+          <div id="selected-course-badge" class="sp-selected-badge"></div>
+          <div id="major-list-clo" class="sp-item-list"></div>
+        </div>
+
+        <!-- Step 3: Subject -->
+        <div class="clo-selector-step" id="step-subject" style="display:none">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <button class="sp-back-btn" onclick="backToStep('major')">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </button>
+            <div class="sp-label" style="margin:0">3. เลือกรายวิชา</div>
+          </div>
+          <div id="selected-major-badge" class="sp-selected-badge sp-badge-blue"></div>
+          <div class="sp-search-wrap">
+            <svg viewBox="0 0 20 20" fill="#94a3b8" width="13" height="13" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+            <input type="text" id="subject-search-clo" placeholder="ค้นหารายวิชา..." oninput="filterSubjectList(this.value)">
+          </div>
+          <div id="subject-list-clo" class="sp-item-list"></div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -800,105 +851,305 @@ function renderMLO() {
 }
 function selMloGroup(i){curMloGroup=i;renderMLO();}
 
-/* ═══════════════ CLO ═══════════════ */
+/* ═══════════════ CLO — API-driven Course Selector ═══════════════ */
+const API_BASE_CLO = 'https://websitefms.onrender.com/api';
+let cloApiCourses = [];      // [{id, name_th, name_en, ...}]
+let cloApiMajors  = [];      // [{id, name_th, ...}]
+let cloApiSubjects = [];     // flat list of subjects for search
+let selectedCourseId = null;
+let selectedMajorId  = null;
+let selectedSubjectData = null; // current subject data with outcomes
+// cloMappings: { [subjectId]: { [cloIdx]: { plo: Set, mlo: Set } } }
+let cloMappings = {};
+
 function renderCLO() {
-  const sel = document.getElementById('course-sel');
-  if (!sel.options.length) {
-    COURSES.forEach((c,i) => {
-      const o = document.createElement('option');
-      o.value=i; o.textContent=`${c.code} – ${c.name.slice(0,28)}`;
-      sel.appendChild(o);
-    });
+  loadApiCourseList();
+}
+
+/* ─── Load courses from API ─── */
+async function loadApiCourseList() {
+  const listEl = document.getElementById('course-list-clo');
+  listEl.innerHTML = '<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลดหลักสูตร...</div>';
+  showStep('course');
+  try {
+    const res = await fetch(`${API_BASE_CLO}/courses`);
+    const data = await res.json();
+    cloApiCourses = Array.isArray(data) ? data : (data.data || []);
+    renderCourseListClo();
+  } catch(e) {
+    listEl.innerHTML = `<div class="sp-empty">❌ โหลดหลักสูตรไม่สำเร็จ<br><small>${e.message}</small></div>`;
   }
-  sel.value = curCourseIdx;
+}
+
+function renderCourseListClo() {
+  const listEl = document.getElementById('course-list-clo');
+  if (!cloApiCourses.length) { listEl.innerHTML = '<div class="sp-empty">ไม่พบหลักสูตร</div>'; return; }
+  listEl.innerHTML = cloApiCourses.map(c => `
+    <div class="sp-item${selectedCourseId===c.id?' active':''}" onclick="selectApiCourse(${c.id},'${esc(c.name_th||'')}')">
+      <div class="sp-item-name">${esc(c.name_th || c.name_en || 'หลักสูตร '+c.id)}</div>
+      ${c.degree_level ? `<div class="sp-item-sub">${esc(c.degree_level)}</div>` : ''}
+    </div>`).join('');
+}
+
+/* ─── Select course → load majors ─── */
+async function selectApiCourse(courseId, courseName) {
+  selectedCourseId = courseId;
+  selectedMajorId  = null;
+  document.getElementById('selected-course-badge').textContent = courseName;
+  showStep('major');
+  const listEl = document.getElementById('major-list-clo');
+  listEl.innerHTML = '<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลด Major...</div>';
+  try {
+    const res = await fetch(`${API_BASE_CLO}/courses/${courseId}/majors`);
+    const data = await res.json();
+    cloApiMajors = Array.isArray(data) ? data : (data.data || []);
+    if (!cloApiMajors.length) { listEl.innerHTML = '<div class="sp-empty">ไม่พบ Major ในหลักสูตรนี้</div>'; return; }
+    listEl.innerHTML = cloApiMajors.map(m => `
+      <div class="sp-item${selectedMajorId===m.id?' active':''}" onclick="selectApiMajor(${m.id},'${esc(m.name_th||'')}',${courseId})">
+        <div class="sp-item-name">${esc(m.name_th || m.name_en || 'Major '+m.id)}</div>
+        ${m.name_en ? `<div class="sp-item-sub">${esc(m.name_en)}</div>` : ''}
+      </div>`).join('');
+  } catch(e) {
+    listEl.innerHTML = `<div class="sp-empty">❌ โหลด Major ไม่สำเร็จ</div>`;
+  }
+}
+
+/* ─── Select major → load all subjects from study plans ─── */
+async function selectApiMajor(majorId, majorName, courseId) {
+  selectedMajorId = majorId;
+  document.getElementById('selected-major-badge').textContent = majorName;
+  showStep('subject');
+  const listEl = document.getElementById('subject-list-clo');
+  listEl.innerHTML = '<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลดรายวิชา...</div>';
+  try {
+    // Get all study plans for this major (same pattern as study-plan.html)
+    const plansData = await fetch(`${API_BASE_CLO}/majors/${majorId}/study-plans?page=1&pageSize=50`).then(r=>r.json());
+    const plans = plansData.data || [];
+
+    // Collect all semester-subjects across all plans & years
+    // ssId = semester_subject id (used for PATCH)
+    const subjectMap = {}; // key = ssId
+    for (const plan of plans) {
+      try {
+        const detail = await fetch(`${API_BASE_CLO}/study-plans/${plan.id}`).then(r=>r.json());
+        for (const sem of (detail.semesters || [])) {
+          for (const it of (sem.subjects || [])) {
+            // it = semester_subject row — same structure as study-plan.html renderSemesters()
+            const _s = it.subject || it;
+            const ssId = it.id; // semester_subject ID (for PATCH /semester-subjects/:id)
+            if (subjectMap[ssId]) continue;
+            subjectMap[ssId] = {
+              id:      ssId,              // semester-subject id → used for saving
+              ssId:    ssId,
+              code:    it.code    || _s.code    || '',
+              name_th: it.name_th || _s.name_th || '',
+              name_en: it.name_en || _s.name_en || '',
+              credits: it.credits ?? _s.default_credits ?? '',
+              hours:   it.hour_structure || it.default_hour_structure || _s.default_hour_structure || '',
+              desc_th: it.description_th || _s.description_th || '',
+              desc_en: it.description_en || _s.description_en || '',
+              // outcomes: [{th, en, plo:[], mlo:[]}]  ← exact same shape study-plan.html uses
+              outcomes: (it.outcomes || []).map(o => ({
+                th:  o.th  || '',
+                en:  o.en  || '',
+                plo: o.plo || [],
+                mlo: o.mlo || [],
+              })),
+              semTitle: sem.title || `ภาคเรียน ${sem.term_no}`,
+              termNo:  sem.term_no || '',
+              yearNo:  plan.year_no || '',
+              category: it.category || '',
+            };
+          }
+        }
+      } catch(e) { console.warn('plan load err', e); }
+    }
+    cloApiSubjects = Object.values(subjectMap);
+    // Sort by year → term
+    cloApiSubjects.sort((a,b) => (Number(a.yearNo)-Number(b.yearNo))*10 + (Number(a.termNo)-Number(b.termNo)));
+    if (!cloApiSubjects.length) { listEl.innerHTML = '<div class="sp-empty">ไม่พบรายวิชาในแผนการศึกษา</div>'; return; }
+    renderSubjectListClo(cloApiSubjects);
+  } catch(e) {
+    listEl.innerHTML = `<div class="sp-empty">❌ โหลดรายวิชาไม่สำเร็จ<br><small>${e.message}</small></div>`;
+  }
+}
+
+function renderSubjectListClo(subjects) {
+  const listEl = document.getElementById('subject-list-clo');
+  if (!subjects.length) { listEl.innerHTML = '<div class="sp-empty">ไม่พบรายวิชา</div>'; return; }
+  listEl.innerHTML = subjects.map(s => `
+    <div class="sp-item" onclick="selectApiSubject(${s.id})">
+      <div class="sp-item-code">${esc(s.code)}</div>
+      <div class="sp-item-name">${esc(s.name_th)}</div>
+      <div class="sp-item-sub">
+        ${s.yearNo ? `ปี ${s.yearNo} · ` : ''}${esc(s.semTitle)}
+        ${s.outcomes.length ? ` · <span style="color:var(--green);font-weight:700;">${s.outcomes.length} CLO</span>` : ' · <span style="color:#94a3b8">ยังไม่มี CLO</span>'}
+      </div>
+    </div>`).join('');
+}
+
+function filterSubjectList(q) {
+  const ql = q.toLowerCase();
+  const filtered = ql
+    ? cloApiSubjects.filter(s =>
+        s.code.toLowerCase().includes(ql) ||
+        s.name_th.toLowerCase().includes(ql) ||
+        (s.name_en||'').toLowerCase().includes(ql))
+    : cloApiSubjects;
+  renderSubjectListClo(filtered);
+}
+
+/* ─── Select subject → show CLO table ─── */
+function selectApiSubject(subjectId) {
+  selectedSubjectData = cloApiSubjects.find(s => s.id === subjectId);
+  if (!selectedSubjectData) return;
+  if (!cloMappings[subjectId]) cloMappings[subjectId] = {};
   renderCourseCard();
 }
-function selectCourse(i){curCourseIdx=i;renderCourseCard();}
 
+function showStep(step) {
+  ['course','major','subject'].forEach(s => {
+    const el = document.getElementById('step-'+s);
+    if (el) el.style.display = s === step ? 'block' : 'none';
+  });
+}
+
+function backToStep(step) {
+  if (step === 'course') {
+    selectedCourseId = null; selectedMajorId = null; selectedSubjectData = null;
+    document.getElementById('clo-main').innerHTML = `
+      <div style="text-align:center;padding:60px 20px;color:var(--text-sub);">
+        <div style="font-size:36px;margin-bottom:12px;">🔍</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text);">เลือกหลักสูตรและรายวิชา</div>
+        <div style="font-size:13px;margin-top:6px;">ใช้แผงด้านขวาเพื่อเลือกหลักสูตร → Major → รายวิชา</div>
+      </div>`;
+    renderCourseListClo();
+    showStep('course');
+  } else if (step === 'major') {
+    selectedMajorId = null; selectedSubjectData = null;
+    showStep('major');
+  }
+}
+
+/* ─── Render course card with CLO (PLO/MLO only) ─── */
 function renderCourseCard() {
-  const c = COURSES[curCourseIdx];
-  document.getElementById('clo-main').innerHTML=`
+  const s = selectedSubjectData;
+  if (!s) return;
+  const main = document.getElementById('clo-main');
+  main.innerHTML = `
     <div class="course-card">
       <div class="course-top">
-        <span class="course-badge">${c.code}</span>
-        <div><div class="course-name">${c.name}</div><div class="course-name-en">${c.nameEn}</div></div>
-        <div class="course-units">${c.units}</div>
+        <span class="course-badge">${esc(s.code)}</span>
+        <div>
+          <div class="course-name">${esc(s.name_th)}</div>
+          ${s.name_en ? `<div class="course-name-en">${esc(s.name_en)}</div>` : ''}
+        </div>
+        ${s.credits ? `<div class="course-units">${s.credits} หน่วยกิต</div>` : ''}
       </div>
-      <div class="course-desc">${c.desc}</div>
+      ${s.desc_th ? `<div class="course-desc">${esc(s.desc_th)}</div>` : ''}
       <div class="inner-tabs">
-        <button class="inner-tab" onclick="showInner('info',this)">ข้อมูลรายวิชา</button>
         <button class="inner-tab active" onclick="showInner('clo',this)">Course Outcomes (CLO)</button>
+        ${s.desc_th||s.desc_en ? `<button class="inner-tab" onclick="showInner('info',this)">ข้อมูลรายวิชา</button>` : ''}
       </div>
     </div>
     <div class="clo-table-wrap">
-      <div id="inner-info" style="display:none;padding:18px 24px;color:var(--text-sub);font-size:15px">ข้อมูลรายวิชาแสดงที่นี่</div>
+      <div id="inner-info" style="display:none;padding:18px 24px;color:var(--text-sub);font-size:13px;line-height:1.7;">
+        ${s.desc_th ? `<div style="margin-bottom:10px">${esc(s.desc_th)}</div>` : ''}
+        ${s.desc_en ? `<div style="color:#94a3b8">${esc(s.desc_en)}</div>` : ''}
+      </div>
       <div id="inner-clo">
-        <div class="clo-thead">
+        <div class="clo-thead" style="grid-template-columns:1fr 1fr">
           <div>CLO &amp; DESCRIPTION</div>
-          <div class="clo-th-kas">LINKED PLO/MLO</div>
-          <div class="clo-th-kas" style="color:var(--k-color)">📖 KNOWLEDGE (K)</div>
-          <div class="clo-th-kas" style="color:var(--a-color)">♥ ATTITUDE (A)</div>
-          <div class="clo-th-kas" style="color:var(--s-color)">⚙ SKILL (S)</div>
+          <div class="clo-th-kas">LINKED PLO / MLO</div>
         </div>
-        <div id="clo-rows">${renderCloRows(c)}</div>
+        <div id="clo-rows">${renderCloRows(s)}</div>
       </div>
     </div>`;
 }
 
-function renderCloRows(c) {
-  if (!c.clos.length) return `<div style="text-align:center;padding:40px;color:#94a3b8;font-size:13px">ยังไม่มี CLO — กดปุ่ม "+ Add CLO"</div>`;
-  return c.clos.map((cl,i) => {
-    const kn=cl.kas.K.size,an=cl.kas.A.size,sn=cl.kas.S.size;
-    const pln=cl.plo.size,mln=cl.mlo.size;
-    const ctx=JSON.stringify({type:'CLO',courseIdx:curCourseIdx,cloIdx:i}).replace(/"/g,'&quot;');
-    const linked=pln+mln>0
-      ? [...cl.plo,...cl.mlo].slice(0,4).map(code=>`<span class="linked-badge">${code}</span>`).join('')
-        +(pln+mln>4?`<span class="linked-badge">+${pln+mln-4}</span>`:'')
-      : '<span style="color:#94a3b8;font-size:11px">—</span>';
-    const kasPills=(type)=>{
-      const codes=[...cl.kas[type]];
-      if(!codes.length) return `<span style="color:#94a3b8;font-size:10px">—</span>`;
-      const clr=type==='K'?'var(--k-color)':type==='A'?'var(--a-color)':'var(--s-color)';
-      const bg=type==='K'?'var(--k-bg)':type==='A'?'var(--a-bg)':'var(--s-bg)';
-      return codes.map(c=>`<span style="display:inline-block;background:${bg};color:${clr};border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700;">${c}</span>`).join(' ');
-    };
-    return `<div class="clo-row">
-      <div><div class="clo-num">CLO ${i+1}</div><div class="clo-th">${cl.th}</div><div class="clo-en">${cl.en}</div></div>
-      <div class="linked-cell" onclick='openModal(${ctx},"PLO_MLO")' style="cursor:pointer;flex-direction:column;gap:3px;">
-        ${linked}
-        <span style="font-size:9px;color:#b0a0cc;margin-top:2px">คลิกเพื่อแก้ไข</span>
+function renderCloRows(s) {
+  if (!s.outcomes || !s.outcomes.length) {
+    return `<div style="text-align:center;padding:40px;color:#94a3b8;font-size:13px;">
+      <div style="font-size:28px;margin-bottom:8px;">📭</div>
+      ไม่พบ CLO ในรายวิชานี้<br>
+      <small style="color:#b0c0cc">CLO ถูกกำหนดในหน้าจัดการแผนการศึกษา</small>
+    </div>`;
+  }
+  const sid = s.id;
+  if (!cloMappings[sid]) cloMappings[sid] = {};
+
+  return s.outcomes.map((cl, i) => {
+    const mapping = cloMappings[sid][i] || { plo: new Set(), mlo: new Set() };
+    cloMappings[sid][i] = mapping;
+    const pln = mapping.plo.size, mln = mapping.mlo.size;
+
+    // pills from API data (already saved)
+    const apiPlo = cl.plo || [];
+    const apiMlo = cl.mlo || [];
+    const allPlo = new Set([...apiPlo, ...mapping.plo]);
+    const allMlo = new Set([...apiMlo, ...mapping.mlo]);
+
+    const linked = (allPlo.size + allMlo.size) > 0
+      ? [...allPlo].map(c=>`<span class="linked-badge">${c}</span>`).join('')
+        + [...allMlo].map(c=>`<span class="linked-badge" style="background:#e0f7fa;color:var(--teal)">${c}</span>`).join('')
+      : '<span style="color:#94a3b8;font-size:11px">— ยังไม่ได้ map</span>';
+
+    const ctx = JSON.stringify({type:'CLO',subjectId:sid,cloIdx:i}).replace(/"/g,'&quot;');
+    return `<div class="clo-row" style="grid-template-columns:1fr 1fr">
+      <div>
+        <div class="clo-num">CLO ${i+1}</div>
+        <div class="clo-th">${esc(cl.th||'')}</div>
+        ${cl.en ? `<div class="clo-en">${esc(cl.en)}</div>` : ''}
       </div>
-      <div class="kas-cell" style="flex-direction:column;gap:4px;cursor:pointer;" onclick='openModal(${ctx},"KAS","K")'>
-        ${kasPills('K')}
-        <button class="ae-btn K" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${kn?`แก้ไข (${kn})`:'Add K'}</button>
-      </div>
-      <div class="kas-cell" style="flex-direction:column;gap:4px;cursor:pointer;" onclick='openModal(${ctx},"KAS","A")'>
-        ${kasPills('A')}
-        <button class="ae-btn A" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${an?`แก้ไข (${an})`:'Add A'}</button>
-      </div>
-      <div class="kas-cell" style="flex-direction:column;gap:4px;cursor:pointer;" onclick='openModal(${ctx},"KAS","S")'>
-        ${kasPills('S')}
-        <button class="ae-btn S" style="margin-top:2px;font-size:10px;padding:3px 9px;">⊕ ${sn?`แก้ไข (${sn})`:'Add S'}</button>
+      <div class="linked-cell" style="cursor:pointer;flex-direction:column;gap:4px;align-items:flex-start;padding:4px 8px;"
+           onclick='openCloModal(${ctx})'>
+        <div style="display:flex;flex-wrap:wrap;gap:3px;">${linked}</div>
+        <span style="font-size:10px;color:#b0a0cc;margin-top:2px;">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="10" height="10" style="display:inline;vertical-align:middle"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+          คลิกเพื่อแก้ไข PLO/MLO
+        </span>
       </div>
     </div>`;
   }).join('');
 }
 
-function showInner(tab,btn){
+function showInner(tab, btn) {
   document.querySelectorAll('.inner-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('inner-info').style.display=tab==='info'?'block':'none';
-  document.getElementById('inner-clo').style.display=tab==='clo'?'block':'none';
+  const infoEl = document.getElementById('inner-info');
+  const cloEl  = document.getElementById('inner-clo');
+  if (infoEl) infoEl.style.display = tab==='info' ? 'block' : 'none';
+  if (cloEl)  cloEl.style.display  = tab==='clo'  ? 'block' : 'none';
 }
 
-function addCloRow(){
-  const c=COURSES[curCourseIdx];
-  const th=prompt('คำอธิบาย CLO (ภาษาไทย):');
-  if(!th) return;
-  const en=prompt('CLO Description (English):','')||'';
-  c.clos.push({th,en,kas:{K:new Set(),A:new Set(),S:new Set()},plo:new Set(),mlo:new Set()});
-  renderCourseCard();
-  toast(`✓ เพิ่ม CLO ${c.clos.length} สำเร็จ`);
+/* ─── CLO Modal (PLO/MLO only) ─── */
+function openCloModal(ctx) {
+  if (typeof ctx === 'string') ctx = JSON.parse(ctx);
+  mCtx = ctx; mPanel = 'PLO_MLO';
+  const i = ctx.cloIdx;
+  const sid = ctx.subjectId;
+  if (!cloMappings[sid]) cloMappings[sid] = {};
+  if (!cloMappings[sid][i]) cloMappings[sid][i] = { plo: new Set(), mlo: new Set() };
+
+  // Merge API-saved PLO/MLO with local mappings
+  const outcome = (selectedSubjectData?.outcomes||[])[i] || {};
+  const apiPlo = outcome.plo || [];
+  const apiMlo = outcome.mlo || [];
+  tPlo = new Set([...apiPlo, ...cloMappings[sid][i].plo]);
+  tMlo = new Set([...apiMlo, ...cloMappings[sid][i].mlo]);
+  tKas = {K:new Set(),A:new Set(),S:new Set()};
+
+  document.getElementById('m-badge').textContent = `CLO${i+1}`;
+  document.getElementById('m-sub').textContent = `เลือก PLO / MLO ที่สอดคล้องกับ CLO ${i+1}`;
+  document.getElementById('m-toggle').style.display = 'none';
+
+  // Show only PLO/MLO panel
+  document.getElementById('panel-pm').style.display = 'flex';
+  document.getElementById('panel-kas').style.display = 'none';
+
+  buildPmLists(); updateCount();
+  document.getElementById('modal-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
 }
 
 /* ═══════════════ MODAL ═══════════════ */
@@ -916,7 +1167,6 @@ function openModal(ctx, mode='KAS', focusType='') {
   document.getElementById('m-toggle').style.display=isClo?'flex':'none';
   if(ctx.type==='PLO'){const k=ploKas[ctx.code]||{K:new Set(),A:new Set(),S:new Set()};tKas={K:new Set(k.K),A:new Set(k.A),S:new Set(k.S)};tPlo=new Set();tMlo=new Set();}
   else if(ctx.type==='MLO'){const k=mloKas[ctx.code]||{K:new Set(),A:new Set(),S:new Set()};tKas={K:new Set(k.K),A:new Set(k.A),S:new Set(k.S)};tPlo=new Set();tMlo=new Set();}
-  else if(ctx.type==='CLO'){const cl=COURSES[ctx.courseIdx].clos[ctx.cloIdx];tKas={K:new Set(cl.kas.K),A:new Set(cl.kas.A),S:new Set(cl.kas.S)};tPlo=new Set(cl.plo);tMlo=new Set(cl.mlo);}
   else{tKas={K:new Set(),A:new Set(),S:new Set()};tPlo=new Set();tMlo=new Set();}
   const actualMode=mode==='PLO_MLO'?'PLO_MLO':'KAS';
   switchMTab(actualMode,actualMode==='PLO_MLO'?document.getElementById('t-plomlo'):document.getElementById('t-kas'));
@@ -1018,13 +1268,61 @@ function saveModal(){
   if(mCtx.type==='PLO'){ploKas[mCtx.code]={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)};renderPLO();}
   else if(mCtx.type==='MLO'){mloKas[mCtx.code]={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)};renderMLO();}
   else if(mCtx.type==='CLO'){
-    const cl=COURSES[mCtx.courseIdx].clos[mCtx.cloIdx];
-    cl.kas={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)};
-    cl.plo=new Set(tPlo);cl.mlo=new Set(tMlo);
-    renderCourseCard();
+    saveCloMapping(mCtx.subjectId, mCtx.cloIdx, [...tPlo], [...tMlo]);
+    return; // toast + closeModal handled inside async fn
   }
   closeModal();
   toast(`✓ บันทึกสำเร็จ (${tKas.K.size+tKas.A.size+tKas.S.size+tPlo.size+tMlo.size} รายการ)`);
+}
+
+/* PATCH CLO PLO/MLO back to API (same endpoint as study-plan.html doEdit) */
+async function saveCloMapping(ssId, cloIdx, ploArr, mloArr) {
+  // 1. Update local data immediately for responsive UI
+  if (!cloMappings[ssId]) cloMappings[ssId] = {};
+  cloMappings[ssId][cloIdx] = { plo: new Set(ploArr), mlo: new Set(mloArr) };
+
+  // 2. Update selectedSubjectData.outcomes in-place
+  if (selectedSubjectData && selectedSubjectData.id === ssId) {
+    const outcomes = selectedSubjectData.outcomes || [];
+    if (outcomes[cloIdx]) {
+      outcomes[cloIdx] = { ...outcomes[cloIdx], plo: ploArr, mlo: mloArr };
+    }
+    selectedSubjectData.outcomes = outcomes;
+    // Also update in cloApiSubjects list
+    const idx = cloApiSubjects.findIndex(s => s.id === ssId);
+    if (idx >= 0) cloApiSubjects[idx].outcomes = outcomes;
+  }
+
+  closeModal();
+  renderCourseCard();
+
+  // 3. PATCH to API — same pattern as study-plan.html doEdit()
+  const s = selectedSubjectData;
+  if (!s) { toast('✓ บันทึก PLO/MLO สำเร็จ (local only)'); return; }
+  const body = {
+    outcomes: (s.outcomes || []).map(o => ({
+      th:  o.th  || '',
+      en:  o.en  || '',
+      plo: o.plo || [],
+      mlo: o.mlo || [],
+    })),
+  };
+  let saved = false;
+  for (const method of ['PATCH','PUT']) {
+    try {
+      const r = await fetch(`${API_BASE_CLO}/semester-subjects/${ssId}`, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (r.ok) { saved = true; break; }
+    } catch {}
+  }
+  toast(saved
+    ? `✓ บันทึก PLO/MLO สำเร็จ (CLO ${cloIdx+1})`
+    : `⚠ บันทึกในเครื่องแล้ว แต่ส่ง API ไม่สำเร็จ`,
+    saved ? '#22c55e' : '#f59e0b'
+  );
 }
 
 /* ═══════════════ EXPORT / IMPORT ═══════════════ */

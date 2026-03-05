@@ -11,7 +11,6 @@
   --purple-dark:  #4A2870;
   --purple-light: #F3EEFF;
   --purple-mid:   #E8DEFF;
-  --accent:       #9B6DD1;
   --bg:           #F7F5FA;
   --white:        #FFFFFF;
   --text:         #181117;
@@ -21,6 +20,8 @@
   --red-bg:       #FEE2E2;
   --blue:         #3B82F6;
   --blue-bg:      #EFF6FF;
+  --green:        #16a34a;
+  --green-bg:     #dcfce7;
   --coop:         #0F766E;
   --coop-light:   #F0FDFA;
   --coop-mid:     #CCFBF1;
@@ -28,31 +29,12 @@
   --topbar-h:     64px;
   --radius:       12px;
   --shadow:       0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:    0 4px 12px rgba(107,63,160,0.12);
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'Noto Sans Thai', 'Lexend', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  display: flex;
-  min-height: 100vh;
-}
+body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
 
 /* ── SIDEBAR ── */
-.sidebar {
-  width: var(--sidebar-w);
-  background: var(--white);
-  height: 100vh;
-  position: fixed;
-  left: 0; top: 0;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid var(--border);
-  z-index: 100;
-}
+.sidebar { width: var(--sidebar-w); background: var(--white); height: 100vh; position: fixed; left: 0; top: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; }
 .sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
 .sidebar-brand-title { font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
 .sidebar-brand-sub { font-size: 11.5px; color: var(--purple); font-weight: 500; margin-top: 2px; }
@@ -61,651 +43,270 @@ body {
 .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--text-sub); text-decoration: none; transition: all 0.18s; cursor: pointer; }
 .nav-item:hover { background: var(--purple-light); color: var(--purple); }
 .nav-item.active { background: var(--purple-light); color: var(--purple); font-weight: 600; }
-.nav-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.75; }
+.nav-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.75; display: block; }
 .nav-item.active .nav-icon, .nav-item:hover .nav-icon { opacity: 1; }
 .sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
 .sidebar-footer .nav-item { color: var(--red); }
 .sidebar-footer .nav-item:hover { background: var(--red-bg); color: #DC2626; }
 
 /* ── TOPBAR ── */
-.topbar {
-  position: fixed; top: 0; left: var(--sidebar-w); right: 0;
-  height: var(--topbar-h); background: var(--white);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 32px; z-index: 90;
-}
+.topbar { position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: var(--topbar-h); background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; z-index: 90; }
 .topbar-left { display: flex; flex-direction: column; }
 .topbar-title { font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
 .topbar-breadcrumb { font-size: 11.5px; color: var(--text-sub); margin-top: 1px; }
-.topbar-breadcrumb a { color: var(--purple); text-decoration: none; cursor: pointer; }
-.topbar-breadcrumb a:hover { text-decoration: underline; }
+.topbar-breadcrumb a { color: var(--purple); text-decoration: none; }
 .topbar-right { display: flex; align-items: center; gap: 14px; }
 .avatar-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 10px; border-radius: 8px; transition: background 0.15s; }
 .avatar-wrap:hover { background: var(--purple-light); }
 .avatar-name { font-size: 13px; font-weight: 600; color: var(--purple); }
 .avatar-circle { width: 34px; height: 34px; border-radius: 50%; background: var(--purple-mid); border: 2px solid var(--purple-light); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--purple); }
+.topbar-plan-indicator { display: flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.topbar-plan-indicator.normal { background: var(--purple-light); color: var(--purple); }
+.topbar-plan-indicator.coop   { background: var(--coop-light);   color: var(--coop); }
 
 /* ── MAIN ── */
-.main {
-  margin-left: var(--sidebar-w);
-  padding-top: var(--topbar-h);
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
+.main { margin-left: var(--sidebar-w); padding-top: var(--topbar-h); flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.page-body { padding: 32px; display: flex; gap: 28px; flex: 1; min-height: 0; }
 
-.page-body {
-  padding: 32px;
-  display: flex;
-  gap: 28px;
-  flex: 1;
-  min-height: 0;
-}
-
-/* ── Left column ── */
-.col-left {
-  width: 300px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.info-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px;
-  box-shadow: var(--shadow);
-}
-
-.info-major-name {
-  font-family: 'Lexend', sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text);
-  line-height: 1.2;
-  margin-bottom: 4px;
-}
-
-.info-major-en {
-  font-size: 13px;
-  color: var(--text-sub);
-  margin-bottom: 14px;
-}
-
-.meta-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  background: var(--purple-light);
-  color: var(--purple);
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.info-divider { height: 1px; background: var(--border); margin: 16px 0; }
-
+/* ── LEFT COL ── */
+.col-left { width: 288px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+.info-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+.info-major-name { font-family: 'Lexend', sans-serif; font-size: 19px; font-weight: 800; color: var(--text); line-height: 1.25; margin-bottom: 4px; }
+.info-major-en { font-size: 12.5px; color: var(--text-sub); margin-bottom: 14px; }
+.meta-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: var(--purple-light); color: var(--purple); border-radius: 999px; font-size: 12px; font-weight: 600; margin-bottom: 18px; }
+.info-divider { height: 1px; background: var(--border); margin: 14px 0; }
 .info-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; }
 .info-label { color: var(--text-sub); }
 .info-value { font-weight: 600; color: var(--text); text-align: right; }
-
-/* Plan type badge in info card */
-.plan-type-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 11.5px;
-  font-weight: 700;
-  transition: all 0.2s;
-}
-.plan-type-badge.normal {
-  background: var(--purple-light);
-  color: var(--purple);
-}
-.plan-type-badge.coop {
-  background: var(--coop-light);
-  color: var(--coop);
-}
-
-/* Year tabs */
-.year-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 4px;
-}
-.year-tab {
-  padding: 9px 10px;
-  border-radius: 8px;
-  border: 1.5px solid var(--border);
-  background: var(--white);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  color: var(--text-sub);
-  transition: all 0.15s;
-  text-align: center;
-}
-.year-tab:hover { background: var(--purple-light); color: var(--purple); border-color: var(--purple); }
-.year-tab.active { background: var(--purple); color: white; border-color: var(--purple); box-shadow: 0 3px 8px rgba(107,63,160,0.25); }
-
-/* coop mode year tabs */
-body.coop-mode .year-tab:hover { background: var(--coop-light); color: var(--coop); border-color: var(--coop); }
-body.coop-mode .year-tab.active { background: var(--coop); border-color: var(--coop); box-shadow: 0 3px 8px rgba(15,118,110,0.25); }
-
-.back-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 18px;
-  background: var(--white);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--text-sub);
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-  text-decoration: none;
-  box-shadow: var(--shadow);
-}
+.plan-type-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; }
+.plan-type-badge.normal { background: var(--purple-light); color: var(--purple); }
+.plan-type-badge.coop   { background: var(--coop-light);   color: var(--coop); }
+.back-btn { display: flex; align-items: center; gap: 8px; padding: 11px 18px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 13.5px; font-weight: 600; color: var(--text-sub); cursor: pointer; font-family: inherit; transition: all 0.15s; text-decoration: none; box-shadow: var(--shadow); }
 .back-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
 
-/* ── Plan Type Selector Card ── */
-.plan-type-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 22px;
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  position: relative;
-}
+/* ══ STEP GUIDE (redesigned) ══ */
+.step-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px 12px; box-shadow: var(--shadow); }
+.step-card-title { font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+.step-card-title::before { content: ''; width: 3px; height: 12px; border-radius: 2px; background: var(--purple); display: block; }
+.step-list { display: flex; flex-direction: column; gap: 0; }
+.step-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; position: relative; }
+.step-item:not(:last-child) { border-bottom: 1px dashed var(--border); }
+/* connector line */
+.step-connector { position: absolute; left: 13px; top: 36px; width: 2px; height: calc(100% - 18px); border-radius: 2px; }
+.step-item.done   .step-connector { background: linear-gradient(to bottom, var(--purple), var(--purple-mid)); }
+.step-item.active .step-connector { background: linear-gradient(to bottom, var(--purple), transparent); }
+.step-item.pending .step-connector { background: var(--border); }
 
-.plan-type-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-sub);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
-}
+.step-num-wrap { position: relative; flex-shrink: 0; margin-top: 2px; }
+.step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; font-family: 'Lexend', sans-serif; position: relative; z-index: 1; transition: all 0.3s; }
+.step-item.done   .step-num { background: var(--purple); color: white; box-shadow: 0 2px 8px rgba(107,63,160,0.4); }
+.step-item.active .step-num { background: white; color: var(--purple); border: 2.5px solid var(--purple); box-shadow: 0 0 0 4px rgba(107,63,160,0.12); }
+.step-item.pending .step-num { background: var(--bg); color: #c0b8d0; border: 2px dashed var(--border); }
 
-.plan-type-toggle {
-  display: flex;
-  gap: 0;
-  background: var(--bg);
-  border-radius: 10px;
-  padding: 4px;
-  border: 1px solid var(--border);
-  position: relative;
-}
+.step-body { flex: 1; min-width: 0; }
+.step-label { font-size: 12.5px; font-weight: 600; line-height: 1.35; }
+.step-item.done   .step-label { color: var(--purple); }
+.step-item.active .step-label { color: var(--text); }
+.step-item.pending .step-label { color: #b8b0c8; }
+.step-sub { font-size: 11px; margin-top: 2px; line-height: 1.45; }
+.step-item.done   .step-sub { color: #8b72bf; }
+.step-item.active .step-sub { color: var(--text-sub); }
+.step-item.pending .step-sub { color: #d0c8e0; }
 
-.plan-type-btn {
-  flex: 1;
-  padding: 10px 8px;
-  border: none;
-  background: transparent;
-  border-radius: 7px;
-  font-size: 12.5px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  color: var(--text-sub);
-  transition: all 0.22s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  position: relative;
-  z-index: 1;
-}
+/* active step animated pulse */
+.step-item.active .step-num::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--purple); opacity: 0; animation: stepPulse 2s ease-in-out infinite; }
+@keyframes stepPulse { 0%,100%{opacity:0;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.2)} }
 
-.plan-type-btn .btn-icon {
-  font-size: 18px;
-  line-height: 1;
-  transition: transform 0.22s ease;
-}
+/* progress bar */
+.step-progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin: 0 0 14px; overflow: hidden; }
+.step-progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--purple-dark), var(--purple)); transition: width 0.5s cubic-bezier(.4,0,.2,1); }
 
-.plan-type-btn:hover .btn-icon {
-  transform: scale(1.15);
-}
+/* ── PLAN TYPE CARD ── */
+.plan-type-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+.plan-type-label { font-size: 10.5px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.plan-type-toggle { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; border: 1px solid var(--border); }
+.plan-type-btn { flex: 1; padding: 10px 8px; border: none; background: transparent; border-radius: 7px; font-size: 12.5px; font-weight: 600; font-family: inherit; cursor: pointer; color: var(--text-sub); transition: all 0.22s ease; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.plan-type-btn .btn-icon { font-size: 18px; line-height: 1; transition: transform 0.22s ease; }
+.plan-type-btn:hover .btn-icon { transform: scale(1.15); }
+.plan-type-btn.active-normal { background: var(--white); color: var(--purple); box-shadow: 0 1px 6px rgba(107,63,160,0.15); }
+.plan-type-btn.active-coop   { background: var(--white); color: var(--coop);   box-shadow: 0 1px 6px rgba(15,118,110,0.15); }
+.plan-type-desc { margin-top: 12px; padding: 10px 13px; border-radius: 8px; font-size: 12px; font-weight: 500; line-height: 1.6; }
+.plan-type-desc.normal { background: var(--purple-light); color: var(--purple-dark); border: 1px solid var(--purple-mid); }
+.plan-type-desc.coop   { background: var(--coop-light);   color: var(--coop);         border: 1px solid var(--coop-mid); }
 
-.plan-type-btn.active-normal {
-  background: var(--white);
-  color: var(--purple);
-  box-shadow: 0 1px 6px rgba(107,63,160,0.15);
-}
+/* ── YEAR TABS ── */
+.year-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.year-tab { padding: 9px 10px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--white); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text-sub); transition: all 0.15s; text-align: center; }
+.year-tab:hover { background: var(--purple-light); color: var(--purple); border-color: var(--purple); }
+.year-tab.active { background: var(--purple); color: white; border-color: var(--purple); box-shadow: 0 3px 8px rgba(107,63,160,0.25); }
+body.coop-mode .year-tab:hover  { background: var(--coop-light); color: var(--coop); border-color: var(--coop); }
+body.coop-mode .year-tab.active { background: var(--coop); border-color: var(--coop); box-shadow: 0 3px 8px rgba(15,118,110,0.25); }
 
-.plan-type-btn.active-coop {
-  background: var(--white);
-  color: var(--coop);
-  box-shadow: 0 1px 6px rgba(15,118,110,0.15);
-}
-
-.plan-type-desc {
-  margin-top: 12px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.6;
-  transition: all 0.25s;
-}
-.plan-type-desc.normal {
-  background: var(--purple-light);
-  color: var(--purple-dark);
-  border: 1px solid var(--purple-mid);
-}
-.plan-type-desc.coop {
-  background: var(--coop-light);
-  color: var(--coop);
-  border: 1px solid var(--coop-mid);
-}
-
-/* ── Right column ── */
-.col-right {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* Plan type banner in right column */
-.plan-banner {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 18px;
-  border-radius: var(--radius);
-  font-size: 13px;
-  font-weight: 600;
-  border: 1.5px solid;
-  transition: all 0.3s ease;
-  animation: fadeUp 0.3s ease both;
-}
-.plan-banner.normal {
-  background: var(--purple-light);
-  border-color: var(--purple-mid);
-  color: var(--purple-dark);
-}
-.plan-banner.coop {
-  background: var(--coop-light);
-  border-color: var(--coop-mid);
-  color: var(--coop);
-}
+/* ── RIGHT COL ── */
+.col-right { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.plan-banner { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-radius: var(--radius); font-size: 13px; font-weight: 600; border: 1.5px solid; }
+.plan-banner.normal { background: var(--purple-light); border-color: var(--purple-mid); color: var(--purple-dark); }
+.plan-banner.coop   { background: var(--coop-light);   border-color: var(--coop-mid);   color: var(--coop); }
 .plan-banner-icon { font-size: 20px; line-height: 1; }
 .plan-banner-text { flex: 1; }
 .plan-banner-title { font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 1px; }
 .plan-banner-sub { font-size: 11.5px; font-weight: 500; opacity: 0.8; }
-
-.plan-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.plan-heading {
-  font-family: 'Lexend', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.plan-heading-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--purple);
-  transition: background 0.25s;
-}
+.plan-topbar { display: flex; align-items: center; justify-content: space-between; }
+.plan-heading { font-family: 'Lexend', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.plan-heading-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); transition: background 0.25s; }
 body.coop-mode .plan-heading-dot { background: var(--coop); }
-
-.btn-add-sem {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
-  background: var(--purple-light);
-  color: var(--purple);
-  border: 1.5px solid var(--purple-mid);
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s;
-}
+.btn-add-sem { display: flex; align-items: center; gap: 6px; padding: 8px 18px; background: var(--purple-light); color: var(--purple); border: 1.5px solid var(--purple-mid); border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; }
 .btn-add-sem:hover { background: var(--purple); color: white; border-color: var(--purple); }
-body.coop-mode .btn-add-sem {
-  background: var(--coop-light);
-  color: var(--coop);
-  border-color: var(--coop-mid);
-}
+body.coop-mode .btn-add-sem { background: var(--coop-light); color: var(--coop); border-color: var(--coop-mid); }
 body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; border-color: var(--coop); }
 
-/* Semester card */
-.semester-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  animation: fadeUp 0.3s ease both;
-}
-.semester-card:nth-child(2) { animation-delay: 0.05s; }
-.semester-card:nth-child(3) { animation-delay: 0.10s; }
-.semester-card:nth-child(4) { animation-delay: 0.15s; }
-@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-
-/* Co-op special semester card */
-.semester-card.is-coop {
-  border-color: var(--coop-mid);
-}
-.semester-card.is-coop .semester-head {
-  background: var(--coop-light);
-}
-.semester-card.is-coop .semester-head:hover {
-  background: #d1faf5;
-}
-.semester-card.is-coop .credits-badge {
-  background: var(--coop-mid);
-  color: var(--coop);
-}
-.semester-card.is-coop .add-subject-btn:hover {
-  border-color: var(--coop);
-  color: var(--coop);
-  background: var(--coop-light);
-}
-
-.semester-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  user-select: none;
-  transition: background 0.12s;
-}
+/* ── SEMESTER CARD ── */
+.semester-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.semester-card.is-coop { border-color: var(--coop-mid); }
+.semester-card.is-coop .semester-head { background: var(--coop-light); }
+.semester-card.is-coop .semester-head:hover { background: #d1faf5; }
+.semester-card.is-coop .credits-badge { background: var(--coop-mid); color: var(--coop); }
+.semester-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--bg); border-bottom: 1px solid var(--border); user-select: none; transition: background 0.12s; }
 .semester-head:hover { background: var(--purple-light); }
-
-.semester-head-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  flex: 1;
-  min-width: 0;
-}
-
-.semester-head-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
+.semester-head-left { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; min-width: 0; }
+.semester-head-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .semester-name { font-family: 'Lexend', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
-
-/* Coop tag on semester */
-.coop-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  background: var(--coop-mid);
-  color: var(--coop);
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.credits-badge {
-  padding: 3px 10px;
-  background: var(--purple-light);
-  color: var(--purple);
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-}
+.coop-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: var(--coop-mid); color: var(--coop); border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.credits-badge { padding: 3px 10px; background: var(--purple-light); color: var(--purple); border-radius: 999px; font-size: 12px; font-weight: 600; }
 .chevron { font-size: 11px; color: var(--text-sub); transition: transform 0.2s; }
 .semester-card.collapsed .chevron { transform: rotate(-90deg); }
 .semester-card.collapsed .semester-body { display: none; }
-
-.del-sem-btn {
-  width: 30px; height: 30px;
-  border-radius: 8px;
-  background: none;
-  border: 1.5px solid transparent;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-sub);
-  transition: all 0.15s;
-  flex-shrink: 0;
-}
+.del-sem-btn { width: 30px; height: 30px; border-radius: 8px; background: none; border: 1.5px solid transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-sub); transition: all 0.15s; flex-shrink: 0; padding: 0; }
 .del-sem-btn:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
-.del-sem-btn svg { pointer-events: none; }
+.del-sem-btn svg { display: block; pointer-events: none; }
 
-/* Subject rows */
-.subject-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 13px 20px;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.1s;
-}
+/* ── SUBJECT ROW ── */
+.subject-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 20px; border-bottom: 1px solid var(--border); transition: background 0.1s; }
 .subject-row:hover { background: var(--purple-light); }
-
 .subject-left { flex: 1; min-width: 0; }
 .subject-code { font-size: 12px; font-weight: 700; color: var(--purple); margin-bottom: 2px; letter-spacing: 0.3px; }
 .subject-name { font-size: 14px; font-weight: 600; color: var(--text); }
-.subject-cat {
-  display: inline-block;
-  margin-top: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--bg);
-  color: var(--text-sub);
-}
-.subject-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.subject-cat { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+.subject-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .subject-credits { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; }
 .subject-credits span { font-size: 11px; font-weight: 400; color: var(--text-sub); }
-.del-btn {
-  width: 28px; height: 28px;
-  border-radius: 7px;
-  background: none;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-sub);
-  transition: all 0.12s;
-}
-.del-btn:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
-
-.empty-subjects {
-  padding: 18px 20px;
-  font-size: 13px;
-  color: var(--text-sub);
-  font-style: italic;
-}
-
-.add-subject-row {
-  padding: 10px 16px;
-  border-top: 1px dashed var(--border);
-}
-.add-subject-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  padding: 10px;
-  border: 1.5px dashed var(--border);
-  border-radius: 8px;
-  background: none;
-  color: var(--text-sub);
-  font-size: 13px;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.15s;
-}
+.icon-btn { width: 30px; height: 30px; border-radius: 8px; background: var(--bg); border: 1.5px solid var(--border); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: var(--text-sub); transition: all 0.13s; flex-shrink: 0; padding: 0; vertical-align: middle; }
+.icon-btn svg { display: block; pointer-events: none; }
+.icon-btn.edit:hover { background: var(--purple-light); border-color: var(--purple); color: var(--purple); }
+.icon-btn.del:hover  { background: var(--red-bg);       border-color: var(--red);    color: var(--red); }
+.empty-subjects { padding: 18px 20px; font-size: 13px; color: var(--text-sub); font-style: italic; }
+.add-subject-row { padding: 10px 16px; border-top: 1px dashed var(--border); }
+.add-subject-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 10px; border: 1.5px dashed var(--border); border-radius: 8px; background: none; color: var(--text-sub); font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.15s; }
 .add-subject-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
-
-/* Coop period block */
-.coop-period-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 20px;
-  background: var(--coop-light);
-  border-bottom: 1px solid var(--coop-mid);
-}
+.coop-period-row { display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: var(--coop-light); border-bottom: 1px solid var(--coop-mid); }
 .coop-period-icon { font-size: 24px; line-height: 1; }
-.coop-period-info { flex: 1; }
 .coop-period-title { font-size: 14px; font-weight: 700; color: var(--coop); margin-bottom: 2px; }
 .coop-period-sub { font-size: 12px; color: #0d9488; }
-
 .empty-state { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 48px 20px; text-align: center; color: var(--text-sub); box-shadow: var(--shadow); }
 .empty-icon { font-size: 36px; margin-bottom: 10px; }
 .empty-state p { font-size: 14px; }
 .loading-state { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
 
-/* ── MODAL ── */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(15,10,40,0.5);
-  backdrop-filter: blur(6px);
-  z-index: 200;
-  display: none; align-items: center; justify-content: center;
-  padding: 20px;
-}
+/* ═══════════════════════════════
+   MODAL BASE
+═══════════════════════════════ */
+.modal-overlay { position: fixed; inset: 0; background: rgba(15,10,40,0.52); backdrop-filter: blur(6px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
-
-.modal {
-  background: var(--white);
-  border-radius: 20px;
-  width: 100%;
-  max-width: 820px;
-  max-height: 92vh;
-  overflow-y: auto;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.22);
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-header {
-  padding: 24px 28px 18px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; background: white; z-index: 1;
-  border-radius: 20px 20px 0 0;
-}
+.modal { background: var(--white); border-radius: 20px; width: 100%; max-height: 92vh; overflow-y: auto; box-shadow: 0 32px 80px rgba(0,0,0,0.22); display: flex; flex-direction: column; }
+.modal-header { padding: 22px 28px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: white; z-index: 1; border-radius: 20px 20px 0 0; gap: 10px; }
+.modal-header.edit-mode { border-left: 4px solid var(--purple); }
+.modal-header.edit-mode .modal-title { color: var(--purple-dark); }
 .modal-title { font-family: 'Lexend', sans-serif; font-size: 18px; font-weight: 800; color: var(--text); }
-.modal-title-sub { font-size: 13px; font-weight: 400; color: var(--text-sub); margin-top: 2px; }
-.modal-close {
-  width: 32px; height: 32px; border-radius: 8px;
-  background: var(--bg); border: 1px solid var(--border);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  font-size: 16px; color: var(--text-sub); transition: all 0.12s;
-}
+.modal-title-sub { font-size: 13px; color: var(--text-sub); margin-top: 2px; }
+.modal-close { width: 32px; height: 32px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--text-sub); transition: all 0.12s; flex-shrink: 0; }
 .modal-close:hover { background: var(--red-bg); color: var(--red); border-color: var(--red); }
-
+.modal-back { width: 32px; height: 32px; border-radius: 8px; background: var(--bg); border: 1.5px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-sub); transition: all 0.13s; flex-shrink: 0; padding: 0; }
+.modal-back:hover { background: var(--purple-light); border-color: var(--purple); color: var(--purple); }
+.modal-back svg { display: block; pointer-events: none; }
 .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 0; }
+.modal-footer { padding: 16px 28px 24px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--border); position: sticky; bottom: 0; background: white; border-radius: 0 0 20px 20px; }
 
-.section-label {
-  font-size: 11px; font-weight: 700; color: var(--text-sub);
-  text-transform: uppercase; letter-spacing: 1px;
-  margin-bottom: 14px; margin-top: 22px;
-  padding-bottom: 8px; border-bottom: 1px solid var(--border);
-}
+/* ── FORM FIELDS ── */
+.section-label { font-size: 11px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; margin-top: 22px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
 .section-label:first-child { margin-top: 0; }
-
+.section-label-icon { font-size: 14px; }
 .field { margin-bottom: 14px; }
 .field label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; }
-.field input, .field select, .field textarea {
-  width: 100%; padding: 11px 14px;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  background: var(--bg); font-size: 14px; font-family: inherit; color: var(--text);
-  outline: none; transition: all 0.15s;
-}
-.field input:focus, .field select:focus, .field textarea:focus {
-  border-color: var(--purple); background: white;
-  box-shadow: 0 0 0 3px rgba(107,63,160,0.1);
-}
-.field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field input, .field select, .field textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); font-size: 14px; font-family: inherit; color: var(--text); outline: none; transition: all 0.15s; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--purple); background: white; box-shadow: 0 0 0 3px rgba(107,63,160,0.1); }
+.field input[readonly] { background: var(--purple-light); color: var(--purple-dark); font-weight: 700; cursor: default; }
+.field textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
+.field-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .field-row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; }
+.autofill-hint { display: none; font-size: 12px; color: var(--purple); font-weight: 600; margin-top: 6px; padding: 6px 12px; background: var(--purple-light); border-radius: 6px; }
 
-.autofill-hint {
-  display: none;
-  font-size: 12px;
-  color: var(--purple);
-  font-weight: 600;
-  margin-top: 6px;
-  padding: 6px 12px;
-  background: var(--purple-light);
-  border-radius: 6px;
-}
+/* ══ OUTCOMES SECTION ══ */
+.outcomes-section { margin-top: 22px; }
+.outcomes-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.outcomes-header-left { display: flex; align-items: center; gap: 8px; }
+.outcomes-section-label { font-size: 11px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
+.btn-add-outcome { display: flex; align-items: center; gap: 5px; padding: 5px 14px; background: var(--purple-light); color: var(--purple); border: 1.5px solid var(--purple-mid); border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.btn-add-outcome:hover { background: var(--purple); color: white; }
+.outcome-items { display: flex; flex-direction: column; gap: 10px; }
+.outcome-item { background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.15s; }
+.outcome-item:focus-within { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(107,63,160,0.08); }
+.outcome-item-head { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--white); border-bottom: 1px solid var(--border); }
+.outcome-num-badge { width: 22px; height: 22px; border-radius: 50%; background: var(--purple-light); color: var(--purple); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Lexend', sans-serif; }
+.outcome-item-label { font-size: 12px; font-weight: 600; color: var(--text-sub); flex: 1; }
+.btn-del-outcome { width: 26px; height: 26px; border-radius: 7px; background: none; border: 1.5px solid transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #c0b8c8; transition: all 0.13s; padding: 0; flex-shrink: 0; }
+.btn-del-outcome:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+.outcome-item-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.outcome-text-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.outcome-text-row textarea { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--white); font-size: 13px; font-family: inherit; color: var(--text); outline: none; resize: vertical; min-height: 64px; line-height: 1.55; transition: all 0.15s; }
+.outcome-text-row textarea:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(107,63,160,0.08); }
 
-.modal-footer {
-  padding: 16px 28px 24px;
-  display: flex; gap: 10px; justify-content: flex-end;
-  border-top: 1px solid var(--border);
-  position: sticky; bottom: 0; background: white;
-  border-radius: 0 0 20px 20px;
-}
+/* PLO / MLO mapping inside outcome */
+.plo-mlo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.plo-mlo-box { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.plo-mlo-box-label { font-size:10.5px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.plo-mlo-box-label .dot { width: 6px; height: 6px; border-radius: 50%; display: block; }
+.plo-dot { background: var(--purple); }
+.mlo-dot { background: var(--blue); }
+.plo-chip-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+.plo-chip { display: inline-flex; align-items: center; gap: 3px; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1.5px solid; transition: all 0.13s; user-select: none; white-space: nowrap; }
+.plo-chip.plo { background: var(--bg); border-color: var(--border); color: var(--text-sub); }
+.plo-chip.plo.selected { background: var(--purple-light); border-color: var(--purple); color: var(--purple); }
+.plo-chip.mlo { background: var(--bg); border-color: var(--border); color: var(--text-sub); }
+.plo-chip.mlo.selected { background: var(--blue-bg); border-color: var(--blue); color: var(--blue); }
+.plo-chip:hover { opacity: 0.8; transform: scale(0.97); }
+.mlo-group { margin-bottom: 6px; }
+.mlo-group-label { font-size: 10px; font-weight: 700; color: var(--text-sub); letter-spacing: 0.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+.no-outcomes-hint { padding: 16px; text-align: center; font-size: 13px; color: var(--text-sub); font-style: italic; background: var(--bg); border-radius: 8px; border: 1.5px dashed var(--border); }
+
+/* ── BUTTONS ── */
 .btn-cancel { padding: 10px 22px; border-radius: 10px; background: var(--bg); border: 1.5px solid var(--border); font-size: 14px; font-family: inherit; cursor: pointer; color: var(--text); font-weight: 500; transition: background 0.12s; }
 .btn-cancel:hover { background: var(--border); }
-.btn-save { padding: 10px 26px; border-radius: 10px; background: var(--purple); color: white; border: none; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background 0.12s; box-shadow: 0 4px 12px rgba(107,63,160,0.3); }
+.btn-save { padding: 10px 26px; border-radius: 10px; background: var(--purple); color: white; border: none; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.15s; box-shadow: 0 4px 12px rgba(107,63,160,0.3); display: flex; align-items: center; gap: 8px; }
 .btn-save:hover { background: var(--purple-dark); }
+.btn-save.edit-mode { background: var(--purple-dark); }
+.btn-save.edit-mode:hover { background: var(--purple); }
+.btn-save svg { display: block; flex-shrink: 0; }
 
-/* Toast */
+/* ── VIEW DETAIL MODAL ── */
+.vd-chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.vd-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+.vd-chip.purple { background: var(--purple-light); color: var(--purple); }
+.vd-chip.blue   { background: var(--blue-bg);      color: var(--blue); }
+.vd-chip.gray   { background: var(--bg); color: var(--text-sub); border: 1px solid var(--border); }
+.vd-block { margin-bottom: 18px; }
+.vd-label { font-size: 11px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.vd-value { font-size: 15px; font-weight: 600; color: var(--text); }
+.vd-tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+.vd-tab { padding: 4px 14px; border-radius: 999px; border: 1.5px solid var(--border); background: var(--bg); font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; color: var(--text-sub); transition: all 0.15s; }
+.vd-tab.active { background: var(--purple); color: white; border-color: var(--purple); }
+.vd-text { font-size: 13.5px; line-height: 1.75; color: var(--text); background: var(--bg); border-radius: 10px; padding: 14px 16px; border: 1px solid var(--border); white-space: pre-wrap; min-height: 60px; }
+.vd-empty { padding: 20px; text-align: center; color: var(--text-sub); font-size: 13px; font-style: italic; background: var(--bg); border-radius: 10px; border: 1px dashed var(--border); margin-bottom: 18px; }
+
+/* ── TOAST ── */
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; font-weight: 500; }
 .toast.show { transform: translateY(0); opacity: 1; }
-.toast.success { background: #16a34a; }
-.toast.error { background: var(--red); }
-
-/* Topbar transition line */
-.topbar-plan-indicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  transition: all 0.25s;
-}
-.topbar-plan-indicator.normal {
-  background: var(--purple-light);
-  color: var(--purple);
-}
-.topbar-plan-indicator.coop {
-  background: var(--coop-light);
-  color: var(--coop);
-}
-
-svg { display: block; }
+.toast.success { background: var(--green); }
+.toast.error   { background: var(--red); }
 </style>
 </head>
 <body>
@@ -749,12 +350,12 @@ svg { display: block; }
     <div class="topbar-title" id="topbarTitle">จัดการแผนการศึกษา</div>
     <div class="topbar-breadcrumb">
       <a href="study-plan.html">แผนการศึกษา</a>
-      <span id="breadcrumbSub"> · <span id="breadcrumbMajor">-</span></span>
+      <span> · <span id="breadcrumbMajor">-</span></span>
     </div>
   </div>
   <div class="topbar-right">
     <div class="topbar-plan-indicator normal" id="topbarPlanIndicator">
-      <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
+      <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" style="display:block"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
       <span id="topbarPlanLabel">แผนปกติ</span>
     </div>
     <div class="avatar-wrap">
@@ -768,11 +369,10 @@ svg { display: block; }
 <main class="main">
   <div class="page-body">
 
-    <!-- Left -->
+    <!-- LEFT -->
     <div class="col-left">
-
       <a class="back-btn" href="study-plan.html">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="display:block"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
         กลับไปรายการ
       </a>
 
@@ -780,68 +380,52 @@ svg { display: block; }
       <div class="info-card">
         <div class="info-major-name" id="majorName">-</div>
         <div class="info-major-en" id="majorEn">-</div>
-        <div class="meta-chip" id="majorCourse">
-          <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg>
+        <div class="meta-chip">
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" style="display:block"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg>
           <span id="majorCourseName">-</span>
         </div>
-
         <div class="info-divider"></div>
-
-        <div class="info-row">
-          <span class="info-label">ประเภทแผน</span>
-          <span class="info-value">
-            <span class="plan-type-badge normal" id="infoPlanType">📋 แผนปกติ</span>
-          </span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">ปีที่เลือก</span>
-          <span class="info-value" id="infoYear">ปี 1</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">จำนวนภาคเรียน</span>
-          <span class="info-value" id="infoSemCount">-</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">หน่วยกิตรวม</span>
-          <span class="info-value" id="infoTotalCredits">-</span>
-        </div>
+        <div class="info-row"><span class="info-label">ประเภทแผน</span><span class="info-value"><span class="plan-type-badge normal" id="infoPlanType">📋 แผนปกติ</span></span></div>
+        <div class="info-row"><span class="info-label">ปีที่เลือก</span><span class="info-value" id="infoYear">ปี 1</span></div>
+        <div class="info-row"><span class="info-label">จำนวนภาคเรียน</span><span class="info-value" id="infoSemCount">-</span></div>
+        <div class="info-row"><span class="info-label">หน่วยกิตรวม</span><span class="info-value" id="infoTotalCredits">-</span></div>
       </div>
 
-      <!-- Plan Type Selector -->
+      <!-- STEP GUIDE (redesigned) -->
+      <div class="step-card">
+        <div class="step-card-title">ขั้นตอนการจัดการ</div>
+        <div class="step-progress-bar"><div class="step-progress-fill" id="stepProgressFill" style="width:0%"></div></div>
+        <div class="step-list" id="stepList"></div>
+      </div>
+
+      <!-- Plan Type -->
       <div class="plan-type-card">
         <div class="plan-type-label">ประเภทแผนการศึกษา</div>
         <div class="plan-type-toggle">
           <button class="plan-type-btn active-normal" id="btnNormal" onclick="selectPlanType('normal')">
-            <span class="btn-icon">📋</span>
-            <span>แผนปกติ</span>
+            <span class="btn-icon">📋</span><span>แผนปกติ</span>
           </button>
           <button class="plan-type-btn" id="btnCoop" onclick="selectPlanType('coop')">
-            <span class="btn-icon">🏭</span>
-            <span>สหกิจศึกษา</span>
+            <span class="btn-icon">🏭</span><span>สหกิจศึกษา</span>
           </button>
         </div>
-        <div class="plan-type-desc normal" id="planTypeDesc">
-          แผนการเรียนปกติ นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร
-        </div>
+        <div class="plan-type-desc normal" id="planTypeDesc">แผนการเรียนปกติ นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร</div>
       </div>
 
       <!-- Year Tabs -->
       <div class="info-card">
         <div style="font-size:12px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">เลือกชั้นปี</div>
-        <div class="year-tabs" id="yearTabs">
+        <div class="year-tabs">
           <button class="year-tab active" data-year="1" onclick="selectYear(1)">ปี 1</button>
           <button class="year-tab" data-year="2" onclick="selectYear(2)">ปี 2</button>
           <button class="year-tab" data-year="3" onclick="selectYear(3)">ปี 3</button>
           <button class="year-tab" data-year="4" onclick="selectYear(4)">ปี 4</button>
         </div>
       </div>
-
     </div>
 
-    <!-- Right -->
+    <!-- RIGHT -->
     <div class="col-right">
-
-      <!-- Plan Banner -->
       <div class="plan-banner normal" id="planBanner">
         <div class="plan-banner-icon" id="planBannerIcon">📋</div>
         <div class="plan-banner-text">
@@ -849,67 +433,106 @@ svg { display: block; }
           <div class="plan-banner-sub" id="planBannerSub">นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร 4 ปี</div>
         </div>
       </div>
-
       <div class="plan-topbar">
         <div class="plan-heading">
           <div class="plan-heading-dot"></div>
           <span id="planHeading">ปี 1 — Study Plan</span>
         </div>
         <button class="btn-add-sem" id="btnAddSemester">
-          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="display:block"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
           เพิ่มภาคเรียน
         </button>
       </div>
-
-      <div id="semesterList">
-        <div class="loading-state">⏳ กำลังโหลด...</div>
-      </div>
+      <div id="semesterList"><div class="loading-state">⏳ กำลังโหลด...</div></div>
     </div>
 
   </div>
 </main>
 
-<!-- Modal: Add Subject -->
-<div class="modal-overlay" id="subjectModal">
-  <div class="modal">
+<!-- ══════════════════════ MODAL A: VIEW SUBJECT ══════════════════════ -->
+<div class="modal-overlay" id="viewModal">
+  <div class="modal" style="max-width:620px;">
     <div class="modal-header">
-      <div>
-        <div class="modal-title">เพิ่มรายวิชา</div>
-        <div class="modal-title-sub" id="modalSemName">-</div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          <span id="v_code" style="background:var(--purple-light);color:var(--purple);font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px;font-family:'Lexend',sans-serif;white-space:nowrap;"></span>
+          <div class="modal-title" id="v_name_th" style="font-size:16px;">-</div>
+        </div>
+        <div class="modal-title-sub" id="v_semname">-</div>
       </div>
-      <button class="modal-close" id="modalClose">✕</button>
+      <button class="modal-close" id="btnViewClose">✕</button>
+    </div>
+    <div class="modal-body" style="padding:18px 28px 8px;">
+      <div class="vd-chip-row">
+        <span class="vd-chip purple" id="v_credits_chip"></span>
+        <span class="vd-chip blue"   id="v_cat_chip"></span>
+        <span class="vd-chip gray"   id="v_hours_chip" style="display:none;"></span>
+      </div>
+      <div class="vd-block" id="v_name_en_block" style="display:none;">
+        <div class="vd-label">ชื่อวิชา (EN)</div>
+        <div class="vd-value" id="v_name_en"></div>
+      </div>
+      <div class="vd-block" id="v_desc_block" style="display:none;">
+        <div class="vd-label">คำอธิบายรายวิชา</div>
+        <div class="vd-tabs">
+          <button class="vd-tab active" onclick="vdTab(this,'v_desc_th','v_desc_en')">ภาษาไทย</button>
+          <button class="vd-tab"        onclick="vdTab(this,'v_desc_en','v_desc_th')">English</button>
+        </div>
+        <div class="vd-text" id="v_desc_th"></div>
+        <div class="vd-text" id="v_desc_en" style="display:none;"></div>
+      </div>
+      <div class="vd-block" id="v_out_block" style="display:none;">
+        <div class="vd-label">ผลลัพธ์การเรียนรู้</div>
+        <div id="v_outcomes_list"></div>
+      </div>
+      <div class="vd-empty" id="v_empty" style="display:none;">ไม่มีคำอธิบายหรือผลลัพธ์การเรียนรู้</div>
+    </div>
+    <div class="modal-footer" style="justify-content:space-between;">
+      <button class="btn-cancel" id="btnViewClose2">ปิด</button>
+      <button class="btn-save" id="btnGoEdit">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+        แก้ไขรายวิชา
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ MODAL B: ADD / EDIT FORM ══════════════════════ -->
+<div class="modal-overlay" id="subjectModal">
+  <div class="modal" style="max-width:860px;">
+    <div class="modal-header" id="formHeader">
+      <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
+        <button class="modal-back" id="btnBackToView" style="display:none;" title="กลับไปดูข้อมูล">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        </button>
+        <div>
+          <div class="modal-title" id="formTitle">เพิ่มรายวิชา</div>
+          <div class="modal-title-sub" id="formSemName">-</div>
+        </div>
+      </div>
+      <button class="modal-close" id="formClose">✕</button>
     </div>
     <div class="modal-body">
-
-      <div class="section-label">ข้อมูลรายวิชา</div>
+      <!-- Basic Info -->
+      <div class="section-label"><span class="section-label-icon">📘</span> ข้อมูลรายวิชา</div>
       <div class="field-row-3">
         <div class="field" style="grid-column:span 2">
           <label>รหัสวิชา *</label>
-          <input type="text" id="m_code" placeholder="เช่น 460-101" autocomplete="off" />
+          <input type="text" id="m_code" placeholder="เช่น 460-101" autocomplete="off"/>
           <div class="autofill-hint" id="autofillHint">✓ พบวิชาในระบบ — เติมข้อมูลให้แล้ว</div>
         </div>
         <div class="field">
           <label>หน่วยกิต *</label>
-          <input type="number" id="m_credits" placeholder="3" min="1" max="9" />
+          <input type="number" id="m_credits" placeholder="3" min="1" max="9"/>
         </div>
       </div>
       <div class="field-row">
-        <div class="field">
-          <label>ชื่อวิชา (ภาษาไทย) *</label>
-          <input type="text" id="m_name_th" placeholder="ชื่อวิชาภาษาไทย" />
-        </div>
-        <div class="field">
-          <label>ชื่อวิชา (ภาษาอังกฤษ)</label>
-          <input type="text" id="m_name_en" placeholder="Subject Name (EN)" />
-        </div>
+        <div class="field"><label>ชื่อวิชา (ภาษาไทย) *</label><input type="text" id="m_name_th" placeholder="ชื่อวิชาภาษาไทย"/></div>
+        <div class="field"><label>ชื่อวิชา (ภาษาอังกฤษ)</label><input type="text" id="m_name_en" placeholder="Subject Name (EN)"/></div>
       </div>
       <div class="field-row">
-        <div class="field">
-          <label>โครงสร้างชั่วโมง</label>
-          <input type="text" id="m_hours" placeholder="เช่น 3(3-0-6)" />
-        </div>
-        <div class="field">
-          <label>หมวดวิชา</label>
+        <div class="field"><label>โครงสร้างชั่วโมง</label><input type="text" id="m_hours" placeholder="เช่น 3(3-0-6)"/></div>
+        <div class="field"><label>หมวดวิชา</label>
           <select id="m_category">
             <option value="Core">Core Course (วิชาบังคับ)</option>
             <option value="Elective">Elective (วิชาเลือก)</option>
@@ -918,34 +541,36 @@ svg { display: block; }
         </div>
       </div>
 
-      <div class="section-label">คำอธิบายรายวิชา</div>
+      <!-- Description -->
+      <div class="section-label"><span class="section-label-icon">📝</span> คำอธิบายรายวิชา</div>
       <div class="field-row">
-        <div class="field">
-          <label>คำอธิบาย (ภาษาไทย)</label>
-          <textarea id="m_desc_th" placeholder="คำอธิบายรายวิชาภาษาไทย..."></textarea>
-        </div>
-        <div class="field">
-          <label>คำอธิบาย (ภาษาอังกฤษ)</label>
-          <textarea id="m_desc_en" placeholder="Course description in English..."></textarea>
-        </div>
+        <div class="field"><label>คำอธิบาย (ภาษาไทย)</label><textarea id="m_desc_th" placeholder="คำอธิบายรายวิชาภาษาไทย..."></textarea></div>
+        <div class="field"><label>คำอธิบาย (ภาษาอังกฤษ)</label><textarea id="m_desc_en" placeholder="Course description in English..."></textarea></div>
       </div>
 
-      <div class="section-label">ผลลัพธ์การเรียนรู้</div>
-      <div class="field-row">
-        <div class="field">
-          <label>ผลลัพธ์การเรียนรู้ (ภาษาไทย)</label>
-          <textarea id="m_out_th" placeholder="สิ่งที่ผู้เรียนจะได้รับหลังเรียนจบ..."></textarea>
+      <!-- Outcomes (dynamic items) -->
+      <div class="outcomes-section">
+        <div class="outcomes-header">
+          <div class="outcomes-header-left">
+            <span class="section-label-icon">🎯</span>
+            <span class="outcomes-section-label">ผลลัพธ์การเรียนรู้ (CLOs)</span>
+          </div>
+          <button class="btn-add-outcome" id="btnAddOutcome" type="button">
+            <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+            เพิ่มผลลัพธ์
+          </button>
         </div>
-        <div class="field">
-          <label>ผลลัพธ์การเรียนรู้ (ภาษาอังกฤษ)</label>
-          <textarea id="m_out_en" placeholder="Learning outcomes after completing the course..."></textarea>
+        <div class="outcome-items" id="outcomeItems">
+          <div class="no-outcomes-hint" id="noOutcomesHint">ยังไม่มีผลลัพธ์การเรียนรู้ — กด "เพิ่มผลลัพธ์" เพื่อเริ่มต้น</div>
         </div>
       </div>
-
     </div>
     <div class="modal-footer">
-      <button class="btn-cancel" id="modalCancel">ยกเลิก</button>
-      <button class="btn-save" id="modalSave">บันทึกรายวิชา</button>
+      <button class="btn-cancel" id="formCancel">ยกเลิก</button>
+      <button class="btn-save" id="formSave">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" id="formSaveIcon"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+        <span id="formSaveLabel">บันทึกรายวิชา</span>
+      </button>
     </div>
   </div>
 </div>
@@ -953,6 +578,152 @@ svg { display: block; }
 <div class="toast" id="toast"></div>
 
 <script>
+/* ══════════════════════════════════════════
+   PLO / MLO DATA
+══════════════════════════════════════════ */
+const PLO_LIST = [
+  {code:'PLO1', desc:'พัฒนาตนเองจากการเรียนรู้เมื่อได้รับคำวิพากษ์วิจารณ์'},
+  {code:'PLO2', desc:'วิเคราะห์และนำเสนอข้อมูลต่อผู้บริหารเพื่อการตัดสินใจ'},
+  {code:'PLO3', desc:'ประยุกต์ความรู้ทางด้านบริหารธุรกิจเพื่อวางแผนกลยุทธ์ให้องค์กร'},
+  {code:'PLO4', desc:'ประยุกต์กรอบแนวคิดความเป็นผู้ประกอบการ (Entrepreneurial Mindset) เพื่อการสร้างธุรกิจ'},
+  {code:'PLO5', desc:'ประยุกต์ใช้กระบวนการวิจัยเพื่อแก้ไขปัญหาทางธุรกิจ'},
+  {code:'PLO6', desc:'สื่อสารภายใต้ความหลากหลายทางสังคมและวัฒนธรรม'},
+  {code:'PLO7', desc:'ทำงานร่วมกับผู้อื่นในองค์กร'},
+  {code:'PLO8', desc:'เลือกใช้เทคโนโลยีดิจิทัลในการทำงานให้บรรลุเป้าหมาย'},
+  {code:'PLO9', desc:'แสดงพฤติกรรมที่แสดงถึงการมีจริยธรรมและความรับผิดชอบต่อสังคม'},
+];
+const MLO_GROUPS = [
+  {label:'การเงินและการลงทุน', icon:'💰', items:[
+    {code:'MLO1.1', desc:'เขียนบทวิเคราะห์ตราสารทางการเงินภายใต้หลักเกณฑ์ของคณะกรรมการกำกับหลักทรัพย์และตลาดหลักทรัพย์'},
+    {code:'MLO1.2', desc:'วางแผนการเงินส่วนบุคคลตามมาตรฐานของสมาคมนักวางแผนการเงินไทย'},
+    {code:'MLO1.3', desc:'วิเคราะห์ข้อมูลทางการเงินเพื่อการบริหารการเงินขององค์กร'},
+  ]},
+  {label:'การตลาดและการสื่อสาร', icon:'📢', items:[
+    {code:'MLO2.1', desc:'วิเคราะห์กลยุทธ์ทางการตลาดอย่างสร้างสรรค์'},
+    {code:'MLO2.2', desc:'วิเคราะห์แนวทางการแก้ไขปัญหาทางการตลาดเชิงนวัตกรรม'},
+    {code:'MLO2.3', desc:'กำหนดกลยุทธ์การตลาดเพื่อใช้ในธุรกิจ'},
+  ]},
+  {label:'การจัดการทรัพยากรมนุษย์', icon:'👥', items:[
+    {code:'MLO3.1', desc:'ใช้แนวคิดการจัดการทรัพยากรมนุษย์ในการสร้างกิจกรรมเพื่อพัฒนาคน'},
+    {code:'MLO3.2', desc:'ใช้เทคโนโลยีดิจิทัลในการบริหารทรัพยากรมนุษย์'},
+  ]},
+  {label:'การจัดการโลจิสติกส์', icon:'🚚', items:[
+    {code:'MLO4.1', desc:'วางแผนในการลดต้นทุนและเพิ่มกำไรโดยใช้ความรู้ด้านการจัดการโลจิสติกส์และโซ่อุปทาน'},
+    {code:'MLO4.2', desc:'ประยุกต์ความรู้ทางด้านการจัดการโลจิสติกส์และโซ่อุปทานในการแก้ไขปัญหาของธุรกิจ'},
+  ]},
+  {label:'ระบบสารสนเทศทางธุรกิจ', icon:'💻', items:[
+    {code:'MLO5.1', desc:'พัฒนาระบบสารสนเทศทางธุรกิจเพื่อใช้ในการวางแผนธุรกิจ'},
+    {code:'MLO5.2', desc:'วางแผนและติดตั้งระบบสารสนเทศได้ถูกต้องตามกฎหมาย'},
+  ]},
+  {label:'การจัดการไมซ์ (MICE)', icon:'🎪', items:[
+    {code:'MLO6.1', desc:'จัดงานไมซ์ได้ตามเป้าหมายการพัฒนาที่ยั่งยืน (SDGs)'},
+    {code:'MLO6.2', desc:'ปรับตัวในสถานการณ์การจัดงานไมซ์ที่มีความกดดัน'},
+  ]},
+];
+
+/* ══════════════════════════════════════════
+   OUTCOME ITEMS MANAGER
+══════════════════════════════════════════ */
+let outcomeCounter = 0;
+
+function buildOutcomeItem(idx, data = {}) {
+  const id = ++outcomeCounter;
+  const el = document.createElement('div');
+  el.className = 'outcome-item';
+  el.dataset.oid = id;
+
+  // PLO chips
+  const ploChips = PLO_LIST.map(p => {
+    const sel = (data.plo || []).includes(p.code) ? ' selected' : '';
+    return `<span class="plo-chip plo${sel}" data-code="${p.code}" title="${p.desc}" onclick="toggleChip(this)">${p.code}</span>`;
+  }).join('');
+
+  // MLO chips by group
+  const mloGroupsHtml = MLO_GROUPS.map(g => {
+    const chips = g.items.map(m => {
+      const sel = (data.mlo || []).includes(m.code) ? ' selected' : '';
+      return `<span class="plo-chip mlo${sel}" data-code="${m.code}" title="${m.desc}" onclick="toggleChip(this)">${m.code}</span>`;
+    }).join('');
+    return `<div class="mlo-group"><div class="mlo-group-label">${g.icon} ${g.label}</div><div class="plo-chip-grid">${chips}</div></div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="outcome-item-head">
+      <div class="outcome-num-badge">${idx}</div>
+      <div class="outcome-item-label">CLO ${idx}</div>
+      <button class="btn-del-outcome" onclick="removeOutcomeItem(this)" type="button" title="ลบข้อนี้">
+        <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+    </div>
+    <div class="outcome-item-body">
+      <div class="outcome-text-row">
+        <textarea placeholder="ผลลัพธ์การเรียนรู้ (ภาษาไทย)..." class="oc-th">${data.th || ''}</textarea>
+        <textarea placeholder="Learning outcome (English)..." class="oc-en">${data.en || ''}</textarea>
+      </div>
+      <div class="plo-mlo-row">
+        <div class="plo-mlo-box">
+          <div class="plo-mlo-box-label"><span class="dot plo-dot"></span> สอดคล้องกับ PLO</div>
+          <div class="plo-chip-grid">${ploChips}</div>
+        </div>
+        <div class="plo-mlo-box">
+          <div class="plo-mlo-box-label"><span class="dot mlo-dot"></span> สอดคล้องกับ MLO</div>
+          <div style="max-height:160px;overflow-y:auto;padding-right:2px;">${mloGroupsHtml}</div>
+        </div>
+      </div>
+    </div>`;
+  return el;
+}
+
+function addOutcomeItem(data = {}) {
+  const container = document.getElementById('outcomeItems');
+  const hint = document.getElementById('noOutcomesHint');
+  const items = container.querySelectorAll('.outcome-item');
+  const idx = items.length + 1;
+  const el = buildOutcomeItem(idx, data);
+  container.appendChild(el);
+  hint.style.display = 'none';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function removeOutcomeItem(btn) {
+  const item = btn.closest('.outcome-item');
+  item.remove();
+  renumberOutcomes();
+}
+
+function renumberOutcomes() {
+  const items = document.querySelectorAll('#outcomeItems .outcome-item');
+  items.forEach((el, i) => {
+    el.querySelector('.outcome-num-badge').textContent = i + 1;
+    el.querySelector('.outcome-item-label').textContent = `CLO ${i + 1}`;
+  });
+  document.getElementById('noOutcomesHint').style.display = items.length ? 'none' : '';
+}
+
+function toggleChip(chip) {
+  chip.classList.toggle('selected');
+}
+
+function collectOutcomes() {
+  return [...document.querySelectorAll('#outcomeItems .outcome-item')].map(el => ({
+    th:  el.querySelector('.oc-th').value.trim(),
+    en:  el.querySelector('.oc-en').value.trim(),
+    plo: [...el.querySelectorAll('.plo-chip.plo.selected')].map(c => c.dataset.code),
+    mlo: [...el.querySelectorAll('.plo-chip.mlo.selected')].map(c => c.dataset.code),
+  })).filter(o => o.th || o.en);
+}
+
+function clearOutcomes() {
+  const c = document.getElementById('outcomeItems');
+  c.querySelectorAll('.outcome-item').forEach(e => e.remove());
+  document.getElementById('noOutcomesHint').style.display = '';
+}
+
+document.getElementById('btnAddOutcome').addEventListener('click', () => addOutcomeItem());
+
+/* ══════════════════════════════════════════
+   APP CORE
+══════════════════════════════════════════ */
 const BASE = "https://websitefms.onrender.com";
 const API  = BASE + "/api";
 
@@ -966,355 +737,423 @@ const majorId  = params.get("majorId");
 const courseId = params.get("courseId");
 if (!majorId) { window.location.href = "study-plan.html"; }
 
-let major       = null;
-let currentYear = 1;
-let currentPlanType = "normal"; // "normal" | "coop"
-let planId      = null;
-// planCache: key = `${type}_${yearNo}` → planId (number)
-// เก็บแยกต่างหากเพื่อไม่ให้ normal กับ coop ใช้ planId เดียวกัน
-let planCache   = {};
-let modalSemId  = null;
-let modalSemName = "-";
+let major = null, currentYear = 1, currentPlanType = "normal";
+let planId = null, planCache = {};
+let modalMode = "add", modalSemId = null, editSsId = null;
+let currentViewData = null;
+const SS = {};
 
-/* ── Toast ── */
+/* ── TOAST ── */
 function toast(msg, type = "") {
   const el = document.getElementById("toast");
   el.textContent = msg; el.className = "toast show " + type;
   setTimeout(() => el.className = "toast", 2800);
 }
 
-/* ── Plan Type Config ── */
-const PLAN_CONFIG = {
-  normal: {
-    icon: "📋",
-    label: "แผนปกติ",
-    bannerTitle: "แผนการศึกษาปกติ",
-    bannerSub: "นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร 4 ปี",
-    desc: "แผนการเรียนปกติ นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร",
-    termNames: ["","ภาคเรียนที่ 1","ภาคเรียนที่ 2","ภาคฤดูร้อน"],
-    // ปี 3 ภาค 1, 2 ปกติ — ไม่มีช่วงสหกิจ
-    coopSemesters: {}
-  },
-  coop: {
-    icon: "🏭",
-    label: "สหกิจศึกษา",
-    bannerTitle: "แผนการศึกษาสหกิจศึกษา",
-    bannerSub: "นักศึกษาออกปฏิบัติงานจริงในสถานประกอบการ ปี 4 ภาคเรียน 2",
-    desc: "แผนสหกิจศึกษา นักศึกษาออกปฏิบัติงานในสถานประกอบการ 1 ภาคเรียน (ปี 4 ภาค 2)",
-    termNames: ["","ภาคเรียนที่ 1","ภาคเรียนที่ 2","ภาคฤดูร้อน"],
-    // key: yearNo → termNo ที่เป็นสหกิจ
-    coopSemesters: { 3: 2 }
-  }
-};
+/* ══════════════════════════════════════════
+   STEP GUIDE (redesigned with progress)
+══════════════════════════════════════════ */
+const STEPS = [
+  { n: 1, label: "เลือกประเภทแผน",     sub: "แผนปกติ หรือ สหกิจศึกษา",          icon: "📋" },
+  { n: 2, label: "เลือกชั้นปี",          sub: "เลือกปี 1–4 ที่ต้องการจัดการ",      icon: "📅" },
+  { n: 3, label: "เพิ่มภาคเรียน",       sub: "กด \"เพิ่มภาคเรียน\" ด้านขวาบน",    icon: "➕" },
+  { n: 4, label: "เพิ่มรายวิชา",        sub: "กด + ในแต่ละภาคเรียน",              icon: "📚" },
+  { n: 5, label: "ระบุผลลัพธ์และ PLO",  sub: "กด ✏️ รายวิชาเพื่อแก้ไขและตั้ง CLO", icon: "🎯" },
+];
 
-/* ── Plan Type Switch ── */
-function selectPlanType(type) {
-  if (type === currentPlanType) return; // ไม่ทำอะไรถ้าไม่เปลี่ยน
-  currentPlanType = type;
-  planId = null; // reset ก่อนเสมอ เพื่อไม่ใช้ planId ของประเภทเก่า
-  const cfg = PLAN_CONFIG[type];
-  const isCoop = type === "coop";
+function renderSteps(activeStep) {
+  const pct = Math.round(((activeStep - 1) / (STEPS.length - 1)) * 100);
+  document.getElementById('stepProgressFill').style.width = pct + '%';
 
-  // body class for CSS hooks
-  document.body.classList.toggle("coop-mode", isCoop);
-
-  // Toggle buttons
-  document.getElementById("btnNormal").className = "plan-type-btn" + (isCoop ? "" : " active-normal");
-  document.getElementById("btnCoop").className   = "plan-type-btn" + (isCoop ? " active-coop" : "");
-
-  // Desc box
-  const descEl = document.getElementById("planTypeDesc");
-  descEl.textContent = cfg.desc;
-  descEl.className = `plan-type-desc ${type}`;
-
-  // Info card badge
-  const badge = document.getElementById("infoPlanType");
-  badge.textContent = cfg.icon + " " + cfg.label;
-  badge.className = `plan-type-badge ${type}`;
-
-  // Topbar indicator
-  const ind = document.getElementById("topbarPlanIndicator");
-  ind.className = `topbar-plan-indicator ${type}`;
-  document.getElementById("topbarPlanLabel").textContent = cfg.label;
-
-  // Banner
-  const banner = document.getElementById("planBanner");
-  banner.className = `plan-banner ${type}`;
-  document.getElementById("planBannerTitle").textContent = cfg.bannerTitle;
-  document.getElementById("planBannerSub").textContent = cfg.bannerSub;
-  document.getElementById("planBannerIcon").textContent = cfg.icon;
-
-  // Reload plan with new type (จะตรวจ cache ก่อน)
-  loadPlanForYear(currentYear);
-}
-
-/* ── Year selection ── */
-function selectYear(year) {
-  currentYear = year;
-  planId = null; // reset ก่อนเสมอ ให้ loadPlanForYear ตรวจ cache เอง
-  document.querySelectorAll(".year-tab").forEach(b =>
-    b.classList.toggle("active", Number(b.dataset.year) === year)
-  );
-  document.getElementById("planHeading").textContent = `ปี ${year} — Study Plan`;
-  document.getElementById("infoYear").textContent = `ปี ${year}`;
-  loadPlanForYear(year);
-}
-
-/* ── Init ── */
-async function init() {
-  try {
-    const majors = await fetch(`${API}/courses/${courseId}/majors`).then(r => r.json());
-    major = majors.find(m => String(m.id) === String(majorId));
-    if (!major) throw new Error("major not found");
-
-    const courses = await fetch(`${API}/courses`).then(r => r.json());
-    const course  = courses.find(c => String(c.id) === String(courseId));
-    const courseName = course?.name_th || `Course #${courseId}`;
-
-    document.getElementById("majorName").textContent      = major.name_th || "-";
-    document.getElementById("majorEn").textContent        = major.name_en || "";
-    document.getElementById("majorCourseName").textContent = courseName;
-    document.getElementById("breadcrumbMajor").textContent = major.name_th || "-";
-    document.getElementById("topbarTitle").textContent    = major.name_th || "จัดการแผนการศึกษา";
-    document.title = `${major.name_th} | FMS Admin`;
-
-    await loadPlanForYear(1);
-  } catch (e) {
-    document.getElementById("semesterList").innerHTML =
-      `<div class="empty-state"><div class="empty-icon">❌</div><p>โหลดข้อมูลไม่สำเร็จ</p></div>`;
-  }
-}
-
-/* ── Load plan (aware of type) ── */
-async function loadPlanForYear(yearNo) {
-  document.getElementById("semesterList").innerHTML = `<div class="loading-state">⏳ กำลังโหลด...</div>`;
-
-  const cacheKey = `${currentPlanType}_${yearNo}`;
-
-  // ถ้าเคย resolve แล้ว ใช้ cache เลย
-  if (planCache[cacheKey]) {
-    planId = planCache[cacheKey];
-    try {
-      const detail = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
-      renderSemesters(detail.semesters || [], yearNo);
-    } catch {
-      showPlanError();
-    }
-    return;
-  }
-
-  // ยังไม่มี cache — ดึงรายการ plans ทั้งหมดของ major นี้
-  planId = null;
-  try {
-    const thaiYear = new Date().getFullYear() + 543;
-    const res = await fetch(`${API}/majors/${majorId}/study-plans?page=1&pageSize=50`);
-    const json = await res.json();
-    const allPlans = json.data || [];
-
-    // หา plan ที่ตรง year_no และ plan_type
-    // API อาจไม่มี plan_type field → ใช้ fallback: ถ้าไม่มี field ให้ถือว่าเป็น "normal"
-    const matched = allPlans.find(p => {
-      const sameYear = Number(p.year_no) === Number(yearNo);
-      const pType = p.plan_type || "normal";
-      return sameYear && pType === currentPlanType;
-    });
-
-    if (matched) {
-      planId = matched.id;
-    } else {
-      // ไม่มี → สร้างใหม่
-      const created = await fetch(`${API}/majors/${majorId}/study-plans`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          academic_year: thaiYear,
-          year_no: yearNo,
-          status: "active",
-          plan_type: currentPlanType
-        })
-      }).then(r => r.json());
-      planId = created?.plan?.id ?? null;
-    }
-
-    if (!planId) throw new Error("no planId");
-
-    // เก็บ cache แยกต่างหากตาม type+year
-    planCache[cacheKey] = planId;
-
-    const detail = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
-    renderSemesters(detail.semesters || [], yearNo);
-  } catch {
-    showPlanError();
-  }
-}
-
-function showPlanError() {
-  planId = null;
-  document.getElementById("semesterList").innerHTML =
-    `<div class="empty-state"><div class="empty-icon">📭</div><p>ไม่พบแผนการศึกษา</p></div>`;
-}
-
-/* ── Render semesters ── */
-function renderSemesters(semesters, yearNo) {
-  const cfg = PLAN_CONFIG[currentPlanType];
-  const coopTermNo = cfg.coopSemesters[yearNo]; // เช่น 2 (ถ้าปีนี้มีภาคสหกิจ)
-
-  const totalCred = semesters.reduce((s, sem) =>
-    s + (sem.subjects||[]).reduce((c, it) => c + Number(it.credits ?? it.default_credits ?? 0), 0), 0);
-  document.getElementById("infoSemCount").textContent = `${semesters.length} ภาค`;
-  document.getElementById("infoTotalCredits").textContent = `${totalCred} หน่วยกิต`;
-
-  if (!semesters.length) {
-    document.getElementById("semesterList").innerHTML =
-      `<div class="empty-state">
-        <div class="empty-icon">${cfg.icon}</div>
-        <p>ยังไม่มีภาคเรียนใน ปี ${yearNo} (${cfg.label})<br>กด "เพิ่มภาคเรียน" เพื่อเริ่มต้น</p>
-      </div>`;
-    return;
-  }
-
-  document.getElementById("semesterList").innerHTML = semesters.map(sem => {
-    const semCred  = (sem.subjects||[]).reduce((s,it) => s + Number(it.credits ?? it.default_credits ?? 0), 0);
-    const semTitle = sem.title || `Semester ${sem.term_no}`;
-    const isCoopSem = currentPlanType === "coop" && Number(sem.term_no) === coopTermNo;
-
-    const subjectsHtml = (sem.subjects||[]).map(it => {
-      const catColor = { Core:"#6B3FA0", Elective:"#3B82F6", GE:"#10B981" }[it.category] || "#64748B";
-      return `<div class="subject-row">
-        <div class="subject-left">
-          <div class="subject-code">${it.code}</div>
-          <div class="subject-name">${it.name_th}</div>
-          <span class="subject-cat" style="background:${catColor}18;color:${catColor}">${it.category||"Core"}</span>
-        </div>
-        <div class="subject-right">
-          <div class="subject-credits">${it.credits ?? it.default_credits} <span>หน่วยกิต</span></div>
-          <button class="del-btn" onclick="deleteSubject(${it.id})" title="ลบรายวิชา">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-          </button>
-        </div>
-      </div>`;
-    }).join("");
-
-    const emptySubs = !sem.subjects?.length && !isCoopSem
-      ? `<div class="empty-subjects">ยังไม่มีรายวิชาในภาคเรียนนี้</div>`
-      : "";
-
-    // ถ้าเป็นภาคสหกิจให้แสดง coop-period block แทนรายวิชา
-    const coopBlock = isCoopSem
-      ? `<div class="coop-period-row">
-          <div class="coop-period-icon">🏭</div>
-          <div class="coop-period-info">
-            <div class="coop-period-title">ช่วงออกปฏิบัติสหกิจศึกษา</div>
-            <div class="coop-period-sub">นักศึกษาออกปฏิบัติงานจริงในสถานประกอบการ ระยะเวลา 1 ภาคการศึกษา (16 สัปดาห์)</div>
-          </div>
-        </div>`
-      : "";
-
-    const coopTagHtml = isCoopSem
-      ? `<span class="coop-tag">🏭 สหกิจศึกษา</span>`
-      : "";
-
-    const semCardClass = `semester-card${isCoopSem ? " is-coop" : ""}`;
-
-    const addSubjectArea = isCoopSem
-      ? "" // ไม่แสดงปุ่ม add subject ในภาคสหกิจ
-      : `<div class="add-subject-row">
-          <button class="add-subject-btn" onclick="openModal(${sem.id}, '${semTitle.replace(/'/g,"\\'")}')">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
-            Add Subject
-          </button>
-        </div>`;
-
-    return `<div class="${semCardClass}" id="sem_${sem.id}">
-      <div class="semester-head">
-        <div class="semester-head-left" onclick="toggleSem(${sem.id})">
-          <div class="semester-name">${semTitle}</div>
-          ${coopTagHtml}
-          <span class="credits-badge">${semCred} Credits</span>
-          <span class="chevron">▼</span>
-        </div>
-        <div class="semester-head-right">
-          <button
-            class="del-sem-btn"
-            onclick="deleteSemester(${sem.id}, '${semTitle.replace(/'/g,"\\'")}')"
-            title="ลบภาคเรียน"
-          >
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
-            </svg>
-          </button>
-        </div>
+  document.getElementById("stepList").innerHTML = STEPS.map(s => {
+    const state = s.n < activeStep ? "done" : s.n === activeStep ? "active" : "pending";
+    const numHtml = state === "done"
+      ? `<svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>`
+      : state === "active" ? s.icon : s.n;
+    return `<div class="step-item ${state}">
+      <div class="step-num-wrap">
+        <div class="step-num">${numHtml}</div>
       </div>
-      <div class="semester-body">
-        ${coopBlock}
-        ${subjectsHtml}
-        ${emptySubs}
-        ${addSubjectArea}
+      <div class="step-body">
+        <div class="step-label">${s.label}</div>
+        <div class="step-sub">${s.sub}</div>
       </div>
     </div>`;
   }).join("");
 }
 
-function toggleSem(id) { document.getElementById("sem_"+id)?.classList.toggle("collapsed"); }
+/* ══════════════════════════════════════════
+   PLAN CONFIG
+══════════════════════════════════════════ */
+const PLAN_CONFIG = {
+  normal: { icon:"📋", label:"แผนปกติ", bannerTitle:"แผนการศึกษาปกติ", bannerSub:"นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร 4 ปี", desc:"แผนการเรียนปกติ นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร", coopSemesters:{} },
+  coop:   { icon:"🏭", label:"สหกิจศึกษา", bannerTitle:"แผนการศึกษาสหกิจศึกษา", bannerSub:"นักศึกษาออกปฏิบัติงานจริงในสถานประกอบการ ปี 4 ภาคเรียน 2", desc:"แผนสหกิจศึกษา นักศึกษาออกปฏิบัติงานในสถานประกอบการ 1 ภาคเรียน (ปี 4 ภาค 2)", coopSemesters:{ 3:2 } },
+};
 
-/* ── Add semester ── */
+function selectPlanType(type) {
+  if (type === currentPlanType) return;
+  currentPlanType = type; planId = null;
+  const cfg = PLAN_CONFIG[type], isCoop = type === "coop";
+  document.body.classList.toggle("coop-mode", isCoop);
+  document.getElementById("btnNormal").className = "plan-type-btn" + (isCoop ? "" : " active-normal");
+  document.getElementById("btnCoop").className   = "plan-type-btn" + (isCoop ? " active-coop" : "");
+  const d = document.getElementById("planTypeDesc"); d.textContent = cfg.desc; d.className = `plan-type-desc ${type}`;
+  const b = document.getElementById("infoPlanType"); b.textContent = cfg.icon + " " + cfg.label; b.className = `plan-type-badge ${type}`;
+  const ind = document.getElementById("topbarPlanIndicator"); ind.className = `topbar-plan-indicator ${type}`; document.getElementById("topbarPlanLabel").textContent = cfg.label;
+  const bn = document.getElementById("planBanner"); bn.className = `plan-banner ${type}`;
+  document.getElementById("planBannerTitle").textContent = cfg.bannerTitle;
+  document.getElementById("planBannerSub").textContent   = cfg.bannerSub;
+  document.getElementById("planBannerIcon").textContent  = cfg.icon;
+  loadPlanForYear(currentYear);
+}
+
+function selectYear(year) {
+  currentYear = year; planId = null;
+  document.querySelectorAll(".year-tab").forEach(b => b.classList.toggle("active", Number(b.dataset.year) === year));
+  document.getElementById("planHeading").textContent = `ปี ${year} — Study Plan`;
+  document.getElementById("infoYear").textContent    = `ปี ${year}`;
+  loadPlanForYear(year);
+}
+
+/* ══════════════════════════════════════════
+   INIT & LOAD
+══════════════════════════════════════════ */
+async function init() {
+  renderSteps(1);
+  try {
+    const majors  = await fetch(`${API}/courses/${courseId}/majors`).then(r => r.json());
+    major = majors.find(m => String(m.id) === String(majorId));
+    if (!major) throw new Error();
+    const courses = await fetch(`${API}/courses`).then(r => r.json());
+    const course  = courses.find(c => String(c.id) === String(courseId));
+    document.getElementById("majorName").textContent        = major.name_th || "-";
+    document.getElementById("majorEn").textContent          = major.name_en || "";
+    document.getElementById("majorCourseName").textContent  = course?.name_th || `Course #${courseId}`;
+    document.getElementById("breadcrumbMajor").textContent  = major.name_th || "-";
+    document.getElementById("topbarTitle").textContent      = major.name_th || "จัดการแผนการศึกษา";
+    document.title = `${major.name_th} | FMS Admin`;
+    await loadPlanForYear(1);
+  } catch {
+    document.getElementById("semesterList").innerHTML = `<div class="empty-state"><div class="empty-icon">❌</div><p>โหลดข้อมูลไม่สำเร็จ</p></div>`;
+  }
+}
+
+async function loadPlanForYear(yearNo) {
+  const list = document.getElementById("semesterList");
+  list.style.opacity = "0"; list.style.pointerEvents = "none";
+  const key = `${currentPlanType}_${yearNo}`;
+  if (planCache[key]) {
+    planId = planCache[key];
+    try {
+      const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+      renderSemesters(d.semesters || [], yearNo);
+    } catch { showPlanError(); }
+    fadeIn(); return;
+  }
+  planId = null;
+  try {
+    const thaiYear = new Date().getFullYear() + 543;
+    const json = await fetch(`${API}/majors/${majorId}/study-plans?page=1&pageSize=50`).then(r => r.json());
+    const matched = (json.data || []).find(p => Number(p.year_no) === Number(yearNo) && (p.plan_type || "normal") === currentPlanType);
+    if (matched) {
+      planId = matched.id;
+    } else {
+      const cr = await fetch(`${API}/majors/${majorId}/study-plans`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ academic_year: thaiYear, year_no: yearNo, status: "active", plan_type: currentPlanType })
+      }).then(r => r.json());
+      planId = cr?.plan?.id ?? null;
+    }
+    if (!planId) throw new Error();
+    planCache[key] = planId;
+    const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+    renderSemesters(d.semesters || [], yearNo);
+  } catch { showPlanError(); }
+  fadeIn();
+}
+
+function showPlanError() {
+  planId = null;
+  document.getElementById("semesterList").innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><p>ไม่พบแผนการศึกษา</p></div>`;
+}
+function fadeIn() {
+  const list = document.getElementById("semesterList");
+  requestAnimationFrame(() => { list.style.transition = "opacity .18s"; list.style.opacity = "1"; list.style.pointerEvents = ""; });
+}
+async function refreshSemesters() {
+  const list = document.getElementById("semesterList");
+  list.style.transition = "opacity .1s"; list.style.opacity = "0"; list.style.pointerEvents = "none";
+  await new Promise(r => setTimeout(r, 120));
+  const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+  renderSemesters(d.semesters || [], currentYear);
+  fadeIn();
+}
+
+/* ══════════════════════════════════════════
+   RENDER SEMESTERS
+══════════════════════════════════════════ */
+function renderSemesters(semesters, yearNo) {
+  const cfg = PLAN_CONFIG[currentPlanType];
+  const coopTermNo = cfg.coopSemesters[yearNo];
+  const totalCred = semesters.reduce((s, sem) => s + (sem.subjects || []).reduce((c, it) => c + Number(it.credits ?? it.default_credits ?? 0), 0), 0);
+  document.getElementById("infoSemCount").textContent     = `${semesters.length} ภาค`;
+  document.getElementById("infoTotalCredits").textContent = `${totalCred} หน่วยกิต`;
+
+  // step progress
+  const hasSems = semesters.length > 0;
+  const hasSubs = semesters.some(s => (s.subjects || []).length > 0);
+  const hasOut  = semesters.some(s => (s.subjects || []).some(it => it.outcomes_th || it.outcomes_en));
+  renderSteps(hasOut ? 5 : hasSubs ? 5 : hasSems ? 4 : 3);
+
+  if (!semesters.length) {
+    document.getElementById("semesterList").innerHTML = `<div class="empty-state"><div class="empty-icon">${cfg.icon}</div><p>ยังไม่มีภาคเรียนใน ปี ${yearNo} (${cfg.label})<br>กด "เพิ่มภาคเรียน" เพื่อเริ่มต้น</p></div>`;
+    return;
+  }
+
+  document.getElementById("semesterList").innerHTML = semesters.map(sem => {
+    const semCred   = (sem.subjects || []).reduce((s, it) => s + Number(it.credits ?? it.default_credits ?? 0), 0);
+    const semTitle  = sem.title || `Semester ${sem.term_no}`;
+    const isCoopSem = currentPlanType === "coop" && Number(sem.term_no) === coopTermNo;
+
+    const subjectsHtml = (sem.subjects || []).map(it => {
+      const _s = it.subject || it;
+      const code    = it.code    || _s.code    || "";
+      const name_th = it.name_th || _s.name_th || "";
+      const credits = it.credits ?? it.default_credits ?? _s.default_credits ?? "";
+      const catColor = { Core:"#6B3FA0", Elective:"#3B82F6", GE:"#10B981" }[it.category] || "#64748B";
+
+      const key = "k" + it.id;
+      SS[key] = {
+        ssId: it.id, semId: sem.id, semName: semTitle,
+        code, name_th,
+        name_en:  it.name_en  || _s.name_en  || "",
+        credits, hours: it.hour_structure || it.default_hour_structure || _s.default_hour_structure || "",
+        category: it.category || "Core",
+        desc_th:  it.description_th || _s.description_th || "",
+        desc_en:  it.description_en || _s.description_en || "",
+        outcomes: it.outcomes || [],  // array of {th, en, plo, mlo}
+      };
+
+      return `<div class="subject-row">
+        <div class="subject-left">
+          <div class="subject-code">${code}</div>
+          <div class="subject-name">${name_th}</div>
+          <span class="subject-cat" style="background:${catColor}18;color:${catColor}">${it.category || "Core"}</span>
+        </div>
+        <div class="subject-right">
+          <div class="subject-credits">${credits} <span>หน่วยกิต</span></div>
+          <button class="icon-btn edit" data-key="${key}" title="ดูและแก้ไขรายวิชา">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+          </button>
+          <button class="icon-btn del" data-id="${it.id}" title="ลบรายวิชา">
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          </button>
+        </div>
+      </div>`;
+    }).join("");
+
+    const coopBlock = isCoopSem ? `<div class="coop-period-row"><div class="coop-period-icon">🏭</div><div><div class="coop-period-title">ช่วงออกปฏิบัติสหกิจศึกษา</div><div class="coop-period-sub">นักศึกษาออกปฏิบัติงานจริงในสถานประกอบการ ระยะเวลา 1 ภาคการศึกษา (16 สัปดาห์)</div></div></div>` : "";
+    const emptySubs  = !sem.subjects?.length && !isCoopSem ? `<div class="empty-subjects">ยังไม่มีรายวิชาในภาคเรียนนี้</div>` : "";
+    const addRow     = isCoopSem ? "" : `<div class="add-subject-row"><button class="add-subject-btn" data-semid="${sem.id}" data-semname="${semTitle}"><svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg> เพิ่มรายวิชา</button></div>`;
+    const coopTag    = isCoopSem ? `<span class="coop-tag">🏭 สหกิจศึกษา</span>` : "";
+
+    return `<div class="semester-card${isCoopSem ? " is-coop" : ""}" id="sem_${sem.id}">
+      <div class="semester-head">
+        <div class="semester-head-left" onclick="toggleSem(${sem.id})">
+          <div class="semester-name">${semTitle}</div>${coopTag}
+          <span class="credits-badge">${semCred} Credits</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="semester-head-right">
+          <button class="del-sem-btn" data-semid="${sem.id}" data-semname="${semTitle}" title="ลบภาคเรียน">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="semester-body">${coopBlock}${subjectsHtml}${emptySubs}${addRow}</div>
+    </div>`;
+  }).join("");
+}
+
+function toggleSem(id) { document.getElementById("sem_" + id)?.classList.toggle("collapsed"); }
+
+document.getElementById("semesterList").addEventListener("click", e => {
+  const editBtn = e.target.closest(".icon-btn.edit");
+  if (editBtn) { openViewModal(editBtn.dataset.key); return; }
+  const delBtn = e.target.closest(".icon-btn.del");
+  if (delBtn) { deleteSubject(Number(delBtn.dataset.id)); return; }
+  const addBtn = e.target.closest(".add-subject-btn");
+  if (addBtn) { openAddModal(Number(addBtn.dataset.semid), addBtn.dataset.semname); return; }
+  const delSem = e.target.closest(".del-sem-btn");
+  if (delSem) { deleteSemester(Number(delSem.dataset.semid), delSem.dataset.semname); return; }
+});
+
+/* ══════════════════════════════════════════
+   ADD SEMESTER
+══════════════════════════════════════════ */
 document.getElementById("btnAddSemester").addEventListener("click", async () => {
   if (!planId) return toast("ไม่พบแผนการศึกษา", "error");
-  const cfg = PLAN_CONFIG[currentPlanType];
   try {
-    const detail = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
-    const existing = (detail.semesters||[]).map(s => Number(s.term_no));
-    const next = [1,2,3].find(t => !existing.includes(t));
-    if (!next) return toast("มีครบทุกภาคเรียนแล้ว", "error");
-    const termNames = [
-      "",
-      `ปี ${currentYear} - ภาคเรียนที่ 1`,
-      `ปี ${currentYear} - ภาคเรียนที่ 2`,
-      `ปี ${currentYear} - ภาคฤดูร้อน`
-    ];
-    await fetch(`${API}/study-plans/${planId}/semesters`, {
-      method: "POST", headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ term_no: next, title: termNames[next], sort_order: next })
-    });
-    toast(`เพิ่มภาคเรียนสำเร็จ ✓`, "success");
     const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
-    renderSemesters(d.semesters||[], currentYear);
+    const existing = (d.semesters || []).map(s => Number(s.term_no));
+    const next = [1, 2, 3].find(t => !existing.includes(t));
+    if (!next) return toast("มีครบทุกภาคเรียนแล้ว", "error");
+    const names = ["", `ปี ${currentYear} - ภาคเรียนที่ 1`, `ปี ${currentYear} - ภาคเรียนที่ 2`, `ปี ${currentYear} - ภาคฤดูร้อน`];
+    await fetch(`${API}/study-plans/${planId}/semesters`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ term_no: next, title: names[next], sort_order: next })
+    });
+    toast("เพิ่มภาคเรียนสำเร็จ ✓", "success");
+    await refreshSemesters();
   } catch { toast("เกิดข้อผิดพลาด", "error"); }
 });
 
-/* ── Delete semester ── */
 async function deleteSemester(semId, semTitle) {
-  const subjectCount = document.querySelectorAll(`#sem_${semId} .subject-row`).length;
-  const confirmMsg = subjectCount > 0
-    ? `ต้องการลบ "${semTitle}" และรายวิชาทั้งหมด ${subjectCount} วิชาในภาคเรียนนี้ใช่หรือไม่?`
-    : `ต้องการลบ "${semTitle}" ใช่หรือไม่?`;
-  if (!confirm(confirmMsg)) return;
+  const cnt = document.querySelectorAll(`#sem_${semId} .subject-row`).length;
+  const msg = cnt > 0 ? `ต้องการลบ "${semTitle}" และรายวิชาทั้งหมด ${cnt} วิชา?` : `ต้องการลบ "${semTitle}"?`;
+  if (!confirm(msg)) return;
   try {
-    const res = await fetch(`${API}/semesters/${semId}`, { method: "DELETE" });
-    if (!res.ok) throw new Error();
+    const r = await fetch(`${API}/semesters/${semId}`, { method: "DELETE" });
+    if (!r.ok) throw new Error();
     toast(`ลบ "${semTitle}" สำเร็จ`, "success");
-    const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
-    renderSemesters(d.semesters||[], currentYear);
+    await refreshSemesters();
   } catch { toast("ลบภาคเรียนไม่สำเร็จ", "error"); }
 }
 
-/* ── Modal ── */
-function openModal(semId, semName) {
-  modalSemId = semId; modalSemName = semName;
-  ["m_code","m_name_th","m_name_en","m_credits","m_hours","m_desc_th","m_desc_en","m_out_th","m_out_en"]
-    .forEach(id => document.getElementById(id).value = "");
-  document.getElementById("autofillHint").style.display = "none";
-  document.getElementById("modalSemName").textContent = semName;
-  document.getElementById("subjectModal").classList.add("open");
+/* ══════════════════════════════════════════
+   VIEW MODAL
+══════════════════════════════════════════ */
+function openViewModal(key) {
+  const d = SS[key];
+  if (!d) return;
+  currentViewData = d;
+
+  document.getElementById("v_code").textContent       = d.code;
+  document.getElementById("v_name_th").textContent    = d.name_th;
+  document.getElementById("v_semname").textContent    = d.semName;
+  document.getElementById("v_credits_chip").textContent = `${d.credits} หน่วยกิต`;
+  document.getElementById("v_cat_chip").textContent   = { Core:"Core Course", Elective:"Elective", GE:"GE" }[d.category] || d.category;
+
+  if (d.hours) { document.getElementById("v_hours_chip").textContent = d.hours; document.getElementById("v_hours_chip").style.display = ""; }
+  else document.getElementById("v_hours_chip").style.display = "none";
+
+  document.getElementById("v_name_en_block").style.display = d.name_en ? "" : "none";
+  document.getElementById("v_name_en").textContent = d.name_en || "";
+
+  const hasDesc = !!(d.desc_th || d.desc_en);
+  document.getElementById("v_desc_block").style.display = hasDesc ? "" : "none";
+  document.getElementById("v_desc_th").textContent = d.desc_th || "(ไม่มีข้อมูล)";
+  document.getElementById("v_desc_en").textContent = d.desc_en || "(no data)";
+  document.getElementById("v_desc_en").style.display = "none";
+  document.getElementById("v_desc_th").style.display = "";
+  document.getElementById("v_desc_block").querySelectorAll(".vd-tab").forEach((t,i) => t.classList.toggle("active", i===0));
+
+  // outcomes list (items)
+  const hasOut = d.outcomes && d.outcomes.length > 0;
+  document.getElementById("v_out_block").style.display = hasOut ? "" : "none";
+  if (hasOut) {
+    document.getElementById("v_outcomes_list").innerHTML = d.outcomes.map((o, i) => {
+      const ploTags = (o.plo || []).map(c => `<span style="display:inline-block;background:var(--purple-light);color:var(--purple);border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700;margin:2px;">${c}</span>`).join('');
+      const mloTags = (o.mlo || []).map(c => `<span style="display:inline-block;background:var(--blue-bg);color:var(--blue);border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700;margin:2px;">${c}</span>`).join('');
+      return `<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;">
+        <div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:6px;">CLO ${i+1}</div>
+        ${o.th ? `<div style="font-size:13px;color:var(--text);margin-bottom:4px;">${o.th}</div>` : ''}
+        ${o.en ? `<div style="font-size:12.5px;color:var(--text-sub);margin-bottom:8px;">${o.en}</div>` : ''}
+        ${(ploTags || mloTags) ? `<div style="margin-top:6px;">${ploTags}${mloTags}</div>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById("v_empty").style.display = (!hasDesc && !hasOut) ? "" : "none";
+  document.getElementById("viewModal").classList.add("open");
 }
-function closeModal() { document.getElementById("subjectModal").classList.remove("open"); }
-document.getElementById("modalCancel").addEventListener("click", closeModal);
-document.getElementById("modalClose").addEventListener("click",  closeModal);
-document.getElementById("subjectModal").addEventListener("click", e => {
-  if (e.target === document.getElementById("subjectModal")) closeModal();
+
+function vdTab(btn, showId, hideId) {
+  btn.closest(".vd-block").querySelectorAll(".vd-tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById(showId).style.display = "";
+  document.getElementById(hideId).style.display = "none";
+}
+
+document.getElementById("btnViewClose").addEventListener("click",  () => document.getElementById("viewModal").classList.remove("open"));
+document.getElementById("btnViewClose2").addEventListener("click", () => document.getElementById("viewModal").classList.remove("open"));
+document.getElementById("viewModal").addEventListener("click", e => { if (e.target === document.getElementById("viewModal")) document.getElementById("viewModal").classList.remove("open"); });
+
+document.getElementById("btnGoEdit").addEventListener("click", () => {
+  document.getElementById("viewModal").classList.remove("open");
+  openEditModal(currentViewData);
 });
 
+/* ══════════════════════════════════════════
+   FORM MODAL (Add / Edit)
+══════════════════════════════════════════ */
+const BASIC_FIELDS = ["m_code","m_name_th","m_name_en","m_credits","m_hours","m_desc_th","m_desc_en"];
+function clearForm() {
+  BASIC_FIELDS.forEach(id => document.getElementById(id).value = "");
+  document.getElementById("m_category").value = "Core";
+  document.getElementById("autofillHint").style.display = "none";
+  clearOutcomes();
+}
+
+function setMode(mode) {
+  modalMode = mode;
+  const isEdit = mode === "edit";
+  document.getElementById("formTitle").textContent       = isEdit ? "แก้ไขรายวิชา" : "เพิ่มรายวิชา";
+  document.getElementById("formHeader").className        = isEdit ? "modal-header edit-mode" : "modal-header";
+  document.getElementById("formSaveLabel").textContent   = isEdit ? "บันทึกการแก้ไข" : "บันทึกรายวิชา";
+  document.getElementById("formSave").className          = isEdit ? "btn-save edit-mode" : "btn-save";
+  document.getElementById("formSaveIcon").innerHTML      = isEdit
+    ? `<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>`
+    : `<path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>`;
+  document.getElementById("btnBackToView").style.display = isEdit ? "flex" : "none";
+  const codeEl = document.getElementById("m_code");
+  codeEl.readOnly = isEdit;
+  codeEl.style.background = isEdit ? "" : "";
+  codeEl.style.color = ""; codeEl.style.fontWeight = "";
+}
+
+function openAddModal(semId, semName) {
+  modalSemId = semId; editSsId = null;
+  clearForm(); setMode("add");
+  document.getElementById("formSemName").textContent = semName;
+  document.getElementById("subjectModal").classList.add("open");
+}
+
+function openEditModal(d) {
+  modalSemId = d.semId; editSsId = d.ssId;
+  clearForm(); setMode("edit");
+  document.getElementById("formSemName").textContent = d.semName;
+  document.getElementById("m_code").value     = d.code;
+  document.getElementById("m_name_th").value  = d.name_th;
+  document.getElementById("m_name_en").value  = d.name_en;
+  document.getElementById("m_credits").value  = d.credits;
+  document.getElementById("m_hours").value    = d.hours;
+  document.getElementById("m_category").value = d.category || "Core";
+  document.getElementById("m_desc_th").value  = d.desc_th;
+  document.getElementById("m_desc_en").value  = d.desc_en;
+  // load outcomes
+  if (d.outcomes && d.outcomes.length) {
+    d.outcomes.forEach(o => addOutcomeItem(o));
+  }
+  document.getElementById("subjectModal").classList.add("open");
+}
+
+function closeForm() { document.getElementById("subjectModal").classList.remove("open"); editSsId = null; }
+
+document.getElementById("formCancel").addEventListener("click", closeForm);
+document.getElementById("formClose").addEventListener("click",  closeForm);
+document.getElementById("subjectModal").addEventListener("click", e => { if (e.target === document.getElementById("subjectModal")) closeForm(); });
+document.getElementById("btnBackToView").addEventListener("click", () => {
+  closeForm();
+  if (currentViewData) {
+    const key = Object.keys(SS).find(k => SS[k] === currentViewData);
+    if (key) openViewModal(key);
+  }
+});
+
+/* Autofill on code blur */
 document.getElementById("m_code").addEventListener("blur", async () => {
+  if (modalMode === "edit") return;
   const code = document.getElementById("m_code").value.trim();
   if (!code) return;
   try {
@@ -1327,58 +1166,81 @@ document.getElementById("m_code").addEventListener("blur", async () => {
       document.getElementById("m_hours").value   = found.default_hour_structure || "";
       document.getElementById("m_desc_th").value = found.description_th || "";
       document.getElementById("m_desc_en").value = found.description_en || "";
-      document.getElementById("m_out_th").value  = found.outcomes_th || "";
-      document.getElementById("m_out_en").value  = found.outcomes_en || "";
+      // load outcomes from found subject if any
+      if (found.outcomes && found.outcomes.length) {
+        clearOutcomes();
+        found.outcomes.forEach(o => addOutcomeItem(o));
+      }
       document.getElementById("autofillHint").style.display = "block";
     }
   } catch {}
 });
 
-document.getElementById("modalSave").addEventListener("click", async () => {
+/* ── Save ── */
+document.getElementById("formSave").addEventListener("click", async () => {
   const code    = document.getElementById("m_code").value.trim();
   const name_th = document.getElementById("m_name_th").value.trim();
   const credits = Number(document.getElementById("m_credits").value);
   if (!code || !name_th || !credits) return toast("กรุณากรอก รหัสวิชา / ชื่อไทย / หน่วยกิต", "error");
+  if (modalMode === "edit") await doEdit(code, name_th, credits);
+  else await doAdd(code, name_th, credits);
+});
 
+async function doAdd(code, name_th, credits) {
+  const outcomes = collectOutcomes();
   let subject_id = null;
   try {
     const items = await fetch(`${API}/subjects?query=${encodeURIComponent(code)}`).then(r => r.json());
     const found = items.find(it => it.code.toLowerCase() === code.toLowerCase());
     if (found) subject_id = found.id;
   } catch {}
-
-  const payload = { category: document.getElementById("m_category").value, credits, hour_structure: document.getElementById("m_hours").value.trim() || null };
-  if (subject_id) { payload.subject_id = subject_id; }
+  const p = { category: document.getElementById("m_category").value, credits, hour_structure: document.getElementById("m_hours").value.trim() || null, outcomes };
+  if (subject_id) { p.subject_id = subject_id; }
   else {
-    Object.assign(payload, {
-      code, name_th, default_credits: credits,
-      name_en: document.getElementById("m_name_en").value.trim() || null,
-      default_hour_structure: document.getElementById("m_hours").value.trim() || null,
-      description_th: document.getElementById("m_desc_th").value.trim() || null,
-      description_en: document.getElementById("m_desc_en").value.trim() || null,
-      outcomes_th: document.getElementById("m_out_th").value.trim() || null,
-      outcomes_en: document.getElementById("m_out_en").value.trim() || null,
+    Object.assign(p, { code, name_th, default_credits: credits,
+      name_en:                document.getElementById("m_name_en").value.trim() || null,
+      default_hour_structure: document.getElementById("m_hours").value.trim()   || null,
+      description_th:         document.getElementById("m_desc_th").value.trim() || null,
+      description_en:         document.getElementById("m_desc_en").value.trim() || null,
     });
   }
   try {
-    const res = await fetch(`${API}/semesters/${modalSemId}/subjects`, {
-      method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(payload)
-    });
-    if (!res.ok) throw new Error();
+    const r = await fetch(`${API}/semesters/${modalSemId}/subjects`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) });
+    if (!r.ok) throw new Error();
     toast("บันทึกรายวิชาสำเร็จ ✓", "success");
-    closeModal();
-    const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
-    renderSemesters(d.semesters||[], currentYear);
+    closeForm(); await refreshSemesters();
   } catch { toast("บันทึกไม่สำเร็จ", "error"); }
-});
+}
+
+async function doEdit(code, name_th, credits) {
+  if (!editSsId) return toast("ไม่พบ ID รายวิชา", "error");
+  const outcomes = collectOutcomes();
+  const p = {
+    credits, category: document.getElementById("m_category").value,
+    hour_structure:  document.getElementById("m_hours").value.trim()    || null,
+    name_th, name_en: document.getElementById("m_name_en").value.trim() || null,
+    description_th:  document.getElementById("m_desc_th").value.trim()  || null,
+    description_en:  document.getElementById("m_desc_en").value.trim()  || null,
+    outcomes,
+  };
+  for (const method of ["PATCH", "PUT"]) {
+    try {
+      const r = await fetch(`${API}/semester-subjects/${editSsId}`, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) });
+      if (r.ok) {
+        toast("แก้ไขรายวิชาสำเร็จ ✓", "success");
+        closeForm(); currentViewData = null; await refreshSemesters(); return;
+      }
+    } catch {}
+  }
+  toast("แก้ไขไม่สำเร็จ", "error");
+}
 
 async function deleteSubject(ssId) {
   if (!confirm("ต้องการลบรายวิชานี้?")) return;
   try {
     await fetch(`${API}/semester-subjects/${ssId}`, { method: "DELETE" });
     toast("ลบรายวิชาสำเร็จ", "success");
-    const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
-    renderSemesters(d.semesters||[], currentYear);
+    await refreshSemesters();
   } catch { toast("ลบไม่สำเร็จ", "error"); }
 }
 
