@@ -18,6 +18,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:14px;}
 
+/* ── TOPBAR ── */
 .topbar{width:100%;height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;gap:16px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
 .topbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .topbar-logo-icon{width:32px;height:32px;background:var(--purple);border-radius:8px;display:flex;align-items:center;justify-content:center;}
@@ -30,6 +31,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
 .avatar{width:36px;height:36px;border-radius:50%;background:var(--purple-bg);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--purple);cursor:pointer;}
 
+/* ── BUTTONS ── */
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.18s;white-space:nowrap;}
 .btn svg{width:15px;height:15px;fill:currentColor;}
 .btn-purple{background:var(--purple);color:white;box-shadow:0 4px 10px rgba(127,19,236,.2);}
@@ -47,12 +49,14 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .unsaved-dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:pulse 1.2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* ── PAGE ── */
 .page{max-width:100%;padding:32px 40px 80px;}
 .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
 .page-title{font-size:26px;font-weight:900;color:var(--text);}
 .page-subtitle{font-size:14px;color:var(--text-sub);margin-top:4px;max-width:580px;line-height:1.5;}
 .header-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;}
 
+/* ── TABLE ── */
 .table-wrapper{background:var(--white);border-radius:14px;box-shadow:0 2px 12px rgba(127,19,236,.08);overflow:auto;border:1px solid var(--border);}
 .matrix-table{border-collapse:collapse;min-width:100%;font-size:12px;}
 .matrix-table th,.matrix-table td{border:1px solid #ede8f5;white-space:nowrap;}
@@ -61,10 +65,127 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .th-group-mlo{background:#e0f7fa;color:var(--teal);text-align:center;padding:10px 8px;font-weight:700;font-size:12px;}
 .th-col-plo{background:#faf0ff;color:var(--purple);text-align:center;padding:10px 10px;font-weight:700;font-size:11px;min-width:40px;}
 .th-col-mlo{background:#f0fafd;color:var(--teal);text-align:center;padding:10px 8px;font-weight:700;font-size:11px;min-width:38px;}
-.td-label{background:var(--white);position:sticky;left:0;z-index:5;padding:10px 14px;width:240px;min-width:240px;max-width:240px;border-right:2px solid #e0d8f0;white-space:normal;line-height:1.5;overflow:hidden;}
-.td-label .row-group{font-size:10.5px;font-weight:700;color:var(--purple);margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px;word-break:break-word;}
-.td-label .row-title{font-size:11.5px;font-weight:600;color:var(--text);margin-bottom:2px;word-break:break-word;white-space:normal;}
-.td-label .row-desc{font-size:10.5px;color:var(--text-sub);line-height:1.4;white-space:normal;word-break:break-word;}
+
+/* ── LABEL CELL ── */
+.td-label{
+  background:var(--white);
+  position:sticky;left:0;z-index:5;
+  padding:10px 14px;
+  width:240px;min-width:240px;max-width:240px;
+  border-right:2px solid #e0d8f0;
+  white-space:normal;line-height:1.5;
+}
+.row-group{
+  font-size:10.5px;font-weight:700;color:var(--purple);
+  margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;
+  word-break:break-word;
+}
+
+/* row-title: clickable, shows underline hint when has desc */
+.row-title{
+  font-size:11.5px;font-weight:600;color:var(--text);
+  word-break:break-word;white-space:normal;
+  display:inline-flex;align-items:flex-start;gap:5px;
+  line-height:1.45;
+}
+.row-title.has-desc{
+  cursor:pointer;
+}
+.row-title.has-desc:hover{
+  color:var(--purple);
+}
+.row-title.has-desc .title-text{
+  border-bottom:1.5px dashed #c4a8ff;
+  padding-bottom:1px;
+}
+.row-title.has-desc:hover .title-text{
+  border-bottom-color:var(--purple);
+}
+
+/* info badge — shown only when desc exists */
+.info-badge{
+  display:inline-flex;
+  align-items:center;justify-content:center;
+  width:15px;height:15px;
+  border-radius:50%;
+  background:var(--purple-bg);
+  color:var(--purple);
+  font-size:9px;font-weight:800;
+  font-family:'Lexend',sans-serif;
+  flex-shrink:0;
+  margin-top:1px;
+  transition:background .15s,color .15s;
+  font-style:normal;
+  line-height:1;
+  user-select:none;
+}
+.row-title.has-desc:hover .info-badge{
+  background:var(--purple);
+  color:white;
+}
+
+/* desc row — hidden by default */
+.row-desc{ display:none; }
+
+/* ── POPUP ── */
+.desc-popup{
+  position:fixed;
+  z-index:9999;
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(6px) scale(.97);
+  transition:opacity .2s ease, transform .2s ease;
+  max-width:340px;min-width:220px;
+}
+.desc-popup.visible{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  pointer-events:none;
+}
+.desc-popup-inner{
+  background:#1e0f38;
+  color:#f0e8ff;
+  border-radius:14px;
+  padding:14px 18px;
+  box-shadow:0 12px 40px rgba(0,0,0,.35), 0 2px 8px rgba(127,19,236,.3);
+  border:1px solid rgba(196,168,255,.18);
+}
+.desc-popup-group{
+  font-size:10px;font-weight:700;
+  color:#a07cdd;letter-spacing:.6px;
+  text-transform:uppercase;margin-bottom:6px;
+  font-family:'Lexend',sans-serif;
+}
+.desc-popup-title{
+  font-size:13px;font-weight:700;
+  color:#e8d8ff;
+  margin-bottom:10px;line-height:1.4;
+}
+.desc-popup-divider{
+  height:1px;background:rgba(196,168,255,.2);margin-bottom:10px;
+}
+.desc-popup-body{
+  font-size:12.5px;line-height:1.7;
+  color:#cbb8f0;
+  white-space:normal;word-break:break-word;
+}
+/* arrow */
+.desc-popup-arrow{
+  width:0;height:0;
+  position:absolute;
+  border-left:7px solid transparent;
+  border-right:7px solid transparent;
+}
+.desc-popup-arrow.up{
+  border-bottom:7px solid #1e0f38;
+  top:-7px;left:20px;
+}
+.desc-popup-arrow.down{
+  border-top:7px solid #1e0f38;
+  bottom:-7px;left:20px;
+}
+
+/* ── CHECK ── */
 .td-check{text-align:center;padding:0;vertical-align:middle;cursor:pointer;transition:background .12s;}
 .td-check:hover{background:var(--purple-light);}
 .check-circle{width:22px;height:22px;border-radius:50%;border:2px solid #d1c4e9;margin:0 auto;transition:all .15s;display:flex;align-items:center;justify-content:center;}
@@ -76,37 +197,34 @@ tbody tr:nth-child(even) .td-label{background:#fdfbff;}
 tbody tr:nth-child(even){background:#fdfbff;}
 tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
 
+/* ── STATS / PAGINATION ── */
 .stats-bar{display:flex;align-items:center;gap:20px;padding:12px 20px;border-top:1px solid var(--border);background:#faf7ff;font-size:13px;}
 .stat-pill{display:flex;align-items:center;gap:6px;font-weight:600;}
 .stat-dot{width:8px;height:8px;border-radius:50%;}
 .stat-dot.plo{background:var(--purple);}
 .stat-dot.mlo{background:var(--teal);}
-
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px;}
 .info-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:16px 18px;display:flex;gap:12px;align-items:flex-start;}
 .info-card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .info-card-icon svg{width:18px;height:18px;}
-.info-card-icon.blue{background:#eff6ff;}
-.info-card-icon.blue svg{fill:#3b82f6;}
-.info-card-icon.amber{background:#fffbeb;}
-.info-card-icon.amber svg{fill:var(--amber);}
-.info-card-icon.green{background:#f0fdf4;}
-.info-card-icon.green svg{fill:var(--green);}
+.info-card-icon.blue{background:#eff6ff;} .info-card-icon.blue svg{fill:#3b82f6;}
+.info-card-icon.amber{background:#fffbeb;} .info-card-icon.amber svg{fill:var(--amber);}
+.info-card-icon.green{background:#f0fdf4;} .info-card-icon.green svg{fill:var(--green);}
 .info-card strong{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
 .info-card p{font-size:12px;color:var(--text-sub);line-height:1.5;}
-
 .pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 20px;border-top:1px solid var(--border);font-size:13px;color:var(--text-sub);}
 .page-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:white;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:.15s;color:var(--text-sub);}
 .page-btn:hover{background:var(--purple-light);color:var(--purple);border-color:var(--purple);}
 .page-btn.active{background:var(--purple);color:white;border-color:var(--purple);}
 .page-btn:disabled{opacity:.4;cursor:not-allowed;}
 
+/* ── TOAST ── */
 .toast{position:fixed;bottom:28px;right:28px;background:#1a1a2e;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
 @media print {
-  .topbar,.header-actions,.info-grid,.pagination,.unsaved-badge{display:none!important;}
+  .topbar,.header-actions,.info-grid,.pagination,.unsaved-badge,.desc-popup{display:none!important;}
   body{background:white;}
   .page{padding:10px;}
   .table-wrapper{box-shadow:none;border:1px solid #ccc;overflow:visible;}
@@ -141,7 +259,7 @@ tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
   <div class="page-header">
     <div>
       <div class="page-title">ตารางวิเคราะห์ความสอดคล้อง (Alignment Matrix)</div>
-      <div class="page-subtitle">PLOs & MLOs กับวิสัยทัศน์ พันธกิจ คุณลักษณะของบัณฑิต และความต้องการของผู้มีส่วนได้ส่วนเสีย</div>
+      <div class="page-subtitle">PLOs &amp; MLOs กับวิสัยทัศน์ พันธกิจ คุณลักษณะของบัณฑิต และความต้องการของผู้มีส่วนได้ส่วนเสีย</div>
     </div>
     <div class="header-actions">
       <button class="btn btn-outline" onclick="downloadTemplate()">
@@ -182,7 +300,7 @@ tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
   <div class="info-grid">
     <div class="info-card">
       <div class="info-card-icon blue"><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg></div>
-      <div><strong>วิธีใช้งาน</strong><p>คลิกที่ช่องตัดกันเพื่อเลือกความสอดคล้อง แล้วกด "บันทึก" เพื่อเก็บข้อมูล</p></div>
+      <div><strong>วิธีใช้งาน</strong><p>คลิกที่ช่องตัดกันเพื่อเลือกความสอดคล้อง · คลิกชื่อรายการ <i style="font-style:normal;background:#ede7f3;color:#7F13EC;border-radius:50%;width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;font-family:Lexend,sans-serif;">i</i> เพื่อดูคำอธิบาย</p></div>
     </div>
     <div class="info-card">
       <div class="info-card-icon amber"><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div>
@@ -195,15 +313,29 @@ tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
   </div>
 </main>
 
+<!-- ══════════ DESCRIPTION POPUP ══════════ -->
+<div class="desc-popup" id="descPopup" role="tooltip">
+  <div class="desc-popup-arrow" id="descArrow"></div>
+  <div class="desc-popup-inner">
+    <div class="desc-popup-group"  id="descGroup"></div>
+    <div class="desc-popup-title"  id="descTitle"></div>
+    <div class="desc-popup-divider"></div>
+    <div class="desc-popup-body"   id="descBody"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
 
 <script>
+/* ═══════════════════════════════════════
+   DATA
+═══════════════════════════════════════ */
 const STORAGE_KEY = 'fms_alignment_matrix_v2';
 const PLO_COLS = ['1','2','3','4','5','6','7','8','9'];
 const MLO_COLS = ['1.1','1.2','1.3','2.1','2.2','2.3','3.1','3.2','4.1','4.2','5.1','5.2','6.1','6.2'];
 const ALL_COLS = [...PLO_COLS.map(c=>'PLO '+c),...MLO_COLS.map(c=>'MLO '+c)];
-
 const EMPTY = Array(23).fill(0);
+
 const DEFAULT_ROWS = [
   {group:'Vision (ระดับมหาวิทยาลัย)',title:'Vision (ระดับมหาวิทยาลัย)',desc:'มหาวิทยาลัยแห่งคุณค่าเพื่อขับเคลื่อนการพัฒนาที่ยั่งยืนระดับแนวหน้าของโลก',checks:[...EMPTY]},
   {group:'Vision (ระดับคณะ)',title:'Vision (ระดับคณะ)',desc:'สถาบันการศึกษาชั้นนำระดับประเทศด้านการจัดการ',checks:[...EMPTY]},
@@ -252,18 +384,20 @@ let hasUnsaved = false;
 const PAGE_SIZE = 12;
 let currentPage = 1;
 
-function markUnsaved() { hasUnsaved=true; document.getElementById('unsavedBadge').classList.add('show'); }
-function markSaved()   { hasUnsaved=false; document.getElementById('unsavedBadge').classList.remove('show'); }
-
-function saveData() {
+function markUnsaved(){ hasUnsaved=true; document.getElementById('unsavedBadge').classList.add('show'); }
+function markSaved()  { hasUnsaved=false; document.getElementById('unsavedBadge').classList.remove('show'); }
+function saveData(){
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(rows)); markSaved(); showToast('✓ บันทึกข้อมูลสำเร็จ'); }
   catch { showToast('❌ บันทึกไม่สำเร็จ','#ef4444'); }
 }
 
-function totalPages() { return Math.ceil(rows.length/PAGE_SIZE); }
-function pageRows()   { const s=(currentPage-1)*PAGE_SIZE; return rows.slice(s,s+PAGE_SIZE); }
+function totalPages(){ return Math.ceil(rows.length/PAGE_SIZE); }
+function pageRows()  { const s=(currentPage-1)*PAGE_SIZE; return rows.slice(s,s+PAGE_SIZE); }
 
-function renderHead() {
+/* ═══════════════════════════════════════
+   RENDER
+═══════════════════════════════════════ */
+function renderHead(){
   document.getElementById('matrixHead').innerHTML=`
     <tr>
       <th class="th-empty" rowspan="2">ผู้มีส่วนได้ส่วนเสียของหลักสูตร</th>
@@ -276,19 +410,30 @@ function renderHead() {
     </tr>`;
 }
 
-function renderBody() {
-  const pr=pageRows();
-  const offset=(currentPage-1)*PAGE_SIZE;
-  document.getElementById('matrixBody').innerHTML=pr.map((row,ri)=>{
-    const gi=offset+ri;
+function renderBody(){
+  const pr = pageRows();
+  const offset = (currentPage-1)*PAGE_SIZE;
+  document.getElementById('matrixBody').innerHTML = pr.map((row,ri)=>{
+    const gi = offset+ri;
+    const hasDesc = !!(row.desc && row.desc.trim());
+
+    // title cell — clickable only if has desc
+    const titleHtml = hasDesc
+      ? `<div class="row-title has-desc" data-gi="${gi}" onclick="togglePopup(event,${gi})">
+           <span class="title-text">${row.title}</span>
+           <i class="info-badge">i</i>
+         </div>`
+      : `<div class="row-title">
+           <span class="title-text">${row.title}</span>
+         </div>`;
+
     return `<tr>
       <td class="td-label">
         <div class="row-group">${row.group}</div>
-        <div class="row-title">${row.title}</div>
-        ${row.desc?`<div class="row-desc">${row.desc}</div>`:''}
+        ${titleHtml}
       </td>
       ${row.checks.map((v,ci)=>{
-        const isMlo=ci>=PLO_COLS.length;
+        const isMlo = ci >= PLO_COLS.length;
         return `<td class="td-check${isMlo?' mlo-col':''}" onclick="toggleCheck(${gi},${ci})" title="${ALL_COLS[ci]}">
           <div class="check-circle${v?' checked':''}"></div>
         </td>`;
@@ -297,63 +442,138 @@ function renderBody() {
   }).join('');
 }
 
-function renderStats() {
-  const ploCovered=PLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[ci])).length;
-  const mloCovered=MLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[PLO_COLS.length+ci])).length;
+function renderStats(){
+  const ploCovered = PLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[ci])).length;
+  const mloCovered = MLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[PLO_COLS.length+ci])).length;
   document.getElementById('statsBar').innerHTML=`
     <span class="stat-pill"><span class="stat-dot plo"></span>PLOs Covered: <b>${ploCovered}/${PLO_COLS.length}</b></span>
     <span class="stat-pill"><span class="stat-dot mlo"></span>MLOs Covered: <b>${mloCovered}/${MLO_COLS.length}</b></span>
     <span style="margin-left:auto;color:var(--text-sub)">แสดง ${Math.min((currentPage-1)*PAGE_SIZE+1,rows.length)}–${Math.min(currentPage*PAGE_SIZE,rows.length)} จาก ${rows.length} รายการ</span>`;
 }
 
-function renderPagination() {
-  const tp=totalPages();
-  const p=document.getElementById('pagination');
+function renderPagination(){
+  const tp = totalPages();
+  const p  = document.getElementById('pagination');
   if(tp<=1){p.innerHTML='';return;}
-  let h=`<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  let h = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
   for(let i=1;i<=tp;i++) h+=`<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
-  h+=`<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}>›</button>`;
+  h += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}>›</button>`;
   p.innerHTML=h;
 }
 
-function goPage(p){currentPage=Math.max(1,Math.min(p,totalPages()));renderBody();renderStats();renderPagination();}
-function render(){renderHead();renderBody();renderStats();renderPagination();}
-function toggleCheck(ri,ci){rows[ri].checks[ci]=rows[ri].checks[ci]?0:1;markUnsaved();renderBody();renderStats();}
+function goPage(p){ currentPage=Math.max(1,Math.min(p,totalPages())); closePopup(); renderBody(); renderStats(); renderPagination(); }
+function render()  { renderHead(); renderBody(); renderStats(); renderPagination(); }
+function toggleCheck(ri,ci){ rows[ri].checks[ci]=rows[ri].checks[ci]?0:1; markUnsaved(); renderBody(); renderStats(); }
 
-function exportExcel() {
-  const header=['กลุ่ม/หมวดหมู่','ชื่อรายการ','คำอธิบาย',
-    ...PLO_COLS.map(c=>'PLO '+c),
-    ...MLO_COLS.map(c=>'MLO '+c)
-  ];
+/* ═══════════════════════════════════════
+   POPUP LOGIC
+═══════════════════════════════════════ */
+let _activeGi = -1;
+
+function togglePopup(e, gi){
+  e.stopPropagation();
+  if(_activeGi === gi){ closePopup(); return; }
+  openPopup(e, gi);
+}
+
+function openPopup(e, gi){
+  const row    = rows[gi];
+  const popup  = document.getElementById('descPopup');
+  const arrow  = document.getElementById('descArrow');
+
+  document.getElementById('descGroup').textContent = row.group;
+  document.getElementById('descTitle').textContent = row.title;
+  document.getElementById('descBody').textContent  = row.desc;
+
+  // temporarily place off-screen to measure size
+  popup.style.visibility = 'hidden';
+  popup.style.left = '-9999px';
+  popup.style.top  = '-9999px';
+  popup.classList.add('visible');
+
+  // position after paint
+  requestAnimationFrame(()=>{
+    const PW = popup.offsetWidth  || 300;
+    const PH = popup.offsetHeight || 120;
+    const GAP = 8;
+    const MARGIN = 12;
+
+    // get trigger element rect (the .row-title div)
+    const trigger = e.currentTarget || e.target;
+    const rect = trigger.getBoundingClientRect ? trigger.getBoundingClientRect() : { left: e.clientX, top: e.clientY, width: 0, height: 20 };
+
+    let x = rect.left;
+    let y = rect.bottom + GAP;
+    let arrowClass = 'up';
+
+    // flip above if not enough room below
+    if(y + PH + MARGIN > window.innerHeight){
+      y = rect.top - PH - GAP;
+      arrowClass = 'down';
+    }
+    // clamp horizontally
+    if(x + PW + MARGIN > window.innerWidth) x = window.innerWidth - PW - MARGIN;
+    if(x < MARGIN) x = MARGIN;
+
+    // arrow position relative to popup
+    const arrowLeft = Math.min(Math.max(rect.left - x + rect.width/2 - 7, 10), PW - 24);
+
+    arrow.className = `desc-popup-arrow ${arrowClass}`;
+    arrow.style.left = arrowLeft + 'px';
+    if(arrowClass === 'down') arrow.style.top = '';
+    else arrow.style.top = '';
+
+    popup.style.left       = x + 'px';
+    popup.style.top        = (window.scrollY + y) + 'px';
+    popup.style.visibility = 'visible';
+
+    _activeGi = gi;
+  });
+}
+
+function closePopup(){
+  _activeGi = -1;
+  const popup = document.getElementById('descPopup');
+  popup.classList.remove('visible');
+}
+
+// close on outside click
+document.addEventListener('click', e => {
+  if(_activeGi < 0) return;
+  if(!e.target.closest('.row-title')) closePopup();
+});
+// close on scroll
+window.addEventListener('scroll', closePopup, {passive:true});
+document.querySelector('.table-wrapper')?.addEventListener('scroll', closePopup, {passive:true});
+// close on page change handled in goPage()
+
+/* ═══════════════════════════════════════
+   EXCEL
+═══════════════════════════════════════ */
+function exportExcel(){
+  const header=['กลุ่ม/หมวดหมู่','ชื่อรายการ','คำอธิบาย',...PLO_COLS.map(c=>'PLO '+c),...MLO_COLS.map(c=>'MLO '+c)];
   const body=rows.map(r=>[r.group,r.title,r.desc,...r.checks]);
   const ws=XLSX.utils.aoa_to_sheet([header,...body]);
   ws['!cols']=[{wch:30},{wch:35},{wch:40},...ALL_COLS.map(()=>({wch:7}))];
-  const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,'Alignment Matrix');
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Alignment Matrix');
   XLSX.writeFile(wb,`alignment_matrix_${new Date().toISOString().slice(0,10)}.xlsx`);
   showToast('✓ Export Excel สำเร็จ');
 }
-
-function exportPDF() { window.print(); }
-
-function downloadTemplate() {
-  const header=['กลุ่ม/หมวดหมู่','ชื่อรายการ','คำอธิบาย',
-    ...PLO_COLS.map(c=>'PLO '+c),...MLO_COLS.map(c=>'MLO '+c)];
-  const example=['Vision (ระดับมหาวิทยาลัย)','Vision ตัวอย่าง','คำอธิบาย',
-    ...PLO_COLS.map(()=>'1'),...MLO_COLS.map((_,i)=>i<6?'1':'0')];
+function exportPDF(){ window.print(); }
+function downloadTemplate(){
+  const header=['กลุ่ม/หมวดหมู่','ชื่อรายการ','คำอธิบาย',...PLO_COLS.map(c=>'PLO '+c),...MLO_COLS.map(c=>'MLO '+c)];
+  const example=['Vision (ระดับมหาวิทยาลัย)','Vision ตัวอย่าง','คำอธิบาย',...PLO_COLS.map(()=>'1'),...MLO_COLS.map((_,i)=>i<6?'1':'0')];
   const ws=XLSX.utils.aoa_to_sheet([header,example]);
   ws['!cols']=[{wch:30},{wch:35},{wch:40},...ALL_COLS.map(()=>({wch:7}))];
-  const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,'Alignment Matrix');
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Alignment Matrix');
   XLSX.writeFile(wb,'alignment_matrix_template.xlsx');
   showToast('✓ ดาวน์โหลด Template สำเร็จ');
 }
-
-function importExcel(e) {
+function importExcel(e){
   const file=e.target.files[0]; if(!file) return;
   const reader=new FileReader();
   reader.onload=ev=>{
-    try {
+    try{
       const wb=XLSX.read(ev.target.result,{type:'binary'});
       const ws=wb.Sheets[wb.SheetNames[0]];
       const json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
@@ -361,24 +581,19 @@ function importExcel(e) {
       const imported=[];
       for(let i=1;i<json.length;i++){
         const row=json[i];
-        const group=String(row[0]||'').trim();
-        const title=String(row[1]||'').trim();
-        const desc=String(row[2]||'').trim();
+        const group=String(row[0]||'').trim(), title=String(row[1]||'').trim(), desc=String(row[2]||'').trim();
         const checks=[];
         for(let c=3;c<3+PLO_COLS.length+MLO_COLS.length;c++){
           const v=String(row[c]||'').trim();
           checks.push(v==='1'||v==='✓'||v.toLowerCase()==='true'||v.toLowerCase()==='x'?1:0);
         }
-        while(checks.length<PLO_COLS.length+MLO_COLS.length)checks.push(0);
-        if(group||title)imported.push({group,title,desc,checks});
+        while(checks.length<PLO_COLS.length+MLO_COLS.length) checks.push(0);
+        if(group||title) imported.push({group,title,desc,checks});
       }
       if(!imported.length){showToast('⚠️ ไม่พบข้อมูลที่ถูกต้อง','#f59e0b');return;}
-      rows=[...rows,...imported];
-      markUnsaved();
-      currentPage=1;
-      render();
+      rows=[...rows,...imported]; markUnsaved(); currentPage=1; render();
       showToast(`✓ นำเข้า ${imported.length} รายการสำเร็จ`);
-    } catch{showToast('❌ ไม่สามารถอ่านไฟล์ได้','#ef4444');}
+    }catch{showToast('❌ ไม่สามารถอ่านไฟล์ได้','#ef4444');}
   };
   reader.readAsBinaryString(file);
   e.target.value='';
@@ -388,8 +603,8 @@ let _tt;
 function showToast(msg,color='#22c55e'){
   document.getElementById('toastDot').style.background=color;
   document.getElementById('toastMsg').textContent=msg;
-  const t=document.getElementById('toast');t.classList.add('show');
-  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);
+  const t=document.getElementById('toast'); t.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
 render();

@@ -317,7 +317,7 @@ async function uploadImage(fileInput, hiddenInput, previewImg) {
     const data = await res.json();
     if (!res.ok) { msg.style.color = "red"; msg.textContent = data.message || "อัปโหลดไม่สำเร็จ"; return; }
     hiddenInput.value = data.url;
-    previewImg.src = BASE_URL + data.url;
+    previewimg.src = data.url.startsWith("http") ? data.url : BASE_URL + data.url;
     previewImg.style.display = "block";
     msg.style.color = "green";
     msg.textContent = "อัปโหลดสำเร็จ";

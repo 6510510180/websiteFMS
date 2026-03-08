@@ -558,17 +558,17 @@
         const infoPlaceholder = document.getElementById("c_info_placeholder");
 
         if (c.hero_image) {
-          heroImg.src = BASE_URL + c.hero_image;
+          heroImg.src = c.hero_image?.startsWith("http") ? c.hero_image : BASE_URL + c.hero_image;
           heroImg.style.display = "block";
           heroPlaceholder.style.display = "none";
         }
         if (c.bg_image) {
-          bgImg.src = BASE_URL + c.bg_image;
+          bgImg.src   = c.bg_image?.startsWith("http") ? c.bg_image : BASE_URL + c.bg_image;
           bgImg.style.display = "block";
           bgPlaceholder.style.display = "none";
         }
         if (c.info_image) {
-          infoImg.src = BASE_URL + c.info_image;
+          infoImg.src = c.info_image?.startsWith("http") ? c.info_image : BASE_URL + c.info_image;
           infoImg.style.display = "block";
           infoPlaceholder.style.display = "none";
         }

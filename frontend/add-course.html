@@ -433,7 +433,7 @@ async function uploadImg(fileInputId, hiddenId, previewWrapId, wrapId, progId) {
     document.getElementById(hiddenId).value = data.url;
     const wrap = document.getElementById(previewWrapId);
     const img = wrap.querySelector('img');
-    img.src = BASE_URL + data.url;
+    img.src = data.url.startsWith("http") ? data.url : BASE_URL + data.url;
     wrap.style.display = 'block';
     document.getElementById(wrapId).classList.add('has-image');
 

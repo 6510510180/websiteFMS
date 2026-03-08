@@ -565,11 +565,11 @@ async function appendNewCourses() {
       card.dataset.courseId = course.id;
 
       // รูปภาพ
-      const imgHTML = course.hero_image
-        ? `<img src="${BASE_URL}${course.hero_image}" alt="${course.name_th}" class="course-img">`
-        : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e9d8fd;color:#9b51e0;font-size:32px;">
-             <i class="fa-solid fa-graduation-cap"></i>
-           </div>`;
+     const imgHTML = course.hero_image
+  ? `<img src="${course.hero_image.startsWith("http") ? course.hero_image : BASE_URL + course.hero_image}" alt="${course.name_th}" class="course-img">`
+  : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e9d8fd;color:#9b51e0;font-size:32px;">
+       <i class="fa-solid fa-graduation-cap"></i>
+     </div>`;
 
       // ชื่อ + ปี
       const yearLine = course.student_range

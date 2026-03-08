@@ -6,117 +6,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
   <style>
     :root {
-      --purple: #7c3aed;
-      --purple-light: #ede9fe;
-      --purple-mid: #c4b5fd;
-      --text: #1e1b2e;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --white: #ffffff;
+      --purple: #7c3aed; --purple-light: #ede9fe; --purple-mid: #c4b5fd;
+      --text: #1e1b2e; --muted: #6b7280; --border: #e5e7eb; --white: #ffffff;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Sarabun', sans-serif; background: #fff; color: var(--text); }
-
-    /* ── NAVBAR ── */
-    .navbar {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 5%; background: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
-      position: sticky; top: 0; z-index: 100;
-    }
+    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; }
     .navbar .logo img { height: 40px; }
     .navbar .logo-text { font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 18px; color: var(--purple); }
     .navbar ul { display: flex; gap: 22px; list-style: none; }
     .navbar a { font-size: 14px; color: #555; text-decoration: none; transition: color .2s; }
     .navbar a:hover, .navbar a.active { color: var(--purple); font-weight: 600; }
     .nav-right { display: flex; align-items: center; gap: 15px; color: #666; cursor: pointer; }
-
-    /* ── HERO ── */
-    .hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 420px;
-      align-items: center;
-      padding: 52px 6%;
-      gap: 48px;
-      background: #f9f8ff;
-    }
-    .hero-left {
-      display: flex; flex-direction: column; justify-content: center;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--purple-light); color: var(--purple);
-      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
-      padding: 4px 14px; border-radius: 99px; margin-bottom: 20px;
-      width: fit-content; text-transform: uppercase;
-    }
-    .hero-badge::before {
-      content: ''; width: 6px; height: 6px;
-      background: var(--purple); border-radius: 50%;
-    }
-    .hero-title {
-      font-family: 'Prompt', sans-serif;
-      font-size: clamp(28px, 3.8vw, 52px);
-      font-weight: 800; line-height: 1.15;
-      color: var(--text); margin-bottom: 20px;
-    }
+    .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 420px; align-items: center; padding: 52px 6%; gap: 48px; background: #f9f8ff; }
+    .hero-left { display: flex; flex-direction: column; justify-content: center; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--purple-light); color: var(--purple); font-size: 11px; font-weight: 700; letter-spacing: 0.8px; padding: 4px 14px; border-radius: 99px; margin-bottom: 20px; width: fit-content; text-transform: uppercase; }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--purple); border-radius: 50%; }
+    .hero-title { font-family: 'Prompt', sans-serif; font-size: clamp(28px, 3.8vw, 52px); font-weight: 800; line-height: 1.15; color: var(--text); margin-bottom: 20px; }
     .hero-title .accent { color: var(--purple); display: block; }
     .hero-meta { font-size: 14px; line-height: 1.9; color: var(--muted); max-width: 420px; }
     .hero-meta span { display: block; }
-
-    /* ── HERO RIGHT: floating card style ── */
-    .hero-right {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .hero-img-wrap {
-      position: relative;
-      width: 100%;
-      max-width: 560px;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 24px 64px rgba(124, 58, 237, 0.18), 0 8px 24px rgba(0,0,0,0.12);
-      aspect-ratio: 4/3;
-      background: linear-gradient(135deg, #e9d8fd, #ddd6fe);
-    }
-    .hero-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-    }
-    .hero-img-wrap .no-img {
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 80px; color: #a78bfa;
-    }
-    /* decorative blur blobs behind image */
-    .hero-right::before {
-      content: '';
-      position: absolute;
-      width: 340px; height: 340px;
-      background: radial-gradient(circle, rgba(167,139,250,0.35), transparent 70%);
-      border-radius: 50%;
-      top: -40px; right: -40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .hero-right {
-      position: relative;
-    }
-    .hero-img-wrap {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── STATS BAR ── */
+    .hero-right { display: flex; align-items: center; justify-content: center; position: relative; }
+    .hero-right::before { content: ''; position: absolute; width: 340px; height: 340px; background: radial-gradient(circle, rgba(167,139,250,0.35), transparent 70%); border-radius: 50%; top: -40px; right: -40px; pointer-events: none; z-index: 0; }
+    .hero-img-wrap { position: relative; z-index: 1; width: 100%; max-width: 560px; border-radius: 20px; overflow: hidden; box-shadow: 0 24px 64px rgba(124,58,237,0.18), 0 8px 24px rgba(0,0,0,0.12); aspect-ratio: 4/3; background: linear-gradient(135deg, #e9d8fd, #ddd6fe); }
+    .hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+    .hero-img-wrap .no-img { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px; color: #a78bfa; }
     .stats-bar { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: #fff; }
     .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); }
     .stat-item { padding: 20px 24px; border-right: 1px solid var(--border); }
@@ -124,105 +40,28 @@
     .stat-label { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; }
     .stat-value { font-family: 'Prompt', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.4; }
     .stat-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
-
-    /* ── MAJORS SECTION with bg_image background ── */
-    .section-majors {
-      position: relative;
-      padding: 64px 6%;
-      overflow: hidden;
-    }
-    /* พื้นหลังที่ใส่ bg_image จาก API */
-    .section-majors-bg {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      z-index: 0;
-    }
-    /* overlay สีม่วงทับภาพ ให้อ่านเนื้อหาได้ */
-    .section-majors-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        135deg,
-        rgba(124, 58, 237, 0.82) 0%,
-        rgba(109, 40, 217, 0.88) 50%,
-        rgba(79, 30, 170, 0.92) 100%
-      );
-    }
-    /* fallback ถ้าไม่มีรูป */
-    .section-majors-bg.no-bg {
-      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #4f1ea0 100%);
-    }
+    .section-majors { position: relative; padding: 64px 6%; overflow: hidden; }
+    .section-majors-bg { position: absolute; inset: 0; background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 0; }
+    .section-majors-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(124,58,237,0.82) 0%, rgba(109,40,217,0.88) 50%, rgba(79,30,170,0.92) 100%); }
+    .section-majors-bg.no-bg { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #4f1ea0 100%); }
     .section-majors > * { position: relative; z-index: 1; }
-
-    .section-majors .section-title {
-      font-family: 'Prompt', sans-serif;
-      font-size: 22px; font-weight: 700;
-      text-align: center; margin-bottom: 32px;
-      color: #fff;
-    }
+    .section-majors .section-title { font-family: 'Prompt', sans-serif; font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 32px; color: #fff; }
     .majors-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 1200px; margin: 0 auto; }
-    .major-card {
-      border-radius: 16px; overflow: hidden;
-      border: 1.5px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(8px);
-      transition: transform .2s, box-shadow .2s, border-color .2s;
-      display: flex; flex-direction: column;
-      text-decoration: none; color: inherit;
-    }
-    .major-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 48px rgba(0,0,0,0.25);
-      border-color: rgba(255,255,255,0.5);
-    }
-
-    /* MAJOR THUMB */
-    .major-thumb {
-      height: 160px;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #ede9fe, #ddd6fe);
-      flex-shrink: 0;
-    }
-    .major-thumb img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: center;
-      display: block;
-      transition: transform .3s ease;
-    }
+    .major-card { border-radius: 16px; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); transition: transform .2s, box-shadow .2s, border-color .2s; display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+    .major-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.25); border-color: rgba(255,255,255,0.5); }
+    .major-thumb { height: 160px; position: relative; overflow: hidden; background: linear-gradient(135deg, #ede9fe, #ddd6fe); flex-shrink: 0; }
+    .major-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform .3s ease; }
     .major-card:hover .major-thumb img { transform: scale(1.05); }
-    .major-thumb .no-img {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .major-thumb::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.18));
-      pointer-events: none; z-index: 1;
-    }
-    .major-icon {
-      position: absolute; top: 10px; left: 10px;
-      background: rgba(124,58,237,0.85); color: #fff;
-      width: 30px; height: 30px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; z-index: 2;
-    }
+    .major-thumb .no-img { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .major-thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.18)); pointer-events: none; z-index: 1; }
+    .major-icon { position: absolute; top: 10px; left: 10px; background: rgba(124,58,237,0.85); color: #fff; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; z-index: 2; }
     .major-body { padding: 14px 16px; flex: 1; }
     .major-name { font-size: 13px; font-weight: 700; color: var(--purple); line-height: 1.5; margin-bottom: 7px; }
     .major-desc { font-size: 12px; color: var(--muted); line-height: 1.65; }
     .major-footer { padding: 10px 16px 12px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
     .major-link { font-size: 12px; font-weight: 600; color: var(--purple); display: flex; align-items: center; gap: 5px; }
-
     .empty-state { grid-column: 1/-1; text-align: center; padding: 48px; color: rgba(255,255,255,0.7); }
     .empty-state i { font-size: 36px; margin-bottom: 12px; display: block; color: rgba(255,255,255,0.4); }
-
-    /* ── TUITION ── */
     .tuition-wrap { padding: 56px 6%; max-width: 1200px; margin: 0 auto; }
     .tuition-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 32px; max-width: 520px; }
     .tuition-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
@@ -230,15 +69,11 @@
     .tuition-amount { font-family: 'Prompt', sans-serif; font-size: 38px; font-weight: 800; color: var(--purple); }
     .tuition-amount span { font-size: 16px; font-weight: 500; color: var(--muted); }
     .tuition-note { font-size: 11px; color: #9ca3af; margin-top: 6px; }
-
-    /* ── LOADING / ERROR ── */
     .loader-wrap { min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
     .spinner { width: 38px; height: 38px; border: 3px solid var(--purple-light); border-top-color: var(--purple); border-radius: 50%; animation: spin .65s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .err-wrap { text-align: center; padding: 80px 20px; color: var(--muted); }
     .err-wrap i { font-size: 42px; color: #d1d5db; display: block; margin-bottom: 14px; }
-
-    /* ── FOOTER ── */
     .footer { background: #fff; padding: 48px 6%; border-top: 1px solid var(--border); }
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; max-width: 1200px; margin: 0 auto; }
     .footer-logo h4 { display: flex; align-items: center; gap: 10px; font-size: 15px; margin-bottom: 12px; }
@@ -250,8 +85,6 @@
     .fcol p { font-size: 13px; color: #666; margin-bottom: 5px; }
     .footer-bottom { max-width: 1200px; margin: 40px auto 0; padding-top: 18px; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; font-size: 12px; color: #bbb; }
     .footer-bottom a { color: #999; text-decoration: none; margin-left: 20px; }
-
-    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .hero { grid-template-columns: 1fr; padding: 40px 5%; gap: 32px; }
       .hero-right::before { display: none; }
@@ -259,14 +92,11 @@
       .majors-grid { grid-template-columns: repeat(2,1fr); }
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
-    @media (max-width: 560px) {
-      .majors-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 560px) { .majors-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <header class="navbar">
   <div class="logo">
     <img src="logo.jpg" alt="Logo" id="logoImg">
@@ -286,7 +116,6 @@
   </div>
 </header>
 
-<!-- DYNAMIC CONTENT -->
 <div id="app">
   <div class="loader-wrap">
     <div class="spinner"></div>
@@ -294,7 +123,6 @@
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-grid">
     <div class="footer-logo">
@@ -331,6 +159,12 @@
     document.getElementById("logoText").style.display = "inline";
   };
 
+  // ✅ helper เดียว ใช้ทั่วทั้งไฟล์
+  function imgUrl(path) {
+    if (!path) return null;
+    return path.startsWith("http") ? path : BASE_URL + path;
+  }
+
   const ICONS = [
     { keys: ["การเงิน","ลงทุน","finance","investment"], icon: "fa-chart-line" },
     { keys: ["การตลาด","สื่อสาร","marketing","communication"], icon: "fa-bullhorn" },
@@ -364,7 +198,6 @@
     const params = new URLSearchParams(window.location.search);
     const courseId = params.get("courseId");
     if (!courseId) { renderError("ไม่พบ courseId ใน URL"); return; }
-
     try {
       const [courseRes, majorsRes] = await Promise.all([
         fetch(`${API}/courses/${courseId}`),
@@ -380,9 +213,10 @@
   }
 
   function render(c, majors) {
-    // Hero image — floating card style
-    const heroImgHTML = c.hero_image
-      ? `<img src="${BASE_URL}${c.hero_image}" alt="${c.name_th || ''}">`
+    // ✅ ประกาศ heroImgHTML ก่อนใช้
+    const heroSrc = imgUrl(c.hero_image);
+    const heroImgHTML = heroSrc
+      ? `<img src="${heroSrc}" alt="${c.name_th || ''}">`
       : `<div class="no-img"><i class="fa-solid fa-graduation-cap"></i></div>`;
 
     const [t1, t2] = splitTitle(c.name_en || c.name_th || "หลักสูตร");
@@ -412,18 +246,19 @@
         ${s.sub ? `<div class="stat-sub">${s.sub}</div>` : ""}
       </div>`).join("");
 
-    // bg_image สำหรับ section background
-    const bgStyle = c.bg_image
-      ? `style="background-image: url('${BASE_URL}${c.bg_image}')"`
-      : "";
-    const bgClass = c.bg_image ? "" : "no-bg";
+    // ✅ bg_image ใช้ imgUrl()
+    const bgSrc = imgUrl(c.bg_image);
+    const bgStyle = bgSrc ? `style="background-image: url('${bgSrc}')"` : "";
+    const bgClass = bgSrc ? "" : "no-bg";
 
     const majorsHTML = majors.length
       ? majors.map(m => {
           const icon = getIcon((m.name_th || "") + " " + (m.name_en || ""));
-          const imgSrc = m.hero_image || m.image_url || m.info_image || null;
-          const thumbHTML = imgSrc
-            ? `<img src="${BASE_URL}${imgSrc}" alt="${m.name_th || ''}" loading="lazy">`
+          // ✅ ใช้ imgUrl() สำหรับรูป major
+          const rawSrc = m.hero_image || m.image_url || m.info_image || null;
+          const mSrc = imgUrl(rawSrc);
+          const thumbHTML = mSrc
+            ? `<img src="${mSrc}" alt="${m.name_th || ''}" loading="lazy">`
             : `<div class="no-img">
                  <i class="fa-solid ${icon}" style="font-size:38px;color:#a78bfa;position:relative;z-index:1;"></i>
                </div>`;
@@ -452,7 +287,6 @@
          </div>`;
 
     app.innerHTML = `
-      <!-- HERO: floating image style -->
       <div class="hero">
         <div class="hero-left">
           <div class="hero-badge">Accredited Program</div>
@@ -463,20 +297,14 @@
           <div class="hero-img-wrap">${heroImgHTML}</div>
         </div>
       </div>
-
-      <!-- STATS BAR -->
       <div class="stats-bar">
         <div class="stats-grid">${statsHTML}</div>
       </div>
-
-      <!-- MAJORS: bg_image เป็นพื้นหลัง section -->
       <div class="section-majors">
         <div class="section-majors-bg ${bgClass}" ${bgStyle}></div>
         <h2 class="section-title">สาขาวิชาที่เปิดสอน</h2>
         <div class="majors-grid">${majorsHTML}</div>
       </div>
-
-      <!-- TUITION -->
       <div class="tuition-wrap">
         <div class="tuition-card">
           <h3>ค่าเทอม</h3>
