@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>แผนการศึกษา | FMS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple:      #7C3AED;
+  --purple-dark: #5B21B6;
+  --purple-mid:  #A78BFA;
+  --purple-light:#EDE9FE;
+  --pink:        #EC4899;
+  --pink-light:  #FDF2F8;
+  --white:       #FFFFFF;
+  --text:        #1E1B4B;
+  --text-sub:    #6B7280;
+  --border:      rgba(124,58,237,0.15);
+  --bg:          #F9F7FF;
+  --radius:      14px;
+  --shadow:      0 4px 24px rgba(124,58,237,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans Thai', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── NAVBAR ── */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(124,58,237,0.1);
+  padding: 0 40px;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.navbar-brand { display: flex; align-items: center; gap: 10px; }
+.navbar-brand-logo {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: white; font-weight: 800;
+  font-family: 'Lexend', sans-serif;
+}
+.navbar-brand-text { font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); }
+.navbar-brand-sub  { font-size: 10px; color: var(--purple); font-weight: 500; }
+.navbar-nav { display: flex; align-items: center; gap: 4px; }
+.nav-link {
+  padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
+  color: var(--text-sub); text-decoration: none; transition: all 0.15s; cursor: pointer;
+}
+.nav-link:hover  { background: var(--purple-light); color: var(--purple); }
+.nav-link.active { background: var(--purple-light); color: var(--purple); font-weight: 700; }
+.navbar-search {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 14px; background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 10px; font-size: 13px; color: var(--text-sub); cursor: text;
+  transition: all 0.15s;
+}
+.navbar-search:hover { border-color: var(--purple); }
+.navbar-search input {
+  border: none; outline: none; background: transparent;
+  font-size: 13px; font-family: inherit; color: var(--text); width: 140px;
+}
+
+/* ── HERO HEADER ── */
+.hero {
+  background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 35%, #ede9fe 65%, #f5f3ff 100%);
+  padding: 44px 40px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(236,72,153,0.18) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(124,58,237,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 60% 60%, rgba(167,139,250,0.12) 0%, transparent 40%);
+  pointer-events: none;
+}
+/* Decorative floating shapes */
+.hero-deco {
+  position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+  display: flex; gap: 16px; align-items: center;
+  opacity: 0.22; pointer-events: none;
+}
+.hero-deco-shape {
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+}
+
+.hero-inner { position: relative; z-index: 1; max-width: 800px; }
+.hero-major { font-size: 14px; font-weight: 600; color: var(--purple); margin-bottom: 4px; opacity: 0.85; }
+.hero-title {
+  font-family: 'Lexend', sans-serif; font-size: 38px; font-weight: 900;
+  color: var(--text); line-height: 1.1; margin-bottom: 22px;
+  letter-spacing: -0.5px;
+}
+.hero-title span { color: var(--purple); }
+
+/* Filters row */
+.filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.filter-select-wrap { position: relative; }
+.filter-select-wrap label {
+  display: block; font-size: 10.5px; font-weight: 700; color: var(--purple);
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px;
+  opacity: 0.75;
+}
+.filter-select {
+  appearance: none;
+  padding: 9px 36px 9px 14px;
+  border: 1.5px solid rgba(124,58,237,0.25);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(8px);
+  font-size: 13px; font-weight: 600; font-family: inherit;
+  color: var(--text); cursor: pointer; outline: none;
+  transition: all 0.15s;
+  min-width: 130px;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.08);
+}
+.filter-select:hover, .filter-select:focus {
+  border-color: var(--purple);
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+}
+.filter-chevron {
+  position: absolute; right: 10px; bottom: 11px;
+  pointer-events: none; color: var(--purple); opacity: 0.6;
+}
+.btn-download {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: rgba(255,255,255,0.75); backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(124,58,237,0.25);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--purple); cursor: pointer; transition: all 0.15s;
+  align-self: flex-end; margin-bottom: 1px;
+}
+.btn-download:hover { background: var(--purple); color: white; border-color: var(--purple); }
+
+/* ── MAIN CONTENT ── */
+.main { padding: 28px 40px 60px; max-width: 1200px; margin: 0 auto; }
+
+/* Summary bar */
+.summary-bar {
+  display: flex; align-items: center; gap: 16px;
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 14px 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+.summary-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--purple), var(--purple-mid));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.summary-text { flex: 1; }
+.summary-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.summary-sub   { font-size: 11.5px; color: var(--text-sub); margin-top: 1px; }
+.summary-stats { display: flex; gap: 24px; }
+.summary-stat  { text-align: center; }
+.summary-stat-val {
+  font-family: 'Lexend', sans-serif; font-size: 22px; font-weight: 800;
+  color: var(--purple); line-height: 1;
+}
+.summary-stat-label { font-size: 11px; color: var(--text-sub); margin-top: 3px; font-weight: 500; }
+.summary-divider { width: 1px; height: 40px; background: var(--border); }
+
+/* ── SUBJECT GRID ROW (per semester group) ── */
+.sem-section { margin-bottom: 28px; }
+.sem-section-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.sem-section-line { flex: 1; height: 2px; background: linear-gradient(90deg, rgba(124,58,237,0.3), transparent); border-radius: 1px; }
+.sem-section-label {
+  font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 700;
+  color: var(--purple); background: var(--purple-light);
+  padding: 4px 14px; border-radius: 999px;
+  white-space: nowrap; letter-spacing: 0.3px;
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* ── SUBJECT CARD ── */
+.subject-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(124,58,237,0.12);
+  border-radius: var(--radius);
+  padding: 16px 18px 14px;
+  box-shadow: 0 2px 12px rgba(124,58,237,0.07);
+  transition: all 0.22s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.subject-card::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(to bottom, var(--purple), var(--purple-mid));
+  border-radius: 3px 0 0 3px;
+  opacity: 0; transition: opacity 0.2s;
+}
+.subject-card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(124,58,237,0.16); border-color: rgba(124,58,237,0.3); }
+.subject-card:hover::before { opacity: 1; }
+
+.card-top {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: 8px;
+  margin-bottom: 8px;
+}
+.card-code-credits { display: flex; align-items: center; gap: 8px; }
+.card-code {
+  font-size: 11px; font-weight: 700; color: var(--purple);
+  background: var(--purple-light); padding: 2px 10px;
+  border-radius: 999px; letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.card-credits {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11.5px; font-weight: 600; color: var(--text-sub);
+  white-space: nowrap;
+}
+.card-credits svg { display: block; color: var(--purple-mid); }
+
+.card-name-th {
+  font-size: 15px; font-weight: 700; color: var(--text);
+  line-height: 1.3; margin-bottom: 6px;
+}
+.card-desc {
+  font-size: 12.5px; color: var(--text-sub); line-height: 1.65;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: auto;
+}
+.card-cat {
+  font-size: 9.5px; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; line-height: 1.2;
+  color: var(--text-sub);
+}
+.card-detail-link {
+  font-size: 12px; font-weight: 700; color: var(--purple);
+  display: flex; align-items: center; gap: 3px;
+  text-decoration: none; transition: gap 0.15s;
+}
+.card-detail-link:hover { gap: 6px; }
+.card-detail-link svg { display: block; }
+
+/* category left-border color variants */
+.subject-card.cat-core::before     { background: linear-gradient(to bottom, #7C3AED, #A78BFA); }
+.subject-card.cat-elective::before { background: linear-gradient(to bottom, #3B82F6, #93C5FD); }
+.subject-card.cat-ge::before       { background: linear-gradient(to bottom, #10B981, #6EE7B7); }
+.subject-card.cat-major::before    { background: linear-gradient(to bottom, #F59E0B, #FCD34D); }
+
+/* ── LEGEND ── */
+.legend-box {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 18px 24px;
+  margin-top: 8px;
+  box-shadow: var(--shadow);
+}
+.legend-header {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; color: var(--purple);
+  margin-bottom: 16px;
+}
+.legend-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.legend-item { display: flex; align-items: flex-start; gap: 10px; }
+.legend-letter {
+  font-family: 'Lexend', sans-serif; font-size: 26px; font-weight: 900;
+  line-height: 1; flex-shrink: 0;
+}
+.legend-item:nth-child(1) .legend-letter { color: var(--purple); }
+.legend-item:nth-child(2) .legend-letter { color: #9333ea; }
+.legend-item:nth-child(3) .legend-letter { color: #a855f7; }
+.legend-item:nth-child(4) .legend-letter { color: #c084fc; }
+.legend-desc { font-size: 11.5px; color: var(--text-sub); line-height: 1.5; font-weight: 500; }
+.legend-desc strong { display: block; color: var(--text); font-weight: 700; font-size: 12px; margin-bottom: 1px; }
+
+/* ── DETAIL MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15,10,40,0.55);
+  backdrop-filter: blur(8px);
+  z-index: 200; display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: white; border-radius: 20px;
+  width: 100%; max-width: 600px; max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.22);
+  animation: modalIn 0.25s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes modalIn { from { opacity:0; transform:scale(0.92) translateY(20px); } to { opacity:1; transform:none; } }
+.modal-hero {
+  background: linear-gradient(135deg, #f3e8ff, #fce7f3);
+  padding: 24px 28px 20px; position: relative; overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+.modal-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 50%, rgba(236,72,153,0.2), transparent 60%);
+  pointer-events: none;
+}
+.modal-hero-inner { position: relative; z-index: 1; }
+.modal-code-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.modal-code {
+  font-size: 11px; font-weight: 700; color: var(--purple);
+  background: rgba(124,58,237,0.12); padding: 3px 12px;
+  border-radius: 999px;
+}
+.modal-credits-badge {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 600; color: #6b7280;
+  background: rgba(255,255,255,0.7); padding: 3px 10px;
+  border-radius: 999px;
+}
+.modal-cat-tag {
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.8px; padding: 3px 10px; border-radius: 999px;
+  margin-left: auto;
+}
+.modal-name-th { font-family: 'Lexend', sans-serif; font-size: 22px; font-weight: 900; color: var(--text); line-height: 1.25; margin-bottom: 4px; }
+.modal-name-en { font-size: 13.5px; color: var(--purple); font-weight: 500; opacity: 0.8; font-style: italic; }
+.modal-close {
+  position: absolute; top: 16px; right: 16px; z-index: 2;
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(255,255,255,0.8); border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: var(--text-sub); transition: all 0.12s;
+}
+.modal-close:hover { background: #fee2e2; color: #ef4444; }
+.modal-body { padding: 22px 28px 28px; }
+.modal-section-label {
+  font-size: 10.5px; font-weight: 700; color: var(--text-sub);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 10px; margin-top: 18px;
+  display: flex; align-items: center; gap: 7px;
+}
+.modal-section-label:first-child { margin-top: 0; }
+.modal-section-label::before { content: ''; display: block; width: 3px; height: 12px; border-radius: 2px; background: var(--purple); }
+.modal-desc {
+  font-size: 13.5px; color: var(--text); line-height: 1.75;
+  background: #f9f7ff; border-radius: 10px; padding: 14px 16px;
+  border: 1px solid var(--border);
+}
+.modal-clo-list { display: flex; flex-direction: column; gap: 8px; }
+.modal-clo-item {
+  background: #f9f7ff; border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+}
+.modal-clo-num { font-size: 11px; font-weight: 700; color: var(--purple); margin-bottom: 5px; }
+.modal-clo-text { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 6px; }
+.modal-chip-row { display: flex; flex-wrap: wrap; gap: 4px; }
+.modal-plo-chip { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--purple-light); color: var(--purple); }
+.modal-mlo-chip { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #eff6ff; color: #3b82f6; }
+
+/* ── LOADING / EMPTY ── */
+.loading-wrap { text-align: center; padding: 60px 20px; }
+.loading-spinner {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid var(--purple-light);
+  border-top-color: var(--purple);
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto 14px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-sub); }
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-text { font-size: 14px; line-height: 1.7; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) { .subjects-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) {
+  .subjects-grid { grid-template-columns: 1fr; }
+  .hero { padding: 32px 20px 28px; }
+  .main { padding: 20px 20px 40px; }
+  .navbar { padding: 0 20px; }
+  .hero-title { font-size: 28px; }
+  .legend-grid { grid-template-columns: repeat(2,1fr); }
+}
+
+/* card entrance animation */
+.subject-card { opacity: 0; transform: translateY(16px); animation: cardIn 0.4s cubic-bezier(.4,0,.2,1) forwards; }
+@keyframes cardIn { to { opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-brand">
+    <div class="navbar-brand-logo">P</div>
+    <div>
+      <div class="navbar-brand-text">PSU · FMS</div>
+      <div class="navbar-brand-sub">Faculty of Management Sciences</div>
+    </div>
+  </div>
+  <div class="navbar-nav">
+    <a class="nav-link" href="#">หน้าหลัก</a>
+    <a class="nav-link" href="#">ข้อมูลทั่วไป</a>
+    <a class="nav-link" href="#">นักศึกษา</a>
+    <a class="nav-link active" href="#">แผนการศึกษา</a>
+    <a class="nav-link" href="#">QA</a>
+  </div>
+  <div class="navbar-search">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="flex-shrink:0;opacity:0.5"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+    <input type="text" placeholder="Search courses..." id="searchInput" oninput="filterCards()"/>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-deco">
+    <div class="hero-deco-shape" style="width:80px;height:80px;transform:rotate(15deg)"></div>
+    <div class="hero-deco-shape" style="width:56px;height:56px;border-radius:50%;margin-top:30px"></div>
+    <div class="hero-deco-shape" style="width:40px;height:64px;transform:rotate(-10deg)"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-major" id="heroMajor">กำลังโหลด...</div>
+    <div class="hero-title">Study <span>Plan</span></div>
+    <div class="filter-row">
+      <div class="filter-select-wrap">
+        <label>แผน</label>
+        <select class="filter-select" id="selPlanType" onchange="onFilterChange()">
+          <option value="normal">แผนปกติ</option>
+          <option value="coop">สหกิจศึกษา</option>
+        </select>
+        <svg class="filter-chevron" width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </div>
+      <div class="filter-select-wrap">
+        <label>ปีการศึกษา</label>
+        <select class="filter-select" id="selYear" onchange="onFilterChange()">
+          <option value="1">ปี 1</option>
+          <option value="2">ปี 2</option>
+          <option value="3">ปี 3</option>
+          <option value="4">ปี 4</option>
+        </select>
+        <svg class="filter-chevron" width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </div>
+      <div class="filter-select-wrap">
+        <label>ภาคเรียน</label>
+        <select class="filter-select" id="selSemester" onchange="filterBySem()">
+          <option value="all">ทุกภาคเรียน</option>
+        </select>
+        <svg class="filter-chevron" width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </div>
+      <button class="btn-download" title="ดาวน์โหลด PDF">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- Summary bar -->
+  <div class="summary-bar">
+    <div class="summary-icon">📊</div>
+    <div class="summary-text">
+      <div class="summary-title">สรุปหน่วยกิตรวมทางการศึกษา</div>
+      <div class="summary-sub">ตรวจสอบความถูกต้องของรายวิชาและหน่วยกิต</div>
+    </div>
+    <div class="summary-stats">
+      <div class="summary-stat">
+        <div class="summary-stat-val" id="statCredits">—</div>
+        <div class="summary-stat-label">หน่วยกิต รวม</div>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-stat">
+        <div class="summary-stat-val" id="statSubjects">—</div>
+        <div class="summary-stat-label">วิชาทั้งหมด</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subjects area -->
+  <div id="subjectsArea">
+    <div class="loading-wrap">
+      <div class="loading-spinner"></div>
+      <div style="font-size:14px;color:var(--text-sub);">กำลังโหลดแผนการศึกษา...</div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend-box">
+    <div class="legend-header">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+      ความหมายของหน่วยกิตที่ใช้ในหลักสูตร n((x)-y-z)
+    </div>
+    <div class="legend-grid">
+      <div class="legend-item">
+        <div class="legend-letter">n</div>
+        <div class="legend-desc"><strong>หน่วยกิตรวม</strong>จำนวนหน่วยกิตทั้งหมดของรายวิชานั้น</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-letter">(x)</div>
+        <div class="legend-desc"><strong>คาบทฤษฎี</strong>จำนวนหน่วยกิตที่จำนวนชั่วโมงการเรียนรู้แบบรู้เรื่อง</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-letter">y</div>
+        <div class="legend-desc"><strong>ปฏิบัติ</strong>จำนวนหน่วยกิตในการเรียนปฏิบัติ/ทดลอง</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-letter">z</div>
+        <div class="legend-desc"><strong>ศึกษาด้วยตนเอง</strong>จำนวนชั่วโมงในการศึกษาด้วยตนเองต่อสัปดาห์</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-hero">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-hero-inner">
+        <div class="modal-code-row">
+          <span class="modal-code" id="m_code"></span>
+          <span class="modal-credits-badge" id="m_credits">
+            <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <span id="m_credits_val"></span> หน่วยกิต
+          </span>
+          <span class="modal-cat-tag" id="m_cat"></span>
+        </div>
+        <div class="modal-name-th" id="m_name_th"></div>
+        <div class="modal-name-en" id="m_name_en"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div id="m_hours_row" style="display:none;margin-bottom:14px;">
+        <span style="font-size:12px;font-weight:600;color:var(--text-sub);">โครงสร้างชั่วโมง: </span>
+        <span style="font-size:13px;font-weight:700;color:var(--purple);" id="m_hours_val"></span>
+      </div>
+      <div id="m_desc_block" style="display:none;">
+        <div class="modal-section-label">คำอธิบายรายวิชา</div>
+        <div class="modal-desc" id="m_desc_th_val"></div>
+      </div>
+      <div id="m_clo_block" style="display:none;">
+        <div class="modal-section-label">ผลลัพธ์การเรียนรู้ (CLOs)</div>
+        <div class="modal-clo-list" id="m_clo_list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "https://websitefms.onrender.com/api";
+
+// Read majorId & courseId from URL
+const params   = new URLSearchParams(window.location.search);
+const majorId  = params.get("majorId");
+const courseId = params.get("courseId");
+
+let allSemesters = []; // all semester data for current plan
+
+/* ══ INIT ══ */
+async function init() {
+  if (!majorId) {
+    showError("ไม่พบ majorId ใน URL — กรุณาเพิ่ม ?majorId=...&courseId=...");
+    return;
+  }
+  try {
+    // Load major name
+    const majors = await fetch(`${API}/courses/${courseId}/majors`).then(r => r.json());
+    const major  = majors.find(m => String(m.id) === String(majorId));
+    document.getElementById("heroMajor").textContent = major?.name_th || `สาขา #${majorId}`;
+    document.title = `${major?.name_th || 'แผนการศึกษา'} | FMS`;
+  } catch {}
+  await loadPlan();
+}
+
+async function loadPlan() {
+  const planType = document.getElementById("selPlanType").value;
+  const yearNo   = document.getElementById("selYear").value;
+
+  document.getElementById("subjectsArea").innerHTML = `
+    <div class="loading-wrap">
+      <div class="loading-spinner"></div>
+      <div style="font-size:14px;color:var(--text-sub);">กำลังโหลด...</div>
+    </div>`;
+
+  try {
+    // Find matching plan
+    const json = await fetch(`${API}/majors/${majorId}/study-plans?page=1&pageSize=50`).then(r => r.json());
+    const plan = (json.data || []).find(p =>
+      Number(p.year_no) === Number(yearNo) &&
+      (p.plan_type || "normal") === planType
+    );
+
+    if (!plan) {
+      allSemesters = [];
+      renderSemesters([]);
+      return;
+    }
+
+    const detail = await fetch(`${API}/study-plans/${plan.id}`).then(r => r.json());
+    allSemesters = detail.semesters || [];
+    populateSemesterFilter(allSemesters);
+    renderSemesters(allSemesters);
+  } catch(e) {
+    showError("โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่");
+  }
+}
+
+function populateSemesterFilter(semesters) {
+  const sel = document.getElementById("selSemester");
+  sel.innerHTML = `<option value="all">ทุกภาคเรียน</option>`;
+  semesters.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s.id;
+    opt.textContent = s.title || `Semester ${s.term_no}`;
+    sel.appendChild(opt);
+  });
+}
+
+function filterBySem() {
+  const semId = document.getElementById("selSemester").value;
+  if (semId === "all") { renderSemesters(allSemesters); return; }
+  const filtered = allSemesters.filter(s => String(s.id) === semId);
+  renderSemesters(filtered);
+}
+
+function filterCards() {
+  const q = document.getElementById("searchInput").value.trim().toLowerCase();
+  document.querySelectorAll(".subject-card").forEach(card => {
+    const text = card.dataset.search || "";
+    card.style.display = (!q || text.includes(q)) ? "" : "none";
+  });
+}
+
+function onFilterChange() {
+  document.getElementById("selSemester").value = "all";
+  loadPlan();
+}
+
+/* ══ RENDER ══ */
+const CAT_LABEL = { Core:"CORE\nCOURSE", Elective:"ELECT\nIVE", GE:"GENERAL\nEDUCATION", Major:"MAJOR\nREQUIREMENT" };
+const CAT_CLASS = { Core:"cat-core", Elective:"cat-elective", GE:"cat-ge", Major:"cat-major" };
+const CAT_COLOR = { Core:"#7C3AED", Elective:"#3B82F6", GE:"#10B981", Major:"#F59E0B" };
+
+function renderSemesters(semesters) {
+  const area = document.getElementById("subjectsArea");
+
+  let totalCredits = 0, totalSubjects = 0;
+  semesters.forEach(s => {
+    (s.subjects || []).forEach(it => {
+      totalCredits  += Number(it.credits ?? it.default_credits ?? 0);
+      totalSubjects += 1;
+    });
+  });
+  document.getElementById("statCredits").textContent  = totalCredits;
+  document.getElementById("statSubjects").textContent = totalSubjects;
+
+  if (!semesters.length || !semesters.some(s => (s.subjects||[]).length)) {
+    area.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <div class="empty-text">ยังไม่มีรายวิชาในแผนนี้<br><span style="font-size:12px;opacity:0.7">กรุณาเพิ่มรายวิชาผ่านหน้า Admin</span></div>
+    </div>`;
+    return;
+  }
+
+  area.innerHTML = semesters.filter(s => (s.subjects||[]).length > 0).map(sem => {
+    const cards = (sem.subjects || []).map((it, idx) => {
+      const _s      = it.subject || it;
+      const code    = it.code    || _s.code    || "";
+      const name_th = it.name_th || _s.name_th || "";
+      const name_en = it.name_en || _s.name_en || "";
+      const credits = it.credits ?? it.default_credits ?? _s.default_credits ?? "";
+      const hours   = it.hour_structure || it.default_hour_structure || _s.default_hour_structure || "";
+      const cat     = it.category || "Core";
+      const desc_en = it.description_en || _s.description_en || "";
+      const desc_th = it.description_th || _s.description_th || "";
+      const desc    = desc_en || desc_th || "";
+      const outcomes = it.outcomes || [];
+      const catClass = CAT_CLASS[cat] || "cat-core";
+      const catLabel = (CAT_LABEL[cat] || cat).replace("\n", "<br>");
+      const hoursDisplay = hours ? `หน่วยกิต ${credits}(${hours.replace(/^\d+/, '')})` : `หน่วยกิต ${credits}`;
+
+      // store data for modal
+      const dataId = `sub_${sem.id}_${idx}`;
+      window._subData = window._subData || {};
+      window._subData[dataId] = { code, name_th, name_en, credits, hours, cat, desc_th, desc_en, outcomes };
+
+      const searchStr = `${code} ${name_th} ${name_en} ${desc}`.toLowerCase();
+
+      return `<div class="subject-card ${catClass}" data-id="${dataId}" data-search="${searchStr}"
+          style="animation-delay:${idx * 0.06}s"
+          onclick="openDetail('${dataId}')">
+        <div class="card-top">
+          <div class="card-code-credits">
+            <span class="card-code">${code}</span>
+            <span class="card-credits">
+              <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+              ${hours ? `หน่วยกิต ${credits}(${hours})` : `${credits} หน่วยกิต`}
+            </span>
+          </div>
+        </div>
+        <div class="card-name-th">${name_th}</div>
+        ${desc ? `<div class="card-desc">${desc}</div>` : `<div style="flex:1"></div>`}
+        <div class="card-footer">
+          <div class="card-cat" style="color:${CAT_COLOR[cat]||'#6B7280'}">${catLabel}</div>
+          <a class="card-detail-link">
+            รายละเอียด
+            <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+          </a>
+        </div>
+      </div>`;
+    }).join("");
+
+    return `<div class="sem-section">
+      <div class="sem-section-header">
+        <div class="sem-section-label">${sem.title || `Semester ${sem.term_no}`}</div>
+        <div class="sem-section-line"></div>
+      </div>
+      <div class="subjects-grid">${cards}</div>
+    </div>`;
+  }).join("");
+}
+
+function showError(msg) {
+  document.getElementById("subjectsArea").innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">❌</div>
+      <div class="empty-text">${msg}</div>
+    </div>`;
+}
+
+/* ══ DETAIL MODAL ══ */
+function openDetail(dataId) {
+  const d = window._subData?.[dataId];
+  if (!d) return;
+
+  const catColorMap = { Core:"rgba(124,58,237,0.12)", Elective:"rgba(59,130,246,0.12)", GE:"rgba(16,185,129,0.12)", Major:"rgba(245,158,11,0.12)" };
+  const catTextMap  = { Core:"#7C3AED", Elective:"#3B82F6", GE:"#10B981", Major:"#F59E0B" };
+  const catLabelMap = { Core:"Core Course", Elective:"Elective", GE:"General Education", Major:"Major Requirement" };
+
+  document.getElementById("m_code").textContent     = d.code;
+  document.getElementById("m_credits_val").textContent = d.credits;
+  document.getElementById("m_name_th").textContent  = d.name_th;
+  document.getElementById("m_name_en").textContent  = d.name_en;
+  document.getElementById("m_name_en").style.display = d.name_en ? "" : "none";
+
+  const catTag = document.getElementById("m_cat");
+  catTag.textContent = catLabelMap[d.cat] || d.cat;
+  catTag.style.background = catColorMap[d.cat] || "#f3f4f6";
+  catTag.style.color      = catTextMap[d.cat]  || "#6b7280";
+
+  const hoursRow = document.getElementById("m_hours_row");
+  if (d.hours) { document.getElementById("m_hours_val").textContent = d.hours; hoursRow.style.display = ""; }
+  else hoursRow.style.display = "none";
+
+  const descBlock = document.getElementById("m_desc_block");
+  const descVal   = d.desc_th || d.desc_en;
+  if (descVal) { document.getElementById("m_desc_th_val").textContent = descVal; descBlock.style.display = ""; }
+  else descBlock.style.display = "none";
+
+  const cloBlock = document.getElementById("m_clo_block");
+  if (d.outcomes && d.outcomes.length) {
+    cloBlock.style.display = "";
+    document.getElementById("m_clo_list").innerHTML = d.outcomes.map((o, i) => {
+      const ploChips = (o.plo||[]).map(c => `<span class="modal-plo-chip">${c}</span>`).join("");
+      const mloChips = (o.mlo||[]).map(c => `<span class="modal-mlo-chip">${c}</span>`).join("");
+      return `<div class="modal-clo-item">
+        <div class="modal-clo-num">CLO ${i+1}</div>
+        ${o.th ? `<div class="modal-clo-text">${o.th}</div>` : ""}
+        ${o.en ? `<div class="modal-clo-text" style="color:var(--text-sub);font-style:italic;">${o.en}</div>` : ""}
+        ${(ploChips||mloChips) ? `<div class="modal-chip-row">${ploChips}${mloChips}</div>` : ""}
+      </div>`;
+    }).join("");
+  } else cloBlock.style.display = "none";
+
+  document.getElementById("detailModal").classList.add("open");
+}
+
+document.getElementById("modalClose").addEventListener("click", () =>
+  document.getElementById("detailModal").classList.remove("open"));
+document.getElementById("detailModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("detailModal"))
+    document.getElementById("detailModal").classList.remove("open");
+});
+
+init();
+</script>
+</body>
+</html>

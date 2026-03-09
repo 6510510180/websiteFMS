@@ -1996,6 +1996,103 @@ app.post("/api/surveys/:surveyId/import-excel", async (req, res) => {
   } catch (e) { await client.query("ROLLBACK"); res.status(500).json({ message: "Server error: "+e.message }); }
   finally { client.release(); }
 });
+// ============================================================
+//  ACHIEVEMENTS
+// ============================================================
+app.get("/api/achievements", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM achievements ORDER BY achieve_date DESC NULLS LAST, created_at DESC"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get("/api/achievements/:id", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM achievements WHERE id=$1", [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบผลงาน" });
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.post("/api/achievements", async (req, res) => {
+  const { title, achieve_date, level, students, description,
+          course_id, image_url, attachments, facebook_url } = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO achievements
+         (title, achieve_date, level, students, description,
+          course_id, image_url, attachments, facebook_url)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
+      [
+        title        || null,
+        achieve_date || null,
+        level        || null,
+        students     || null,
+        description  || null,
+        course_id    || null,
+        image_url    || null,
+        attachments  || null,
+        facebook_url || null,
+      ]
+    );
+    res.status(201).json({ message: "บันทึกผลงานสำเร็จ", achievement: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.put("/api/achievements/:id", async (req, res) => {
+  const { title, achieve_date, level, students, description,
+          course_id, image_url, attachments, facebook_url } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE achievements SET
+         title        = COALESCE($1, title),
+         achieve_date = COALESCE($2, achieve_date),
+         level        = COALESCE($3, level),
+         students     = COALESCE($4, students),
+         description  = COALESCE($5, description),
+         course_id    = $6,
+         image_url    = COALESCE($7, image_url),
+         attachments  = COALESCE($8, attachments),
+         facebook_url = $9,
+         updated_at   = now()
+       WHERE id=$10 RETURNING *`,
+      [
+        title        || null,
+        achieve_date || null,
+        level        || null,
+        students     || null,
+        description  || null,
+        course_id    || null,
+        image_url    || null,
+        attachments  || null,
+        facebook_url || null,
+        req.params.id,
+      ]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบผลงาน" });
+    res.json({ message: "อัปเดตผลงานสำเร็จ", achievement: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.delete("/api/achievements/:id", async (req, res) => {
+  try {
+    const result = await pool.query("DELETE FROM achievements WHERE id=$1 RETURNING *", [req.params.id]);
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบผลงาน" });
+    res.json({ message: "ลบผลงานสำเร็จ" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // ── Catch-all (ต้องอยู่ท้ายสุด) ─────────────────────────────
 app.get("*", (req, res) => {

@@ -7,20 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {
-  --purple:#7F13EC; --purple-dark:#5c0db0; --purple-mid:#9B6DD1;
-  --purple-light:#F3EEFF; --purple-bg:#EDE7F3;
-  --text:#21111C; --text-sub:#64748B; --border:rgba(0,0,0,0.09);
-  --white:#FFFFFF; --bg:#F7F4FC;
-  --green:#22c55e; --teal:#0891b2; --amber:#f59e0b; --red:#ef4444;
-  --k-color:#7c3aed; --k-bg:#f3e8ff;
-  --a-color:#e11d48; --a-bg:#ffe4e6;
-  --s-color:#16a34a; --s-bg:#dcfce7;
-}
+:root{--purple:#7F13EC;--purple-dark:#5c0db0;--purple-mid:#9B6DD1;--purple-light:#F3EEFF;--purple-bg:#EDE7F3;--text:#21111C;--text-sub:#64748B;--border:rgba(0,0,0,0.09);--white:#FFFFFF;--bg:#F7F4FC;--green:#22c55e;--teal:#0891b2;--amber:#f59e0b;--red:#ef4444;--k-color:#7c3aed;--k-bg:#f3e8ff;--a-color:#e11d48;--a-bg:#ffe4e6;--s-color:#16a34a;--s-bg:#dcfce7;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:13px;}
-
-/* TOPBAR */
 .topbar{width:100%;height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;gap:16px;position:sticky;top:0;z-index:300;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
 .logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .logo-icon{width:32px;height:32px;background:var(--purple);border-radius:8px;display:flex;align-items:center;justify-content:center;}
@@ -31,15 +20,11 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .top-nav a:hover{background:var(--purple-light);color:var(--purple);}
 .top-nav a.active{color:var(--purple);border-bottom:2px solid var(--purple);border-radius:0;padding-bottom:6px;}
 .avatar{width:36px;height:36px;border-radius:50%;background:var(--purple-bg);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--purple);cursor:pointer;margin-left:auto;}
-
-/* PAGE */
 .page{flex:1;max-width:100%;padding:32px 40px 80px;}
 .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
 .page-title{font-size:26px;font-weight:900;color:var(--text);}
 .page-subtitle{font-size:14px;color:var(--text-sub);margin-top:4px;max-width:580px;line-height:1.5;}
 .header-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;}
-
-/* DATA SOURCE BANNER */
 .data-banner{display:flex;align-items:center;gap:12px;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;margin-bottom:20px;border:1.5px solid;}
 .data-banner.idle{background:#f8f4ff;border-color:#c4b5fd;color:#5b21b6;}
 .data-banner.live{background:#f0fdf4;border-color:#86efac;color:#166534;}
@@ -55,18 +40,12 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .btn-pull svg{width:15px;height:15px;fill:currentColor;}
 .btn-pull.spinning svg.spin-icon{animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* MAIN TABS */
 .main-tabs{display:flex;border-bottom:2px solid #e8deff;}
 .main-tab{padding:12px 28px;border:none;background:transparent;font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;color:var(--text-sub);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.18s;white-space:nowrap;}
 .main-tab:hover{color:var(--purple);}
 .main-tab.active{color:var(--purple);border-bottom-color:var(--purple);}
-
-/* PANEL */
 .panel{display:none;padding-top:20px;}
 .panel.active{display:block;}
-
-/* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.18s;white-space:nowrap;}
 .btn svg{width:15px;height:15px;fill:currentColor;}
 .btn-purple{background:var(--purple);color:white;box-shadow:0 4px 10px rgba(127,19,236,.2);}
@@ -78,8 +57,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .btn-amber{background:#d97706;color:white;}
 .btn-amber:hover{background:#b45309;}
 #fileInput{display:none;}
-
-/* LO FRAME */
 .lo-frame{border:1.5px dashed #c4b5fd;border-radius:16px;overflow:hidden;display:flex;min-height:500px;}
 .lo-sidebar{width:210px;flex-shrink:0;border-right:1px solid #ede8f5;background:#fdfbff;padding:8px 0;}
 .sb-item{display:flex;align-items:center;gap:9px;padding:12px 16px;font-size:13px;font-weight:500;color:var(--text-sub);cursor:pointer;border-left:3px solid transparent;transition:.15s;}
@@ -103,11 +80,9 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .ae-btn.S{color:var(--s-color);border-color:var(--s-color);background:var(--s-bg);}
 .ae-btn:hover{opacity:.82;}
 .ae-cnt{background:white;border-radius:999px;padding:1px 5px;font-size:10px;font-weight:800;}
-
-/* CLO */
 .clo-wrap{display:flex;gap:20px;}
 .clo-main{flex:1;min-width:0;}
-.clo-side{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:0;}
+.clo-side{width:280px;flex-shrink:0;}
 .clo-selector-step{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;}
 .sp-label{font-size:11px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
 .sp-item-list{display:flex;flex-direction:column;gap:4px;max-height:240px;overflow-y:auto;}
@@ -148,28 +123,15 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .clo-en{font-size:11px;color:var(--text-sub);margin-top:2px;}
 .linked-cell{display:flex;justify-content:center;flex-wrap:wrap;gap:3px;}
 .linked-badge{font-family:'Lexend',sans-serif;font-size:10px;font-weight:700;background:var(--purple-bg);color:var(--purple);padding:2px 8px;border-radius:999px;white-space:nowrap;}
-.sp-label{font-size:11px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
-.sp-card{background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:10px;}
-.sp-select{width:100%;padding:11px 14px;border:none;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);background:transparent;cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
-.btn-sp-primary{width:100%;padding:11px;background:var(--purple);color:white;border:none;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.18s;margin-bottom:8px;}
-.btn-sp-primary:hover{background:var(--purple-dark);}
-.btn-sp-outline{width:100%;padding:11px;background:white;color:var(--purple);border:1.5px solid var(--purple);border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.18s;}
-.btn-sp-outline:hover{background:var(--purple-light);}
-
-/* EMPTY STATE */
 .empty-lo{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 24px;gap:14px;color:var(--text-sub);flex:1;}
 .empty-lo svg{width:52px;height:52px;fill:#d8b4fe;opacity:.6;}
 .empty-lo strong{font-size:15px;font-weight:700;color:var(--text);}
 .empty-lo p{font-size:13px;text-align:center;max-width:360px;line-height:1.6;}
 .empty-lo a{color:var(--purple);font-weight:700;text-decoration:underline;cursor:pointer;}
-
-/* STATUS BAR */
 .status-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 40px;border-top:1px solid var(--border);background:var(--white);font-size:11px;color:var(--text-sub);flex-wrap:wrap;gap:8px;margin-top:auto;}
 .status-dots{display:flex;gap:16px;flex-wrap:wrap;}
 .sdot{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;}
 .dot{width:7px;height:7px;border-radius:50%;}
-
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .modal-overlay.show{opacity:1;pointer-events:all;}
 .modal{background:var(--white);border-radius:18px;width:920px;max-width:96vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 28px 72px rgba(0,0,0,0.22);transform:translateY(22px) scale(.97);transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
@@ -182,7 +144,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .m-close{width:30px;height:30px;border:none;background:#f1f5f9;border-radius:8px;cursor:pointer;font-size:16px;color:var(--text-sub);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;}
 .m-close:hover{background:#fee2e2;color:#ef4444;}
 .m-toggle{display:flex;background:#f3eeff;border-radius:10px;padding:4px;gap:2px;width:fit-content;margin-bottom:2px;}
-.m-toggle-btn{padding:7px 22px;border:none;background:transparent;font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;color:var(--purple-mid);border-radius:8px;cursor:pointer;transition:.15px;}
+.m-toggle-btn{padding:7px 22px;border:none;background:transparent;font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;color:var(--purple-mid);border-radius:8px;cursor:pointer;}
 .m-toggle-btn.active{background:white;color:var(--purple);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
 .m-body{flex:1;overflow:hidden;display:flex;min-height:0;}
 .pm-col{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden;}
@@ -191,14 +153,14 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .pm-col-head.plo{background:var(--purple-bg);color:var(--purple);}
 .pm-col-head.mlo{background:#e0f7fa;color:var(--teal);}
 .pm-search{padding:8px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.pm-search input{width:100%;padding:6px 10px 6px 30px;border:1.5px solid #e0d8f0;border-radius:8px;font-family:inherit;font-size:12px;outline:none;transition:.15px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath fill-rule='evenodd' d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'/%3E%3C/svg%3E") no-repeat 8px center;}
+.pm-search input{width:100%;padding:6px 10px 6px 30px;border:1.5px solid #e0d8f0;border-radius:8px;font-family:inherit;font-size:12px;outline:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath fill-rule='evenodd' d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'/%3E%3C/svg%3E") no-repeat 8px center;}
 .pm-search input:focus{border-color:var(--purple);}
 .pm-list{overflow-y:auto;flex:1;padding:4px 6px;}
-.pm-item{display:flex;align-items:flex-start;gap:9px;padding:8px 8px;border-radius:8px;cursor:pointer;transition:background .12s;user-select:none;}
+.pm-item{display:flex;align-items:flex-start;gap:9px;padding:8px;border-radius:8px;cursor:pointer;transition:background .12s;user-select:none;}
 .pm-item:hover{background:#f8f4ff;}
 .pm-item.selected{background:var(--purple-light);}
 .pm-item.selected.mlo-sel{background:#e0f7fa;}
-.pm-check{width:18px;height:18px;border-radius:5px;border:2px solid #d1c4e9;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15px;margin-top:1px;}
+.pm-check{width:18px;height:18px;border-radius:5px;border:2px solid #d1c4e9;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;}
 .pm-item.selected .pm-check{border-color:var(--purple);background:var(--purple);}
 .pm-item.selected.mlo-sel .pm-check{border-color:var(--teal);background:var(--teal);}
 .pm-check-tick{display:none;width:9px;height:6px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translateY(-1px);}
@@ -214,13 +176,13 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .kas-col-head.A{background:var(--a-bg);color:var(--a-color);}
 .kas-col-head.S{background:var(--s-bg);color:var(--s-color);}
 .kas-search{padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.kas-search input{width:100%;padding:6px 10px 6px 28px;border:1.5px solid #e0d8f0;border-radius:7px;font-family:inherit;font-size:12px;outline:none;transition:.15px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath fill-rule='evenodd' d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'/%3E%3C/svg%3E") no-repeat 7px center;}
+.kas-search input{width:100%;padding:6px 10px 6px 28px;border:1.5px solid #e0d8f0;border-radius:7px;font-family:inherit;font-size:12px;outline:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath fill-rule='evenodd' d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'/%3E%3C/svg%3E") no-repeat 7px center;}
 .kas-search input:focus{border-color:var(--purple);}
 .kas-list{overflow-y:auto;flex:1;padding:4px 6px;}
 .kas-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;cursor:pointer;transition:background .12s;user-select:none;}
 .kas-item:hover{background:#f8f4ff;}
 .kas-item.selected{background:var(--purple-light);}
-.kas-check{width:16px;height:16px;border-radius:4px;border:2px solid #d1c4e9;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15px;}
+.kas-check{width:16px;height:16px;border-radius:4px;border:2px solid #d1c4e9;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .kas-check-tick{display:none;width:8px;height:5px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translateY(-1px);}
 .kas-item.selected .kas-check-tick{display:block;}
 .kas-item.selected.K .kas-check{border-color:var(--k-color);background:var(--k-color);}
@@ -236,23 +198,17 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .m-sel-count{font-size:12px;color:var(--text-sub);}
 .m-sel-count strong{color:var(--purple);}
 .m-btns{display:flex;gap:10px;}
-.btn-m-cancel{padding:9px 22px;border:1.5px solid var(--border);background:white;border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;color:var(--text-sub);cursor:pointer;transition:.15px;}
+.btn-m-cancel{padding:9px 22px;border:1.5px solid var(--border);background:white;border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;color:var(--text-sub);cursor:pointer;}
 .btn-m-cancel:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-light);}
-.btn-m-save{padding:9px 24px;border:none;background:var(--purple);color:white;border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(127,19,236,.25);transition:.15px;}
+.btn-m-save{padding:9px 24px;border:none;background:var(--purple);color:white;border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(127,19,236,.25);}
 .btn-m-save:hover{background:var(--purple-dark);}
-
-/* TOAST */
 .toast{position:fixed;bottom:28px;right:28px;background:#1a1a2e;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-
-/* PDF */
 .pdf-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.92);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;opacity:0;pointer-events:none;transition:opacity .25s;}
 .pdf-overlay.show{opacity:1;pointer-events:all;}
 .pdf-spinner{width:44px;height:44px;border:4px solid #e8deff;border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
 .pdf-msg{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:var(--purple);}
-
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   body{background:white;font-size:10pt;min-height:unset;display:block;}
@@ -321,17 +277,11 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
           <svg viewBox="0 0 20 20" style="width:11px;height:11px;"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
         </button>
         <div id="pdf-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:180px;overflow:hidden;z-index:400;">
-          <button onclick="exportPDF('PLO')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);transition:.12s;" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'">
-            <span style="color:var(--purple);font-weight:800;font-family:'Lexend',sans-serif;font-size:11px;">PLO</span> ตาราง PLO
-          </button>
-          <button onclick="exportPDF('MLO')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);transition:.12s;" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'">
-            <span style="color:var(--teal);font-weight:800;font-family:'Lexend',sans-serif;font-size:11px;">MLO</span> ตาราง MLO
-          </button>
-          <button onclick="exportPDF('CLO')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);transition:.12s;" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'">
-            <span style="color:#16a34a;font-weight:800;font-family:'Lexend',sans-serif;font-size:11px;">CLO</span> ตาราง CLO
-          </button>
+          <button onclick="exportPDF('PLO')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'"><span style="color:var(--purple);font-weight:800;font-family:'Lexend',sans-serif;font-size:11px;">PLO</span> ตาราง PLO</button>
+          <button onclick="exportPDF('MLO')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'"><span style="color:var(--teal);font-weight:800;font-family:'Lexend',sans-serif;font-size:11px;">MLO</span> ตาราง MLO</button>
+          <button onclick="exportPDF('CLO')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'"><span style="color:#16a34a;font-weight:800;font-family:'Lexend',sans-serif;font-size:11px;">CLO</span> ตาราง CLO</button>
           <div style="border-top:1px solid var(--border);"></div>
-          <button onclick="exportPDF('ALL')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;color:var(--purple);transition:.12s;" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'">
+          <button onclick="exportPDF('ALL')" style="display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:none;background:none;cursor:pointer;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;color:var(--purple);" onmouseover="this.style.background='#f8f4ff'" onmouseout="this.style.background='none'">
             <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
             ทั้งหมด (PLO+MLO+CLO)
           </button>
@@ -345,24 +295,21 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="importExcel(event)">
   </div>
 
-  <!-- DATA SOURCE BANNER -->
-  <div class="data-banner idle" id="dataBanner">
-    <div class="banner-dot idle" id="bannerDot"></div>
-    <span id="bannerText">ยังไม่ได้ดึงข้อมูล PLO/MLO — กดปุ่มเพื่อโหลดข้อมูลจากหน้าจัดการ PLO/MLO</span>
+  <div class="data-banner default" id="dataBanner">
+    <div class="banner-dot default" id="bannerDot"></div>
+    <span id="bannerText">แสดงข้อมูล Default — กดปุ่มเพื่อดึงข้อมูลจากหน้าจัดการ PLO/MLO</span>
     <button class="btn-pull" id="pullBtn" onclick="pullPloMloData()">
       <svg class="spin-icon" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg>
       ดึงข้อมูล PLO/MLO
     </button>
   </div>
 
-  <!-- MAIN TABS -->
   <div class="main-tabs">
     <button class="main-tab active" onclick="switchTab('PLO',this)">Program Learning Outcomes (PLO)</button>
     <button class="main-tab" onclick="switchTab('MLO',this)">Major Learning Outcomes (MLO)</button>
     <button class="main-tab" onclick="switchTab('CLO',this)">Course Learning Outcomes (CLO)</button>
   </div>
 
-  <!-- PLO PANEL -->
   <div class="panel active" id="panel-PLO">
     <div class="lo-frame">
       <div class="lo-content">
@@ -377,7 +324,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     </div>
   </div>
 
-  <!-- MLO PANEL -->
   <div class="panel" id="panel-MLO">
     <div class="lo-frame">
       <div class="lo-sidebar" id="mlo-sidebar"></div>
@@ -393,7 +339,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     </div>
   </div>
 
-  <!-- CLO PANEL -->
   <div class="panel" id="panel-CLO">
     <div class="clo-wrap">
       <div class="clo-main" id="clo-main">
@@ -404,34 +349,21 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
         </div>
       </div>
       <div class="clo-side" id="clo-side-panel">
-
-        <!-- Step 1: Course -->
         <div class="clo-selector-step" id="step-course">
           <div class="sp-label">1. เลือกหลักสูตร</div>
-          <div id="course-loading" style="display:none;padding:10px;font-size:12px;color:var(--text-sub);display:flex;align-items:center;gap:8px;">
-            <div class="sp-spinner"></div> กำลังโหลด...
-          </div>
           <div id="course-list-clo" class="sp-item-list"></div>
         </div>
-
-        <!-- Step 2: Major -->
         <div class="clo-selector-step" id="step-major" style="display:none">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <button class="sp-back-btn" onclick="backToStep('course')">
-              <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            </button>
+            <button class="sp-back-btn" onclick="backToStep('course')"><svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></button>
             <div class="sp-label" style="margin:0">2. เลือก Major</div>
           </div>
           <div id="selected-course-badge" class="sp-selected-badge"></div>
           <div id="major-list-clo" class="sp-item-list"></div>
         </div>
-
-        <!-- Step 3: Subject -->
         <div class="clo-selector-step" id="step-subject" style="display:none">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <button class="sp-back-btn" onclick="backToStep('major')">
-              <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            </button>
+            <button class="sp-back-btn" onclick="backToStep('major')"><svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></button>
             <div class="sp-label" style="margin:0">3. เลือกรายวิชา</div>
           </div>
           <div id="selected-major-badge" class="sp-selected-badge sp-badge-blue"></div>
@@ -441,13 +373,11 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
           </div>
           <div id="subject-list-clo" class="sp-item-list"></div>
         </div>
-
       </div>
     </div>
   </div>
 </div>
 
-<!-- STATUS BAR -->
 <div class="status-bar">
   <div class="status-dots">
     <span class="sdot"><span class="dot" style="background:var(--purple)"></span>PLO MAPPING</span>
@@ -456,10 +386,9 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <span class="sdot"><span class="dot" style="background:var(--a-color)"></span>ATTITUDE (A)</span>
     <span class="sdot"><span class="dot" style="background:var(--s-color)"></span>SKILL (S)</span>
   </div>
-  <div id="status-source">แหล่งข้อมูล: กำลังโหลด...</div>
+  <div id="status-source">แหล่งข้อมูล: Default</div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeBg(event)">
   <div class="modal">
     <div class="m-header">
@@ -519,19 +448,13 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   <div class="pdf-spinner"></div>
   <div class="pdf-msg" id="pdf-msg">กำลังเตรียม PDF...</div>
 </div>
-
 <div class="toast" id="toast"><div class="toast-dot" id="toast-dot"></div><span id="toast-msg"></span></div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   LOAD PLO / MLO FROM localStorage (saved by plo.html)
-   Key: 'fms_plo_mlo_data'  →  { PLO:[{code,skill},...], MLO:[...] }
-═══════════════════════════════════════════════════════════ */
-const PLO_STORAGE_KEY = 'fms_plo_mlo_data';
-const KAS_STORAGE_KEY = 'fms_kas_mapping_data';
+const PLO_STORAGE_KEY='fms_plo_mlo_data';
+const KAS_STORAGE_KEY='fms_kas_mapping_data';
 
-// ── Default fallback data (ใช้เมื่อยังไม่มีข้อมูลจาก plo.html) ──
-const DEFAULT_PLO = [
+const DEFAULT_PLO=[
   {code:'PLO1',desc:'พัฒนาตนเองจากการเรียนรู้เมื่อได้รับคำวิพากษ์วิจารณ์'},
   {code:'PLO2',desc:'วิเคราะห์และนำเสนอข้อมูลต่อผู้บริหารเพื่อการตัดสินใจ'},
   {code:'PLO3',desc:'ประยุกต์ความรู้ทางด้านบริหารธุรกิจเพื่อวางแผนกลยุทธ์ให้องค์กร'},
@@ -542,7 +465,7 @@ const DEFAULT_PLO = [
   {code:'PLO8',desc:'เลือกใช้เทคโนโลยีดิจิทัลในการทำงานให้บรรลุเป้าหมาย'},
   {code:'PLO9',desc:'แสดงพฤติกรรมที่แสดงถึงการมีจริยธรรมและความรับผิดชอบต่อสังคม'},
 ];
-const DEFAULT_MLO_GROUPS = [
+const DEFAULT_MLO_GROUPS=[
   {label:'การเงินและการลงทุน',icon:'💰',items:[
     {code:'MLO1.1',desc:'เขียนบทวิเคราะห์ตราสารทางการเงินภายใต้หลักเกณฑ์ของคณะกรรมการกำกับหลักทรัพย์และตลาดหลักทรัพย์'},
     {code:'MLO1.2',desc:'วางแผนการเงินส่วนบุคคลตามมาตรฐานของสมาคมนักวางแผนการเงินไทย'},
@@ -571,84 +494,6 @@ const DEFAULT_MLO_GROUPS = [
   ]},
 ];
 
-// ── Load from localStorage ──
-let PLO_LIST = [];
-let MLO_GROUPS = [];
-let isLiveData = false;
-
-function loadPloMloData() {
-  try {
-    const saved = localStorage.getItem(PLO_STORAGE_KEY);
-    if (saved) {
-      const data = JSON.parse(saved);
-      const ploArr = data.PLO || [];
-      const mloArr = data.MLO || [];
-
-      if (ploArr.length > 0 || mloArr.length > 0) {
-        // Convert from plo.html format: {code, skill} → {code, desc}
-        PLO_LIST = ploArr.map(item => ({
-          code: item.code || '',
-          desc: item.skill || item.desc || ''
-        })).filter(item => item.code);
-
-        // MLO: flatten into single group since plo.html doesn't have groups
-        if (mloArr.length > 0) {
-          // Check if stored as flat array or grouped
-          MLO_GROUPS = [{
-            label: 'MLO ทั้งหมด',
-            icon: '🎓',
-            items: mloArr.map(item => ({
-              code: item.code || '',
-              desc: item.skill || item.desc || ''
-            })).filter(item => item.code)
-          }];
-        } else {
-          MLO_GROUPS = [];
-        }
-
-        isLiveData = true;
-        return;
-      }
-    }
-  } catch(e) {
-    console.warn('Could not load PLO/MLO from localStorage:', e);
-  }
-
-  // Fallback to defaults
-  PLO_LIST = DEFAULT_PLO;
-  MLO_GROUPS = DEFAULT_MLO_GROUPS;
-  isLiveData = false;
-}
-
-function updateBanner(state) {
-  const banner = document.getElementById('dataBanner');
-  const dot = document.getElementById('bannerDot');
-  const text = document.getElementById('bannerText');
-  const statusSrc = document.getElementById('status-source');
-  if (state === 'live') {
-    banner.className = 'data-banner live';
-    dot.className = 'banner-dot live';
-    text.innerHTML = `✓ ดึงข้อมูลสำเร็จ — PLO <strong>${PLO_LIST.length}</strong> รายการ, MLO <strong>${MLO_GROUPS.reduce((s,g)=>s+g.items.length,0)}</strong> รายการ`;
-    statusSrc.textContent = `แหล่งข้อมูล: localStorage (fms_plo_mlo_data)`;
-  } else if (state === 'notfound') {
-    banner.className = 'data-banner default';
-    dot.className = 'banner-dot default';
-    text.innerHTML = `⚠ ไม่พบข้อมูลใน localStorage — แสดงข้อมูล Default อยู่ กรุณา <a class="banner-link" href="plo.html">บันทึกข้อมูลที่หน้า PLO/MLO</a> ก่อน`;
-    statusSrc.textContent = `แหล่งข้อมูล: Default (ไม่พบใน localStorage)`;
-  } else if (state === 'default') {
-    banner.className = 'data-banner default';
-    dot.className = 'banner-dot default';
-    text.innerHTML = `แสดงข้อมูล Default — กดปุ่มเพื่อดึงข้อมูลจากหน้าจัดการ PLO/MLO`;
-    statusSrc.textContent = `แหล่งข้อมูล: Default`;
-  } else {
-    banner.className = 'data-banner idle';
-    dot.className = 'banner-dot idle';
-    text.innerHTML = `ยังไม่ได้ดึงข้อมูล PLO/MLO — กดปุ่มเพื่อโหลดข้อมูลจากหน้าจัดการ PLO/MLO`;
-    statusSrc.textContent = `แหล่งข้อมูล: ยังไม่ได้ดึงข้อมูล`;
-  }
-}
-
-// ── KAS reference data ──
 const K_DATA=[
   {code:'K1',label:'รูปแบบและคุณลักษณะการเป็นผู้นำ'},{code:'K2',label:'วิธีการปรับตัว'},{code:'K3',label:'บริหารธุรกิจ'},{code:'K4',label:'เทคโนโลยีสารสนเทศ'},{code:'K5',label:'รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร'},{code:'K6',label:'ธุรกิจอัจฉริยะ'},{code:'K7',label:'ระบบฐานข้อมูล'},{code:'K8',label:'กลยุทธ์ทางธุรกิจ'},{code:'K9',label:'การเป็นผู้ประกอบการ'},{code:'K10',label:'ระเบียบวิธีวิจัย'},
   {code:'K11',label:'การอ้างอิงข้อมูล'},{code:'K12',label:'การเขียนโปรแกรมคอมพิวเตอร์'},{code:'K13',label:'จิตวิทยา'},{code:'K14',label:'แนวทางการทำงานเป็นทีม'},{code:'K15',label:'นวัตกรรม'},{code:'K16',label:'กฎหมายแรงงาน'},{code:'K17',label:'กฎหมายทางธุรกิจ'},{code:'K18',label:'จริยธรรม'},{code:'K19',label:'จรรยาบรรณ'},{code:'K20',label:'การเงิน'},
@@ -675,687 +520,390 @@ const S_DATA=[
   {code:'S31',label:'การจัดการความขัดแย้ง'},{code:'S32',label:'การรู้เท่าทัน'},{code:'S33',label:'ความยืดหยุ่น'},{code:'S34',label:'ความคิดเชิงวิพากษ์'},{code:'S35',label:'การกล้าแสดงออก'},{code:'S36',label:'มารยาทและบุคลิกภาพ'},{code:'S37',label:'การออกแบบ'},
 ];
 
-const COURSES = [
-  {code:'477-201',name:'การเขียนโปรแกรมเบื้องต้นทางธุรกิจ',nameEn:'Introduction to Programming in Business (WIL)',units:'3((2)-2-5)',
-   desc:'การติดตั้งโปรแกรมตัวแปลภาษาและสภาพแวดล้อมที่ใช้ในการเขียนโปรแกรม ตัวแปรและคำสงวนในการเขียนโปรแกรม ตัวดำเนินการทางคณิตศาสตร์ โครงสร้างทำงานแบบเงื่อนไข การเขียนและใช้งานฟังก์ชัน',
-   clos:[
-    {th:'อธิบายหลักการของการเขียนโปรแกรม',en:'Explain the principles of programming',kas:{K:new Set(),A:new Set(),S:new Set()},plo:new Set(),mlo:new Set()},
-    {th:'อธิบายความสัมพันธ์ระหว่างการเขียนโปรแกรมกับแนวคิดความเป็นผู้ประกอบการ',en:'Explain the relationship between programming and entrepreneurial mindset',kas:{K:new Set(),A:new Set(),S:new Set()},plo:new Set(),mlo:new Set()},
-    {th:'ทำงานร่วมกับผู้อื่นเพื่อบรรลุเป้าหมาย',en:'Collaborate with others to achieve goals',kas:{K:new Set(),A:new Set(),S:new Set()},plo:new Set(),mlo:new Set()},
-    {th:'วาดผังการทำงานของโปรแกรม',en:'Draw program flowchart',kas:{K:new Set(),A:new Set(),S:new Set()},plo:new Set(),mlo:new Set()},
-  ]},
-  {code:'MG-301',name:'การจัดการเชิงกลยุทธ์',nameEn:'Strategic Management',units:'3(3-0-6)',
-   desc:'แนวคิดและกระบวนการจัดการเชิงกลยุทธ์ การวิเคราะห์สภาพแวดล้อมภายในและภายนอกองค์กร การกำหนดและการนำกลยุทธ์ไปปฏิบัติ',
-   clos:[
-    {th:'วิเคราะห์สภาพแวดล้อมภายในและภายนอกองค์กร',en:'Analyze internal and external organizational environment',kas:{K:new Set(),A:new Set(),S:new Set()},plo:new Set(),mlo:new Set()},
-    {th:'กำหนดกลยุทธ์ระดับองค์กร',en:'Formulate corporate level strategy',kas:{K:new Set(),A:new Set(),S:new Set()},plo:new Set(),mlo:new Set()},
-  ]},
-];
+/* STATE */
+let PLO_LIST=[],MLO_GROUPS=[],isLiveData=false;
+let ploKas={},mloKas={};
+let curTab='PLO',curMloGroup=0;
+let mCtx=null,mPanel='PLO_MLO';
+let tKas={K:new Set(),A:new Set(),S:new Set()},tPlo=new Set(),tMlo=new Set();
 
-/* ═══════════════ STATE ═══════════════ */
-let ploKas = {};
-let mloKas = {};
-let curTab='PLO', curMloGroup=0, curCourseIdx=0;
-let mCtx=null, mPanel='PLO_MLO';
-let tKas={K:new Set(),A:new Set(),S:new Set()}, tPlo=new Set(), tMlo=new Set();
-
-function initKasState() {
-  PLO_LIST.forEach(p => { if(!ploKas[p.code]) ploKas[p.code]={K:new Set(),A:new Set(),S:new Set()}; });
-  MLO_GROUPS.forEach(g => g.items.forEach(m => { if(!mloKas[m.code]) mloKas[m.code]={K:new Set(),A:new Set(),S:new Set()}; }));
-}
-
-function loadKasData() {
-  try {
-    const saved = localStorage.getItem(KAS_STORAGE_KEY);
-    if (!saved) return;
-    const data = JSON.parse(saved);
-    if (data.ploKas) {
-      Object.keys(data.ploKas).forEach(code => {
-        if (!ploKas[code]) ploKas[code] = {K:new Set(),A:new Set(),S:new Set()};
-        ['K','A','S'].forEach(t => {
-          (data.ploKas[code][t]||[]).forEach(v => ploKas[code][t].add(v));
-        });
-      });
+/* PLO/MLO from localStorage */
+function loadPloMloData(){
+  try{
+    const saved=localStorage.getItem(PLO_STORAGE_KEY);
+    if(saved){
+      const data=JSON.parse(saved);
+      const pa=data.PLO||[],ma=data.MLO||[];
+      if(pa.length||ma.length){
+        PLO_LIST=pa.map(i=>({code:i.code||'',desc:i.skill||i.desc||''})).filter(i=>i.code);
+        MLO_GROUPS=ma.length?[{label:'MLO ทั้งหมด',icon:'🎓',items:ma.map(i=>({code:i.code||'',desc:i.skill||i.desc||''})).filter(i=>i.code)}]:[];
+        isLiveData=true;return;
+      }
     }
-    if (data.mloKas) {
-      Object.keys(data.mloKas).forEach(code => {
-        if (!mloKas[code]) mloKas[code] = {K:new Set(),A:new Set(),S:new Set()};
-        ['K','A','S'].forEach(t => {
-          (data.mloKas[code][t]||[]).forEach(v => mloKas[code][t].add(v));
-        });
-      });
-    }
-  } catch(e) { console.warn('Could not load KAS data:', e); }
+  }catch(e){console.warn(e);}
+  PLO_LIST=DEFAULT_PLO;MLO_GROUPS=DEFAULT_MLO_GROUPS;isLiveData=false;
 }
 
-function saveKasData() {
-  try {
-    const out = { ploKas:{}, mloKas:{} };
-    Object.keys(ploKas).forEach(c => { out.ploKas[c]={ K:[...ploKas[c].K], A:[...ploKas[c].A], S:[...ploKas[c].S] }; });
-    Object.keys(mloKas).forEach(c => { out.mloKas[c]={ K:[...mloKas[c].K], A:[...mloKas[c].A], S:[...mloKas[c].S] }; });
-    localStorage.setItem(KAS_STORAGE_KEY, JSON.stringify(out));
-    toast('✓ บันทึก KAS Mapping สำเร็จ', '#22c55e');
-  } catch(e) { toast('❌ บันทึกไม่สำเร็จ: '+e.message, '#ef4444'); }
+/* KAS mapping state */
+function initKasState(){
+  PLO_LIST.forEach(p=>{if(!ploKas[p.code])ploKas[p.code]={K:new Set(),A:new Set(),S:new Set()};});
+  MLO_GROUPS.forEach(g=>g.items.forEach(m=>{if(!mloKas[m.code])mloKas[m.code]={K:new Set(),A:new Set(),S:new Set()};}));
+}
+function loadKasData(){
+  try{
+    const saved=localStorage.getItem(KAS_STORAGE_KEY);if(!saved)return;
+    const data=JSON.parse(saved);
+    if(data.ploKas)Object.keys(data.ploKas).forEach(c=>{if(!ploKas[c])ploKas[c]={K:new Set(),A:new Set(),S:new Set()};['K','A','S'].forEach(t=>(data.ploKas[c][t]||[]).forEach(v=>ploKas[c][t].add(v)));});
+    if(data.mloKas)Object.keys(data.mloKas).forEach(c=>{if(!mloKas[c])mloKas[c]={K:new Set(),A:new Set(),S:new Set()};['K','A','S'].forEach(t=>(data.mloKas[c][t]||[]).forEach(v=>mloKas[c][t].add(v)));});
+  }catch(e){console.warn(e);}
+}
+function saveKasData(){
+  try{
+    const out={ploKas:{},mloKas:{}};
+    Object.keys(ploKas).forEach(c=>{out.ploKas[c]={K:[...ploKas[c].K],A:[...ploKas[c].A],S:[...ploKas[c].S]};});
+    Object.keys(mloKas).forEach(c=>{out.mloKas[c]={K:[...mloKas[c].K],A:[...mloKas[c].A],S:[...mloKas[c].S]};});
+    localStorage.setItem(KAS_STORAGE_KEY,JSON.stringify(out));
+    toast('✓ บันทึก KAS Mapping สำเร็จ','#22c55e');
+  }catch(e){toast('❌ บันทึกไม่สำเร็จ: '+e.message,'#ef4444');}
 }
 
-/* ─── Manual pull function ─── */
-function pullPloMloData() {
-  const btn = document.getElementById('pullBtn');
-  btn.classList.add('spinning');
-  btn.disabled = true;
-  setTimeout(() => {
-    loadPloMloData();
-    initKasState();
-    loadKasData();
-    if (isLiveData) {
-      updateBanner('live');
-      if (curTab==='PLO') renderPLO();
-      else if (curTab==='MLO') renderMLO();
-      toast(`✓ ดึงข้อมูลสำเร็จ — PLO ${PLO_LIST.length} รายการ, MLO ${MLO_GROUPS.reduce((s,g)=>s+g.items.length,0)} รายการ`, '#22c55e');
-    } else {
-      updateBanner('notfound');
-      toast('⚠ ไม่พบข้อมูลใน localStorage — กรุณาบันทึกที่หน้า PLO/MLO ก่อน', '#f59e0b');
-    }
-    btn.classList.remove('spinning');
-    btn.disabled = false;
-  }, 500);
+/* Banner */
+function updateBanner(state){
+  const b=document.getElementById('dataBanner'),d=document.getElementById('bannerDot'),
+        t=document.getElementById('bannerText'),s=document.getElementById('status-source');
+  if(state==='live'){
+    b.className='data-banner live';d.className='banner-dot live';
+    t.innerHTML=`✓ ดึงข้อมูลสำเร็จ — PLO <strong>${PLO_LIST.length}</strong> รายการ, MLO <strong>${MLO_GROUPS.reduce((a,g)=>a+g.items.length,0)}</strong> รายการ`;
+    s.textContent='แหล่งข้อมูล: localStorage (fms_plo_mlo_data)';
+  }else if(state==='notfound'){
+    b.className='data-banner default';d.className='banner-dot default';
+    t.innerHTML='⚠ ไม่พบข้อมูลใน localStorage — แสดงข้อมูล Default อยู่ กรุณา <a class="banner-link" href="plo.html">บันทึกข้อมูลที่หน้า PLO/MLO</a> ก่อน';
+    s.textContent='แหล่งข้อมูล: Default (ไม่พบใน localStorage)';
+  }else{
+    b.className='data-banner default';d.className='banner-dot default';
+    t.innerHTML='แสดงข้อมูล Default — กดปุ่มเพื่อดึงข้อมูลจากหน้าจัดการ PLO/MLO';
+    s.textContent='แหล่งข้อมูล: Default';
+  }
 }
 
-document.addEventListener('click', e => {
-  const wrap = document.getElementById('pdf-wrap');
-  if (wrap && !wrap.contains(e.target)) document.getElementById('pdf-menu').style.display='none';
-});
-function togglePdfMenu(){
-  const m=document.getElementById('pdf-menu');
-  m.style.display=m.style.display==='none'?'block':'none';
+/* Pull button */
+function pullPloMloData(){
+  const btn=document.getElementById('pullBtn');
+  btn.classList.add('spinning');btn.disabled=true;
+  setTimeout(()=>{
+    loadPloMloData();initKasState();loadKasData();
+    if(isLiveData){updateBanner('live');toast(`✓ ดึงข้อมูลสำเร็จ — PLO ${PLO_LIST.length} MLO ${MLO_GROUPS.reduce((a,g)=>a+g.items.length,0)}`,'#22c55e');}
+    else{updateBanner('notfound');toast('⚠ ไม่พบข้อมูลใน localStorage','#f59e0b');}
+    if(curTab==='PLO')renderPLO();else if(curTab==='MLO')renderMLO();
+    btn.classList.remove('spinning');btn.disabled=false;
+  },500);
 }
 
-/* ═══════════════ MAIN TABS ═══════════════ */
-function switchTab(tab, btn) {
-  curTab = tab;
-  document.querySelectorAll('.main-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+tab).classList.add('active');
-  if(tab==='PLO') renderPLO();
-  else if(tab==='MLO') renderMLO();
-  else renderCLO();
+document.addEventListener('click',e=>{const w=document.getElementById('pdf-wrap');if(w&&!w.contains(e.target))document.getElementById('pdf-menu').style.display='none';});
+function togglePdfMenu(){const m=document.getElementById('pdf-menu');m.style.display=m.style.display==='none'?'block':'none';}
+
+/* Tabs */
+function switchTab(tab,btn){
+  curTab=tab;
+  document.querySelectorAll('.main-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+tab).classList.add('active');
+  if(tab==='PLO')renderPLO();else if(tab==='MLO')renderMLO();else renderCLO();
 }
 
-/* ═══════════════ PLO ═══════════════ */
-function renderPLO() {
-  const container = document.getElementById('plo-rows');
-  if (!PLO_LIST.length) {
-    container.innerHTML = `<div class="empty-lo">
-      <svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
-      <strong>ยังไม่มีข้อมูล PLO</strong>
-      <p>กรุณาไปบันทึกข้อมูล PLO ที่ <a href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน แล้วกลับมาที่หน้านี้</p>
-    </div>`;
+/* PLO/MLO render */
+function renderPLO(){
+  const c=document.getElementById('plo-rows');
+  if(!PLO_LIST.length){c.innerHTML='<div class="empty-lo"><svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg><strong>ยังไม่มีข้อมูล PLO</strong><p>กรุณาไปบันทึกข้อมูล PLO ที่ <a href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน</p></div>';return;}
+  c.innerHTML=PLO_LIST.map(p=>loRow(p.code,p.desc,'PLO',ploKas[p.code]||{K:new Set(),A:new Set(),S:new Set()})).join('');
+}
+function renderMLO(){
+  if(!MLO_GROUPS.length){
+    document.getElementById('mlo-sidebar').innerHTML='';
+    document.getElementById('mlo-rows').innerHTML='<div class="empty-lo"><svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg><strong>ยังไม่มีข้อมูล MLO</strong><p>กรุณาไปบันทึกข้อมูล MLO ที่ <a href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน</p></div>';
     return;
   }
-  container.innerHTML = PLO_LIST.map(p => ploRow(p.code, p.desc, 'PLO', ploKas[p.code]||{K:new Set(),A:new Set(),S:new Set()})).join('');
-}
-
-function ploRow(code, desc, type, k) {
-  const kn=k.K.size, an=k.A.size, sn=k.S.size;
-  const ctx = JSON.stringify({type,code}).replace(/"/g,'&quot;');
-  const kPrint = t => [...k[t]].map(c=>`<span class="kp-tag ${t}">${c}</span>`).join('');
-  return `<div class="lo-row">
-    <div class="lo-info">
-      <span class="lo-badge${type==='MLO'?' mlo':''}">${code}</span>
-      <span class="lo-text">${esc(desc)}</span>
-    </div>
-    <div class="kas-cell">
-      <button class="ae-btn K" onclick='openModal(${ctx},"KAS","K")'>
-        <span>⊕</span> Add/Edit${kn?` <span class="ae-cnt">${kn}</span>`:''}
-      </button>
-      <div class="kas-print">${kPrint('K')||'<span class="kp-tag K" style="opacity:.35">—</span>'}</div>
-    </div>
-    <div class="kas-cell">
-      <button class="ae-btn A" onclick='openModal(${ctx},"KAS","A")'>
-        <span>⊕</span> Add/Edit${an?` <span class="ae-cnt">${an}</span>`:''}
-      </button>
-      <div class="kas-print">${kPrint('A')||'<span class="kp-tag A" style="opacity:.35">—</span>'}</div>
-    </div>
-    <div class="kas-cell">
-      <button class="ae-btn S" onclick='openModal(${ctx},"KAS","S")'>
-        <span>⊕</span> Add/Edit${sn?` <span class="ae-cnt">${sn}</span>`:''}
-      </button>
-      <div class="kas-print">${kPrint('S')||'<span class="kp-tag S" style="opacity:.35">—</span>'}</div>
-    </div>
-  </div>`;
-}
-
-function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-/* ═══════════════ MLO ═══════════════ */
-function renderMLO() {
-  if (!MLO_GROUPS.length) {
-    document.getElementById('mlo-sidebar').innerHTML = '';
-    document.getElementById('mlo-rows').innerHTML = `<div class="empty-lo">
-      <svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
-      <strong>ยังไม่มีข้อมูล MLO</strong>
-      <p>กรุณาไปบันทึกข้อมูล MLO ที่ <a href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน</p>
-    </div>`;
-    return;
-  }
-  if (curMloGroup >= MLO_GROUPS.length) curMloGroup = 0;
-  document.getElementById('mlo-sidebar').innerHTML = MLO_GROUPS.map((g,i) => `
-    <div class="sb-item${i===curMloGroup?' active':''}" onclick="selMloGroup(${i})">
-      <span class="sb-icon">${g.icon||'📋'}</span><span>${g.label}</span>
-    </div>`).join('');
-  const g = MLO_GROUPS[curMloGroup];
-  document.getElementById('mlo-rows').innerHTML = g.items.map(m =>
-    ploRow(m.code, m.desc, 'MLO', mloKas[m.code]||{K:new Set(),A:new Set(),S:new Set()})
-  ).join('');
+  if(curMloGroup>=MLO_GROUPS.length)curMloGroup=0;
+  document.getElementById('mlo-sidebar').innerHTML=MLO_GROUPS.map((g,i)=>`<div class="sb-item${i===curMloGroup?' active':''}" onclick="selMloGroup(${i})"><span class="sb-icon">${g.icon||'📋'}</span><span>${g.label}</span></div>`).join('');
+  const g=MLO_GROUPS[curMloGroup];
+  document.getElementById('mlo-rows').innerHTML=g.items.map(m=>loRow(m.code,m.desc,'MLO',mloKas[m.code]||{K:new Set(),A:new Set(),S:new Set()})).join('');
 }
 function selMloGroup(i){curMloGroup=i;renderMLO();}
 
-/* ═══════════════ CLO — API-driven Course Selector ═══════════════ */
-const API_BASE_CLO = 'https://websitefms.onrender.com/api';
-let cloApiCourses = [];      // [{id, name_th, name_en, ...}]
-let cloApiMajors  = [];      // [{id, name_th, ...}]
-let cloApiSubjects = [];     // flat list of subjects for search
-let selectedCourseId = null;
-let selectedMajorId  = null;
-let selectedSubjectData = null; // current subject data with outcomes
-// cloMappings: { [subjectId]: { [cloIdx]: { plo: Set, mlo: Set } } }
-let cloMappings = {};
-
-function renderCLO() {
-  loadApiCourseList();
+function loRow(code,desc,type,k){
+  const kn=k.K.size,an=k.A.size,sn=k.S.size;
+  const ctx=JSON.stringify({type,code}).replace(/"/g,'&quot;');
+  const kPrint=t=>[...k[t]].map(c=>`<span class="kp-tag ${t}">${c}</span>`).join('');
+  return `<div class="lo-row">
+    <div class="lo-info"><span class="lo-badge${type==='MLO'?' mlo':''}">${code}</span><span class="lo-text">${esc(desc)}</span></div>
+    <div class="kas-cell"><button class="ae-btn K" onclick='openModal(${ctx},"KAS","K")'><span>⊕</span> Add/Edit${kn?` <span class="ae-cnt">${kn}</span>`:''}</button><div class="kas-print">${kPrint('K')||'<span class="kp-tag K" style="opacity:.35">—</span>'}</div></div>
+    <div class="kas-cell"><button class="ae-btn A" onclick='openModal(${ctx},"KAS","A")'><span>⊕</span> Add/Edit${an?` <span class="ae-cnt">${an}</span>`:''}</button><div class="kas-print">${kPrint('A')||'<span class="kp-tag A" style="opacity:.35">—</span>'}</div></div>
+    <div class="kas-cell"><button class="ae-btn S" onclick='openModal(${ctx},"KAS","S")'><span>⊕</span> Add/Edit${sn?` <span class="ae-cnt">${sn}</span>`:''}</button><div class="kas-print">${kPrint('S')||'<span class="kp-tag S" style="opacity:.35">—</span>'}</div></div>
+  </div>`;
 }
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-/* ─── Load courses from API ─── */
-async function loadApiCourseList() {
-  const listEl = document.getElementById('course-list-clo');
-  listEl.innerHTML = '<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลดหลักสูตร...</div>';
+/* CLO - API driven */
+const API_BASE_CLO='https://websitefms.onrender.com/api';
+let cloApiCourses=[],cloApiMajors=[],cloApiSubjects=[];
+let selectedCourseId=null,selectedMajorId=null,selectedSubjectData=null;
+let cloMappings={};
+
+function renderCLO(){loadApiCourseList();}
+
+async function loadApiCourseList(){
+  const el=document.getElementById('course-list-clo');
+  el.innerHTML='<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลดหลักสูตร...</div>';
   showStep('course');
-  try {
-    const res = await fetch(`${API_BASE_CLO}/courses`);
-    const data = await res.json();
-    cloApiCourses = Array.isArray(data) ? data : (data.data || []);
-    renderCourseListClo();
-  } catch(e) {
-    listEl.innerHTML = `<div class="sp-empty">❌ โหลดหลักสูตรไม่สำเร็จ<br><small>${e.message}</small></div>`;
-  }
+  try{
+    const d=await fetch(`${API_BASE_CLO}/courses`).then(r=>r.json());
+    cloApiCourses=Array.isArray(d)?d:(d.data||[]);renderCourseListClo();
+  }catch(e){el.innerHTML=`<div class="sp-empty">❌ โหลดหลักสูตรไม่สำเร็จ<br><small>${e.message}</small></div>`;}
 }
-
-function renderCourseListClo() {
-  const listEl = document.getElementById('course-list-clo');
-  if (!cloApiCourses.length) { listEl.innerHTML = '<div class="sp-empty">ไม่พบหลักสูตร</div>'; return; }
-  listEl.innerHTML = cloApiCourses.map(c => `
-    <div class="sp-item${selectedCourseId===c.id?' active':''}" onclick="selectApiCourse(${c.id},'${esc(c.name_th||'')}')">
-      <div class="sp-item-name">${esc(c.name_th || c.name_en || 'หลักสูตร '+c.id)}</div>
-      ${c.degree_level ? `<div class="sp-item-sub">${esc(c.degree_level)}</div>` : ''}
-    </div>`).join('');
+function renderCourseListClo(){
+  const el=document.getElementById('course-list-clo');
+  if(!cloApiCourses.length){el.innerHTML='<div class="sp-empty">ไม่พบหลักสูตร</div>';return;}
+  el.innerHTML=cloApiCourses.map(c=>`<div class="sp-item${selectedCourseId===c.id?' active':''}" onclick="selectApiCourse(${c.id},'${esc(c.name_th||'')}')"><div class="sp-item-name">${esc(c.name_th||c.name_en||'หลักสูตร '+c.id)}</div>${c.degree_level?`<div class="sp-item-sub">${esc(c.degree_level)}</div>`:''}</div>`).join('');
 }
-
-/* ─── Select course → load majors ─── */
-async function selectApiCourse(courseId, courseName) {
-  selectedCourseId = courseId;
-  selectedMajorId  = null;
-  document.getElementById('selected-course-badge').textContent = courseName;
+async function selectApiCourse(courseId,courseName){
+  selectedCourseId=courseId;selectedMajorId=null;
+  document.getElementById('selected-course-badge').textContent=courseName;
   showStep('major');
-  const listEl = document.getElementById('major-list-clo');
-  listEl.innerHTML = '<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลด Major...</div>';
-  try {
-    const res = await fetch(`${API_BASE_CLO}/courses/${courseId}/majors`);
-    const data = await res.json();
-    cloApiMajors = Array.isArray(data) ? data : (data.data || []);
-    if (!cloApiMajors.length) { listEl.innerHTML = '<div class="sp-empty">ไม่พบ Major ในหลักสูตรนี้</div>'; return; }
-    listEl.innerHTML = cloApiMajors.map(m => `
-      <div class="sp-item${selectedMajorId===m.id?' active':''}" onclick="selectApiMajor(${m.id},'${esc(m.name_th||'')}',${courseId})">
-        <div class="sp-item-name">${esc(m.name_th || m.name_en || 'Major '+m.id)}</div>
-        ${m.name_en ? `<div class="sp-item-sub">${esc(m.name_en)}</div>` : ''}
-      </div>`).join('');
-  } catch(e) {
-    listEl.innerHTML = `<div class="sp-empty">❌ โหลด Major ไม่สำเร็จ</div>`;
-  }
+  const el=document.getElementById('major-list-clo');
+  el.innerHTML='<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลด Major...</div>';
+  try{
+    const d=await fetch(`${API_BASE_CLO}/courses/${courseId}/majors`).then(r=>r.json());
+    cloApiMajors=Array.isArray(d)?d:(d.data||[]);
+    if(!cloApiMajors.length){el.innerHTML='<div class="sp-empty">ไม่พบ Major</div>';return;}
+    el.innerHTML=cloApiMajors.map(m=>`<div class="sp-item${selectedMajorId===m.id?' active':''}" onclick="selectApiMajor(${m.id},'${esc(m.name_th||'')}',${courseId})"><div class="sp-item-name">${esc(m.name_th||m.name_en||'Major '+m.id)}</div>${m.name_en?`<div class="sp-item-sub">${esc(m.name_en)}</div>`:''}</div>`).join('');
+  }catch(e){el.innerHTML='<div class="sp-empty">❌ โหลด Major ไม่สำเร็จ</div>';}
 }
-
-/* ─── Select major → load all subjects from study plans ─── */
-async function selectApiMajor(majorId, majorName, courseId) {
-  selectedMajorId = majorId;
-  document.getElementById('selected-major-badge').textContent = majorName;
+async function selectApiMajor(majorId,majorName){
+  selectedMajorId=majorId;
+  document.getElementById('selected-major-badge').textContent=majorName;
   showStep('subject');
-  const listEl = document.getElementById('subject-list-clo');
-  listEl.innerHTML = '<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลดรายวิชา...</div>';
-  try {
-    // Get all study plans for this major (same pattern as study-plan.html)
-    const plansData = await fetch(`${API_BASE_CLO}/majors/${majorId}/study-plans?page=1&pageSize=50`).then(r=>r.json());
-    const plans = plansData.data || [];
-
-    // Collect all semester-subjects across all plans & years
-    // ssId = semester_subject id (used for PATCH)
-    const subjectMap = {}; // key = ssId
-    for (const plan of plans) {
-      try {
-        const detail = await fetch(`${API_BASE_CLO}/study-plans/${plan.id}`).then(r=>r.json());
-        for (const sem of (detail.semesters || [])) {
-          for (const it of (sem.subjects || [])) {
-            // it = semester_subject row — same structure as study-plan.html renderSemesters()
-            const _s = it.subject || it;
-            const ssId = it.id; // semester_subject ID (for PATCH /semester-subjects/:id)
-            if (subjectMap[ssId]) continue;
-            subjectMap[ssId] = {
-              id:      ssId,              // semester-subject id → used for saving
-              ssId:    ssId,
-              code:    it.code    || _s.code    || '',
-              name_th: it.name_th || _s.name_th || '',
-              name_en: it.name_en || _s.name_en || '',
-              credits: it.credits ?? _s.default_credits ?? '',
-              hours:   it.hour_structure || it.default_hour_structure || _s.default_hour_structure || '',
-              desc_th: it.description_th || _s.description_th || '',
-              desc_en: it.description_en || _s.description_en || '',
-              // outcomes: [{th, en, plo:[], mlo:[]}]  ← exact same shape study-plan.html uses
-              outcomes: (it.outcomes || []).map(o => ({
-                th:  o.th  || '',
-                en:  o.en  || '',
-                plo: o.plo || [],
-                mlo: o.mlo || [],
-              })),
-              semTitle: sem.title || `ภาคเรียน ${sem.term_no}`,
-              termNo:  sem.term_no || '',
-              yearNo:  plan.year_no || '',
-              category: it.category || '',
-            };
+  const el=document.getElementById('subject-list-clo');
+  el.innerHTML='<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลดรายวิชา...</div>';
+  try{
+    const pd=await fetch(`${API_BASE_CLO}/majors/${majorId}/study-plans?page=1&pageSize=50`).then(r=>r.json());
+    const plans=pd.data||[];const subjectMap={};
+    for(const plan of plans){
+      try{
+        const detail=await fetch(`${API_BASE_CLO}/study-plans/${plan.id}`).then(r=>r.json());
+        for(const sem of(detail.semesters||[])){
+          for(const it of(sem.subjects||[])){
+            const _s=it.subject||it,ssId=it.id;
+            if(subjectMap[ssId])continue;
+            subjectMap[ssId]={id:ssId,ssId,code:it.code||_s.code||'',name_th:it.name_th||_s.name_th||'',name_en:it.name_en||_s.name_en||'',credits:it.credits??_s.default_credits??'',desc_th:it.description_th||_s.description_th||'',desc_en:it.description_en||_s.description_en||'',outcomes:(it.outcomes||[]).map(o=>({th:o.th||'',en:o.en||'',plo:o.plo||[],mlo:o.mlo||[]})),semTitle:sem.title||`ภาคเรียน ${sem.term_no}`,termNo:sem.term_no||'',yearNo:plan.year_no||''};
           }
         }
-      } catch(e) { console.warn('plan load err', e); }
+      }catch(e){console.warn(e);}
     }
-    cloApiSubjects = Object.values(subjectMap);
-    // Sort by year → term
-    cloApiSubjects.sort((a,b) => (Number(a.yearNo)-Number(b.yearNo))*10 + (Number(a.termNo)-Number(b.termNo)));
-    if (!cloApiSubjects.length) { listEl.innerHTML = '<div class="sp-empty">ไม่พบรายวิชาในแผนการศึกษา</div>'; return; }
+    cloApiSubjects=Object.values(subjectMap).sort((a,b)=>(Number(a.yearNo)-Number(b.yearNo))*10+(Number(a.termNo)-Number(b.termNo)));
+    if(!cloApiSubjects.length){el.innerHTML='<div class="sp-empty">ไม่พบรายวิชา</div>';return;}
     renderSubjectListClo(cloApiSubjects);
-  } catch(e) {
-    listEl.innerHTML = `<div class="sp-empty">❌ โหลดรายวิชาไม่สำเร็จ<br><small>${e.message}</small></div>`;
-  }
+  }catch(e){el.innerHTML=`<div class="sp-empty">❌ โหลดรายวิชาไม่สำเร็จ<br><small>${e.message}</small></div>`;}
 }
-
-function renderSubjectListClo(subjects) {
-  const listEl = document.getElementById('subject-list-clo');
-  if (!subjects.length) { listEl.innerHTML = '<div class="sp-empty">ไม่พบรายวิชา</div>'; return; }
-  listEl.innerHTML = subjects.map(s => `
-    <div class="sp-item" onclick="selectApiSubject(${s.id})">
-      <div class="sp-item-code">${esc(s.code)}</div>
-      <div class="sp-item-name">${esc(s.name_th)}</div>
-      <div class="sp-item-sub">
-        ${s.yearNo ? `ปี ${s.yearNo} · ` : ''}${esc(s.semTitle)}
-        ${s.outcomes.length ? ` · <span style="color:var(--green);font-weight:700;">${s.outcomes.length} CLO</span>` : ' · <span style="color:#94a3b8">ยังไม่มี CLO</span>'}
-      </div>
-    </div>`).join('');
+function renderSubjectListClo(subjects){
+  const el=document.getElementById('subject-list-clo');
+  if(!subjects.length){el.innerHTML='<div class="sp-empty">ไม่พบรายวิชา</div>';return;}
+  el.innerHTML=subjects.map(s=>`<div class="sp-item" onclick="selectApiSubject(${s.id})"><div class="sp-item-code">${esc(s.code)}</div><div class="sp-item-name">${esc(s.name_th)}</div><div class="sp-item-sub">${s.yearNo?`ปี ${s.yearNo} · `:''}${esc(s.semTitle)}${s.outcomes.length?` · <span style="color:var(--green);font-weight:700;">${s.outcomes.length} CLO</span>`:' · <span style="color:#94a3b8">ยังไม่มี CLO</span>'}</div></div>`).join('');
 }
-
-function filterSubjectList(q) {
-  const ql = q.toLowerCase();
-  const filtered = ql
-    ? cloApiSubjects.filter(s =>
-        s.code.toLowerCase().includes(ql) ||
-        s.name_th.toLowerCase().includes(ql) ||
-        (s.name_en||'').toLowerCase().includes(ql))
-    : cloApiSubjects;
-  renderSubjectListClo(filtered);
+function filterSubjectList(q){
+  const ql=q.toLowerCase();
+  renderSubjectListClo(ql?cloApiSubjects.filter(s=>s.code.toLowerCase().includes(ql)||s.name_th.toLowerCase().includes(ql)||(s.name_en||'').toLowerCase().includes(ql)):cloApiSubjects);
 }
-
-/* ─── Select subject → show CLO table ─── */
-function selectApiSubject(subjectId) {
-  selectedSubjectData = cloApiSubjects.find(s => s.id === subjectId);
-  if (!selectedSubjectData) return;
-  if (!cloMappings[subjectId]) cloMappings[subjectId] = {};
+function selectApiSubject(id){
+  selectedSubjectData=cloApiSubjects.find(s=>s.id===id);
+  if(!selectedSubjectData)return;
+  if(!cloMappings[id])cloMappings[id]={};
   renderCourseCard();
 }
-
-function showStep(step) {
-  ['course','major','subject'].forEach(s => {
-    const el = document.getElementById('step-'+s);
-    if (el) el.style.display = s === step ? 'block' : 'none';
-  });
+function showStep(step){['course','major','subject'].forEach(s=>{const el=document.getElementById('step-'+s);if(el)el.style.display=s===step?'block':'none';});}
+function backToStep(step){
+  if(step==='course'){
+    selectedCourseId=null;selectedMajorId=null;selectedSubjectData=null;
+    document.getElementById('clo-main').innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text-sub);"><div style="font-size:36px;margin-bottom:12px;">🔍</div><div style="font-size:15px;font-weight:700;color:var(--text);">เลือกหลักสูตรและรายวิชา</div><div style="font-size:13px;margin-top:6px;">ใช้แผงด้านขวาเพื่อเลือกหลักสูตร → Major → รายวิชา</div></div>';
+    renderCourseListClo();showStep('course');
+  }else if(step==='major'){selectedMajorId=null;selectedSubjectData=null;showStep('major');}
 }
-
-function backToStep(step) {
-  if (step === 'course') {
-    selectedCourseId = null; selectedMajorId = null; selectedSubjectData = null;
-    document.getElementById('clo-main').innerHTML = `
-      <div style="text-align:center;padding:60px 20px;color:var(--text-sub);">
-        <div style="font-size:36px;margin-bottom:12px;">🔍</div>
-        <div style="font-size:15px;font-weight:700;color:var(--text);">เลือกหลักสูตรและรายวิชา</div>
-        <div style="font-size:13px;margin-top:6px;">ใช้แผงด้านขวาเพื่อเลือกหลักสูตร → Major → รายวิชา</div>
-      </div>`;
-    renderCourseListClo();
-    showStep('course');
-  } else if (step === 'major') {
-    selectedMajorId = null; selectedSubjectData = null;
-    showStep('major');
-  }
-}
-
-/* ─── Render course card with CLO (PLO/MLO only) ─── */
-function renderCourseCard() {
-  const s = selectedSubjectData;
-  if (!s) return;
-  const main = document.getElementById('clo-main');
-  main.innerHTML = `
+function renderCourseCard(){
+  const s=selectedSubjectData;if(!s)return;
+  document.getElementById('clo-main').innerHTML=`
     <div class="course-card">
       <div class="course-top">
         <span class="course-badge">${esc(s.code)}</span>
-        <div>
-          <div class="course-name">${esc(s.name_th)}</div>
-          ${s.name_en ? `<div class="course-name-en">${esc(s.name_en)}</div>` : ''}
-        </div>
-        ${s.credits ? `<div class="course-units">${s.credits} หน่วยกิต</div>` : ''}
+        <div><div class="course-name">${esc(s.name_th)}</div>${s.name_en?`<div class="course-name-en">${esc(s.name_en)}</div>`:''}</div>
+        ${s.credits?`<div class="course-units">${s.credits} หน่วยกิต</div>`:''}
       </div>
-      ${s.desc_th ? `<div class="course-desc">${esc(s.desc_th)}</div>` : ''}
+      ${s.desc_th?`<div class="course-desc">${esc(s.desc_th)}</div>`:''}
       <div class="inner-tabs">
         <button class="inner-tab active" onclick="showInner('clo',this)">Course Outcomes (CLO)</button>
-        ${s.desc_th||s.desc_en ? `<button class="inner-tab" onclick="showInner('info',this)">ข้อมูลรายวิชา</button>` : ''}
+        ${s.desc_th||s.desc_en?`<button class="inner-tab" onclick="showInner('info',this)">ข้อมูลรายวิชา</button>`:''}
       </div>
     </div>
     <div class="clo-table-wrap">
-      <div id="inner-info" style="display:none;padding:18px 24px;color:var(--text-sub);font-size:13px;line-height:1.7;">
-        ${s.desc_th ? `<div style="margin-bottom:10px">${esc(s.desc_th)}</div>` : ''}
-        ${s.desc_en ? `<div style="color:#94a3b8">${esc(s.desc_en)}</div>` : ''}
-      </div>
+      <div id="inner-info" style="display:none;padding:18px 24px;color:var(--text-sub);font-size:13px;line-height:1.7;">${s.desc_th?`<div style="margin-bottom:10px">${esc(s.desc_th)}</div>`:''}${s.desc_en?`<div style="color:#94a3b8">${esc(s.desc_en)}</div>`:''}</div>
       <div id="inner-clo">
-        <div class="clo-thead" style="grid-template-columns:1fr 1fr">
-          <div>CLO &amp; DESCRIPTION</div>
-          <div class="clo-th-kas">LINKED PLO / MLO</div>
-        </div>
+        <div class="clo-thead" style="grid-template-columns:1fr 1fr"><div>CLO &amp; DESCRIPTION</div><div class="clo-th-kas">LINKED PLO / MLO</div></div>
         <div id="clo-rows">${renderCloRows(s)}</div>
       </div>
     </div>`;
 }
-
-function renderCloRows(s) {
-  if (!s.outcomes || !s.outcomes.length) {
-    return `<div style="text-align:center;padding:40px;color:#94a3b8;font-size:13px;">
-      <div style="font-size:28px;margin-bottom:8px;">📭</div>
-      ไม่พบ CLO ในรายวิชานี้<br>
-      <small style="color:#b0c0cc">CLO ถูกกำหนดในหน้าจัดการแผนการศึกษา</small>
-    </div>`;
-  }
-  const sid = s.id;
-  if (!cloMappings[sid]) cloMappings[sid] = {};
-
-  return s.outcomes.map((cl, i) => {
-    const mapping = cloMappings[sid][i] || { plo: new Set(), mlo: new Set() };
-    cloMappings[sid][i] = mapping;
-    const pln = mapping.plo.size, mln = mapping.mlo.size;
-
-    // pills from API data (already saved)
-    const apiPlo = cl.plo || [];
-    const apiMlo = cl.mlo || [];
-    const allPlo = new Set([...apiPlo, ...mapping.plo]);
-    const allMlo = new Set([...apiMlo, ...mapping.mlo]);
-
-    const linked = (allPlo.size + allMlo.size) > 0
-      ? [...allPlo].map(c=>`<span class="linked-badge">${c}</span>`).join('')
-        + [...allMlo].map(c=>`<span class="linked-badge" style="background:#e0f7fa;color:var(--teal)">${c}</span>`).join('')
-      : '<span style="color:#94a3b8;font-size:11px">— ยังไม่ได้ map</span>';
-
-    const ctx = JSON.stringify({type:'CLO',subjectId:sid,cloIdx:i}).replace(/"/g,'&quot;');
+function renderCloRows(s){
+  if(!s.outcomes||!s.outcomes.length)return`<div style="text-align:center;padding:40px;color:#94a3b8;font-size:13px;"><div style="font-size:28px;margin-bottom:8px;">📭</div>ไม่พบ CLO ในรายวิชานี้<br><small style="color:#b0c0cc">CLO ถูกกำหนดในหน้าจัดการแผนการศึกษา</small></div>`;
+  const sid=s.id;if(!cloMappings[sid])cloMappings[sid]={};
+  return s.outcomes.map((cl,i)=>{
+    const m=cloMappings[sid][i]||{plo:new Set(),mlo:new Set()};cloMappings[sid][i]=m;
+    const ap=cl.plo||[],am=cl.mlo||[];
+    const ap2=new Set([...ap,...m.plo]),am2=new Set([...am,...m.mlo]);
+    const linked=(ap2.size+am2.size)>0?[...ap2].map(c=>`<span class="linked-badge">${c}</span>`).join('')+[...am2].map(c=>`<span class="linked-badge" style="background:#e0f7fa;color:var(--teal)">${c}</span>`).join(''):'<span style="color:#94a3b8;font-size:11px">— ยังไม่ได้ map</span>';
+    const ctx=JSON.stringify({type:'CLO',subjectId:sid,cloIdx:i}).replace(/"/g,'&quot;');
     return `<div class="clo-row" style="grid-template-columns:1fr 1fr">
-      <div>
-        <div class="clo-num">CLO ${i+1}</div>
-        <div class="clo-th">${esc(cl.th||'')}</div>
-        ${cl.en ? `<div class="clo-en">${esc(cl.en)}</div>` : ''}
-      </div>
-      <div class="linked-cell" style="cursor:pointer;flex-direction:column;gap:4px;align-items:flex-start;padding:4px 8px;"
-           onclick='openCloModal(${ctx})'>
+      <div><div class="clo-num">CLO ${i+1}</div><div class="clo-th">${esc(cl.th||'')}</div>${cl.en?`<div class="clo-en">${esc(cl.en)}</div>`:''}</div>
+      <div class="linked-cell" style="cursor:pointer;flex-direction:column;gap:4px;align-items:flex-start;padding:4px 8px;" onclick='openCloModal(${ctx})'>
         <div style="display:flex;flex-wrap:wrap;gap:3px;">${linked}</div>
-        <span style="font-size:10px;color:#b0a0cc;margin-top:2px;">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="10" height="10" style="display:inline;vertical-align:middle"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
-          คลิกเพื่อแก้ไข PLO/MLO
-        </span>
+        <span style="font-size:10px;color:#b0a0cc;margin-top:2px;"><svg viewBox="0 0 20 20" fill="currentColor" width="10" height="10" style="display:inline;vertical-align:middle"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg> คลิกเพื่อแก้ไข PLO/MLO</span>
       </div>
     </div>`;
   }).join('');
 }
-
-function showInner(tab, btn) {
-  document.querySelectorAll('.inner-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const infoEl = document.getElementById('inner-info');
-  const cloEl  = document.getElementById('inner-clo');
-  if (infoEl) infoEl.style.display = tab==='info' ? 'block' : 'none';
-  if (cloEl)  cloEl.style.display  = tab==='clo'  ? 'block' : 'none';
+function showInner(tab,btn){
+  document.querySelectorAll('.inner-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  const ie=document.getElementById('inner-info'),ce=document.getElementById('inner-clo');
+  if(ie)ie.style.display=tab==='info'?'block':'none';
+  if(ce)ce.style.display=tab==='clo'?'block':'none';
 }
 
-/* ─── CLO Modal (PLO/MLO only) ─── */
-function openCloModal(ctx) {
-  if (typeof ctx === 'string') ctx = JSON.parse(ctx);
-  mCtx = ctx; mPanel = 'PLO_MLO';
-  const i = ctx.cloIdx;
-  const sid = ctx.subjectId;
-  if (!cloMappings[sid]) cloMappings[sid] = {};
-  if (!cloMappings[sid][i]) cloMappings[sid][i] = { plo: new Set(), mlo: new Set() };
-
-  // Merge API-saved PLO/MLO with local mappings
-  const outcome = (selectedSubjectData?.outcomes||[])[i] || {};
-  const apiPlo = outcome.plo || [];
-  const apiMlo = outcome.mlo || [];
-  tPlo = new Set([...apiPlo, ...cloMappings[sid][i].plo]);
-  tMlo = new Set([...apiMlo, ...cloMappings[sid][i].mlo]);
-  tKas = {K:new Set(),A:new Set(),S:new Set()};
-
-  document.getElementById('m-badge').textContent = `CLO${i+1}`;
-  document.getElementById('m-sub').textContent = `เลือก PLO / MLO ที่สอดคล้องกับ CLO ${i+1}`;
-  document.getElementById('m-toggle').style.display = 'none';
-
-  // Show only PLO/MLO panel
-  document.getElementById('panel-pm').style.display = 'flex';
-  document.getElementById('panel-kas').style.display = 'none';
-
-  buildPmLists(); updateCount();
-  document.getElementById('modal-overlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
+/* CLO modal */
+function openCloModal(ctx){
+  if(typeof ctx==='string')ctx=JSON.parse(ctx);
+  mCtx=ctx;mPanel='PLO_MLO';
+  const i=ctx.cloIdx,sid=ctx.subjectId;
+  if(!cloMappings[sid])cloMappings[sid]={};
+  if(!cloMappings[sid][i])cloMappings[sid][i]={plo:new Set(),mlo:new Set()};
+  const outcome=(selectedSubjectData?.outcomes||[])[i]||{};
+  tPlo=new Set([...(outcome.plo||[]),...cloMappings[sid][i].plo]);
+  tMlo=new Set([...(outcome.mlo||[]),...cloMappings[sid][i].mlo]);
+  tKas={K:new Set(),A:new Set(),S:new Set()};
+  document.getElementById('m-badge').textContent=`CLO${i+1}`;
+  document.getElementById('m-sub').textContent=`เลือก PLO / MLO ที่สอดคล้องกับ CLO ${i+1}`;
+  document.getElementById('m-toggle').style.display='none';
+  document.getElementById('panel-pm').style.display='flex';
+  document.getElementById('panel-kas').style.display='none';
+  buildPmLists();updateCount();
+  document.getElementById('modal-overlay').classList.add('show');document.body.style.overflow='hidden';
 }
 
-/* ═══════════════ MODAL ═══════════════ */
-function openModal(ctx, mode='KAS', focusType='') {
-  if(typeof ctx==='string') ctx=JSON.parse(ctx);
-  mCtx=ctx; mPanel=mode;
-  let badge='';
-  if(ctx.type==='PLO') badge=ctx.code;
-  else if(ctx.type==='MLO') badge=ctx.code;
-  else if(ctx.type==='CLO') badge=`CLO${ctx.cloIdx+1}`;
-  else badge='Import';
+/* KAS modal */
+function openModal(ctx,mode,focusType){
+  if(typeof ctx==='string')ctx=JSON.parse(ctx);
+  mCtx=ctx;mPanel=mode;
+  const badge=ctx.type==='CLO'?`CLO${ctx.cloIdx+1}`:ctx.code;
   document.getElementById('m-badge').textContent=badge;
   document.getElementById('m-sub').textContent=`Select the Knowledge, Attitude, and Skill components associated with ${badge}.`;
-  const isClo=ctx.type==='CLO'||ctx.type==='IMPORT_PLO';
-  document.getElementById('m-toggle').style.display=isClo?'flex':'none';
+  document.getElementById('m-toggle').style.display=ctx.type==='CLO'?'flex':'none';
   if(ctx.type==='PLO'){const k=ploKas[ctx.code]||{K:new Set(),A:new Set(),S:new Set()};tKas={K:new Set(k.K),A:new Set(k.A),S:new Set(k.S)};tPlo=new Set();tMlo=new Set();}
   else if(ctx.type==='MLO'){const k=mloKas[ctx.code]||{K:new Set(),A:new Set(),S:new Set()};tKas={K:new Set(k.K),A:new Set(k.A),S:new Set(k.S)};tPlo=new Set();tMlo=new Set();}
   else{tKas={K:new Set(),A:new Set(),S:new Set()};tPlo=new Set();tMlo=new Set();}
-  const actualMode=mode==='PLO_MLO'?'PLO_MLO':'KAS';
-  switchMTab(actualMode,actualMode==='PLO_MLO'?document.getElementById('t-plomlo'):document.getElementById('t-kas'));
-  buildKasLists(); buildPmLists(); updateCount();
-  document.getElementById('modal-overlay').classList.add('show');
-  document.body.style.overflow='hidden';
-  if(focusType) setTimeout(()=>{const el=document.getElementById('s-'+focusType.toLowerCase());if(el)el.focus();},80);
+  const am=mode==='PLO_MLO'?'PLO_MLO':'KAS';
+  switchMTab(am,am==='PLO_MLO'?document.getElementById('t-plomlo'):document.getElementById('t-kas'));
+  buildKasLists();buildPmLists();updateCount();
+  document.getElementById('modal-overlay').classList.add('show');document.body.style.overflow='hidden';
+  if(focusType)setTimeout(()=>{const el=document.getElementById('s-'+focusType.toLowerCase());if(el)el.focus();},80);
 }
 function closeModal(){document.getElementById('modal-overlay').classList.remove('show');document.body.style.overflow='';}
 function closeBg(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
 function switchMTab(panel,btn){
   mPanel=panel;
-  document.querySelectorAll('.m-toggle-btn').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
+  document.querySelectorAll('.m-toggle-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');
   document.getElementById('panel-pm').style.display=panel==='PLO_MLO'?'flex':'none';
   document.getElementById('panel-kas').style.display=panel==='KAS'?'flex':'none';
 }
-
 function buildPmLists(){
-  // PLO list
-  if (!PLO_LIST.length) {
-    document.getElementById('list-plo').innerHTML='<div class="pm-empty">ยังไม่มีข้อมูล PLO</div>';
-  } else {
-    document.getElementById('list-plo').innerHTML=PLO_LIST.map(p=>{
-      const sel=tPlo.has(p.code);
-      return `<div class="pm-item${sel?' selected':''}" id="pi-${p.code}" onclick="togPM('PLO','${p.code}')">
-        <div class="pm-check"><div class="pm-check-tick"></div></div>
-        <span class="pm-code">${p.code}</span><span class="pm-desc">${esc(p.desc)}</span>
-      </div>`;
-    }).join('');
-  }
+  document.getElementById('list-plo').innerHTML=PLO_LIST.length?PLO_LIST.map(p=>{const sel=tPlo.has(p.code);return`<div class="pm-item${sel?' selected':''}" id="pi-${p.code}" onclick="togPM('PLO','${p.code}')"><div class="pm-check"><div class="pm-check-tick"></div></div><span class="pm-code">${p.code}</span><span class="pm-desc">${esc(p.desc)}</span></div>`;}).join(''):'<div class="pm-empty">ยังไม่มีข้อมูล PLO</div>';
   document.getElementById('s-plo').value='';
-
-  // MLO list
-  const allMlos = MLO_GROUPS.flatMap(g=>g.items);
-  if (!allMlos.length) {
-    document.getElementById('list-mlo').innerHTML='<div class="pm-empty">ยังไม่มีข้อมูล MLO</div>';
-  } else {
-    document.getElementById('list-mlo').innerHTML=allMlos.map(m=>{
-      const sel=tMlo.has(m.code);
-      const sid=m.code.replace(/\./g,'_');
-      return `<div class="pm-item mlo-sel${sel?' selected':''}" id="mi-${sid}" onclick="togPM('MLO','${m.code}')">
-        <div class="pm-check"><div class="pm-check-tick"></div></div>
-        <span class="pm-code mlo-code">${m.code}</span><span class="pm-desc">${esc(m.desc)}</span>
-      </div>`;
-    }).join('');
-  }
+  const allM=MLO_GROUPS.flatMap(g=>g.items);
+  document.getElementById('list-mlo').innerHTML=allM.length?allM.map(m=>{const sel=tMlo.has(m.code),sid=m.code.replace(/\./g,'_');return`<div class="pm-item mlo-sel${sel?' selected':''}" id="mi-${sid}" onclick="togPM('MLO','${m.code}')"><div class="pm-check"><div class="pm-check-tick"></div></div><span class="pm-code mlo-code">${m.code}</span><span class="pm-desc">${esc(m.desc)}</span></div>`;}).join(''):'<div class="pm-empty">ยังไม่มีข้อมูล MLO</div>';
   document.getElementById('s-mlo').value='';
 }
-
 function buildKasLists(){
   ['K','A','S'].forEach(t=>{
     const data=t==='K'?K_DATA:t==='A'?A_DATA:S_DATA;
-    document.getElementById('list-'+t.toLowerCase()).innerHTML=data.map(item=>{
-      const sel=tKas[t].has(item.code);
-      return `<div class="kas-item ${t}${sel?' selected':''}" id="ki-${item.code}" onclick="togKas('${t}','${item.code}')">
-        <div class="kas-check"><div class="kas-check-tick"></div></div>
-        <span class="kas-code ${t}">${item.code}</span><span class="kas-label">${item.label}</span>
-      </div>`;
-    }).join('');
+    document.getElementById('list-'+t.toLowerCase()).innerHTML=data.map(item=>{const sel=tKas[t].has(item.code);return`<div class="kas-item ${t}${sel?' selected':''}" id="ki-${item.code}" onclick="togKas('${t}','${item.code}')"><div class="kas-check"><div class="kas-check-tick"></div></div><span class="kas-code ${t}">${item.code}</span><span class="kas-label">${item.label}</span></div>`;}).join('');
     document.getElementById('s-'+t.toLowerCase()).value='';
   });
 }
 function togPM(type,code){
-  const ref=type==='PLO'?tPlo:tMlo;
-  if(ref.has(code))ref.delete(code);else ref.add(code);
-  const sid=(type==='PLO'?'pi-':'mi-')+code.replace(/\./g,'_');
-  const el=document.getElementById(sid);
-  if(el) el.classList.toggle('selected',ref.has(code));
-  updateCount();
+  const ref=type==='PLO'?tPlo:tMlo;if(ref.has(code))ref.delete(code);else ref.add(code);
+  const el=document.getElementById((type==='PLO'?'pi-':'mi-')+code.replace(/\./g,'_'));
+  if(el)el.classList.toggle('selected',ref.has(code));updateCount();
 }
 function togKas(t,code){
   if(tKas[t].has(code))tKas[t].delete(code);else tKas[t].add(code);
   const el=document.getElementById('ki-'+code);
-  if(el){el.classList.toggle('selected',tKas[t].has(code));el.classList.toggle(t,true);}
-  updateCount();
+  if(el){el.classList.toggle('selected',tKas[t].has(code));el.classList.toggle(t,true);}updateCount();
 }
 function filterPM(type,q){
   const ql=q.toLowerCase();
-  if(type==='PLO') PLO_LIST.forEach(p=>{const el=document.getElementById('pi-'+p.code);if(el)el.classList.toggle('hidden',!!(ql&&!p.code.toLowerCase().includes(ql)&&!p.desc.toLowerCase().includes(ql)));});
-  else MLO_GROUPS.flatMap(g=>g.items).forEach(m=>{const sid=m.code.replace(/\./g,'_');const el=document.getElementById('mi-'+sid);if(el)el.classList.toggle('hidden',!!(ql&&!m.code.toLowerCase().includes(ql)&&!m.desc.toLowerCase().includes(ql)));});
+  if(type==='PLO')PLO_LIST.forEach(p=>{const el=document.getElementById('pi-'+p.code);if(el)el.classList.toggle('hidden',!!(ql&&!p.code.toLowerCase().includes(ql)&&!p.desc.toLowerCase().includes(ql)));});
+  else MLO_GROUPS.flatMap(g=>g.items).forEach(m=>{const el=document.getElementById('mi-'+m.code.replace(/\./g,'_'));if(el)el.classList.toggle('hidden',!!(ql&&!m.code.toLowerCase().includes(ql)&&!m.desc.toLowerCase().includes(ql)));});
 }
 function filterKAS(t,q){
-  const data=t==='K'?K_DATA:t==='A'?A_DATA:S_DATA;
-  const ql=q.toLowerCase();
+  const data=t==='K'?K_DATA:t==='A'?A_DATA:S_DATA,ql=q.toLowerCase();
   data.forEach(item=>{const el=document.getElementById('ki-'+item.code);if(el)el.classList.toggle('hidden',!!(ql&&!item.code.toLowerCase().includes(ql)&&!item.label.toLowerCase().includes(ql)));});
 }
 function updateCount(){
   const kn=tKas.K.size,an=tKas.A.size,sn=tKas.S.size,pln=tPlo.size,mln=tMlo.size;
   document.getElementById('m-count').innerHTML=`<strong>${kn+an+sn+pln+mln}</strong> items selected total`;
-  document.getElementById('cnt-k').textContent=`${kn} เลือก`;
-  document.getElementById('cnt-a').textContent=`${an} เลือก`;
-  document.getElementById('cnt-s').textContent=`${sn} เลือก`;
-  document.getElementById('cnt-plo').textContent=`${pln} เลือก`;
+  document.getElementById('cnt-k').textContent=`${kn} เลือก`;document.getElementById('cnt-a').textContent=`${an} เลือก`;
+  document.getElementById('cnt-s').textContent=`${sn} เลือก`;document.getElementById('cnt-plo').textContent=`${pln} เลือก`;
   document.getElementById('cnt-mlo').textContent=`${mln} เลือก`;
 }
 function saveModal(){
   if(!mCtx){closeModal();return;}
   if(mCtx.type==='PLO'){ploKas[mCtx.code]={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)};renderPLO();}
   else if(mCtx.type==='MLO'){mloKas[mCtx.code]={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)};renderMLO();}
-  else if(mCtx.type==='CLO'){
-    saveCloMapping(mCtx.subjectId, mCtx.cloIdx, [...tPlo], [...tMlo]);
-    return; // toast + closeModal handled inside async fn
+  else if(mCtx.type==='CLO'){saveCloMapping(mCtx.subjectId,mCtx.cloIdx,[...tPlo],[...tMlo]);return;}
+  closeModal();toast(`✓ บันทึกสำเร็จ (${tKas.K.size+tKas.A.size+tKas.S.size+tPlo.size+tMlo.size} รายการ)`);
+}
+async function saveCloMapping(ssId,cloIdx,ploArr,mloArr){
+  if(!cloMappings[ssId])cloMappings[ssId]={};
+  cloMappings[ssId][cloIdx]={plo:new Set(ploArr),mlo:new Set(mloArr)};
+  if(selectedSubjectData&&selectedSubjectData.id===ssId){
+    const outcomes=selectedSubjectData.outcomes||[];
+    if(outcomes[cloIdx])outcomes[cloIdx]={...outcomes[cloIdx],plo:ploArr,mlo:mloArr};
+    selectedSubjectData.outcomes=outcomes;
+    const idx=cloApiSubjects.findIndex(s=>s.id===ssId);if(idx>=0)cloApiSubjects[idx].outcomes=outcomes;
   }
-  closeModal();
-  toast(`✓ บันทึกสำเร็จ (${tKas.K.size+tKas.A.size+tKas.S.size+tPlo.size+tMlo.size} รายการ)`);
+  closeModal();renderCourseCard();
+  const s=selectedSubjectData;if(!s){toast('✓ บันทึก PLO/MLO สำเร็จ (local only)');return;}
+  const body={outcomes:(s.outcomes||[]).map(o=>({th:o.th||'',en:o.en||'',plo:o.plo||[],mlo:o.mlo||[]}))};
+  let saved=false;
+  for(const method of['PATCH','PUT']){
+    try{const r=await fetch(`${API_BASE_CLO}/semester-subjects/${ssId}`,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(r.ok){saved=true;break;}}catch{}
+  }
+  toast(saved?`✓ บันทึก PLO/MLO สำเร็จ (CLO ${cloIdx+1})`:`⚠ บันทึกในเครื่องแล้ว แต่ส่ง API ไม่สำเร็จ`,saved?'#22c55e':'#f59e0b');
 }
 
-/* PATCH CLO PLO/MLO back to API (same endpoint as study-plan.html doEdit) */
-async function saveCloMapping(ssId, cloIdx, ploArr, mloArr) {
-  // 1. Update local data immediately for responsive UI
-  if (!cloMappings[ssId]) cloMappings[ssId] = {};
-  cloMappings[ssId][cloIdx] = { plo: new Set(ploArr), mlo: new Set(mloArr) };
-
-  // 2. Update selectedSubjectData.outcomes in-place
-  if (selectedSubjectData && selectedSubjectData.id === ssId) {
-    const outcomes = selectedSubjectData.outcomes || [];
-    if (outcomes[cloIdx]) {
-      outcomes[cloIdx] = { ...outcomes[cloIdx], plo: ploArr, mlo: mloArr };
-    }
-    selectedSubjectData.outcomes = outcomes;
-    // Also update in cloApiSubjects list
-    const idx = cloApiSubjects.findIndex(s => s.id === ssId);
-    if (idx >= 0) cloApiSubjects[idx].outcomes = outcomes;
-  }
-
-  closeModal();
-  renderCourseCard();
-
-  // 3. PATCH to API — same pattern as study-plan.html doEdit()
-  const s = selectedSubjectData;
-  if (!s) { toast('✓ บันทึก PLO/MLO สำเร็จ (local only)'); return; }
-  const body = {
-    outcomes: (s.outcomes || []).map(o => ({
-      th:  o.th  || '',
-      en:  o.en  || '',
-      plo: o.plo || [],
-      mlo: o.mlo || [],
-    })),
-  };
-  let saved = false;
-  for (const method of ['PATCH','PUT']) {
-    try {
-      const r = await fetch(`${API_BASE_CLO}/semester-subjects/${ssId}`, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (r.ok) { saved = true; break; }
-    } catch {}
-  }
-  toast(saved
-    ? `✓ บันทึก PLO/MLO สำเร็จ (CLO ${cloIdx+1})`
-    : `⚠ บันทึกในเครื่องแล้ว แต่ส่ง API ไม่สำเร็จ`,
-    saved ? '#22c55e' : '#f59e0b'
-  );
+/* Export/Import */
+function downloadTemplate(){
+  const wb=XLSX.utils.book_new();
+  const kc=K_DATA.map(d=>d.code),ac=A_DATA.map(d=>d.code),sc=S_DATA.map(d=>d.code);
+  const ph=['PLO','DESCRIPTION',...kc,...ac,...sc];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([ph,...PLO_LIST.map(p=>[p.code,p.desc,...new Array(kc.length+ac.length+sc.length).fill('')])]),'PLO_KAS');
+  const allM=MLO_GROUPS.flatMap(g=>g.items);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['MLO','DESCRIPTION',...kc,...ac,...sc],...allM.map(m=>[m.code,m.desc,...new Array(kc.length+ac.length+sc.length).fill('')])]),'MLO_KAS');
+  XLSX.writeFile(wb,'KAS_Mapping_Template.xlsx');toast('✓ ดาวน์โหลด Template สำเร็จ','#16a34a');
 }
-
-/* ═══════════════ EXPORT / IMPORT ═══════════════ */
-function downloadTemplate() {
-  const wb = XLSX.utils.book_new();
-  const kCodes=K_DATA.map(d=>d.code), aCodes=A_DATA.map(d=>d.code), sCodes=S_DATA.map(d=>d.code);
-  const ploHeader=['PLO','DESCRIPTION',...kCodes,...aCodes,...sCodes];
-  const ploRows=[ploHeader,...PLO_LIST.map(p=>[p.code,p.desc,...new Array(kCodes.length+aCodes.length+sCodes.length).fill('')])];
-  const wsPlo=XLSX.utils.aoa_to_sheet(ploRows);
-  wsPlo['!cols']=[{wch:8},{wch:50},...kCodes.map(()=>({wch:6})),...aCodes.map(()=>({wch:6})),...sCodes.map(()=>({wch:6}))];
-  XLSX.utils.book_append_sheet(wb,wsPlo,'PLO_KAS');
-  const allMlos=MLO_GROUPS.flatMap(g=>g.items);
-  const mloHeader=['MLO','DESCRIPTION',...kCodes,...aCodes,...sCodes];
-  const mloRows=[mloHeader,...allMlos.map(m=>[m.code,m.desc,...new Array(kCodes.length+aCodes.length+sCodes.length).fill('')])];
-  const wsMlo=XLSX.utils.aoa_to_sheet(mloRows);
-  XLSX.utils.book_append_sheet(wb,wsMlo,'MLO_KAS');
-  XLSX.writeFile(wb,'KAS_Mapping_Template.xlsx');
-  toast('✓ ดาวน์โหลด Template สำเร็จ','#16a34a');
-}
-
 function exportExcel(){
   const wb=XLSX.utils.book_new();
-  const ploHeader=['PLO','DESCRIPTION','K_CODES','A_CODES','S_CODES'];
-  const ploData=[ploHeader,...PLO_LIST.map(p=>[p.code,p.desc,[...( ploKas[p.code]||{K:new Set()}).K].join(','),[...(ploKas[p.code]||{A:new Set()}).A].join(','),[...(ploKas[p.code]||{S:new Set()}).S].join(',')])];
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ploData),'PLO_KAS');
-  const allMlos=MLO_GROUPS.flatMap(g=>g.items);
-  const mloHeader=['MLO','DESCRIPTION','K_CODES','A_CODES','S_CODES'];
-  const mloData=[mloHeader,...allMlos.map(m=>[m.code,m.desc,[...(mloKas[m.code]||{K:new Set()}).K].join(','),[...(mloKas[m.code]||{A:new Set()}).A].join(','),[...(mloKas[m.code]||{S:new Set()}).S].join(',')])];
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(mloData),'MLO_KAS');
-  XLSX.writeFile(wb,'KAS_Mapping_Export.xlsx');
-  toast('✓ Export Excel สำเร็จ','#16a34a');
+  const pd=[['PLO','DESCRIPTION','K_CODES','A_CODES','S_CODES'],...PLO_LIST.map(p=>[p.code,p.desc,[...(ploKas[p.code]||{K:new Set()}).K].join(','),[...(ploKas[p.code]||{A:new Set()}).A].join(','),[...(ploKas[p.code]||{S:new Set()}).S].join(',')])];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(pd),'PLO_KAS');
+  const allM=MLO_GROUPS.flatMap(g=>g.items);
+  const md=[['MLO','DESCRIPTION','K_CODES','A_CODES','S_CODES'],...allM.map(m=>[m.code,m.desc,[...(mloKas[m.code]||{K:new Set()}).K].join(','),[...(mloKas[m.code]||{A:new Set()}).A].join(','),[...(mloKas[m.code]||{S:new Set()}).S].join(',')])];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(md),'MLO_KAS');
+  XLSX.writeFile(wb,'KAS_Mapping_Export.xlsx');toast('✓ Export Excel สำเร็จ','#16a34a');
 }
-
 function importExcel(e){
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
@@ -1364,10 +912,8 @@ function importExcel(e){
       const wb=XLSX.read(ev.target.result,{type:'binary'});
       if(wb.SheetNames.includes('PLO_KAS')){
         const rows=XLSX.utils.sheet_to_json(wb.Sheets['PLO_KAS'],{header:1,defval:''});
-        if(rows.length>1){
-          const h=rows[0]; const ks=h.indexOf('K1'),as=h.indexOf('A1'),ss=h.indexOf('S1');
-          rows.slice(1).forEach(row=>{
-            const code=String(row[0]||'').trim();if(!ploKas[code])return;
+        if(rows.length>1){const h=rows[0],ks=h.indexOf('K1'),as=h.indexOf('A1'),ss=h.indexOf('S1');
+          rows.slice(1).forEach(row=>{const code=String(row[0]||'').trim();if(!ploKas[code])return;
             if(ks>=0)K_DATA.forEach((k,i)=>{if(row[ks+i]==='✓'||row[ks+i]==1)ploKas[code].K.add(k.code);});
             if(as>=0)A_DATA.forEach((a,i)=>{if(row[as+i]==='✓'||row[as+i]==1)ploKas[code].A.add(a.code);});
             if(ss>=0)S_DATA.forEach((s,i)=>{if(row[ss+i]==='✓'||row[ss+i]==1)ploKas[code].S.add(s.code);});
@@ -1378,43 +924,32 @@ function importExcel(e){
       toast(`✓ Import สำเร็จ: ${file.name}`,'#0891b2');
     }catch(err){toast('❌ Import ล้มเหลว: '+err.message,'#ef4444');}
   };
-  reader.readAsBinaryString(file);
-  e.target.value='';
+  reader.readAsBinaryString(file);e.target.value='';
 }
-
 function exportPDF(section='ALL'){
   document.getElementById('pdf-menu').style.display='none';
-  const overlay=document.getElementById('pdf-overlay');
-  overlay.classList.add('show');
+  const overlay=document.getElementById('pdf-overlay');overlay.classList.add('show');
   document.getElementById('pdf-msg').textContent='กำลังเตรียม PDF...';
   setTimeout(()=>{
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active'));
-    const panels=section==='ALL'?['PLO','MLO','CLO']:section==='PLO'?['PLO']:section==='MLO'?['MLO']:['CLO'];
-    panels.forEach(id=>document.getElementById('panel-'+id)?.classList.add('print-active'));
-    setTimeout(()=>{
-      overlay.classList.remove('show');
-      window.print();
-      setTimeout(()=>document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active')),500);
-    },300);
+    (section==='ALL'?['PLO','MLO','CLO']:[section]).forEach(id=>document.getElementById('panel-'+id)?.classList.add('print-active'));
+    setTimeout(()=>{overlay.classList.remove('show');window.print();setTimeout(()=>document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active')),500);},300);
   },200);
 }
 
-/* ═══════════════ TOAST ═══════════════ */
+/* Toast */
 let _tt;
 function toast(msg,color='#22c55e'){
   document.getElementById('toast-dot').style.background=color;
   document.getElementById('toast-msg').textContent=msg;
-  const t=document.getElementById('toast');
-  t.classList.add('show');
-  clearTimeout(_tt);
-  _tt=setTimeout(()=>t.classList.remove('show'),3200);
+  const t=document.getElementById('toast');t.classList.add('show');
+  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3200);
 }
 
-/* ═══════════════ INIT ═══════════════ */
-// แสดงข้อมูล Default ก่อน รอให้ผู้ใช้กดปุ่มเพื่อดึงจาก localStorage
-PLO_LIST = DEFAULT_PLO;
-MLO_GROUPS = DEFAULT_MLO_GROUPS;
-isLiveData = false;
+/* ═══════════ INIT — ใช้ข้อมูล Default จนกว่าจะกดปุ่มดึงข้อมูล ═══════════ */
+PLO_LIST=DEFAULT_PLO;
+MLO_GROUPS=DEFAULT_MLO_GROUPS;
+isLiveData=false;
 initKasState();
 loadKasData();
 updateBanner('default');

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<title>ผลงานนักศึกษา | FMS Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<style>
+:root {
+  --bg:#f1f3f8; --surface:#fff; --surface2:#f7f8fc; --border:#e2e6f0;
+  --purple:#6d28d9; --purple2:#7c3aed; --purple3:#8b5cf6;
+  --text:#1e1b2e; --muted:#6b7280; --green:#059669; --red:#dc2626;
+  --amber:#d97706; --blue:#2563eb; --fb:#1877f2; --sidebar-w:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:14px;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--surface);height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border);z-index:100;box-shadow:2px 0 8px rgba(0,0,0,.06);}
+.sidebar-brand{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.brand-icon{width:32px;height:32px;background:var(--purple);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.brand-title{font-size:15px;font-weight:700;color:var(--text);}
+.brand-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.sidebar-section{padding:16px 16px 6px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;}
+.sidebar-nav{flex:1;padding:4px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:all .18s;}
+.nav-item:hover{background:rgba(109,40,217,.1);color:var(--purple);}
+.nav-item.active{background:rgba(109,40,217,.12);color:var(--purple);font-weight:600;}
+.nav-item i{width:16px;text-align:center;font-size:14px;}
+.sidebar-footer{padding:10px;border-top:1px solid var(--border);}
+.sidebar-footer .nav-item{color:var(--red);}
+.sidebar-footer .nav-item:hover{background:rgba(220,38,38,.08);}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:var(--sidebar-w);right:0;height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:16px;z-index:90;}
+.topbar-breadcrumb{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);}
+.topbar-breadcrumb a{color:var(--muted);text-decoration:none;}
+.topbar-breadcrumb a:hover{color:var(--purple);}
+.topbar-breadcrumb .sep{opacity:.4;}
+.topbar-breadcrumb .current{color:var(--text);font-weight:500;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.topbar-search{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;width:220px;}
+.topbar-search input{background:none;border:none;outline:none;color:var(--text);font-size:13px;width:100%;font-family:inherit;}
+.topbar-search i{color:var(--muted);font-size:12px;}
+.topbar-avatar{width:32px;height:32px;background:linear-gradient(135deg,var(--purple),var(--purple3));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;color:#fff;}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);margin-top:56px;flex:1;padding:28px 32px;min-width:0;}
+
+/* PAGE HEAD */
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
+.page-head-left h1{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.3px;}
+.page-head-left p{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;text-decoration:none;white-space:nowrap;}
+.btn-primary{background:var(--purple);color:#fff;box-shadow:0 4px 14px rgba(109,40,217,.28);}
+.btn-primary:hover{background:var(--purple2);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--muted);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--purple);color:var(--purple);background:rgba(109,40,217,.05);}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.stat-icon.purple{background:rgba(109,40,217,.1);color:var(--purple);}
+.stat-icon.gold{background:rgba(217,119,6,.1);color:var(--amber);}
+.stat-icon.green{background:rgba(5,150,105,.1);color:var(--green);}
+.stat-icon.blue{background:rgba(37,99,235,.1);color:var(--blue);}
+.stat-val{font-size:22px;font-weight:700;color:var(--text);line-height:1;}
+.stat-lbl{font-size:11.5px;color:var(--muted);margin-top:3px;}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.toolbar-search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;flex:1;min-width:200px;max-width:320px;}
+.toolbar-search input{background:none;border:none;outline:none;color:var(--text);font-size:13px;width:100%;font-family:inherit;}
+.toolbar-search i{color:var(--muted);font-size:13px;}
+.filter-select{padding:8px 32px 8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:inherit;outline:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+.filter-select:focus{border-color:var(--purple);}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+
+/* ACHIEVEMENT CARD */
+.ach-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.05);transition:transform .2s,box-shadow .2s;cursor:pointer;text-decoration:none;display:flex;flex-direction:column;position:relative;}
+.ach-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,.1);}
+.ach-card-img{width:100%;height:170px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);position:relative;overflow:hidden;flex-shrink:0;}
+.ach-card-img img{width:100%;height:100%;object-fit:cover;}
+.ach-card-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#c4b5fd;font-size:11px;}
+.ach-card-img-placeholder i{font-size:32px;color:#ddd6fe;}
+/* FB overlay on image */
+.fb-overlay{position:absolute;bottom:0;left:0;right:0;padding:8px 12px;background:linear-gradient(to top,rgba(0,0,0,.55),transparent);display:flex;align-items:center;gap:5px;opacity:0;transition:opacity .2s;}
+.ach-card:hover .fb-overlay{opacity:1;}
+.fb-overlay i{color:#fff;font-size:13px;}
+.fb-overlay span{color:#fff;font-size:11.5px;font-weight:500;}
+/* no-fb card gets different hover tint */
+.ach-card.no-fb:hover{box-shadow:0 8px 28px rgba(0,0,0,.08);}
+
+.ach-card-body{padding:14px 16px;flex:1;display:flex;flex-direction:column;gap:6px;}
+.ach-card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.level-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;}
+.level-badge.gold  {background:rgba(217,119,6,.12);color:#92400e;}
+.level-badge.silver{background:rgba(100,116,139,.1);color:#475569;}
+.level-badge.normal{background:rgba(109,40,217,.1);color:var(--purple);}
+.ach-card-date{font-size:11px;color:var(--muted);}
+.ach-card-title{font-size:13.5px;font-weight:600;color:var(--text);line-height:1.45;flex:1;}
+.ach-card-students{font-size:11.5px;color:var(--muted);display:flex;align-items:flex-start;gap:5px;line-height:1.4;}
+.ach-card-students i{margin-top:2px;flex-shrink:0;font-size:10px;}
+/* FB pill at bottom of card */
+.ach-card-fb{display:flex;align-items:center;gap:6px;padding:8px 16px;border-top:1px solid var(--border);background:rgba(24,119,242,.04);font-size:11.5px;color:var(--fb);font-weight:500;}
+.ach-card-fb i{font-size:12px;}
+.ach-card-no-fb{padding:8px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);font-style:italic;}
+
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,#e2e6f0 25%,#f0f2f8 50%,#e2e6f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;}
+@keyframes shimmer{to{background-position:-200% 0;}}
+.skel-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.skel-img{height:170px;background:linear-gradient(90deg,#e2e6f0 25%,#f0f2f8 50%,#e2e6f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;}
+.skel-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:.3;}
+.empty-title{font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.empty-sub{font-size:13px;line-height:1.6;}
+
+/* LOAD MORE */
+.load-more-wrap{text-align:center;margin-top:28px;}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.ach-card{animation:fadeInUp .3s ease both;}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon">🎓</div>
+    <div><div class="brand-title">FMS Admin</div><div class="brand-sub">PSU Management</div></div>
+  </div>
+  <div class="sidebar-section">เมนูหลัก</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="dashboard.html"><i class="fa-solid fa-gauge-high"></i> แดชบอร์ด</a>
+    <a class="nav-item" href="course-list.html"><i class="fa-solid fa-book-open"></i> หลักสูตร</a>
+    <a class="nav-item" href="study-plan.html"><i class="fa-solid fa-list-check"></i> แผนการศึกษา</a>
+    <a class="nav-item active" href="#"><i class="fa-solid fa-trophy"></i> ผลงาน</a>
+    <a class="nav-item" href="qa-dashboard.html"><i class="fa-solid fa-shield-check"></i> ประกันคุณภาพ</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</a>
+  </div>
+</aside>
+
+<header class="topbar">
+  <div class="topbar-breadcrumb">
+    <a href="dashboard.html"><i class="fa-solid fa-house" style="font-size:11px;"></i></a>
+    <span class="sep">/</span>
+    <span class="current">ผลงานนักศึกษา</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="topSearch" placeholder="ค้นหาผลงาน..." oninput="applyFilters()"/>
+    </div>
+    <div class="topbar-avatar">A</div>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="page-head">
+    <div class="page-head-left">
+      <h1>🏆 ผลงานนักศึกษาและผลสัมฤทธิ์</h1>
+      <p>รวมข้อมูลความสำเร็จของนักศึกษา รางวัล และสถิติประกอบการประเมินคุณภาพหลักสูตร</p>
+    </div>
+    <a class="btn btn-primary" href="add-achievement.html">
+      <i class="fa-solid fa-plus"></i> เพิ่มผลงาน
+    </a>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card"><div class="stat-icon purple"><i class="fa-solid fa-trophy"></i></div><div><div class="stat-val" id="statTotal">—</div><div class="stat-lbl">ผลงานทั้งหมด</div></div></div>
+    <div class="stat-card"><div class="stat-icon gold"><i class="fa-solid fa-globe"></i></div><div><div class="stat-val" id="statIntl">—</div><div class="stat-lbl">ระดับนานาชาติ / ชาติ</div></div></div>
+    <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-briefcase"></i></div><div><div class="stat-val" id="statEmp">—</div><div class="stat-lbl">การมีงานทำ</div></div></div>
+    <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-users"></i></div><div><div class="stat-val" id="statStudents">—</div><div class="stat-lbl">นักศึกษาที่เกี่ยวข้อง</div></div></div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchBox" placeholder="ค้นหาชื่อรางวัล นักศึกษา..." oninput="applyFilters()"/>
+    </div>
+    <select class="filter-select" id="filterLevel" onchange="applyFilters()">
+      <option value="">ทุกระดับ</option>
+      <option value="international">🌐 นานาชาติ</option>
+      <option value="national">🏆 ระดับชาติ</option>
+      <option value="regional">🥈 ภูมิภาค</option>
+      <option value="university">🎓 มหาวิทยาลัย</option>
+      <option value="faculty">📋 ระดับคณะ</option>
+      <option value="employment">💼 การมีงานทำ</option>
+      <option value="other">📌 อื่นๆ</option>
+    </select>
+    <select class="filter-select" id="filterYear" onchange="applyFilters()">
+      <option value="">ทุกปี</option>
+    </select>
+    <div style="margin-left:auto;font-size:12.5px;color:var(--muted);" id="countLabel"></div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid" id="grid"></div>
+
+  <div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
+    <button class="btn btn-outline" id="loadMoreBtn" onclick="loadMore()">
+      <i class="fa-solid fa-arrow-down"></i> โหลดเพิ่มเติม
+    </button>
+  </div>
+
+</main>
+
+<script>
+const BASE_URL = "https://websitefms.onrender.com";
+const API = BASE_URL + "/api";
+const PAGE_SIZE = 12;
+
+if (!localStorage.getItem("user")) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
+document.getElementById("logoutBtn").addEventListener("click", e => { e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html"; });
+
+let allData = [], filtered = [], page = 0;
+
+const LEVEL_LABEL = { international:"🌐 นานาชาติ", national:"🏆 ระดับชาติ", regional:"🥈 ภูมิภาค", university:"🎓 มหาวิทยาลัย", faculty:"📋 ระดับคณะ", employment:"💼 การมีงานทำ", other:"📌 อื่นๆ" };
+const LEVEL_CLASS = { international:"gold", national:"gold", regional:"silver", university:"silver", faculty:"normal", employment:"normal", other:"normal" };
+
+// ── Skeleton ──
+function showSkeleton(n=6) {
+  const g = document.getElementById("grid");
+  g.innerHTML = Array.from({length:n}, () => `
+    <div class="skel-card">
+      <div class="skel-img"></div>
+      <div class="skel-body">
+        <div class="skeleton" style="height:14px;width:40%;"></div>
+        <div class="skeleton" style="height:18px;width:85%;"></div>
+        <div class="skeleton" style="height:14px;width:60%;"></div>
+      </div>
+    </div>`).join("");
+}
+
+// ── Load data ──
+async function loadData() {
+  showSkeleton();
+  try {
+    const res = await fetch(`${API}/achievements`);
+    if (!res.ok) throw new Error("โหลดไม่สำเร็จ");
+    allData = await res.json();
+    buildYearFilter();
+    updateStats();
+    applyFilters();
+  } catch (err) {
+    document.getElementById("grid").innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-icon">⚠️</div>
+        <div class="empty-title">โหลดข้อมูลไม่สำเร็จ</div>
+        <div class="empty-sub">${err.message}</div>
+      </div>`;
+  }
+}
+
+// ── Year filter options ──
+function buildYearFilter() {
+  const years = [...new Set(allData.map(d => d.achieve_date?.slice(0,4)).filter(Boolean))].sort((a,b)=>b-a);
+  const sel = document.getElementById("filterYear");
+  years.forEach(y => { const o = document.createElement("option"); o.value = y; o.textContent = `ปี ${parseInt(y)+543}`; sel.appendChild(o); });
+}
+
+// ── Stats ──
+function updateStats() {
+  document.getElementById("statTotal").textContent    = allData.length;
+  document.getElementById("statIntl").textContent     = allData.filter(d => ["international","national"].includes(d.level)).length;
+  document.getElementById("statEmp").textContent      = allData.filter(d => d.level === "employment").length;
+  const allStudents = allData.flatMap(d => d.students ? d.students.split(",").map(s=>s.trim()).filter(Boolean) : []);
+  document.getElementById("statStudents").textContent = new Set(allStudents).size;
+}
+
+// ── Filter ──
+function applyFilters() {
+  const q      = (document.getElementById("searchBox").value || document.getElementById("topSearch").value || "").toLowerCase();
+  const level  = document.getElementById("filterLevel").value;
+  const year   = document.getElementById("filterYear").value;
+  filtered = allData.filter(d => {
+    const matchQ = !q || (d.title||"").toLowerCase().includes(q) || (d.students||"").toLowerCase().includes(q) || (d.description||"").toLowerCase().includes(q);
+    const matchL = !level || d.level === level;
+    const matchY = !year  || (d.achieve_date||"").startsWith(year);
+    return matchQ && matchL && matchY;
+  });
+  document.getElementById("countLabel").textContent = `แสดง ${Math.min(filtered.length, PAGE_SIZE)} จาก ${filtered.length} รายการ`;
+  page = 0;
+  document.getElementById("grid").innerHTML = "";
+  renderPage();
+}
+
+// ── Render page ──
+function renderPage() {
+  const start = page * PAGE_SIZE;
+  const chunk = filtered.slice(start, start + PAGE_SIZE);
+  const grid  = document.getElementById("grid");
+
+  if (page === 0 && chunk.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-icon">🏆</div>
+        <div class="empty-title">ยังไม่มีผลงาน</div>
+        <div class="empty-sub">กดปุ่ม "เพิ่มผลงาน" เพื่อบันทึกรายการแรก</div>
+      </div>`;
+    document.getElementById("loadMoreWrap").style.display = "none";
+    return;
+  }
+
+  chunk.forEach((d, i) => {
+    const card = buildCard(d, start + i);
+    grid.appendChild(card);
+  });
+
+  const shown = (page + 1) * PAGE_SIZE;
+  const wrap  = document.getElementById("loadMoreWrap");
+  const btn   = document.getElementById("loadMoreBtn");
+  if (shown < filtered.length) {
+    wrap.style.display = "block";
+    btn.textContent = `โหลดเพิ่มเติม (${filtered.length - shown} รายการ)`;
+    btn.innerHTML   = `<i class="fa-solid fa-arrow-down"></i> โหลดเพิ่มเติม (${filtered.length - shown} รายการ)`;
+  } else {
+    wrap.style.display = "none";
+  }
+  document.getElementById("countLabel").textContent = `แสดง ${Math.min(shown, filtered.length)} จาก ${filtered.length} รายการ`;
+}
+
+function loadMore() { page++; renderPage(); }
+
+// ── Build card ──
+function buildCard(d, idx) {
+  const hasFb  = d.facebook_url && /facebook\.com|fb\.watch|fb\.me/i.test(d.facebook_url);
+  const target = hasFb ? d.facebook_url : null;
+
+  // card element — clickable only if has FB link
+  const card = document.createElement(hasFb ? "a" : "div");
+  card.className = "ach-card" + (hasFb ? "" : " no-fb");
+  card.style.animationDelay = (idx % PAGE_SIZE * 0.04) + "s";
+  if (hasFb) { card.href = d.facebook_url; card.target = "_blank"; card.rel = "noopener"; }
+
+  // image
+  const imgHtml = d.image_url
+    ? `<img src="${BASE_URL}${d.image_url}" alt="${d.title||""}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\"ach-card-img-placeholder\\"><i class=\\"fa-solid fa-image\\"></i><span>ไม่มีรูปภาพ</span></div>'"/>`
+    : `<div class="ach-card-img-placeholder"><i class="fa-solid fa-image"></i><span>ไม่มีรูปภาพ</span></div>`;
+
+  const fbOverlay = hasFb ? `<div class="fb-overlay"><i class="fa-brands fa-facebook-f"></i><span>ดูโพสต์ใน Facebook</span></div>` : "";
+
+  // date
+  let dateStr = "";
+  if (d.achieve_date) {
+    try { dateStr = new Date(d.achieve_date).toLocaleDateString("th-TH", {year:"numeric",month:"long",day:"numeric"}); } catch {}
+  }
+
+  // students (truncate)
+  const students = d.students ? d.students.split(",").map(s=>s.trim()).filter(Boolean) : [];
+  const studentsStr = students.length > 2 ? students.slice(0,2).join(", ") + ` +${students.length-2} คน` : students.join(", ") || "—";
+
+  // level badge
+  const badgeClass = LEVEL_CLASS[d.level] || "normal";
+  const badgeLabel = LEVEL_LABEL[d.level] || d.level || "ผลงาน";
+
+  // bottom strip
+  const bottomStrip = hasFb
+    ? `<div class="ach-card-fb"><i class="fa-brands fa-facebook-f"></i> กดดูโพสต์ใน Facebook</div>`
+    : `<div class="ach-card-no-fb">ยังไม่มีลิ้ง Facebook</div>`;
+
+  card.innerHTML = `
+    <div class="ach-card-img">${imgHtml}${fbOverlay}</div>
+    <div class="ach-card-body">
+      <div class="ach-card-meta">
+        <span class="level-badge ${badgeClass}">${badgeLabel}</span>
+        <span class="ach-card-date">${dateStr}</span>
+      </div>
+      <div class="ach-card-title">${d.title || "(ไม่มีชื่อ)"}</div>
+      <div class="ach-card-students"><i class="fa-solid fa-user-group"></i>${studentsStr}</div>
+    </div>
+    ${bottomStrip}`;
+
+  // edit button (non-FB cards only show edit; FB cards also get edit via stopPropagation)
+  const editBtn = document.createElement("a");
+  editBtn.href = `add-achievement.html?achieveId=${d.id}`;
+  editBtn.style.cssText = "position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.9);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-decoration:none;transition:all .18s;z-index:2;";
+  editBtn.title = "แก้ไข";
+  editBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+  editBtn.addEventListener("click", e => e.stopPropagation());
+  editBtn.addEventListener("mouseenter", () => { editBtn.style.color = "var(--purple)"; editBtn.style.borderColor = "var(--purple)"; });
+  editBtn.addEventListener("mouseleave", () => { editBtn.style.color = "var(--muted)"; editBtn.style.borderColor = "var(--border)"; });
+  card.appendChild(editBtn);
+
+  return card;
+}
+
+loadData();
+</script>
+</body>
+</html>
