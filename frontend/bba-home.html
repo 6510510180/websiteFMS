@@ -7,362 +7,60 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Sarabun', sans-serif;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #fdfdfd;
-            color: #333;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 5%;
-            background: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar .logo img {
-            height: 40px;
-        }
-
-        .navbar ul {
-            display: flex;
-            gap: 20px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .navbar a {
-            font-size: 14px;
-            color: #555;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .navbar a.active {
-            color: #9b51e0;
-            font-weight: bold;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .container {
-            width: 90%;
-            margin: 20px auto;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-        }
-
-        .hero-banner {
-            background-color: #f1e1ff;
-            padding: 40px 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-
-        .welcome-text {
-            color: black !important;
-            margin: 0; 
-            font-size: 24px;
-            line-height: 1.2;
-        }
-
-        .sub-text {
-            color: #9b51e0;
-            margin: 10px 0 0 0; 
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .course-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .course-card {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            text-align: center;
-            position: relative;
-            transition: 0.3s;
-        }
-
-        .course-card:has(a):hover {
-            transform: translateY(-5px);
-        }
-
-        .badge-new {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #ff4757;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            z-index: 10;
-        }
-
-        .img-placeholder {
-            background-color: #ddd;
-            height: 100px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .course-label {
-            background-color: #c084fc;
-            color: #fff;
-            padding: 12px;
-            font-size: 13px;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-
-        .no-link .course-label {
-            cursor: default;
-        }
-
-        .no-link .course-label:hover {
-            background-color: #c084fc; 
-        }
-
-        .course-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .course-link:hover .course-label {
-            background-color: #a855f7; 
-        }
-
-        .course-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .announcement-box {
-            background: #fff;
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #eee;
-            height: 440px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .bold-text {
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .announce-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .announce-list li {
-            margin-bottom: 15px;
-            padding-left: 15px;
-            border-left: 3px solid #9b51e0;
-        }
-
-        .btn-all {
-            width: 100%;
-            padding: 12px;
-            background: #f8f0ff;
-            border: none;
-            border-radius: 8px;
-            color: #9b51e0;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .more-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .calendar-link {
-            color: #9b51e0;
-            text-decoration: none;
-            font-size: 13px;
-            margin-right: 5%; 
-        }
-
-        .more-options {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .option-card {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #fff;
-            padding: 15px;
-            border: 1px solid #eee;
-            border-radius: 12px;
-        }
-
-        .resources-box {
-            background: #9b51e0;
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 15px;
-            color: white;
-        }
-
-        .resources-box h4 {
-            margin: 0 0 15px 0; 
-            font-size: 18px;
-        }
-
-        .resources-box a {
-            display: flex; 
-            align-items: center;
-            gap: 10px;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 12px;
-            font-size: 14px;
-            opacity: 0.9;
-            transition: 0.2s;
-        }
-
-        .resources-box a:hover {
-            opacity: 1;
-            transform: translateX(5px);
-        }
-
-        .footer {
-            background: #fff;
-            padding: 50px 5%;
-            border-top: 1px solid #eee;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1.5fr;
-            gap: 40px;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1.5fr;
-            gap: 40px;
-        }
-
-        .footer-logo-col h4 {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .footer-logo-col p {
-            font-size: 13px;
-            line-height: 1.6;
-            color: #777;
-        }
-
-        .footer-col h4 {
-            margin-bottom: 20px;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .footer-col ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .footer-col li {
-            margin-bottom: 10px;
-            font-size: 13px;
-            color: #666;
-            cursor: pointer;
-        }
-
-        .footer-col p {
-            margin: 5px 0;
-            font-size: 13px;
-            color: #666;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            color: #999;
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid #f5f5f5;
-            font-size: 12px;
-            color: #bbb;
-        }
-
-        .footer-legal {
-            display: flex;
-            gap: 25px;
-        }
-
-        .footer-legal a {
-            text-decoration: none;
-            color: #999;
-        }
+        * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
+        body { margin: 0; padding: 0; background-color: #fdfdfd; color: #333; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .navbar .logo img { height: 40px; }
+        .navbar ul { display: flex; gap: 20px; margin: 0; padding: 0; list-style: none; }
+        .navbar a { font-size: 14px; color: #555; text-decoration: none; transition: 0.3s; }
+        .navbar a.active { color: #9b51e0; font-weight: bold; }
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .container { width: 90%; margin: 20px auto; }
+        .main-content { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .hero-banner { background-color: #f1e1ff; padding: 40px 30px; border-radius: 15px; margin-bottom: 30px; }
+        .welcome-text { color: black !important; margin: 0; font-size: 24px; line-height: 1.2; }
+        .sub-text { color: #9b51e0; margin: 10px 0 0 0; font-size: 20px; font-weight: bold; }
+        .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+        .course-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; position: relative; transition: 0.3s; }
+        .course-card:has(a):hover { transform: translateY(-5px); }
+        .badge-new { position: absolute; top: 10px; right: 10px; background-color: #ff4757; color: white; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; z-index: 10; }
+        .img-placeholder { background-color: #ddd; height: 100px; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .course-label { background-color: #c084fc; color: #fff; padding: 12px; font-size: 13px; min-height: 60px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+        .no-link .course-label { cursor: default; }
+        .no-link .course-label:hover { background-color: #c084fc; }
+        .course-link { text-decoration: none; color: inherit; display: block; }
+        .course-link:hover .course-label { background-color: #a855f7; }
+        .course-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .announcement-box { background: #fff; border-radius: 15px; padding: 20px; border: 1px solid #eee; height: 440px; display: flex; flex-direction: column; justify-content: space-between; }
+        .bold-text { font-weight: bold; font-size: 18px; }
+        .announce-list { list-style: none; padding: 0; }
+        .announce-list li { margin-bottom: 15px; padding-left: 15px; border-left: 3px solid #9b51e0; }
+        .btn-all { width: 100%; padding: 12px; background: #f8f0ff; border: none; border-radius: 8px; color: #9b51e0; font-weight: bold; cursor: pointer; }
+        .more-header { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .calendar-link { color: #9b51e0; text-decoration: none; font-size: 13px; margin-right: 5%; }
+        .more-options { display: flex; gap: 15px; margin-top: 15px; }
+        .option-card { flex: 1; display: flex; align-items: center; gap: 12px; background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 12px; }
+        .resources-box { background: #9b51e0; margin-top: 20px; padding: 20px; border-radius: 15px; color: white; }
+        .resources-box h4 { margin: 0 0 15px 0; font-size: 18px; }
+        .resources-box a { display: flex; align-items: center; gap: 10px; color: white; text-decoration: none; margin-bottom: 12px; font-size: 14px; opacity: 0.9; transition: 0.2s; }
+        .resources-box a:hover { opacity: 1; transform: translateX(5px); }
+        .footer { background: #fff; padding: 50px 5%; border-top: 1px solid #eee; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; }
+        .footer-logo-col h4 { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 16px; font-weight: bold; }
+        .footer-logo-col p { font-size: 13px; line-height: 1.6; color: #777; }
+        .footer-col h4 { margin-bottom: 20px; font-size: 15px; font-weight: bold; }
+        .footer-col ul { margin: 0; padding: 0; list-style: none; }
+        .footer-col li { margin-bottom: 10px; font-size: 13px; color: #666; cursor: pointer; }
+        .footer-col p { margin: 5px 0; font-size: 13px; color: #666; }
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; color: #999; }
+        .footer-bottom { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 20px; border-top: 1px solid #f5f5f5; font-size: 12px; color: #bbb; }
+        .footer-legal { display: flex; gap: 25px; }
+        .footer-legal a { text-decoration: none; color: #999; }
     </style>
 </head>
 <body>
     <header class="navbar">
-        <div class="logo">
-            <img src="logo.jpg" alt="Logo">
-        </div>
+        <div class="logo"><img src="logo.jpg" alt="Logo"></div>
         <nav>
             <ul>
                 <li><a href="index.html" class="active">หน้าหลัก</a></li>
@@ -387,8 +85,6 @@
             <div class="left-column">
                 <h3 class="section-title">หลักสูตร</h3>
                 <div class="course-grid" id="courseGrid">
-
-                    <!-- ── card ปี 2567 (เพื่อนทำไว้ — อย่าแตะ) ── -->
                     <div class="course-card" data-static="true">
                         <span class="badge-new">NEW</span>
                         <div class="img-placeholder"><img src="p1.jpg" alt="p1" class="course-img"></div>
@@ -396,37 +92,28 @@
                             <div class="course-label">หลักสูตรบริหารธุรกิจบัณฑิต<br>ปีหลักสูตร 2567</div>
                         </a>
                     </div>
-
-                    <!-- ── card ปี 2563 (เพื่อนทำไว้ — อย่าแตะ) ── -->
                     <div class="course-card" data-static="true">
                         <div class="img-placeholder"><img src="p2.jpg" alt="p2" class="course-img"></div>
                         <a href="bba-2563.html" class="course-link">
                             <div class="course-label">หลักสูตรบริหารธุรกิจบัณฑิต<br>ปีหลักสูตร 2563</div>
                         </a>
                     </div>
-
                     <div class="course-card no-link" data-static="true">
                         <div class="img-placeholder"><img src="p3.jpg" alt="p3" class="course-img"></div>
                         <div class="course-label">การจัดการความเป็นผู้ประกอบการ<br>ปีหลักสูตร 2565</div>
                     </div>
-
                     <div class="course-card no-link" data-static="true">
                         <div class="img-placeholder"><img src="p4.jpg" alt="p4" class="course-img"></div>
                         <div class="course-label">หลักสูตรบัญชีบัณฑิต<br>ปีหลักสูตร 2568</div>
                     </div>
-
                     <div class="course-card no-link" data-static="true">
                         <div class="img-placeholder"><img src="p5.jpg" alt="p5" class="course-img"></div>
                         <div class="course-label">หลักสูตรบัญชีบัณฑิต<br>ปีหลักสูตร 2564</div>
                     </div>
-
                     <div class="course-card no-link" data-static="true">
                         <div class="img-placeholder"><img src="p6.jpg" alt="p6" class="course-img"></div>
                         <div class="course-label">หลักสูตรรัฐประศาสนศาสตรบัณฑิต<br>ปีหลักสูตร 2564</div>
                     </div>
-
-                    <!-- ── หลักสูตรใหม่จาก API จะถูก append ต่อท้ายตรงนี้ ── -->
-
                 </div>
 
                 <div class="more-header">
@@ -435,25 +122,16 @@
                 </div>
                 <div class="more-options">
                     <div class="option-card">
-                        <i class="fa-regular fa-calendar-days" style="color: #9b51e0;"></i>
-                        <div>
-                            <strong>แผนการศึกษา</strong>
-                            <p>แผนการศึกษาหลักสูตรบริหาร</p>
-                        </div>
+                        <i class="fa-regular fa-calendar-days" style="color:#9b51e0;"></i>
+                        <div><strong>แผนการศึกษา</strong><p>แผนการศึกษาหลักสูตรบริหาร</p></div>
                     </div>
                     <div class="option-card">
-                        <i class="fa-solid fa-users" style="color: #f2994a;"></i>
-                        <div>
-                            <strong>นักศึกษา</strong>
-                            <p>ข้อมูลทั่วไปที่นักศึกษาควรรู้</p>
-                        </div>
+                        <i class="fa-solid fa-users" style="color:#f2994a;"></i>
+                        <div><strong>นักศึกษา</strong><p>ข้อมูลทั่วไปที่นักศึกษาควรรู้</p></div>
                     </div>
                     <div class="option-card">
-                        <i class="fa-solid fa-magnifying-glass" style="color: #27ae60;"></i>
-                        <div>
-                            <strong>ค้นหา</strong>
-                            <p>ค้นหาข้อมูลภายในระบบ</p>
-                        </div>
+                        <i class="fa-solid fa-magnifying-glass" style="color:#27ae60;"></i>
+                        <div><strong>ค้นหา</strong><p>ค้นหาข้อมูลภายในระบบ</p></div>
                     </div>
                 </div>
             </div>
@@ -463,29 +141,16 @@
                     <div>
                         <div class="announce-header">
                             <span class="bold-text">ประกาศ</span>
-                            <i class="fa-regular fa-bell" style="color: #9b51e0;"></i>
+                            <i class="fa-regular fa-bell" style="color:#9b51e0;"></i>
                         </div>
                         <ul class="announce-list">
-                            <li>
-                                <strong>Registration Deadline</strong>
-                                <p>Fall 2024 registration closes in 3 days.</p>
-                                <small>2 hours ago</small>
-                            </li>
-                            <li>
-                                <strong>Campus Job Fair</strong>
-                                <p>Join us at the Student Center this Friday.</p>
-                                <small>Yesterday</small>
-                            </li>
-                            <li>
-                                <strong>Library Hours Extended</strong>
-                                <p>The main library will be open 24/7.</p>
-                                <small>Oct 20</small>
-                            </li>
+                            <li><strong>Registration Deadline</strong><p>Fall 2024 registration closes in 3 days.</p><small>2 hours ago</small></li>
+                            <li><strong>Campus Job Fair</strong><p>Join us at the Student Center this Friday.</p><small>Yesterday</small></li>
+                            <li><strong>Library Hours Extended</strong><p>The main library will be open 24/7.</p><small>Oct 20</small></li>
                         </ul>
                     </div>
                     <button class="btn-all">View All Notices</button>
                 </div>
-
                 <div class="resources-box">
                     <h4>Resources</h4>
                     <a href="#"><i class="fa-solid fa-book"></i> Library Catalog</a>
@@ -510,19 +175,11 @@
                 </div>
                 <div class="footer-col">
                     <h4>หลักสูตร</h4>
-                    <ul>
-                        <li>ปริญญาตรี</li>
-                        <li>ปริญญาโท</li>
-                        <li>ปริญญาเอก</li>
-                    </ul>
+                    <ul><li>ปริญญาตรี</li><li>ปริญญาโท</li><li>ปริญญาเอก</li></ul>
                 </div>
                 <div class="footer-col">
                     <h4>ข้อมูลนิสิต</h4>
-                    <ul>
-                        <li>การรับสมัคร</li>
-                        <li>ห้องสมุด</li>
-                        <li>กองกิจการนักศึกษา</li>
-                    </ul>
+                    <ul><li>การรับสมัคร</li><li>ห้องสมุด</li><li>กองกิจการนักศึกษา</li></ul>
                 </div>
                 <div class="footer-col">
                     <h4>ติดต่อเรา</h4>
@@ -545,56 +202,96 @@
 const BASE_URL = "https://websitefms.onrender.com";
 const API = BASE_URL + "/api";
 
+// ══════════════════════════════════════════════════════
+//  ตั้งค่า Cloudinary — แก้ CLOUD_NAME ให้ตรงกับของคุณ
+// ══════════════════════════════════════════════════════
+const CLOUDINARY_CLOUD_NAME = "your_cloud_name"; // ← เปลี่ยนตรงนี้
+const CL_BASE = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+/**
+ * แปลงค่า hero_image จาก API ให้เป็น URL ที่ใช้งานได้
+ *
+ * รองรับ 4 รูปแบบที่ API อาจส่งมา:
+ *  1. URL เต็ม      → "https://res.cloudinary.com/..."  ใช้ตรง
+ *  2. Secure URL   → "https://..."                      ใช้ตรง
+ *  3. public_id    → "fms/course_1"                     ต่อกับ Cloudinary base
+ *  4. path เซิร์ฟเวอร์ → "/uploads/img.jpg"             ต่อกับ BASE_URL
+ */
+function resolveImageUrl(heroImage) {
+    if (!heroImage) return null;
+
+    // รูปแบบ 1 & 2 — URL เต็มอยู่แล้ว
+    if (heroImage.startsWith("http://") || heroImage.startsWith("https://")) {
+        return heroImage;
+    }
+
+    // รูปแบบ 4 — path ขึ้นต้นด้วย /
+    if (heroImage.startsWith("/")) {
+        return BASE_URL + heroImage;
+    }
+
+    // รูปแบบ 3 — Cloudinary public_id (ไม่มี / นำหน้า)
+    // เช่น "fms/course_1", "courses/bba2567", "course_hero_1"
+    return `${CL_BASE}/q_auto,f_auto,w_400,h_200,c_fill/${heroImage}`;
+}
+
 async function appendNewCourses() {
-  const grid = document.getElementById("courseGrid");
+    const grid = document.getElementById("courseGrid");
 
-  try {
-    const res = await fetch(`${API}/courses`);
-    if (!res.ok) return;
-    const courses = await res.json();
-    if (!courses || courses.length === 0) return;
+    try {
+        const res = await fetch(`${API}/courses`);
+        if (!res.ok) return;
+        const courses = await res.json();
+        if (!courses || courses.length === 0) return;
 
-    const newestId = Math.max(...courses.map(c => c.id));
+        const newestId = Math.max(...courses.map(c => c.id));
 
-    courses.forEach(course => {
-      const isNew = course.id === newestId;
-      const isActive = course.status === "active";
+        courses.forEach(course => {
+            const isNew    = course.id === newestId;
+            const isActive = course.status === "active";
 
-      const card = document.createElement("div");
-      card.className = `course-card${isActive ? "" : " no-link"}`;
-      card.dataset.courseId = course.id;
+            const card = document.createElement("div");
+            card.className = `course-card${isActive ? "" : " no-link"}`;
+            card.dataset.courseId = course.id;
 
-      // รูปภาพ
-     const imgHTML = course.hero_image
-  ? `<img src="${course.hero_image.startsWith("http") ? course.hero_image : BASE_URL + course.hero_image}" alt="${course.name_th}" class="course-img">`
-  : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e9d8fd;color:#9b51e0;font-size:32px;">
-       <i class="fa-solid fa-graduation-cap"></i>
-     </div>`;
+            // ── รูปภาพ ───────────────────────────────────────────
+            const imgUrl = resolveImageUrl(course.hero_image);
+            const imgHTML = imgUrl
+                ? `<img
+                       src="${imgUrl}"
+                       alt="${course.name_th || 'course'}"
+                       class="course-img"
+                       loading="lazy"
+                       onerror="this.style.display='none';this.parentElement.innerHTML+='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e9d8fd;color:#9b51e0;font-size:32px;\\'><i class=\\'fa-solid fa-graduation-cap\\'></i></div>'"
+                   >`
+                : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e9d8fd;color:#9b51e0;font-size:32px;">
+                       <i class="fa-solid fa-graduation-cap"></i>
+                   </div>`;
 
-      // ชื่อ + ปี
-      const yearLine = course.student_range
-        ? `<br><small style="opacity:0.85;">${course.student_range}</small>`
-        : "";
+            // ── ชื่อหลักสูตร + ปี ────────────────────────────────
+            const yearLine = course.student_range
+                ? `<br><small style="opacity:0.85;">${course.student_range}</small>`
+                : "";
 
-      // label — แยก active vs ไม่ active ให้ครบ
-      const labelHTML = isActive
-        ? `<a href="bba-public.html?courseId=${course.id}" class="course-link">
-             <div class="course-label">${course.name_th}${yearLine}</div>
-           </a>`
-        : `<div class="course-label">${course.name_th}${yearLine}</div>`;
+            // ── label ────────────────────────────────────────────
+            const labelHTML = isActive
+                ? `<a href="bba-public.html?courseId=${course.id}" class="course-link">
+                       <div class="course-label">${course.name_th || '-'}${yearLine}</div>
+                   </a>`
+                : `<div class="course-label">${course.name_th || '-'}${yearLine}</div>`;
 
-      card.innerHTML = `
-        ${isNew ? '<span class="badge-new">NEW</span>' : ""}
-        <div class="img-placeholder">${imgHTML}</div>
-        ${labelHTML}
-      `;
+            card.innerHTML = `
+                ${isNew ? '<span class="badge-new">NEW</span>' : ""}
+                <div class="img-placeholder">${imgHTML}</div>
+                ${labelHTML}
+            `;
 
-      grid.appendChild(card);
-    });
+            grid.appendChild(card);
+        });
 
-  } catch (err) {
-    console.warn("appendNewCourses: API ไม่ตอบสนอง ใช้ข้อมูล static แทน", err);
-  }
+    } catch (err) {
+        console.warn("appendNewCourses: API ไม่ตอบสนอง ใช้ข้อมูล static แทน", err);
+    }
 }
 
 appendNewCourses();

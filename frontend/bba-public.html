@@ -159,10 +159,41 @@
     document.getElementById("logoText").style.display = "inline";
   };
 
-  // ✅ helper เดียว ใช้ทั่วทั้งไฟล์
-  function imgUrl(path) {
+  // ══════════════════════════════════════════════════════
+  //  ตั้งค่า Cloudinary — แก้ CLOUD_NAME ให้ตรงกับของคุณ
+  // ══════════════════════════════════════════════════════
+  const CLOUDINARY_CLOUD_NAME = "your_cloud_name"; // ← เปลี่ยนตรงนี้
+  const CL_BASE = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+  /**
+   * แปลงค่า image path จาก API ให้เป็น URL ที่ใช้งานได้
+   *
+   * รองรับ 4 รูปแบบ:
+   *  1. URL เต็ม (https://...)            → ใช้ตรง
+   *  2. Cloudinary secure_url (https://res.cloudinary.com/...) → ใช้ตรง
+   *  3. Cloudinary public_id (fms/course_1, courses/img) → ต่อกับ CL_BASE
+   *  4. Path สัมพัทธ์ (/uploads/img.jpg) → ต่อกับ BASE_URL
+   *
+   * @param {string|null} path   - ค่าจาก API เช่น hero_image, bg_image, image_url
+   * @param {object}      opts   - { w, h, crop } สำหรับ Cloudinary transform (optional)
+   */
+  function imgUrl(path, opts = {}) {
     if (!path) return null;
-    return path.startsWith("http") ? path : BASE_URL + path;
+
+    // รูปแบบ 1 & 2 — URL เต็มอยู่แล้ว
+    if (path.startsWith("http://") || path.startsWith("https://")) {
+      return path;
+    }
+
+    // รูปแบบ 4 — path ขึ้นต้นด้วย /
+    if (path.startsWith("/")) {
+      return BASE_URL + path;
+    }
+
+    // รูปแบบ 3 — Cloudinary public_id
+    const { w = 800, h = 600, crop = "fill" } = opts;
+    const transform = `q_auto,f_auto,w_${w},h_${h},c_${crop}`;
+    return `${CL_BASE}/${transform}/${path}`;
   }
 
   const ICONS = [
@@ -213,10 +244,12 @@
   }
 
   function render(c, majors) {
-    // ✅ ประกาศ heroImgHTML ก่อนใช้
-    const heroSrc = imgUrl(c.hero_image);
+    // hero image — ขนาด 560×420 (4:3)
+    const heroSrc = imgUrl(c.hero_image, { w: 560, h: 420, crop: "fill" });
     const heroImgHTML = heroSrc
-      ? `<img src="${heroSrc}" alt="${c.name_th || ''}">`
+      ? `<img src="${heroSrc}" alt="${c.name_th || ''}"
+             loading="lazy"
+             onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'no-img\\'><i class=\\'fa-solid fa-graduation-cap\\'></i></div>'">`
       : `<div class="no-img"><i class="fa-solid fa-graduation-cap"></i></div>`;
 
     const [t1, t2] = splitTitle(c.name_en || c.name_th || "หลักสูตร");
@@ -246,27 +279,29 @@
         ${s.sub ? `<div class="stat-sub">${s.sub}</div>` : ""}
       </div>`).join("");
 
-    // ✅ bg_image ใช้ imgUrl()
-    const bgSrc = imgUrl(c.bg_image);
+    // bg_image — ใช้ขนาดใหญ่สำหรับ cover section
+    const bgSrc = imgUrl(c.bg_image, { w: 1400, h: 600, crop: "fill" });
     const bgStyle = bgSrc ? `style="background-image: url('${bgSrc}')"` : "";
     const bgClass = bgSrc ? "" : "no-bg";
 
     const majorsHTML = majors.length
       ? majors.map(m => {
           const icon = getIcon((m.name_th || "") + " " + (m.name_en || ""));
-          // ✅ ใช้ imgUrl() สำหรับรูป major
+          // major card image — ลอง field ต่างๆ ที่ API อาจส่งมา
           const rawSrc = m.hero_image || m.image_url || m.info_image || null;
-          const mSrc = imgUrl(rawSrc);
+          const mSrc = imgUrl(rawSrc, { w: 480, h: 320, crop: "fill" });
           const thumbHTML = mSrc
-            ? `<img src="${mSrc}" alt="${m.name_th || ''}" loading="lazy">`
-            : `<div class="no-img">
-                 <i class="fa-solid ${icon}" style="font-size:38px;color:#a78bfa;position:relative;z-index:1;"></i>
-               </div>`;
+            ? `<img src="${mSrc}" alt="${m.name_th || ''}" loading="lazy"
+                   onerror="this.style.display='none';this.parentElement.querySelector('.no-img').style.display='flex'">`
+            : "";
           const desc = (m.short_detail || m.intro || m.description || "").slice(0, 100);
           return `
             <a class="major-card" href="bachelor-portal.html?majorId=${m.id}&courseId=${m.course_id || ''}">
               <div class="major-thumb">
                 ${thumbHTML}
+                <div class="no-img" style="${mSrc ? 'display:none' : ''}">
+                  <i class="fa-solid ${icon}" style="font-size:38px;color:#a78bfa;position:relative;z-index:1;"></i>
+                </div>
                 <div class="major-icon"><i class="fa-solid ${icon}"></i></div>
               </div>
               <div class="major-body">
