@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<title>PLO/MLO | FMS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<style>
+:root{
+  --bg:#f7f8fc;--surface:#fff;--surface2:#f1f3f8;--border:#e2e6f0;
+  --purple:#6d28d9;--purple2:#7c3aed;--purple3:#8b5cf6;--purple-light:#ede9fe;
+  --text:#1e1b2e;--muted:#6b7280;--green:#059669;--red:#dc2626;
+  --amber:#d97706;--blue:#2563eb;--teal:#0d9488;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;}
+
+/* ── NAVBAR ── */
+.navbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 6px rgba(0,0,0,.06);}
+.navbar-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;gap:20px;}
+.navbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.navbar-logo img{height:38px;object-fit:contain;}
+.logo-placeholder{width:44px;height:44px;background:var(--purple);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.navbar-brand-title{font-size:13px;font-weight:700;color:var(--text);}
+.navbar-brand-sub{font-size:10px;color:var(--muted);}
+.divider{width:1px;height:28px;background:var(--border);}
+.navbar-nav{display:flex;align-items:center;gap:2px;flex:1;}
+.nav-link{padding:7px 12px;border-radius:7px;font-size:13.5px;font-weight:500;color:var(--muted);text-decoration:none;transition:all .18s;white-space:nowrap;}
+.nav-link:hover{background:var(--surface2);color:var(--text);}
+.nav-link.active{color:var(--purple);font-weight:600;background:var(--purple-light);}
+.navbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.icon-btn{width:34px;height:34px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px;transition:all .18s;}
+.icon-btn:hover{border-color:var(--purple);color:var(--purple);}
+.avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--purple),var(--purple3));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;color:#fff;}
+.hamburger{display:none;width:36px;height:36px;border-radius:8px;background:none;border:1px solid var(--border);align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:16px;}
+.mobile-menu{display:none;flex-direction:column;gap:2px;padding:8px 16px 12px;border-top:1px solid var(--border);background:var(--surface);}
+.mobile-menu.open{display:flex;}
+.mobile-menu .nav-link{padding:10px 12px;border-radius:8px;font-size:14px;}
+
+/* ── PAGE ── */
+.page{max-width:1280px;margin:0 auto;padding:28px 24px;}
+
+/* ── VERSION BADGE ── */
+.version-badge{display:inline-flex;align-items:center;gap:6px;background:var(--purple-light);color:var(--purple);padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+
+/* ── PAGE HEAD ── */
+.page-head{margin-bottom:20px;}
+.page-head h1{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-.5px;line-height:1.3;}
+.page-head-sub{font-size:13px;color:var(--muted);margin-top:5px;}
+
+/* ── TAB BAR ── */
+.tabbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+.tab-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;border:1px solid var(--border);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;background:var(--surface);color:var(--muted);transition:all .18s;text-decoration:none;}
+.tab-btn:hover{border-color:var(--purple);color:var(--purple);}
+.tab-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);box-shadow:0 4px 12px rgba(109,40,217,.3);}
+.tab-btn i{font-size:13px;}
+.tab-btn.dl{background:var(--purple);color:#fff;border-color:var(--purple);margin-left:auto;}
+.tab-btn.dl:hover{background:var(--purple2);}
+
+/* ── SECTION TITLE ── */
+.section-title{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.section-title h2{font-size:18px;font-weight:700;color:var(--text);}
+.section-badge{display:inline-block;padding:3px 10px;border-radius:5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+.badge-core{background:rgba(37,99,235,.12);color:var(--blue);}
+.badge-specific{background:rgba(217,119,6,.12);color:var(--amber);}
+
+/* ── PLO GRID ── */
+.plo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px;}
+.plo-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:transform .18s,box-shadow .18s;position:relative;}
+.plo-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.09);}
+.plo-card-icon{width:36px;height:36px;border-radius:9px;background:var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px;}
+.plo-card-id{font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.plo-card-text{font-size:13px;color:var(--text);line-height:1.65;}
+
+/* ── MLO SECTION ── */
+.mlo-layout{display:grid;grid-template-columns:220px 1fr;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.mlo-sidebar{border-right:1px solid var(--border);padding:8px 0;}
+.mlo-sidebar-item{padding:11px 16px;font-size:13px;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:8px;border-left:3px solid transparent;color:var(--muted);}
+.mlo-sidebar-item:hover{background:var(--surface2);}
+.mlo-sidebar-item.active{background:var(--purple-light);color:var(--purple);font-weight:600;border-left-color:var(--purple);}
+.mlo-sidebar-item i{font-size:12px;width:14px;}
+.mlo-content{padding:24px;}
+.mlo-header{margin-bottom:20px;}
+.mlo-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:5px;}
+.mlo-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.mlo-list{display:flex;flex-direction:column;gap:12px;}
+.mlo-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start;transition:border-color .18s;}
+.mlo-item:hover{border-color:var(--purple);}
+.mlo-badge{flex-shrink:0;background:var(--purple);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;letter-spacing:.3px;margin-top:1px;}
+.mlo-text{font-size:13px;color:var(--text);line-height:1.6;flex:1;}
+.mlo-mapping-btn{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:8px 16px;background:var(--purple-light);border:1px solid rgba(109,40,217,.2);border-radius:8px;font-size:12.5px;font-weight:600;color:var(--purple);cursor:pointer;font-family:inherit;transition:all .18s;}
+.mlo-mapping-btn:hover{background:#ddd6fe;}
+
+/* ── SKELETON ── */
+.skeleton{background:linear-gradient(90deg,#e2e6f0 25%,#f0f2f8 50%,#e2e6f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
+@keyframes shimmer{to{background-position:-200% 0;}}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:20px;right:20px;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.12);display:none;align-items:center;gap:8px;z-index:999;}
+#toast.show{display:flex;}
+#toast.error{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .plo-grid{grid-template-columns:repeat(2,1fr);}
+  .mlo-layout{grid-template-columns:180px 1fr;}
+}
+@media(max-width:768px){
+  .navbar-nav{display:none;}
+  .hamburger{display:flex;}
+  .page{padding:16px 14px;}
+  .page-head h1{font-size:20px;}
+  .tabbar{gap:6px;}
+  .tab-btn{font-size:12px;padding:7px 12px;}
+  .tab-btn.dl{margin-left:0;}
+  .plo-grid{grid-template-columns:1fr;}
+  .mlo-layout{grid-template-columns:1fr;}
+  .mlo-sidebar{border-right:none;border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0;}
+  .mlo-sidebar-item{white-space:nowrap;border-left:none;border-bottom:3px solid transparent;}
+  .mlo-sidebar-item.active{border-left:none;border-bottom-color:var(--purple);}
+}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.plo-card{animation:fadeInUp .3s ease both;}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="navbar-logo" href="index.html">
+      <img src="logo.jpg" alt="PSU FMS" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="logo-placeholder" style="display:none;">🎓</div>
+      <div>
+        <div class="navbar-brand-title">FACULTY OF MANAGEMENT SCIENCES</div>
+        <div class="navbar-brand-sub">Prince of Songkla University</div>
+      </div>
+    </a>
+    <div class="divider"></div>
+    <div class="navbar-nav">
+      <a class="nav-link" href="index.html">หน้าหลัก</a>
+      <a class="nav-link" href="info.html">ข้อมูลทั่วไป</a>
+      <a class="nav-link" href="student.html">นักศึกษา</a>
+      <a class="nav-link" href="plans.html">แผนการศึกษา</a>
+      <a class="nav-link active" href="#">QA</a>
+    </div>
+    <div class="navbar-right">
+      <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
+      <div class="avatar">A</div>
+      <button class="hamburger" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a class="nav-link" href="index.html">หน้าหลัก</a>
+    <a class="nav-link" href="info.html">ข้อมูลทั่วไป</a>
+    <a class="nav-link" href="student.html">นักศึกษา</a>
+    <a class="nav-link" href="plans.html">แผนการศึกษา</a>
+    <a class="nav-link active" href="#">QA</a>
+  </div>
+</nav>
+
+<div class="page">
+  <!-- VERSION -->
+  <div class="version-badge"><i class="fa-solid fa-shield-check"></i> AUN-QA Version 4.0</div>
+
+  <!-- PAGE HEAD -->
+  <div class="page-head">
+    <h1>รายละเอียดผลลัพธ์การเรียนรู้ (PLOs &amp; MLOs)</h1>
+    <div class="page-head-sub" id="courseSubtitle">กำลังโหลดข้อมูลหลักสูตร...</div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tabbar">
+    <button class="tab-btn active" onclick="setTab('plo',this)">
+      <i class="fa-solid fa-diagram-project"></i> PLOs/MLOs
+    </button>
+    <button class="tab-btn" onclick="setTab('map',this)">
+      <i class="fa-solid fa-table-cells"></i> ตะแกรงผลลัพธ์
+    </button>
+    <button class="tab-btn" onclick="setTab('align',this)">
+      <i class="fa-solid fa-arrows-to-dot"></i> Alignment Matrix
+    </button>
+    <button class="tab-btn" onclick="setTab('kas',this)">
+      <i class="fa-solid fa-layer-group"></i> KAS
+    </button>
+    <button class="tab-btn dl" onclick="downloadDoc()">
+      <i class="fa-solid fa-download"></i> Download Document
+    </button>
+  </div>
+
+  <!-- PLO SECTION -->
+  <div id="ploSection">
+    <!-- PLOs -->
+    <div class="section-title">
+      <h2>Program Learning Outcomes (PLOs)</h2>
+      <span class="section-badge badge-core">CORE</span>
+    </div>
+    <div class="plo-grid" id="ploGrid">
+      <!-- skeleton -->
+      <div class="plo-card"><div class="skeleton" style="height:36px;width:36px;border-radius:9px;margin-bottom:12px;"></div><div class="skeleton" style="height:12px;width:40%;margin-bottom:8px;"></div><div class="skeleton" style="height:14px;width:100%;margin-bottom:6px;"></div><div class="skeleton" style="height:14px;width:80%;"></div></div>
+      <div class="plo-card"><div class="skeleton" style="height:36px;width:36px;border-radius:9px;margin-bottom:12px;"></div><div class="skeleton" style="height:12px;width:40%;margin-bottom:8px;"></div><div class="skeleton" style="height:14px;width:100%;margin-bottom:6px;"></div><div class="skeleton" style="height:14px;width:70%;"></div></div>
+      <div class="plo-card"><div class="skeleton" style="height:36px;width:36px;border-radius:9px;margin-bottom:12px;"></div><div class="skeleton" style="height:12px;width:40%;margin-bottom:8px;"></div><div class="skeleton" style="height:14px;width:100%;margin-bottom:6px;"></div><div class="skeleton" style="height:14px;width:90%;"></div></div>
+    </div>
+
+    <!-- MLOs -->
+    <div class="section-title">
+      <h2>Major Learning Outcomes (MLOs)</h2>
+      <span class="section-badge badge-specific">MAJOR SPECIFIC</span>
+    </div>
+    <div class="mlo-layout">
+      <div class="mlo-sidebar" id="mloSidebar">
+        <div class="mlo-sidebar-item" style="padding:14px 16px;color:var(--muted);font-size:12px;">
+          <i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลด...
+        </div>
+      </div>
+      <div class="mlo-content" id="mloContent">
+        <div class="mlo-header">
+          <div class="mlo-title">กำลังโหลดข้อมูล...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHER TABS (placeholder) -->
+  <div id="otherSection" style="display:none;">
+    <div style="text-align:center;padding:60px 20px;color:var(--muted);">
+      <i class="fa-solid fa-hammer" style="font-size:40px;opacity:.3;margin-bottom:12px;display:block;"></i>
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;">กำลังพัฒนา</div>
+      <div style="font-size:13px;">ส่วนนี้จะเปิดให้ใช้งานเร็วๆ นี้</div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API = "https://websitefms.onrender.com/api";
+
+// ── Get programId from URL (?program_id=xxx)
+const PROGRAM_ID = new URLSearchParams(window.location.search).get("program_id");
+
+// ── PLO icons by index
+const PLO_ICONS = ["🔄","📊","💬","💡","🌐","🤝","👥","💻","⚖️"];
+
+// ── Sidebar icons by major name (fallback: fa-book)
+const MAJOR_ICONS = {
+  "การเงินและการลงทุน": "fa-chart-line",
+  "การตลาดและการสื่อสาร": "fa-bullhorn",
+  "การจัดการทรัพยากรมนุษย์": "fa-users",
+  "การจัดการโลจิสติกส์": "fa-truck",
+  "ระบบสนเทศทางการบริหาร": "fa-server",
+  "การจัดการไมซ์": "fa-calendar-check",
+};
+
+let ploData = [], mloData = [], majorList = [], activeMajor = null;
+
+// ── Fetch PLOs via /api/programs/:programId/plos
+async function loadPLOs() {
+  if (PROGRAM_ID) {
+    try {
+      const res = await fetch(`${API}/programs/${PROGRAM_ID}/plos`);
+      if (!res.ok) throw new Error();
+      ploData = await res.json();
+      // normalize: API returns { code, description } — map code → id
+      ploData = ploData.map(p => ({ ...p, id: p.code || p.id }));
+      renderPLOs();
+      return;
+    } catch {}
+  }
+  // fallback static data
+  ploData = [
+    { id:"PLO1", description:"พัฒนาตนเองจากการเรียนรู้เพื่อรับผิดชอบต่อวิชาชีพ" },
+    { id:"PLO2", description:"วิเคราะห์และนำเสนอข้อมูลต่อผู้บริหารเพื่อการตัดสินใจ" },
+    { id:"PLO3", description:"ประยุกต์ความรู้ทำงานบริหารธุรกิจเพื่อวางแผนลูกค้าองค์กร" },
+    { id:"PLO4", description:"ประยุกต์รูปแบบความคิดเป็นผู้ประกอบการ (Entrepreneurial Mindset) เพื่อสร้างธุรกิจ" },
+    { id:"PLO5", description:"ประยุกต์ใช้กระบวนการวิจัยเพื่อแก้ไขปัญหาทางธุรกิจ" },
+    { id:"PLO6", description:"สื่อสารในสาระที่ได้ความหลากหลายสังคมและวัฒนธรรม" },
+    { id:"PLO7", description:"ทำงานร่วมกับผู้อื่นในองค์กร" },
+    { id:"PLO8", description:"เลือกใช้เทคโนโลยีดิจิทัลในการทำงานให้บรรลุเป้าหมาย" },
+    { id:"PLO9", description:"แสดงพฤติกรรมที่แสดงถึงการมีจริยธรรมและความรับผิดชอบต่อสังคม" },
+  ];
+  renderPLOs();
+}
+
+function renderPLOs() {
+  const grid = document.getElementById("ploGrid");
+  grid.innerHTML = ploData.map((p, i) => `
+    <div class="plo-card" style="animation-delay:${i*0.05}s">
+      <div class="plo-card-icon">${PLO_ICONS[i % PLO_ICONS.length]}</div>
+      <div class="plo-card-id">${p.id || "PLO"+(i+1)}</div>
+      <div class="plo-card-text">${p.description || p.name_en || p.name_th || ""}</div>
+    </div>`).join("");
+}
+
+// ── Fetch MLOs via /api/programs/:programId/major-groups then /api/major-groups/:groupId/mlos
+async function loadMLOs() {
+  if (PROGRAM_ID) {
+    try {
+      const groupRes = await fetch(`${API}/programs/${PROGRAM_ID}/major-groups`);
+      if (!groupRes.ok) throw new Error();
+      const groups = await groupRes.json();
+      // For each group fetch its MLOs
+      const groupsWithMLOs = await Promise.all(groups.map(async g => {
+        try {
+          const mloRes = await fetch(`${API}/major-groups/${g.id}/mlos`);
+          const mlos = mloRes.ok ? await mloRes.json() : [];
+          return {
+            major: g.label || g.major_name_th || g.major_name_en || "สาขาวิชา",
+            major_desc: g.description || "",
+            icon: g.icon || null,
+            outcomes: mlos.map(m => ({ id: m.code, text: m.description }))
+          };
+        } catch {
+          return { major: g.label, major_desc: "", outcomes: [] };
+        }
+      }));
+      mloData = groupsWithMLOs;
+      buildMajorList();
+      return;
+    } catch {}
+  }
+  // fallback static
+  mloData = [
+      { major:"การเงินและการลงทุน", major_desc:"สาขาวิชาการเงินและการลงทุน\nเป้าหมายผลสัมฤทธิ์การเรียนรู้และพัฒนาตัวอย่าง",
+        outcomes:[
+          { id:"MLO 1.1", text:"เพิ่มพูนวิเคราะห์สถานการณ์การเงินให้เหมาะสมกับสถานการณ์ระดับกลยุทธ์และการบริหารจัดการตลาดหลักทรัพย์" },
+          { id:"MLO 1.2", text:"วางแผนการเพิ่มต้นทุนมูลค่าตามมาตรฐานระดับสวนตามแผนบริหารการเงินไทย" },
+          { id:"MLO 1.3", text:"วิเคราะห์ข้อมูลองค์กรการเงินเพื่อการบริหารการเงินขององค์กร" },
+        ]
+      },
+      { major:"การตลาดและการสื่อสาร", major_desc:"สาขาวิชาการตลาดและการสื่อสาร",
+        outcomes:[
+          { id:"MLO 2.1", text:"วิเคราะห์พฤติกรรมผู้บริโภคและกลยุทธ์การตลาด" },
+          { id:"MLO 2.2", text:"สื่อสารการตลาดในยุคดิจิทัลอย่างมีประสิทธิภาพ" },
+        ]
+      },
+      { major:"การจัดการทรัพยากรมนุษย์", major_desc:"สาขาวิชาการจัดการทรัพยากรมนุษย์",
+        outcomes:[
+          { id:"MLO 3.1", text:"วางแผนและบริหารจัดการทรัพยากรมนุษย์ในองค์กร" },
+          { id:"MLO 3.2", text:"พัฒนาระบบประเมินและสร้างแรงจูงใจพนักงาน" },
+        ]
+      },
+      { major:"การจัดการโลจิสติกส์", major_desc:"สาขาวิชาการจัดการโลจิสติกส์",
+        outcomes:[
+          { id:"MLO 4.1", text:"จัดการห่วงโซ่อุปทานอย่างมีประสิทธิภาพ" },
+          { id:"MLO 4.2", text:"ประยุกต์ใช้เทคโนโลยีในการจัดการโลจิสติกส์" },
+        ]
+      },
+      { major:"ระบบสนเทศทางการบริหาร", major_desc:"สาขาวิชาระบบสนเทศทางการบริหาร",
+        outcomes:[
+          { id:"MLO 5.1", text:"วิเคราะห์และออกแบบระบบสนเทศทางธุรกิจ" },
+          { id:"MLO 5.2", text:"พัฒนาโซลูชันดิจิทัลเพื่อการบริหารจัดการ" },
+        ]
+      },
+      { major:"การจัดการไมซ์ (MICE)", major_desc:"สาขาวิชาการจัดการไมซ์",
+        outcomes:[
+          { id:"MLO 6.1", text:"วางแผนและจัดการอีเว้นท์และการประชุมระดับนานาชาติ" },
+          { id:"MLO 6.2", text:"บริหารจัดการงาน MICE อย่างมืออาชีพ" },
+        ]
+      },
+    ];
+    buildMajorList();
+  }
+
+function buildMajorList() {
+  majorList = mloData;
+  const sidebar = document.getElementById("mloSidebar");
+  sidebar.innerHTML = majorList.map((m, i) => {
+    const icon = MAJOR_ICONS[m.major] || "fa-book";
+    return `<div class="mlo-sidebar-item${i===0?' active':''}" onclick="selectMajor(${i},this)">
+      <i class="fa-solid ${icon}"></i> ${m.major}
+    </div>`;
+  }).join("");
+  if (majorList.length) selectMajorData(0);
+}
+
+function selectMajor(idx, el) {
+  document.querySelectorAll(".mlo-sidebar-item").forEach(e=>e.classList.remove("active"));
+  el.classList.add("active");
+  selectMajorData(idx);
+}
+
+function selectMajorData(idx) {
+  const m = majorList[idx];
+  if (!m) return;
+  const content = document.getElementById("mloContent");
+  content.innerHTML = `
+    <div class="mlo-header">
+      <div class="mlo-title">${m.major}</div>
+      <div class="mlo-desc">${m.major_desc || ""}</div>
+    </div>
+    <div class="mlo-list">
+      ${(m.outcomes||[]).map(o=>`
+        <div class="mlo-item">
+          <span class="mlo-badge">${o.id}</span>
+          <div class="mlo-text">${o.text || o.description || ""}</div>
+        </div>`).join("")}
+    </div>
+    <button class="mlo-mapping-btn" onclick="setTab('map',null)">
+      <i class="fa-solid fa-rotate"></i> ดูแผนเชื่อมโยงที่แสดงผล (Mapping Matrix)
+    </button>`;
+}
+
+// ── Fetch Course Info
+async function loadCourseInfo() {
+  if (PROGRAM_ID) {
+    try {
+      const res = await fetch(`${API}/programs/${PROGRAM_ID}`);
+      if (!res.ok) throw new Error();
+      const p = await res.json();
+      document.getElementById("courseSubtitle").textContent =
+        (p.name_th || p.name_en || "") + (p.year ? ` (ฉบับปรับปรุง พ.ศ. ${p.year})` : "");
+      return;
+    } catch {}
+  }
+  try {
+    const res = await fetch(`${API}/courses`);
+    if (!res.ok) throw new Error();
+    const courses = await res.json();
+    if (courses.length) {
+      const c = courses[0];
+      document.getElementById("courseSubtitle").textContent =
+        (c.name_th || c.name || "") + (c.year ? ` (ฉบับปรับปรุง พ.ศ. ${c.year})` : "");
+    }
+  } catch {
+    document.getElementById("courseSubtitle").textContent = "หลักสูตรบริหารธุรกิจบัณฑิต";
+  }
+}
+
+// ── Tab switching
+function setTab(tab, btn) {
+  if (btn) {
+    document.querySelectorAll(".tab-btn:not(.dl)").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+  }
+  document.getElementById("ploSection").style.display = tab === "plo" ? "" : "none";
+  document.getElementById("otherSection").style.display = tab !== "plo" ? "" : "none";
+}
+
+function downloadDoc() {
+  showToast("ยังไม่มีเอกสารให้ดาวน์โหลด", "error");
+}
+
+function toggleMenu() {
+  document.getElementById("mobileMenu").classList.toggle("open");
+}
+
+function showToast(msg, type="error") {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = `show ${type}`;
+  clearTimeout(t._t); t._t = setTimeout(()=>t.className="", 3000);
+}
+
+// ── Init
+loadCourseInfo();
+loadPLOs();
+loadMLOs();
+</script>
+</body>
+</html>
