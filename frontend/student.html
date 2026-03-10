@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bachelor of Business Administration | FMS PSU</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;900&family=Lexend:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #7C3AED;
+    --purple-soft: #8B5CF6;
+    --purple-light: #EDE9FE;
+    --purple-pale: #F5F3FF;
+    --text: #1E1030;
+    --text-mid: #4B5563;
+    --text-soft: #9CA3AF;
+    --white: #FFFFFF;
+    --bg: #F8F6FD;
+    --border: #E9E4F5;
+    --card-bg: #FDFCFF;
+    --fin-c: #7C3AED; --fin-bg: #F5F3FF; --fin-bd: #DDD6FE;
+    --mkt-c: #BE185D; --mkt-bg: #FDF2F8; --mkt-bd: #FBCFE8;
+    --hrm-c: #065F46; --hrm-bg: #ECFDF5; --hrm-bd: #A7F3D0;
+    --lsm-c: #92400E; --lsm-bg: #FFFBEB; --lsm-bd: #FDE68A;
+    --bis-c: #1E40AF; --bis-bg: #EFF6FF; --bis-bd: #BFDBFE;
+    --mice-c: #991B1B; --mice-bg: #FFF5F5; --mice-bd: #FECACA;
+    --radius: 16px;
+    --shadow: 0 2px 16px rgba(124,58,237,0.08);
+    --shadow-hover: 0 8px 32px rgba(124,58,237,0.16);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans Thai', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ─────────── HERO ─────────── */
+  .hero {
+    background: var(--white);
+    padding: 64px 48px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .hero-top {
+    display: flex;
+    align-items: center;
+    gap: 56px;
+    max-width: 1120px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-text { flex: 1; }
+
+  .hero-title {
+    font-family: 'Lexend', sans-serif;
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--text);
+    letter-spacing: -1.5px;
+  }
+
+  .hero-title .accent { color: var(--purple); }
+
+  .hero-subtitle {
+    font-size: 14px;
+    color: var(--text-mid);
+    margin-top: 16px;
+    line-height: 1.8;
+  }
+
+  .hero-image {
+    flex: 0 0 380px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(124,58,237,0.15);
+    aspect-ratio: 4/3;
+    position: relative;
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .hero-image:hover img { transform: scale(1.04); }
+
+  .hero-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, transparent 60%, rgba(124,58,237,0.12));
+    pointer-events: none;
+  }
+
+  /* Major pills */
+  .major-row {
+    max-width: 1120px;
+    margin: 0 auto;
+    width: 100%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .major-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 1.5px solid;
+    font-family: 'Lexend', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    letter-spacing: 0.2px;
+  }
+
+  .major-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  }
+
+  .major-pill .pill-emoji { font-size: 14px; }
+  .pill-fin  { color: var(--fin-c);  background: var(--fin-bg);  border-color: var(--fin-bd);  }
+  .pill-mkt  { color: var(--mkt-c);  background: var(--mkt-bg);  border-color: var(--mkt-bd);  }
+  .pill-hrm  { color: var(--hrm-c);  background: var(--hrm-bg);  border-color: var(--hrm-bd);  }
+  .pill-lsm  { color: var(--lsm-c);  background: var(--lsm-bg);  border-color: var(--lsm-bd);  }
+  .pill-bis  { color: var(--bis-c);  background: var(--bis-bg);  border-color: var(--bis-bd);  }
+  .pill-mice { color: var(--mice-c); background: var(--mice-bg); border-color: var(--mice-bd); }
+
+  /* ─────────── CURRICULUM ─────────── */
+  .curriculum {
+    background: var(--purple-pale);
+    padding: 64px 48px 80px;
+  }
+
+  .curriculum-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    font-family: 'Lexend', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--text-soft);
+    margin-bottom: 32px;
+  }
+
+  /* Accordion grid: 2-col top, 1-col full bottom */
+  .acc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .acc-full { grid-column: 1 / -1; }
+
+  /* ─── Accordion ─── */
+  .acc {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .acc.open {
+    border-color: #C4B5FD;
+    box-shadow: var(--shadow-hover);
+  }
+
+  .acc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 24px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s;
+  }
+
+  .acc-header:hover { background: var(--purple-light); }
+  .acc.open .acc-header { background: var(--purple-light); }
+
+  .acc-label {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .acc-chevron {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--purple-pale);
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s, transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .acc.open .acc-chevron {
+    background: var(--purple);
+    border-color: var(--purple);
+    transform: rotate(180deg);
+  }
+
+  .acc-chevron svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--purple);
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.2s;
+  }
+
+  .acc.open .acc-chevron svg { stroke: white; }
+
+  /* Smooth slide */
+  .acc-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .acc.open .acc-body { grid-template-rows: 1fr; }
+
+  .acc-body-inner { overflow: hidden; }
+
+  .acc-content { padding: 6px 28px 28px; }
+
+  /* ─── Expanded content styles ─── */
+
+  /* Two-column open layout (for gen + elec combined) */
+  .exp-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .exp-col h3 {
+    font-family: 'Lexend', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .exp-col p {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    margin-bottom: 10px;
+  }
+
+  .exp-link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--purple);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-top: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .exp-link:hover { opacity: 0.7; }
+
+  /* Subject type rows */
+  .type-list { display: flex; flex-direction: column; gap: 4px; }
+
+  .type-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    transition: background 0.15s;
+    cursor: default;
+  }
+
+  .type-row:hover { background: var(--purple-pale); }
+
+  .type-icon {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 1.5px solid;
+  }
+
+  .icon-blue   { background: #EFF6FF; border-color: #BFDBFE; }
+  .icon-green  { background: #ECFDF5; border-color: #A7F3D0; }
+  .icon-amber  { background: #FFFBEB; border-color: #FDE68A; }
+  .icon-purple { background: #F5F3FF; border-color: #DDD6FE; }
+  .icon-rose   { background: #FFF1F2; border-color: #FECDD3; }
+
+  .type-info { flex: 1; }
+
+  .type-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .type-desc {
+    font-size: 12.5px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 900px) {
+    .hero-top { flex-direction: column; }
+    .hero-image { flex: unset; width: 100%; max-width: 500px; align-self: center; }
+    .acc-grid { grid-template-columns: 1fr; }
+    .acc-full { grid-column: auto; }
+    .exp-cols { grid-template-columns: 1fr; gap: 20px; }
+    .hero-title { font-size: 38px; }
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding: 40px 24px 40px; }
+    .curriculum { padding: 48px 20px 64px; }
+    .major-row { padding: 12px 20px; gap: 6px; }
+    .hero-title { font-size: 32px; }
+  }
+
+  /* page entry animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-text  { animation: fadeUp 0.55s ease both; }
+  .hero-image { animation: fadeUp 0.55s 0.12s ease both; }
+  .major-row  { animation: fadeUp 0.55s 0.22s ease both; }
+
+  /* ─── skeleton loader for pills ─── */
+  @keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+  }
+  .pill-skeleton {
+    display: inline-block;
+    width: 90px; height: 36px;
+    border-radius: 999px;
+    background: linear-gradient(90deg,#ede9fe 25%,#f5f3ff 50%,#ede9fe 75%);
+    background-size: 400px 100%;
+    animation: shimmer 1.2s infinite linear;
+  }
+  .pill-error {
+    font-size: 12px; color: #9CA3AF; padding: 8px 16px;
+    background: #F9FAFB; border-radius: 999px; border: 1.5px dashed #E5E7EB;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-top">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        Bachelor of<br>
+        <span class="accent">Business<br>Administration</span>
+      </h1>
+      <p class="hero-subtitle">
+        คณะวิทยาการจัดการ<br>
+        มหาวิทยาลัยสงขลานครินทร์
+      </p>
+    </div>
+    <div class="hero-image">
+      <!-- Placeholder gradient fallback if image fails -->
+      <img
+        src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=760&q=80"
+        alt="นักศึกษา BBA"
+        onerror="this.parentElement.style.background='linear-gradient(135deg,#7C3AED 0%,#EC4899 100%)';this.style.display='none';"
+      >
+      <div class="hero-image-overlay"></div>
+    </div>
+  </div>
+
+  <!-- Major row — populated by JS -->
+  <div class="major-row" id="major-row">
+    <!-- skeleton placeholders while loading -->
+    <span class="pill-skeleton"></span>
+    <span class="pill-skeleton"></span>
+    <span class="pill-skeleton"></span>
+    <span class="pill-skeleton"></span>
+    <span class="pill-skeleton"></span>
+    <span class="pill-skeleton"></span>
+  </div>
+</section>
+
+<!-- ══════════ CURRICULUM ══════════ -->
+<section class="curriculum">
+  <div class="curriculum-inner">
+    <h2 class="section-title">โครงสร้างหลักสูตร</h2>
+    <p class="section-sub">รวมหน่วยกิตหลักสูตรไม่น้อยกว่า 129 หน่วยกิต</p>
+
+    <div class="acc-grid">
+
+      <!-- ① หมวดวิชาศึกษาทั่วไป -->
+      <div class="acc" id="acc1">
+        <div class="acc-header" onclick="toggle('acc1')">
+          <span class="acc-label">หมวดวิชาศึกษาทั่วไป</span>
+          <div class="acc-chevron">
+            <svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg>
+          </div>
+        </div>
+        <div class="acc-body">
+          <div class="acc-body-inner">
+            <div class="acc-content">
+              <p style="font-size:13px;color:var(--text-mid);line-height:1.85;margin-bottom:14px;">
+                เลือกจากรายวิชาของหมวดหมู่วิชาศึกษาทั่วไปที่เปิดสอนใน
+                มหาวิทยาลัยสงขลานครินทร์ ทั้งนี้ต้องตรงตามบัญชีของ
+                วิชาศึกษาทั่วไปที่เห็นชอบจาก
+                คณะกรรมการพัฒนาวิชาศึกษาทั่วไปของมหาวิทยาลัยสงขลานครินทร์
+              </p>
+              <a class="exp-link">หมวดศึกษาทั่วไป →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② หมวดวิชาเลือกเสรี -->
+      <div class="acc" id="acc2">
+        <div class="acc-header" onclick="toggle('acc2')">
+          <span class="acc-label">หมวดวิชาเลือกเสรี</span>
+          <div class="acc-chevron">
+            <svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg>
+          </div>
+        </div>
+        <div class="acc-body">
+          <div class="acc-body-inner">
+            <div class="acc-content">
+              <p style="font-size:13px;color:var(--text-mid);line-height:1.85;">
+                นักศึกษาสามารถเลือกเรียนรายวิชาใด ๆ ก็ได้
+                ที่เปิดสอนในมหาวิทยาลัยสงขลานครินทร์ หรือ มหาวิทยาลัยอื่น
+                ทั้งในประเทศและต่างประเทศ โดยความเห็นชอบของหลักสูตร/สาขาวิชา
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ หมวดวิชาเฉพาะ (full width) -->
+      <div class="acc acc-full" id="acc3">
+        <div class="acc-header" onclick="toggle('acc3')">
+          <span class="acc-label">หมวดวิชาเฉพาะ</span>
+          <div class="acc-chevron">
+            <svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg>
+          </div>
+        </div>
+        <div class="acc-body">
+          <div class="acc-body-inner">
+            <div class="acc-content">
+              <div class="type-list">
+
+                <div class="type-row">
+                  <div class="type-icon icon-blue">📘</div>
+                  <div class="type-info">
+                    <div class="type-name">วิชาแกน</div>
+                    <div class="type-desc">รายวิชาพื้นฐานสำคัญที่นักศึกษาทุกสาขาในระดับเดียวกันต้องเรียน เพื่อสร้างความรู้และทักษะร่วมกันก่อนเจาะเฉพาะทางเฉพาะของสาขา</div>
+                  </div>
+                </div>
+
+                <div class="type-row">
+                  <div class="type-icon icon-green">🎓</div>
+                  <div class="type-info">
+                    <div class="type-name">วิชาพื้น</div>
+                    <div class="type-desc">ประกอบด้วย 3 วิชาดังนี้</div>
+                  </div>
+                </div>
+
+                <div class="type-row">
+                  <div class="type-icon icon-amber">📋</div>
+                  <div class="type-info">
+                    <div class="type-name">วิชาบังคับ</div>
+                    <div class="type-desc">เป็นวิชาที่นักศึกษาทุกคนในหลักสูตรต้องลงทะเบียนเรียนและสอบผ่านตามเกณฑ์ที่กำหนด จึงจะสามารถสำเร็จการศึกษาได้</div>
+                  </div>
+                </div>
+
+                <div class="type-row">
+                  <div class="type-icon icon-purple">🔓</div>
+                  <div class="type-info">
+                    <div class="type-name">วิชาเลือก</div>
+                    <div class="type-desc">รายวิชาที่หลักสูตรเปิดโอกาสให้ผู้เรียนได้เลือกเรียนตามความสนใจ ความถนัด หรือเพื่อขยายความรู้เพิ่มเติมตามวิชาบังคับ โดยเลือกเรียนวิชาเองของสาขา</div>
+                  </div>
+                </div>
+
+                <div class="type-row">
+                  <div class="type-icon icon-rose">⚡</div>
+                  <div class="type-info">
+                    <div class="type-name">วิชาโก</div>
+                    <div class="type-desc">ให้เลือกจากรายวิชาในกลุ่มวิชาใดวิชาหนึ่ง จำนวน 15 หน่วยกิต ที่เปิดสอนโดยสาขาวิชาบริหารธุรกิจสาขาวิชาการบัญชี</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /acc-grid -->
+  </div>
+</section>
+
+<script>
+  /* ══════════════════════════════════════════
+     CONFIG
+  ══════════════════════════════════════════ */
+  const API_BASE = 'https://websitefms.onrender.com/api';
+
+  // courseId can be passed via ?courseId=1 — default to 1
+  const params   = new URLSearchParams(window.location.search);
+  const COURSE_ID = params.get('courseId') || '1';
+
+  /* ══════════════════════════════════════════
+     PILL PALETTE — cycles if more than defined
+  ══════════════════════════════════════════ */
+  const PALETTE = [
+    { c:'#7C3AED', bg:'#F5F3FF', bd:'#DDD6FE' },
+    { c:'#BE185D', bg:'#FDF2F8', bd:'#FBCFE8' },
+    { c:'#065F46', bg:'#ECFDF5', bd:'#A7F3D0' },
+    { c:'#92400E', bg:'#FFFBEB', bd:'#FDE68A' },
+    { c:'#1E40AF', bg:'#EFF6FF', bd:'#BFDBFE' },
+    { c:'#991B1B', bg:'#FFF5F5', bd:'#FECACA' },
+    { c:'#0F766E', bg:'#F0FDFA', bd:'#99F6E4' },
+    { c:'#6D28D9', bg:'#F5F3FF', bd:'#C4B5FD' },
+  ];
+
+  /* emoji fallback bank — use hero_image emoji field or rotate from list */
+  const EMOJIS = ['💰','📣','👥','🚚','🖥','🎪','📊','🔬','🌐','📐'];
+
+  /* ══════════════════════════════════════════
+     FETCH MAJORS
+  ══════════════════════════════════════════ */
+  async function loadMajors() {
+    const row = document.getElementById('major-row');
+    try {
+      const res  = await fetch(`${API_BASE}/courses/${COURSE_ID}/majors`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const majors = Array.isArray(data) ? data : (data.data || []);
+
+      if (!majors.length) {
+        row.innerHTML = '<span class="pill-error">ยังไม่มีสาขาวิชา</span>';
+        return;
+      }
+
+      row.innerHTML = majors.map((m, i) => {
+        const pal   = PALETTE[i % PALETTE.length];
+        const emoji = EMOJIS[i % EMOJIS.length];
+        // display name: prefer name_en short abbrev, else first word of name_th
+        const label = m.name_en
+          ? m.name_en.replace(/\s+\S+/g, '').substring(0, 6)   // first "word" up to 6 chars
+          : (m.name_th || '').split(' ')[0].substring(0, 4);
+        return `<span
+          class="major-pill"
+          style="color:${pal.c};background:${pal.bg};border-color:${pal.bd};"
+          title="${m.name_th || m.name_en || ''}"
+          onclick="scrollToMajor(${m.id})"
+        ><span class="pill-emoji">${emoji}</span>${label}</span>`;
+      }).join('');
+
+    } catch (err) {
+      console.warn('loadMajors error:', err);
+      row.innerHTML = '<span class="pill-error">⚠ ไม่สามารถโหลดข้อมูลสาขาวิชาได้</span>';
+    }
+  }
+
+  function scrollToMajor(id) {
+    // placeholder: could scroll to a major section or navigate to major detail page
+    const el = document.getElementById('major-' + id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ══════════════════════════════════════════
+     ACCORDION
+  ══════════════════════════════════════════ */
+  function toggle(id) {
+    const el     = document.getElementById(id);
+    const isOpen = el.classList.contains('open');
+    document.querySelectorAll('.acc').forEach(a => a.classList.remove('open'));
+    if (!isOpen) el.classList.add('open');
+  }
+
+  /* ── INIT ── */
+  loadMajors();
+</script>
+</body>
+</html>
