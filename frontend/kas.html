@@ -64,22 +64,34 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .sb-item.active{background:var(--purple-light);color:var(--purple);font-weight:700;border-left-color:var(--purple);}
 .sb-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
 .lo-content{flex:1;overflow:auto;}
-.lo-thead{display:grid;grid-template-columns:1fr 170px 155px 155px;padding:11px 20px;border-bottom:2px solid #ede8f5;background:#faf7ff;font-size:10.5px;font-weight:800;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;gap:8px;align-items:center;}
+/* ── Grid: ชื่อ | K | A | S ── */
+.lo-thead{display:grid;grid-template-columns:1fr 200px 180px 180px;padding:11px 20px;border-bottom:2px solid #ede8f5;background:#faf7ff;font-size:10.5px;font-weight:800;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;gap:8px;align-items:center;}
 .th-kas-cell{display:flex;align-items:center;justify-content:center;gap:5px;}
-.lo-row{display:grid;grid-template-columns:1fr 170px 155px 155px;padding:15px 20px;border-bottom:1px solid #f5eeff;gap:8px;align-items:center;transition:background .12s;}
+.lo-row{display:grid;grid-template-columns:1fr 200px 180px 180px;padding:15px 20px;border-bottom:1px solid #f5eeff;gap:8px;align-items:start;transition:background .12s;}
 .lo-row:last-child{border-bottom:none;}
 .lo-row:hover{background:#fdfbff;}
 .lo-info{display:flex;gap:11px;align-items:flex-start;}
 .lo-badge{font-family:'Lexend',sans-serif;font-size:11px;font-weight:800;background:var(--purple-bg);color:var(--purple);padding:3px 9px;border-radius:6px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
 .lo-badge.mlo{background:#e0f7fa;color:var(--teal);}
 .lo-text{font-size:12.5px;color:var(--text);line-height:1.55;}
-.kas-cell{display:flex;justify-content:center;align-items:center;}
-.ae-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:999px;font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;transition:.15s;white-space:nowrap;}
-.ae-btn.K{color:var(--k-color);border-color:var(--k-color);background:var(--k-bg);}
-.ae-btn.A{color:var(--a-color);border-color:var(--a-color);background:var(--a-bg);}
-.ae-btn.S{color:var(--s-color);border-color:var(--s-color);background:var(--s-bg);}
-.ae-btn:hover{opacity:.82;}
-.ae-cnt{background:white;border-radius:999px;padding:1px 5px;font-size:10px;font-weight:800;}
+
+/* ── KAS Cell — แสดง tags + ปุ่มแก้ไข ── */
+.kas-cell{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:2px 0;}
+.kas-tags{display:flex;flex-wrap:wrap;gap:3px;min-height:22px;}
+.kas-tag{font-family:'Lexend',sans-serif;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap;line-height:1.6;}
+.kas-tag.K{background:var(--k-bg);color:var(--k-color);border:1px solid #ddd6fe;}
+.kas-tag.A{background:var(--a-bg);color:var(--a-color);border:1px solid #fecdd3;}
+.kas-tag.S{background:var(--s-bg);color:var(--s-color);border:1px solid #bbf7d0;}
+.kas-tag.empty{background:#f1f5f9;color:#94a3b8;border:1px dashed #cbd5e1;font-weight:500;font-size:10px;}
+.kas-edit-btn{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:5px;font-family:'Lexend',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid;transition:.15s;white-space:nowrap;margin-top:2px;}
+.kas-edit-btn.K{color:var(--k-color);border-color:#c4b5fd;background:white;}
+.kas-edit-btn.K:hover{background:var(--k-bg);}
+.kas-edit-btn.A{color:var(--a-color);border-color:#fda4af;background:white;}
+.kas-edit-btn.A:hover{background:var(--a-bg);}
+.kas-edit-btn.S{color:var(--s-color);border-color:#86efac;background:white;}
+.kas-edit-btn.S:hover{background:var(--s-bg);}
+
+/* ── CLO section ── */
 .clo-wrap{display:flex;gap:20px;}
 .clo-main{flex:1;min-width:0;}
 .clo-side{width:280px;flex-shrink:0;}
@@ -224,14 +236,10 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   .lo-badge{font-size:8pt;padding:2pt 6pt;}
   .lo-text{font-size:9pt;line-height:1.4;}
   .kas-cell{display:block!important;}
-  .ae-btn{display:none!important;}
-  .kas-print{display:flex!important;flex-wrap:wrap;gap:2pt;justify-content:center;}
-  .kp-tag{font-size:7.5pt;font-weight:700;padding:1.5pt 5pt;border-radius:3pt;white-space:nowrap;}
-  .kp-tag.K{background:#f3e8ff;color:#7c3aed;}
-  .kp-tag.A{background:#ffe4e6;color:#e11d48;}
-  .kp-tag.S{background:#dcfce7;color:#16a34a;}
+  .kas-edit-btn{display:none!important;}
+  .kas-tags{display:flex!important;flex-wrap:wrap;gap:2pt;}
+  .kas-tag{font-size:7.5pt;padding:1.5pt 5pt;border-radius:3pt;}
 }
-.kas-print{display:none;}
 </style>
 </head>
 <body>
@@ -527,6 +535,12 @@ let curTab='PLO',curMloGroup=0;
 let mCtx=null,mPanel='PLO_MLO';
 let tKas={K:new Set(),A:new Set(),S:new Set()},tPlo=new Set(),tMlo=new Set();
 
+/* Lookup label from code */
+function kasLabel(type,code){
+  const data=type==='K'?K_DATA:type==='A'?A_DATA:S_DATA;
+  return (data.find(d=>d.code===code)||{}).label||code;
+}
+
 /* PLO/MLO from localStorage */
 function loadPloMloData(){
   try{
@@ -610,6 +624,44 @@ function switchTab(tab,btn){
   if(tab==='PLO')renderPLO();else if(tab==='MLO')renderMLO();else renderCLO();
 }
 
+/* ══════════════════════════════════════════════════════
+   loRow — แสดง KAS tags + ปุ่มแก้ไขเล็กๆ ด้านล่าง
+   ══════════════════════════════════════════════════════ */
+function renderKasTags(codes,type){
+  if(!codes||!codes.size)return`<span class="kas-tag empty">— ยังไม่ได้เลือก</span>`;
+  return [...codes].map(code=>`<span class="kas-tag ${type}" title="${esc(kasLabel(type,code))}">${code}</span>`).join('');
+}
+
+function loRow(code,desc,type,k){
+  const ctx=JSON.stringify({type,code}).replace(/"/g,'&quot;');
+  return `<div class="lo-row">
+    <div class="lo-info"><span class="lo-badge${type==='MLO'?' mlo':''}">${code}</span><span class="lo-text">${esc(desc)}</span></div>
+    <div class="kas-cell">
+      <div class="kas-tags">${renderKasTags(k.K,'K')}</div>
+      <button class="kas-edit-btn K" onclick='openModal(${ctx},"KAS","K")'>
+        <svg viewBox="0 0 20 20" fill="currentColor" width="9" height="9"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+        แก้ไข K
+      </button>
+    </div>
+    <div class="kas-cell">
+      <div class="kas-tags">${renderKasTags(k.A,'A')}</div>
+      <button class="kas-edit-btn A" onclick='openModal(${ctx},"KAS","A")'>
+        <svg viewBox="0 0 20 20" fill="currentColor" width="9" height="9"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+        แก้ไข A
+      </button>
+    </div>
+    <div class="kas-cell">
+      <div class="kas-tags">${renderKasTags(k.S,'S')}</div>
+      <button class="kas-edit-btn S" onclick='openModal(${ctx},"KAS","S")'>
+        <svg viewBox="0 0 20 20" fill="currentColor" width="9" height="9"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+        แก้ไข S
+      </button>
+    </div>
+  </div>`;
+}
+
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
 /* PLO/MLO render */
 function renderPLO(){
   const c=document.getElementById('plo-rows');
@@ -628,19 +680,6 @@ function renderMLO(){
   document.getElementById('mlo-rows').innerHTML=g.items.map(m=>loRow(m.code,m.desc,'MLO',mloKas[m.code]||{K:new Set(),A:new Set(),S:new Set()})).join('');
 }
 function selMloGroup(i){curMloGroup=i;renderMLO();}
-
-function loRow(code,desc,type,k){
-  const kn=k.K.size,an=k.A.size,sn=k.S.size;
-  const ctx=JSON.stringify({type,code}).replace(/"/g,'&quot;');
-  const kPrint=t=>[...k[t]].map(c=>`<span class="kp-tag ${t}">${c}</span>`).join('');
-  return `<div class="lo-row">
-    <div class="lo-info"><span class="lo-badge${type==='MLO'?' mlo':''}">${code}</span><span class="lo-text">${esc(desc)}</span></div>
-    <div class="kas-cell"><button class="ae-btn K" onclick='openModal(${ctx},"KAS","K")'><span>⊕</span> Add/Edit${kn?` <span class="ae-cnt">${kn}</span>`:''}</button><div class="kas-print">${kPrint('K')||'<span class="kp-tag K" style="opacity:.35">—</span>'}</div></div>
-    <div class="kas-cell"><button class="ae-btn A" onclick='openModal(${ctx},"KAS","A")'><span>⊕</span> Add/Edit${an?` <span class="ae-cnt">${an}</span>`:''}</button><div class="kas-print">${kPrint('A')||'<span class="kp-tag A" style="opacity:.35">—</span>'}</div></div>
-    <div class="kas-cell"><button class="ae-btn S" onclick='openModal(${ctx},"KAS","S")'><span>⊕</span> Add/Edit${sn?` <span class="ae-cnt">${sn}</span>`:''}</button><div class="kas-print">${kPrint('S')||'<span class="kp-tag S" style="opacity:.35">—</span>'}</div></div>
-  </div>`;
-}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 /* CLO - API driven */
 const API_BASE_CLO='https://websitefms.onrender.com/api';
@@ -946,7 +985,7 @@ function toast(msg,color='#22c55e'){
   clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3200);
 }
 
-/* ═══════════ INIT — ใช้ข้อมูล Default จนกว่าจะกดปุ่มดึงข้อมูล ═══════════ */
+/* INIT */
 PLO_LIST=DEFAULT_PLO;
 MLO_GROUPS=DEFAULT_MLO_GROUPS;
 isLiveData=false;

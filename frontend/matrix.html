@@ -49,6 +49,61 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .unsaved-dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:pulse 1.2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* ── PUBLISH TOGGLE ── */
+.publish-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--white);border-radius:14px;
+  border:1.5px solid var(--border);
+  padding:14px 22px;margin-bottom:20px;
+  box-shadow:0 2px 8px rgba(127,19,236,.06);
+}
+.publish-bar.published{
+  background:#f0fdf4;border-color:#86efac;
+}
+.publish-info{display:flex;align-items:center;gap:12px;}
+.publish-dot{width:10px;height:10px;border-radius:50%;background:#94a3b8;flex-shrink:0;}
+.publish-dot.on{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2);animation:pulseGreen 1.8s infinite;}
+@keyframes pulseGreen{0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.2)}50%{box-shadow:0 0 0 6px rgba(34,197,94,.05)}}
+.publish-label{font-size:13px;font-weight:700;color:var(--text);}
+.publish-sublabel{font-size:11.5px;color:var(--text-sub);margin-top:1px;}
+.publish-time{font-size:11px;color:#16a34a;font-weight:600;margin-top:2px;}
+
+/* Toggle switch */
+.toggle-wrap{display:flex;align-items:center;gap:10px;}
+.toggle-text{font-size:12px;font-weight:700;color:var(--text-sub);}
+.toggle-switch{position:relative;width:46px;height:26px;cursor:pointer;}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-slider{position:absolute;inset:0;background:#d1d5db;border-radius:999px;transition:.3s;}
+.toggle-slider:before{content:'';position:absolute;width:18px;height:18px;left:4px;top:4px;background:white;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.toggle-switch input:checked + .toggle-slider{background:#22c55e;}
+.toggle-switch input:checked + .toggle-slider:before{transform:translateX(20px);}
+.btn-preview{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text-sub);transition:.18s;text-decoration:none;}
+.btn-preview:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-light);}
+.btn-preview svg{width:13px;height:13px;fill:currentColor;}
+
+/* ── CONFIRM MODAL ── */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.confirm-overlay.show{opacity:1;pointer-events:all;}
+.confirm-modal{background:white;border-radius:20px;padding:32px;width:460px;max-width:94vw;box-shadow:0 24px 60px rgba(0,0,0,.25);transform:translateY(16px) scale(.97);transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
+.confirm-overlay.show .confirm-modal{transform:translateY(0) scale(1);}
+.confirm-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.confirm-icon.publish{background:#f0fdf4;}
+.confirm-icon.unpublish{background:#fef2f2;}
+.confirm-icon svg{width:26px;height:26px;}
+.confirm-icon.publish svg{fill:#16a34a;}
+.confirm-icon.unpublish svg{fill:#ef4444;}
+.confirm-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px;}
+.confirm-body{font-size:13.5px;color:var(--text-sub);line-height:1.7;margin-bottom:24px;}
+.confirm-body strong{color:var(--text);}
+.confirm-btns{display:flex;gap:10px;justify-content:flex-end;}
+.btn-cancel-confirm{padding:10px 22px;border:1.5px solid var(--border);background:white;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;color:var(--text-sub);cursor:pointer;transition:.15s;}
+.btn-cancel-confirm:hover{border-color:var(--text-sub);}
+.btn-do-publish{padding:10px 24px;border:none;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.18s;}
+.btn-do-publish.publish{background:#16a34a;color:white;}
+.btn-do-publish.publish:hover{background:#15803d;}
+.btn-do-publish.unpublish{background:#ef4444;color:white;}
+.btn-do-publish.unpublish:hover{background:#dc2626;}
+
 /* ── PAGE ── */
 .page{max-width:100%;padding:32px 40px 80px;}
 .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
@@ -66,124 +121,27 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .th-col-plo{background:#faf0ff;color:var(--purple);text-align:center;padding:10px 10px;font-weight:700;font-size:11px;min-width:40px;}
 .th-col-mlo{background:#f0fafd;color:var(--teal);text-align:center;padding:10px 8px;font-weight:700;font-size:11px;min-width:38px;}
 
-/* ── LABEL CELL ── */
-.td-label{
-  background:var(--white);
-  position:sticky;left:0;z-index:5;
-  padding:10px 14px;
-  width:240px;min-width:240px;max-width:240px;
-  border-right:2px solid #e0d8f0;
-  white-space:normal;line-height:1.5;
-}
-.row-group{
-  font-size:10.5px;font-weight:700;color:var(--purple);
-  margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;
-  word-break:break-word;
-}
-
-/* row-title: clickable, shows underline hint when has desc */
-.row-title{
-  font-size:11.5px;font-weight:600;color:var(--text);
-  word-break:break-word;white-space:normal;
-  display:inline-flex;align-items:flex-start;gap:5px;
-  line-height:1.45;
-}
-.row-title.has-desc{
-  cursor:pointer;
-}
-.row-title.has-desc:hover{
-  color:var(--purple);
-}
-.row-title.has-desc .title-text{
-  border-bottom:1.5px dashed #c4a8ff;
-  padding-bottom:1px;
-}
-.row-title.has-desc:hover .title-text{
-  border-bottom-color:var(--purple);
-}
-
-/* info badge — shown only when desc exists */
-.info-badge{
-  display:inline-flex;
-  align-items:center;justify-content:center;
-  width:15px;height:15px;
-  border-radius:50%;
-  background:var(--purple-bg);
-  color:var(--purple);
-  font-size:9px;font-weight:800;
-  font-family:'Lexend',sans-serif;
-  flex-shrink:0;
-  margin-top:1px;
-  transition:background .15s,color .15s;
-  font-style:normal;
-  line-height:1;
-  user-select:none;
-}
-.row-title.has-desc:hover .info-badge{
-  background:var(--purple);
-  color:white;
-}
-
-/* desc row — hidden by default */
-.row-desc{ display:none; }
+.td-label{background:var(--white);position:sticky;left:0;z-index:5;padding:10px 14px;width:240px;min-width:240px;max-width:240px;border-right:2px solid #e0d8f0;white-space:normal;line-height:1.5;}
+.row-group{font-size:10.5px;font-weight:700;color:var(--purple);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;word-break:break-word;}
+.row-title{font-size:11.5px;font-weight:600;color:var(--text);word-break:break-word;white-space:normal;display:inline-flex;align-items:flex-start;gap:5px;line-height:1.45;}
+.row-title.has-desc{cursor:pointer;}
+.row-title.has-desc:hover{color:var(--purple);}
+.row-title.has-desc .title-text{border-bottom:1.5px dashed #c4a8ff;padding-bottom:1px;}
+.row-title.has-desc:hover .title-text{border-bottom-color:var(--purple);}
+.info-badge{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--purple-bg);color:var(--purple);font-size:9px;font-weight:800;font-family:'Lexend',sans-serif;flex-shrink:0;margin-top:1px;transition:background .15s,color .15s;font-style:normal;line-height:1;user-select:none;}
+.row-title.has-desc:hover .info-badge{background:var(--purple);color:white;}
 
 /* ── POPUP ── */
-.desc-popup{
-  position:fixed;
-  z-index:9999;
-  pointer-events:none;
-  opacity:0;
-  transform:translateY(6px) scale(.97);
-  transition:opacity .2s ease, transform .2s ease;
-  max-width:340px;min-width:220px;
-}
-.desc-popup.visible{
-  opacity:1;
-  transform:translateY(0) scale(1);
-  pointer-events:none;
-}
-.desc-popup-inner{
-  background:#1e0f38;
-  color:#f0e8ff;
-  border-radius:14px;
-  padding:14px 18px;
-  box-shadow:0 12px 40px rgba(0,0,0,.35), 0 2px 8px rgba(127,19,236,.3);
-  border:1px solid rgba(196,168,255,.18);
-}
-.desc-popup-group{
-  font-size:10px;font-weight:700;
-  color:#a07cdd;letter-spacing:.6px;
-  text-transform:uppercase;margin-bottom:6px;
-  font-family:'Lexend',sans-serif;
-}
-.desc-popup-title{
-  font-size:13px;font-weight:700;
-  color:#e8d8ff;
-  margin-bottom:10px;line-height:1.4;
-}
-.desc-popup-divider{
-  height:1px;background:rgba(196,168,255,.2);margin-bottom:10px;
-}
-.desc-popup-body{
-  font-size:12.5px;line-height:1.7;
-  color:#cbb8f0;
-  white-space:normal;word-break:break-word;
-}
-/* arrow */
-.desc-popup-arrow{
-  width:0;height:0;
-  position:absolute;
-  border-left:7px solid transparent;
-  border-right:7px solid transparent;
-}
-.desc-popup-arrow.up{
-  border-bottom:7px solid #1e0f38;
-  top:-7px;left:20px;
-}
-.desc-popup-arrow.down{
-  border-top:7px solid #1e0f38;
-  bottom:-7px;left:20px;
-}
+.desc-popup{position:fixed;z-index:9999;pointer-events:none;opacity:0;transform:translateY(6px) scale(.97);transition:opacity .2s ease, transform .2s ease;max-width:340px;min-width:220px;}
+.desc-popup.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:none;}
+.desc-popup-inner{background:#1e0f38;color:#f0e8ff;border-radius:14px;padding:14px 18px;box-shadow:0 12px 40px rgba(0,0,0,.35), 0 2px 8px rgba(127,19,236,.3);border:1px solid rgba(196,168,255,.18);}
+.desc-popup-group{font-size:10px;font-weight:700;color:#a07cdd;letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px;font-family:'Lexend',sans-serif;}
+.desc-popup-title{font-size:13px;font-weight:700;color:#e8d8ff;margin-bottom:10px;line-height:1.4;}
+.desc-popup-divider{height:1px;background:rgba(196,168,255,.2);margin-bottom:10px;}
+.desc-popup-body{font-size:12.5px;line-height:1.7;color:#cbb8f0;white-space:normal;word-break:break-word;}
+.desc-popup-arrow{width:0;height:0;position:absolute;border-left:7px solid transparent;border-right:7px solid transparent;}
+.desc-popup-arrow.up{border-bottom:7px solid #1e0f38;top:-7px;left:20px;}
+.desc-popup-arrow.down{border-top:7px solid #1e0f38;bottom:-7px;left:20px;}
 
 /* ── CHECK ── */
 .td-check{text-align:center;padding:0;vertical-align:middle;cursor:pointer;transition:background .12s;}
@@ -224,7 +182,7 @@ tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
 .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
 @media print {
-  .topbar,.header-actions,.info-grid,.pagination,.unsaved-badge,.desc-popup{display:none!important;}
+  .topbar,.header-actions,.info-grid,.pagination,.unsaved-badge,.desc-popup,.publish-bar{display:none!important;}
   body{background:white;}
   .page{padding:10px;}
   .table-wrapper{box-shadow:none;border:1px solid #ccc;overflow:visible;}
@@ -286,6 +244,31 @@ tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
     <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="importExcel(event)">
   </div>
 
+  <!-- ══════════ PUBLISH BAR ══════════ -->
+  <div class="publish-bar" id="publishBar">
+    <div class="publish-info">
+      <div class="publish-dot" id="publishDot"></div>
+      <div>
+        <div class="publish-label" id="publishLabel">ยังไม่เผยแพร่ข้อมูลสู่สาธารณะ</div>
+        <div class="publish-sublabel" id="publishSublabel">ข้อมูลจะไม่แสดงในหน้า bba-matrix.html จนกว่าจะเปิดเผยแพร่</div>
+        <div class="publish-time" id="publishTime" style="display:none;"></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <a href="bba-matrix.html" target="_blank" class="btn-preview">
+        <svg viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+        Preview หน้าสาธารณะ
+      </a>
+      <div class="toggle-wrap">
+        <span class="toggle-text" id="toggleLabel">ปิดเผยแพร่</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="publishToggle" onchange="onToggleChange(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
   <div class="table-wrapper">
     <div style="overflow:auto">
       <table class="matrix-table" id="matrixTable">
@@ -324,13 +307,29 @@ tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
   </div>
 </div>
 
+<!-- ══════════ CONFIRM MODAL ══════════ -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-modal">
+    <div class="confirm-icon" id="confirmIcon">
+      <svg id="confirmIconSvg" viewBox="0 0 20 20"></svg>
+    </div>
+    <div class="confirm-title" id="confirmTitle"></div>
+    <div class="confirm-body"  id="confirmBody"></div>
+    <div class="confirm-btns">
+      <button class="btn-cancel-confirm" onclick="cancelConfirm()">ยกเลิก</button>
+      <button class="btn-do-publish"     id="confirmDoBtn" onclick="doConfirm()"></button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
 
 <script>
 /* ═══════════════════════════════════════
    DATA
 ═══════════════════════════════════════ */
-const STORAGE_KEY = 'fms_alignment_matrix_v2';
+const STORAGE_KEY   = 'fms_alignment_matrix_v2';
+const PUBLISH_KEY   = 'fms_matrix_publish_state';
 const PLO_COLS = ['1','2','3','4','5','6','7','8','9'];
 const MLO_COLS = ['1.1','1.2','1.3','2.1','2.2','2.3','3.1','3.2','4.1','4.2','5.1','5.2','6.1','6.2'];
 const ALL_COLS = [...PLO_COLS.map(c=>'PLO '+c),...MLO_COLS.map(c=>'MLO '+c)];
@@ -380,9 +379,19 @@ try {
   rows = saved ? JSON.parse(saved) : DEFAULT_ROWS.map(r=>({...r,checks:[...r.checks]}));
 } catch { rows = DEFAULT_ROWS.map(r=>({...r,checks:[...r.checks]})); }
 
+// Publish state
+let publishState = {published: false, publishedAt: null};
+try {
+  const ps = localStorage.getItem(PUBLISH_KEY);
+  if(ps) publishState = JSON.parse(ps);
+} catch {}
+
 let hasUnsaved = false;
 const PAGE_SIZE = 12;
 let currentPage = 1;
+
+// pending toggle value (before confirm)
+let _pendingPublish = null;
 
 function markUnsaved(){ hasUnsaved=true; document.getElementById('unsavedBadge').classList.add('show'); }
 function markSaved()  { hasUnsaved=false; document.getElementById('unsavedBadge').classList.remove('show'); }
@@ -391,12 +400,103 @@ function saveData(){
   catch { showToast('❌ บันทึกไม่สำเร็จ','#ef4444'); }
 }
 
-function totalPages(){ return Math.ceil(rows.length/PAGE_SIZE); }
-function pageRows()  { const s=(currentPage-1)*PAGE_SIZE; return rows.slice(s,s+PAGE_SIZE); }
+/* ═══════════════════════════════════════
+   PUBLISH LOGIC
+═══════════════════════════════════════ */
+function onToggleChange(checked){
+  // revert toggle immediately — wait for confirm
+  document.getElementById('publishToggle').checked = publishState.published;
+  _pendingPublish = checked;
+  showConfirm(checked);
+}
+
+function showConfirm(willPublish){
+  const icon   = document.getElementById('confirmIcon');
+  const svg    = document.getElementById('confirmIconSvg');
+  const title  = document.getElementById('confirmTitle');
+  const body   = document.getElementById('confirmBody');
+  const doBtn  = document.getElementById('confirmDoBtn');
+
+  if(willPublish){
+    icon.className  = 'confirm-icon publish';
+    svg.innerHTML   = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>';
+    title.textContent = 'ยืนยันการเผยแพร่ข้อมูล';
+    body.innerHTML  = `ข้อมูล Alignment Matrix จะถูก<strong>แสดงในหน้าสาธารณะ (bba-matrix.html)</strong> ทันที<br><br>ตรวจสอบให้แน่ใจว่าข้อมูลถูกต้องและบันทึกแล้วก่อนเผยแพร่`;
+    doBtn.textContent = 'เผยแพร่ข้อมูล';
+    doBtn.className = 'btn-do-publish publish';
+  } else {
+    icon.className  = 'confirm-icon unpublish';
+    svg.innerHTML   = '<path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524L13.477 14.89zm1.414-1.414L6.524 5.11A6 6 0 0114.89 13.476zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>';
+    title.textContent = 'ยืนยันการปิดเผยแพร่';
+    body.innerHTML  = `ข้อมูล Alignment Matrix จะ<strong>ถูกซ่อนจากหน้าสาธารณะ (bba-matrix.html)</strong> ทันที<br><br>ผู้เยี่ยมชมจะเห็นข้อความ "ข้อมูลยังไม่พร้อมเผยแพร่" แทน`;
+    doBtn.textContent = 'ปิดเผยแพร่';
+    doBtn.className = 'btn-do-publish unpublish';
+  }
+
+  document.getElementById('confirmOverlay').classList.add('show');
+}
+
+function cancelConfirm(){
+  document.getElementById('confirmOverlay').classList.remove('show');
+  _pendingPublish = null;
+}
+
+function doConfirm(){
+  const willPublish = _pendingPublish;
+  document.getElementById('confirmOverlay').classList.remove('show');
+  _pendingPublish = null;
+
+  publishState.published = willPublish;
+  publishState.publishedAt = willPublish ? new Date().toISOString() : null;
+  localStorage.setItem(PUBLISH_KEY, JSON.stringify(publishState));
+
+  // sync the actual toggle
+  document.getElementById('publishToggle').checked = willPublish;
+  updatePublishBar();
+  showToast(willPublish ? '✓ เผยแพร่ข้อมูลสำเร็จ · หน้า bba-matrix.html จะแสดงข้อมูลแล้ว' : '✓ ปิดเผยแพร่แล้ว · ข้อมูลถูกซ่อนจากสาธารณะ', willPublish ? '#22c55e' : '#f59e0b');
+}
+
+function updatePublishBar(){
+  const bar       = document.getElementById('publishBar');
+  const dot       = document.getElementById('publishDot');
+  const label     = document.getElementById('publishLabel');
+  const sublabel  = document.getElementById('publishSublabel');
+  const timeEl    = document.getElementById('publishTime');
+  const toggle    = document.getElementById('publishToggle');
+  const toggleLbl = document.getElementById('toggleLabel');
+
+  const on = publishState.published;
+  toggle.checked = on;
+  bar.classList.toggle('published', on);
+  dot.classList.toggle('on', on);
+  toggleLbl.textContent = on ? 'เผยแพร่แล้ว' : 'ปิดเผยแพร่';
+
+  if(on){
+    label.textContent    = 'เผยแพร่ข้อมูลสู่สาธารณะแล้ว';
+    sublabel.textContent = 'ข้อมูลแสดงในหน้า bba-matrix.html เรียบร้อย';
+    if(publishState.publishedAt){
+      const d = new Date(publishState.publishedAt);
+      timeEl.textContent = `เผยแพร่เมื่อ ${d.toLocaleDateString('th-TH')} ${d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}`;
+      timeEl.style.display = '';
+    }
+  } else {
+    label.textContent    = 'ยังไม่เผยแพร่ข้อมูลสู่สาธารณะ';
+    sublabel.textContent = 'ข้อมูลจะไม่แสดงในหน้า bba-matrix.html จนกว่าจะเปิดเผยแพร่';
+    timeEl.style.display = 'none';
+  }
+}
+
+// close confirm on overlay click
+document.getElementById('confirmOverlay').addEventListener('click', function(e){
+  if(e.target === this) cancelConfirm();
+});
 
 /* ═══════════════════════════════════════
    RENDER
 ═══════════════════════════════════════ */
+function totalPages(){ return Math.ceil(rows.length/PAGE_SIZE); }
+function pageRows()  { const s=(currentPage-1)*PAGE_SIZE; return rows.slice(s,s+PAGE_SIZE); }
+
 function renderHead(){
   document.getElementById('matrixHead').innerHTML=`
     <tr>
@@ -416,17 +516,12 @@ function renderBody(){
   document.getElementById('matrixBody').innerHTML = pr.map((row,ri)=>{
     const gi = offset+ri;
     const hasDesc = !!(row.desc && row.desc.trim());
-
-    // title cell — clickable only if has desc
     const titleHtml = hasDesc
       ? `<div class="row-title has-desc" data-gi="${gi}" onclick="togglePopup(event,${gi})">
            <span class="title-text">${row.title}</span>
            <i class="info-badge">i</i>
          </div>`
-      : `<div class="row-title">
-           <span class="title-text">${row.title}</span>
-         </div>`;
-
+      : `<div class="row-title"><span class="title-text">${row.title}</span></div>`;
     return `<tr>
       <td class="td-label">
         <div class="row-group">${row.group}</div>
@@ -469,83 +564,48 @@ function toggleCheck(ri,ci){ rows[ri].checks[ci]=rows[ri].checks[ci]?0:1; markUn
    POPUP LOGIC
 ═══════════════════════════════════════ */
 let _activeGi = -1;
-
 function togglePopup(e, gi){
   e.stopPropagation();
   if(_activeGi === gi){ closePopup(); return; }
   openPopup(e, gi);
 }
-
 function openPopup(e, gi){
   const row    = rows[gi];
   const popup  = document.getElementById('descPopup');
   const arrow  = document.getElementById('descArrow');
-
   document.getElementById('descGroup').textContent = row.group;
   document.getElementById('descTitle').textContent = row.title;
   document.getElementById('descBody').textContent  = row.desc;
-
-  // temporarily place off-screen to measure size
   popup.style.visibility = 'hidden';
   popup.style.left = '-9999px';
   popup.style.top  = '-9999px';
   popup.classList.add('visible');
-
-  // position after paint
   requestAnimationFrame(()=>{
     const PW = popup.offsetWidth  || 300;
     const PH = popup.offsetHeight || 120;
-    const GAP = 8;
-    const MARGIN = 12;
-
-    // get trigger element rect (the .row-title div)
+    const GAP = 8; const MARGIN = 12;
     const trigger = e.currentTarget || e.target;
     const rect = trigger.getBoundingClientRect ? trigger.getBoundingClientRect() : { left: e.clientX, top: e.clientY, width: 0, height: 20 };
-
-    let x = rect.left;
-    let y = rect.bottom + GAP;
-    let arrowClass = 'up';
-
-    // flip above if not enough room below
-    if(y + PH + MARGIN > window.innerHeight){
-      y = rect.top - PH - GAP;
-      arrowClass = 'down';
-    }
-    // clamp horizontally
+    let x = rect.left; let y = rect.bottom + GAP; let arrowClass = 'up';
+    if(y + PH + MARGIN > window.innerHeight){ y = rect.top - PH - GAP; arrowClass = 'down'; }
     if(x + PW + MARGIN > window.innerWidth) x = window.innerWidth - PW - MARGIN;
     if(x < MARGIN) x = MARGIN;
-
-    // arrow position relative to popup
     const arrowLeft = Math.min(Math.max(rect.left - x + rect.width/2 - 7, 10), PW - 24);
-
     arrow.className = `desc-popup-arrow ${arrowClass}`;
     arrow.style.left = arrowLeft + 'px';
-    if(arrowClass === 'down') arrow.style.top = '';
-    else arrow.style.top = '';
-
     popup.style.left       = x + 'px';
     popup.style.top        = (window.scrollY + y) + 'px';
     popup.style.visibility = 'visible';
-
     _activeGi = gi;
   });
 }
-
 function closePopup(){
   _activeGi = -1;
-  const popup = document.getElementById('descPopup');
-  popup.classList.remove('visible');
+  document.getElementById('descPopup').classList.remove('visible');
 }
-
-// close on outside click
-document.addEventListener('click', e => {
-  if(_activeGi < 0) return;
-  if(!e.target.closest('.row-title')) closePopup();
-});
-// close on scroll
+document.addEventListener('click', e => { if(_activeGi < 0) return; if(!e.target.closest('.row-title')) closePopup(); });
 window.addEventListener('scroll', closePopup, {passive:true});
 document.querySelector('.table-wrapper')?.addEventListener('scroll', closePopup, {passive:true});
-// close on page change handled in goPage()
 
 /* ═══════════════════════════════════════
    EXCEL
@@ -604,9 +664,11 @@ function showToast(msg,color='#22c55e'){
   document.getElementById('toastDot').style.background=color;
   document.getElementById('toastMsg').textContent=msg;
   const t=document.getElementById('toast'); t.classList.add('show');
-  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),3000);
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),3500);
 }
 
+// Init
+updatePublishBar();
 render();
 </script>
 </body>

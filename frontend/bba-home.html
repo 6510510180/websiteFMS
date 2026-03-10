@@ -64,7 +64,7 @@
         <nav>
             <ul>
                 <li><a href="bba-home.html" class="active">หน้าหลัก</a></li>
-                <li><a href="bba-public.html?courseId=${course.id}">ข้อมูลทั่วไป</a></li>
+                <li><a href="bba-public.html" id="nav-general">ข้อมูลทั่วไป</a></li>
                 <li><a href="student.html">นักศึกษา</a></li>
                 <li><a href="plans.html">แผนการศึกษา</a></li>
                 <li><a href="bba-qa.html">QA</a></li>
@@ -245,6 +245,9 @@ async function appendNewCourses() {
         if (!courses || courses.length === 0) return;
 
         const newestId = Math.max(...courses.map(c => c.id));
+        // ── อัปเดต navbar "ข้อมูลทั่วไป" ให้ชี้ไปหลักสูตรล่าสุด ──
+const navGeneral = document.getElementById("nav-general");
+if (navGeneral) navGeneral.href = `bba-public.html?courseId=${newestId}`;
 
         courses.forEach(course => {
             const isNew    = course.id === newestId;

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Alignment Matrix | หลักสูตรบริหารธุรกิจบัณฑิต</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;900&family=Sarabun:wght@300;400;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+:root {
+  --purple:#7F13EC; --purple-dark:#5c0db0;
+  --purple-light:#F3EEFF; --purple-bg:#EDE7F3;
+  --teal:#0891b2; --teal-light:#e0f7fa;
+  --text:#21111C; --text-sub:#64748B;
+  --border:rgba(0,0,0,0.09); --white:#FFFFFF; --bg:#f8f7fc;
+  --green:#22c55e;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Sarabun','Noto Sans Thai',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:14px;}
+
+/* ── NAVBAR (same style as bba-home) ── */
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:10px 5%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,0.05);position:sticky;top:0;z-index:1000;}
+.navbar .logo img{height:40px;}
+.navbar ul{display:flex;gap:20px;margin:0;padding:0;list-style:none;}
+.navbar a{font-size:14px;color:#555;text-decoration:none;transition:.3s;}
+.navbar a.active{color:#9b51e0;font-weight:bold;}
+.nav-right{display:flex;align-items:center;gap:15px;}
+
+/* ── PAGE ── */
+.container{width:92%;max-width:1400px;margin:0 auto;}
+.page-wrap{padding:32px 0 80px;}
+
+/* ── HERO ── */
+.page-hero{
+  background:linear-gradient(135deg,#f3e8ff 0%,#e0f2fe 100%);
+  border-radius:16px;padding:32px 36px;margin-bottom:28px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:20px;
+  flex-wrap:wrap;
+}
+.hero-left{}
+.hero-eyebrow{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:8px;font-family:'Lexend',sans-serif;}
+.hero-title{font-size:24px;font-weight:900;color:var(--text);line-height:1.25;margin-bottom:8px;}
+.hero-sub{font-size:13.5px;color:var(--text-sub);line-height:1.7;max-width:560px;}
+.hero-stats{display:flex;gap:20px;margin-top:18px;flex-wrap:wrap;}
+.hero-stat{text-align:center;background:white;padding:12px 20px;border-radius:12px;box-shadow:0 2px 8px rgba(127,19,236,.08);}
+.hero-stat-val{font-family:'Lexend',sans-serif;font-size:22px;font-weight:800;color:var(--purple);}
+.hero-stat-val.teal{color:var(--teal);}
+.hero-stat-lbl{font-size:11px;color:var(--text-sub);margin-top:2px;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:white;border:1.5px solid #86efac;
+  color:#15803d;padding:10px 18px;border-radius:999px;
+  font-size:12px;font-weight:700;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(34,197,94,.15);
+  align-self:flex-start;
+}
+.hero-badge-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse 1.8s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4)}70%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
+
+/* ── FILTER BAR ── */
+.filter-bar{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:18px;flex-wrap:wrap;
+}
+.filter-label{font-size:12px;font-weight:700;color:var(--text-sub);white-space:nowrap;}
+.filter-btn{
+  padding:7px 16px;border-radius:999px;border:1.5px solid var(--border);
+  background:white;font-family:'Sarabun',sans-serif;font-size:12px;
+  font-weight:700;cursor:pointer;transition:.15s;color:var(--text-sub);white-space:nowrap;
+}
+.filter-btn:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-light);}
+.filter-btn.active{background:var(--purple);color:white;border-color:var(--purple);}
+.filter-btn.teal-active{background:var(--teal);color:white;border-color:var(--teal);}
+.filter-search{
+  margin-left:auto;display:flex;align-items:center;gap:8px;
+  background:white;border:1.5px solid var(--border);border-radius:10px;
+  padding:7px 14px;transition:.15s;
+}
+.filter-search:focus-within{border-color:var(--purple);}
+.filter-search svg{width:14px;height:14px;fill:#94a3b8;flex-shrink:0;}
+.filter-search input{border:none;outline:none;font-family:'Sarabun',sans-serif;font-size:13px;color:var(--text);background:transparent;width:200px;}
+
+/* ── TABLE ── */
+.table-wrapper{
+  background:var(--white);border-radius:16px;
+  box-shadow:0 4px 20px rgba(127,19,236,.09);
+  overflow:hidden;border:1px solid var(--border);
+}
+.table-scroll{overflow:auto;}
+.matrix-table{border-collapse:collapse;min-width:100%;font-size:12px;}
+.matrix-table th,.matrix-table td{border:1px solid #ede8f5;}
+.th-empty{
+  background:#fafafa;width:260px;min-width:260px;max-width:260px;
+  padding:14px 18px;font-size:13px;font-weight:700;color:var(--text);
+  border-bottom:2px solid #ddd;text-align:left;
+  position:sticky;left:0;z-index:10;white-space:normal;
+}
+.th-group-plo{background:#f3e8ff;color:var(--purple);text-align:center;padding:12px 8px;font-weight:700;font-size:12px;}
+.th-group-mlo{background:#e0f7fa;color:var(--teal);text-align:center;padding:12px 8px;font-weight:700;font-size:12px;}
+.th-col-plo{background:#faf0ff;color:var(--purple);text-align:center;padding:10px;font-weight:700;font-size:11px;min-width:42px;}
+.th-col-mlo{background:#f0fafd;color:var(--teal);text-align:center;padding:10px 8px;font-weight:700;font-size:11px;min-width:40px;}
+
+.td-label{
+  background:var(--white);position:sticky;left:0;z-index:5;
+  padding:12px 18px;width:260px;min-width:260px;max-width:260px;
+  border-right:2px solid #e0d8f0;white-space:normal;line-height:1.5;
+}
+.row-group{font-size:10px;font-weight:800;color:var(--purple);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;word-break:break-word;}
+.row-title{font-size:12px;font-weight:600;color:var(--text);word-break:break-word;white-space:normal;line-height:1.5;}
+.row-title.has-desc{cursor:pointer;display:inline-flex;align-items:flex-start;gap:5px;}
+.row-title.has-desc:hover{color:var(--purple);}
+.row-title.has-desc .title-text{border-bottom:1.5px dashed #c4a8ff;padding-bottom:1px;}
+.row-title.has-desc:hover .title-text{border-bottom-color:var(--purple);}
+.info-badge{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--purple-bg);color:var(--purple);font-size:9px;font-weight:800;flex-shrink:0;margin-top:1px;font-style:normal;}
+.row-title.has-desc:hover .info-badge{background:var(--purple);color:white;}
+
+/* row hidden by filter */
+.matrix-table tr.hidden-row{display:none;}
+
+/* check dot — read-only */
+.td-check{text-align:center;padding:8px 4px;vertical-align:middle;}
+.check-dot{
+  width:20px;height:20px;border-radius:50%;
+  margin:0 auto;display:flex;align-items:center;justify-content:center;
+  border:2px solid #e0d8f5;background:transparent;transition:all .15s;
+}
+.check-dot.on{background:var(--purple);border-color:var(--purple);}
+.check-dot.on::after{content:'';width:9px;height:5px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translateY(-1px);display:block;}
+.td-check.mlo-col .check-dot.on{background:var(--teal);border-color:var(--teal);}
+tbody tr:nth-child(even) .td-label{background:#fdfbff;}
+tbody tr:nth-child(even){background:#fdfbff;}
+tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
+
+/* ── STATS BAR ── */
+.stats-bar{
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  padding:14px 20px;border-top:1px solid var(--border);background:#faf7ff;font-size:13px;
+}
+.stat-pill{display:flex;align-items:center;gap:6px;font-weight:600;}
+.stat-dot{width:8px;height:8px;border-radius:50%;}
+.stat-dot.plo{background:var(--purple);}
+.stat-dot.mlo{background:var(--teal);}
+
+/* ── PAGINATION ── */
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 20px;border-top:1px solid var(--border);font-size:13px;color:var(--text-sub);}
+.page-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:white;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:.15s;color:var(--text-sub);}
+.page-btn:hover{background:var(--purple-light);color:var(--purple);border-color:var(--purple);}
+.page-btn.active{background:var(--purple);color:white;border-color:var(--purple);}
+.page-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── LEGEND ── */
+.legend-section{margin-top:20px;display:flex;gap:14px;flex-wrap:wrap;}
+.legend-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:14px 18px;display:flex;gap:12px;align-items:flex-start;flex:1;min-width:260px;}
+.legend-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.legend-icon svg{width:18px;height:18px;}
+.legend-icon.blue{background:#eff6ff;} .legend-icon.blue svg{fill:#3b82f6;}
+.legend-icon.amber{background:#fffbeb;} .legend-icon.amber svg{fill:#f59e0b;}
+.legend-icon.green{background:#f0fdf4;} .legend-icon.green svg{fill:#16a34a;}
+.legend-card strong{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.legend-card p{font-size:12px;color:var(--text-sub);line-height:1.5;}
+
+/* ── POPUP ── */
+.desc-popup{position:fixed;z-index:9999;pointer-events:none;opacity:0;transform:translateY(6px) scale(.97);transition:opacity .2s ease, transform .2s ease;max-width:340px;min-width:220px;}
+.desc-popup.visible{opacity:1;transform:translateY(0) scale(1);}
+.desc-popup-inner{background:#1e0f38;color:#f0e8ff;border-radius:14px;padding:14px 18px;box-shadow:0 12px 40px rgba(0,0,0,.35);border:1px solid rgba(196,168,255,.18);}
+.desc-popup-group{font-size:10px;font-weight:700;color:#a07cdd;letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px;font-family:'Lexend',sans-serif;}
+.desc-popup-title{font-size:13px;font-weight:700;color:#e8d8ff;margin-bottom:10px;line-height:1.4;}
+.desc-popup-divider{height:1px;background:rgba(196,168,255,.2);margin-bottom:10px;}
+.desc-popup-body{font-size:12.5px;line-height:1.7;color:#cbb8f0;white-space:normal;word-break:break-word;}
+.desc-popup-arrow{width:0;height:0;position:absolute;border-left:7px solid transparent;border-right:7px solid transparent;}
+.desc-popup-arrow.up{border-bottom:7px solid #1e0f38;top:-7px;left:20px;}
+.desc-popup-arrow.down{border-top:7px solid #1e0f38;bottom:-7px;left:20px;}
+
+/* ── UNPUBLISHED STATE ── */
+.unpublished-wrap{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:480px;text-align:center;padding:60px 20px;
+  background:var(--white);border-radius:16px;border:1px solid var(--border);
+  box-shadow:0 4px 20px rgba(127,19,236,.06);
+}
+.unpublished-icon{
+  width:80px;height:80px;border-radius:20px;
+  background:var(--purple-bg);display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;
+}
+.unpublished-icon svg{width:38px;height:38px;fill:var(--purple);opacity:.6;}
+.unpublished-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px;}
+.unpublished-sub{font-size:14px;color:var(--text-sub);line-height:1.7;max-width:420px;}
+
+/* ── FOOTER ── */
+.footer-mini{
+  margin-top:auto;padding:20px 5%;
+  border-top:1px solid var(--border);
+  background:white;font-size:12px;color:#bbb;
+  display:flex;align-items:center;justify-content:space-between;
+}
+
+@media (max-width:768px){
+  .hero-stats{gap:10px;}
+  .hero-stat{padding:10px 14px;}
+  .filter-search input{width:140px;}
+  .page-hero{padding:22px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar">
+  <div class="logo"><img src="logo.jpg" alt="Logo" onerror="this.style.display='none'"></div>
+  <nav>
+    <ul>
+      <li><a href="bba-home.html">หน้าหลัก</a></li>
+      <li><a href="bba-public.html">ข้อมูลทั่วไป</a></li>
+      <li><a href="student.html">นักศึกษา</a></li>
+      <li><a href="plans.html">แผนการศึกษา</a></li>
+      <li><a href="bba-matrix.html" class="active">Alignment Matrix</a></li>
+    </ul>
+  </nav>
+  <div class="nav-right">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </div>
+</header>
+
+<div class="container page-wrap">
+
+  <!-- ── PUBLISHED VIEW ── -->
+  <div id="publishedView" style="display:none;">
+
+    <!-- HERO -->
+    <div class="page-hero">
+      <div class="hero-left">
+        <div class="hero-eyebrow">AUN-QA · Criterion 1</div>
+        <div class="hero-title">ตารางวิเคราะห์ความสอดคล้อง<br>(Alignment Matrix)</div>
+        <div class="hero-sub">PLOs &amp; MLOs กับวิสัยทัศน์ พันธกิจ คุณลักษณะของบัณฑิต<br>และความต้องการของผู้มีส่วนได้ส่วนเสีย</div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-val" id="statPloVal">—</div>
+            <div class="hero-stat-lbl">PLOs Covered</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-val teal" id="statMloVal">—</div>
+            <div class="hero-stat-lbl">MLOs Covered</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-val" id="statRowVal">—</div>
+            <div class="hero-stat-lbl">รายการทั้งหมด</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-val" id="statCheckVal">—</div>
+            <div class="hero-stat-lbl">จุดเชื่อมโยง</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="hero-badge">
+          <div class="hero-badge-dot"></div>
+          ข้อมูล ณ <span id="publishedAt">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <span class="filter-label">กรองตาม:</span>
+      <button class="filter-btn active" onclick="setFilter('all',this)">ทั้งหมด</button>
+      <button class="filter-btn" onclick="setFilter('vision',this)">Vision</button>
+      <button class="filter-btn" onclick="setFilter('mission',this)">Mission</button>
+      <button class="filter-btn" onclick="setFilter('stakeholder',this)">Stakeholder Need</button>
+      <div class="filter-search">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+        <input type="text" id="searchInput" placeholder="ค้นหารายการ..." oninput="onSearch()">
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+      <div class="table-scroll">
+        <table class="matrix-table" id="matrixTable">
+          <thead id="matrixHead"></thead>
+          <tbody id="matrixBody"></tbody>
+        </table>
+      </div>
+      <div class="stats-bar" id="statsBar"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend-section">
+      <div class="legend-card">
+        <div class="legend-icon blue"><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg></div>
+        <div><strong>วิธีอ่านตาราง</strong><p>วงกลมสีม่วง = PLO · วงกลมสีฟ้า = MLO · เครื่องหมาย ✓ หมายถึงมีความสอดคล้อง · คลิกชื่อรายการที่มีเส้นประเพื่อดูคำอธิบาย</p></div>
+      </div>
+      <div class="legend-card">
+        <div class="legend-icon amber"><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div>
+        <div><strong>มาตรฐาน AUN-QA</strong><p>วิสัยทัศน์และพันธกิจควรสอดคล้องกับ PLOs อย่างน้อย 1 ข้อ ตามเกณฑ์ Criterion 1</p></div>
+      </div>
+      <div class="legend-card">
+        <div class="legend-icon green"><svg viewBox="0 0 20 20"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg></div>
+        <div><strong>เอกสารอ้างอิง</strong><p>ตารางนี้ใช้ประกอบใน Self-Assessment Report (SAR) หมวดที่ 1 ด้านผลลัพธ์การเรียนรู้</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── UNPUBLISHED VIEW ── -->
+  <div id="unpublishedView" style="display:none;">
+    <div class="unpublished-wrap">
+      <div class="unpublished-icon">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+      </div>
+      <div class="unpublished-title">ข้อมูลยังไม่พร้อมเผยแพร่</div>
+      <div class="unpublished-sub">ตาราง Alignment Matrix ยังไม่ได้รับการเผยแพร่จากผู้ดูแลระบบ<br>กรุณาติดต่อเจ้าหน้าที่หลักสูตรเพื่อสอบถามข้อมูล</div>
+    </div>
+  </div>
+
+  <!-- ── LOADING ── -->
+  <div id="loadingView" style="text-align:center;padding:80px 20px;color:#94a3b8;">
+    <div style="width:40px;height:40px;border:3px solid #e8deff;border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px;"></div>
+    <div style="font-size:14px;">กำลังโหลดข้อมูล...</div>
+  </div>
+
+</div>
+
+<!-- POPUP -->
+<div class="desc-popup" id="descPopup">
+  <div class="desc-popup-arrow" id="descArrow"></div>
+  <div class="desc-popup-inner">
+    <div class="desc-popup-group" id="descGroup"></div>
+    <div class="desc-popup-title" id="descTitle"></div>
+    <div class="desc-popup-divider"></div>
+    <div class="desc-popup-body"  id="descBody"></div>
+  </div>
+</div>
+
+<footer class="footer-mini">
+  <span>© 2026 คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์</span>
+  <span>AUN-QA Academic Quality Management System</span>
+</footer>
+
+<style>
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+
+<script>
+/* ═══════════════════════════════════════
+   CONSTANTS (must match matrix.html)
+═══════════════════════════════════════ */
+const STORAGE_KEY = 'fms_alignment_matrix_v2';
+const PUBLISH_KEY = 'fms_matrix_publish_state';
+const PLO_COLS = ['1','2','3','4','5','6','7','8','9'];
+const MLO_COLS = ['1.1','1.2','1.3','2.1','2.2','2.3','3.1','3.2','4.1','4.2','5.1','5.2','6.1','6.2'];
+const ALL_COLS = [...PLO_COLS.map(c=>'PLO '+c),...MLO_COLS.map(c=>'MLO '+c)];
+
+const PAGE_SIZE = 15;
+let rows = [];
+let filteredRows = [];
+let currentPage = 1;
+let activeFilter = 'all';
+
+/* ═══════════════════════════════════════
+   INIT — check publish state
+═══════════════════════════════════════ */
+function init(){
+  // read publish state
+  let publishState = {published: false, publishedAt: null};
+  try {
+    const ps = localStorage.getItem(PUBLISH_KEY);
+    if(ps) publishState = JSON.parse(ps);
+  } catch {}
+
+  document.getElementById('loadingView').style.display = 'none';
+
+  if(!publishState.published){
+    document.getElementById('unpublishedView').style.display = '';
+    return;
+  }
+
+  // read matrix data
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    rows = saved ? JSON.parse(saved) : [];
+  } catch { rows = []; }
+
+  if(!rows.length){
+    document.getElementById('unpublishedView').style.display = '';
+    return;
+  }
+
+  // show published view
+  document.getElementById('publishedView').style.display = '';
+  filteredRows = [...rows];
+
+  // published time
+  if(publishState.publishedAt){
+    const d = new Date(publishState.publishedAt);
+    document.getElementById('publishedAt').textContent =
+      d.toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'}) + ' ' +
+      d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}) + ' น.';
+  }
+
+  // hero stats
+  const ploCovered = PLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[ci])).length;
+  const mloCovered = MLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[PLO_COLS.length+ci])).length;
+  const totalChecks = rows.reduce((s,r)=>s+r.checks.reduce((a,v)=>a+v,0),0);
+  document.getElementById('statPloVal').textContent = `${ploCovered}/${PLO_COLS.length}`;
+  document.getElementById('statMloVal').textContent = `${mloCovered}/${MLO_COLS.length}`;
+  document.getElementById('statRowVal').textContent = rows.length;
+  document.getElementById('statCheckVal').textContent = totalChecks;
+
+  render();
+}
+
+/* ═══════════════════════════════════════
+   FILTER
+═══════════════════════════════════════ */
+function setFilter(type, btn){
+  activeFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active','teal-active'));
+  btn.classList.add('active');
+  document.getElementById('searchInput').value = '';
+  applyFilter();
+}
+
+function onSearch(){
+  applyFilter();
+}
+
+function applyFilter(){
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  filteredRows = rows.filter(r => {
+    const groupLower = (r.group||'').toLowerCase();
+    const titleLower = (r.title||'').toLowerCase();
+    // type filter
+    let typeMatch = true;
+    if(activeFilter === 'vision')      typeMatch = groupLower.includes('vision');
+    else if(activeFilter === 'mission')    typeMatch = groupLower.includes('mission');
+    else if(activeFilter === 'stakeholder') typeMatch = groupLower.includes('stakeholder');
+    // search filter
+    const searchMatch = !q || groupLower.includes(q) || titleLower.includes(q) || (r.desc||'').toLowerCase().includes(q);
+    return typeMatch && searchMatch;
+  });
+  currentPage = 1;
+  render();
+}
+
+/* ═══════════════════════════════════════
+   RENDER
+═══════════════════════════════════════ */
+function totalPages(){ return Math.max(1, Math.ceil(filteredRows.length/PAGE_SIZE)); }
+function pageRows()  { const s=(currentPage-1)*PAGE_SIZE; return filteredRows.slice(s,s+PAGE_SIZE); }
+
+function renderHead(){
+  document.getElementById('matrixHead').innerHTML=`
+    <tr>
+      <th class="th-empty" rowspan="2">ผู้มีส่วนได้ส่วนเสียของหลักสูตร</th>
+      <th class="th-group-plo" colspan="${PLO_COLS.length}">Program Learning Outcomes (PLOs)</th>
+      <th class="th-group-mlo" colspan="${MLO_COLS.length}">Module Learning Outcomes (MLOs)</th>
+    </tr>
+    <tr>
+      ${PLO_COLS.map(c=>`<th class="th-col-plo">${c}</th>`).join('')}
+      ${MLO_COLS.map(c=>`<th class="th-col-mlo">${c}</th>`).join('')}
+    </tr>`;
+}
+
+function renderBody(){
+  const pr = pageRows();
+  document.getElementById('matrixBody').innerHTML = pr.map((row)=>{
+    const hasDesc = !!(row.desc && row.desc.trim());
+    const rowIdx  = rows.indexOf(row);
+    const titleHtml = hasDesc
+      ? `<div class="row-title has-desc" onclick="togglePopup(event,${rowIdx})">
+           <span class="title-text">${esc(row.title)}</span>
+           <i class="info-badge">i</i>
+         </div>`
+      : `<div class="row-title"><span class="title-text">${esc(row.title)}</span></div>`;
+
+    return `<tr>
+      <td class="td-label">
+        <div class="row-group">${esc(row.group)}</div>
+        ${titleHtml}
+      </td>
+      ${row.checks.map((v,ci)=>{
+        const isMlo = ci >= PLO_COLS.length;
+        return `<td class="td-check${isMlo?' mlo-col':''}" title="${ALL_COLS[ci]}">
+          <div class="check-dot${v?' on':''}"></div>
+        </td>`;
+      }).join('')}
+    </tr>`;
+  }).join('');
+}
+
+function renderStats(){
+  const showing = filteredRows.length;
+  const from    = showing ? (currentPage-1)*PAGE_SIZE+1 : 0;
+  const to      = Math.min(currentPage*PAGE_SIZE, showing);
+  const ploCovered = PLO_COLS.filter((_,ci)=>filteredRows.some(r=>r.checks[ci])).length;
+  const mloCovered = MLO_COLS.filter((_,ci)=>filteredRows.some(r=>r.checks[PLO_COLS.length+ci])).length;
+  document.getElementById('statsBar').innerHTML=`
+    <span class="stat-pill"><span class="stat-dot plo"></span>PLOs: <b>${ploCovered}/${PLO_COLS.length}</b></span>
+    <span class="stat-pill"><span class="stat-dot mlo"></span>MLOs: <b>${mloCovered}/${MLO_COLS.length}</b></span>
+    <span style="margin-left:auto;color:var(--text-sub)">แสดง ${from}–${to} จาก ${showing} รายการ</span>`;
+}
+
+function renderPagination(){
+  const tp = totalPages();
+  const p  = document.getElementById('pagination');
+  if(tp<=1){p.innerHTML='';return;}
+  let h = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  for(let i=1;i<=tp;i++) h+=`<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
+  h += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}>›</button>`;
+  p.innerHTML=h;
+}
+
+function goPage(p){ currentPage=Math.max(1,Math.min(p,totalPages())); closePopup(); renderBody(); renderStats(); renderPagination(); }
+function render()  { renderHead(); renderBody(); renderStats(); renderPagination(); }
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ═══════════════════════════════════════
+   POPUP
+═══════════════════════════════════════ */
+let _activeGi = -1;
+function togglePopup(e, gi){
+  e.stopPropagation();
+  if(_activeGi === gi){ closePopup(); return; }
+  openPopup(e, gi);
+}
+function openPopup(e, gi){
+  const row   = rows[gi];
+  const popup = document.getElementById('descPopup');
+  const arrow = document.getElementById('descArrow');
+  document.getElementById('descGroup').textContent = row.group;
+  document.getElementById('descTitle').textContent = row.title;
+  document.getElementById('descBody').textContent  = row.desc;
+  popup.style.visibility = 'hidden'; popup.style.left='-9999px'; popup.style.top='-9999px';
+  popup.classList.add('visible');
+  requestAnimationFrame(()=>{
+    const PW=popup.offsetWidth||300, PH=popup.offsetHeight||120, GAP=8, MARGIN=12;
+    const trigger=e.currentTarget||e.target;
+    const rect=trigger.getBoundingClientRect?trigger.getBoundingClientRect():{left:e.clientX,top:e.clientY,width:0,height:20};
+    let x=rect.left, y=rect.bottom+GAP, arrowClass='up';
+    if(y+PH+MARGIN>window.innerHeight){y=rect.top-PH-GAP;arrowClass='down';}
+    if(x+PW+MARGIN>window.innerWidth) x=window.innerWidth-PW-MARGIN;
+    if(x<MARGIN) x=MARGIN;
+    const arrowLeft=Math.min(Math.max(rect.left-x+rect.width/2-7,10),PW-24);
+    arrow.className=`desc-popup-arrow ${arrowClass}`;
+    arrow.style.left=arrowLeft+'px';
+    popup.style.left=x+'px';
+    popup.style.top=(window.scrollY+y)+'px';
+    popup.style.visibility='visible';
+    _activeGi=gi;
+  });
+}
+function closePopup(){
+  _activeGi=-1;
+  document.getElementById('descPopup').classList.remove('visible');
+}
+document.addEventListener('click',e=>{ if(_activeGi<0)return; if(!e.target.closest('.row-title'))closePopup(); });
+window.addEventListener('scroll',closePopup,{passive:true});
+
+/* run */
+init();
+</script>
+</body>
+</html>

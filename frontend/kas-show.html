@@ -730,11 +730,11 @@
         data = data.filter(x => x.total <= 3);
       }
 
-      let csv = 'รหัส,PLO,MLO,รวม\n';
+      let csv = '\uFEFF' + 'รหัส,PLO,MLO,รวม\n';
       csv += data.map(x => `${x.code},${x.plo},${x.mlo},${x.total}`).join('\n');
 
       const element = document.createElement('a');
-      element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });element.setAttribute('href', URL.createObjectURL(blob));
       element.setAttribute('download', `KAS-${currentTab}-${new Date().toISOString().split('T')[0]}.csv`);
       element.style.display = 'none';
       document.body.appendChild(element);
