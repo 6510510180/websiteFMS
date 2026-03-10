@@ -4,306 +4,64 @@
   <meta charset="UTF-8">
   <title>ข้อมูลทั่วไปของหลักสูตร | FMS Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
   <style>
     :root {
-      --purple: #6B3FA0;
-      --purple-dark: #4A2870;
-      --purple-light: #F3EEFF;
-      --purple-mid: #E8DEFF;
-      --accent: #9B6DD1;
-      --bg: #F7F5FA;
-      --white: #FFFFFF;
-      --text: #181117;
-      --text-sub: #64748B;
-      --border: #EDE8F5;
-      --red: #EF4444;
-      --red-bg: #FEE2E2;
-      --radius: 12px;
-      --shadow: 0 4px 12px rgba(107,63,160,0.10);
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --purple: #6B3FA0; --purple-dark: #4A2870; --purple-light: #F3EEFF;
+      --purple-mid: #E8DEFF; --accent: #9B6DD1; --bg: #F7F5FA; --white: #FFFFFF;
+      --text: #181117; --text-sub: #64748B; --border: #EDE8F5;
+      --red: #EF4444; --red-bg: #FEE2E2; --radius: 12px;
+      --shadow: 0 4px 12px rgba(107,63,160,0.10); --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
     }
-
     * { box-sizing: border-box; margin:0; padding:0; }
-    body {
-      font-family: 'Noto Sans Thai', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-    }
-
-    .sidebar-qa {
-      width: 240px;
-      background: white;
-      height: 100vh;
-      position: fixed;
-      left: 0; top: 0;
-      border-right: 1px solid var(--border);
-      box-shadow: 2px 0 16px rgba(0,0,0,0.06);
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-    }
-    .sidebar-brand {
-      padding: 20px 20px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .sidebar-brand-title {
-      font-family: 'Lexend', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .sidebar-brand-sub {
-      font-size: 11.5px;
-      color: var(--purple);
-      font-weight: 500;
-      margin-top: 2px;
-    }
-    .sidebar-section-label {
-      padding: 20px 20px 6px;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-sub);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-    }
-    .sidebar-nav-qa {
-      flex: 1;
-      padding: 8px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      overflow-y: auto;
-    }
-    .nav-item-qa {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--text-sub);
-      text-decoration: none;
-      transition: all 0.18s;
-      cursor: pointer;
-    }
-    .nav-item-qa:hover,
-    .nav-item-qa.active {
-      background: var(--purple-light);
-      color: var(--purple);
-      font-weight: 600;
-    }
+    body { font-family: 'Noto Sans Thai', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; }
+    .sidebar-qa { width: 240px; background: white; height: 100vh; position: fixed; left: 0; top: 0; border-right: 1px solid var(--border); box-shadow: 2px 0 16px rgba(0,0,0,0.06); z-index: 100; display: flex; flex-direction: column; }
+    .sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+    .sidebar-brand-title { font-family: 'Lexend', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
+    .sidebar-brand-sub { font-size: 11.5px; color: var(--purple); font-weight: 500; margin-top: 2px; }
+    .sidebar-section-label { padding: 20px 20px 6px; font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.2px; }
+    .sidebar-nav-qa { flex: 1; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+    .nav-item-qa { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--text-sub); text-decoration: none; transition: all 0.18s; cursor: pointer; }
+    .nav-item-qa:hover, .nav-item-qa.active { background: var(--purple-light); color: var(--purple); font-weight: 600; }
     .nav-icon-qa { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.75; }
-    .nav-item-qa.active .nav-icon-qa,
-    .nav-item-qa:hover .nav-icon-qa { opacity: 1; }
-
-    .sidebar-footer-qa {
-      padding: 12px;
-      border-top: 1px solid var(--border);
-    }
+    .nav-item-qa.active .nav-icon-qa, .nav-item-qa:hover .nav-icon-qa { opacity: 1; }
+    .sidebar-footer-qa { padding: 12px; border-top: 1px solid var(--border); }
     .sidebar-footer-qa .nav-item-qa { color: var(--red); }
     .sidebar-footer-qa .nav-item-qa:hover { background: var(--red-bg); color: #DC2626; }
-
-    .main {
-      margin-left: 240px;
-      flex: 1;
-      padding: 32px;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    .page-header h2 {
-      font-size: 24px;
-      font-weight: 700;
-      margin: 0;
-      color: var(--text);
-    }
-    .page-header small {
-      color: var(--text-sub);
-      font-size: 13px;
-    }
-
-    .btn-main {
-      background: var(--purple);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: 500;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 14px;
-      box-shadow: 0 3px 10px rgba(107,63,160,0.25);
-      transition: all 0.2s;
-    }
-    .btn-main:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(107,63,160,0.35);
-    }
-    .btn-danger {
-      background: var(--red-bg);
-      color: var(--red);
-      border: 1px solid #fecaca;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: 500;
-      font-family: inherit;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-danger:hover {
-      background: #fecaca;
-    }
-
-    .card {
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-    .card-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: var(--purple-dark);
-    }
-
-    .form-grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px 32px;
-    }
-    .field label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-      display: block;
-    }
-    .field-value {
-      padding: 12px 16px;
-      background: var(--purple-light);
-      border-radius: 10px;
-      border: 1px solid #e5d9ff;
-      font-size: 14.5px;
-      min-height: 48px;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    /* ── image-row: 3 columns on wide, 2 on medium, 1 on small ── */
-    .image-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-top: 16px;
-    }
-    @media (max-width: 1100px) {
-      .image-row { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 680px) {
-      .image-row { grid-template-columns: 1fr; }
-    }
-
-    .image-box label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-sub);
-      margin-bottom: 8px;
-      display: block;
-    }
-    .image-box img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: var(--shadow-sm);
-      background: #f8f5ff;
-    }
-    .image-placeholder {
-      width: 100%;
-      height: 180px;
-      border-radius: 12px;
-      background: var(--purple-light);
-      border: 2px dashed #d8c8f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-sub);
-      font-size: 13px;
-    }
-
-    /* badge tag on image label */
-    .img-label-tag {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 99px;
-      margin-left: 6px;
-      vertical-align: middle;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    th, td {
-      padding: 14px;
-      border-bottom: 1px solid #eee;
-      text-align: left;
-    }
-    th {
-      background: var(--purple-light);
-      color: #555;
-      font-weight: 600;
-    }
+    .main { margin-left: 240px; flex: 1; padding: 32px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+    .page-header h2 { font-size: 24px; font-weight: 700; margin: 0; color: var(--text); }
+    .page-header small { color: var(--text-sub); font-size: 13px; }
+    .btn-main { background: var(--purple); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 500; cursor: pointer; font-family: inherit; font-size: 14px; box-shadow: 0 3px 10px rgba(107,63,160,0.25); transition: all 0.2s; }
+    .btn-main:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(107,63,160,0.35); }
+    .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid #fecaca; padding: 10px 20px; border-radius: 10px; font-weight: 500; font-family: inherit; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+    .btn-danger:hover { background: #fecaca; }
+    .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 24px; }
+    .card-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--purple-dark); }
+    .form-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px 32px; }
+    .field label { font-size: 13px; font-weight: 500; color: var(--text-sub); margin-bottom: 6px; display: block; }
+    .field-value { padding: 12px 16px; background: var(--purple-light); border-radius: 10px; border: 1px solid #e5d9ff; font-size: 14.5px; min-height: 48px; color: var(--text); line-height: 1.5; }
+    .image-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 16px; }
+    @media (max-width: 1100px) { .image-row { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 680px) { .image-row { grid-template-columns: 1fr; } }
+    .image-box label { font-size: 13px; font-weight: 500; color: var(--text-sub); margin-bottom: 8px; display: block; }
+    .image-box img { width: 100%; border-radius: 12px; box-shadow: var(--shadow-sm); background: #f8f5ff; }
+    .image-placeholder { width: 100%; height: 180px; border-radius: 12px; background: var(--purple-light); border: 2px dashed #d8c8f5; display: flex; align-items: center; justify-content: center; color: var(--text-sub); font-size: 13px; }
+    .img-label-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 14px; border-bottom: 1px solid #eee; text-align: left; }
+    th { background: var(--purple-light); color: #555; font-weight: 600; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #faf7ff; }
-
-    .status-pill, .toggle-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 500;
-    }
-    .status-active      { background: #e6ffe8; color: #2e9a52; }
-    .status-draft       { background: #f5e7ff; color: var(--purple); }
+    .status-pill, .toggle-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; }
+    .status-active { background: #e6ffe8; color: #2e9a52; }
+    .status-draft { background: #f5e7ff; color: var(--purple); }
     .status-maintenance { background: #ffe6e6; color: #c0392b; }
-
-    .btn-link {
-      background: none;
-      border: none;
-      color: var(--purple);
-      font-size: 13px;
-      font-family: inherit;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      transition: background 0.15s;
-    }
+    .btn-link { background: none; border: none; color: var(--purple); font-size: 13px; font-family: inherit; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background 0.15s; }
     .btn-link:hover { background: var(--purple-light); }
     .btn-link.danger { color: var(--red); }
     .btn-link.danger:hover { background: var(--red-bg); }
-
     #message { color: var(--red); margin: 12px 0; font-size: 14px; }
-
     .loading-row td { text-align: center; color: #aaa; padding: 40px; }
   </style>
 </head>
@@ -356,111 +114,54 @@
 
     <div id="message"></div>
 
-    <!-- ข้อมูลหลักสูตร -->
     <div class="card">
       <div class="card-title">ข้อมูลหลักสูตร</div>
       <div class="form-grid-2">
-        <div class="field">
-          <label>ชื่อหลักสูตร (ภาษาไทย)</label>
-          <div class="field-value" id="c_name_th">-</div>
-        </div>
-        <div class="field">
-          <label>ชื่อหลักสูตร (ภาษาอังกฤษ)</label>
-          <div class="field-value" id="c_name_en">-</div>
-        </div>
-        <div class="field">
-          <label>ระดับการศึกษา</label>
-          <div class="field-value" id="c_degree_level">-</div>
-        </div>
-        <div class="field">
-          <label>สถานะหลักสูตร</label>
-          <div id="c_status" class="toggle-status status-draft">
-            <span>กำลังโหลด...</span>
-          </div>
-        </div>
-        <div class="field">
-          <label>สำหรับนักศึกษา (รหัส)</label>
-          <div class="field-value" id="c_student_range">-</div>
-        </div>
-        <div class="field">
-          <label>คำอธิบายหลักสูตร</label>
-          <div class="field-value" id="c_short_detail">-</div>
-        </div>
+        <div class="field"><label>ชื่อหลักสูตร (ภาษาไทย)</label><div class="field-value" id="c_name_th">-</div></div>
+        <div class="field"><label>ชื่อหลักสูตร (ภาษาอังกฤษ)</label><div class="field-value" id="c_name_en">-</div></div>
+        <div class="field"><label>ระดับการศึกษา</label><div class="field-value" id="c_degree_level">-</div></div>
+        <div class="field"><label>สถานะหลักสูตร</label><div id="c_status" class="toggle-status status-draft"><span>กำลังโหลด...</span></div></div>
+        <div class="field"><label>สำหรับนักศึกษา (รหัส)</label><div class="field-value" id="c_student_range">-</div></div>
+        <div class="field"><label>คำอธิบายหลักสูตร</label><div class="field-value" id="c_short_detail">-</div></div>
       </div>
     </div>
 
-    <!-- โครงสร้างหลักสูตร -->
     <div class="card">
       <div class="card-title">รายละเอียดโครงสร้างหลักสูตร</div>
       <div class="form-grid-2">
-        <div class="field">
-          <label>รูปแบบหลักสูตร</label>
-          <div class="field-value" id="c_program_type">-</div>
-        </div>
-        <div class="field">
-          <label>การจัดการศึกษา</label>
-          <div class="field-value" id="c_study_system">-</div>
-        </div>
-        <div class="field">
-          <label>การให้ปริญญา</label>
-          <div class="field-value" id="c_award_title">-</div>
-        </div>
-        <div class="field">
-          <label>จำนวนหน่วยกิตตลอดหลักสูตร</label>
-          <div class="field-value" id="c_total_credits">-</div>
-        </div>
+        <div class="field"><label>รูปแบบหลักสูตร</label><div class="field-value" id="c_program_type">-</div></div>
+        <div class="field"><label>การจัดการศึกษา</label><div class="field-value" id="c_study_system">-</div></div>
+        <div class="field"><label>การให้ปริญญา</label><div class="field-value" id="c_award_title">-</div></div>
+        <div class="field"><label>จำนวนหน่วยกิตตลอดหลักสูตร</label><div class="field-value" id="c_total_credits">-</div></div>
       </div>
     </div>
 
-    <!-- ภาพประกอบหลักสูตร -->
     <div class="card">
       <div class="card-title">ภาพประกอบหลักสูตร</div>
       <div class="image-row">
-
-        <!-- Hero Image -->
         <div class="image-box">
-          <label>
-            Hero Image
-            <span class="img-label-tag" style="background:#ede9fe;color:#7c3aed">หน้าปก</span>
-          </label>
+          <label>Hero Image <span class="img-label-tag" style="background:#ede9fe;color:#7c3aed">หน้าปก</span></label>
           <img id="c_hero_image" src="" alt="Hero Image" style="display:none;">
           <div id="c_hero_placeholder" class="image-placeholder">ยังไม่มีรูปภาพ</div>
         </div>
-
-        <!-- Background Image (เพิ่มใหม่) -->
         <div class="image-box">
-          <label>
-            Background Image
-            <span class="img-label-tag" style="background:#fef9c3;color:#854d0e">พื้นหลัง Banner</span>
-          </label>
+          <label>Background Image <span class="img-label-tag" style="background:#fef9c3;color:#854d0e">พื้นหลัง Banner</span></label>
           <img id="c_bg_image" src="" alt="Background Image" style="display:none;">
           <div id="c_bg_placeholder" class="image-placeholder">ยังไม่มีรูปภาพ</div>
         </div>
-
-        <!-- Info Image -->
         <div class="image-box">
-          <label>
-            Info Image
-            <span class="img-label-tag" style="background:#dcfce7;color:#166534">รายละเอียด</span>
-          </label>
+          <label>Info Image <span class="img-label-tag" style="background:#dcfce7;color:#166534">รายละเอียด</span></label>
           <img id="c_info_image" src="" alt="Info Image" style="display:none;">
           <div id="c_info_placeholder" class="image-placeholder">ยังไม่มีรูปภาพ</div>
         </div>
-
       </div>
     </div>
 
-    <!-- ตารางสาขาวิชา -->
     <div class="card">
       <div class="card-title">สาขาวิชาที่เปิดสอน</div>
       <table>
         <thead>
-          <tr>
-            <th>ชื่อสาขาวิชา (ไทย)</th>
-            <th>ชื่อสาขาวิชา (อังกฤษ)</th>
-            <th>คำอธิบาย</th>
-            <th>จัดการ</th>
-          </tr>
+          <tr><th>ชื่อสาขาวิชา (ไทย)</th><th>ชื่อสาขาวิชา (อังกฤษ)</th><th>คำอธิบาย</th><th>จัดการ</th></tr>
         </thead>
         <tbody id="majorTable">
           <tr class="loading-row"><td colspan="4">กำลังโหลด...</td></tr>
@@ -470,108 +171,91 @@
   </div>
 
   <script>
-    const BASE_URL = "https://websitefms.onrender.com";
-    const API_BASE = BASE_URL + "/api";
+    var BASE_URL = "https://websitefms.onrender.com";
+    var API_BASE = BASE_URL + "/api";
 
-    const userData = localStorage.getItem("user");
-    if (!userData) {
-      alert("กรุณาเข้าสู่ระบบก่อน");
-      window.location.href = "login.html";
-    }
+    var userData = localStorage.getItem("user");
+    if (!userData) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
 
-    document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    document.getElementById("logoutBtn").addEventListener("click", function(e) {
       e.preventDefault();
       localStorage.removeItem("user");
       window.location.href = "login.html";
     });
 
-    const msg = document.getElementById("message");
-    const params = new URLSearchParams(window.location.search);
-    const courseId = params.get("courseId");
+    // ── แปลง URL จาก API ให้ใช้งานได้จริง ──
+    function resolveUrl(path) {
+      if (!path) return "";
+      if (path.indexOf("http") === 0) return path;   // URL เต็มอยู่แล้ว (Cloudinary, etc.)
+      return BASE_URL + path;                         // path สัมพัทธ์
+    }
+
+    var msg = document.getElementById("message");
+    var params = new URLSearchParams(window.location.search);
+    var courseId = params.get("courseId");
 
     if (!courseId) {
       msg.textContent = "ไม่พบรหัสหลักสูตร (courseId)";
     } else {
-      document.getElementById("editCourseBtn").addEventListener("click", () => {
-        window.location.href = `add-course.html?courseId=${courseId}`;
+      document.getElementById("editCourseBtn").addEventListener("click", function() {
+        window.location.href = "add-course.html?courseId=" + courseId;
       });
-
-      document.getElementById("addMajorBtn").addEventListener("click", () => {
-        window.location.href = `add-major.html?courseId=${courseId}`;
+      document.getElementById("addMajorBtn").addEventListener("click", function() {
+        window.location.href = "add-major.html?courseId=" + courseId;
       });
-
-      document.getElementById("deleteCourseBtn").addEventListener("click", async () => {
+      document.getElementById("deleteCourseBtn").addEventListener("click", async function() {
         if (!confirm("ต้องการลบหลักสูตรนี้พร้อมสาขาวิชาทั้งหมดใช่หรือไม่?")) return;
         try {
-          const res = await fetch(`${API_BASE}/courses/${courseId}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" }
-          });
-          const data = await res.json();
+          var res = await fetch(API_BASE + "/courses/" + courseId, { method: "DELETE", headers: { "Content-Type": "application/json" } });
+          var data = await res.json();
           if (!res.ok) { alert(data.message || "ลบหลักสูตรไม่สำเร็จ"); return; }
           alert("ลบหลักสูตรสำเร็จ");
           window.location.href = "course-list.html";
-        } catch (err) {
-          console.error(err);
-          alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
-        }
+        } catch (err) { alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์"); }
       });
-
       loadCourse(courseId);
       loadMajors(courseId);
     }
 
     async function loadCourse(id) {
       try {
-        const res = await fetch(`${API_BASE}/courses/${id}`);
+        var res = await fetch(API_BASE + "/courses/" + id);
         if (!res.ok) throw new Error("ไม่สามารถดึงข้อมูลได้");
+        var c = await res.json();
 
-        const c = await res.json();
+        document.getElementById("c_name_th").textContent       = c.name_th       || "-";
+        document.getElementById("c_name_en").textContent       = c.name_en       || "-";
+        document.getElementById("c_degree_level").textContent  = c.degree_level  || "-";
+        document.getElementById("c_short_detail").textContent  = c.short_detail  || "-";
+        document.getElementById("c_program_type").textContent  = c.program_type  || "-";
+        document.getElementById("c_study_system").textContent  = c.study_system  || "-";
+        document.getElementById("c_award_title").textContent   = c.award_title   || "-";
+        document.getElementById("c_total_credits").textContent = c.total_credits != null ? c.total_credits + " หน่วยกิต" : "-";
+        document.getElementById("c_student_range").textContent = c.student_range || "-";
 
-        document.getElementById("c_name_th").textContent        = c.name_th        || "-";
-        document.getElementById("c_name_en").textContent        = c.name_en        || "-";
-        document.getElementById("c_degree_level").textContent   = c.degree_level   || "-";
-        document.getElementById("c_short_detail").textContent   = c.short_detail   || "-";
-        document.getElementById("c_program_type").textContent   = c.program_type   || "-";
-        document.getElementById("c_study_system").textContent   = c.study_system   || "-";
-        document.getElementById("c_award_title").textContent    = c.award_title    || "-";
-        document.getElementById("c_total_credits").textContent  = c.total_credits  != null ? c.total_credits + " หน่วยกิต" : "-";
-        document.getElementById("c_student_range").textContent  = c.student_range  || "-";
-
-        // สถานะ
-        const statusEl = document.getElementById("c_status");
-        const statusMap = {
-          active:      { text: "พร้อมใช้งาน (Active)",      cls: "status-active" },
-          draft:       { text: "ฉบับร่าง (Draft)",           cls: "status-draft" },
-          maintenance: { text: "ปิดปรับปรุง (Maintenance)",  cls: "status-maintenance" }
+        var statusEl = document.getElementById("c_status");
+        var statusMap = {
+          active:      { text: "พร้อมใช้งาน (Active)",     cls: "status-active" },
+          draft:       { text: "ฉบับร่าง (Draft)",          cls: "status-draft" },
+          maintenance: { text: "ปิดปรับปรุง (Maintenance)", cls: "status-maintenance" }
         };
-        const s = statusMap[c.status] || { text: "ไม่ระบุ", cls: "status-draft" };
-        statusEl.innerHTML = `<span>${s.text}</span>`;
-        statusEl.className = `toggle-status ${s.cls}`;
+        var s = statusMap[c.status] || { text: "ไม่ระบุ", cls: "status-draft" };
+        statusEl.innerHTML = "<span>" + s.text + "</span>";
+        statusEl.className = "toggle-status " + s.cls;
 
-        // ── รูปภาพทั้ง 3 ──
-        const heroImg         = document.getElementById("c_hero_image");
-        const heroPlaceholder = document.getElementById("c_hero_placeholder");
-        const bgImg           = document.getElementById("c_bg_image");
-        const bgPlaceholder   = document.getElementById("c_bg_placeholder");
-        const infoImg         = document.getElementById("c_info_image");
-        const infoPlaceholder = document.getElementById("c_info_placeholder");
-
-        if (c.hero_image) {
-          heroImg.src = c.hero_image?.startsWith("http") ? c.hero_image : BASE_URL + c.hero_image;
-          heroImg.style.display = "block";
-          heroPlaceholder.style.display = "none";
-        }
-        if (c.bg_image) {
-          bgImg.src   = c.bg_image?.startsWith("http") ? c.bg_image : BASE_URL + c.bg_image;
-          bgImg.style.display = "block";
-          bgPlaceholder.style.display = "none";
-        }
-        if (c.info_image) {
-          infoImg.src = c.info_image?.startsWith("http") ? c.info_image : BASE_URL + c.info_image;
-          infoImg.style.display = "block";
-          infoPlaceholder.style.display = "none";
-        }
+        // ── รูปภาพ: ใช้ resolveUrl() แทน BASE_URL + path ตรงๆ ──
+        [
+          { field: "hero_image",  img: "c_hero_image",  ph: "c_hero_placeholder"  },
+          { field: "bg_image",    img: "c_bg_image",    ph: "c_bg_placeholder"    },
+          { field: "info_image",  img: "c_info_image",  ph: "c_info_placeholder"  }
+        ].forEach(function(item) {
+          if (c[item.field]) {
+            var imgEl = document.getElementById(item.img);
+            imgEl.src = resolveUrl(c[item.field]);   // ← แก้แล้ว
+            imgEl.style.display = "block";
+            document.getElementById(item.ph).style.display = "none";
+          }
+        });
 
       } catch (err) {
         console.error(err);
@@ -580,65 +264,46 @@
     }
 
     async function loadMajors(id) {
-      const tbody = document.getElementById("majorTable");
+      var tbody = document.getElementById("majorTable");
       try {
-        const res = await fetch(`${API_BASE}/courses/${id}/majors`);
+        var res = await fetch(API_BASE + "/courses/" + id + "/majors");
         if (!res.ok) throw new Error("ไม่สามารถดึงสาขาวิชาได้");
-
-        const majors = await res.json();
-
+        var majors = await res.json();
         if (!majors.length) {
-          tbody.innerHTML = `<tr class="loading-row"><td colspan="4">ยังไม่มีสาขาวิชา</td></tr>`;
+          tbody.innerHTML = '<tr class="loading-row"><td colspan="4">ยังไม่มีสาขาวิชา</td></tr>';
           return;
         }
-
         tbody.innerHTML = "";
-        majors.forEach(m => {
-          const introShort = m.intro
-            ? m.intro.slice(0, 60) + (m.intro.length > 60 ? "..." : "")
-            : "-";
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td><strong>${m.name_th || "-"}</strong></td>
-            <td style="color:var(--text-sub)">${m.name_en || "-"}</td>
-            <td>${introShort}</td>
-            <td>
-              <button class="btn-link edit-major" data-id="${m.id}">แก้ไข</button>
-              <button class="btn-link danger delete-major" data-id="${m.id}">ลบ</button>
-            </td>
-          `;
+        majors.forEach(function(m) {
+          var introShort = m.intro ? m.intro.slice(0, 60) + (m.intro.length > 60 ? "..." : "") : "-";
+          var tr = document.createElement("tr");
+          tr.innerHTML = '<td><strong>' + (m.name_th || "-") + '</strong></td>'
+            + '<td style="color:var(--text-sub)">' + (m.name_en || "-") + '</td>'
+            + '<td>' + introShort + '</td>'
+            + '<td>'
+            + '<button class="btn-link edit-major" data-id="' + m.id + '">แก้ไข</button>'
+            + '<button class="btn-link danger delete-major" data-id="' + m.id + '">ลบ</button>'
+            + '</td>';
           tbody.appendChild(tr);
         });
-
-        document.querySelectorAll(".edit-major").forEach(btn => {
-          btn.addEventListener("click", () => {
-            window.location.href = `add-major.html?courseId=${courseId}&majorId=${btn.dataset.id}`;
+        document.querySelectorAll(".edit-major").forEach(function(btn) {
+          btn.addEventListener("click", function() {
+            window.location.href = "add-major.html?courseId=" + courseId + "&majorId=" + btn.dataset.id;
           });
         });
-
-        document.querySelectorAll(".delete-major").forEach(btn => {
-          btn.addEventListener("click", async () => {
+        document.querySelectorAll(".delete-major").forEach(function(btn) {
+          btn.addEventListener("click", async function() {
             if (!confirm("ต้องการลบสาขาวิชานี้ใช่หรือไม่?")) return;
             try {
-              const res = await fetch(`${API_BASE}/majors/${btn.dataset.id}`, {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" }
-              });
-              if (!res.ok) {
-                const data = await res.json();
-                alert(data.message || "ลบไม่สำเร็จ");
-                return;
-              }
+              var res = await fetch(API_BASE + "/majors/" + btn.dataset.id, { method: "DELETE", headers: { "Content-Type": "application/json" } });
+              if (!res.ok) { var data = await res.json(); alert(data.message || "ลบไม่สำเร็จ"); return; }
               loadMajors(courseId);
-            } catch (err) {
-              alert("เกิดข้อผิดพลาดในการลบสาขาวิชา");
-            }
+            } catch (err) { alert("เกิดข้อผิดพลาดในการลบสาขาวิชา"); }
           });
         });
-
       } catch (err) {
         console.error(err);
-        tbody.innerHTML = `<tr class="loading-row"><td colspan="4">ไม่สามารถโหลดสาขาวิชาได้</td></tr>`;
+        tbody.innerHTML = '<tr class="loading-row"><td colspan="4">ไม่สามารถโหลดสาขาวิชาได้</td></tr>';
       }
     }
   </script>

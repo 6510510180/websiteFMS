@@ -21,17 +21,33 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/login.html"));
 });
 
-// ── Upload Config ────────────────────────────────────────────
-const uploadDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-app.use("/uploads", express.static(uploadDir));
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename:    (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder:         "fms-uploads",
+    allowed_formats: ["jpg", "jpeg", "png", "webp", "gif"],
+    transformation: [{ quality: "auto", fetch_format: "auto" }],
+  },
+});
+
 const upload = multer({ storage });
+
+// ── Upload API (เหมือนเดิม แค่ response เปลี่ยน) ─────────────
+// ลบ route เดิมออก แล้วแทนด้วยนี้:
+app.post("/api/upload", upload.single("image"), (req, res) => {
+  if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+  // Cloudinary จะส่ง secure_url กลับมาเป็น https://res.cloudinary.com/...
+  res.json({ url: req.file.path });
+});
 
 // ── Database ─────────────────────────────────────────────────
 const pool = new Pool({

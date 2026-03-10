@@ -16,7 +16,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--bg); display: flex; min-height: 100vh; }
 
-/* ── SIDEBAR ── */
 .sidebar-qa {
   width:var(--sidebar-w);background:var(--white);height:100vh;position:fixed;
   left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border-col);z-index:100;
@@ -40,7 +39,6 @@ svg{display:block;}
 .sidebar-footer-qa .nav-item-qa{color:var(--red);}
 .sidebar-footer-qa .nav-item-qa:hover{background:var(--red-bg);color:#DC2626;}
 
-/* ── MAIN ── */
 .main { margin-left: var(--sidebar-w); flex: 1; padding: 32px; display: flex; flex-direction: column; min-width: 0; }
 .page-header { margin-bottom: 24px; }
 .page-header small { color: #999; font-size: 13px; }
@@ -64,7 +62,6 @@ svg{display:block;}
 }
 textarea { resize: vertical; min-height: 80px; }
 
-/* ── IMAGE UPLOAD CARD ── */
 .img-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
 .img-upload-item {
   border: 2px dashed #c4b5fd; border-radius: 14px; padding: 16px;
@@ -107,7 +104,6 @@ textarea { resize: vertical; min-height: 80px; }
 .prog-bar { flex: 1; height: 4px; background: #e9e2ff; border-radius: 99px; overflow: hidden; }
 .prog-fill { height: 100%; width: 0; border-radius: 99px; background: var(--primary); transition: width .3s; }
 
-/* ── HOW-TO CALLOUT ── */
 .howto-box {
   background: linear-gradient(135deg, #f5f0ff, #fdf4ff);
   border: 1.5px solid #c4b5fd; border-radius: 12px;
@@ -123,7 +119,6 @@ textarea { resize: vertical; min-height: 80px; }
 .howto-item .hi-title { font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 3px; }
 .howto-item .hi-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
 
-/* ── FOOTER ACTIONS ── */
 .footer-actions {
   display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; flex-wrap: wrap;
 }
@@ -142,7 +137,6 @@ textarea { resize: vertical; min-height: 80px; }
 </head>
 <body>
 
-<!-- ══ SIDEBAR ══ -->
 <aside class="sidebar-qa">
   <div class="sidebar-brand">
     <div class="sidebar-brand-title">FMS Admin</div>
@@ -175,7 +169,6 @@ textarea { resize: vertical; min-height: 80px; }
   </div>
 </aside>
 
-<!-- ══ MAIN ══ -->
 <div class="main">
   <div class="page-header">
     <small>แดชบอร์ด / เพิ่มหรือแก้ไขหลักสูตร</small>
@@ -185,7 +178,6 @@ textarea { resize: vertical; min-height: 80px; }
 
   <form id="courseForm">
 
-    <!-- ══ CARD 1: ข้อมูลหลักสูตร ══ -->
     <div class="card">
       <div class="card-title">
         <svg width="18" height="18" viewBox="0 0 20 20" fill="#7c3aed"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
@@ -240,7 +232,6 @@ textarea { resize: vertical; min-height: 80px; }
       </div>
     </div>
 
-    <!-- ══ CARD 2: รูปภาพหลักสูตร ══ -->
     <div class="card">
       <div class="card-title">
         <svg width="18" height="18" viewBox="0 0 20 20" fill="#7c3aed"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
@@ -248,7 +239,6 @@ textarea { resize: vertical; min-height: 80px; }
       </div>
       <div class="card-sub">อัปโหลดรูปภาพที่ใช้แสดงในแต่ละส่วนของหน้าหลักสูตร</div>
 
-      <!-- How-to callout -->
       <div class="howto-box">
         <h5>📍 แต่ละรูปใช้แสดงที่ไหน?</h5>
         <div class="howto-row">
@@ -270,7 +260,6 @@ textarea { resize: vertical; min-height: 80px; }
         </div>
       </div>
 
-      <!-- 3 upload boxes -->
       <div class="img-upload-grid" style="margin-top:16px;">
 
         <!-- Hero Image -->
@@ -297,7 +286,7 @@ textarea { resize: vertical; min-height: 80px; }
           </div>
         </div>
 
-        <!-- Background Image (NEW) -->
+        <!-- Background Image -->
         <div class="img-upload-item" id="wrap-bg">
           <div class="img-upload-label">
             <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
@@ -345,10 +334,9 @@ textarea { resize: vertical; min-height: 80px; }
           </div>
         </div>
 
-      </div><!-- end img-upload-grid -->
-    </div><!-- end card 2 -->
+      </div>
+    </div>
 
-    <!-- ══ FOOTER ACTIONS ══ -->
     <div class="footer-actions">
       <button type="button" class="btn btn-secondary" onclick="history.back()">ยกเลิก</button>
       <button type="button" class="btn btn-danger" id="deleteBtn" style="display:none">🗑 ลบหลักสูตร</button>
@@ -366,22 +354,19 @@ textarea { resize: vertical; min-height: 80px; }
   </form>
 </div>
 
-<!-- ══ SCRIPT ══ -->
 <script>
 const BASE_URL = "https://websitefms.onrender.com";
 const API = BASE_URL + "/api";
 
-/* ── Auth guard ── */
 const user = localStorage.getItem("user");
 if (!user) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
 
-document.getElementById("logoutBtn").addEventListener("click", (e) => {
+document.getElementById("logoutBtn").addEventListener("click", function(e) {
   e.preventDefault();
   localStorage.removeItem("user");
   window.location.href = "login.html";
 });
 
-/* ── Read params ── */
 const params = new URLSearchParams(window.location.search);
 const courseId = params.get("courseId");
 const isEdit = !!courseId;
@@ -390,115 +375,122 @@ const msg = document.getElementById("message");
 if (isEdit) {
   document.getElementById("pageTitle").textContent = "แก้ไขหลักสูตร";
   document.getElementById("pageSub").textContent = "แก้ไขข้อมูลหลักสูตร แล้วกดอัปเดต";
-  document.getElementById("saveBtn").innerHTML = `
-    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
-    อัปเดตหลักสูตร`;
+  document.getElementById("saveBtn").innerHTML = '<svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg> อัปเดตหลักสูตร';
   document.getElementById("deleteBtn").style.display = "inline-flex";
   loadCourse();
 }
 
-/* ══ UPLOAD IMAGE ══════════════════════════════════════ */
+// ─── helper: แปลง URL จาก API ให้ใช้งานได้ (เหมือน admin page เดิม) ───
+function resolveUrl(path) {
+  if (!path) return "";
+  if (path.indexOf("http") === 0) return path;   // URL เต็มอยู่แล้ว
+  return BASE_URL + path;                         // path สัมพัทธ์
+}
+
+// ─── Upload image ───────────────────────────────────────────────────────
 async function uploadImg(fileInputId, hiddenId, previewWrapId, wrapId, progId) {
   const fileInput = document.getElementById(fileInputId);
   const file = fileInput.files[0];
   if (!file) return;
 
-  // Show progress
-  const progEl = document.getElementById(progId);
-  const progFill = document.getElementById('progfill-' + progId.replace('prog-',''));
-  const progTxt = document.getElementById(progId + '-txt');
-  progEl.classList.add('show');
-  progFill.style.width = '30%';
-  progTxt.textContent = 'กำลังอัปโหลด...';
+  const progEl   = document.getElementById(progId);
+  const key      = progId.replace("prog-", "");
+  const progFill = document.getElementById("progfill-" + key);
+  const progTxt  = document.getElementById(progId + "-txt");
 
-  showMsg('กำลังอัปโหลดรูป...', 'loading');
+  progEl.classList.add("show");
+  progFill.style.width = "30%";
+  progTxt.textContent = "กำลังอัปโหลด...";
+  showMsg("กำลังอัปโหลดรูป...", "loading");
 
   const fd = new FormData();
   fd.append("image", file);
 
   try {
-    const res = await fetch(`${API}/upload`, { method: "POST", body: fd });
+    const res  = await fetch(API + "/upload", { method: "POST", body: fd });
     const data = await res.json();
-
-    progFill.style.width = '100%';
+    progFill.style.width = "100%";
 
     if (!res.ok) {
-      progTxt.textContent = 'อัปโหลดไม่สำเร็จ';
-      showMsg(data.message || 'อัปโหลดไม่สำเร็จ', 'error');
-      setTimeout(() => progEl.classList.remove('show'), 2000);
+      progTxt.textContent = "อัปโหลดไม่สำเร็จ";
+      showMsg(data.message || "อัปโหลดไม่สำเร็จ", "error");
+      setTimeout(function() { progEl.classList.remove("show"); }, 2000);
       return;
     }
 
-    // Set hidden value & show preview
+    // เก็บ URL ที่ได้จาก API ตรงๆ ไม่ต้องแปลง
     document.getElementById(hiddenId).value = data.url;
-    const wrap = document.getElementById(previewWrapId);
-    const img = wrap.querySelector('img');
-    img.src = data.url.startsWith("http") ? data.url : BASE_URL + data.url;
-    wrap.style.display = 'block';
-    document.getElementById(wrapId).classList.add('has-image');
 
-    progTxt.textContent = '✓ อัปโหลดสำเร็จ';
-    showMsg('✓ อัปโหลดรูปสำเร็จ', 'success');
-    setTimeout(() => { progEl.classList.remove('show'); progFill.style.width='0'; }, 2500);
+    const wrap = document.getElementById(previewWrapId);
+    wrap.querySelector("img").src = resolveUrl(data.url);
+    wrap.style.display = "block";
+    document.getElementById(wrapId).classList.add("has-image");
+
+    progTxt.textContent = "✓ อัปโหลดสำเร็จ";
+    showMsg("✓ อัปโหลดรูปสำเร็จ", "success");
+    setTimeout(function() {
+      progEl.classList.remove("show");
+      progFill.style.width = "0";
+    }, 2500);
 
   } catch(err) {
-    progFill.style.width = '0';
-    progEl.classList.remove('show');
-    showMsg('เชื่อมต่อ Server ไม่ได้', 'error');
+    progFill.style.width = "0";
+    progEl.classList.remove("show");
+    showMsg("เชื่อมต่อ Server ไม่ได้", "error");
   }
 }
 
 function removeImg(hiddenId, previewWrapId, wrapId) {
-  document.getElementById(hiddenId).value = '';
+  document.getElementById(hiddenId).value = "";
   const wrap = document.getElementById(previewWrapId);
-  wrap.style.display = 'none';
-  wrap.querySelector('img').src = '';
-  document.getElementById(wrapId).classList.remove('has-image');
+  wrap.style.display = "none";
+  wrap.querySelector("img").src = "";
+  document.getElementById(wrapId).classList.remove("has-image");
 }
 
-/* ══ LOAD COURSE (edit mode) ═══════════════════════════ */
+// ─── Load course (edit mode) ─────────────────────────────────────────────
 async function loadCourse() {
   try {
-    const res = await fetch(`${API}/courses/${courseId}`);
-    if (!res.ok) throw new Error('load failed');
+    const res = await fetch(API + "/courses/" + courseId);
+    if (!res.ok) throw new Error("load failed");
     const c = await res.json();
 
-    const fields = ['name_th','name_en','degree_level','status','program_type',
-                    'study_system','award_title','total_credits','short_detail','student_range'];
-    fields.forEach(f => {
+    ["name_th","name_en","degree_level","status","program_type",
+     "study_system","award_title","total_credits","short_detail","student_range"
+    ].forEach(function(f) {
       const el = document.getElementById(f);
       if (el && c[f] != null) el.value = c[f];
     });
 
-    // Load images
+    // โหลดรูปภาพ — ใช้ resolveUrl() แทนการต่อ BASE_URL ตรงๆ
     [
-      { field: 'hero_image', wrap: 'prevHero', wrapOuter: 'wrap-hero' },
-      { field: 'bg_image',   wrap: 'prevBg',   wrapOuter: 'wrap-bg'   },
-      { field: 'info_image', wrap: 'prevInfo',  wrapOuter: 'wrap-info' },
-    ].forEach(({ field, wrap, wrapOuter }) => {
-      if (c[field]) {
-        document.getElementById(field).value = c[field];
-        const wrapEl = document.getElementById(wrap);
-        wrapEl.querySelector('img').src = BASE_URL + c[field];
-        wrapEl.style.display = 'block';
-        document.getElementById(wrapOuter).classList.add('has-image');
+      { field: "hero_image", wrap: "prevHero", wrapOuter: "wrap-hero" },
+      { field: "bg_image",   wrap: "prevBg",   wrapOuter: "wrap-bg"   },
+      { field: "info_image", wrap: "prevInfo",  wrapOuter: "wrap-info" }
+    ].forEach(function(item) {
+      if (c[item.field]) {
+        document.getElementById(item.field).value = c[item.field];
+        const wrapEl = document.getElementById(item.wrap);
+        wrapEl.querySelector("img").src = resolveUrl(c[item.field]); // ← แก้ตรงนี้
+        wrapEl.style.display = "block";
+        document.getElementById(item.wrapOuter).classList.add("has-image");
       }
     });
 
   } catch(err) {
-    showMsg('โหลดข้อมูลหลักสูตรไม่สำเร็จ', 'error');
+    showMsg("โหลดข้อมูลหลักสูตรไม่สำเร็จ", "error");
   }
 }
 
-/* ══ SAVE / UPDATE ══════════════════════════════════════ */
+// ─── Save / Update ───────────────────────────────────────────────────────
 let afterSave = "info";
-document.getElementById("saveBtn").addEventListener('click', () => { afterSave = "info"; });
-document.getElementById("addMajorBtn").addEventListener('click', () => {
+document.getElementById("saveBtn").addEventListener("click", function() { afterSave = "info"; });
+document.getElementById("addMajorBtn").addEventListener("click", function() {
   afterSave = "major";
   document.getElementById("courseForm").requestSubmit();
 });
 
-document.getElementById("courseForm").addEventListener("submit", async (e) => {
+document.getElementById("courseForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
   const body = {
@@ -513,51 +505,57 @@ document.getElementById("courseForm").addEventListener("submit", async (e) => {
     short_detail:  document.getElementById("short_detail").value,
     student_range: document.getElementById("student_range").value,
     hero_image:    document.getElementById("hero_image").value  || null,
-    bg_image:      document.getElementById("bg_image").value    || null,   // ← ใหม่
-    info_image:    document.getElementById("info_image").value  || null,
+    bg_image:      document.getElementById("bg_image").value    || null,
+    info_image:    document.getElementById("info_image").value  || null
   };
 
-  if (!body.name_th.trim()) { showMsg('กรุณากรอกชื่อหลักสูตรภาษาไทย', 'error'); return; }
+  if (!body.name_th.trim()) { showMsg("กรุณากรอกชื่อหลักสูตรภาษาไทย", "error"); return; }
 
-  showMsg('กำลังบันทึก...', 'loading');
+  showMsg("กำลังบันทึก...", "loading");
   document.getElementById("saveBtn").disabled = true;
 
-  const url    = isEdit ? `${API}/courses/${courseId}` : `${API}/courses`;
+  const url    = isEdit ? API + "/courses/" + courseId : API + "/courses";
   const method = isEdit ? "PUT" : "POST";
 
   try {
-    const res  = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const res  = await fetch(url, { method: method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     const data = await res.json();
 
-    if (!res.ok) { showMsg(data.message || 'บันทึกไม่สำเร็จ', 'error'); document.getElementById("saveBtn").disabled = false; return; }
+    if (!res.ok) {
+      showMsg(data.message || "บันทึกไม่สำเร็จ", "error");
+      document.getElementById("saveBtn").disabled = false;
+      return;
+    }
 
-    showMsg('✓ บันทึกสำเร็จ! กำลังเปลี่ยนหน้า...', 'success');
+    showMsg("✓ บันทึกสำเร็จ! กำลังเปลี่ยนหน้า...", "success");
     const id = isEdit ? courseId : (data.id || data.courseId);
-    setTimeout(() => {
-      if (!isEdit && afterSave === "major") window.location.href = `add-major.html?courseId=${id}`;
-      else window.location.href = `course-info.html?courseId=${id}`;
+    setTimeout(function() {
+      if (!isEdit && afterSave === "major") window.location.href = "add-major.html?courseId=" + id;
+      else window.location.href = "course-info.html?courseId=" + id;
     }, 700);
   } catch(err) {
-    showMsg('เชื่อมต่อ Server ไม่ได้', 'error');
+    showMsg("เชื่อมต่อ Server ไม่ได้", "error");
     document.getElementById("saveBtn").disabled = false;
   }
 });
 
-/* ══ DELETE ════════════════════════════════════════════ */
-document.getElementById("deleteBtn").addEventListener('click', async () => {
-  if (!confirm(`ยืนยันลบหลักสูตรนี้?\nการลบจะไม่สามารถกู้คืนได้`)) return;
-  showMsg('กำลังลบ...', 'loading');
+// ─── Delete ──────────────────────────────────────────────────────────────
+document.getElementById("deleteBtn").addEventListener("click", async function() {
+  if (!confirm("ยืนยันลบหลักสูตรนี้?\nการลบจะไม่สามารถกู้คืนได้")) return;
+  showMsg("กำลังลบ...", "loading");
   try {
-    const res = await fetch(`${API}/courses/${courseId}`, { method: 'DELETE' });
+    const res = await fetch(API + "/courses/" + courseId, { method: "DELETE" });
     if (!res.ok) throw new Error();
-    showMsg('✓ ลบสำเร็จ', 'success');
-    setTimeout(() => window.location.href = 'course-list.html', 800);
-  } catch { showMsg('ลบไม่สำเร็จ', 'error'); }
+    showMsg("✓ ลบสำเร็จ", "success");
+    setTimeout(function() { window.location.href = "course-list.html"; }, 800);
+  } catch(e) {
+    showMsg("ลบไม่สำเร็จ", "error");
+  }
 });
 
-/* ══ HELPERS ═══════════════════════════════════════════ */
+// ─── Helper ──────────────────────────────────────────────────────────────
 function showMsg(text, type) {
-  const el = document.getElementById('message');
+  const el = document.getElementById("message");
   el.className = type;
   el.textContent = text;
 }
