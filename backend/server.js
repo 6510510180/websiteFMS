@@ -2336,6 +2336,30 @@ app.post("/api/courses/:id/vision-mission", async (req, res) => {
   }
 });
 
+app.post("/api/majors/:id/mlos", async (req, res) => {
+  const { code, name_th, name_en, kas_knowledge, kas_attitude, kas_skill, course_id } = req.body;
+  if (!code || !name_th) return res.status(400).json({ message: "ต้องส่ง code และ name_th" });
+  try {
+    const result = await pool.query(
+      `INSERT INTO course_mlos (major_id, course_id, code, name_th, name_en, kas_knowledge, kas_attitude, kas_skill)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+       ON CONFLICT (major_id, code) DO UPDATE SET
+         name_th       = EXCLUDED.name_th,
+         name_en       = EXCLUDED.name_en,
+         kas_knowledge = EXCLUDED.kas_knowledge,
+         kas_attitude  = EXCLUDED.kas_attitude,
+         kas_skill     = EXCLUDED.kas_skill
+       RETURNING *`,
+      [req.params.id, course_id || null, code, name_th, name_en || null,
+       JSON.stringify(kas_knowledge || {}),
+       JSON.stringify(kas_attitude  || {}),
+       JSON.stringify(kas_skill     || {})]
+    );
+    res.json({ message: "บันทึก MLO สำเร็จ", mlo: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 // ============================================================
 //  Start Server
 // ============================================================
