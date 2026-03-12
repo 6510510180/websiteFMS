@@ -2360,6 +2360,47 @@ app.post("/api/majors/:id/mlos", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+// GET /api/courses/:id/stakeholder-needs
+app.get("/api/courses/:id/stakeholder-needs", async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM course_stakeholder_needs WHERE course_id=$1 ORDER BY id`,
+      [req.params.id]
+    );
+    res.json(result.rows);
+  } catch (err) { res.status(500).json({ message: err.message }); }
+});
+
+// GET /api/courses/:id/vision-mission
+app.get("/api/courses/:id/vision-mission", async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM course_vision_mission WHERE course_id=$1 ORDER BY id`,
+      [req.params.id]
+    );
+    res.json(result.rows);
+  } catch (err) { res.status(500).json({ message: err.message }); }
+});
+
+// GET /api/courses/:id/plo-scores
+app.get("/api/courses/:id/plo-scores", async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM course_plo_scores WHERE course_id=$1 ORDER BY plo_code`,
+      [req.params.id]
+    );
+    res.json(result.rows);
+  } catch (err) { res.status(500).json({ message: err.message }); }
+});
+app.get("/api/courses/:id/plo-kas", async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM course_plo_kas WHERE course_id=$1 ORDER BY plo_code`,
+      [req.params.id]
+    );
+    res.json(result.rows);
+  } catch (err) { res.status(500).json({ message: err.message }); }
+});
 // ============================================================
 //  Start Server
 // ============================================================

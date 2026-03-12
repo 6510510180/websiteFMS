@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หลักสูตรบริหารธุรกิจบัณฑิต</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+:root {
+  --pu:#6B3FA0; --pu2:#7b2cbf; --pu-l:#F3EEFF; --pu-m:#E8DEFF; --pu-tab:#EDE9FE;
+  --bg:#EEEEF6; --wh:#ffffff; --tx:#1A1523; --ts:#64748B; --bd:#E2E8F0;
+  --green:#10B981; --amber:#F59E0B; --blue:#3B82F6; --red:#EF4444;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;font-size:14px;}
+/* Navbar */
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:58px;background:var(--wh);box-shadow:0 1px 0 var(--bd);position:sticky;top:0;z-index:1000;}
+.navbar .logo{display:flex;align-items:center;}
+.navbar .logo img{height:38px;}
+nav{flex:1;display:flex;justify-content:center;}
+.nav-links{list-style:none;display:flex;gap:32px;align-items:center;}
+.nav-links a{font-size:14px;text-decoration:none;color:#555;font-weight:500;}
+.nav-links a:hover,.nav-links a.active{color:var(--pu);font-weight:700;}
+.search-container{display:flex;justify-content:flex-end;}
+.search-box{display:flex;align-items:center;background:#F1F5F9;padding:7px 14px;border-radius:10px;width:240px;gap:8px;}
+.search-box input{border:none;background:none;outline:none;font-family:inherit;font-size:13px;width:100%;}
+.search-box i{color:#94A3B8;}
+/* Main */
+.main-content{padding:36px 0;min-height:100vh;}
+.container{width:92%;max-width:1380px;margin:0 auto;}
+/* Header banner */
+.header-banner{background:var(--pu-m);border-radius:14px;padding:22px 28px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:22px;}
+.header-text-group{flex:1;}
+.header-title{font-size:20px;font-weight:800;color:var(--tx);line-height:1.3;margin:0;}
+.header-subtitle{font-size:13px;color:var(--ts);margin-top:4px;}
+.header-buttons{display:flex;gap:10px;flex-shrink:0;align-items:center;}
+/* Tab bar */
+.action-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;}
+.tab-btn{padding:9px 20px;border-radius:9px;text-decoration:none;font-size:13.5px;font-weight:600;background:var(--wh);color:#555;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd);cursor:pointer;font-family:inherit;transition:all .18s;white-space:nowrap;}
+.tab-btn:hover{border-color:var(--pu);color:var(--pu);}
+.tab-btn.active{background:var(--pu-tab);color:var(--pu);border-color:var(--pu-m);font-weight:700;}
+/* Buttons */
+.btn-filter{background:var(--pu2);color:#fff;border:none;padding:9px 18px;border-radius:9px;cursor:pointer;font-weight:600;font-size:13.5px;font-family:inherit;display:inline-flex;align-items:center;gap:8px;}
+.btn-excel{background:transparent;color:#555;border:1px solid var(--bd);padding:9px 18px;border-radius:9px;cursor:pointer;font-weight:500;font-size:13.5px;font-family:inherit;display:inline-flex;align-items:center;gap:8px;}
+/* Dashboard Grid */
+.dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start;}
+.card{background:var(--wh);border-radius:14px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);}
+/* Table card */
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.title-with-icon{display:flex;align-items:center;gap:10px;}
+.title-with-icon h2{font-size:16px;font-weight:700;margin:0;}
+.badge{background:#EFF6FF;color:var(--blue);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;}
+.purple-text{color:var(--pu);}
+/* Data table */
+.data-table{width:100%;border-collapse:collapse;margin-top:8px;}
+.data-table th{padding:10px 12px;border-bottom:2px solid var(--bd);font-size:11px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;}
+.data-table th:nth-child(2),.data-table th:nth-child(3),.data-table th:nth-child(4){text-align:center;}
+.data-table td{padding:11px 12px;border-bottom:1px solid #F8F9FA;font-size:13.5px;vertical-align:middle;}
+.data-table td:nth-child(2),.data-table td:nth-child(3){text-align:center;color:var(--ts);}
+.data-table td:nth-child(4){text-align:center;}
+.sub-header td{color:var(--pu2);font-weight:700;font-size:13px;padding:14px 12px 6px;}
+.highlight{color:var(--green);font-weight:700;}
+.total-row-main{background:#F8F5FF;font-weight:700;}
+.total-row-main td:nth-child(4){color:var(--wh);}
+.bg-dark-blue{background:var(--pu2);color:#fff !important;font-weight:800;border-radius:6px;padding:4px 8px;display:inline-block;}
+.grand-total-row{background:var(--pu-m)!important;font-weight:700;}
+.grand-total-row td{padding:13px 12px;border:none;color:var(--pu2);}
+/* Analytics sidebar */
+.analytics-container{display:flex;flex-direction:column;gap:18px;}
+.stat-card h3,.advice-card h3{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--tx);}
+/* Progress bars */
+.progress-group{margin-bottom:18px;}
+.progress-label{display:flex;justify-content:space-between;font-weight:600;font-size:13px;color:var(--tx);margin-bottom:6px;}
+.progress-label span:last-child{color:var(--ts);font-weight:400;}
+.progress-bar{background:#F0F0F0;height:8px;border-radius:10px;overflow:hidden;}
+.progress-bar .fill{height:100%;border-radius:10px;background:var(--pu2);}
+/* Score summary grid */
+.score-summary-grid{display:flex;justify-content:space-around;align-items:center;padding-top:18px;margin-top:8px;text-align:center;}
+.divider-line{width:1px;height:40px;background:var(--bd);}
+.val-large{font-size:28px;font-weight:800;line-height:1;}
+.lbl-small{font-size:10px;color:var(--ts);margin-top:5px;font-weight:700;text-transform:uppercase;}
+.purple-text{color:var(--pu2);}
+.green-text{color:var(--green);}
+/* Advice */
+.advice-card{margin-top:0;}
+.advice-item{display:flex;gap:10px;margin-top:12px;font-size:13px;padding:12px;border-radius:10px;line-height:1.5;}
+.advice-item i{margin-top:2px;flex-shrink:0;}
+.advice-item.success{background:#F0FFF4;color:#15803D;}
+.advice-item.warning{background:#FFFBEB;color:#92400E;}
+@media(max-width:900px){.dashboard-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo"><img src="logo.jpg" alt="PSU Logo"></div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="bba-home.html">หน้าหลัก</a></li>
+            <li><a href="bba-public.html">ข้อมูลทั่วไป</a></li>
+            <li><a href="student.html">นักศึกษา</a></li>
+            <li><a href="plans.html">แผนการศึกษา</a></li>
+            <li><a href="bba-qa.html"class="active">QA</a></li>
+        </ul>
+    </nav>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i> <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร">
+        </div>
+    </div>
+</header>
+<main class="main-content">
+    <div class="container">
+        <header class="header-banner">
+            <h1 class="header-title">สรุปจากระบบการประเมินผลการเรียนรู้และการทวนสอบผลสัมฤทธิ์ของนักศึกษา ปีการศึกษา 2567</h1>
+         
+            <div class="header-buttons">
+                <button class="btn-filter"><i class="fas fa-filter"></i> กรองข้อมูล</button>
+                <button class="btn-excel"><i class="fas fa-file-export"></i> ส่งออก Excel</button>
+            </div>
+        </header>
+        
+        <div class="action-bar">
+            <div class="tabs">
+                <a href="plo.html" class="tab-btn"><i class="fas fa-th-large"></i> PLOs/MLOs</a>
+                <a href="score.html" class="tab-btn active"><i class="fas fa-chart-bar"></i> คะแนนผลลัพธ์</a>
+                <a href="bba-matrix1.html" class="tab-btn"><i class="fas fa-project-diagram"></i> Alignment Matrix</a>
+                <a href="kas1.html" class="tab-btn"><i class="fas fa-book"></i> KAS</a>
+            </div>
+        </div>
+        
+
+        <div class="dashboard-grid">
+            <section class="table-container">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="title-with-icon">
+                            <i class="fas fa-table purple-text"></i>
+                            <h2>ตารางสรุปคะแนนเฉลี่ยแยกตาม PLO/MLO</h2>
+                        </div>
+                        <span class="badge">Average Scale 1.0 - 5.0</span>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>รายการผลลัพธ์การเรียนรู้ (LEARNING OUTCOMES)</th>
+                                <th>SEM 1</th>
+                                <th>SEM 2</th>
+                                <th class="text-center">GRAND<br>TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="sub-header"><td colspan="4">หลักสูตรบริหารธุรกิจบัณฑิต</td></tr>
+                            <tr>
+                                <td>PLO1 การบูรณาการและการประยุกต์ศาสตร์ด้านบริหารธุรกิจ</td>
+                                <td>4.60</td>
+                                <td>4.54</td>
+                                <td class="highlight">4.57</td>
+                            </tr>
+                            <tr>
+                                <td>PLO2 การเป็นผู้ประกอบการที่มีทักษะสร้างสรรค์บนพื้นฐานพหุวัฒนธรรม</td>
+                                <td>4.57</td>
+                                <td>4.59</td>
+                                <td class="highlight">4.58</td>
+                            </tr>
+                            <tr>
+                                <td>PLO3 การประยุกต์ใช้ เทคโนโลยีเพือการวิเคราะห์และการตัดสินใจ</td>
+                                <td>4.60</td>
+                                <td>4.54</td>
+                                <td class="highlight">4.57</td>
+                            </tr>
+                            <tr>
+                                <td>PLO4 การให้ความร่วมมือในการทํางานเป็นทีมและการสือสาร</td>
+                                <td>4.63</td>
+                                <td>4.55</td>
+                                <td class="highlight">4.59</td>
+                            </tr>
+                            <tr>
+                                <td>PLO5 จรรยาบรรณ คุณธรรมและจริยธรรม</td>
+                                <td>4.67</td>
+                                <td>4.60</td>
+                                <td class="highlight">4.64</td>
+                            </tr>
+                            <tr>
+                                <td>PLO6 พัฒนาทักษะและความสามารถในการเรียนรู้ตลอดชีวิต</td>
+                                <td>4.67</td>
+                                <td>4.61</td>
+                                <td class="highlight">4.64</td>
+                            </tr>
+                            <tr>
+                                <td>MLOวิชาเอกการจัดการทรัพยากรมนุษย์</td>
+                                <td></td>
+                                <td>4.66</td>
+                                <td class="highlight">4.66</td>
+                            </tr>
+                            <tr>
+                                <td>MLOวิชาเอกการจัดการโลจิสต์และโซ่อุปทาน</td>
+                                <td></td>
+                                <td>4.55</td>
+                                <td class="highlight">4.55</td>
+                            </tr>
+                            <tr>
+                                <td>MLOวิชาเอกการตลาดและการสือสาร</td>
+                                <td>4.58</td>
+                                <td>4.59</td>
+                                <td class="highlight">4.58</td>
+                            </tr>
+                            <tr>
+                                <td>MLOวิชาเอกระบบสารสนเทศทางธุรกิจ</td>
+                                <td>4.57</td>
+                                <td>4.33</td>
+                                <td class="highlight">4.50</td>
+                            </tr>
+                            <tr>
+                                <td>PLO</td>
+                                <td>4.63</td>
+                                <td>4.57</td>
+                                <td class="highlight">4.59</td>
+                            </tr>
+                            <tr>
+                                <td>ด้านความรู ้และทักษะทางปัญญา</td>
+                                <td>4.63</td>
+                                <td>4.60</td>
+                                <td class="highlight">4.62</td>
+                            </tr>
+                            <tr>
+                                <td>ด้านคุณธรรม จริยธรรม</td>
+                                <td>4.60</td>
+                                <td>4.65</td>
+                                <td class="highlight">4.62</td>
+                            </tr>
+                            <tr>
+                                <td>ด้านทักษะการวิเคราะห์เชิงตัวเลข การสือสารและการใช้ เทคโนโลยีสารสนเทศ</td>
+                                <td>4.66</td>
+                                <td>4.70</td>
+                                <td class="highlight">4.67</td>
+                            </tr>
+                            <tr>
+                                <td>ด้านทักษะความสัมพันธ์ระหว่างบุคคลและความรับผิดชอบ</td>
+                                <td>4.50</td>
+                                <td>4.73</td>
+                                <td class="highlight">4.61</td>
+                            </tr>
+                            <tr class="total-row-main">
+                                <td>รวมหลักสูตรบริหารธุรกิจบัณทิต</td>
+                                <td>4.63</td>
+                                <td>4.57</td>
+                                <td class="bg-dark-blue">4.60</td>
+                            </tr>
+                            <tr class="sub-header"><td colspan="4">หลายหลักสูตร สาขาวิชาบริหารธุรกิจ</td></tr>
+                            <tr>
+                                <td>ด้านความรู้</td>
+                                <td>5.00</td>
+                                <td>4.63</td>
+                                <td class="highlight">4.70</td>
+                            </tr>
+                            <tr>
+                                <td>ด้านความรู้และทักษะทางปัญญา</td>
+                                <td>5.00</td>
+                                <td>4.83</td>
+                                <td class="highlight">4.88</td>
+                            </tr>
+                            <tr>
+                                <td>ด้านคุณธรรม จริยธรรม</td>
+                                <td>5.00</td>
+                                <td>5.00</td>
+                                <td class="highlight">5.00</td>
+                            </tr>
+                            <tr>
+                                <td>ด้านทักษะการวิเคราะห์เชิงตัวเลข การสื่อสารและการใช้ เทคโนโลยีสารสนเทศ</td>
+                                <td>5.00</td>
+                                <td>4.67</td>
+                                <td class="highlight">4.75</td>
+                            </tr>
+                            <tr>
+                                <td>ด้านทักษะความสัมพันธ์ระหว่างบุคคลและความรับผิดชอบ</td>
+                                <td>5.00</td>
+                                <td>5.00</td>
+                                <td class="highlight">5.00</td>
+                            </tr>
+                            <tr class="total-row-main">
+                                <td>รวมหลายหลักสูตร สาขาวิชาบริหารธุรกิจ</td>
+                                <td>5.00</td>
+                                <td>4.80</td>
+                                <td class="bg-dark-blue">4.85</td>
+                            </tr>
+                            <tr class="grand-total-row">
+                                <td>สาชาวิชาบริหารธุรกิจ Total</td>
+                                <td>4.63</td>
+                                <td>4.57</td>
+                                <td class="bg-dark-blue">4.60</td>
+                            </tr>
+                            <tr class="grand-total-row">
+                                <td>Grand Total</td>
+                                <td>4.63</td>
+                                <td>4.57</td>
+                                <td class="bg-dark-blue">4.60</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <aside class="analytics-container">
+               
+<div class="card stat-card">
+    <h3><i class="fa-solid fa-chart-column"></i></i> เปรียบเทียบคะแนนรวมแต่ละด้าน</h3>
+ 
+    
+    <div class="progress-group">
+        <div class="progress-label"><span>GRAND TOTAL</span> <span>4.58 / 5.0</span></div>
+        <div class="progress-bar"><div class="fill purple" style="width: 92%;"></div></div>
+    </div>
+    <div class="progress-group">
+        <div class="progress-label"><span>รวมหลักสูตรบริหารธุรกิจ</span> <span>4.60 / 5.0</span></div>
+        <div class="progress-bar"><div class="fill purple" style="width: 92%;"></div></div>
+    </div>
+
+    <div class="score-summary-grid">
+        <div class="stat-item">
+            <div class="val-large purple-text">92%</div>
+            <div class="lbl-small">TARGET ACHIEVED</div>
+        </div>
+        <div class="divider-line"></div> <div class="stat-item">
+            <div class="val-large green-text">4.60</div>
+            <div class="lbl-small">OVERALL AVG</div>
+        </div>
+    </div>
+</div>
+                <div class="card advice-card">
+                    <h3><i class="far fa-lightbulb"></i> สรุปข้อเสนอแนะ</h3>
+                    <div class="advice-item success">
+                        <i class="fas fa-check-circle"></i>
+                        <span>คะแนนด้านคุณธรรมและจริยธรรมมีแนวโน้มที่ดีมาก บรรลุเป้าหมายที่ตั้งไว้ในระดับสูงสุด (5.0)</span>
+                    </div>
+                    <div class="advice-item warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>วิชาเอกระบบสารสนเทศทางธุรกิจ (MLO) มีคะแนนลดลงเล็กน้อยในเทอม 2 (4.33) ควรติดตามแผนการพัฒนา</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+</body>
+</html>
