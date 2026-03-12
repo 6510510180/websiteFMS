@@ -2116,6 +2116,45 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/login.html"));
   }
 });
+// ── QA Seed compat routes ────────────────────────────────────
+
+// POST /api/courses/:id/plos
+app.post("/api/courses/:id/plos", async (req, res) => {
+  const { code, order, name_th, name_en, description } = req.body;
+  if (!code || !name_th) return res.status(400).json({ message: "ข้อมูลไม่ครบ" });
+  try {
+    const result = await pool.query(
+      `INSERT INTO course_plos (course_id, code, "order", name_th, name_en, description)
+       VALUES ($1,$2,$3,$4,$5,$6)
+       ON CONFLICT (course_id, code) DO UPDATE SET
+         name_th     = EXCLUDED.name_th,
+         name_en     = EXCLUDED.name_en,
+         description = EXCLUDED.description,
+         updated_at  = now()
+       RETURNING *`,
+      [req.params.id, code, order||0, name_th, name_en||null, description||null]
+    );
+    res.json({ message: "บันทึก PLO สำเร็จ", plo: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/courses/:id/stakeholder-needs
+app.post("/api/courses/:id/stakeholder-needs", async (req, res) => {
+  const { group, need, plo_mapping, mlo_mapping } = req.body;
+  if (!need) return res.status(400).json({ message: "ข้อมูลไม่ครบ" });
+  try {
+    const result = await pool.query(
+      `INSERT INTO course_stakeholder_needs (course_id, "group", need, plo_mapping, mlo_mapping)
+       VALUES ($1,$2,$3,$4,$5) RETURNING *`,
+      [req.params.id, group||null, need, JSON.stringify(plo_mapping||[]), JSON.stringify(mlo_mapping||[])]
+    );
+    res.json({ message: "บันทึก Stakeholder Need สำเร็จ", item: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // ============================================================
 //  Start Server
