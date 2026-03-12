@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bachelor of Business Administration | FMS PSU</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;900&family=Lexend:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
   :root {
     --purple: #7C3AED;
@@ -18,385 +21,285 @@
     --bg: #F8F6FD;
     --border: #E9E4F5;
     --card-bg: #FDFCFF;
-    --fin-c: #7C3AED; --fin-bg: #F5F3FF; --fin-bd: #DDD6FE;
-    --mkt-c: #BE185D; --mkt-bg: #FDF2F8; --mkt-bd: #FBCFE8;
-    --hrm-c: #065F46; --hrm-bg: #ECFDF5; --hrm-bd: #A7F3D0;
-    --lsm-c: #92400E; --lsm-bg: #FFFBEB; --lsm-bd: #FDE68A;
-    --bis-c: #1E40AF; --bis-bg: #EFF6FF; --bis-bd: #BFDBFE;
-    --mice-c: #991B1B; --mice-bg: #FFF5F5; --mice-bd: #FECACA;
-    --radius: 16px;
     --shadow: 0 2px 16px rgba(124,58,237,0.08);
     --shadow-hover: 0 8px 32px rgba(124,58,237,0.16);
+    --radius: 16px;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Noto Sans Thai', sans-serif;
+    font-family: 'Sarabun', sans-serif;
     background: var(--bg);
     color: var(--text);
     font-size: 14px;
     line-height: 1.6;
   }
 
+  /* ══════════ NAVBAR — เหมือน bba-home.html ══════════ */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .navbar .logo img { height: 40px; }
+  .navbar ul {
+    display: flex; gap: 20px; margin: 0; padding: 0;
+    list-style: none; align-items: center;
+  }
+  .navbar a { font-size: 14px; color: #555; text-decoration: none; transition: 0.3s; }
+  .navbar a:hover { color: #9b51e0; }
+  .navbar a.active { color: #9b51e0; font-weight: bold; }
+  .nav-right { display: flex; align-items: center; gap: 15px; }
+
+  /* Dropdown */
+  .nav-dropdown { position: relative; }
+  .nav-dropdown-toggle {
+    font-size: 14px; color: #555; background: none; border: none;
+    cursor: pointer; font-family: inherit; padding: 0;
+    display: flex; align-items: center; gap: 4px; transition: color 0.3s;
+  }
+  .nav-dropdown-toggle:hover,
+  .nav-dropdown.open .nav-dropdown-toggle { color: #9b51e0; }
+  .nav-dropdown-toggle .chevron {
+    transition: transform 0.18s; display: inline-block;
+    font-style: normal; font-size: 10px;
+  }
+  .nav-dropdown.open .nav-dropdown-toggle .chevron { transform: rotate(180deg); }
+  .nav-dropdown-menu {
+    display: none; position: absolute; top: calc(100% + 10px); left: 0;
+    background: #fff; border: 1px solid #eee; border-radius: 10px;
+    min-width: 210px; box-shadow: 0 8px 24px rgba(155,81,224,0.13);
+    overflow: hidden; z-index: 999;
+    animation: dropIn 0.15s ease;
+  }
+  @keyframes dropIn { from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;} }
+  .nav-dropdown.open .nav-dropdown-menu { display: block; }
+  .dropdown-item {
+    display: block; width: 100%; padding: 11px 16px;
+    font-size: 13px; color: #444; background: none; border: none;
+    border-bottom: 1px solid #f5f5f5; text-align: left;
+    cursor: pointer; font-family: inherit; text-decoration: none;
+    transition: all 0.12s;
+  }
+  .dropdown-item:last-child { border-bottom: none; }
+  .dropdown-item:hover { background: #f8f0ff; color: #9b51e0; padding-left: 20px; }
+  .dropdown-loading {
+    padding: 12px 16px; font-size: 12px; color: #aaa;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .spinner-sm {
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 2px solid #e9d5ff; border-top-color: #9b51e0;
+    animation: spin 0.7s linear infinite; flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   /* ─────────── HERO ─────────── */
   .hero {
     background: var(--white);
-    padding: 64px 48px 56px;
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
+    padding: 28px 20px 40px;
   }
-
   .hero-top {
-    display: flex;
-    align-items: center;
-    gap: 56px;
-    max-width: 1120px;
-    margin: 0 auto;
-    width: 100%;
+    display: flex; align-items: center; gap: 56px;
+    max-width: 1120px; margin: 0 auto; width: 100%;
   }
-
   .hero-text { flex: 1; }
-
   .hero-title {
-    font-family: 'Lexend', sans-serif;
-    font-size: 52px;
-    font-weight: 900;
-    line-height: 1.05;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 52px; font-weight: 900; line-height: 1.05; letter-spacing: -1.5px;
     color: var(--text);
-    letter-spacing: -1.5px;
   }
-
   .hero-title .accent { color: var(--purple); }
-
   .hero-subtitle {
-    font-size: 14px;
-    color: var(--text-mid);
-    margin-top: 16px;
-    line-height: 1.8;
+    font-size: 14px; color: var(--text-mid); margin-top: 16px; line-height: 1.8;
   }
-
   .hero-image {
-    flex: 0 0 380px;
-    border-radius: 20px;
-    overflow: hidden;
+    flex: 0 0 380px; border-radius: 20px; overflow: hidden;
     box-shadow: 0 16px 48px rgba(124,58,237,0.15);
-    aspect-ratio: 4/3;
-    position: relative;
+    aspect-ratio: 4/3; position: relative;
   }
-
-  .hero-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.6s ease;
-  }
-
+  .hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
   .hero-image:hover img { transform: scale(1.04); }
-
   .hero-image-overlay {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: linear-gradient(160deg, transparent 60%, rgba(124,58,237,0.12));
     pointer-events: none;
   }
 
-  /* Major pills */
-  .major-row {
-    max-width: 1120px;
-    margin: 0 auto;
-    width: 100%;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: 999px;
-    padding: 14px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
+  /* MAJOR BAR */
+  .major-wrap { max-width: 1120px; margin: 16px auto 0; padding: 0 20px 10px; }
+  .major-bar {
+    display: flex; justify-content: space-around; align-items: center;
+    background: #ffffff; padding: 25px 10px; border-radius: 20px;
+    border: 1.5px solid #ececf1; box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    max-width: 1000px; margin: 0 auto;
   }
-
-  .major-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 20px;
-    border-radius: 999px;
-    border: 1.5px solid;
-    font-family: 'Lexend', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    letter-spacing: 0.2px;
+  .major-item {
+    display: flex; flex-direction: column; align-items: center;
+    text-decoration: none; transition: all 0.3s ease;
   }
-
-  .major-pill:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  .major-item:hover { transform: translateY(-5px); }
+  .major-symbol {
+    width: 55px; height: 55px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; margin-bottom: 12px;
+    border: 2px solid transparent; transition: 0.3s;
   }
-
-  .major-pill .pill-emoji { font-size: 14px; }
-  .pill-fin  { color: var(--fin-c);  background: var(--fin-bg);  border-color: var(--fin-bd);  }
-  .pill-mkt  { color: var(--mkt-c);  background: var(--mkt-bg);  border-color: var(--mkt-bd);  }
-  .pill-hrm  { color: var(--hrm-c);  background: var(--hrm-bg);  border-color: var(--hrm-bd);  }
-  .pill-lsm  { color: var(--lsm-c);  background: var(--lsm-bg);  border-color: var(--lsm-bd);  }
-  .pill-bis  { color: var(--bis-c);  background: var(--bis-bg);  border-color: var(--bis-bd);  }
-  .pill-mice { color: var(--mice-c); background: var(--mice-bg); border-color: var(--mice-bd); }
-
-  /* ─────────── CURRICULUM ─────────── */
-  .curriculum {
-    background: var(--purple-pale);
-    padding: 64px 48px 80px;
+  .major-item:hover .major-symbol { filter: contrast(1.1) brightness(0.95); transform: scale(1.05); }
+  .fin  { background: #f5f3ff; color: #7c3aed; border-color: #ddd6fe; }
+  .mkt  { background: #fff1f2; color: #e11d48; border-color: #fecdd3; }
+  .hrm  { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+  .lsm  { background: #fffbeb; color: #d97706; border-color: #fef3c7; }
+  .bis  { background: #f0f9ff; color: #0284c7; border-color: #bae6fd; }
+  .mice { background: #fdf4ff; color: #c026d3; border-color: #fae8ff; }
+  .major-skeleton {
+    width: 55px; height: 55px; border-radius: 50%;
+    background: linear-gradient(90deg,#f3f0ff 25%,#f8f5ff 50%,#f3f0ff 75%);
+    background-size: 400px 100%; animation: shimmer 1.1s infinite linear;
   }
-
-  .curriculum-inner {
-    max-width: 1120px;
-    margin: 0 auto;
+  .major-empty, .major-error {
+    flex: 1 1 100%; text-align: center; padding: 10px 8px; font-size: 13px;
   }
+  .major-empty { background:#F9FAFB; border:1.5px dashed #E5E7EB; border-radius: 14px; color: var(--text-soft); }
+  .major-error { background:#FFF7F7; border:1.5px dashed #FCA5A5; border-radius: 14px; color:#B91C1C; }
 
+  /* PLAN SECTION */
+  .plan-section { padding: 60px 20px 80px; background: #fff; }
+  .plan-inner   { max-width: 1120px; margin: 0 auto; }
+  .plan-title   { text-align: center; font-family: 'Sarabun', sans-serif; font-size: 32px; font-weight: 800; color: #333; margin-bottom: 28px; }
+  .plan-grid    { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .plan-card {
+    background: #fff; border: 1px solid #ECECF1; border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03); padding: 22px 22px 20px;
+  }
+  .year-badge {
+    display: inline-block; background: #7c3aed; color: #fff; border-radius: 999px;
+    font-size: 11px; font-weight: 800; padding: 4px 10px; letter-spacing: .4px;
+  }
+  .plan-card h4 { margin: 12px 0 10px; font-size: 16px; color: #1F2937; }
+  .plan-list { margin: 0; padding-left: 0; list-style: none; }
+  .plan-list li {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 13px; color: #4B5563; margin: 7px 0;
+  }
+  .plan-list i { color: #7c3aed; font-size: 12px; margin-top: 4px; }
+  .plan-skeleton {
+    height: 180px; border-radius: 18px;
+    background: linear-gradient(90deg,#f3f0ff 25%,#f8f5ff 50%,#f3f0ff 75%);
+    background-size: 400px 100%; animation: shimmer 1.1s infinite linear;
+  }
+  .plan-empty, .plan-error {
+    grid-column: 1 / -1; text-align: center; padding: 16px 12px; font-size: 13px;
+  }
+  .plan-empty { color:#6B7280; background:#F9FAFB; border-radius: 14px; border:1.5px dashed #E5E7EB; }
+  .plan-error { color:#B91C1C; background:#FFF7F7; border-radius: 14px; border:1.5px dashed #FCA5A5; }
+
+  @keyframes shimmer { 0%{background-position:-400px 0;} 100%{background-position:400px 0;} }
+
+  /* CURRICULUM */
+  .curriculum { background: var(--purple-pale); padding: 56px 20px 72px; }
+  .curriculum-inner { max-width: 1120px; margin: 0 auto; }
   .section-title {
-    font-family: 'Lexend', sans-serif;
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--text);
-    letter-spacing: -0.5px;
-    margin-bottom: 6px;
+    font-family: 'Sarabun', sans-serif; font-size: 28px; font-weight: 800; color: var(--text);
+    letter-spacing: -0.5px; margin-bottom: 6px;
   }
-
-  .section-sub {
-    font-size: 13px;
-    color: var(--text-soft);
-    margin-bottom: 32px;
-  }
-
-  /* Accordion grid: 2-col top, 1-col full bottom */
-  .acc-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-
+  .section-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 24px; }
+  .acc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .acc-full { grid-column: 1 / -1; }
-
-  /* ─── Accordion ─── */
   .acc {
-    background: var(--white);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: box-shadow 0.2s, border-color 0.2s;
+    background:#fff; border:1.5px solid var(--border); border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03); overflow:hidden; transition: box-shadow .2s, border-color .2s;
   }
-
-  .acc.open {
-    border-color: #C4B5FD;
-    box-shadow: var(--shadow-hover);
-  }
-
+  .acc.open { border-color:#C4B5FD; box-shadow: var(--shadow-hover); }
   .acc-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 22px 24px;
-    cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.15s;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 24px; cursor:pointer; user-select:none; transition:background .15s;
   }
-
-  .acc-header:hover { background: var(--purple-light); }
-  .acc.open .acc-header { background: var(--purple-light); }
-
-  .acc-label {
-    font-family: 'Noto Sans Thai', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text);
-  }
-
+  .acc-header:hover, .acc.open .acc-header { background: var(--purple-light); }
+  .acc-label { font-size:15px; font-weight:700; color:var(--text); }
   .acc-chevron {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    background: var(--purple-pale);
-    border: 1.5px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: background 0.2s, border-color 0.2s, transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    width:30px; height:30px; border-radius:8px; background:var(--purple-pale);
+    border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; transition:.2s;
   }
-
-  .acc.open .acc-chevron {
-    background: var(--purple);
-    border-color: var(--purple);
-    transform: rotate(180deg);
-  }
-
-  .acc-chevron svg {
-    width: 14px;
-    height: 14px;
-    stroke: var(--purple);
-    fill: none;
-    stroke-width: 2.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transition: stroke 0.2s;
-  }
-
-  .acc.open .acc-chevron svg { stroke: white; }
-
-  /* Smooth slide */
-  .acc-body {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .acc.open .acc-body { grid-template-rows: 1fr; }
-
-  .acc-body-inner { overflow: hidden; }
-
+  .acc.open .acc-chevron { background:var(--purple); border-color:var(--purple); transform: rotate(180deg); }
+  .acc-chevron svg { width:14px; height:14px; stroke:var(--purple); fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; transition:stroke .2s; }
+  .acc.open .acc-chevron svg { stroke:#fff; }
+  .acc-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows .4s cubic-bezier(.4,0,.2,1); }
+  .acc.open .acc-body { grid-template-rows:1fr; }
+  .acc-body-inner { overflow:hidden; }
   .acc-content { padding: 6px 28px 28px; }
-
-  /* ─── Expanded content styles ─── */
-
-  /* Two-column open layout (for gen + elec combined) */
-  .exp-cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-
-  .exp-col h3 {
-    font-family: 'Lexend', sans-serif;
-    font-size: 17px;
-    font-weight: 800;
-    color: var(--text);
-    margin-bottom: 12px;
-    line-height: 1.3;
-  }
-
-  .exp-col p {
-    font-size: 13px;
-    color: var(--text-mid);
-    line-height: 1.85;
-    margin-bottom: 10px;
-  }
-
-  .exp-link {
-    display: inline-block;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--purple);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    margin-top: 4px;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-
-  .exp-link:hover { opacity: 0.7; }
-
-  /* Subject type rows */
-  .type-list { display: flex; flex-direction: column; gap: 4px; }
-
-  .type-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 13px 16px;
-    border-radius: 12px;
-    transition: background 0.15s;
-    cursor: default;
-  }
-
+  .type-list { display:flex; flex-direction:column; gap:6px; }
+  .type-row { display:flex; align-items:flex-start; gap:14px; padding:13px 16px; border-radius: 12px; transition: background .15s; }
   .type-row:hover { background: var(--purple-pale); }
+  .type-icon { flex-shrink:0; width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; border:1.5px solid; }
+  .icon-blue{ background:#EFF6FF; border-color:#BFDBFE; }
+  .icon-green{ background:#ECFDF5; border-color:#A7F3D0; }
+  .icon-amber{ background:#FFFBEB; border-color:#FDE68A; }
+  .icon-purple{ background:#F5F3FF; border-color:#DDD6FE; }
+  .icon-rose{ background:#FFF1F2; border-color:#FECDD3; }
+  .type-name { font-size:13.5px; font-weight:700; color:var(--text); margin-bottom:3px; }
+  .type-desc { font-size:12.5px; color:var(--text-mid); line-height:1.7; }
 
-  .type-icon {
-    flex-shrink: 0;
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    border: 1.5px solid;
-  }
-
-  .icon-blue   { background: #EFF6FF; border-color: #BFDBFE; }
-  .icon-green  { background: #ECFDF5; border-color: #A7F3D0; }
-  .icon-amber  { background: #FFFBEB; border-color: #FDE68A; }
-  .icon-purple { background: #F5F3FF; border-color: #DDD6FE; }
-  .icon-rose   { background: #FFF1F2; border-color: #FECDD3; }
-
-  .type-info { flex: 1; }
-
-  .type-name {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 3px;
-  }
-
-  .type-desc {
-    font-size: 12.5px;
-    color: var(--text-mid);
-    line-height: 1.7;
-  }
-
-  /* ─── Responsive ─── */
+  /* Responsive */
   @media (max-width: 900px) {
     .hero-top { flex-direction: column; }
     .hero-image { flex: unset; width: 100%; max-width: 500px; align-self: center; }
     .acc-grid { grid-template-columns: 1fr; }
     .acc-full { grid-column: auto; }
-    .exp-cols { grid-template-columns: 1fr; gap: 20px; }
     .hero-title { font-size: 38px; }
+    .plan-grid { grid-template-columns: repeat(2, 1fr); }
   }
-
   @media (max-width: 640px) {
-    .hero { padding: 40px 24px 40px; }
-    .curriculum { padding: 48px 20px 64px; }
-    .major-row { padding: 12px 20px; gap: 6px; }
+    .hero { padding: 20px 16px 32px; }
+    .curriculum { padding: 48px 16px 64px; }
     .hero-title { font-size: 32px; }
+    .plan-grid { grid-template-columns: 1fr; }
+    .major-bar { gap: 14px 18px; flex-wrap: wrap; }
   }
 
-  /* page entry animation */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero-text  { animation: fadeUp 0.55s ease both; }
-  .hero-image { animation: fadeUp 0.55s 0.12s ease both; }
-  .major-row  { animation: fadeUp 0.55s 0.22s ease both; }
-
-  /* ─── skeleton loader for pills ─── */
-  @keyframes shimmer {
-    0%   { background-position: -400px 0; }
-    100% { background-position:  400px 0; }
-  }
-  .pill-skeleton {
-    display: inline-block;
-    width: 90px; height: 36px;
-    border-radius: 999px;
-    background: linear-gradient(90deg,#ede9fe 25%,#f5f3ff 50%,#ede9fe 75%);
-    background-size: 400px 100%;
-    animation: shimmer 1.2s infinite linear;
-  }
-  .pill-error {
-    font-size: 12px; color: #9CA3AF; padding: 8px 16px;
-    background: #F9FAFB; border-radius: 999px; border: 1.5px dashed #E5E7EB;
-  }
+  @keyframes fadeUp { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+  .hero-text  { animation: fadeUp .55s ease both; }
+  .hero-image { animation: fadeUp .55s .12s ease both; }
+  .major-wrap { animation: fadeUp .55s .18s ease both; }
 </style>
 </head>
 <body>
+
+<!-- ══════════ NAVBAR — เหมือน bba-home.html ══════════ -->
+<header class="navbar">
+  <div class="logo"><img src="logo.jpg" alt="Logo"></div>
+  <nav>
+    <ul>
+      <li><a href="bba-home.html">หน้าหลัก</a></li>
+      <li><a href="bba-public.html" id="nav-general">ข้อมูลทั่วไป</a></li>
+      <li><a href="student.html" class="active">นักศึกษา</a></li>
+      <li>
+        <div class="nav-dropdown" id="planDropdown">
+          <button class="nav-dropdown-toggle" onclick="togglePlanDropdown()">
+            แผนการศึกษา <i class="chevron">▾</i>
+          </button>
+          <div class="nav-dropdown-menu" id="planDropdownMenu">
+            <div class="dropdown-loading">
+              <div class="spinner-sm"></div>
+              <span>กำลังโหลด...</span>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li><a href="bba-qa.html">QA</a></li>
+    </ul>
+  </nav>
+  <div class="nav-right">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </div>
+</header>
 
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
@@ -412,7 +315,6 @@
       </p>
     </div>
     <div class="hero-image">
-      <!-- Placeholder gradient fallback if image fails -->
       <img
         src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=760&q=80"
         alt="นักศึกษา BBA"
@@ -422,15 +324,28 @@
     </div>
   </div>
 
-  <!-- Major row — populated by JS -->
-  <div class="major-row" id="major-row">
-    <!-- skeleton placeholders while loading -->
-    <span class="pill-skeleton"></span>
-    <span class="pill-skeleton"></span>
-    <span class="pill-skeleton"></span>
-    <span class="pill-skeleton"></span>
-    <span class="pill-skeleton"></span>
-    <span class="pill-skeleton"></span>
+  <div class="major-wrap">
+    <div class="major-bar" id="major-bar">
+      <div class="major-skeleton"></div>
+      <div class="major-skeleton"></div>
+      <div class="major-skeleton"></div>
+      <div class="major-skeleton"></div>
+      <div class="major-skeleton"></div>
+      <div class="major-skeleton"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ แผนการศึกษา ══════════ -->
+<section class="plan-section">
+  <div class="plan-inner">
+    <h2 class="plan-title">แผนการศึกษา</h2>
+    <div id="plan-grid" class="plan-grid">
+      <div class="plan-skeleton"></div>
+      <div class="plan-skeleton"></div>
+      <div class="plan-skeleton"></div>
+      <div class="plan-skeleton"></div>
+    </div>
   </div>
 </section>
 
@@ -441,196 +356,208 @@
     <p class="section-sub">รวมหน่วยกิตหลักสูตรไม่น้อยกว่า 129 หน่วยกิต</p>
 
     <div class="acc-grid">
-
-      <!-- ① หมวดวิชาศึกษาทั่วไป -->
       <div class="acc" id="acc1">
         <div class="acc-header" onclick="toggle('acc1')">
           <span class="acc-label">หมวดวิชาศึกษาทั่วไป</span>
-          <div class="acc-chevron">
-            <svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg>
-          </div>
+          <div class="acc-chevron"><svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg></div>
         </div>
-        <div class="acc-body">
-          <div class="acc-body-inner">
-            <div class="acc-content">
-              <p style="font-size:13px;color:var(--text-mid);line-height:1.85;margin-bottom:14px;">
-                เลือกจากรายวิชาของหมวดหมู่วิชาศึกษาทั่วไปที่เปิดสอนใน
-                มหาวิทยาลัยสงขลานครินทร์ ทั้งนี้ต้องตรงตามบัญชีของ
-                วิชาศึกษาทั่วไปที่เห็นชอบจาก
-                คณะกรรมการพัฒนาวิชาศึกษาทั่วไปของมหาวิทยาลัยสงขลานครินทร์
-              </p>
-              <a class="exp-link">หมวดศึกษาทั่วไป →</a>
-            </div>
-          </div>
-        </div>
+        <div class="acc-body"><div class="acc-body-inner"><div class="acc-content">
+          <p style="font-size:13px;color:var(--text-mid);line-height:1.85;margin-bottom:14px;">
+            เลือกจากรายวิชาของหมวดหมู่วิชาศึกษาทั่วไปที่เปิดสอนในมหาวิทยาลัยสงขลานครินทร์
+            ทั้งนี้ต้องตรงตามบัญชีของวิชาศึกษาทั่วไปที่เห็นชอบจากคณะกรรมการพัฒนาวิชาศึกษาทั่วไป
+          </p>
+        </div></div></div>
       </div>
 
-      <!-- ② หมวดวิชาเลือกเสรี -->
       <div class="acc" id="acc2">
         <div class="acc-header" onclick="toggle('acc2')">
           <span class="acc-label">หมวดวิชาเลือกเสรี</span>
-          <div class="acc-chevron">
-            <svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg>
-          </div>
+          <div class="acc-chevron"><svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg></div>
         </div>
-        <div class="acc-body">
-          <div class="acc-body-inner">
-            <div class="acc-content">
-              <p style="font-size:13px;color:var(--text-mid);line-height:1.85;">
-                นักศึกษาสามารถเลือกเรียนรายวิชาใด ๆ ก็ได้
-                ที่เปิดสอนในมหาวิทยาลัยสงขลานครินทร์ หรือ มหาวิทยาลัยอื่น
-                ทั้งในประเทศและต่างประเทศ โดยความเห็นชอบของหลักสูตร/สาขาวิชา
-              </p>
-            </div>
-          </div>
-        </div>
+        <div class="acc-body"><div class="acc-body-inner"><div class="acc-content">
+          <p style="font-size:13px;color:var(--text-mid);line-height:1.85;">
+            นักศึกษาสามารถเลือกเรียนรายวิชาใด ๆ ก็ได้ที่เปิดสอนในมหาวิทยาลัยสงขลานครินทร์
+            หรือมหาวิทยาลัยอื่น ทั้งในประเทศและต่างประเทศ โดยความเห็นชอบของหลักสูตร/สาขาวิชา
+          </p>
+        </div></div></div>
       </div>
 
-      <!-- ③ หมวดวิชาเฉพาะ (full width) -->
       <div class="acc acc-full" id="acc3">
         <div class="acc-header" onclick="toggle('acc3')">
           <span class="acc-label">หมวดวิชาเฉพาะ</span>
-          <div class="acc-chevron">
-            <svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg>
-          </div>
+          <div class="acc-chevron"><svg viewBox="0 0 16 16"><polyline points="3 5.5 8 10.5 13 5.5"/></svg></div>
         </div>
-        <div class="acc-body">
-          <div class="acc-body-inner">
-            <div class="acc-content">
-              <div class="type-list">
-
-                <div class="type-row">
-                  <div class="type-icon icon-blue">📘</div>
-                  <div class="type-info">
-                    <div class="type-name">วิชาแกน</div>
-                    <div class="type-desc">รายวิชาพื้นฐานสำคัญที่นักศึกษาทุกสาขาในระดับเดียวกันต้องเรียน เพื่อสร้างความรู้และทักษะร่วมกันก่อนเจาะเฉพาะทางเฉพาะของสาขา</div>
-                  </div>
-                </div>
-
-                <div class="type-row">
-                  <div class="type-icon icon-green">🎓</div>
-                  <div class="type-info">
-                    <div class="type-name">วิชาพื้น</div>
-                    <div class="type-desc">ประกอบด้วย 3 วิชาดังนี้</div>
-                  </div>
-                </div>
-
-                <div class="type-row">
-                  <div class="type-icon icon-amber">📋</div>
-                  <div class="type-info">
-                    <div class="type-name">วิชาบังคับ</div>
-                    <div class="type-desc">เป็นวิชาที่นักศึกษาทุกคนในหลักสูตรต้องลงทะเบียนเรียนและสอบผ่านตามเกณฑ์ที่กำหนด จึงจะสามารถสำเร็จการศึกษาได้</div>
-                  </div>
-                </div>
-
-                <div class="type-row">
-                  <div class="type-icon icon-purple">🔓</div>
-                  <div class="type-info">
-                    <div class="type-name">วิชาเลือก</div>
-                    <div class="type-desc">รายวิชาที่หลักสูตรเปิดโอกาสให้ผู้เรียนได้เลือกเรียนตามความสนใจ ความถนัด หรือเพื่อขยายความรู้เพิ่มเติมตามวิชาบังคับ โดยเลือกเรียนวิชาเองของสาขา</div>
-                  </div>
-                </div>
-
-                <div class="type-row">
-                  <div class="type-icon icon-rose">⚡</div>
-                  <div class="type-info">
-                    <div class="type-name">วิชาโก</div>
-                    <div class="type-desc">ให้เลือกจากรายวิชาในกลุ่มวิชาใดวิชาหนึ่ง จำนวน 15 หน่วยกิต ที่เปิดสอนโดยสาขาวิชาบริหารธุรกิจสาขาวิชาการบัญชี</div>
-                  </div>
-                </div>
-
-              </div>
+        <div class="acc-body"><div class="acc-body-inner"><div class="acc-content">
+          <div class="type-list">
+            <div class="type-row">
+              <div class="type-icon icon-blue"><i class="fa-solid fa-book"></i></div>
+              <div><div class="type-name">วิชาแกน</div><div class="type-desc">รายวิชาพื้นฐานสำคัญที่นักศึกษาทุกสาขาต้องเรียน เพื่อสร้างความรู้และทักษะร่วมกัน</div></div>
+            </div>
+            <div class="type-row">
+              <div class="type-icon icon-green"><i class="fa-solid fa-graduation-cap"></i></div>
+              <div><div class="type-name">วิชาพื้น</div><div class="type-desc">ประกอบด้วย 3 วิชาดังนี้</div></div>
+            </div>
+            <div class="type-row">
+              <div class="type-icon icon-amber"><i class="fa-solid fa-clipboard-list"></i></div>
+              <div><div class="type-name">วิชาบังคับ</div><div class="type-desc">วิชาที่นักศึกษาทุกคนต้องลงทะเบียนและสอบผ่านตามเกณฑ์ที่กำหนดจึงจะสำเร็จการศึกษาได้</div></div>
+            </div>
+            <div class="type-row">
+              <div class="type-icon icon-purple"><i class="fa-solid fa-unlock"></i></div>
+              <div><div class="type-name">วิชาเลือก</div><div class="type-desc">รายวิชาที่หลักสูตรเปิดโอกาสให้ผู้เรียนได้เลือกเรียนตามความสนใจและความถนัด</div></div>
+            </div>
+            <div class="type-row">
+              <div class="type-icon icon-rose"><i class="fa-solid fa-bolt"></i></div>
+              <div><div class="type-name">วิชาโท</div><div class="type-desc">ให้เลือกจากรายวิชาในกลุ่มวิชาใดวิชาหนึ่ง จำนวน 15 หน่วยกิต ที่เปิดสอนโดยสาขาวิชาบริหารธุรกิจ</div></div>
             </div>
           </div>
-        </div>
+        </div></div></div>
       </div>
-
-    </div><!-- /acc-grid -->
+    </div>
   </div>
 </section>
 
 <script>
-  /* ══════════════════════════════════════════
-     CONFIG
-  ══════════════════════════════════════════ */
-  const API_BASE = 'https://websitefms.onrender.com/api';
-
-  // courseId can be passed via ?courseId=1 — default to 1
-  const params   = new URLSearchParams(window.location.search);
+  const API_BASE  = 'https://websitefms.onrender.com/api';
+  const params    = new URLSearchParams(window.location.search);
   const COURSE_ID = params.get('courseId') || '1';
+  const PLAN_API_URL = `${API_BASE}/courses/${COURSE_ID}/plans`;
+  const BASE_URL = "https://websitefms.onrender.com";
 
-  /* ══════════════════════════════════════════
-     PILL PALETTE — cycles if more than defined
-  ══════════════════════════════════════════ */
-  const PALETTE = [
-    { c:'#7C3AED', bg:'#F5F3FF', bd:'#DDD6FE' },
-    { c:'#BE185D', bg:'#FDF2F8', bd:'#FBCFE8' },
-    { c:'#065F46', bg:'#ECFDF5', bd:'#A7F3D0' },
-    { c:'#92400E', bg:'#FFFBEB', bd:'#FDE68A' },
-    { c:'#1E40AF', bg:'#EFF6FF', bd:'#BFDBFE' },
-    { c:'#991B1B', bg:'#FFF5F5', bd:'#FECACA' },
-    { c:'#0F766E', bg:'#F0FDFA', bd:'#99F6E4' },
-    { c:'#6D28D9', bg:'#F5F3FF', bd:'#C4B5FD' },
-  ];
+  /* ── Dropdown ── */
+  function togglePlanDropdown() {
+    document.getElementById('planDropdown').classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    const dd = document.getElementById('planDropdown');
+    if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+  });
 
-  /* emoji fallback bank — use hero_image emoji field or rotate from list */
-  const EMOJIS = ['💰','📣','👥','🚚','🖥','🎪','📊','🔬','🌐','📐'];
-
-  /* ══════════════════════════════════════════
-     FETCH MAJORS
-  ══════════════════════════════════════════ */
-  async function loadMajors() {
-    const row = document.getElementById('major-row');
+  async function buildPlanDropdown() {
+    const menu = document.getElementById('planDropdownMenu');
     try {
-      const res  = await fetch(`${API_BASE}/courses/${COURSE_ID}/majors`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const majors = Array.isArray(data) ? data : (data.data || []);
-
-      if (!majors.length) {
-        row.innerHTML = '<span class="pill-error">ยังไม่มีสาขาวิชา</span>';
+      const res = await fetch(`${API_BASE}/courses`);
+      if (!res.ok) throw new Error();
+      const courses = await res.json();
+      if (!courses || courses.length === 0) {
+        menu.innerHTML = `<div style="padding:12px 16px;font-size:12px;color:#aaa;">ไม่พบข้อมูลหลักสูตร</div>`;
         return;
       }
-
-      row.innerHTML = majors.map((m, i) => {
-        const pal   = PALETTE[i % PALETTE.length];
-        const emoji = EMOJIS[i % EMOJIS.length];
-        // display name: prefer name_en short abbrev, else first word of name_th
-        const label = m.name_en
-          ? m.name_en.replace(/\s+\S+/g, '').substring(0, 6)   // first "word" up to 6 chars
-          : (m.name_th || '').split(' ')[0].substring(0, 4);
-        return `<span
-          class="major-pill"
-          style="color:${pal.c};background:${pal.bg};border-color:${pal.bd};"
-          title="${m.name_th || m.name_en || ''}"
-          onclick="scrollToMajor(${m.id})"
-        ><span class="pill-emoji">${emoji}</span>${label}</span>`;
-      }).join('');
-
-    } catch (err) {
-      console.warn('loadMajors error:', err);
-      row.innerHTML = '<span class="pill-error">⚠ ไม่สามารถโหลดข้อมูลสาขาวิชาได้</span>';
+      menu.innerHTML = courses.map(c =>
+        `<a class="dropdown-item" href="plans.html?courseId=${c.id}">${c.name_th || 'หลักสูตร ' + c.id}</a>`
+      ).join('');
+    } catch {
+      menu.innerHTML = `<a class="dropdown-item" href="plans.html">ดูแผนการศึกษา</a>`;
     }
   }
 
-  function scrollToMajor(id) {
-    // placeholder: could scroll to a major section or navigate to major detail page
-    const el = document.getElementById('major-' + id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  /* ── MAJOR THEMES ── */
+  const MAJOR_THEMES = {
+    FIN:  { cls: 'fin',  icon: '<i class="fa-solid fa-coins"></i>',            emoji: '💰' },
+    MKT:  { cls: 'mkt',  icon: '<i class="fa-solid fa-bullhorn"></i>',         emoji: '📣' },
+    HRM:  { cls: 'hrm',  icon: '<i class="fa-solid fa-users-gear"></i>',       emoji: '👥' },
+    LSM:  { cls: 'lsm',  icon: '<i class="fa-solid fa-truck-fast"></i>',       emoji: '🚚' },
+    BIS:  { cls: 'bis',  icon: '<i class="fa-solid fa-laptop-code"></i>',      emoji: '🖥' },
+    MICE: { cls: 'mice', icon: '<i class="fa-solid fa-microphone-lines"></i>', emoji: '🎪' },
+  };
+
+  function guessMajorKey(m) {
+    if (m?.code) {
+      const up = String(m.code).toUpperCase().trim();
+      if (MAJOR_THEMES[up]) return up;
+    }
+    const text = [m?.name_en, m?.name_th].filter(Boolean).join(' ').toLowerCase();
+    const rules = [
+      { key:'FIN',  kws:['finance','financial','การเงิน'] },
+      { key:'MKT',  kws:['marketing','การตลาด'] },
+      { key:'HRM',  kws:['human resource','hrm','ทรัพยากรมนุษย์'] },
+      { key:'LSM',  kws:['logistics','supply chain','โลจิสติกส์'] },
+      { key:'BIS',  kws:['business information','bis','สารสนเทศ'] },
+      { key:'MICE', kws:['mice','event','exhibition','ประชุม'] },
+    ];
+    for (const r of rules) if (r.kws.some(k => text.includes(k))) return r.key;
+    return null;
   }
 
-  /* ══════════════════════════════════════════
-     ACCORDION
-  ══════════════════════════════════════════ */
+  function renderMajorItem(m, idx) {
+    const key = guessMajorKey(m);
+    const theme = key ? MAJOR_THEMES[key] : Object.values(MAJOR_THEMES)[idx % 6];
+    const visual = theme?.icon || '';
+    const label = key || (m.code ? String(m.code).toUpperCase() : 'MAJOR');
+    return `
+      <a class="major-item" title="${m.name_th || m.name_en || ''}" href="bachelor-portal.html?majorId=${m.id}&courseId=${m.course_id || COURSE_ID}">
+        <div class="major-symbol ${theme?.cls || ''}">
+          ${visual}&nbsp;<span>${label}</span>
+        </div>
+      </a>`;
+  }
+
+  async function loadMajors() {
+    const bar = document.getElementById('major-bar');
+    try {
+      const res = await fetch(`${API_BASE}/courses/${COURSE_ID}/majors`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const majors = Array.isArray(data) ? data : (data.data || []);
+      if (!majors.length) {
+        bar.innerHTML = `<div class="major-empty">ยังไม่มีสาขาวิชาสำหรับหลักสูตรนี้</div>`;
+        return;
+      }
+      bar.innerHTML = majors.map((m, i) => renderMajorItem(m, i)).join('');
+    } catch {
+      bar.innerHTML = `<div class="major-error">⚠ ไม่สามารถโหลดข้อมูลสาขาวิชาได้</div>`;
+    }
+  }
+
+  const firstOf = (obj, keys, fallback = '') =>
+    keys.reduce((acc, k) => (acc !== undefined && acc !== null) ? acc : obj?.[k], undefined) ?? fallback;
+
+  function renderPlanCard(plan) {
+    const year  = firstOf(plan, ['year', 'year_no', 'order', 'id'], '');
+    const badge = firstOf(plan, ['year_label', 'label'], year ? `YEAR ${year}` : 'YEAR');
+    const title = firstOf(plan, ['title_th', 'title', 'name_th', 'name'], '');
+    const items = firstOf(plan, ['items', 'bullets', 'details', 'points'], []);
+    const safeItems = Array.isArray(items) ? items : [];
+    const li = safeItems.map(t =>
+      `<li><i class="fa-solid fa-circle-check"></i><span>${t}</span></li>`
+    ).join('');
+    return `
+      <div class="plan-card">
+        <span class="year-badge">${badge}</span>
+        <h4>${title}</h4>
+        <ul class="plan-list">${li}</ul>
+      </div>`;
+  }
+
+  async function loadPlan() {
+    const grid = document.getElementById('plan-grid');
+    try {
+      const res = await fetch(PLAN_API_URL);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      let plans = Array.isArray(data) ? data : (data.data || []);
+      plans = plans
+        .sort((a,b) => (firstOf(a,['year','order','id'],0)) - (firstOf(b,['year','order','id'],0)))
+        .slice(0, 4);
+      if (!plans.length) {
+        grid.innerHTML = `<div class="plan-empty">ยังไม่มีข้อมูลแผนการศึกษา</div>`;
+        return;
+      }
+      grid.innerHTML = plans.map(p => renderPlanCard(p)).join('');
+    } catch {
+      grid.innerHTML = `<div class="plan-error">⚠ ไม่สามารถโหลดข้อมูลแผนการศึกษาได้</div>`;
+    }
+  }
+
   function toggle(id) {
-    const el     = document.getElementById(id);
+    const el = document.getElementById(id);
     const isOpen = el.classList.contains('open');
     document.querySelectorAll('.acc').forEach(a => a.classList.remove('open'));
     if (!isOpen) el.classList.add('open');
   }
 
-  /* ── INIT ── */
+  buildPlanDropdown();
   loadMajors();
+  loadPlan();
 </script>
 </body>
 </html>

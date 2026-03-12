@@ -16,10 +16,44 @@
     .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; }
     .navbar .logo img { height: 40px; }
     .navbar .logo-text { font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 18px; color: var(--purple); }
-    .navbar ul { display: flex; gap: 22px; list-style: none; }
+    .navbar ul { display: flex; gap: 22px; list-style: none; align-items: center; }
     .navbar a { font-size: 14px; color: #555; text-decoration: none; transition: color .2s; }
     .navbar a:hover, .navbar a.active { color: var(--purple); font-weight: 600; }
     .nav-right { display: flex; align-items: center; gap: 15px; color: #666; cursor: pointer; }
+
+    /* ── Dropdown ── */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle {
+      font-size: 14px; color: #555; background: none; border: none;
+      cursor: pointer; font-family: inherit; padding: 0;
+      display: flex; align-items: center; gap: 4px; transition: color 0.2s;
+    }
+    .nav-dropdown-toggle:hover,
+    .nav-dropdown.open .nav-dropdown-toggle { color: var(--purple); }
+    .nav-dropdown-toggle .chevron { font-style: normal; font-size: 10px; transition: transform 0.18s; display: inline-block; }
+    .nav-dropdown.open .nav-dropdown-toggle .chevron { transform: rotate(180deg); }
+    .nav-dropdown-menu {
+      display: none; position: absolute; top: calc(100% + 10px); left: 0;
+      background: #fff; border: 1px solid #eee; border-radius: 10px;
+      min-width: 210px; box-shadow: 0 8px 24px rgba(124,58,237,0.13);
+      overflow: hidden; z-index: 999;
+      animation: dropIn 0.15s ease;
+    }
+    @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+    .nav-dropdown.open .nav-dropdown-menu { display: block; }
+    .dropdown-item {
+      display: block; width: 100%; padding: 11px 16px;
+      font-size: 13px; color: #444; background: none; border: none;
+      border-bottom: 1px solid #f5f5f5; text-align: left;
+      cursor: pointer; font-family: inherit; text-decoration: none;
+      transition: all 0.12s;
+    }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item:hover { background: #f5f0ff; color: var(--purple); padding-left: 20px; }
+    .dropdown-item.active { color: var(--purple); font-weight: 700; background: #f5f0ff; }
+    .dropdown-loading { padding: 12px 16px; font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 8px; }
+    .spinner-sm { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #e9d5ff; border-top-color: var(--purple); animation: spin .7s linear infinite; flex-shrink: 0; }
+
     .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 420px; align-items: center; padding: 52px 6%; gap: 48px; background: #f9f8ff; }
     .hero-left { display: flex; flex-direction: column; justify-content: center; }
     .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--purple-light); color: var(--purple); font-size: 11px; font-weight: 700; letter-spacing: 0.8px; padding: 4px 14px; border-radius: 99px; margin-bottom: 20px; width: fit-content; text-transform: uppercase; }
@@ -105,10 +139,23 @@
   <nav>
     <ul>
       <li><a href="bba-home.html">หน้าหลัก</a></li>
-      <li><a href="bba-public.html" class="active"></a>ข้อมูลทั่วไป</a></li>
+      <li><a href="bba-public.html" class="active">ข้อมูลทั่วไป</a></li>
       <li><a href="student.html">นักศึกษา</a></li>
-      <li><a href="plans.html">แผนการศึกษา</a></li>
-      <li><a href="#">QA</a></li>
+      <li>
+        <!-- Dropdown แผนการศึกษา — สร้างจาก API พร้อม courseId ที่ถูกต้อง -->
+        <div class="nav-dropdown" id="planDropdown">
+          <button class="nav-dropdown-toggle" onclick="togglePlanDropdown()">
+            แผนการศึกษา <i class="chevron">▾</i>
+          </button>
+          <div class="nav-dropdown-menu" id="planDropdownMenu">
+            <div class="dropdown-loading">
+              <div class="spinner-sm"></div>
+              <span>กำลังโหลด...</span>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li><a href="bba-qa.html">QA</a></li>
     </ul>
   </nav>
   <div class="nav-right">
@@ -159,41 +206,15 @@
     document.getElementById("logoText").style.display = "inline";
   };
 
-  // ══════════════════════════════════════════════════════
-  //  ตั้งค่า Cloudinary — แก้ CLOUD_NAME ให้ตรงกับของคุณ
-  // ══════════════════════════════════════════════════════
   const CLOUDINARY_CLOUD_NAME = "your_cloud_name"; // ← เปลี่ยนตรงนี้
   const CL_BASE = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
-  /**
-   * แปลงค่า image path จาก API ให้เป็น URL ที่ใช้งานได้
-   *
-   * รองรับ 4 รูปแบบ:
-   *  1. URL เต็ม (https://...)            → ใช้ตรง
-   *  2. Cloudinary secure_url (https://res.cloudinary.com/...) → ใช้ตรง
-   *  3. Cloudinary public_id (fms/course_1, courses/img) → ต่อกับ CL_BASE
-   *  4. Path สัมพัทธ์ (/uploads/img.jpg) → ต่อกับ BASE_URL
-   *
-   * @param {string|null} path   - ค่าจาก API เช่น hero_image, bg_image, image_url
-   * @param {object}      opts   - { w, h, crop } สำหรับ Cloudinary transform (optional)
-   */
   function imgUrl(path, opts = {}) {
     if (!path) return null;
-
-    // รูปแบบ 1 & 2 — URL เต็มอยู่แล้ว
-    if (path.startsWith("http://") || path.startsWith("https://")) {
-      return path;
-    }
-
-    // รูปแบบ 4 — path ขึ้นต้นด้วย /
-    if (path.startsWith("/")) {
-      return BASE_URL + path;
-    }
-
-    // รูปแบบ 3 — Cloudinary public_id
+    if (path.startsWith("http://") || path.startsWith("https://")) return path;
+    if (path.startsWith("/")) return BASE_URL + path;
     const { w = 800, h = 600, crop = "fill" } = opts;
-    const transform = `q_auto,f_auto,w_${w},h_${h},c_${crop}`;
-    return `${CL_BASE}/${transform}/${path}`;
+    return `${CL_BASE}/q_auto,f_auto,w_${w},h_${h},c_${crop}/${path}`;
   }
 
   const ICONS = [
@@ -225,18 +246,53 @@
     return ["", name];
   }
 
+  // ── Dropdown toggle ──
+  function togglePlanDropdown() {
+    document.getElementById('planDropdown').classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    const dd = document.getElementById('planDropdown');
+    if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+  });
+
+  // ── สร้าง dropdown จาก courses ทั้งหมด โดย highlight course ที่อยู่ในหน้านี้ ──
+  function buildPlanDropdown(courses, currentCourseId) {
+    const menu = document.getElementById('planDropdownMenu');
+    if (!courses || courses.length === 0) {
+      menu.innerHTML = `<div style="padding:12px 16px;font-size:12px;color:#aaa;">ไม่พบข้อมูลหลักสูตร</div>`;
+      return;
+    }
+    menu.innerHTML = courses.map(c =>
+      `<a class="dropdown-item${c.id === currentCourseId ? ' active' : ''}"
+          href="plans.html?courseId=${c.id}">
+        ${c.name_th || 'หลักสูตร ' + c.id}
+       </a>`
+    ).join('');
+  }
+
   async function init() {
     const params = new URLSearchParams(window.location.search);
     const courseId = params.get("courseId");
     if (!courseId) { renderError("ไม่พบ courseId ใน URL"); return; }
+
+    const currentCourseId = Number(courseId);
+
     try {
-      const [courseRes, majorsRes] = await Promise.all([
+      // โหลดพร้อมกัน 3 อย่าง: course ปัจจุบัน, สาขาวิชา, รายชื่อ courses ทั้งหมด
+      const [courseRes, majorsRes, allCoursesRes] = await Promise.all([
         fetch(`${API}/courses/${courseId}`),
-        fetch(`${API}/courses/${courseId}/majors`).catch(() => ({ ok: false }))
+        fetch(`${API}/courses/${courseId}/majors`).catch(() => ({ ok: false })),
+        fetch(`${API}/courses`).catch(() => ({ ok: false })),
       ]);
+
       if (!courseRes.ok) throw new Error("course not found");
       const course = await courseRes.json();
       const majors = majorsRes.ok ? (await majorsRes.json()) : [];
+      const allCourses = allCoursesRes.ok ? (await allCoursesRes.json()) : [];
+
+      // Dropdown: highlight ตาม courseId ที่กำลังดูอยู่
+      buildPlanDropdown(Array.isArray(allCourses) ? allCourses : [], currentCourseId);
+
       render(course, Array.isArray(majors) ? majors : []);
     } catch {
       renderError("ไม่สามารถโหลดข้อมูลหลักสูตรได้ กรุณาลองใหม่อีกครั้ง");
@@ -244,11 +300,9 @@
   }
 
   function render(c, majors) {
-    // hero image — ขนาด 560×420 (4:3)
     const heroSrc = imgUrl(c.hero_image, { w: 560, h: 420, crop: "fill" });
     const heroImgHTML = heroSrc
-      ? `<img src="${heroSrc}" alt="${c.name_th || ''}"
-             loading="lazy"
+      ? `<img src="${heroSrc}" alt="${c.name_th || ''}" loading="lazy"
              onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'no-img\\'><i class=\\'fa-solid fa-graduation-cap\\'></i></div>'">`
       : `<div class="no-img"><i class="fa-solid fa-graduation-cap"></i></div>`;
 
@@ -279,7 +333,6 @@
         ${s.sub ? `<div class="stat-sub">${s.sub}</div>` : ""}
       </div>`).join("");
 
-    // bg_image — ใช้ขนาดใหญ่สำหรับ cover section
     const bgSrc = imgUrl(c.bg_image, { w: 1400, h: 600, crop: "fill" });
     const bgStyle = bgSrc ? `style="background-image: url('${bgSrc}')"` : "";
     const bgClass = bgSrc ? "" : "no-bg";
@@ -287,7 +340,6 @@
     const majorsHTML = majors.length
       ? majors.map(m => {
           const icon = getIcon((m.name_th || "") + " " + (m.name_en || ""));
-          // major card image — ลอง field ต่างๆ ที่ API อาจส่งมา
           const rawSrc = m.hero_image || m.image_url || m.info_image || null;
           const mSrc = imgUrl(rawSrc, { w: 480, h: 320, crop: "fill" });
           const thumbHTML = mSrc

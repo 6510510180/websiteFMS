@@ -190,6 +190,7 @@ tbody tr:hover { background: #fdfbff; }
         <tr>
           <th>ชื่อหลักสูตร</th>
           <th>ระดับการศึกษา</th>
+          <th>ปีหลักสูตร</th>
           <th>สถานะ</th>
           <th>จัดการ</th>
         </tr>
@@ -237,6 +238,7 @@ function renderTable(courses) {
     <tr onclick="window.location.href='course-info.html?courseId=${c.id}'">
       <td><b>${c.name_th || "-"}</b></td>
       <td>${c.degree_level || "-"}</td>
+      <td>${c.student_range || "-"}</td>
       <td><span class="badge ${c.status}">${c.status || "-"}</span></td>
       <td onclick="event.stopPropagation()">
         <button class="action-btn" title="แก้ไข" onclick="window.location.href='add-course.html?courseId=${c.id}'">✏️</button>
