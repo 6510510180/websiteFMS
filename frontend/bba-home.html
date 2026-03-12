@@ -85,19 +85,6 @@
             <div class="left-column">
                 <h3 class="section-title">หลักสูตร</h3>
                 <div class="course-grid" id="courseGrid">
-                    <div class="course-card" data-static="true">
-                        <span class="badge-new">NEW</span>
-                        <div class="img-placeholder"><img src="p1.jpg" alt="p1" class="course-img"></div>
-                        <a href="info.html" class="course-link">
-                            <div class="course-label">หลักสูตรบริหารธุรกิจบัณฑิต<br>ปีหลักสูตร 2567</div>
-                        </a>
-                    </div>
-                    <div class="course-card" data-static="true">
-                        <div class="img-placeholder"><img src="p2.jpg" alt="p2" class="course-img"></div>
-                        <a href="bba-2563.html" class="course-link">
-                            <div class="course-label">หลักสูตรบริหารธุรกิจบัณฑิต<br>ปีหลักสูตร 2563</div>
-                        </a>
-                    </div>
                     <div class="course-card no-link" data-static="true">
                         <div class="img-placeholder"><img src="p3.jpg" alt="p3" class="course-img"></div>
                         <div class="course-label">การจัดการความเป็นผู้ประกอบการ<br>ปีหลักสูตร 2565</div>
@@ -249,7 +236,12 @@ async function appendNewCourses() {
 const navGeneral = document.getElementById("nav-general");
 if (navGeneral) navGeneral.href = `bba-public.html?courseId=${newestId}`;
 
-        courses.forEach(course => {
+       const sorted = [...courses].sort((a, b) => b.id - a.id);
+
+const staticCards = [...grid.querySelectorAll('[data-static="true"]')];
+staticCards.forEach(c => c.remove());
+
+sorted.forEach(course => {
             const isNew    = course.id === newestId;
             const isActive = course.status === "active";
 
@@ -291,6 +283,8 @@ if (navGeneral) navGeneral.href = `bba-public.html?courseId=${newestId}`;
 
             grid.appendChild(card);
         });
+        // นำ static cards กลับมาต่อท้าย
+        staticCards.forEach(c => grid.appendChild(c));
 
     } catch (err) {
         console.warn("appendNewCourses: API ไม่ตอบสนอง ใช้ข้อมูล static แทน", err);

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จัดการแผนการเรียน — FMS BBA</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #22263a;
+  --border: #2e3350;
+  --accent: #4f7fff;
+  --accent2: #7c5cfc;
+  --green: #34d399;
+  --yellow: #fbbf24;
+  --red: #f87171;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --font: 'Sarabun', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; min-height: 100vh; }
+
+/* HEADER */
+.header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; }
+.header-logo { font-size: 13px; font-family: var(--mono); color: var(--accent); letter-spacing: 0.5px; }
+.header h1 { font-size: 16px; font-weight: 600; flex: 1; }
+.badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 10px; font-size: 12px; font-family: var(--mono); color: var(--muted); }
+.badge.green { border-color: var(--green); color: var(--green); }
+.badge.yellow { border-color: var(--yellow); color: var(--yellow); }
+
+/* LAYOUT */
+.layout { display: grid; grid-template-columns: 280px 1fr; height: calc(100vh - 53px); }
+.sidebar { background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
+.main { overflow-y: auto; padding: 24px; }
+
+/* SIDEBAR SECTIONS */
+.sidebar-section { padding: 16px; border-bottom: 1px solid var(--border); }
+.sidebar-label { font-size: 11px; font-family: var(--mono); color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+.seed-btn { width: 100%; padding: 10px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-family: var(--font); font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity .2s; }
+.seed-btn:hover { opacity: 0.85; }
+.seed-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.export-btn { width: 100%; padding: 8px; background: transparent; color: var(--green); border: 1px solid var(--green); border-radius: 8px; cursor: pointer; font-family: var(--font); font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; transition: background .2s; }
+.export-btn:hover { background: rgba(52,211,153,.1); }
+.clear-btn { width: 100%; padding: 8px; background: transparent; color: var(--red); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-family: var(--font); font-size: 12px; margin-top: 6px; transition: border-color .2s; }
+.clear-btn:hover { border-color: var(--red); }
+
+/* SELECTS */
+.select-group { margin-bottom: 10px; }
+.select-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+select { width: 100%; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; font-family: var(--font); font-size: 13px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+select:focus { outline: none; border-color: var(--accent); }
+
+/* STAT PILLS */
+.stats { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.stat-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-family: var(--mono); }
+.stat-pill span { color: var(--accent); font-weight: 600; }
+
+/* MAIN CONTENT */
+.page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.page-title { font-size: 20px; font-weight: 700; }
+.add-btn { margin-left: auto; padding: 8px 18px; background: var(--accent); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-family: var(--font); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: opacity .2s; }
+.add-btn:hover { opacity: 0.85; }
+
+/* TERM BLOCK */
+.term-block { margin-bottom: 20px; }
+.term-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px 10px 0 0; cursor: pointer; user-select: none; }
+.term-header:hover { border-color: var(--accent); }
+.term-title { font-size: 14px; font-weight: 600; flex: 1; }
+.term-credits { font-size: 12px; font-family: var(--mono); color: var(--muted); }
+.chevron { color: var(--muted); transition: transform .2s; font-size: 12px; }
+.term-block.collapsed .chevron { transform: rotate(-90deg); }
+.term-body { border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
+.term-block.collapsed .term-body { display: none; }
+
+/* SUBJECT TABLE */
+.subj-table { width: 100%; border-collapse: collapse; }
+.subj-table th { background: var(--surface); padding: 8px 12px; text-align: left; font-size: 11px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+.subj-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+.subj-table tr:last-child td { border-bottom: none; }
+.subj-table tr:hover td { background: rgba(79,127,255,.04); }
+.code-cell { font-family: var(--mono); font-size: 12px; color: var(--accent); white-space: nowrap; }
+.credits-cell { font-family: var(--mono); text-align: center; }
+.hours-cell { color: var(--muted); font-size: 12px; }
+.plan-tag { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 10px; font-family: var(--mono); margin: 1px; }
+.plan-tag.normal { background: rgba(79,127,255,.15); color: var(--accent); border: 1px solid rgba(79,127,255,.3); }
+.plan-tag.coop { background: rgba(124,92,252,.15); color: var(--accent2); border: 1px solid rgba(124,92,252,.3); }
+
+/* ACTION BUTTONS */
+.action-cell { white-space: nowrap; }
+.btn-edit { background: transparent; border: 1px solid var(--border); color: var(--text); border-radius: 5px; padding: 3px 10px; cursor: pointer; font-size: 12px; font-family: var(--font); transition: border-color .15s; }
+.btn-edit:hover { border-color: var(--accent); color: var(--accent); }
+.btn-del { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 5px; padding: 3px 8px; cursor: pointer; font-size: 12px; margin-left: 4px; transition: border-color .15s, color .15s; }
+.btn-del:hover { border-color: var(--red); color: var(--red); }
+
+/* EMPTY STATE */
+.empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty h3 { font-size: 16px; margin-bottom: 6px; color: var(--text); }
+
+/* MODAL */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal-backdrop.hidden { display: none; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; }
+.modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 16px; font-weight: 700; }
+.modal-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; padding: 0 4px; }
+.modal-close:hover { color: var(--text); }
+.modal-body { padding: 20px 24px; }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* FORM */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.form-row.single { grid-template-columns: 1fr; }
+.field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+.field input, .field select { width: 100%; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-family: var(--font); font-size: 14px; }
+.field input:focus, .field select:focus { outline: none; border-color: var(--accent); }
+.field input::placeholder { color: var(--muted); }
+.btn-save { padding: 9px 24px; background: var(--accent); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-family: var(--font); font-size: 14px; font-weight: 600; }
+.btn-cancel { padding: 9px 18px; background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-family: var(--font); font-size: 14px; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; font-size: 13px; z-index: 999; display: flex; align-items: center; gap: 8px; transform: translateY(80px); opacity: 0; transition: all .3s; pointer-events: none; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { border-color: var(--green); }
+.toast.error { border-color: var(--red); }
+
+/* LOG */
+.log-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-family: var(--mono); font-size: 11px; color: var(--muted); max-height: 120px; overflow-y: auto; margin-top: 10px; line-height: 1.6; }
+.log-box .log-ok { color: var(--green); }
+.log-box .log-err { color: var(--red); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">FMS/BBA</div>
+  <h1>จัดการแผนการเรียน</h1>
+  <div id="storeBadge" class="badge">ยังไม่มีข้อมูล</div>
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">ข้อมูล</div>
+      <button class="seed-btn" onclick="runSeed()" id="seedBtn">
+        🌱 Seed ข้อมูลทั้งหมด
+      </button>
+      <button class="export-btn" onclick="exportJSON()">
+        📦 Export JSON
+      </button>
+      <button class="clear-btn" onclick="clearAll()">
+        🗑 ล้างข้อมูลทั้งหมด
+      </button>
+      <div id="logBox" class="log-box" style="display:none"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">เลือกแผนการเรียน</div>
+      <div class="select-group">
+        <label>หลักสูตร</label>
+        <select id="selCurriculum" onchange="onCurrChange()">
+          <option value="">-- เลือกหลักสูตร --</option>
+          <option value="2563">2563 (ปรับปรุง พ.ศ. 2563)</option>
+          <option value="2567">2567 (ปรับปรุง พ.ศ. 2567)</option>
+        </select>
+      </div>
+      <div class="select-group">
+        <label>สาขาวิชา</label>
+        <select id="selMajor" onchange="onMajorChange()" disabled>
+          <option value="">-- เลือกสาขา --</option>
+        </select>
+      </div>
+      <div class="select-group">
+        <label>ประเภทแผน</label>
+        <select id="selPlanType" onchange="renderPlan()" disabled>
+          <option value="normal">ปกติ (Normal)</option>
+          <option value="coop">สหกิจ (Co-op)</option>
+        </select>
+      </div>
+      <div id="planStats" class="stats"></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="mainArea">
+    <div class="empty">
+      <div class="empty-icon">📚</div>
+      <h3>เลือกแผนการเรียนเพื่อเริ่มต้น</h3>
+      <p style="font-size:13px;margin-top:6px">กด "Seed ข้อมูลทั้งหมด" แล้วเลือก หลักสูตร → สาขา → ประเภทแผน</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop hidden" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">เพิ่มรายวิชา</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="field">
+          <label>ชั้นปี</label>
+          <select id="fYear">
+            <option value="1">ปี 1</option>
+            <option value="2">ปี 2</option>
+            <option value="3">ปี 3</option>
+            <option value="4">ปี 4</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>ภาคเรียน</label>
+          <select id="fTerm">
+            <option value="1">ภาคเรียนที่ 1</option>
+            <option value="2">ภาคเรียนที่ 2</option>
+            <option value="summer">ภาคฤดูร้อน</option>
+            <option value="1,2">1 หรือ 2</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>รหัสวิชา</label>
+          <input type="text" id="fCode" placeholder="เช่น 460-101">
+        </div>
+        <div class="field">
+          <label>หน่วยกิต</label>
+          <input type="number" id="fCredits" min="0" max="10" value="3">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="field">
+          <label>ชื่อวิชา (ภาษาไทย)</label>
+          <input type="text" id="fName" placeholder="ชื่อรายวิชา">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>ชั่วโมง</label>
+          <input type="text" id="fHours" placeholder="เช่น 3((3)-0-6)">
+        </div>
+        <div class="field">
+          <label>ใช้กับแผน</label>
+          <select id="fPlan">
+            <option value="normal,coop">ทั้งคู่</option>
+            <option value="normal">ปกติเท่านั้น</option>
+            <option value="coop">สหกิจเท่านั้น</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn-save" onclick="saveSubject()">💾 บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+//  ALL_PLANS DATA
+// ─────────────────────────────────────────────
+const ALL_PLANS = {"BIS_2567_normal":[{"year":"1","term":"1","plan":"normal,coop","code":"460-101","name_th":"หลักการตลาด","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"460-102","name_th":"หลักการจัดการและจิตวิทยา","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"464-101","name_th":"การบัญชีการเงินเบื้องต้น","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"477-101","name_th":"หลักการพื้นฐานระบบสารสนเทศ","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"876-106","name_th":"เศรษฐศาสตร์สำหรับบริหารธุรกิจ","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 1 ภาษาและการสื่อสาร","credits":2,"hours":"2((x)-y-z)"},{"year":"1","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 6 จิตสาธารณะและการพัฒนาที่ยั่งยืน","credits":2,"hours":"2((x)-y-z)"},{"year":"1","term":"2","plan":"normal,coop","code":"460-103","name_th":"หลักการเงิน","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"2","plan":"normal,coop","code":"460-104","name_th":"การจัดการการผลิตและการดำเนินงาน","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"2","plan":"normal,coop","code":"460-105","name_th":"การจัดการทรัพยากรมนุษย์","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"2","plan":"normal,coop","code":"477-102","name_th":"ตรรกะของการใช้โปรแกรมและโครงสร้างข้อมูล","credits":3,"hours":"3((2)-2-5)"},{"year":"1","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 1 ภาษาและการสื่อสาร","credits":2,"hours":"2((x)-y-z)"},{"year":"1","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 2 การคิดเชิงตรรกะและตัวเลข","credits":2,"hours":"2((x)-y-z)"},{"year":"1","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 7 การปรับตัวให้เข้ากับพลวัตของโลก","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"1","plan":"normal,coop","code":"460-201","name_th":"ความคิดแบบเติบโตเพื่อทักษะการสื่อสารทางธุรกิจ","credits":2,"hours":"2((1)-2-3)"},{"year":"2","term":"1","plan":"normal,coop","code":"477-201","name_th":"การเขียนโปรแกรมเบื้องต้นทางธุรกิจ","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"1","plan":"normal,coop","code":"477-202","name_th":"เครือข่ายคอมพิวเตอร์และความมั่นคงทางไซเบอร์","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 3 การคิดแบบผู้ประกอบการ","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 4 การใช้เทคโนโลยีดิจิทัล","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"2","plan":"normal,coop","code":"460-202","name_th":"ธุรกิจอัจฉริยะและการวิเคราะห์ข้อมูลเชิงธุรกิจ","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"2","plan":"normal,coop","code":"477-203","name_th":"การจัดการฐานข้อมูล","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"2","plan":"normal,coop","code":"477-204","name_th":"เทคโนโลยีแพลตฟอร์มสําหรับคลาวด์","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 2 การคิดเชิงระบบ","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 5 สุขภาวะแบบองค์รวม","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"1,2","plan":"normal,coop","code":"xxx-xxx","name_th":"วิชาเลือกเสรี","credits":3,"hours":"3((x)-y-z)"},{"year":"3","term":"1","plan":"normal,coop","code":"460-301","name_th":"กฎหมายและจริยธรรมทางธุรกิจ","credits":3,"hours":"3((3)-0-6)"},{"year":"3","term":"1","plan":"normal,coop","code":"460-302","name_th":"สถิติสําหรับการวิจัยทางธุรกิจ","credits":3,"hours":"3((2)-2-5)"},{"year":"3","term":"1","plan":"normal,coop","code":"477-301","name_th":"การพัฒนาเว็บขั้นสมบูรณ์","credits":3,"hours":"3((2)-2-5)"},{"year":"3","term":"1","plan":"normal,coop","code":"477-302","name_th":"การวิเคราะห์และออกแบบระบบสารสนเทศทางธุรกิจ","credits":3,"hours":"3((2)-2-5)"},{"year":"3","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 8 รายวิชาเลือกในหมวดวิชาศึกษาทั่วไป","credits":2,"hours":"2((x)-y-z)"},{"year":"3","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 8 รายวิชาเลือกในหมวดวิชาศึกษาทั่วไป","credits":2,"hours":"2((x)-y-z)"},{"year":"3","term":"2","plan":"normal,coop","code":"460-303","name_th":"ชุดวิชาความเป็นผู้ประกอบการ นวัตกรรม และการเปลี่ยนผ่านสู่ดิจิทัล","credits":4,"hours":"4((3)-2-7)"},{"year":"3","term":"2","plan":"normal,coop","code":"464-301","name_th":"การภาษีอากร","credits":3,"hours":"3((3)-0-6)"},{"year":"3","term":"2","plan":"normal,coop","code":"477-303","name_th":"ระบบสารสนเทศเพื่อการจัดการ","credits":3,"hours":"3((2)-2-5)"},{"year":"3","term":"1,2","plan":"normal","code":"xxx-xxx","name_th":"วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"3","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"3","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"3","term":"summer","plan":"normal","code":"477-304","name_th":"การฝึกงานทางระบบสารสนเทศ","credits":1,"hours":"320 ชั่วโมง"},{"year":"4","term":"1","plan":"normal","code":"477-401","name_th":"สัมมนาระบบสารสนเทศทางธุรกิจ","credits":1,"hours":"1((1)-0-2)"},{"year":"4","term":"1","plan":"normal","code":"477-402","name_th":"โครงงานระบบสารสนเทศทางธุรกิจ 1","credits":2,"hours":"2((0)-6-0)"},{"year":"4","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 8 รายวิชาเลือกในหมวดวิชาศึกษาทั่วไป","credits":2,"hours":"2((x)-y-z)"},{"year":"4","term":"2","plan":"normal","code":"460-401","name_th":"การจัดการเชิงกลยุทธ์","credits":3,"hours":"3((2)-2-5)"},{"year":"4","term":"2","plan":"normal","code":"477-403","name_th":"โครงงานระบบสารสนเทศทางธุรกิจ 2","credits":3,"hours":"3((0)-9-0)"},{"year":"4","term":"1,2","plan":"normal","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"4","term":"1,2","plan":"normal","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"}],"BIS_2567_coop":[{"year":"1","term":"1","plan":"normal,coop","code":"460-101","name_th":"หลักการตลาด","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"460-102","name_th":"หลักการจัดการและจิตวิทยา","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"464-101","name_th":"การบัญชีการเงินเบื้องต้น","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"477-101","name_th":"หลักการพื้นฐานระบบสารสนเทศ","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"876-106","name_th":"เศรษฐศาสตร์สำหรับบริหารธุรกิจ","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 1 ภาษาและการสื่อสาร","credits":2,"hours":"2((x)-y-z)"},{"year":"1","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 6 จิตสาธารณะและการพัฒนาที่ยั่งยืน","credits":2,"hours":"2((x)-y-z)"},{"year":"1","term":"2","plan":"normal,coop","code":"460-103","name_th":"หลักการเงิน","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"2","plan":"normal,coop","code":"460-104","name_th":"การจัดการการผลิตและการดำเนินงาน","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"2","plan":"normal,coop","code":"460-105","name_th":"การจัดการทรัพยากรมนุษย์","credits":3,"hours":"3((3)-0-6)"},{"year":"1","term":"2","plan":"normal,coop","code":"477-102","name_th":"ตรรกะของการใช้โปรแกรมและโครงสร้างข้อมูล","credits":3,"hours":"3((2)-2-5)"},{"year":"1","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 1 ภาษาและการสื่อสาร","credits":2,"hours":"2((x)-y-z)"},{"year":"1","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 2 การคิดเชิงตรรกะและตัวเลข","credits":2,"hours":"2((x)-y-z)"},{"year":"1","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 7 การปรับตัวให้เข้ากับพลวัตของโลก","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"1","plan":"normal,coop","code":"460-201","name_th":"ความคิดแบบเติบโตเพื่อทักษะการสื่อสารทางธุรกิจ","credits":2,"hours":"2((1)-2-3)"},{"year":"2","term":"1","plan":"normal,coop","code":"477-201","name_th":"การเขียนโปรแกรมเบื้องต้นทางธุรกิจ","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"1","plan":"normal,coop","code":"477-202","name_th":"เครือข่ายคอมพิวเตอร์และความมั่นคงทางไซเบอร์","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 3 การคิดแบบผู้ประกอบการ","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 4 การใช้เทคโนโลยีดิจิทัล","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"2","plan":"normal,coop","code":"460-202","name_th":"ธุรกิจอัจฉริยะและการวิเคราะห์ข้อมูลเชิงธุรกิจ","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"2","plan":"normal,coop","code":"477-203","name_th":"การจัดการฐานข้อมูล","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"2","plan":"normal,coop","code":"477-204","name_th":"เทคโนโลยีแพลตฟอร์มสําหรับคลาวด์","credits":3,"hours":"3((2)-2-5)"},{"year":"2","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 2 การคิดเชิงระบบ","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 5 สุขภาวะแบบองค์รวม","credits":2,"hours":"2((x)-y-z)"},{"year":"2","term":"1,2","plan":"normal,coop","code":"xxx-xxx","name_th":"วิชาเลือกเสรี","credits":3,"hours":"3((x)-y-z)"},{"year":"3","term":"1","plan":"normal,coop","code":"460-301","name_th":"กฎหมายและจริยธรรมทางธุรกิจ","credits":3,"hours":"3((3)-0-6)"},{"year":"3","term":"1","plan":"normal,coop","code":"460-302","name_th":"สถิติสําหรับการวิจัยทางธุรกิจ","credits":3,"hours":"3((2)-2-5)"},{"year":"3","term":"1","plan":"normal,coop","code":"477-301","name_th":"การพัฒนาเว็บขั้นสมบูรณ์","credits":3,"hours":"3((2)-2-5)"},{"year":"3","term":"1","plan":"normal,coop","code":"477-302","name_th":"การวิเคราะห์และออกแบบระบบสารสนเทศทางธุรกิจ","credits":3,"hours":"3((2)-2-5)"},{"year":"3","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 8 รายวิชาเลือกในหมวดวิชาศึกษาทั่วไป","credits":2,"hours":"2((x)-y-z)"},{"year":"3","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 8 รายวิชาเลือกในหมวดวิชาศึกษาทั่วไป","credits":2,"hours":"2((x)-y-z)"},{"year":"3","term":"2","plan":"normal,coop","code":"460-303","name_th":"ชุดวิชาความเป็นผู้ประกอบการ นวัตกรรม และการเปลี่ยนผ่านสู่ดิจิทัล","credits":4,"hours":"4((3)-2-7)"},{"year":"3","term":"2","plan":"normal,coop","code":"464-301","name_th":"การภาษีอากร","credits":3,"hours":"3((3)-0-6)"},{"year":"3","term":"2","plan":"normal,coop","code":"477-303","name_th":"ระบบสารสนเทศเพื่อการจัดการ","credits":3,"hours":"3((2)-2-5)"},{"year":"3","term":"1","plan":"coop","code":"xxx-xxx","name_th":"วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"3","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"3","term":"2","plan":"normal,coop","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"3","term":"2","plan":"coop","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"3","term":"2","plan":"coop","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"4","term":"1","plan":"coop","code":"460-401","name_th":"การจัดการเชิงกลยุทธ์","credits":3,"hours":"3((2)-2-5)"},{"year":"4","term":"1","plan":"coop","code":"460-402","name_th":"เตรียมสหกิจ","credits":1,"hours":"30 ชั่วโมง"},{"year":"4","term":"1","plan":"coop","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"4","term":"1","plan":"coop","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"4","term":"1","plan":"coop","code":"xxx-xxx","name_th":"วิชาโท หรือ วิชาชีพเลือก","credits":3,"hours":"3((x)-y-z)"},{"year":"4","term":"1","plan":"normal,coop","code":"xxx-xxx","name_th":"GE 8 รายวิชาเลือกในหมวดวิชาศึกษาทั่วไป","credits":2,"hours":"2((x)-y-z)"},{"year":"4","term":"2","plan":"coop","code":"460-403","name_th":"สหกิจศึกษา","credits":6,"hours":"6((0)-36-0)"}]};
+
+// ─────────────────────────────────────────────
+//  CONSTANTS
+// ─────────────────────────────────────────────
+const MAJORS_2563 = [
+  {key:'FIN',label:'การเงินและการลงทุน (FIN)'},
+  {key:'HRM',label:'การจัดการทรัพยากรมนุษย์ (HRM)'},
+  {key:'LSM',label:'การจัดการโลจิสติกส์ (LSM)'},
+  {key:'MKT',label:'การตลาด (MKT)'},
+  {key:'MICE',label:'การจัดการไมซ์ (MICE)'},
+  {key:'BIS',label:'ระบบสารสนเทศทางธุรกิจ (BIS)'},
+];
+const MAJORS_2567 = [
+  {key:'FIN',label:'การเงินและการลงทุน (FIN)'},
+  {key:'HRM',label:'การจัดการทรัพยากรมนุษย์ (HRM)'},
+  {key:'LSM',label:'การจัดการโลจิสติกส์ (LSM)'},
+  {key:'MKT',label:'การตลาดและการสื่อสาร (MKT)'},
+  {key:'MICE',label:'การจัดการไมซ์ (MICE)'},
+  {key:'BIS',label:'ระบบสารสนเทศทางธุรกิจ (BIS)'},
+];
+const TERM_LABELS = {'1':'ภาคเรียนที่ 1','2':'ภาคเรียนที่ 2','summer':'ภาคฤดูร้อน','1,2':'ภาคเรียนที่ 1 หรือ 2'};
+
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+let DB = {}; // {planKey: [{...subjects}]}
+let editIdx = null; // {planKey, termKey, idx}
+const LS_KEY = 'fms_study_plans_v2';
+
+// ─────────────────────────────────────────────
+//  STORAGE
+// ─────────────────────────────────────────────
+function saveDB(){ try { localStorage.setItem(LS_KEY, JSON.stringify(DB)); updateBadge(); } catch(e){ showToast('❌ localStorage เต็ม',true); } }
+function loadDB(){ try { const d = localStorage.getItem(LS_KEY); if(d) DB = JSON.parse(d); updateBadge(); } catch(e){ DB={}; } }
+
+function updateBadge(){
+  const keys = Object.keys(DB);
+  const badge = document.getElementById('storeBadge');
+  if(keys.length===0){ badge.className='badge'; badge.textContent='ยังไม่มีข้อมูล'; }
+  else { badge.className='badge green'; badge.textContent=`${keys.length} แผน | ${Object.values(DB).reduce((s,v)=>s+v.length,0)} รายวิชา`; }
+}
+
+// ─────────────────────────────────────────────
+//  SEED
+// ─────────────────────────────────────────────
+function runSeed(){
+  const btn = document.getElementById('seedBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ กำลัง seed...';
+  const logBox = document.getElementById('logBox');
+  logBox.style.display = 'block';
+  logBox.innerHTML = '';
+
+  let count = 0;
+  const keys = Object.keys(ALL_PLANS);
+  for(const key of keys){
+    // Fix credits
+    const subjects = ALL_PLANS[key].map(s => {
+      let cr = Number(s.credits);
+      if(cr >= 30) cr = 1; // internship/สหกิจ
+      return {...s, credits: cr, _id: crypto.randomUUID()};
+    });
+    DB[key] = subjects;
+    count += subjects.length;
+    logBox.innerHTML += `<div class="log-ok">✓ ${key} (${subjects.length} วิชา)</div>`;
+  }
+  logBox.scrollTop = logBox.scrollHeight;
+
+  saveDB();
+  btn.disabled = false;
+  btn.textContent = '🌱 Seed ข้อมูลทั้งหมด';
+  showToast(`✅ Seed สำเร็จ ${keys.length} แผน / ${count} รายวิชา`);
+  renderPlan();
+}
+
+function clearAll(){
+  if(!confirm('ลบข้อมูลทั้งหมดใน localStorage?')) return;
+  DB = {};
+  localStorage.removeItem(LS_KEY);
+  updateBadge();
+  document.getElementById('mainArea').innerHTML = `<div class="empty"><div class="empty-icon">📭</div><h3>ล้างข้อมูลแล้ว</h3><p style="font-size:13px;margin-top:6px">กด Seed ข้อมูลทั้งหมด เพื่อเริ่มใหม่</p></div>`;
+  showToast('🗑 ล้างข้อมูลแล้ว');
+}
+
+// ─────────────────────────────────────────────
+//  SELECTORS
+// ─────────────────────────────────────────────
+function onCurrChange(){
+  const curr = document.getElementById('selCurriculum').value;
+  const maj = document.getElementById('selMajor');
+  const pt = document.getElementById('selPlanType');
+  maj.disabled = !curr;
+  pt.disabled = !curr;
+  maj.innerHTML = '<option value="">-- เลือกสาขา --</option>';
+  const list = curr==='2563' ? MAJORS_2563 : MAJORS_2567;
+  list.forEach(m => maj.innerHTML += `<option value="${m.key}">${m.label}</option>`);
+  renderPlan();
+}
+
+function onMajorChange(){ renderPlan(); }
+
+function currentPlanKey(){
+  const curr = document.getElementById('selCurriculum').value;
+  const maj = document.getElementById('selMajor').value;
+  const pt = document.getElementById('selPlanType').value;
+  if(!curr||!maj) return null;
+  return `${maj}_${curr}_${pt}`;
+}
+
+// ─────────────────────────────────────────────
+//  RENDER
+// ─────────────────────────────────────────────
+function renderPlan(){
+  const key = currentPlanKey();
+  const main = document.getElementById('mainArea');
+  const stats = document.getElementById('planStats');
+  stats.innerHTML='';
+
+  if(!key){ main.innerHTML=`<div class="empty"><div class="empty-icon">📚</div><h3>เลือกแผนการเรียน</h3></div>`; return; }
+
+  const subjects = DB[key];
+  if(!subjects){
+    main.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><h3>ยังไม่มีข้อมูลสำหรับ ${key}</h3><p style="font-size:13px;margin-top:6px">กด "Seed ข้อมูลทั้งหมด" ก่อนครับ</p></div>`;
+    return;
+  }
+
+  // Stats
+  const totalCredits = subjects.reduce((s,v)=>s+Number(v.credits),0);
+  const totalSubj = subjects.length;
+  stats.innerHTML=`<div class="stat-pill">วิชา <span>${totalSubj}</span></div><div class="stat-pill">หน่วยกิต <span>${totalCredits}</span></div>`;
+
+  // Group by year+term
+  const groups = {};
+  subjects.forEach((s,i) => {
+    const gk = `${s.year}__${s.term}`;
+    if(!groups[gk]) groups[gk] = [];
+    groups[gk].push({...s, _origIdx: i});
+  });
+
+  // Sort groups
+  const termOrder = {'1':1,'2':2,'summer':3,'1,2':4};
+  const sortedKeys = Object.keys(groups).sort((a,b) => {
+    const [ya,ta] = a.split('__');
+    const [yb,tb] = b.split('__');
+    const yDiff = Number(ya.split(',')[0]) - Number(yb.split(',')[0]);
+    if(yDiff!==0) return yDiff;
+    return (termOrder[ta]||5) - (termOrder[tb]||5);
+  });
+
+  let html = `<div class="page-header">
+    <div class="page-title">${key.replace(/_/g,' ')}</div>
+    <button class="add-btn" onclick="openAddModal()">＋ เพิ่มรายวิชา</button>
+  </div>`;
+
+  sortedKeys.forEach(gk => {
+    const [year, term] = gk.split('__');
+    const items = groups[gk];
+    const tc = items.reduce((s,v)=>s+Number(v.credits),0);
+    const termLabel = TERM_LABELS[term]||`ภาค ${term}`;
+    const blockId = 'blk_' + gk.replace(/[,]/g,'_');
+
+    html += `<div class="term-block" id="${blockId}">
+      <div class="term-header" onclick="toggleBlock('${blockId}')">
+        <div class="term-title">ปีที่ ${year} — ${termLabel}</div>
+        <div class="term-credits">${tc} หน่วยกิต</div>
+        <div class="chevron">▾</div>
+      </div>
+      <div class="term-body">
+        <table class="subj-table">
+          <thead><tr>
+            <th>รหัสวิชา</th>
+            <th>ชื่อวิชา</th>
+            <th>หน่วยกิต</th>
+            <th>ชั่วโมง</th>
+            <th>แผน</th>
+            <th></th>
+          </tr></thead>
+          <tbody>`;
+
+    items.forEach(s => {
+      const plans = (s.plan||'normal,coop').split(',').map(p=>p.trim()).filter(Boolean);
+      const planTags = plans.map(p=>`<span class="plan-tag ${p}">${p}</span>`).join('');
+      html += `<tr>
+        <td class="code-cell">${escH(s.code||'—')}</td>
+        <td>${escH(s.name_th||'—')}</td>
+        <td class="credits-cell">${s.credits}</td>
+        <td class="hours-cell">${escH(s.hours||'—')}</td>
+        <td>${planTags}</td>
+        <td class="action-cell">
+          <button class="btn-edit" onclick="openEditModal('${escH(key)}','${s._id}')">แก้ไข</button>
+          <button class="btn-del" onclick="deleteSubject('${escH(key)}','${s._id}')">✕</button>
+        </td>
+      </tr>`;
+    });
+
+    html += `</tbody></table></div></div>`;
+  });
+
+  main.innerHTML = html;
+}
+
+function toggleBlock(id){
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ─────────────────────────────────────────────
+//  MODAL
+// ─────────────────────────────────────────────
+function openAddModal(){
+  editIdx = null;
+  document.getElementById('modalTitle').textContent = 'เพิ่มรายวิชา';
+  document.getElementById('fYear').value = '1';
+  document.getElementById('fTerm').value = '1';
+  document.getElementById('fCode').value = '';
+  document.getElementById('fCredits').value = '3';
+  document.getElementById('fName').value = '';
+  document.getElementById('fHours').value = '';
+  document.getElementById('fPlan').value = 'normal,coop';
+  document.getElementById('modalBackdrop').classList.remove('hidden');
+}
+
+function openEditModal(planKey, subjectId){
+  const subjects = DB[planKey];
+  if(!subjects) return;
+  const idx = subjects.findIndex(s=>s._id===subjectId);
+  if(idx===-1) return;
+  const s = subjects[idx];
+  editIdx = {planKey, subjectId};
+
+  document.getElementById('modalTitle').textContent = 'แก้ไขรายวิชา';
+  document.getElementById('fYear').value = String(s.year).split(',')[0];
+  document.getElementById('fTerm').value = String(s.term);
+  document.getElementById('fCode').value = s.code||'';
+  document.getElementById('fCredits').value = s.credits||3;
+  document.getElementById('fName').value = s.name_th||'';
+  document.getElementById('fHours').value = s.hours||'';
+  document.getElementById('fPlan').value = s.plan||'normal,coop';
+  document.getElementById('modalBackdrop').classList.remove('hidden');
+}
+
+function closeModal(){
+  document.getElementById('modalBackdrop').classList.add('hidden');
+  editIdx = null;
+}
+
+function saveSubject(){
+  const key = currentPlanKey();
+  if(!key) return;
+  if(!DB[key]) DB[key] = [];
+
+  const subj = {
+    year: document.getElementById('fYear').value,
+    term: document.getElementById('fTerm').value,
+    code: document.getElementById('fCode').value.trim(),
+    credits: Number(document.getElementById('fCredits').value)||0,
+    name_th: document.getElementById('fName').value.trim(),
+    hours: document.getElementById('fHours').value.trim(),
+    plan: document.getElementById('fPlan').value,
+  };
+
+  if(!subj.name_th){ showToast('❌ กรุณากรอกชื่อวิชา',true); return; }
+
+  if(editIdx){
+    const idx = DB[editIdx.planKey].findIndex(s=>s._id===editIdx.subjectId);
+    if(idx!==-1){
+      subj._id = editIdx.subjectId;
+      DB[editIdx.planKey][idx] = subj;
+    }
+  } else {
+    subj._id = crypto.randomUUID();
+    DB[key].push(subj);
+  }
+
+  saveDB();
+  closeModal();
+  renderPlan();
+  showToast(editIdx ? '✅ แก้ไขแล้ว' : '✅ เพิ่มรายวิชาแล้ว');
+}
+
+function deleteSubject(planKey, subjectId){
+  if(!confirm('ลบรายวิชานี้?')) return;
+  const idx = DB[planKey].findIndex(s=>s._id===subjectId);
+  if(idx===-1) return;
+  DB[planKey].splice(idx,1);
+  saveDB();
+  renderPlan();
+  showToast('🗑 ลบแล้ว');
+}
+
+// ─────────────────────────────────────────────
+//  EXPORT
+// ─────────────────────────────────────────────
+function exportJSON(){
+  const key = currentPlanKey();
+  let data, filename;
+  if(key && DB[key]){
+    data = {[key]: DB[key]};
+    filename = `study-plan-${key}.json`;
+  } else {
+    data = DB;
+    filename = 'study-plans-all.json';
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  showToast('📦 Export แล้ว: ' + filename);
+}
+
+// ─────────────────────────────────────────────
+//  TOAST
+// ─────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, isErr=false){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr?' error':' success');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+loadDB();
+
+// Close modal on backdrop click
+document.getElementById('modalBackdrop').addEventListener('click', function(e){
+  if(e.target===this) closeModal();
+});
+</script>
+</body>
+</html>

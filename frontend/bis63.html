@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>หลักสูตรบริหารธุรกิจบัณฑิต</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700;800&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fdfdfd;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .purple-text {
+            color: #9b51e0 !important;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            flex: 1; 
+            display: flex;
+            justify-content: flex-start;
+        }
+      
+        .navbar .logo img {
+            height: 40px;
+
+        }
+
+        nav {
+            flex: 1;          
+            display: flex;
+            justify-content: center; 
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            text-decoration: none;
+            color: #444;
+            white-space: nowrap;
+        }
+
+        .nav-links a.active {
+            color: #7b2cbf; /* สีม่วงตามตัวอย่าง */
+        }
+
+        .search-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: flex-end;
+            margin-left: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f0f2f5;
+            padding: 8px 15px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            margin-left: 10px;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .search-box i {
+            color: #888;
+        }
+
+        .nav-placeholder { height: 80px; }
+
+        .course-hero { 
+            padding: 60px 0 20px 0; 
+        }
+        
+        .title-group h2 { 
+            margin: 0; 
+            font-size: 40px; 
+            font-weight: 800; 
+        }
+ 
+        .course-hero {
+            display: flex;
+            justify-content: space-between; 
+            align-items: flex-end; 
+            padding: 60px 0 30px 0;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            padding: 10px 15px;
+        }
+   
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 15px;
+            color: #999;
+            font-weight: bold;
+        }
+
+        .filter-group select {
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            min-width: 140px;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin: 25px 0;
+            border: 1px solid #f0f0f0;
+        }
+
+        .stat-info { /* --- ฝั่งซ้าย (ไอคอน + ข้อความ) --- */
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            background: #8e44ad;
+            color: #fff;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-label {
+            font-weight: bold;
+            color: #8e44ad;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .stat-desc {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .stat-count { /* --- ฝั่งขวา (ตัวเลขสรุป) --- */
+            display: flex;
+            align-items: center;
+        }
+
+        .count-item {
+            display: flex;
+            align-items: baseline;
+            gap: 15px;
+        }
+        
+        .item-title {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .total-display { /* ส่วนแสดงผลตัวเลขและหน่วยนับ */
+            display: flex;
+            align-items: baseline; /* ทำให้ฐานตัวอักษรตรงกันเป๊ะ */
+            gap: 8px;
+            color: #8e44ad; 
+        }
+
+        #totalCredits, #totalCourses { /* เน้นตัวเลขให้ใหญ่และหนาเป็นพิเศษ */
+            font-size: 32px; 
+            font-weight: 800; 
+            line-height: 1;
+        }
+
+        .total-display span:last-child { /* หน่วยนับ (หน่วยกิต / รายวิชา) */
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .divider { /* เส้นคั่นกลาง */
+            width: 1px;
+            height: 35px;
+            background: #f1f5f9;
+            margin: 0 20px;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px 0;
+        }
+
+        .course-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #9b51e0;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: #f9f5ff;
+            padding: 5px 12px;
+            border-radius: 8px;
+        }
+  
+        .course-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px; 
+            font-weight: 800;
+        }
+
+        .course-card p {
+            font-size: 13px;
+            color: #777;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Credit Note */
+        .credit-note {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 40px 0 80px 0;
+            border: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #555;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+        }
+        .credit-note strong { color: #9b51e0; display: block; margin-bottom: 10px; font-size: 16px; }
+
+        /* No Content Message */
+        #noCourseMsg {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 0;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo"><img src="logo.jpg" alt="PSU Logo"></div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html">หน้าหลัก</a></li>
+            <li><a href="info.html">ข้อมูลทั่วไป</a></li>
+            <li><a href="student.html">นักศึกษา</a></li>
+            <li><a href="plan.html" class="active">แผนการศึกษา</a></li>
+            <li><a href="qa.html">QA</a></li>
+        </ul>
+    </nav>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i> <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร">
+        </div>
+    </div>
+</header>
+
+    <main class="container">
+        <section class="course-hero">
+            <div class="title-group">
+                <h2>วิชาเอกระบบสารสนเทศทางธุรกิจ<br>Study Plan</h2>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>แผนการเรียน</label>
+                    <select id="planFilter">
+                        <option value="normal">แผนปกติ</option>
+                        <option value="coop">แผนสหกิจศึกษา</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>ชั้นปีการศึกษา</label>
+                    <select id="yearFilter">
+                        <option value="1">ปี 1</option>
+                        <option value="2">ปี 2</option>
+                        <option value="3">ปี 3</option>
+                        <option value="4">ปี 4</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>ภาคเรียน</label>
+                    <select id="termFilter">
+                        <option value="1">ภาคเรียนที่ 1</option>
+                        <option value="2">ภาคเรียนที่ 2</option>
+                        <option value="summer">ภาคฤดูร้อน</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+    <div class="stat-card">
+        <div class="stat-info">
+            <div class="stat-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <div class="stat-text">
+                <div class="stat-label">สรุปหน่วยกิตรวมภาคการศึกษา</div>
+                <div class="stat-desc">ตรวจสอบความถูกต้องของจำนวนวิชาและหน่วยกิต</div>
+            </div>
+        </div>
+    <div class="stat-count">
+        <div class="count-item">
+            <span class="item-title">หน่วยกิตรวม</span> 
+            <div class="item-value">
+                <span class="total-display"><span id="totalCredits">0</span> <span>หน่วยกิต</span></span>
+            </div>
+        </div>
+    <div class="divider"></div>
+        <div class="count-item">
+            <span class="item-title">วิชาทั้งหมด</span>
+            <div class="item-value">
+                <span class="total-display"><span id="totalCourses">0</span> <span>รายวิชา</span></span>
+            </div>
+        </div>
+    </div>
+    </div>
+   
+        <div class="course-grid" id="courseContainer">
+
+          
+
+            <div class="course-card" data-year="1" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>460-101</span><span><i class="fa-solid fa-clock"></i>3((3)-0-6)</span></div>
+                <h4>หลักการตลาด</h4>
+                <p>ความหมายและขอบเขตของการตลาด แนวคิดและกระบวนการทางการตลาด พฤติกรรมผู้บริโภค</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>464-101</span><span><i class="fa-solid fa-clock"></i>3((3)-0-6)</span></div>
+                <h4>การบัญชีการเงินเบื้องต้น</h4>
+                <p>ความหมายและวัตถุประสงค์ของการบัญชี ประโยชน์ของข้อมูลทางการบัญชี หลักการและวิธีการบันทึกตามหลักกการบัญชีคู่</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>477-101</span><span><i class="fa-solid fa-clock"></i>3((3)-0-6)</span></div>
+                <h4>หลักการพื้นฐานระบบสารสนเทศ</h4>
+                <p>แนวความคิดพื้นฐานเกี่ยวกับระบบสารสนเทศและเทคโนโลยีสารสนเทศ โครงสร้างและองค์ประกอบของระบบสารสนเทศ</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>876-102</span><span><i class="fa-solid fa-clock"></i>3((3)-0-6)</span></div>
+                <h4>หลักเศรษฐศาสตร์พื้นฐานและการประยุกต์</h4>
+                <p>แนวคิดพื้นฐานจุลภาค: อุปสงค์อุปทาน ความยืดหยุ่น ภาครัฐ ต้นทุน โครงสร้างตลาด</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>950-102</span><span><i class="fa-solid fa-clock"></i>3((3)-0-6)</span></div>
+                <h4>ชีวิตที่ดี</h4>
+                <p>ความหลากหลายทางวัฒนธรรม ความสุขของชีวิต การยอมรับความแตกต่าง การทำงานเป็นทีม</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>1((1)-0-2)</span></div>
+                <h4>เลือกสุนทรียศาสตร์และกีฬา</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+
+
+            <div class="course-card" data-year="1" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>322-100</span><span><i class="fa-solid fa-clock"></i>2((2)-0-4)</span></div>
+                <h4>คำนวณศิลป์</h4>
+                <p>คณิตศาสตร์รอบตัว ตัวแบบทางคณิตศาสตร์เพื่อการดำเนินชีวิต อัตราดอกเบี้ยและค่ารายปี</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>460-102</span><span><i class="fa-solid fa-clock"></i>3((3)-0-6)</span></div>
+                <h4>การจัดการทรัพยากรมนุษย์</h4>
+                <p>ภาพรวมการจัดการทรัพยากรมนุษย์ การจัดสายงาน การวางแผนกําลังคน การสรรหา การคัดเลือก การฝึกอบรมพนักงาน</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>460-103</span><span><i class="fa-solid fa-clock"></i>3((3)-0-6)</span></div>
+                <h4>หลักการเงิน</h4>
+                <p>เป้าหมายและหน้าที่ทางการเงิน การวิเคราะห์งบการเงิน การวางแผนและพยากรณ์ทางการเงิน การบริหารเงินทุนหมุนเวียน</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>460-104</span><span><i class="fa-solid fa-clock"></i>3((3)-0-6)</span></div>
+                <h4>การจัดการการผลิตและการดำเนินงาน</h4>
+                <p>บทบาทและหน้าที่ของการจัดการการผลิตและการดําเนินงานในองค์การธุรกิจ การออกแบบ ผลิตภัณฑ์และบริการ</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>477-102</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>ตรรกะของการใช้โปรแกรมและโครงสร้างข้อมูล</h4>
+                <p>ความรู้เบื้องต้นเกี่ยวกับคอมพิวเตอร์และการเขียนโปรแกรม หลักของขั้นตอนวิธี ผังงานโปรแกรม รหัสเทียม โมดูล</p>
+            </div>
+            <div class="course-card" data-year="1" data-term="1,2" data-plan="normal,coop">
+                <div class="course-meta"><span>890-xxx</span><span><i class="fa-solid fa-clock"></i>2((2)-0-4)</span></div>
+                <h4>บังคับกลุ่มสาระภาษาและการสื่อสาร*</h4>
+                <p>เป็นไปตามประกาศมหาวิทยาลัย เรื่อง เกณฑ์การเรียนรายวิชาศึกษาทั่วไปสาระบังคับเรียน</p>
+            </div>          
+            <div class="course-card" data-year="1" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>895-001</span><span><i class="fa-solid fa-clock"></i>2((2)-0-4)</span></div>
+                <h4>พลเมืองที่ดี</h4>
+                <p>บทบาท หน้าที่ และความรับผิดชอบของพลเมือง การจัดระเบียบสังคม การอยู่ร่วมกันในสังคมพหุวัฒนธรรม</p>
+            </div>
+          
+
+            <div class="course-card" data-year="2" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>001-102</span><span><i class="fa-solid fa-clock"></i>2((2)-0-4)</span></div>
+                <h4>ศาสตร์พระราชากับการพัฒนาที่ยั่งยืน</h4>
+                <p>ความหมาย หลักการ แนวคิด ความสำคัญ และเป้าหมายของหลักปรัชญาของเศรษฐกิจพอเพียง</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>001-103</span><span><i class="fa-solid fa-clock"></i>1((1)-0-2)</span></div>
+                <h4>ไอเดียสู่ความเป็นผู้ประกอบการ</h4>
+                <p>การเป็นผู้ประกอบการ การวิเคราะห์สภาพแวดล้อมธุรกิจ การแสวงหาโอกาสทางธุรกิจ การจัดทำแนวคิดธุรกิจด้วยเครื่องมือทางธุรกิจสมัยใหม่</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>347-203</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>สถิติพื้นฐานสำหรับธุรกิจและการประยุกต์ใช้</h4>
+                <p>แนวคิดพื้นฐานของสถิติและการประยุกต์ใช้ ข้อมูลและการจำแนกข้อมูล การสรุปและนำเสนอข้อมูล</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>388-100</span><span><i class="fa-solid fa-clock"></i>1((1)-0-2)</span></div>
+                <h4>สุขภาวะเพื่อเพื่อนมนุษย์</h4>
+                <p>หลักการและขั้นตอนการช่วยชีวิตขั้นพื้นฐาน ปัญหาสุขภาพจิตที่พบบ่อย การดูแลสุขภาพตามวัย</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>460-201</span><span><i class="fa-solid fa-clock"></i>2((1)-2-3)</span></div>
+                <h4>ทักษะการติดต่อสื่อสารทางธุรกิจ</h4>
+                <p>ทักษะการเขียนและการนำเสนอทางธุรกิจสำหรับผู้มีส่วนได้ส่วนเสีย การสืบค้นและการใช้ข้อมูลเพื่อการทำรายงาน</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>460-400</span><span><i class="fa-solid fa-clock"></i>1((1)-0-2)</span></div>
+                <h4>ประโยชน์เพื่อนมนุษย์</h4>
+                <p>การทำกิจกรรมบูรณาการองค์ความรู้ตามหลักปรัชญาของเศรษฐกิจพอเพียง หลักการทรงงาน และหลักการเข้าใจ</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>477-201</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>การเขียนโปรแกรมเบื้องต้นทางธุรกิจ</h4>
+                <p>การติดตั้งโปรแกรมตัวแปลภาษาและสภาพแวดล้อมที่ใช้ในการเขียนโปรแกรม ตัวแปรและคําสงวน ในภาษาการเขียนโปรแกรม</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>2((2)-0-4)</span></div>
+                <h4>เลือกการรู้ดิจิทัล</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+   
+
+
+           
+
+
+            <div class="course-card" data-year="2" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>477-202</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>การจัดการฐานข้อมูล</h4>
+                <p>หลักการพื้นฐานการจัดการฐานข้อมูลและการประยุกต์ใช้ การออกแบบโครงสร้างฐานข้อมูลแบบ ฐานข้อมูลเชิงสัมพันธ์และโนเอสคิวแอล</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>477-203</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>เครือข่ายคอมพิวเตอร์และความมั่นคงทางไซเบอร์</h4>
+                <p>หลักการทํางานระบบเครือข่ายสื่อสารและระบบเครือข่ายคอมพิวเตอร์ มาตรฐานแบบจําลองโอเอสไอ และแบบจําลองอินเทอร์เน็ต</p>
+            </div>
+          
+            <div class="course-card" data-year="2" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>2((2)-0-4)</span></div>
+                <h4>เลือกการคิดเชิงระบบ</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>1((1)-0-2)</span></div>
+                <h4>เลือกสุนทรียศาสตร์และกีฬา</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+            <div class="course-card" data-year="2" data-term="1,2" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>2((2)-0-4)</span></div>
+                <h4>เลือกหมวดวิชาศึกษาทั่วไป</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>            
+          
+            <div class="course-card" data-year="2" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>460-202</span><span><i class="fa-solid fa-clock"></i>7((3)-8-10)</span></div>
+                <h4>ชุดวิชาดิจิทัล นวัตกรรม และความเป็นผู้ประกอบการ</h4>
+                <p>แนวคิดการบริหารธุรกิจในยุคดิจิทัล ครอบคลุมทุกด้าน และการฝึกปฏิบัติธุรกิจจริง</p>
+            </div>
+
+
+            <div class="course-card" data-year="3" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>477-301</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>การพัฒนาเว็บขั้นสมบูรณ์</h4>
+                <p>องค์ประกอบและแนวคิดพื้นฐานของเทคโนโลยีเว็บ หลักการทํางานของเทคโนโลยีเว็บ เทคโนโลยีเว็บฝั่งไคลแอนท์ </p>
+            </div>
+            <div class="course-card" data-year="3" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>477-302</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>เทคโนโลยีแพลตฟอร์มสำหรับคลาวด์</h4>
+                <p>คลาวด์คอมพิวติ้งเบื้องต้น รูปแบบบริการ สถาปัตยกรรม เทคโนโลยีเสมือนจริง ประเด็นความปลอดภัย/ความเป็นส่วนตัว โครงงานเว็บบนคลาวด์</p>
+            </div>
+            <div class="course-card" data-year="3" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>874-293</span><span><i class="fa-solid fa-clock"></i>3((3)-0-6)</span></div>
+                <h4>กฎหมายธุรกิจ</h4>
+                <p>ความรู้เบื้องต้นกฎหมายที่เกี่ยวกับการประกอบธุรกิจ การเลือกรูปแบบองค์กรธุรกิจ สัญญาที่เกี่ยวข้องกับการประกอบธุรกิจ</p>
+            </div>
+            <div class="course-card" data-year="3" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>2((2)-0-4)</span></div>
+                <h4>เลือกการอยู่อย่างเท่าทัน</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+            <div class="course-card" data-year="3" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>2((2)-0-4)</span></div>
+                <h4>เลือกหมวดวิชาศึกษาทั่วไป</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>         
+            <div class="course-card" data-year="3" data-term="1" data-plan="coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>3((x)-y-z)</span></div>
+                <h4>วิชาชีพเลือก หรือ วิชาโท</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+
+
+            <div class="course-card" data-year="3" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>460-301</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>ธุรกิจอัจฉริยะและการวิเคราะห์ข้อมูลเชิงธุรกิจ</h4>
+                <p>แนวคิดพื้นฐานของสถาปัตยกรรมอัจฉริยะทางธุรกิจ การพัฒนาธุรกิจอัจฉริยะ การออกแบบโครงสร้างพื้นฐาน</p>
+            </div>
+            <div class="course-card" data-year="3" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>477-303</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>การวิเคราะห์และออกแบบระบบสารสนเทศทางธุรกิจ</h4>
+                <p>แนวคิดของกระบวนการวิเคราะห์และออกแบบ เครื่องมือและเทคนิคในการวิเคราะห์และออกแบบระบบสารสนเทศในสภาพแวดล้อมทางธุรกิจ</p>
+            </div>
+            <div class="course-card" data-year="3" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>3((x)-y-z)</span></div>
+                <h4>วิชาชีพเลือก หรือ วิชาโท</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+            <div class="course-card" data-year="3" data-term="2" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>3((x)-y-z)</span></div>
+                <h4>วิชาชีพเลือก หรือ วิชาโท</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+            <div class="course-card" data-year="3" data-term="1,2" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>3((x)-y-z)</span></div>
+                <h4>วิชาชีพเลือก</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+            <div class="course-card" data-year="3" data-term="2" data-plan="coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>3((x)-y-z)</span></div>
+                <h4>วิชาเลือกเสรี</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>     
+
+        
+            <div class="course-card" data-year="3" data-term="summer" data-plan="normal">
+                <div class="course-meta"><span>477-304</span><span><i class="fa-solid fa-clock"></i>320 ชั่วโมง</span></div>
+                <h4>การฝึกงานทางระบบสารสนเทศ</h4>
+                <p>การฝึกงานภาคฤดูร้อน การใช้ความรู้ทางด้านการบริหารธุรกิจและ/หรือด้านระบบสารสนเทศ การฝึกงานผ่านการอบรมและปฏิบัติงานจริง ไม่น้อยกว่า 8 สัปดาห์ทําการ</p>
+            </div>
+
+            <div class="course-card" data-year="4" data-term="1" data-plan="coop">
+                <div class="course-meta"><span>460-401</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>การจัดการเชิงกลยุทธ์</h4>
+                <p>แนวคิดและทฤษฎีเกี่ยวกับการจัดการเชิงกลยุทธ์ การวิเคราะห์สภาพแวดล้อมทั้งภายนอกและภายในธุรกิจ แนวคิดและเทคนิคของการวิเคราะห์เชิงกลยุทธ์</p>
+            </div>
+            <div class="course-card" data-year="4" data-term="1" data-plan="coop">
+                <div class="course-meta"><span>473-409</span><span><i class="fa-solid fa-clock"></i>1((0)-2-1)</span></div>
+                <h4>เตรียมสหกิจ</h4>
+                <p>การเตรียมความพร้อมก่อนการฝึกงานสหกิจศึกษาและค้นคว้าเอกสารในเรื่องที่เกี่ยวข้องกับการฝึกงาน เทคนิคการนําเสนอ และจริยธรรมในการปฏิบัติงาน 224</p>
+            </div>
+            <div class="course-card" data-year="4" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>477-401</span><span><i class="fa-solid fa-clock"></i>3((1)-4-4)</span></div>
+                <h4>สัมมนาระบบสารสนเทศทางธุรกิจ</h4>
+                <p>การสัมมนาแลกเปลี่ยนความคิดเห็น การวิเคราะห์ แก้ปัญหา และการนําเสนอในหัวข้อที่น่าสนใจทางระบบสารสนเทศทางธุรกิจ รวมทั้งการเชิญวิทยากร การศึกษาดูงาน</p>
+            </div>
+            <div class="course-card" data-year="4" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>477-402</span><span><i class="fa-solid fa-clock"></i>3((0)-9-0)</span></div>
+                <h4>โครงงานระบบสารสนเทศทางธุรกิจ 1</h4>
+                <p>การเรียนรู้ขั้นตอนการพัฒนาโครงงาน การกําหนดปัญหาด้านระบบสารสนเทศในงานธุรกิจ การสํารวจความต้องการของผู้ใช้</p>
+            </div>
+            <div class="course-card" data-year="4" data-term="1" data-plan="normal,coop">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>3((x)-y-z)</span></div>
+                <h4>วิชาชีพเลือก หรือ วิชาโท</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+           
+        
+        
+
+
+            <div class="course-card" data-year="4" data-term="2" data-plan="normal">
+                <div class="course-meta"><span>460-401</span><span><i class="fa-solid fa-clock"></i>3((2)-2-5)</span></div>
+                <h4>การจัดการเชิงกลยุทธ์</h4>
+                <p>แนวคิดและทฤษฎีเกี่ยวกับการจัดการเชิงกลยุทธ์ การวิเคราะห์สภาพแวดล้อมทั้งภายนอกและภายในธุรกิจ แนวคิดและเทคนิคของการวิเคราะห์เชิงกลยุทธ์</p>
+            </div>
+            <div class="course-card" data-year="4" data-term="2" data-plan="normal">
+                <div class="course-meta"><span>477-403</span><span><i class="fa-solid fa-clock"></i>3((0)-9-0)</span></div>
+                <h4>โครงงานระบบสารสนเทศทางธุรกิจ 2</h4>
+                <p>การออกแบบส่วนติดต่อกับผู้ใช้ การพัฒนาโปรแกรม การทดสอบโปรแกรม การวัดและประเมินผล การเขียนเอกสารประกอบการใช้งานโปรแกรม การนําไปใช้จริง</p>
+            </div>
+            <div class="course-card" data-year="4" data-term="1,2" data-plan="normal">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>3((x)-y-z)</span></div>
+                <h4>วิชาชีพเลือก หรือ วิชาโท</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>
+            <div class="course-card" data-year="4" data-term="1,2" data-plan="normal">
+                <div class="course-meta"><span>xxx-xxx</span><span><i class="fa-solid fa-clock"></i>3((x)-y-z)</span></div>
+                <h4>วิชาเลือกเสรี</h4>
+                <p>เลือกตามความสนใจ</p>
+            </div>            
+        
+          
+            
+            <div class="course-card" data-year="4" data-term="2" data-plan="coop">
+                <div class="course-meta"><span>477-405</span><span><i class="fa-solid fa-clock"></i>8((0)-48-0)</span></div>
+                <h4>สหกิจศึกษา</h4>
+                <p>รายวิชาบังคับเรียนก่อน : 460-402 เตรียมสหกิจศึกษา</p>
+            </div>
+
+
+    
+
+            <div id="noCourseMsg" style="display: none;">
+                <i class="fa-solid fa-folder-open" style="font-size: 40px; margin-bottom: 15px;"></i>
+                <p>ยังไม่มีข้อมูลรายวิชาสำหรับช่วงเวลา</p>
+            </div>
+        </div>
+
+        <div class="credit-note">
+            <strong><i class="fa-solid fa-circle-info"></i> ความหมายของหน่วยกิต n((x)-y-z)</strong>
+            <span>n หมายถึง จำนวนหน่วยกิตรวม
+            <br>(x) หมายถึง จำนวนหน่วยกิตที่มีจำนวนชั่วโมงการจัดการเรียนรู้แบบเชิงรุก
+            <br>y หมายถึง จำนวนหน่วยกิตปฏิบัติการ
+            <br>z หมายถึง จำนวนชั่วโมงศึกษาด้วยตนเอง</span>
+        </div>
+    </main>
+
+<script>
+    const yearF = document.getElementById('yearFilter');
+    const termF = document.getElementById('termFilter');
+    const planF = document.getElementById('planFilter');
+    const cards = document.querySelectorAll('.course-card');
+    const noMsg = document.getElementById('noCourseMsg');
+    
+    // ดึง Element สำหรับแสดงตัวเลขสรุป
+    const totalCreditsEl = document.getElementById('totalCredits');
+    const totalCoursesEl = document.getElementById('totalCourses');
+
+    function updateDisplay() {
+        let hasContent = false;
+        let sumCredits = 0;
+        let countCourses = 0;
+
+        cards.forEach(card => {
+            // เช็คเงื่อนไขแบบรองรับเครื่องหมายคอมม่า (,) เพื่อให้ 1 วิชาอยู่ได้หลายที่
+            const yearMatch = card.dataset.year.split(',').includes(yearF.value);
+            const termMatch = card.dataset.term.split(',').includes(termF.value);
+            const planMatch = card.dataset.plan.split(',').includes(planF.value);
+            
+            const match = yearMatch && termMatch && planMatch;
+            card.style.display = match ? "flex" : "none";
+
+            if (match) {
+                hasContent = true;
+                countCourses++; // นับจำนวนวิชา
+                
+                // ค้นหาตัวเลขหน่วยกิตในกล่องวิชา (หาจากข้อความ เช่น 3((x)-y-z))
+                const metaText = card.querySelector('.course-meta').innerText;
+                const creditMatch = metaText.match(/(\d+)\(/); // ดึงเลขหน้าวงเล็บออกมา
+                if (creditMatch) {
+                    sumCredits += parseInt(creditMatch[1]);
+                }
+            }
+        });
+
+        // อัปเดตตัวเลขสรุปบนหน้าเว็บ
+        if (totalCreditsEl) totalCreditsEl.innerText = sumCredits;
+        if (totalCoursesEl) totalCoursesEl.innerText = countCourses;
+        
+        noMsg.style.display = hasContent ? "none" : "block";
+    }
+
+    [yearF, termF, planF].forEach(s => s.addEventListener('change', updateDisplay));
+    updateDisplay(); // รันตอนเริ่มหน้าเว็บ
+</script>
+</body>
+</html>

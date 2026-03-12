@@ -172,27 +172,90 @@ tbody tr:hover td{background:var(--acc-ll)}
 #toast{position:fixed;bottom:22px;right:22px;z-index:9999;background:var(--sidebar);color:#fff;padding:11px 20px;border-radius:12px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:var(--sh3);transform:translateY(70px);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
 #toast.show{transform:none;opacity:1}
 .tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-/* ── SHOW MORE ── */
 .show-more-row{display:none;align-items:center;gap:10px;margin-top:10px;padding:6px 2px}
 .show-more-row .btn-ghost{background:var(--acc-ll);border-color:#c4b5fd;color:var(--acc)}
 .show-more-row .btn-ghost:hover{background:var(--acc-l)}
 .show-more-count{font-size:11px;color:var(--muted);font-weight:500}
-
-/* ── COOP/INTERN SECTION STYLES ── */
 .type-block{border-radius:12px;padding:16px;margin-bottom:14px}
 .type-block-coop{background:#eff6ff;border:2px solid #bfdbfe}
 .type-block-intern{background:#f0fdf4;border:2px solid #a7f3d0}
 .type-tag{display:inline-flex;align-items:center;padding:3px 12px;border-radius:99px;font-size:11px;font-weight:800}
 .type-tag-coop{background:#2563eb;color:#fff}
 .type-tag-intern{background:#059669;color:#fff}
-.kpi-block{border-radius:14px;padding:16px;border:2px solid}
-.kpi-block-coop{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#93c5fd}
-.kpi-block-intern{background:linear-gradient(135deg,#f0fdf4,#d1fae5);border-color:#6ee7b7}
-.kpi-block-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
-.coop-tables-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.charts-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.charts-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+
+/* ══════════════════════════════
+   PUBLISH BAR
+══════════════════════════════ */
+.publish-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:#fff;border-radius:12px;border:1.5px solid var(--border);
+  padding:12px 18px;margin-bottom:16px;
+  box-shadow:var(--sh);transition:.3s;
+}
+.publish-bar.published{
+  background:#f0fdf4;border-color:#86efac;
+}
+.publish-info{display:flex;align-items:center;gap:12px;}
+.pub-dot{width:10px;height:10px;border-radius:50%;background:#94a3b8;flex-shrink:0;transition:.3s;}
+.pub-dot.on{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2);animation:pubpulse 1.8s infinite;}
+@keyframes pubpulse{0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.18)}50%{box-shadow:0 0 0 7px rgba(34,197,94,.04)}}
+.pub-label{font-size:12.5px;font-weight:700;color:var(--text);}
+.pub-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.pub-time{font-size:10.5px;color:#16a34a;font-weight:600;margin-top:2px;display:none;}
+.pub-right{display:flex;align-items:center;gap:10px;}
+.toggle-wrap{display:flex;align-items:center;gap:8px;}
+.toggle-lbl{font-size:11.5px;font-weight:700;color:var(--muted);}
+.toggle-sw{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0;}
+.toggle-sw input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-slider{position:absolute;inset:0;background:#d1d5db;border-radius:99px;transition:.3s;}
+.toggle-slider:before{content:'';position:absolute;width:16px;height:16px;left:4px;top:4px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.toggle-sw input:checked+.toggle-slider{background:#22c55e;}
+.toggle-sw input:checked+.toggle-slider:before{transform:translateX(20px);}
+.btn-preview-pub{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 14px;
+  border-radius:8px;font-size:11.5px;font-weight:700;cursor:pointer;
+  border:1.5px solid var(--border);background:#fff;color:var(--text2);
+  transition:.15s;text-decoration:none;font-family:'Sarabun',sans-serif;
+}
+.btn-preview-pub:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-ll);}
+.btn-preview-pub svg{width:12px;height:12px;fill:currentColor;}
+
+/* ── CONFIRM MODAL for publish ── */
+.pub-confirm-overlay{
+  position:fixed;inset:0;z-index:9000;
+  background:rgba(14,5,30,.6);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:.22s;
+}
+.pub-confirm-overlay.open{opacity:1;pointer-events:all;}
+.pub-confirm-modal{
+  background:#fff;border-radius:20px;padding:32px 36px;
+  max-width:460px;width:92%;
+  box-shadow:0 32px 80px rgba(0,0,0,.22);
+  transform:translateY(16px) scale(.97);
+  transition:transform .28s cubic-bezier(.34,1.56,.64,1);
+}
+.pub-confirm-overlay.open .pub-confirm-modal{transform:none;}
+.pub-confirm-icon{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+}
+.pub-confirm-icon.go{background:#f0fdf4;}
+.pub-confirm-icon.stop{background:#fef2f2;}
+.pub-confirm-icon svg{width:26px;height:26px;}
+.pub-confirm-icon.go svg{fill:#16a34a;}
+.pub-confirm-icon.stop svg{fill:#ef4444;}
+.pub-confirm-title{font-family:'Anuphan',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px;}
+.pub-confirm-body{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:24px;}
+.pub-confirm-body strong{color:var(--text);}
+.pub-confirm-btns{display:flex;gap:10px;justify-content:flex-end;}
+.pub-btn-cancel{padding:10px 22px;border:1.5px solid var(--border);background:#fff;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:.15s;}
+.pub-btn-cancel:hover{border-color:var(--text2);}
+.pub-btn-do{padding:10px 24px;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.18s;}
+.pub-btn-do.go{background:#16a34a;color:#fff;}
+.pub-btn-do.go:hover{background:#15803d;}
+.pub-btn-do.stop{background:#ef4444;color:#fff;}
+.pub-btn-do.stop:hover{background:#dc2626;}
 </style>
 </head>
 <body>
@@ -274,6 +337,32 @@ tbody tr:hover td{background:var(--acc-ll)}
           </div>
         </div>
       </div>
+
+      <!-- ══ PUBLISH BAR ══ -->
+      <div class="publish-bar" id="pub-bar-students">
+        <div class="publish-info">
+          <div class="pub-dot" id="pub-dot-students"></div>
+          <div>
+            <div class="pub-label" id="pub-label-students">ยังไม่เผยแพร่ Dashboard สู่สาธารณะ</div>
+            <div class="pub-sub" id="pub-sub-students">ข้อมูลจะไม่แสดงในหน้า bba-students.html จนกว่าจะเปิดเผยแพร่</div>
+            <div class="pub-time" id="pub-time-students"></div>
+          </div>
+        </div>
+        <div class="pub-right">
+          <a href="bba-students.html" target="_blank" class="btn-preview-pub">
+            <svg viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+            ดูหน้า Dashboard สาธารณะ
+          </a>
+          <div class="toggle-wrap">
+            <span class="toggle-lbl" id="pub-toggle-lbl-students">ปิด</span>
+            <label class="toggle-sw">
+              <input type="checkbox" id="pub-toggle-students" onchange="onPubToggle('students', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-body" style="padding-bottom:0">
           <div class="import-tabs">
@@ -426,10 +515,7 @@ tbody tr:hover td{background:var(--acc-ll)}
         <div class="ph-row">
           <div>
             <div class="ph-eyebrow">Cooperative Education</div>
-            <div class="ph-title" style="display:flex;align-items:center;gap:10px">
-              สหกิจศึกษา
-              <span class="type-tag type-tag-coop">4 เดือน</span>
-            </div>
+            <div class="ph-title" style="display:flex;align-items:center;gap:10px">สหกิจศึกษา <span class="type-tag type-tag-coop">4 เดือน</span></div>
             <div class="ph-sub">ออกปฏิบัติงานเต็มเวลาในสถานประกอบการ — สถิติแยกอิสระจากฝึกงาน</div>
           </div>
           <div class="ph-actions">
@@ -442,7 +528,6 @@ tbody tr:hover td{background:var(--acc-ll)}
           </div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-body" style="padding-bottom:0">
           <div class="import-tabs">
@@ -454,11 +539,10 @@ tbody tr:hover td{background:var(--acc-ll)}
             </button>
           </div>
           <div class="itab-panel active" id="panel-excel-coop" style="padding:16px 0 18px">
-            <div class="infobox blue"><strong>📋 Sheet ที่ใช้:</strong> <code style="background:#dbeafe;padding:1px 6px;border-radius:4px;font-size:11px">Coop</code> — คอลัมน์: ปีการศึกษา, วิชาเอก, จำนวน</div>
+            <div class="infobox blue"><strong>📋 Sheet ที่ใช้:</strong> <code style="background:#dbeafe;padding:1px 6px;border-radius:4px;font-size:11px">Coop</code>, CoopTop5, Partners — คอลัมน์: ปีการศึกษา, วิชาเอก, จำนวน</div>
             <div class="dz" id="dz-coop" ondragover="dzO(event,'dz-coop')" ondragleave="dzL('dz-coop')" ondrop="dzD(event,'coopOnly')" onclick="document.getElementById('xl-coop').click()">
-              <span class="dz-ico">🏢</span><h3>ลากไฟล์ Excel (สหกิจ)</h3>
-              <p>Sheet: <strong>Coop</strong> (สหกิจ 4 เดือน), CoopTop5, Partners</p>
-              <p>หรือ <b>คลิกเพื่อเลือกไฟล์</b></p>
+              <span class="dz-ico">🏢</span><h3>ลากไฟล์ Excel (สหกิจ) มาวางที่นี่</h3>
+              <p>รองรับ .xlsx / .xls</p><p>หรือ <b>คลิกเพื่อเลือกไฟล์</b></p>
               <span id="dz-coop-fn" class="dz-fn" style="display:none"></span>
             </div>
             <input type="file" id="xl-coop" accept=".xlsx,.xls" style="display:none" onchange="handleXL(event,'coopOnly')">
@@ -517,8 +601,6 @@ tbody tr:hover td{background:var(--acc-ll)}
           </div>
         </div>
       </div>
-
-      <!-- Table: สหกิจ -->
       <div class="card">
         <div class="card-hd">
           <div class="card-num" style="background:#2563eb">🏢</div>
@@ -536,8 +618,6 @@ tbody tr:hover td{background:var(--acc-ll)}
           <div id="coop-total-row" style="margin-top:10px;text-align:right;font-size:12px;color:var(--muted)"></div>
         </div>
       </div>
-
-      <!-- Preview: สหกิจ -->
       <div id="preview-coop-only" style="display:none">
         <div class="preview-wrap">
           <div class="preview-hd">
@@ -554,7 +634,7 @@ tbody tr:hover td{background:var(--acc-ll)}
               </div>
             </div>
             <div class="chart-card">
-              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#2563eb">สถิตินักศึกษาสหกิจ แยกสาขาตามปี</div><div class="chart-sub">ระยะเวลา 4 เดือน</div></div></div>
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#2563eb">สถิตินักศึกษาสหกิจ แยกสาขาตามปี</div></div></div>
               <div style="height:240px"><canvas id="chart-coop-bar"></canvas></div>
               <div class="clegend" id="leg-coop-bar"></div>
             </div>
@@ -586,17 +666,13 @@ tbody tr:hover td{background:var(--acc-ll)}
       </div>
     </div><!-- /view-coop -->
 
-
     <!-- ══ VIEW: ฝึกงาน (2 เดือน) ══ -->
     <div class="view" id="view-intern">
       <div class="ph">
         <div class="ph-row">
           <div>
             <div class="ph-eyebrow">Internship Program</div>
-            <div class="ph-title" style="display:flex;align-items:center;gap:10px">
-              ฝึกงาน
-              <span class="type-tag type-tag-intern">2 เดือน</span>
-            </div>
+            <div class="ph-title" style="display:flex;align-items:center;gap:10px">ฝึกงาน <span class="type-tag type-tag-intern">2 เดือน</span></div>
             <div class="ph-sub">ฝึกประสบการณ์วิชาชีพระยะสั้น — สถิติแยกอิสระจากสหกิจ</div>
           </div>
           <div class="ph-actions">
@@ -609,7 +685,6 @@ tbody tr:hover td{background:var(--acc-ll)}
           </div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-body" style="padding-bottom:0">
           <div class="import-tabs">
@@ -621,11 +696,10 @@ tbody tr:hover td{background:var(--acc-ll)}
             </button>
           </div>
           <div class="itab-panel active" id="panel-excel-intern" style="padding:16px 0 18px">
-            <div class="infobox green"><strong>📋 Sheet ที่ใช้:</strong> <code style="background:#d1fae5;padding:1px 6px;border-radius:4px;font-size:11px">Intern</code> — คอลัมน์: ปีการศึกษา, วิชาเอก, จำนวน</div>
+            <div class="infobox green"><strong>📋 Sheet ที่ใช้:</strong> <code style="background:#d1fae5;padding:1px 6px;border-radius:4px;font-size:11px">Intern</code>, InternTop5, Partners — คอลัมน์: ปีการศึกษา, วิชาเอก, จำนวน</div>
             <div class="dz" id="dz-intern" ondragover="dzO(event,'dz-intern')" ondragleave="dzL('dz-intern')" ondrop="dzD(event,'internOnly')" onclick="document.getElementById('xl-intern').click()" style="border-color:#6ee7b7;background:#f0fdf4">
-              <span class="dz-ico">📋</span><h3>ลากไฟล์ Excel (ฝึกงาน)</h3>
-              <p>Sheet: <strong>Intern</strong> (ฝึกงาน 2 เดือน), InternTop5, Partners</p>
-              <p>หรือ <b>คลิกเพื่อเลือกไฟล์</b></p>
+              <span class="dz-ico">📋</span><h3>ลากไฟล์ Excel (ฝึกงาน) มาวางที่นี่</h3>
+              <p>รองรับ .xlsx / .xls</p><p>หรือ <b>คลิกเพื่อเลือกไฟล์</b></p>
               <span id="dz-intern-fn" class="dz-fn" style="display:none"></span>
             </div>
             <input type="file" id="xl-intern" accept=".xlsx,.xls" style="display:none" onchange="handleXL(event,'internOnly')">
@@ -684,8 +758,6 @@ tbody tr:hover td{background:var(--acc-ll)}
           </div>
         </div>
       </div>
-
-      <!-- Table: ฝึกงาน -->
       <div class="card">
         <div class="card-hd">
           <div class="card-num" style="background:#059669">📋</div>
@@ -703,8 +775,6 @@ tbody tr:hover td{background:var(--acc-ll)}
           <div id="intern-total-row" style="margin-top:10px;text-align:right;font-size:12px;color:var(--muted)"></div>
         </div>
       </div>
-
-      <!-- Preview: ฝึกงาน -->
       <div id="preview-intern-only" style="display:none">
         <div class="preview-wrap">
           <div class="preview-hd">
@@ -721,13 +791,13 @@ tbody tr:hover td{background:var(--acc-ll)}
               </div>
             </div>
             <div class="chart-card">
-              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#059669">สถิตินักศึกษาฝึกงาน แยกสาขาตามปี</div><div class="chart-sub">ระยะเวลา 2 เดือน</div></div></div>
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#059669">สถิตินักศึกษาฝึกงาน แยกสาขาตามปี</div></div></div>
               <div style="height:240px"><canvas id="chart-intern-bar"></canvas></div>
               <div class="clegend" id="leg-intern-bar"></div>
             </div>
             <div class="chart-row2">
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี (รวมทุกสาขา)</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี</div></div></div>
                 <div style="height:180px"><canvas id="chart-intern-trend"></canvas></div>
               </div>
               <div class="chart-card">
@@ -752,7 +822,6 @@ tbody tr:hover td{background:var(--acc-ll)}
         </div>
       </div>
     </div><!-- /view-intern -->
-
 
     <!-- ══ VIEW: Looker Studio ══ -->
     <div class="view" id="view-looker">
@@ -820,9 +889,29 @@ tbody tr:hover td{background:var(--acc-ll)}
   </div>
 </div>
 
+<!-- ══ PUBLISH CONFIRM MODAL ══ -->
+<div class="pub-confirm-overlay" id="pub-confirm-overlay">
+  <div class="pub-confirm-modal">
+    <div class="pub-confirm-icon" id="pub-confirm-icon">
+      <svg id="pub-confirm-svg" viewBox="0 0 20 20"></svg>
+    </div>
+    <div class="pub-confirm-title" id="pub-confirm-title"></div>
+    <div class="pub-confirm-body"  id="pub-confirm-body"></div>
+    <div class="pub-confirm-btns">
+      <button class="pub-btn-cancel" onclick="cancelPubConfirm()">ยกเลิก</button>
+      <button class="pub-btn-do" id="pub-btn-do" onclick="doPubConfirm()"></button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"><span class="tdot" id="tdot"></span><span id="tmsg"></span></div>
 
 <script>
+/* ════════════ STORAGE KEYS ════════════ */
+const STUDENTS_PUBLISH_KEY = 'fms_students_publish_state';
+const STUDENTS_DATA_KEY    = 'fms_students_data_v1';
+
+/* ════════════ DATA ════════════ */
 const MJ={
   fin:{name:'การเงินและการลงทุน',short:'FIN',color:'#7c3aed'},
   mkt:{name:'การตลาดและการสื่อสาร',short:'MKT',color:'#2563eb'},
@@ -873,14 +962,77 @@ let DB={
 let LOOKER_REPORTS=[];
 let pendingWB={s:null,coop:null,intern:null};
 const DEFAULT_YRS=[2577,2576,2575,2574,2573,2572,2571,2570,2569,2568,2567,2566,2565,2564,2563,2562,2561,2560];
-
-// ── แสดงผล: state สำหรับปุ่มดูเพิ่มเติม ──
-let _intakeShowAll=false;
-let _coopShowAll=false;
-let _internShowAll=false;
+let _intakeShowAll=false,_coopShowAll=false,_internShowAll=false;
 const TABLE_LIMIT=6;
+let _pendingPub=null;
 
-/* ── INIT ── */
+/* ── publish state ── */
+let pubState={students:{published:false,publishedAt:null}};
+try{const ps=localStorage.getItem(STUDENTS_PUBLISH_KEY);if(ps)pubState=JSON.parse(ps);}catch{}
+function savePubState(){localStorage.setItem(STUDENTS_PUBLISH_KEY,JSON.stringify(pubState));}
+function saveStudentsData(){localStorage.setItem(STUDENTS_DATA_KEY,JSON.stringify(DB));}
+
+/* ════════════ PUBLISH LOGIC ════════════ */
+function onPubToggle(section,checked){
+  document.getElementById('pub-toggle-'+section).checked=pubState[section]?.published||false;
+  _pendingPub={section,willPublish:checked};
+  showPubConfirm(section,checked);
+}
+function showPubConfirm(section,willPublish){
+  const icon=document.getElementById('pub-confirm-icon');
+  const svg=document.getElementById('pub-confirm-svg');
+  const title=document.getElementById('pub-confirm-title');
+  const body=document.getElementById('pub-confirm-body');
+  const doBtn=document.getElementById('pub-btn-do');
+  if(willPublish){
+    icon.className='pub-confirm-icon go';
+    svg.innerHTML='<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>';
+    title.textContent='ยืนยันการเผยแพร่ Dashboard';
+    body.innerHTML='ข้อมูลสถิตินักศึกษาจะถูก<strong>แสดงในหน้า bba-students.html</strong> ทันที<br><br>ผู้เยี่ยมชมจะสามารถดูกราฟและตัวเลขสถิติทั้งหมดได้';
+    doBtn.textContent='เผยแพร่ Dashboard';doBtn.className='pub-btn-do go';
+  }else{
+    icon.className='pub-confirm-icon stop';
+    svg.innerHTML='<path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524L13.477 14.89zm1.414-1.414L6.524 5.11A6 6 0 0114.89 13.476zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>';
+    title.textContent='ยืนยันการปิดเผยแพร่';
+    body.innerHTML='Dashboard สถิตินักศึกษาจะ<strong>ถูกซ่อนจากสาธารณะ</strong> ทันที<br><br>ผู้เยี่ยมชม bba-students.html จะเห็นข้อความ "ยังไม่เผยแพร่" แทน';
+    doBtn.textContent='ปิดเผยแพร่';doBtn.className='pub-btn-do stop';
+  }
+  document.getElementById('pub-confirm-overlay').classList.add('open');
+}
+function cancelPubConfirm(){document.getElementById('pub-confirm-overlay').classList.remove('open');_pendingPub=null;}
+function doPubConfirm(){
+  if(!_pendingPub)return;
+  const{section,willPublish}=_pendingPub;
+  document.getElementById('pub-confirm-overlay').classList.remove('open');_pendingPub=null;
+  if(!pubState[section])pubState[section]={};
+  pubState[section].published=willPublish;
+  pubState[section].publishedAt=willPublish?new Date().toISOString():null;
+  savePubState();
+  if(willPublish)saveStudentsData();
+  document.getElementById('pub-toggle-'+section).checked=willPublish;
+  updatePubBar(section);
+  toast(willPublish?'✓ เผยแพร่ Dashboard สำเร็จ · หน้า bba-students.html พร้อมแล้ว':'✓ ปิดเผยแพร่แล้ว · ซ่อนจากสาธารณะแล้ว',willPublish?'#22c55e':'#f59e0b');
+}
+document.getElementById('pub-confirm-overlay').addEventListener('click',function(e){if(e.target===this)cancelPubConfirm();});
+
+function updatePubBar(section){
+  const state=pubState[section]||{};const on=!!state.published;
+  const bar=document.getElementById('pub-bar-'+section);if(!bar)return;
+  document.getElementById('pub-toggle-'+section).checked=on;
+  bar.classList.toggle('published',on);
+  document.getElementById('pub-dot-'+section).classList.toggle('on',on);
+  document.getElementById('pub-toggle-lbl-'+section).textContent=on?'เผยแพร่แล้ว':'ปิด';
+  document.getElementById('pub-label-'+section).textContent=on?'Dashboard เผยแพร่สู่สาธารณะแล้ว':'ยังไม่เผยแพร่ Dashboard สู่สาธารณะ';
+  document.getElementById('pub-sub-'+section).textContent=on?'ข้อมูลแสดงในหน้า bba-students.html เรียบร้อยแล้ว':'ข้อมูลจะไม่แสดงในหน้า bba-students.html จนกว่าจะเปิดเผยแพร่';
+  const time=document.getElementById('pub-time-'+section);
+  if(on&&state.publishedAt){
+    const d=new Date(state.publishedAt);
+    time.textContent='เผยแพร่เมื่อ '+d.toLocaleDateString('th-TH')+' '+d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+    time.style.display='';
+  }else{time.style.display='none';}
+}
+
+/* ════════════ INIT ════════════ */
 function initSelects(){
   ['fi_yr','ft_yr','fs_yr','fcoop_yr','fintern_yr'].forEach(id=>{
     const s=document.getElementById(id);if(!s)return;
@@ -888,36 +1040,30 @@ function initSelects(){
     DEFAULT_YRS.forEach(y=>{s.innerHTML+=`<option value="${y}">${y}</option>`;});
   });
 }
-
 function init(){
   initSelects();
-  renderIntakeTable();
-  renderCoopOnlyTable();
-  renderInternOnlyTable();
-  renderYrFilterDropdown();
-  renderSavedReports();
+  renderIntakeTable();renderCoopOnlyTable();renderInternOnlyTable();
+  renderYrFilterDropdown();renderSavedReports();
+  updatePubBar('students');
 }
 
-/* ── NAV ── */
+/* ════════════ NAV ════════════ */
 function gotoView(name,navEl,sbEl){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
   if(navEl){document.querySelectorAll('.tn-a').forEach(e=>e.classList.remove('active'));navEl.classList.add('active');}
   document.querySelectorAll('.sb-item').forEach(e=>e.classList.remove('active'));
-  const sbId='sb-'+name;
-  if(document.getElementById(sbId))document.getElementById(sbId).classList.add('active');
+  const sbId='sb-'+name;if(document.getElementById(sbId))document.getElementById(sbId).classList.add('active');
   if(sbEl)sbEl.classList.add('active');
 }
-
 function switchImportTab(name,tabEl){
   const parent=tabEl.closest('.card-body');
   parent.querySelectorAll('.itab').forEach(t=>t.classList.remove('active'));
   parent.querySelectorAll('.itab-panel').forEach(p=>p.classList.remove('active'));
-  tabEl.classList.add('active');
-  document.getElementById('panel-'+name).classList.add('active');
+  tabEl.classList.add('active');document.getElementById('panel-'+name).classList.add('active');
 }
 
-/* ── SAVE STUDENTS ── */
+/* ════════════ SAVE ════════════ */
 function saveIntake(){
   const yr=+document.getElementById('fi_yr').value,mid=document.getElementById('fi_mj').value;
   if(!yr||!mid){toast('กรุณาเลือกปีและสาขา','#ef4444');return;}
@@ -925,8 +1071,7 @@ function saveIntake(){
   if(!DB.intake[mid])DB.intake[mid]=[];
   const idx=DB.intake[mid].findIndex(r=>r[0]===yr);
   if(idx>=0)DB.intake[mid][idx]=row;else DB.intake[mid].push(row);
-  _intakeShowAll=false;
-  renderIntakeTable();renderYrFilterDropdown();
+  _intakeShowAll=false;renderIntakeTable();renderYrFilterDropdown();
   toast('✓ บันทึก Intake '+MJ[mid].short+' ปี '+yr);
 }
 function saveTrend(){
@@ -948,65 +1093,48 @@ function saveStatus(){
   ].filter(x=>x.val>0);
   toast('✓ บันทึกสถานะ ปี '+yr);
 }
-
-/* ── SAVE COOP / INTERN ── */
 function saveCoopEntry(type){
   const prefix=type==='coop'?'fcoop':'fintern';
   const yr=+document.getElementById(prefix+'_yr').value;
   const mid=document.getElementById(prefix+'_mj').value;
   const n=+document.getElementById(prefix+'_n').value||0;
   if(!yr||!mid){toast('กรุณาเลือกปีและสาขา','#ef4444');return;}
-
   if(type==='coop'){
     if(!DB.coopYrs.includes(yr)){DB.coopYrs.push(yr);DB.coopYrs.sort((a,b)=>a-b);}
     const yi=DB.coopYrs.indexOf(yr);
     MJ_KEYS.forEach(m=>{if(!DB.coop[m])DB.coop[m]=DB.coopYrs.map(()=>0);while(DB.coop[m].length<DB.coopYrs.length)DB.coop[m].splice(yi,0,0);});
     DB.coop[mid][yi]=n;
-    const t5=[1,2,3,4,5].map(i=>document.getElementById('fcoop_co'+i)?.value||'').filter(Boolean);
-    if(t5.length)DB.top5Coop=t5;
-    const p=[1,2,3,4].map(i=>document.getElementById('fcoop_p'+i)?.value||'').filter(Boolean);
-    if(p.length)DB.partnersCoop=p;
-    _coopShowAll=false;
-    renderCoopOnlyTable();
-    updateCoopYrFilter();
+    const t5=[1,2,3,4,5].map(i=>document.getElementById('fcoop_co'+i)?.value||'').filter(Boolean);if(t5.length)DB.top5Coop=t5;
+    const p=[1,2,3,4].map(i=>document.getElementById('fcoop_p'+i)?.value||'').filter(Boolean);if(p.length)DB.partnersCoop=p;
+    _coopShowAll=false;renderCoopOnlyTable();updateCoopYrFilter();
     toast('✓ บันทึกสหกิจ (4 เดือน) · '+MJ[mid].short+' · ปี '+yr+' = '+n+' คน');
-  } else {
+  }else{
     if(!DB.internYrs.includes(yr)){DB.internYrs.push(yr);DB.internYrs.sort((a,b)=>a-b);}
     const yi=DB.internYrs.indexOf(yr);
     MJ_KEYS.forEach(m=>{if(!DB.intern[m])DB.intern[m]=DB.internYrs.map(()=>0);while(DB.intern[m].length<DB.internYrs.length)DB.intern[m].splice(yi,0,0);});
     DB.intern[mid][yi]=n;
-    const t5=[1,2,3,4,5].map(i=>document.getElementById('fintern_co'+i)?.value||'').filter(Boolean);
-    if(t5.length)DB.top5Intern=t5;
-    const p=[1,2,3,4].map(i=>document.getElementById('fintern_p'+i)?.value||'').filter(Boolean);
-    if(p.length)DB.partnersIntern=p;
-    _internShowAll=false;
-    renderInternOnlyTable();
-    updateInternYrFilter();
+    const t5=[1,2,3,4,5].map(i=>document.getElementById('fintern_co'+i)?.value||'').filter(Boolean);if(t5.length)DB.top5Intern=t5;
+    const p=[1,2,3,4].map(i=>document.getElementById('fintern_p'+i)?.value||'').filter(Boolean);if(p.length)DB.partnersIntern=p;
+    _internShowAll=false;renderInternOnlyTable();updateInternYrFilter();
     toast('✓ บันทึกฝึกงาน (2 เดือน) · '+MJ[mid].short+' · ปี '+yr+' = '+n+' คน');
   }
 }
 
-/* ── ฟังก์ชัน show-more ── */
-function _renderShowMore(wrapperId, total, shown, showAll, toggleFn) {
-  const wrap = document.getElementById(wrapperId);
-  if (!wrap) return;
-  if (total > TABLE_LIMIT) {
-    wrap.style.display = 'flex';
-    if (showAll) {
-      wrap.innerHTML = `<button class="btn btn-ghost btn-xs" onclick="${toggleFn}(false)">▲ แสดงน้อยลง</button><span class="show-more-count">แสดงทั้งหมด ${total} รายการ</span>`;
-    } else {
-      wrap.innerHTML = `<button class="btn btn-ghost btn-xs" onclick="${toggleFn}(true)">+ ดูเพิ่มเติม ${total - TABLE_LIMIT} รายการ</button><span class="show-more-count">แสดง ${TABLE_LIMIT} จาก ${total} รายการ</span>`;
-    }
-  } else {
-    wrap.style.display = 'none';
-  }
+/* ════════════ SHOW MORE ════════════ */
+function _renderShowMore(wrapperId,total,shown,showAll,toggleFn){
+  const wrap=document.getElementById(wrapperId);if(!wrap)return;
+  if(total>TABLE_LIMIT){
+    wrap.style.display='flex';
+    wrap.innerHTML=showAll
+      ?`<button class="btn btn-ghost btn-xs" onclick="${toggleFn}(false)">▲ แสดงน้อยลง</button><span class="show-more-count">แสดงทั้งหมด ${total} รายการ</span>`
+      :`<button class="btn btn-ghost btn-xs" onclick="${toggleFn}(true)">+ ดูเพิ่มเติม ${total-TABLE_LIMIT} รายการ</button><span class="show-more-count">แสดง ${TABLE_LIMIT} จาก ${total} รายการ</span>`;
+  }else wrap.style.display='none';
 }
-
 function toggleIntake(v){_intakeShowAll=v;renderIntakeTable();}
 function toggleCoop(v){_coopShowAll=v;renderCoopOnlyTable();}
 function toggleIntern(v){_internShowAll=v;renderInternOnlyTable();}
 
-/* ── TABLE RENDERS ── */
+/* ════════════ TABLES ════════════ */
 function renderYrFilterDropdown(){
   const sel=document.getElementById('tbl_yr_filter');if(!sel)return;
   const cur=sel.value;
@@ -1014,80 +1142,66 @@ function renderYrFilterDropdown(){
   sel.innerHTML='<option value="all">ทุกปี</option>'+yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
   if(cur)sel.value=cur;
 }
-
 function updateCoopYrFilter(){
   const sel=document.getElementById('coop_yr_filter');if(!sel)return;
   const yrs=[...new Set(MJ_KEYS.flatMap(m=>(DB.coop[m]||[]).map((v,i)=>v>0?DB.coopYrs[i]:null).filter(Boolean)))].sort((a,b)=>b-a);
   sel.innerHTML='<option value="all">ทุกปี</option>'+yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
 }
-
 function updateInternYrFilter(){
   const sel=document.getElementById('intern_yr_filter');if(!sel)return;
   const yrs=[...new Set(MJ_KEYS.flatMap(m=>(DB.intern[m]||[]).map((v,i)=>v>0?DB.internYrs[i]:null).filter(Boolean)))].sort((a,b)=>b-a);
   sel.innerHTML='<option value="all">ทุกปี</option>'+yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
 }
-
 function renderIntakeTable(){
   const filter=document.getElementById('tbl_yr_filter')?.value||'all';
-  let rows=[];
-  MJ_KEYS.forEach(mid=>(DB.intake[mid]||[]).forEach(r=>rows.push({mid,r})));
+  let rows=[];MJ_KEYS.forEach(mid=>(DB.intake[mid]||[]).forEach(r=>rows.push({mid,r})));
   if(filter!=='all')rows=rows.filter(({r})=>r[0]===+filter);
   rows.sort((a,b)=>b.r[0]-a.r[0]||a.mid.localeCompare(b.mid));
-  const total=rows.length;
-  const shown=_intakeShowAll?rows:rows.slice(0,TABLE_LIMIT);
+  const total=rows.length;const shown=_intakeShowAll?rows:rows.slice(0,TABLE_LIMIT);
   document.getElementById('tbody-intake').innerHTML=shown.map(({mid,r})=>`<tr>
     <td><strong>${r[0]}</strong></td><td><span class="badge badge-purple">${MJ[mid].short}</span></td>
     <td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td>
     <td><button class="btn btn-ghost btn-xs" onclick="delIntake(${r[0]},'${mid}')">ลบ</button></td>
   </tr>`).join('')||'<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>';
-  _renderShowMore('intake-show-more', total, shown.length, _intakeShowAll, 'toggleIntake');
+  _renderShowMore('intake-show-more',total,shown.length,_intakeShowAll,'toggleIntake');
 }
 function delIntake(yr,mid){DB.intake[mid]=(DB.intake[mid]||[]).filter(r=>r[0]!==yr);renderIntakeTable();}
-
 function renderCoopOnlyTable(){
-  updateCoopYrFilter();
-  const yrF=document.getElementById('coop_yr_filter')?.value||'all';
-  let rows=[];
-  MJ_KEYS.forEach(m=>DB.coopYrs.forEach((yr,yi)=>{const n=(DB.coop[m]||[])[yi]||0;if(n>0&&(yrF==='all'||+yrF===yr))rows.push({yr,mid:m,n});}));
+  updateCoopYrFilter();const yrF=document.getElementById('coop_yr_filter')?.value||'all';
+  let rows=[];MJ_KEYS.forEach(m=>DB.coopYrs.forEach((yr,yi)=>{const n=(DB.coop[m]||[])[yi]||0;if(n>0&&(yrF==='all'||+yrF===yr))rows.push({yr,mid:m,n});}));
   rows.sort((a,b)=>b.yr-a.yr||a.mid.localeCompare(b.mid));
-  const total=rows.length;
-  const shown=_coopShowAll?rows:rows.slice(0,TABLE_LIMIT);
+  const total=rows.length;const shown=_coopShowAll?rows:rows.slice(0,TABLE_LIMIT);
   const totalPeople=rows.reduce((s,r)=>s+r.n,0);
   document.getElementById('tbody-coop-only').innerHTML=shown.map(r=>`<tr>
     <td><strong>${r.yr}</strong></td><td><span class="badge badge-blue">${MJ[r.mid].short}</span></td>
     <td><strong>${r.n}</strong></td>
     <td><button class="btn btn-ghost btn-xs" onclick="delCoopOnly(${r.yr},'${r.mid}')">ลบ</button></td>
   </tr>`).join('')||'<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>';
-  _renderShowMore('coop-show-more', total, shown.length, _coopShowAll, 'toggleCoop');
+  _renderShowMore('coop-show-more',total,shown.length,_coopShowAll,'toggleCoop');
   document.getElementById('coop-total-row').innerHTML=rows.length?`รวมทั้งหมด <strong>${totalPeople.toLocaleString()} คน</strong>`:'';
 }
 function delCoopOnly(yr,mid){const yi=DB.coopYrs.indexOf(yr);if(yi>=0&&DB.coop[mid])DB.coop[mid][yi]=0;renderCoopOnlyTable();}
-
 function renderInternOnlyTable(){
-  updateInternYrFilter();
-  const yrF=document.getElementById('intern_yr_filter')?.value||'all';
-  let rows=[];
-  MJ_KEYS.forEach(m=>DB.internYrs.forEach((yr,yi)=>{const n=(DB.intern[m]||[])[yi]||0;if(n>0&&(yrF==='all'||+yrF===yr))rows.push({yr,mid:m,n});}));
+  updateInternYrFilter();const yrF=document.getElementById('intern_yr_filter')?.value||'all';
+  let rows=[];MJ_KEYS.forEach(m=>DB.internYrs.forEach((yr,yi)=>{const n=(DB.intern[m]||[])[yi]||0;if(n>0&&(yrF==='all'||+yrF===yr))rows.push({yr,mid:m,n});}));
   rows.sort((a,b)=>b.yr-a.yr||a.mid.localeCompare(b.mid));
-  const total=rows.length;
-  const shown=_internShowAll?rows:rows.slice(0,TABLE_LIMIT);
+  const total=rows.length;const shown=_internShowAll?rows:rows.slice(0,TABLE_LIMIT);
   const totalPeople=rows.reduce((s,r)=>s+r.n,0);
   document.getElementById('tbody-intern-only').innerHTML=shown.map(r=>`<tr>
     <td><strong>${r.yr}</strong></td><td><span class="badge badge-green">${MJ[r.mid].short}</span></td>
     <td><strong>${r.n}</strong></td>
     <td><button class="btn btn-ghost btn-xs" onclick="delInternOnly(${r.yr},'${r.mid}')">ลบ</button></td>
   </tr>`).join('')||'<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีข้อมูล</td></tr>';
-  _renderShowMore('intern-show-more', total, shown.length, _internShowAll, 'toggleIntern');
+  _renderShowMore('intern-show-more',total,shown.length,_internShowAll,'toggleIntern');
   document.getElementById('intern-total-row').innerHTML=rows.length?`รวมทั้งหมด <strong>${totalPeople.toLocaleString()} คน</strong>`:'';
 }
 function delInternOnly(yr,mid){const yi=DB.internYrs.indexOf(yr);if(yi>=0&&DB.intern[mid])DB.intern[mid][yi]=0;renderInternOnlyTable();}
 
-/* ── EXCEL IMPORT ── */
+/* ════════════ EXCEL IMPORT ════════════ */
 function dzO(e,id){e.preventDefault();document.getElementById(id).classList.add('drag');}
 function dzL(id){document.getElementById(id).classList.remove('drag');}
 function dzD(e,target){e.preventDefault();const id=target==='students'?'dz-s':target==='coopOnly'?'dz-coop':'dz-intern';document.getElementById(id).classList.remove('drag');if(e.dataTransfer.files[0])procXL(e.dataTransfer.files[0],target);}
 function handleXL(e,target){if(e.target.files[0])procXL(e.target.files[0],target);}
-
 function procXL(file,target){
   if(!/\.(xlsx|xls)$/i.test(file.name)){toast('กรุณาใช้ไฟล์ .xlsx / .xls','#ef4444');return;}
   const sfx=target==='students'?'s':target==='coopOnly'?'coop':'intern';
@@ -1097,22 +1211,18 @@ function procXL(file,target){
   reader.onload=ev=>{
     try{
       const wb=XLSX.read(ev.target.result,{type:'array'});
-      pendingWB[sfx]=wb;
-      buildSheetTabs(wb,sfx);
-      buildSheetPreview(wb.SheetNames[0],sfx);
+      pendingWB[sfx]=wb;buildSheetTabs(wb,sfx);buildSheetPreview(wb.SheetNames[0],sfx);
       document.getElementById('xl-'+sfx+'-preview').style.display='block';
-      const statusId=target==='students'?'students-import-status':target==='coopOnly'?'coop-import-status':'intern-import-status';
-      document.getElementById(statusId).innerHTML=`<div class="import-status info">📊 พบ ${wb.SheetNames.length} Sheet — ตรวจสอบแล้วกดยืนยัน</div>`;
+      const sid=target==='students'?'students-import-status':target==='coopOnly'?'coop-import-status':'intern-import-status';
+      document.getElementById(sid).innerHTML=`<div class="import-status info">📊 พบ ${wb.SheetNames.length} Sheet — ตรวจสอบแล้วกดยืนยัน</div>`;
     }catch(err){toast('อ่านไฟล์ไม่ได้: '+err.message,'#ef4444');}
   };
   reader.readAsArrayBuffer(file);
 }
-
 function buildSheetTabs(wb,sfx){
   const wrap=document.getElementById('xl-'+sfx+'-sheet-tabs');
   wrap.innerHTML=wb.SheetNames.map((sn,i)=>`<button class="stab${i===0?' active':''}" onclick="buildSheetPreview('${sn}','${sfx}',this)">${sn}</button>`).join('');
 }
-
 function buildSheetPreview(sn,sfx,tabEl){
   if(!pendingWB[sfx])return;
   if(tabEl){document.querySelectorAll('#xl-'+sfx+'-sheet-tabs .stab').forEach(b=>b.classList.remove('active'));tabEl.classList.add('active');}
@@ -1122,82 +1232,61 @@ function buildSheetPreview(sn,sfx,tabEl){
   rows.slice(1).forEach(r=>{html+='<tr>'+rows[0].map((_,i)=>`<td>${r[i]??''}</td>`).join('')+'</tr>';});
   document.getElementById('xl-'+sfx+'-tbl').innerHTML=html+'</tbody></table>';
 }
-
 function cancelImport(sfx){pendingWB[sfx]=null;document.getElementById('xl-'+sfx+'-preview').style.display='none';}
-
 function confirmImport(target){
   const sfx=target==='students'?'s':target==='coopOnly'?'coop':'intern';
-  const wb=pendingWB[sfx];if(!wb)return;
-  let cnt=0;
+  const wb=pendingWB[sfx];if(!wb)return;let cnt=0;
   wb.SheetNames.forEach(sn=>{
-    const snl=sn.toLowerCase().trim();
-    const data=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:''});
-    if(target==='students'){
-      if(['intake','fin','mkt','hrm','log','bis','mice'].some(k=>snl.includes(k))){
-        data.forEach(row=>{
-          const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
-          const rawMid=String(row['วิชาเอก']||row['major']||snl);
-          const mid=MJ_MAP[rawMid.trim()]||MJ_MAP[rawMid.trim().toUpperCase()];
-          if(!yr||!mid)return;
-          const r=[yr,+row['แผนรับ']||0,+row['สัมภาษณ์']||0,+row['ยืนยัน']||0,+row['รายงานตัว']||0,+row['ไม่รายงานตัว']||0];
-          if(!DB.intake[mid])DB.intake[mid]=[];
-          const idx=DB.intake[mid].findIndex(x=>x[0]===yr);
-          if(idx>=0)DB.intake[mid][idx]=r;else DB.intake[mid].push(r);cnt++;
-        });
-      }
+    const snl=sn.toLowerCase().trim();const data=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:''});
+    if(target==='students'&&['intake','fin','mkt','hrm','log','bis','mice'].some(k=>snl.includes(k))){
+      data.forEach(row=>{
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
+        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||snl).trim()];
+        if(!yr||!mid)return;
+        const r=[yr,+row['แผนรับ']||0,+row['สัมภาษณ์']||0,+row['ยืนยัน']||0,+row['รายงานตัว']||0,+row['ไม่รายงานตัว']||0];
+        if(!DB.intake[mid])DB.intake[mid]=[];
+        const idx=DB.intake[mid].findIndex(x=>x[0]===yr);
+        if(idx>=0)DB.intake[mid][idx]=r;else DB.intake[mid].push(r);cnt++;
+      });
     }
     if(target==='coopOnly'&&(snl.includes('coop')||snl.includes('สหกิจ'))){
       data.forEach(row=>{
-        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
-        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||'').trim()];
-        const n=+row['จำนวน']||0;
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||0);
+        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||'').trim()];const n=+row['จำนวน']||0;
         if(!yr||!mid)return;
         if(!DB.coopYrs.includes(yr)){DB.coopYrs.push(yr);DB.coopYrs.sort((a,b)=>a-b);}
-        const yi=DB.coopYrs.indexOf(yr);
-        if(!DB.coop[mid])DB.coop[mid]=DB.coopYrs.map(()=>0);
-        while(DB.coop[mid].length<DB.coopYrs.length)DB.coop[mid].push(0);
-        DB.coop[mid][yi]=n;cnt++;
+        const yi=DB.coopYrs.indexOf(yr);if(!DB.coop[mid])DB.coop[mid]=DB.coopYrs.map(()=>0);
+        while(DB.coop[mid].length<DB.coopYrs.length)DB.coop[mid].push(0);DB.coop[mid][yi]=n;cnt++;
       });
-      if(snl.includes('top5')||snl.includes('cooptop')){
-        const names=data.map(r=>r['บริษัท']||r['company']||r['name']||Object.values(r)[0]).filter(Boolean);
-        if(names.length)DB.top5Coop=names.slice(0,5);
-      }
+      if(snl.includes('top5')){const names=data.map(r=>r['บริษัท']||r['company']||Object.values(r)[0]).filter(Boolean);if(names.length)DB.top5Coop=names.slice(0,5);}
     }
     if(target==='internOnly'&&(snl.includes('intern')||snl.includes('ฝึกงาน'))){
       data.forEach(row=>{
-        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
-        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||'').trim()];
-        const n=+row['จำนวน']||0;
+        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||0);
+        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||'').trim()];const n=+row['จำนวน']||0;
         if(!yr||!mid)return;
         if(!DB.internYrs.includes(yr)){DB.internYrs.push(yr);DB.internYrs.sort((a,b)=>a-b);}
-        const yi=DB.internYrs.indexOf(yr);
-        if(!DB.intern[mid])DB.intern[mid]=DB.internYrs.map(()=>0);
-        while(DB.intern[mid].length<DB.internYrs.length)DB.intern[mid].push(0);
-        DB.intern[mid][yi]=n;cnt++;
+        const yi=DB.internYrs.indexOf(yr);if(!DB.intern[mid])DB.intern[mid]=DB.internYrs.map(()=>0);
+        while(DB.intern[mid].length<DB.internYrs.length)DB.intern[mid].push(0);DB.intern[mid][yi]=n;cnt++;
       });
-      if(snl.includes('top5')||snl.includes('interntop')){
-        const names=data.map(r=>r['บริษัท']||r['company']||r['name']||Object.values(r)[0]).filter(Boolean);
-        if(names.length)DB.top5Intern=names.slice(0,5);
-      }
+      if(snl.includes('top5')){const names=data.map(r=>r['บริษัท']||r['company']||Object.values(r)[0]).filter(Boolean);if(names.length)DB.top5Intern=names.slice(0,5);}
     }
   });
-  const statusId=target==='students'?'students-import-status':target==='coopOnly'?'coop-import-status':'intern-import-status';
-  document.getElementById(statusId).innerHTML=`<div class="import-status ok">✓ นำเข้าสำเร็จ ${cnt} แถว</div>`;
-  pendingWB[sfx]=null;
-  document.getElementById('xl-'+sfx+'-preview').style.display='none';
+  const sid=target==='students'?'students-import-status':target==='coopOnly'?'coop-import-status':'intern-import-status';
+  document.getElementById(sid).innerHTML=`<div class="import-status ok">✓ นำเข้าสำเร็จ ${cnt} แถว</div>`;
+  pendingWB[sfx]=null;document.getElementById('xl-'+sfx+'-preview').style.display='none';
   if(target==='students'){_intakeShowAll=false;renderIntakeTable();renderYrFilterDropdown();}
   else if(target==='coopOnly'){_coopShowAll=false;renderCoopOnlyTable();}
   else{_internShowAll=false;renderInternOnlyTable();}
   toast(`✓ นำเข้าสำเร็จ ${cnt} แถว`);
 }
 
-/* ── CHARTS ── */
+/* ════════════ CHARTS ════════════ */
 const CH={};
 function dc(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
 
-/* ── PREVIEW: Students ── */
 function previewStudents(){
-  const yrs=[...new Set(MJ_KEYS.flatMap(m=>(DB.intake[m]||[]).map(r=>r[0]),...Object.keys(DB.status).map(Number)))].sort((a,b)=>b-a);
+  const yrs=[...new Set([...MJ_KEYS.flatMap(m=>(DB.intake[m]||[]).map(r=>r[0])),...Object.keys(DB.status).map(Number)])].sort((a,b)=>b-a);
   const sel=document.getElementById('prev_yr');
   sel.innerHTML=yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
   sel.value=yrs[0]||2567;
@@ -1205,7 +1294,6 @@ function previewStudents(){
   document.getElementById('preview-students').scrollIntoView({behavior:'smooth',block:'start'});
   renderStudentCharts();
 }
-
 function renderStudentCharts(){
   const yr=+document.getElementById('prev_yr').value||2567;
   const tot=MJ_KEYS.reduce((s,m)=>{const r=(DB.intake[m]||[]).find(x=>x[0]===yr);return s+(r?r[4]:0);},0);
@@ -1234,84 +1322,53 @@ function renderStudentCharts(){
     {label:'ลงทะเบียน',data:tYrs.map(y=>DB.trend[y]?.enrolled||0),borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.1)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#7c3aed'},
     {label:'สำเร็จการศึกษา',data:tYrs.map(y=>DB.trend[y]?.graduated||0),borderColor:'#ea580c',backgroundColor:'rgba(234,88,12,.06)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#ea580c',borderDash:[5,3]},
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:10,padding:12}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f3f4f6'},beginAtZero:false,ticks:{font:{size:10}}}}}});
-  const sd=DB.status[yr]||[];
-  dc('status-s');
+  const sd=DB.status[yr]||[];dc('status-s');
   if(sd.length>0){
     CH['status-s']=new Chart(document.getElementById('chart-status-s'),{type:'doughnut',data:{labels:sd.map(x=>x.label),datasets:[{data:sd.map(x=>x.val),backgroundColor:sd.map(x=>x.color),borderWidth:2,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'55%'}});
     const st=sd.reduce((a,b)=>a+b.val,0);
     document.getElementById('status-legend').innerHTML=sd.map(x=>`<div class="pl-item"><div class="pl-dot" style="background:${x.color}"></div><span>${x.label}</span><span class="pl-val">${x.val.toLocaleString()} (${st?((x.val/st)*100).toFixed(1):0}%)</span></div>`).join('');
-  } else {
-    document.getElementById('status-legend').innerHTML='<p style="color:var(--muted);font-size:12px">ไม่มีข้อมูลสถานะสำหรับปีนี้</p>';
-  }
+  }else{document.getElementById('status-legend').innerHTML='<p style="color:var(--muted);font-size:12px">ไม่มีข้อมูลสถานะสำหรับปีนี้</p>';}
 }
 
-/* ── PREVIEW: Coop/Intern ── */
 function previewCoopType(type){
   if(type==='coop'){
     document.getElementById('preview-coop-only').style.display='block';
     document.getElementById('preview-coop-only').scrollIntoView({behavior:'smooth',block:'start'});
-    renderCoopTypeCharts('coop');
-  } else {
+  }else{
     document.getElementById('preview-intern-only').style.display='block';
     document.getElementById('preview-intern-only').scrollIntoView({behavior:'smooth',block:'start'});
-    renderCoopTypeCharts('intern');
   }
+  renderCoopTypeCharts(type);
 }
-
 function renderCoopTypeCharts(type){
   const isCoop=type==='coop';
-  const src=isCoop?DB.coop:DB.intern;
-  const yrs=isCoop?DB.coopYrs:DB.internYrs;
+  const src=isCoop?DB.coop:DB.intern;const yrs=isCoop?DB.coopYrs:DB.internYrs;
   const color=isCoop?'#2563eb':'#059669';
-  const top5=isCoop?DB.top5Coop:DB.top5Intern;
-  const partners=isCoop?DB.partnersCoop:DB.partnersIntern;
-
+  const top5=isCoop?DB.top5Coop:DB.top5Intern;const partners=isCoop?DB.partnersCoop:DB.partnersIntern;
   const total=MJ_KEYS.reduce((s,m)=>(src[m]||[]).reduce((a,b)=>a+b,s),0);
-  const latestYr=yrs[yrs.length-1];
-  const latestYi=yrs.indexOf(latestYr);
+  const latestYr=yrs[yrs.length-1];const latestYi=yrs.indexOf(latestYr);
   const latest=latestYi>=0?MJ_KEYS.reduce((s,m)=>s+((src[m]||[])[latestYi]||0),0):0;
-
-  if(isCoop){
-    document.getElementById('kpi-coop-total').textContent=total.toLocaleString();
-    document.getElementById('kpi-coop-latest').textContent=latest.toLocaleString();
-    document.getElementById('kpi-coop-yr').textContent='ปี '+(latestYr||'—');
-  } else {
-    document.getElementById('kpi-intern-total').textContent=total.toLocaleString();
-    document.getElementById('kpi-intern-latest').textContent=latest.toLocaleString();
-    document.getElementById('kpi-intern-yr').textContent='ปี '+(latestYr||'—');
-  }
-
-  const barId=isCoop?'coop-bar':'intern-bar';
-  const legId=isCoop?'leg-coop-bar':'leg-intern-bar';
-  const trendId=isCoop?'coop-trend':'intern-trend';
-  const pieId=isCoop?'coop-pie':'intern-pie';
+  if(isCoop){document.getElementById('kpi-coop-total').textContent=total.toLocaleString();document.getElementById('kpi-coop-latest').textContent=latest.toLocaleString();document.getElementById('kpi-coop-yr').textContent='ปี '+(latestYr||'—');}
+  else{document.getElementById('kpi-intern-total').textContent=total.toLocaleString();document.getElementById('kpi-intern-latest').textContent=latest.toLocaleString();document.getElementById('kpi-intern-yr').textContent='ปี '+(latestYr||'—');}
+  const barId=isCoop?'coop-bar':'intern-bar';const legId=isCoop?'leg-coop-bar':'leg-intern-bar';
+  const trendId=isCoop?'coop-trend':'intern-trend';const pieId=isCoop?'coop-pie':'intern-pie';
   const pieLegId=isCoop?'coop-pie-leg':'intern-pie-leg';
-  const top5Id=isCoop?'top5-coop':'top5-intern';
-  const partnersId=isCoop?'partners-coop':'partners-intern';
-
-  dc(barId);
-  CH[barId]=new Chart(document.getElementById('chart-'+barId),{type:'bar',data:{labels:yrs,datasets:MJ_KEYS.map(m=>({label:MJ[m].short,data:yrs.map((_,yi)=>(src[m]||[])[yi]||0),backgroundColor:MJ[m].color,borderRadius:4}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:10}}}}}});
+  const top5Id=isCoop?'top5-coop':'top5-intern';const partnersId=isCoop?'partners-coop':'partners-intern';
+  dc(barId);CH[barId]=new Chart(document.getElementById('chart-'+barId),{type:'bar',data:{labels:yrs,datasets:MJ_KEYS.map(m=>({label:MJ[m].short,data:yrs.map((_,yi)=>(src[m]||[])[yi]||0),backgroundColor:MJ[m].color,borderRadius:4}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:10}}}}}});
   document.getElementById(legId).innerHTML=MJ_KEYS.map(m=>`<div class="cl-item"><div class="cl-dot" style="background:${MJ[m].color}"></div>${MJ[m].short}</div>`).join('');
-
   const trendData=yrs.map((_,yi)=>MJ_KEYS.reduce((s,m)=>s+((src[m]||[])[yi]||0),0));
-  dc(trendId);
-  CH[trendId]=new Chart(document.getElementById('chart-'+trendId),{type:'line',data:{labels:yrs,datasets:[{label:isCoop?'สหกิจ':'ฝึกงาน',data:trendData,borderColor:color,backgroundColor:isCoop?'rgba(37,99,235,.1)':'rgba(5,150,105,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:color}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:9}}}}}});
-
+  dc(trendId);CH[trendId]=new Chart(document.getElementById('chart-'+trendId),{type:'line',data:{labels:yrs,datasets:[{label:isCoop?'สหกิจ':'ฝึกงาน',data:trendData,borderColor:color,backgroundColor:isCoop?'rgba(37,99,235,.1)':'rgba(5,150,105,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:color}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:9}}}}}});
   const pieData=MJ_KEYS.map(m=>(src[m]||[]).reduce((a,b)=>a+b,0));
   const pieTotal=pieData.reduce((a,b)=>a+b,0);
-  dc(pieId);
-  CH[pieId]=new Chart(document.getElementById('chart-'+pieId),{type:'doughnut',data:{labels:MJ_KEYS.map(m=>MJ[m].short),datasets:[{data:pieData,backgroundColor:MJ_KEYS.map(m=>MJ[m].color),borderWidth:2,borderColor:'#fff',hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'55%'}});
+  dc(pieId);CH[pieId]=new Chart(document.getElementById('chart-'+pieId),{type:'doughnut',data:{labels:MJ_KEYS.map(m=>MJ[m].short),datasets:[{data:pieData,backgroundColor:MJ_KEYS.map(m=>MJ[m].color),borderWidth:2,borderColor:'#fff',hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'55%'}});
   document.getElementById(pieLegId).innerHTML=MJ_KEYS.map((m,i)=>`<div class="pl-item"><div class="pl-dot" style="background:${MJ[m].color}"></div><span>${MJ[m].short}</span><span class="pl-val">${pieData[i]} (${pieTotal?((pieData[i]/pieTotal)*100).toFixed(0):0}%)</span></div>`).join('');
-
-  const t5=(top5||[]).slice(0,5);
-  document.getElementById(top5Id).innerHTML=t5.length?t5.map((c,i)=>`<div class="t5"><div class="t5n">${i+1}</div><span style="flex:1;font-size:12px">${c}</span><span class="t5val" style="color:${color}">${5-i}⭐</span></div>`).join(''):'<p style="font-size:12px;color:var(--muted)">ยังไม่มีข้อมูล</p>';
+  document.getElementById(top5Id).innerHTML=(top5||[]).slice(0,5).map((c,i)=>`<div class="t5"><div class="t5n">${i+1}</div><span style="flex:1;font-size:12px">${c}</span><span class="t5val" style="color:${color}">${5-i}⭐</span></div>`).join('')||'<p style="font-size:12px;color:var(--muted)">ยังไม่มีข้อมูล</p>';
   document.getElementById(partnersId).innerHTML=(partners||[]).map(p=>`<div class="partner-chip">${p}</div>`).join('')||'<p style="font-size:12px;color:var(--muted)">ยังไม่มีข้อมูล</p>';
 }
 
-/* ── LOOKER ── */
+/* ════════════ LOOKER ════════════ */
 function loadLooker(){
-  const url=document.getElementById('looker_url').value.trim();
-  if(!url){toast('กรุณาใส่ URL','#ef4444');return;}
+  const url=document.getElementById('looker_url').value.trim();if(!url){toast('กรุณาใส่ URL','#ef4444');return;}
   const wrap=document.getElementById('looker-frame-wrap');
   wrap.innerHTML=`<div class="looker-loading"><div class="spin"></div><p style="font-size:12px;color:var(--muted)">กำลังโหลด...</p></div>`;
   setTimeout(()=>{
@@ -1327,19 +1384,19 @@ function saveCurrentReport(){
   LOOKER_REPORTS.push({name,url});renderSavedReports();toast('✓ บันทึก Report "'+name+'"');
 }
 function renderSavedReports(){
-  const wrap=document.getElementById('saved-reports');
+  const wrap=document.getElementById('saved-reports');if(!wrap)return;
   if(!LOOKER_REPORTS.length){wrap.innerHTML='<p style="font-size:11.5px;color:var(--muted)">ยังไม่มีรายงาน</p>';return;}
   wrap.innerHTML=LOOKER_REPORTS.map((r,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--acc-ll);border-radius:8px;border:1px solid #c4b5fd"><span style="font-size:12px;font-weight:600;flex:1">📊 ${r.name}</span><button class="btn btn-teal btn-xs" onclick="loadSavedReport(${i})">Load</button><button class="btn btn-ghost btn-xs" onclick="LOOKER_REPORTS.splice(${i},1);renderSavedReports()">ลบ</button></div>`).join('');
-  document.getElementById('looker-tab-btns').innerHTML=LOOKER_REPORTS.map((r,i)=>`<button class="btn btn-ghost btn-xs" onclick="loadSavedReport(${i})">${r.name}</button>`).join('');
+  const tabBtns=document.getElementById('looker-tab-btns');if(tabBtns)tabBtns.innerHTML=LOOKER_REPORTS.map((r,i)=>`<button class="btn btn-ghost btn-xs" onclick="loadSavedReport(${i})">${r.name}</button>`).join('');
 }
 function loadSavedReport(i){document.getElementById('looker_url').value=LOOKER_REPORTS[i].url;loadLooker();}
 
-/* ── EXPORT ── */
+/* ════════════ EXPORT ════════════ */
 function exportXLSX(){
   const wb=XLSX.utils.book_new();
   MJ_KEYS.forEach(m=>{if((DB.intake[m]||[]).length>0){const ws=XLSX.utils.aoa_to_sheet([['ปีการศึกษา','แผนรับ','สัมภาษณ์','ยืนยัน','รายงานตัว','ไม่รายงานตัว'],...DB.intake[m].sort((a,b)=>a[0]-b[0])]);XLSX.utils.book_append_sheet(wb,ws,MJ[m].short);}});
   const tYrs=Object.keys(DB.trend).map(Number).sort((a,b)=>a-b);
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','ลงทะเบียน','สำเร็จการศึกษา'],...tYrs.map(y=>[y,DB.trend[y].enrolled,DB.trend[y].graduated])]),'Trend');
+  if(tYrs.length)XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','ลงทะเบียน','สำเร็จการศึกษา'],...tYrs.map(y=>[y,DB.trend[y].enrolled,DB.trend[y].graduated])]),'Trend');
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['สาขา (สหกิจ 4 เดือน)',...DB.coopYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.coop[m]||DB.coopYrs.map(()=>0)),(DB.coop[m]||[]).reduce((a,b)=>a+b,0)])]),'Coop_4mo');
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['สาขา (ฝึกงาน 2 เดือน)',...DB.internYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.intern[m]||DB.internYrs.map(()=>0)),(DB.intern[m]||[]).reduce((a,b)=>a+b,0)])]),'Intern_2mo');
   XLSX.writeFile(wb,'student_data_hub_export.xlsx');
@@ -1364,12 +1421,12 @@ function downloadTemplate(type){
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','จำนวนสำเร็จการศึกษา'],[2567,0]]),'Graduated');
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','ยังเป็นนักศึกษา','สำเร็จการศึกษา','ไม่รายงานตัว','โอนย้าย','ออกกลางคัน','พักการศึกษา'],[2567,532,518,14,8,21,3]]),'Status');
     XLSX.writeFile(wb,'template_students.xlsx');
-  } else if(type==='coop'){
+  }else if(type==='coop'){
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','วิชาเอก','จำนวน'],[2567,'fin',12],[2567,'mkt',37]]),'Coop');
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['บริษัท'],['กรุงเทพมหานคร'],['สมุทรปราการ']]),'CoopTop5');
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['partner'],['UOB'],['Tops']]),'Partners');
     XLSX.writeFile(wb,'template_coop_4month.xlsx');
-  } else {
+  }else{
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','วิชาเอก','จำนวน'],[2567,'fin',41],[2567,'mkt',65]]),'Intern');
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['บริษัท'],['Tops'],['SCB']]),'InternTop5');
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['partner'],['TBH'],['PTT']]),'Partners');
@@ -1378,7 +1435,7 @@ function downloadTemplate(type){
   toast('✓ ดาวน์โหลด Template สำเร็จ');
 }
 
-/* ── MODAL / TOAST ── */
+/* ════════════ MODAL / TOAST ════════════ */
 function openExportModal(){document.getElementById('export-modal').classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));

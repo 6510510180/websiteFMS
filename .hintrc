@@ -9,7 +9,8 @@
         "ignore": [
           "backdrop-filter",
           "user-select",
-          "-moz-appearance"
+          "-moz-appearance",
+          "min-width: fit-content"
         ]
       }
     ],
@@ -38,6 +39,7 @@
       {
         "image-alt": "off"
       }
-    ]
+    ],
+    "meta-viewport": "off"
   }
 }

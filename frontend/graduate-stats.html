@@ -422,6 +422,7 @@
   <button class="tab-btn active" onclick="switchTab('input',this)">การใส่ข้อมูล</button>
   <button class="tab-btn" onclick="switchTab('preview',this)">Preview รายงาน</button>
   <div class="nav-right">
+    <button class="btn-outline btn-sm" onclick="downloadTemplate()">📋 ดาวน์โหลด Template</button>
     <button class="btn-outline btn-sm" onclick="document.getElementById('fileInput').click()">📥 นำเข้า Excel</button>
     <button class="btn-primary btn-sm" onclick="saveAll()">💾 บันทึกข้อมูล</button>
   </div>
@@ -436,6 +437,7 @@
     <h1 class="page-title">การได้งานทำของบัณฑิต</h1>
     <p class="page-sub">บันทึกข้อมูลอัตราการได้งานทำของนักศึกษา/สำเร็จการศึกษาตามสาขาวิชา ประเภทงาน และตามระยะเวลา</p>
     <div class="header-actions">
+      <button class="btn-outline btn-sm" onclick="downloadTemplate()">📋 ดาวน์โหลด Template Excel</button>
       <button class="btn-outline btn-sm" onclick="document.getElementById('fileInput').click()">📥 นำเข้าจาก Excel</button>
       <button class="btn-outline btn-sm" onclick="switchTab('preview',document.querySelectorAll('.tab-btn')[1])">👁 Preview รายงาน</button>
     </div>
@@ -577,6 +579,7 @@
 <div class="bottom-bar">
   <div class="bottom-timestamp" id="bottomTime"></div>
   <div style="display:flex;gap:8px">
+    <button class="btn-outline btn-sm" onclick="downloadTemplate()">📋 Template</button>
     <button class="btn-outline btn-sm" onclick="switchTab('preview',document.querySelectorAll('.tab-btn')[1])">👁 ดูข้อมูล</button>
     <button class="btn-primary btn-sm" onclick="saveAll()">💾 บันทึกข้อมูลสถิติ</button>
   </div>
@@ -815,6 +818,57 @@ function showToast(msg, type='success') {
   t.style.display='block';
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>{ t.style.display='none'; }, 3000);
+}
+
+// ══════════════════════════════════════════════════════
+//  ดาวน์โหลด Template Excel
+// ══════════════════════════════════════════════════════
+function downloadTemplate() {
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1: อัตราได้งาน_สาขา
+  const s1 = [
+    ["สาขาวิชา", "จำนวนที่ได้งานทำ (คน)", "จำนวนบัณฑิตทั้งหมด (คน)", "อัตราการได้งาน (%)"],
+    ...MAJORS.map(m => [m, "", "", ""])
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(s1), "อัตราได้งาน_สาขา");
+
+  // Sheet 2: ข้อมูลรายปี_สาขา
+  const s2Header = ["สาขา", ...YEARS.flatMap(y => [`ปี ${y} (N)`, `ปี ${y} (T)`])];
+  const s2 = [s2Header, ...MAJORS.map(m => [m, ...Array(YEARS.length * 2).fill("")])];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(s2), "ข้อมูลรายปี_สาขา");
+
+  // Sheet 3: ทำงานตรงสาย
+  const s3Header = ["ประเภท", ...YEARS.map(y => `ปี ${y} (N)`), ...YEARS.map(y => `ปี ${y} (T)`)];
+  const s3 = [
+    s3Header,
+    ["มีงานทำ", ...Array(YEARS.length * 2).fill("")],
+    ["ทำงานตรงสาย", ...Array(YEARS.length * 2).fill("")]
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(s3), "ทำงานตรงสาย");
+
+  // Sheet 4: ประเภทงาน
+  const s4 = [
+    ["ประเภทงาน", "จำนวน (คน)", "หมายเหตุ"],
+    ["การจ้างงาน (Employment)", "", ""],
+    ["ประกอบอาชีพอิสระ (Self-employed)", "", ""],
+    ["ศึกษาต่อ (Further Study)", "", ""],
+    ["ความท้าทายอื่น ๆ (Other)", "", ""]
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(s4), "ประเภทงาน");
+
+  // Sheet 5: คำแนะนำ
+  const s5 = [
+    ["Sheet", "คำอธิบาย", "วิธีกรอกข้อมูล"],
+    ["อัตราได้งาน_สาขา", "อัตราการได้งานทำแต่ละสาขา", "กรอก N = จำนวนได้งาน, T = จำนวนทั้งหมด → ระบบคำนวณ % ให้อัตโนมัติ"],
+    ["ข้อมูลรายปี_สาขา", "ข้อมูลแยกตามปีและสาขา", "กรอก N/T ในแต่ละปีการศึกษา 2563–2567"],
+    ["ทำงานตรงสาย", "นักศึกษาที่ทำงานตรงสาย", "กรอกแถว มีงานทำ และ ตรงสาย ครบทั้ง 5 ปี"],
+    ["ประเภทงาน", "สัดส่วนตามประเภทงาน", "กรอกจำนวน (คน) ในแต่ละประเภท"]
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(s5), "คำแนะนำการใช้งาน");
+
+  XLSX.writeFile(wb, "template_การได้งานทำของบัณฑิต.xlsx");
+  showToast("ดาวน์โหลด Template สำเร็จ! 📋");
 }
 
 init();
