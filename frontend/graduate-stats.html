@@ -54,7 +54,7 @@
     color: var(--text);
     min-height: 100vh;
     padding-bottom: 80px;
-    padding-left: var(--sidebar-w);
+    padding-left: calc(var(--sidebar-w) + 4px);
   }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -68,13 +68,15 @@
     border-bottom: 1.5px solid var(--border);
     display: flex;
     align-items: center;
-    padding: 0 28px;
+    padding: 0 28px 0 28px;
     position: sticky;
     top: 0;
     z-index: 300;
     gap: 0;
     height: var(--nav-h);
-    box-shadow: 0 1px 6px rgba(124,58,237,0.06);
+    /* ยืดเต็มหน้าจอ ครอบ sidebar ด้วย */
+    margin-left: calc(-1 * var(--sidebar-w) - 4px);
+    padding-left: calc(var(--sidebar-w) + 32px);
   }
 
   .nav-logo {
@@ -154,18 +156,48 @@
   .btn-sm { padding: 7px 14px; font-size: 12.5px; }
 
   /* ── LAYOUT ── */
-  .container { max-width: 980px; margin: 0 auto; padding: 28px 24px; }
+  .container { max-width: 980px; margin: 0 auto; padding: 28px 28px 28px 32px; }
 
-  .page-header { margin-bottom: 24px; }
+  /* ── PAGE HEADER (redesigned) ── */
+  .page-header {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 28px 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .page-header-left { display: flex; align-items: center; gap: 16px; }
+  .page-header-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: var(--purple-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(124,58,237,0.15);
+  }
   .page-title {
     font-family: 'Lexend', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 800;
     color: var(--text);
     letter-spacing: -0.4px;
+    line-height: 1.2;
   }
-  .page-sub { font-size: 12.5px; color: var(--text-soft); margin-top: 5px; line-height: 1.65; }
-  .header-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .page-sub {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+  .page-header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .header-actions { display: none; } /* hidden — moved into header row */
 
   /* ── CARD ── */
   .card {
@@ -630,12 +662,22 @@
 
   <!-- PAGE HEADER -->
   <div class="page-header">
-    <h1 class="page-title">การได้งานทำของบัณฑิต</h1>
-    <p class="page-sub">บันทึกข้อมูลอัตราการได้งานทำของนักศึกษา/สำเร็จการศึกษาตามสาขาวิชา ประเภทงาน และตามระยะเวลา</p>
-    <div class="header-actions">
-      <button class="btn-outline btn-sm" onclick="downloadTemplate()">📋 ดาวน์โหลด Template Excel</button>
-      <button class="btn-outline btn-sm" onclick="document.getElementById('fileInput').click()">📥 นำเข้าจาก Excel</button>
-      <button class="btn-outline btn-sm" onclick="switchTab('preview',document.querySelectorAll('.tab-btn')[1])">👁 Preview รายงาน</button>
+    <div class="page-header-left">
+      <div class="page-header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3L1 9L12 15L21 10.09V17H23V9L12 3Z" fill="#7C3AED"/>
+          <path d="M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" fill="#A78BFA"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">การได้งานทำของบัณฑิต</h1>
+        <p class="page-sub">บันทึกข้อมูลอัตราการได้งานทำตามสาขาวิชา ประเภทงาน และระยะเวลา</p>
+      </div>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn-outline btn-sm" onclick="downloadTemplate()">📋 Template</button>
+      <button class="btn-outline btn-sm" onclick="document.getElementById('fileInput').click()">📥 นำเข้า Excel</button>
+      <button class="btn-primary btn-sm" onclick="switchTab('preview',document.querySelectorAll('.tab-btn')[1])">👁 Preview</button>
     </div>
   </div>
 
