@@ -84,25 +84,22 @@ body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg
 .back-btn { display: flex; align-items: center; gap: 8px; padding: 11px 18px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 13.5px; font-weight: 600; color: var(--text-sub); cursor: pointer; font-family: inherit; transition: all 0.15s; text-decoration: none; box-shadow: var(--shadow); }
 .back-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
 
-/* ══ STEP GUIDE (redesigned) ══ */
+/* ══ STEP GUIDE ══ */
 .step-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px 12px; box-shadow: var(--shadow); }
 .step-card-title { font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
 .step-card-title::before { content: ''; width: 3px; height: 12px; border-radius: 2px; background: var(--purple); display: block; }
 .step-list { display: flex; flex-direction: column; gap: 0; }
 .step-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; position: relative; }
 .step-item:not(:last-child) { border-bottom: 1px dashed var(--border); }
-/* connector line */
 .step-connector { position: absolute; left: 13px; top: 36px; width: 2px; height: calc(100% - 18px); border-radius: 2px; }
 .step-item.done   .step-connector { background: linear-gradient(to bottom, var(--purple), var(--purple-mid)); }
 .step-item.active .step-connector { background: linear-gradient(to bottom, var(--purple), transparent); }
 .step-item.pending .step-connector { background: var(--border); }
-
 .step-num-wrap { position: relative; flex-shrink: 0; margin-top: 2px; }
 .step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; font-family: 'Lexend', sans-serif; position: relative; z-index: 1; transition: all 0.3s; }
 .step-item.done   .step-num { background: var(--purple); color: white; box-shadow: 0 2px 8px rgba(107,63,160,0.4); }
 .step-item.active .step-num { background: white; color: var(--purple); border: 2.5px solid var(--purple); box-shadow: 0 0 0 4px rgba(107,63,160,0.12); }
 .step-item.pending .step-num { background: var(--bg); color: #c0b8d0; border: 2px dashed var(--border); }
-
 .step-body { flex: 1; min-width: 0; }
 .step-label { font-size: 12.5px; font-weight: 600; line-height: 1.35; }
 .step-item.done   .step-label { color: var(--purple); }
@@ -112,12 +109,8 @@ body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg
 .step-item.done   .step-sub { color: #8b72bf; }
 .step-item.active .step-sub { color: var(--text-sub); }
 .step-item.pending .step-sub { color: #d0c8e0; }
-
-/* active step animated pulse */
 .step-item.active .step-num::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--purple); opacity: 0; animation: stepPulse 2s ease-in-out infinite; }
 @keyframes stepPulse { 0%,100%{opacity:0;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.2)} }
-
-/* progress bar */
 .step-progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin: 0 0 14px; overflow: hidden; }
 .step-progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--purple-dark), var(--purple)); transition: width 0.5s cubic-bezier(.4,0,.2,1); }
 
@@ -207,9 +200,7 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
 .empty-state p { font-size: 14px; }
 .loading-state { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
 
-/* ═══════════════════════════════
-   MODAL BASE
-═══════════════════════════════ */
+/* ── MODAL ── */
 .modal-overlay { position: fixed; inset: 0; background: rgba(15,10,40,0.52); backdrop-filter: blur(6px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
 .modal { background: var(--white); border-radius: 20px; width: 100%; max-height: 92vh; overflow-y: auto; box-shadow: 0 32px 80px rgba(0,0,0,0.22); display: flex; flex-direction: column; }
@@ -240,7 +231,7 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
 .field-row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; }
 .autofill-hint { display: none; font-size: 12px; color: var(--purple); font-weight: 600; margin-top: 6px; padding: 6px 12px; background: var(--purple-light); border-radius: 6px; }
 
-/* ══ OUTCOMES SECTION ══ */
+/* ── OUTCOMES ── */
 .outcomes-section { margin-top: 22px; }
 .outcomes-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 .outcomes-header-left { display: flex; align-items: center; gap: 8px; }
@@ -259,8 +250,6 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
 .outcome-text-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .outcome-text-row textarea { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--white); font-size: 13px; font-family: inherit; color: var(--text); outline: none; resize: vertical; min-height: 64px; line-height: 1.55; transition: all 0.15s; }
 .outcome-text-row textarea:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(107,63,160,0.08); }
-
-/* PLO / MLO mapping inside outcome */
 .plo-mlo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .plo-mlo-box { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 12px; }
 .plo-mlo-box-label { font-size:10.5px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
@@ -286,6 +275,7 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
 .btn-save.edit-mode { background: var(--purple-dark); }
 .btn-save.edit-mode:hover { background: var(--purple); }
 .btn-save svg { display: block; flex-shrink: 0; }
+.btn-save:disabled { opacity: 0.65; cursor: not-allowed; }
 
 /* ── VIEW DETAIL MODAL ── */
 .vd-chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
@@ -368,15 +358,12 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
 <!-- MAIN -->
 <main class="main">
   <div class="page-body">
-
     <!-- LEFT -->
     <div class="col-left">
       <a class="back-btn" href="study-plan.html">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="display:block"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
         กลับไปรายการ
       </a>
-
-      <!-- Major Info -->
       <div class="info-card">
         <div class="info-major-name" id="majorName">-</div>
         <div class="info-major-en" id="majorEn">-</div>
@@ -390,15 +377,11 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
         <div class="info-row"><span class="info-label">จำนวนภาคเรียน</span><span class="info-value" id="infoSemCount">-</span></div>
         <div class="info-row"><span class="info-label">หน่วยกิตรวม</span><span class="info-value" id="infoTotalCredits">-</span></div>
       </div>
-
-      <!-- STEP GUIDE (redesigned) -->
       <div class="step-card">
         <div class="step-card-title">ขั้นตอนการจัดการ</div>
         <div class="step-progress-bar"><div class="step-progress-fill" id="stepProgressFill" style="width:0%"></div></div>
         <div class="step-list" id="stepList"></div>
       </div>
-
-      <!-- Plan Type -->
       <div class="plan-type-card">
         <div class="plan-type-label">ประเภทแผนการศึกษา</div>
         <div class="plan-type-toggle">
@@ -411,8 +394,6 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
         </div>
         <div class="plan-type-desc normal" id="planTypeDesc">แผนการเรียนปกติ นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร</div>
       </div>
-
-      <!-- Year Tabs -->
       <div class="info-card">
         <div style="font-size:12px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">เลือกชั้นปี</div>
         <div class="year-tabs">
@@ -445,11 +426,10 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
       </div>
       <div id="semesterList"><div class="loading-state">⏳ กำลังโหลด...</div></div>
     </div>
-
   </div>
 </main>
 
-<!-- ══════════════════════ MODAL A: VIEW SUBJECT ══════════════════════ -->
+<!-- MODAL A: VIEW -->
 <div class="modal-overlay" id="viewModal">
   <div class="modal" style="max-width:620px;">
     <div class="modal-header">
@@ -497,7 +477,7 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
   </div>
 </div>
 
-<!-- ══════════════════════ MODAL B: ADD / EDIT FORM ══════════════════════ -->
+<!-- MODAL B: ADD / EDIT -->
 <div class="modal-overlay" id="subjectModal">
   <div class="modal" style="max-width:860px;">
     <div class="modal-header" id="formHeader">
@@ -513,7 +493,6 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
       <button class="modal-close" id="formClose">✕</button>
     </div>
     <div class="modal-body">
-      <!-- Basic Info -->
       <div class="section-label"><span class="section-label-icon">📘</span> ข้อมูลรายวิชา</div>
       <div class="field-row-3">
         <div class="field" style="grid-column:span 2">
@@ -540,15 +519,11 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
           </select>
         </div>
       </div>
-
-      <!-- Description -->
       <div class="section-label"><span class="section-label-icon">📝</span> คำอธิบายรายวิชา</div>
       <div class="field-row">
         <div class="field"><label>คำอธิบาย (ภาษาไทย)</label><textarea id="m_desc_th" placeholder="คำอธิบายรายวิชาภาษาไทย..."></textarea></div>
         <div class="field"><label>คำอธิบาย (ภาษาอังกฤษ)</label><textarea id="m_desc_en" placeholder="Course description in English..."></textarea></div>
       </div>
-
-      <!-- Outcomes (dynamic items) -->
       <div class="outcomes-section">
         <div class="outcomes-header">
           <div class="outcomes-header-left">
@@ -578,9 +553,7 @@ body.coop-mode .btn-add-sem:hover { background: var(--coop); color: white; borde
 <div class="toast" id="toast"></div>
 
 <script>
-/* ══════════════════════════════════════════
-   PLO / MLO DATA
-══════════════════════════════════════════ */
+/* ══ PLO / MLO DATA ══ */
 const PLO_LIST = [
   {code:'PLO1', desc:'พัฒนาตนเองจากการเรียนรู้เมื่อได้รับคำวิพากษ์วิจารณ์'},
   {code:'PLO2', desc:'วิเคราะห์และนำเสนอข้อมูลต่อผู้บริหารเพื่อการตัดสินใจ'},
@@ -621,9 +594,7 @@ const MLO_GROUPS = [
   ]},
 ];
 
-/* ══════════════════════════════════════════
-   OUTCOME ITEMS MANAGER
-══════════════════════════════════════════ */
+/* ══ OUTCOME MANAGER ══ */
 let outcomeCounter = 0;
 
 function buildOutcomeItem(idx, data = {}) {
@@ -631,14 +602,10 @@ function buildOutcomeItem(idx, data = {}) {
   const el = document.createElement('div');
   el.className = 'outcome-item';
   el.dataset.oid = id;
-
-  // PLO chips
   const ploChips = PLO_LIST.map(p => {
     const sel = (data.plo || []).includes(p.code) ? ' selected' : '';
     return `<span class="plo-chip plo${sel}" data-code="${p.code}" title="${p.desc}" onclick="toggleChip(this)">${p.code}</span>`;
   }).join('');
-
-  // MLO chips by group
   const mloGroupsHtml = MLO_GROUPS.map(g => {
     const chips = g.items.map(m => {
       const sel = (data.mlo || []).includes(m.code) ? ' selected' : '';
@@ -646,7 +613,6 @@ function buildOutcomeItem(idx, data = {}) {
     }).join('');
     return `<div class="mlo-group"><div class="mlo-group-label">${g.icon} ${g.label}</div><div class="plo-chip-grid">${chips}</div></div>`;
   }).join('');
-
   el.innerHTML = `
     <div class="outcome-item-head">
       <div class="outcome-num-badge">${idx}</div>
@@ -678,16 +644,14 @@ function addOutcomeItem(data = {}) {
   const container = document.getElementById('outcomeItems');
   const hint = document.getElementById('noOutcomesHint');
   const items = container.querySelectorAll('.outcome-item');
-  const idx = items.length + 1;
-  const el = buildOutcomeItem(idx, data);
+  const el = buildOutcomeItem(items.length + 1, data);
   container.appendChild(el);
   hint.style.display = 'none';
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function removeOutcomeItem(btn) {
-  const item = btn.closest('.outcome-item');
-  item.remove();
+  btn.closest('.outcome-item').remove();
   renumberOutcomes();
 }
 
@@ -700,9 +664,7 @@ function renumberOutcomes() {
   document.getElementById('noOutcomesHint').style.display = items.length ? 'none' : '';
 }
 
-function toggleChip(chip) {
-  chip.classList.toggle('selected');
-}
+function toggleChip(chip) { chip.classList.toggle('selected'); }
 
 function collectOutcomes() {
   return [...document.querySelectorAll('#outcomeItems .outcome-item')].map(el => ({
@@ -714,16 +676,13 @@ function collectOutcomes() {
 }
 
 function clearOutcomes() {
-  const c = document.getElementById('outcomeItems');
-  c.querySelectorAll('.outcome-item').forEach(e => e.remove());
+  document.querySelectorAll('#outcomeItems .outcome-item').forEach(e => e.remove());
   document.getElementById('noOutcomesHint').style.display = '';
 }
 
 document.getElementById('btnAddOutcome').addEventListener('click', () => addOutcomeItem());
 
-/* ══════════════════════════════════════════
-   APP CORE
-══════════════════════════════════════════ */
+/* ══ APP CORE ══ */
 const BASE = "https://websitefms.onrender.com";
 const API  = BASE + "/api";
 
@@ -750,30 +709,33 @@ function toast(msg, type = "") {
   setTimeout(() => el.className = "toast", 2800);
 }
 
-/* ══════════════════════════════════════════
-   STEP GUIDE (redesigned with progress)
-══════════════════════════════════════════ */
+/* ── LOADING STATE ── */
+function setSaveLoading(loading) {
+  const btn = document.getElementById("formSave");
+  const label = document.getElementById("formSaveLabel");
+  btn.disabled = loading;
+  label.textContent = loading ? "กำลังบันทึก..." : (modalMode === "edit" ? "บันทึกการแก้ไข" : "บันทึกรายวิชา");
+}
+
+/* ══ STEP GUIDE ══ */
 const STEPS = [
-  { n: 1, label: "เลือกประเภทแผน",     sub: "แผนปกติ หรือ สหกิจศึกษา",          icon: "📋" },
-  { n: 2, label: "เลือกชั้นปี",          sub: "เลือกปี 1–4 ที่ต้องการจัดการ",      icon: "📅" },
-  { n: 3, label: "เพิ่มภาคเรียน",       sub: "กด \"เพิ่มภาคเรียน\" ด้านขวาบน",    icon: "➕" },
-  { n: 4, label: "เพิ่มรายวิชา",        sub: "กด + ในแต่ละภาคเรียน",              icon: "📚" },
-  { n: 5, label: "ระบุผลลัพธ์และ PLO",  sub: "กด ✏️ รายวิชาเพื่อแก้ไขและตั้ง CLO", icon: "🎯" },
+  { n:1, label:"เลือกประเภทแผน",    sub:"แผนปกติ หรือ สหกิจศึกษา",          icon:"📋" },
+  { n:2, label:"เลือกชั้นปี",         sub:"เลือกปี 1–4 ที่ต้องการจัดการ",      icon:"📅" },
+  { n:3, label:"เพิ่มภาคเรียน",      sub:"กด \"เพิ่มภาคเรียน\" ด้านขวาบน",    icon:"➕" },
+  { n:4, label:"เพิ่มรายวิชา",       sub:"กด + ในแต่ละภาคเรียน",              icon:"📚" },
+  { n:5, label:"ระบุผลลัพธ์และ PLO", sub:"กด ✏️ รายวิชาเพื่อแก้ไขและตั้ง CLO", icon:"🎯" },
 ];
 
 function renderSteps(activeStep) {
   const pct = Math.round(((activeStep - 1) / (STEPS.length - 1)) * 100);
   document.getElementById('stepProgressFill').style.width = pct + '%';
-
   document.getElementById("stepList").innerHTML = STEPS.map(s => {
     const state = s.n < activeStep ? "done" : s.n === activeStep ? "active" : "pending";
     const numHtml = state === "done"
       ? `<svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>`
       : state === "active" ? s.icon : s.n;
     return `<div class="step-item ${state}">
-      <div class="step-num-wrap">
-        <div class="step-num">${numHtml}</div>
-      </div>
+      <div class="step-num-wrap"><div class="step-num">${numHtml}</div></div>
       <div class="step-body">
         <div class="step-label">${s.label}</div>
         <div class="step-sub">${s.sub}</div>
@@ -782,9 +744,7 @@ function renderSteps(activeStep) {
   }).join("");
 }
 
-/* ══════════════════════════════════════════
-   PLAN CONFIG
-══════════════════════════════════════════ */
+/* ══ PLAN CONFIG ══ */
 const PLAN_CONFIG = {
   normal: { icon:"📋", label:"แผนปกติ", bannerTitle:"แผนการศึกษาปกติ", bannerSub:"นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร 4 ปี", desc:"แผนการเรียนปกติ นักศึกษาเรียนรายวิชาในชั้นเรียนตลอดหลักสูตร", coopSemesters:{} },
   coop:   { icon:"🏭", label:"สหกิจศึกษา", bannerTitle:"แผนการศึกษาสหกิจศึกษา", bannerSub:"นักศึกษาออกปฏิบัติงานจริงในสถานประกอบการ ปี 4 ภาคเรียน 2", desc:"แผนสหกิจศึกษา นักศึกษาออกปฏิบัติงานในสถานประกอบการ 1 ภาคเรียน (ปี 4 ภาค 2)", coopSemesters:{ 3:2 } },
@@ -815,9 +775,16 @@ function selectYear(year) {
   loadPlanForYear(year);
 }
 
-/* ══════════════════════════════════════════
-   INIT & LOAD
-══════════════════════════════════════════ */
+async function deleteSubject(ssId) {
+  if (!confirm("ต้องการลบรายวิชานี้?")) return;
+  try {
+    await fetch(`${API}/semester-subjects/${ssId}`, { method: "DELETE" });
+    toast("ลบรายวิชาสำเร็จ", "success");
+    await refreshSemesters();
+  } catch { toast("ลบไม่สำเร็จ", "error"); }
+}
+
+/* ══ INIT ══ */
 async function init() {
   renderSteps(1);
   try {
@@ -826,11 +793,11 @@ async function init() {
     if (!major) throw new Error();
     const courses = await fetch(`${API}/courses`).then(r => r.json());
     const course  = courses.find(c => String(c.id) === String(courseId));
-    document.getElementById("majorName").textContent        = major.name_th || "-";
-    document.getElementById("majorEn").textContent          = major.name_en || "";
-    document.getElementById("majorCourseName").textContent  = course?.name_th || `Course #${courseId}`;
-    document.getElementById("breadcrumbMajor").textContent  = major.name_th || "-";
-    document.getElementById("topbarTitle").textContent      = major.name_th || "จัดการแผนการศึกษา";
+    document.getElementById("majorName").textContent       = major.name_th || "-";
+    document.getElementById("majorEn").textContent         = major.name_en || "";
+    document.getElementById("majorCourseName").textContent = course?.name_th || `Course #${courseId}`;
+    document.getElementById("breadcrumbMajor").textContent = major.name_th || "-";
+    document.getElementById("topbarTitle").textContent     = major.name_th || "จัดการแผนการศึกษา";
     document.title = `${major.name_th} | FMS Admin`;
     await loadPlanForYear(1);
   } catch {
@@ -847,6 +814,7 @@ async function loadPlanForYear(yearNo) {
     try {
       const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
       renderSemesters(d.semesters || [], yearNo);
+      await enrichSSCache();
     } catch { showPlanError(); }
     fadeIn(); return;
   }
@@ -881,17 +849,26 @@ function fadeIn() {
   requestAnimationFrame(() => { list.style.transition = "opacity .18s"; list.style.opacity = "1"; list.style.pointerEvents = ""; });
 }
 async function refreshSemesters() {
+  // ถ้า planId หาย (เช่น หลังจาก navigate หรือ state reset) ให้ reload ใหม่จาก API
+  if (!planId) {
+    console.warn("refreshSemesters: planId is null — reloading via loadPlanForYear");
+    await loadPlanForYear(currentYear);
+    return;
+  }
   const list = document.getElementById("semesterList");
   list.style.transition = "opacity .1s"; list.style.opacity = "0"; list.style.pointerEvents = "none";
   await new Promise(r => setTimeout(r, 120));
-  const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
-  renderSemesters(d.semesters || [], currentYear);
+  try {
+    const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+    renderSemesters(d.semesters || [], currentYear);
+  } catch (err) {
+    console.error("refreshSemesters error:", err);
+    toast("โหลดข้อมูลไม่สำเร็จ", "error");
+  }
   fadeIn();
 }
 
-/* ══════════════════════════════════════════
-   RENDER SEMESTERS
-══════════════════════════════════════════ */
+/* ══ RENDER SEMESTERS ══ */
 function renderSemesters(semesters, yearNo) {
   const cfg = PLAN_CONFIG[currentPlanType];
   const coopTermNo = cfg.coopSemesters[yearNo];
@@ -899,10 +876,9 @@ function renderSemesters(semesters, yearNo) {
   document.getElementById("infoSemCount").textContent     = `${semesters.length} ภาค`;
   document.getElementById("infoTotalCredits").textContent = `${totalCred} หน่วยกิต`;
 
-  // step progress
   const hasSems = semesters.length > 0;
   const hasSubs = semesters.some(s => (s.subjects || []).length > 0);
-  const hasOut  = semesters.some(s => (s.subjects || []).some(it => it.outcomes_th || it.outcomes_en));
+  const hasOut  = semesters.some(s => (s.subjects || []).some(it => (it.outcomes || []).length > 0));
   renderSteps(hasOut ? 5 : hasSubs ? 5 : hasSems ? 4 : 3);
 
   if (!semesters.length) {
@@ -916,22 +892,47 @@ function renderSemesters(semesters, yearNo) {
     const isCoopSem = currentPlanType === "coop" && Number(sem.term_no) === coopTermNo;
 
     const subjectsHtml = (sem.subjects || []).map(it => {
-      const _s = it.subject || it;
+      const _s      = it.subject || it;
       const code    = it.code    || _s.code    || "";
       const name_th = it.name_th || _s.name_th || "";
       const credits = it.credits ?? it.default_credits ?? _s.default_credits ?? "";
       const catColor = { Core:"#6B3FA0", Elective:"#3B82F6", GE:"#10B981" }[it.category] || "#64748B";
 
+      // ── parse outcomes จาก API response ──
+      // รองรับทั้ง array format และ string format (เดิม)
+      // ── parse outcomes จาก API ──
+let outcomes = [];
+if (Array.isArray(it.outcomes) && it.outcomes.length > 0) {
+  outcomes = it.outcomes;
+} else {
+  // API เก็บเป็น string outcomes_th / outcomes_en
+  const thLines = ((it.outcomes_th || it.description_th && '') || '').split('\n').filter(Boolean);
+  const enLines = ((it.outcomes_en || '') || '').split('\n').filter(Boolean);
+  // ลอง fallback จาก subject object ด้วย
+  const subTh   = (_s.outcomes_th || '').split('\n').filter(Boolean);
+  const subEn   = (_s.outcomes_en || '').split('\n').filter(Boolean);
+  const finalTh = thLines.length ? thLines : subTh;
+  const finalEn = enLines.length ? enLines : subEn;
+  const maxLen  = Math.max(finalTh.length, finalEn.length);
+  for (let i = 0; i < maxLen; i++) {
+    outcomes.push({ th: finalTh[i] || '', en: finalEn[i] || '', plo: [], mlo: [] });
+  }
+}
       const key = "k" + it.id;
       SS[key] = {
-        ssId: it.id, semId: sem.id, semName: semTitle,
-        code, name_th,
-        name_en:  it.name_en  || _s.name_en  || "",
-        credits, hours: it.hour_structure || it.default_hour_structure || _s.default_hour_structure || "",
-        category: it.category || "Core",
-        desc_th:  it.description_th || _s.description_th || "",
-        desc_en:  it.description_en || _s.description_en || "",
-        outcomes: it.outcomes || [],  // array of {th, en, plo, mlo}
+        ssId:      it.id,
+        semId:     sem.id,
+        semName:   semTitle,
+        subjectId: it.subject_id || _s.id || null,
+        code,
+        name_th,
+        name_en:   it.name_en   || _s.name_en   || "",
+        credits,
+        hours:     it.hour_structure || it.default_hour_structure || _s.default_hour_structure || "",
+        category:  it.category || "Core",
+        desc_th:   it.description_th || _s.description_th || "",
+        desc_en:   it.description_en || _s.description_en || "",
+        outcomes,
       };
 
       return `<div class="subject-row">
@@ -988,9 +989,7 @@ document.getElementById("semesterList").addEventListener("click", e => {
   if (delSem) { deleteSemester(Number(delSem.dataset.semid), delSem.dataset.semname); return; }
 });
 
-/* ══════════════════════════════════════════
-   ADD SEMESTER
-══════════════════════════════════════════ */
+/* ══ ADD SEMESTER ══ */
 document.getElementById("btnAddSemester").addEventListener("click", async () => {
   if (!planId) return toast("ไม่พบแผนการศึกษา", "error");
   try {
@@ -1020,26 +1019,20 @@ async function deleteSemester(semId, semTitle) {
   } catch { toast("ลบภาคเรียนไม่สำเร็จ", "error"); }
 }
 
-/* ══════════════════════════════════════════
-   VIEW MODAL
-══════════════════════════════════════════ */
+/* ══ VIEW MODAL ══ */
 function openViewModal(key) {
   const d = SS[key];
   if (!d) return;
   currentViewData = d;
-
-  document.getElementById("v_code").textContent       = d.code;
-  document.getElementById("v_name_th").textContent    = d.name_th;
-  document.getElementById("v_semname").textContent    = d.semName;
+  document.getElementById("v_code").textContent        = d.code;
+  document.getElementById("v_name_th").textContent     = d.name_th;
+  document.getElementById("v_semname").textContent     = d.semName;
   document.getElementById("v_credits_chip").textContent = `${d.credits} หน่วยกิต`;
-  document.getElementById("v_cat_chip").textContent   = { Core:"Core Course", Elective:"Elective", GE:"GE" }[d.category] || d.category;
-
+  document.getElementById("v_cat_chip").textContent    = { Core:"Core Course", Elective:"Elective", GE:"GE" }[d.category] || d.category;
   if (d.hours) { document.getElementById("v_hours_chip").textContent = d.hours; document.getElementById("v_hours_chip").style.display = ""; }
   else document.getElementById("v_hours_chip").style.display = "none";
-
   document.getElementById("v_name_en_block").style.display = d.name_en ? "" : "none";
   document.getElementById("v_name_en").textContent = d.name_en || "";
-
   const hasDesc = !!(d.desc_th || d.desc_en);
   document.getElementById("v_desc_block").style.display = hasDesc ? "" : "none";
   document.getElementById("v_desc_th").textContent = d.desc_th || "(ไม่มีข้อมูล)";
@@ -1047,8 +1040,6 @@ function openViewModal(key) {
   document.getElementById("v_desc_en").style.display = "none";
   document.getElementById("v_desc_th").style.display = "";
   document.getElementById("v_desc_block").querySelectorAll(".vd-tab").forEach((t,i) => t.classList.toggle("active", i===0));
-
-  // outcomes list (items)
   const hasOut = d.outcomes && d.outcomes.length > 0;
   document.getElementById("v_out_block").style.display = hasOut ? "" : "none";
   if (hasOut) {
@@ -1063,7 +1054,6 @@ function openViewModal(key) {
       </div>`;
     }).join('');
   }
-
   document.getElementById("v_empty").style.display = (!hasDesc && !hasOut) ? "" : "none";
   document.getElementById("viewModal").classList.add("open");
 }
@@ -1078,15 +1068,12 @@ function vdTab(btn, showId, hideId) {
 document.getElementById("btnViewClose").addEventListener("click",  () => document.getElementById("viewModal").classList.remove("open"));
 document.getElementById("btnViewClose2").addEventListener("click", () => document.getElementById("viewModal").classList.remove("open"));
 document.getElementById("viewModal").addEventListener("click", e => { if (e.target === document.getElementById("viewModal")) document.getElementById("viewModal").classList.remove("open"); });
-
-document.getElementById("btnGoEdit").addEventListener("click", () => {
+document.getElementById("btnGoEdit").addEventListener("click", async () => {
   document.getElementById("viewModal").classList.remove("open");
-  openEditModal(currentViewData);
+  await openEditModal(currentViewData);
 });
 
-/* ══════════════════════════════════════════
-   FORM MODAL (Add / Edit)
-══════════════════════════════════════════ */
+/* ══ FORM MODAL ══ */
 const BASIC_FIELDS = ["m_code","m_name_th","m_name_en","m_credits","m_hours","m_desc_th","m_desc_en"];
 function clearForm() {
   BASIC_FIELDS.forEach(id => document.getElementById(id).value = "");
@@ -1098,18 +1085,15 @@ function clearForm() {
 function setMode(mode) {
   modalMode = mode;
   const isEdit = mode === "edit";
-  document.getElementById("formTitle").textContent       = isEdit ? "แก้ไขรายวิชา" : "เพิ่มรายวิชา";
-  document.getElementById("formHeader").className        = isEdit ? "modal-header edit-mode" : "modal-header";
-  document.getElementById("formSaveLabel").textContent   = isEdit ? "บันทึกการแก้ไข" : "บันทึกรายวิชา";
-  document.getElementById("formSave").className          = isEdit ? "btn-save edit-mode" : "btn-save";
-  document.getElementById("formSaveIcon").innerHTML      = isEdit
+  document.getElementById("formTitle").textContent     = isEdit ? "แก้ไขรายวิชา" : "เพิ่มรายวิชา";
+  document.getElementById("formHeader").className      = isEdit ? "modal-header edit-mode" : "modal-header";
+  document.getElementById("formSaveLabel").textContent = isEdit ? "บันทึกการแก้ไข" : "บันทึกรายวิชา";
+  document.getElementById("formSave").className        = isEdit ? "btn-save edit-mode" : "btn-save";
+  document.getElementById("formSaveIcon").innerHTML    = isEdit
     ? `<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>`
     : `<path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>`;
   document.getElementById("btnBackToView").style.display = isEdit ? "flex" : "none";
-  const codeEl = document.getElementById("m_code");
-  codeEl.readOnly = isEdit;
-  codeEl.style.background = isEdit ? "" : "";
-  codeEl.style.color = ""; codeEl.style.fontWeight = "";
+  document.getElementById("m_code").readOnly = isEdit;
 }
 
 function openAddModal(semId, semName) {
@@ -1119,19 +1103,48 @@ function openAddModal(semId, semName) {
   document.getElementById("subjectModal").classList.add("open");
 }
 
-function openEditModal(d) {
+async function openEditModal(d) {
   modalSemId = d.semId; editSsId = d.ssId;
   clearForm(); setMode("edit");
   document.getElementById("formSemName").textContent = d.semName;
   document.getElementById("m_code").value     = d.code;
   document.getElementById("m_name_th").value  = d.name_th;
-  document.getElementById("m_name_en").value  = d.name_en;
+  document.getElementById("m_name_en").value  = d.name_en  || "";
   document.getElementById("m_credits").value  = d.credits;
-  document.getElementById("m_hours").value    = d.hours;
+  document.getElementById("m_hours").value    = d.hours    || "";
   document.getElementById("m_category").value = d.category || "Core";
-  document.getElementById("m_desc_th").value  = d.desc_th;
-  document.getElementById("m_desc_en").value  = d.desc_en;
-  // load outcomes
+  document.getElementById("m_desc_th").value  = d.desc_th  || "";
+  document.getElementById("m_desc_en").value  = d.desc_en  || "";
+
+  // ถ้า desc ว่าง และมี subjectId → ลอง fetch ข้อมูลเต็ม
+  if ((!d.desc_th && !d.desc_en) && d.subjectId) {
+    try {
+      const s = await fetch(`${API}/subjects/${d.subjectId}`).then(r => r.json());
+      document.getElementById("m_name_th").value = s.name_th  || d.name_th;
+      document.getElementById("m_name_en").value = s.name_en  || "";
+      document.getElementById("m_desc_th").value = s.description_th || "";
+      document.getElementById("m_desc_en").value = s.description_en || "";
+      // อัปเดต SS cache ด้วย
+      d.desc_th  = s.description_th || "";
+      d.desc_en  = s.description_en || "";
+      d.name_en  = s.name_en || "";
+      // parse outcomes
+      if (!d.outcomes || d.outcomes.length === 0) {
+        const thRaw = s.outcomes_th || "";
+        const enRaw = s.outcomes_en || "";
+        if (thRaw || enRaw) {
+          const thLines = thRaw.split('\n').filter(Boolean);
+          const enLines = enRaw.split('\n').filter(Boolean);
+          const maxLen  = Math.max(thLines.length, enLines.length);
+          d.outcomes = [];
+          for (let i = 0; i < maxLen; i++) {
+            d.outcomes.push({ th: thLines[i] || '', en: enLines[i] || '', plo: [], mlo: [] });
+          }
+        }
+      }
+    } catch(e) { console.warn("fetch subject failed:", e); }
+  }
+
   if (d.outcomes && d.outcomes.length) {
     d.outcomes.forEach(o => addOutcomeItem(o));
   }
@@ -1160,13 +1173,12 @@ document.getElementById("m_code").addEventListener("blur", async () => {
     const items = await fetch(`${API}/subjects?query=${encodeURIComponent(code)}`).then(r => r.json());
     const found = items.find(it => it.code.toLowerCase() === code.toLowerCase());
     if (found) {
-      document.getElementById("m_name_th").value = found.name_th || "";
-      document.getElementById("m_name_en").value = found.name_en || "";
-      document.getElementById("m_credits").value = found.default_credits || "";
-      document.getElementById("m_hours").value   = found.default_hour_structure || "";
-      document.getElementById("m_desc_th").value = found.description_th || "";
-      document.getElementById("m_desc_en").value = found.description_en || "";
-      // load outcomes from found subject if any
+      document.getElementById("m_name_th").value  = found.name_th || "";
+      document.getElementById("m_name_en").value  = found.name_en || "";
+      document.getElementById("m_credits").value  = found.default_credits || "";
+      document.getElementById("m_hours").value    = found.default_hour_structure || "";
+      document.getElementById("m_desc_th").value  = found.description_th || "";
+      document.getElementById("m_desc_en").value  = found.description_en || "";
       if (found.outcomes && found.outcomes.length) {
         clearOutcomes();
         found.outcomes.forEach(o => addOutcomeItem(o));
@@ -1178,6 +1190,11 @@ document.getElementById("m_code").addEventListener("blur", async () => {
 
 /* ── Save ── */
 document.getElementById("formSave").addEventListener("click", async () => {
+  // DEBUG
+  console.log("=== formSave clicked ===");
+  console.log("modal open:", document.getElementById("subjectModal").classList.contains("open"));
+  console.log("outcome items at click:", document.querySelectorAll("#outcomeItems .outcome-item").length);
+  // ... โค้ดเดิม
   const code    = document.getElementById("m_code").value.trim();
   const name_th = document.getElementById("m_name_th").value.trim();
   const credits = Number(document.getElementById("m_credits").value);
@@ -1185,65 +1202,172 @@ document.getElementById("formSave").addEventListener("click", async () => {
   if (modalMode === "edit") await doEdit(code, name_th, credits);
   else await doAdd(code, name_th, credits);
 });
+// fetch ข้อมูลเต็มของ subject แล้ว merge เข้า SS cache
+async function enrichSSCache() {
+  const keys = Object.keys(SS);
+  await Promise.all(keys.map(async key => {
+    const entry = SS[key];
+    if (!entry.subjectId) return;
+    try {
+      const s = await fetch(`${API}/subjects/${entry.subjectId}`).then(r => r.json());
+      entry.name_th  = s.name_th  || entry.name_th;
+      entry.name_en  = s.name_en  || entry.name_en;
+      entry.desc_th  = s.description_th || entry.desc_th;
+      entry.desc_en  = s.description_en || entry.desc_en;
+      entry.hours    = entry.hours || s.default_hour_structure || "";
 
+      // parse outcomes จาก subject
+      if (!entry.outcomes || entry.outcomes.length === 0) {
+        const thRaw = s.outcomes_th || "";
+        const enRaw = s.outcomes_en || "";
+        if (thRaw || enRaw) {
+          const thLines = thRaw.split('\n').filter(Boolean);
+          const enLines = enRaw.split('\n').filter(Boolean);
+          const maxLen  = Math.max(thLines.length, enLines.length);
+          entry.outcomes = [];
+          for (let i = 0; i < maxLen; i++) {
+            entry.outcomes.push({ th: thLines[i] || '', en: enLines[i] || '', plo: [], mlo: [] });
+          }
+        }
+      }
+    } catch(e) {
+      console.warn("enrichSSCache failed for subjectId:", entry.subjectId, e);
+    }
+  }));
+}
 async function doAdd(code, name_th, credits) {
-  const outcomes = collectOutcomes();
+  setSaveLoading(true);
+  const outcomesArray  = collectOutcomes();
+  const outcomes_th    = outcomesArray.map(o => o.th).filter(Boolean).join('\n');
+  const outcomes_en    = outcomesArray.map(o => o.en).filter(Boolean).join('\n');
+
   let subject_id = null;
   try {
     const items = await fetch(`${API}/subjects?query=${encodeURIComponent(code)}`).then(r => r.json());
     const found = items.find(it => it.code.toLowerCase() === code.toLowerCase());
     if (found) subject_id = found.id;
   } catch {}
-  const p = { category: document.getElementById("m_category").value, credits, hour_structure: document.getElementById("m_hours").value.trim() || null, outcomes };
-  if (subject_id) { p.subject_id = subject_id; }
-  else {
-    Object.assign(p, { code, name_th, default_credits: credits,
-      name_en:                document.getElementById("m_name_en").value.trim() || null,
-      default_hour_structure: document.getElementById("m_hours").value.trim()   || null,
-      description_th:         document.getElementById("m_desc_th").value.trim() || null,
-      description_en:         document.getElementById("m_desc_en").value.trim() || null,
+
+  const p = {
+    category:       document.getElementById("m_category").value,
+    credits,
+    hour_structure: document.getElementById("m_hours").value.trim() || null,
+    outcomes_th:    outcomes_th || null,
+    outcomes_en:    outcomes_en || null,
+  };
+  if (subject_id) {
+    p.subject_id = subject_id;
+  } else {
+    Object.assign(p, {
+      code, name_th, default_credits: credits,
+      name_en:                document.getElementById("m_name_en").value.trim()   || null,
+      default_hour_structure: document.getElementById("m_hours").value.trim()     || null,
+      description_th:         document.getElementById("m_desc_th").value.trim()   || null,
+      description_en:         document.getElementById("m_desc_en").value.trim()   || null,
     });
   }
   try {
-    const r = await fetch(`${API}/semesters/${modalSemId}/subjects`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) });
-    if (!r.ok) throw new Error();
+    const r = await fetch(`${API}/semesters/${modalSemId}/subjects`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p)
+    });
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      toast(`บันทึกไม่สำเร็จ: ${e.message || r.status}`, "error");
+      return;
+    }
     toast("บันทึกรายวิชาสำเร็จ ✓", "success");
     closeForm(); await refreshSemesters();
-  } catch { toast("บันทึกไม่สำเร็จ", "error"); }
+  } catch { toast("เกิดข้อผิดพลาด", "error"); }
+  finally { setSaveLoading(false); }
 }
-
 async function doEdit(code, name_th, credits) {
   if (!editSsId) return toast("ไม่พบ ID รายวิชา", "error");
-  const outcomes = collectOutcomes();
-  const p = {
-    credits, category: document.getElementById("m_category").value,
-    hour_structure:  document.getElementById("m_hours").value.trim()    || null,
-    name_th, name_en: document.getElementById("m_name_en").value.trim() || null,
-    description_th:  document.getElementById("m_desc_th").value.trim()  || null,
-    description_en:  document.getElementById("m_desc_en").value.trim()  || null,
-    outcomes,
-  };
-  for (const method of ["PATCH", "PUT"]) {
-    try {
-      const r = await fetch(`${API}/semester-subjects/${editSsId}`, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) });
-      if (r.ok) {
-        toast("แก้ไขรายวิชาสำเร็จ ✓", "success");
-        closeForm(); currentViewData = null; await refreshSemesters(); return;
-      }
-    } catch {}
-  }
-  toast("แก้ไขไม่สำเร็จ", "error");
-}
 
-async function deleteSubject(ssId) {
-  if (!confirm("ต้องการลบรายวิชานี้?")) return;
+  const savedPlanId = planId;
+  const savedYear   = currentYear;
+  setSaveLoading(true);
+
+  // collect ทันทีก่อนอะไรทั้งนั้น
+  const outcomesArray = collectOutcomes();
+  console.log("outcomes collected:", JSON.stringify(outcomesArray));
+
+  const outcomes_th = outcomesArray.map(o => o.th).filter(Boolean).join('\n');
+  const outcomes_en = outcomesArray.map(o => o.en).filter(Boolean).join('\n');
+  const category       = document.getElementById("m_category").value;
+  const hour_structure = document.getElementById("m_hours").value.trim() || null;
+  const name_en        = document.getElementById("m_name_en").value.trim() || null;
+  const description_th = document.getElementById("m_desc_th").value.trim() || null;
+  const description_en = document.getElementById("m_desc_en").value.trim() || null;
+
+  const ssPayload = { category, credits, hour_structure, outcomes_th: outcomes_th || null, outcomes_en: outcomes_en || null };
+  console.log("PUT /semester-subjects payload:", JSON.stringify(ssPayload));
+
   try {
-    await fetch(`${API}/semester-subjects/${ssId}`, { method: "DELETE" });
-    toast("ลบรายวิชาสำเร็จ", "success");
-    await refreshSemesters();
-  } catch { toast("ลบไม่สำเร็จ", "error"); }
+    const r1 = await fetch(`${API}/semester-subjects/${editSsId}`, {
+      method: "PUT", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(ssPayload),
+    });
+    const r1Text = await r1.text();
+    console.log("r1 status:", r1.status, "body:", r1Text);
+    if (!r1.ok) { toast("อัปเดตไม่สำเร็จ: " + r1.status, "error"); setSaveLoading(false); return; }
+
+    const cacheKey = Object.keys(SS).find(k => SS[k]?.ssId === editSsId);
+    let subjectId  = cacheKey ? SS[cacheKey].subjectId : null;
+    console.log("subjectId:", subjectId);
+
+    if (subjectId) {
+      const subPayload = { name_th, name_en, default_credits: credits, default_hour_structure: hour_structure, description_th, description_en, outcomes_th: outcomes_th || null, outcomes_en: outcomes_en || null };
+      console.log("PUT /subjects payload:", JSON.stringify(subPayload));
+      const r2 = await fetch(`${API}/subjects/${subjectId}`, {
+        method: "PUT", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(subPayload),
+      });
+      const r2Text = await r2.text();
+      console.log("r2 status:", r2.status, "body:", r2Text);
+      toast(r2.ok ? "แก้ไขสำเร็จ ✓" : "บันทึกบางส่วนสำเร็จ", r2.ok ? "success" : "");
+    } else {
+      toast("แก้ไขสำเร็จ ✓", "success");
+    }
+
+    currentViewData = null;
+    closeForm();
+    if (!planId && savedPlanId) planId = savedPlanId;
+    if (planId) { await refreshSemesters(); } else { await loadPlanForYear(savedYear); }
+
+    // ดู GET response หลัง refresh
+    console.log("GET study-plan after refresh:");
+    const check = await fetch(`${API}/study-plans/${planId}`).then(r=>r.json());
+    console.log(JSON.stringify(check.semesters?.map(s => s.subjects?.map(sub => ({ id: sub.id, outcomes_th: sub.outcomes_th, outcomes_en: sub.outcomes_en, outcomes: sub.outcomes })))));
+
+  } catch (err) {
+    console.error("doEdit error:", err);
+    toast("เกิดข้อผิดพลาด: " + err.message, "error");
+  } finally { setSaveLoading(false); }
 }
 
+async function refreshSemesters() {
+  if (!planId) {
+    const key = `${currentPlanType}_${currentYear}`;
+    if (planCache[key]) { planId = planCache[key]; }
+    else { await loadPlanForYear(currentYear); return; }
+  }
+  const list = document.getElementById("semesterList");
+  list.style.transition = "opacity .1s";
+  list.style.opacity = "0";
+  list.style.pointerEvents = "none";
+  await new Promise(r => setTimeout(r, 120));
+  try {
+    const d = await fetch(`${API}/study-plans/${planId}`).then(r => r.json());
+    renderSemesters(d.semesters || [], currentYear);
+    await enrichSSCache();   // ← เพิ่มบรรทัดนี้
+  } catch (err) {
+    console.error("refreshSemesters error:", err);
+    toast("โหลดข้อมูลไม่สำเร็จ", "error");
+  }
+  fadeIn();
+}
+
+/* ══ INIT ══ */
 init();
 </script>
 </body>

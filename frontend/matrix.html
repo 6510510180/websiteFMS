@@ -57,9 +57,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   padding:14px 22px;margin-bottom:20px;
   box-shadow:0 2px 8px rgba(127,19,236,.06);
 }
-.publish-bar.published{
-  background:#f0fdf4;border-color:#86efac;
-}
+.publish-bar.published{background:#f0fdf4;border-color:#86efac;}
 .publish-info{display:flex;align-items:center;gap:12px;}
 .publish-dot{width:10px;height:10px;border-radius:50%;background:#94a3b8;flex-shrink:0;}
 .publish-dot.on{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2);animation:pulseGreen 1.8s infinite;}
@@ -68,7 +66,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .publish-sublabel{font-size:11.5px;color:var(--text-sub);margin-top:1px;}
 .publish-time{font-size:11px;color:#16a34a;font-weight:600;margin-top:2px;}
 
-/* Toggle switch */
 .toggle-wrap{display:flex;align-items:center;gap:10px;}
 .toggle-text{font-size:12px;font-weight:700;color:var(--text-sub);}
 .toggle-switch{position:relative;width:46px;height:26px;cursor:pointer;}
@@ -115,14 +112,41 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .table-wrapper{background:var(--white);border-radius:14px;box-shadow:0 2px 12px rgba(127,19,236,.08);overflow:auto;border:1px solid var(--border);}
 .matrix-table{border-collapse:collapse;min-width:100%;font-size:12px;}
 .matrix-table th,.matrix-table td{border:1px solid #ede8f5;white-space:nowrap;}
-.th-empty{background:#fafafa;width:240px;min-width:240px;max-width:240px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--text);border-bottom:2px solid #ddd;text-align:left;position:sticky;left:0;z-index:10;white-space:normal;}
+
+/* FIX: wider first column + allow wrapping */
+.th-empty{
+  background:#fafafa;
+  width:300px;min-width:300px;max-width:300px;
+  padding:10px 14px;font-size:13px;font-weight:700;color:var(--text);
+  border-bottom:2px solid #ddd;text-align:left;
+  position:sticky;left:0;z-index:10;
+  white-space:normal;
+}
 .th-group-plo{background:#f3e8ff;color:var(--purple);text-align:center;padding:10px 8px;font-weight:700;font-size:12px;}
 .th-group-mlo{background:#e0f7fa;color:var(--teal);text-align:center;padding:10px 8px;font-weight:700;font-size:12px;}
 .th-col-plo{background:#faf0ff;color:var(--purple);text-align:center;padding:10px 10px;font-weight:700;font-size:11px;min-width:40px;}
 .th-col-mlo{background:#f0fafd;color:var(--teal);text-align:center;padding:10px 8px;font-weight:700;font-size:11px;min-width:38px;}
 
-.td-label{background:var(--white);position:sticky;left:0;z-index:5;padding:10px 14px;width:240px;min-width:240px;max-width:240px;border-right:2px solid #e0d8f0;white-space:normal;line-height:1.5;}
-.row-group{font-size:10.5px;font-weight:700;color:var(--purple);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;word-break:break-word;}
+/* FIX: wider + always wrap */
+.td-label{
+  background:var(--white);
+  position:sticky;left:0;z-index:5;
+  padding:10px 14px;
+  width:300px;min-width:300px;max-width:300px;
+  border-right:2px solid #e0d8f0;
+  white-space:normal;
+  line-height:1.5;
+}
+
+/* FIX: row-group wraps properly */
+.row-group{
+  font-size:10.5px;font-weight:700;color:var(--purple);
+  margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;
+  word-break:break-word;
+  white-space:normal;
+  line-height:1.4;
+  overflow-wrap:break-word;
+}
 .row-title{font-size:11.5px;font-weight:600;color:var(--text);word-break:break-word;white-space:normal;display:inline-flex;align-items:flex-start;gap:5px;line-height:1.45;}
 .row-title.has-desc{cursor:pointer;}
 .row-title.has-desc:hover{color:var(--purple);}
@@ -325,9 +349,6 @@ tbody tr:hover .td-label,tbody tr:hover{background:#f5eeff !important;}
 <div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
 
 <script>
-/* ═══════════════════════════════════════
-   DATA
-═══════════════════════════════════════ */
 const STORAGE_KEY   = 'fms_alignment_matrix_v2';
 const PUBLISH_KEY   = 'fms_matrix_publish_state';
 const PLO_COLS = ['1','2','3','4','5','6','7','8','9'];
@@ -379,7 +400,6 @@ try {
   rows = saved ? JSON.parse(saved) : DEFAULT_ROWS.map(r=>({...r,checks:[...r.checks]}));
 } catch { rows = DEFAULT_ROWS.map(r=>({...r,checks:[...r.checks]})); }
 
-// Publish state
 let publishState = {published: false, publishedAt: null};
 try {
   const ps = localStorage.getItem(PUBLISH_KEY);
@@ -389,8 +409,6 @@ try {
 let hasUnsaved = false;
 const PAGE_SIZE = 12;
 let currentPage = 1;
-
-// pending toggle value (before confirm)
 let _pendingPublish = null;
 
 function markUnsaved(){ hasUnsaved=true; document.getElementById('unsavedBadge').classList.add('show'); }
@@ -400,100 +418,68 @@ function saveData(){
   catch { showToast('❌ บันทึกไม่สำเร็จ','#ef4444'); }
 }
 
-/* ═══════════════════════════════════════
-   PUBLISH LOGIC
-═══════════════════════════════════════ */
 function onToggleChange(checked){
-  // revert toggle immediately — wait for confirm
   document.getElementById('publishToggle').checked = publishState.published;
   _pendingPublish = checked;
   showConfirm(checked);
 }
 
 function showConfirm(willPublish){
-  const icon   = document.getElementById('confirmIcon');
-  const svg    = document.getElementById('confirmIconSvg');
-  const title  = document.getElementById('confirmTitle');
-  const body   = document.getElementById('confirmBody');
-  const doBtn  = document.getElementById('confirmDoBtn');
-
+  const icon=document.getElementById('confirmIcon'),svg=document.getElementById('confirmIconSvg'),
+        title=document.getElementById('confirmTitle'),body=document.getElementById('confirmBody'),
+        doBtn=document.getElementById('confirmDoBtn');
   if(willPublish){
-    icon.className  = 'confirm-icon publish';
-    svg.innerHTML   = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>';
-    title.textContent = 'ยืนยันการเผยแพร่ข้อมูล';
-    body.innerHTML  = `ข้อมูล Alignment Matrix จะถูก<strong>แสดงในหน้าสาธารณะ (bba-matrix.html)</strong> ทันที<br><br>ตรวจสอบให้แน่ใจว่าข้อมูลถูกต้องและบันทึกแล้วก่อนเผยแพร่`;
-    doBtn.textContent = 'เผยแพร่ข้อมูล';
-    doBtn.className = 'btn-do-publish publish';
+    icon.className='confirm-icon publish';
+    svg.innerHTML='<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>';
+    title.textContent='ยืนยันการเผยแพร่ข้อมูล';
+    body.innerHTML=`ข้อมูล Alignment Matrix จะถูก<strong>แสดงในหน้าสาธารณะ (bba-matrix.html)</strong> ทันที<br><br>ตรวจสอบให้แน่ใจว่าข้อมูลถูกต้องและบันทึกแล้วก่อนเผยแพร่`;
+    doBtn.textContent='เผยแพร่ข้อมูล'; doBtn.className='btn-do-publish publish';
   } else {
-    icon.className  = 'confirm-icon unpublish';
-    svg.innerHTML   = '<path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524L13.477 14.89zm1.414-1.414L6.524 5.11A6 6 0 0114.89 13.476zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>';
-    title.textContent = 'ยืนยันการปิดเผยแพร่';
-    body.innerHTML  = `ข้อมูล Alignment Matrix จะ<strong>ถูกซ่อนจากหน้าสาธารณะ (bba-matrix.html)</strong> ทันที<br><br>ผู้เยี่ยมชมจะเห็นข้อความ "ข้อมูลยังไม่พร้อมเผยแพร่" แทน`;
-    doBtn.textContent = 'ปิดเผยแพร่';
-    doBtn.className = 'btn-do-publish unpublish';
+    icon.className='confirm-icon unpublish';
+    svg.innerHTML='<path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524L13.477 14.89zm1.414-1.414L6.524 5.11A6 6 0 0114.89 13.476zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>';
+    title.textContent='ยืนยันการปิดเผยแพร่';
+    body.innerHTML=`ข้อมูล Alignment Matrix จะ<strong>ถูกซ่อนจากหน้าสาธารณะ (bba-matrix.html)</strong> ทันที<br><br>ผู้เยี่ยมชมจะเห็นข้อความ "ข้อมูลยังไม่พร้อมเผยแพร่" แทน`;
+    doBtn.textContent='ปิดเผยแพร่'; doBtn.className='btn-do-publish unpublish';
   }
-
   document.getElementById('confirmOverlay').classList.add('show');
 }
 
-function cancelConfirm(){
-  document.getElementById('confirmOverlay').classList.remove('show');
-  _pendingPublish = null;
-}
-
+function cancelConfirm(){ document.getElementById('confirmOverlay').classList.remove('show'); _pendingPublish=null; }
 function doConfirm(){
-  const willPublish = _pendingPublish;
-  document.getElementById('confirmOverlay').classList.remove('show');
-  _pendingPublish = null;
-
-  publishState.published = willPublish;
-  publishState.publishedAt = willPublish ? new Date().toISOString() : null;
-  localStorage.setItem(PUBLISH_KEY, JSON.stringify(publishState));
-
-  // sync the actual toggle
-  document.getElementById('publishToggle').checked = willPublish;
+  const willPublish=_pendingPublish;
+  document.getElementById('confirmOverlay').classList.remove('show'); _pendingPublish=null;
+  publishState.published=willPublish; publishState.publishedAt=willPublish?new Date().toISOString():null;
+  localStorage.setItem(PUBLISH_KEY,JSON.stringify(publishState));
+  document.getElementById('publishToggle').checked=willPublish;
   updatePublishBar();
-  showToast(willPublish ? '✓ เผยแพร่ข้อมูลสำเร็จ · หน้า bba-matrix.html จะแสดงข้อมูลแล้ว' : '✓ ปิดเผยแพร่แล้ว · ข้อมูลถูกซ่อนจากสาธารณะ', willPublish ? '#22c55e' : '#f59e0b');
+  showToast(willPublish?'✓ เผยแพร่ข้อมูลสำเร็จ':'✓ ปิดเผยแพร่แล้ว',willPublish?'#22c55e':'#f59e0b');
 }
 
 function updatePublishBar(){
-  const bar       = document.getElementById('publishBar');
-  const dot       = document.getElementById('publishDot');
-  const label     = document.getElementById('publishLabel');
-  const sublabel  = document.getElementById('publishSublabel');
-  const timeEl    = document.getElementById('publishTime');
-  const toggle    = document.getElementById('publishToggle');
-  const toggleLbl = document.getElementById('toggleLabel');
-
-  const on = publishState.published;
-  toggle.checked = on;
-  bar.classList.toggle('published', on);
-  dot.classList.toggle('on', on);
-  toggleLbl.textContent = on ? 'เผยแพร่แล้ว' : 'ปิดเผยแพร่';
-
+  const bar=document.getElementById('publishBar'),dot=document.getElementById('publishDot'),
+        label=document.getElementById('publishLabel'),sublabel=document.getElementById('publishSublabel'),
+        timeEl=document.getElementById('publishTime'),toggle=document.getElementById('publishToggle'),
+        toggleLbl=document.getElementById('toggleLabel');
+  const on=publishState.published;
+  toggle.checked=on; bar.classList.toggle('published',on); dot.classList.toggle('on',on);
+  toggleLbl.textContent=on?'เผยแพร่แล้ว':'ปิดเผยแพร่';
   if(on){
-    label.textContent    = 'เผยแพร่ข้อมูลสู่สาธารณะแล้ว';
-    sublabel.textContent = 'ข้อมูลแสดงในหน้า bba-matrix.html เรียบร้อย';
+    label.textContent='เผยแพร่ข้อมูลสู่สาธารณะแล้ว';
+    sublabel.textContent='ข้อมูลแสดงในหน้า bba-matrix.html เรียบร้อย';
     if(publishState.publishedAt){
-      const d = new Date(publishState.publishedAt);
-      timeEl.textContent = `เผยแพร่เมื่อ ${d.toLocaleDateString('th-TH')} ${d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}`;
-      timeEl.style.display = '';
+      const d=new Date(publishState.publishedAt);
+      timeEl.textContent=`เผยแพร่เมื่อ ${d.toLocaleDateString('th-TH')} ${d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}`;
+      timeEl.style.display='';
     }
   } else {
-    label.textContent    = 'ยังไม่เผยแพร่ข้อมูลสู่สาธารณะ';
-    sublabel.textContent = 'ข้อมูลจะไม่แสดงในหน้า bba-matrix.html จนกว่าจะเปิดเผยแพร่';
-    timeEl.style.display = 'none';
+    label.textContent='ยังไม่เผยแพร่ข้อมูลสู่สาธารณะ';
+    sublabel.textContent='ข้อมูลจะไม่แสดงในหน้า bba-matrix.html จนกว่าจะเปิดเผยแพร่';
+    timeEl.style.display='none';
   }
 }
 
-// close confirm on overlay click
-document.getElementById('confirmOverlay').addEventListener('click', function(e){
-  if(e.target === this) cancelConfirm();
-});
+document.getElementById('confirmOverlay').addEventListener('click',function(e){ if(e.target===this) cancelConfirm(); });
 
-/* ═══════════════════════════════════════
-   RENDER
-═══════════════════════════════════════ */
 function totalPages(){ return Math.ceil(rows.length/PAGE_SIZE); }
 function pageRows()  { const s=(currentPage-1)*PAGE_SIZE; return rows.slice(s,s+PAGE_SIZE); }
 
@@ -511,35 +497,22 @@ function renderHead(){
 }
 
 function renderBody(){
-  const pr = pageRows();
-  const offset = (currentPage-1)*PAGE_SIZE;
-  document.getElementById('matrixBody').innerHTML = pr.map((row,ri)=>{
-    const gi = offset+ri;
-    const hasDesc = !!(row.desc && row.desc.trim());
-    const titleHtml = hasDesc
-      ? `<div class="row-title has-desc" data-gi="${gi}" onclick="togglePopup(event,${gi})">
-           <span class="title-text">${row.title}</span>
-           <i class="info-badge">i</i>
-         </div>`
-      : `<div class="row-title"><span class="title-text">${row.title}</span></div>`;
-    return `<tr>
-      <td class="td-label">
-        <div class="row-group">${row.group}</div>
-        ${titleHtml}
-      </td>
-      ${row.checks.map((v,ci)=>{
-        const isMlo = ci >= PLO_COLS.length;
-        return `<td class="td-check${isMlo?' mlo-col':''}" onclick="toggleCheck(${gi},${ci})" title="${ALL_COLS[ci]}">
-          <div class="check-circle${v?' checked':''}"></div>
-        </td>`;
-      }).join('')}
-    </tr>`;
+  const pr=pageRows(), offset=(currentPage-1)*PAGE_SIZE;
+  document.getElementById('matrixBody').innerHTML=pr.map((row,ri)=>{
+    const gi=offset+ri, hasDesc=!!(row.desc&&row.desc.trim());
+    const titleHtml=hasDesc
+      ?`<div class="row-title has-desc" data-gi="${gi}" onclick="togglePopup(event,${gi})"><span class="title-text">${row.title}</span><i class="info-badge">i</i></div>`
+      :`<div class="row-title"><span class="title-text">${row.title}</span></div>`;
+    return `<tr><td class="td-label"><div class="row-group">${row.group}</div>${titleHtml}</td>${row.checks.map((v,ci)=>{
+      const isMlo=ci>=PLO_COLS.length;
+      return `<td class="td-check${isMlo?' mlo-col':''}" onclick="toggleCheck(${gi},${ci})" title="${ALL_COLS[ci]}"><div class="check-circle${v?' checked':''}"></div></td>`;
+    }).join('')}</tr>`;
   }).join('');
 }
 
 function renderStats(){
-  const ploCovered = PLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[ci])).length;
-  const mloCovered = MLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[PLO_COLS.length+ci])).length;
+  const ploCovered=PLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[ci])).length;
+  const mloCovered=MLO_COLS.filter((_,ci)=>rows.some(r=>r.checks[PLO_COLS.length+ci])).length;
   document.getElementById('statsBar').innerHTML=`
     <span class="stat-pill"><span class="stat-dot plo"></span>PLOs Covered: <b>${ploCovered}/${PLO_COLS.length}</b></span>
     <span class="stat-pill"><span class="stat-dot mlo"></span>MLOs Covered: <b>${mloCovered}/${MLO_COLS.length}</b></span>
@@ -547,12 +520,11 @@ function renderStats(){
 }
 
 function renderPagination(){
-  const tp = totalPages();
-  const p  = document.getElementById('pagination');
+  const tp=totalPages(), p=document.getElementById('pagination');
   if(tp<=1){p.innerHTML='';return;}
-  let h = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  let h=`<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
   for(let i=1;i<=tp;i++) h+=`<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
-  h += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}>›</button>`;
+  h+=`<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}>›</button>`;
   p.innerHTML=h;
 }
 
@@ -560,56 +532,34 @@ function goPage(p){ currentPage=Math.max(1,Math.min(p,totalPages())); closePopup
 function render()  { renderHead(); renderBody(); renderStats(); renderPagination(); }
 function toggleCheck(ri,ci){ rows[ri].checks[ci]=rows[ri].checks[ci]?0:1; markUnsaved(); renderBody(); renderStats(); }
 
-/* ═══════════════════════════════════════
-   POPUP LOGIC
-═══════════════════════════════════════ */
-let _activeGi = -1;
-function togglePopup(e, gi){
-  e.stopPropagation();
-  if(_activeGi === gi){ closePopup(); return; }
-  openPopup(e, gi);
-}
-function openPopup(e, gi){
-  const row    = rows[gi];
-  const popup  = document.getElementById('descPopup');
-  const arrow  = document.getElementById('descArrow');
-  document.getElementById('descGroup').textContent = row.group;
-  document.getElementById('descTitle').textContent = row.title;
-  document.getElementById('descBody').textContent  = row.desc;
-  popup.style.visibility = 'hidden';
-  popup.style.left = '-9999px';
-  popup.style.top  = '-9999px';
+let _activeGi=-1;
+function togglePopup(e,gi){ e.stopPropagation(); if(_activeGi===gi){closePopup();return;} openPopup(e,gi); }
+function openPopup(e,gi){
+  const row=rows[gi], popup=document.getElementById('descPopup'), arrow=document.getElementById('descArrow');
+  document.getElementById('descGroup').textContent=row.group;
+  document.getElementById('descTitle').textContent=row.title;
+  document.getElementById('descBody').textContent=row.desc;
+  popup.style.visibility='hidden'; popup.style.left='-9999px'; popup.style.top='-9999px';
   popup.classList.add('visible');
   requestAnimationFrame(()=>{
-    const PW = popup.offsetWidth  || 300;
-    const PH = popup.offsetHeight || 120;
-    const GAP = 8; const MARGIN = 12;
-    const trigger = e.currentTarget || e.target;
-    const rect = trigger.getBoundingClientRect ? trigger.getBoundingClientRect() : { left: e.clientX, top: e.clientY, width: 0, height: 20 };
-    let x = rect.left; let y = rect.bottom + GAP; let arrowClass = 'up';
-    if(y + PH + MARGIN > window.innerHeight){ y = rect.top - PH - GAP; arrowClass = 'down'; }
-    if(x + PW + MARGIN > window.innerWidth) x = window.innerWidth - PW - MARGIN;
-    if(x < MARGIN) x = MARGIN;
-    const arrowLeft = Math.min(Math.max(rect.left - x + rect.width/2 - 7, 10), PW - 24);
-    arrow.className = `desc-popup-arrow ${arrowClass}`;
-    arrow.style.left = arrowLeft + 'px';
-    popup.style.left       = x + 'px';
-    popup.style.top        = (window.scrollY + y) + 'px';
-    popup.style.visibility = 'visible';
-    _activeGi = gi;
+    const PW=popup.offsetWidth||300, PH=popup.offsetHeight||120, GAP=8, MARGIN=12;
+    const trigger=e.currentTarget||e.target;
+    const rect=trigger.getBoundingClientRect?trigger.getBoundingClientRect():{left:e.clientX,top:e.clientY,width:0,height:20};
+    let x=rect.left, y=rect.bottom+GAP, arrowClass='up';
+    if(y+PH+MARGIN>window.innerHeight){y=rect.top-PH-GAP; arrowClass='down';}
+    if(x+PW+MARGIN>window.innerWidth) x=window.innerWidth-PW-MARGIN;
+    if(x<MARGIN) x=MARGIN;
+    const arrowLeft=Math.min(Math.max(rect.left-x+rect.width/2-7,10),PW-24);
+    arrow.className=`desc-popup-arrow ${arrowClass}`; arrow.style.left=arrowLeft+'px';
+    popup.style.left=x+'px'; popup.style.top=(window.scrollY+y)+'px'; popup.style.visibility='visible';
+    _activeGi=gi;
   });
 }
-function closePopup(){
-  _activeGi = -1;
-  document.getElementById('descPopup').classList.remove('visible');
-}
-document.addEventListener('click', e => { if(_activeGi < 0) return; if(!e.target.closest('.row-title')) closePopup(); });
-window.addEventListener('scroll', closePopup, {passive:true});
-document.querySelector('.table-wrapper')?.addEventListener('scroll', closePopup, {passive:true});
+function closePopup(){ _activeGi=-1; document.getElementById('descPopup').classList.remove('visible'); }
+document.addEventListener('click',e=>{if(_activeGi<0)return; if(!e.target.closest('.row-title'))closePopup();});
+window.addEventListener('scroll',closePopup,{passive:true});
+document.querySelector('.table-wrapper')?.addEventListener('scroll',closePopup,{passive:true});
 
-/* ═══════════════════════════════════════
-   EXCEL
-═══════════════════════════════════════ */
 function exportExcel(){
   const header=['กลุ่ม/หมวดหมู่','ชื่อรายการ','คำอธิบาย',...PLO_COLS.map(c=>'PLO '+c),...MLO_COLS.map(c=>'MLO '+c)];
   const body=rows.map(r=>[r.group,r.title,r.desc,...r.checks]);
@@ -641,7 +591,7 @@ function importExcel(e){
       const imported=[];
       for(let i=1;i<json.length;i++){
         const row=json[i];
-        const group=String(row[0]||'').trim(), title=String(row[1]||'').trim(), desc=String(row[2]||'').trim();
+        const group=String(row[0]||'').trim(),title=String(row[1]||'').trim(),desc=String(row[2]||'').trim();
         const checks=[];
         for(let c=3;c<3+PLO_COLS.length+MLO_COLS.length;c++){
           const v=String(row[c]||'').trim();
@@ -667,7 +617,6 @@ function showToast(msg,color='#22c55e'){
   clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),3500);
 }
 
-// Init
 updatePublishBar();
 render();
 </script>

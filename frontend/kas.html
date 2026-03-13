@@ -64,7 +64,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .sb-item.active{background:var(--purple-light);color:var(--purple);font-weight:700;border-left-color:var(--purple);}
 .sb-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
 .lo-content{flex:1;overflow:auto;}
-/* ── Grid: ชื่อ | K | A | S ── */
 .lo-thead{display:grid;grid-template-columns:1fr 200px 180px 180px;padding:11px 20px;border-bottom:2px solid #ede8f5;background:#faf7ff;font-size:10.5px;font-weight:800;color:var(--text-sub);text-transform:uppercase;letter-spacing:.5px;gap:8px;align-items:center;}
 .th-kas-cell{display:flex;align-items:center;justify-content:center;gap:5px;}
 .lo-row{display:grid;grid-template-columns:1fr 200px 180px 180px;padding:15px 20px;border-bottom:1px solid #f5eeff;gap:8px;align-items:start;transition:background .12s;}
@@ -74,8 +73,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .lo-badge{font-family:'Lexend',sans-serif;font-size:11px;font-weight:800;background:var(--purple-bg);color:var(--purple);padding:3px 9px;border-radius:6px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
 .lo-badge.mlo{background:#e0f7fa;color:var(--teal);}
 .lo-text{font-size:12.5px;color:var(--text);line-height:1.55;}
-
-/* ── KAS Cell — แสดง tags + ปุ่มแก้ไข ── */
 .kas-cell{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:2px 0;}
 .kas-tags{display:flex;flex-wrap:wrap;gap:3px;min-height:22px;}
 .kas-tag{font-family:'Lexend',sans-serif;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap;line-height:1.6;}
@@ -90,8 +87,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .kas-edit-btn.A:hover{background:var(--a-bg);}
 .kas-edit-btn.S{color:var(--s-color);border-color:#86efac;background:white;}
 .kas-edit-btn.S:hover{background:var(--s-bg);}
-
-/* ── CLO section ── */
 .clo-wrap{display:flex;gap:20px;}
 .clo-main{flex:1;min-width:0;}
 .clo-side{width:280px;flex-shrink:0;}
@@ -140,6 +135,11 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .empty-lo strong{font-size:15px;font-weight:700;color:var(--text);}
 .empty-lo p{font-size:13px;text-align:center;max-width:360px;line-height:1.6;}
 .empty-lo a{color:var(--purple);font-weight:700;text-decoration:underline;cursor:pointer;}
+
+/* CLO loading indicator */
+.clo-loading-row{display:flex;align-items:center;gap:10px;padding:24px 20px;color:var(--text-sub);font-size:13px;}
+.clo-spinner{width:16px;height:16px;border:2px solid #e8deff;border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+
 .status-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 40px;border-top:1px solid var(--border);background:var(--white);font-size:11px;color:var(--text-sub);flex-wrap:wrap;gap:8px;margin-top:auto;}
 .status-dots{display:flex;gap:16px;flex-wrap:wrap;}
 .sdot{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;}
@@ -535,13 +535,11 @@ let curTab='PLO',curMloGroup=0;
 let mCtx=null,mPanel='PLO_MLO';
 let tKas={K:new Set(),A:new Set(),S:new Set()},tPlo=new Set(),tMlo=new Set();
 
-/* Lookup label from code */
 function kasLabel(type,code){
   const data=type==='K'?K_DATA:type==='A'?A_DATA:S_DATA;
   return (data.find(d=>d.code===code)||{}).label||code;
 }
 
-/* PLO/MLO from localStorage */
 function loadPloMloData(){
   try{
     const saved=localStorage.getItem(PLO_STORAGE_KEY);
@@ -558,7 +556,6 @@ function loadPloMloData(){
   PLO_LIST=DEFAULT_PLO;MLO_GROUPS=DEFAULT_MLO_GROUPS;isLiveData=false;
 }
 
-/* KAS mapping state */
 function initKasState(){
   PLO_LIST.forEach(p=>{if(!ploKas[p.code])ploKas[p.code]={K:new Set(),A:new Set(),S:new Set()};});
   MLO_GROUPS.forEach(g=>g.items.forEach(m=>{if(!mloKas[m.code])mloKas[m.code]={K:new Set(),A:new Set(),S:new Set()};}));
@@ -581,7 +578,6 @@ function saveKasData(){
   }catch(e){toast('❌ บันทึกไม่สำเร็จ: '+e.message,'#ef4444');}
 }
 
-/* Banner */
 function updateBanner(state){
   const b=document.getElementById('dataBanner'),d=document.getElementById('bannerDot'),
         t=document.getElementById('bannerText'),s=document.getElementById('status-source');
@@ -600,7 +596,6 @@ function updateBanner(state){
   }
 }
 
-/* Pull button */
 function pullPloMloData(){
   const btn=document.getElementById('pullBtn');
   btn.classList.add('spinning');btn.disabled=true;
@@ -616,7 +611,6 @@ function pullPloMloData(){
 document.addEventListener('click',e=>{const w=document.getElementById('pdf-wrap');if(w&&!w.contains(e.target))document.getElementById('pdf-menu').style.display='none';});
 function togglePdfMenu(){const m=document.getElementById('pdf-menu');m.style.display=m.style.display==='none'?'block':'none';}
 
-/* Tabs */
 function switchTab(tab,btn){
   curTab=tab;
   document.querySelectorAll('.main-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
@@ -624,9 +618,6 @@ function switchTab(tab,btn){
   if(tab==='PLO')renderPLO();else if(tab==='MLO')renderMLO();else renderCLO();
 }
 
-/* ══════════════════════════════════════════════════════
-   loRow — แสดง KAS tags + ปุ่มแก้ไขเล็กๆ ด้านล่าง
-   ══════════════════════════════════════════════════════ */
 function renderKasTags(codes,type){
   if(!codes||!codes.size)return`<span class="kas-tag empty">— ยังไม่ได้เลือก</span>`;
   return [...codes].map(code=>`<span class="kas-tag ${type}" title="${esc(kasLabel(type,code))}">${code}</span>`).join('');
@@ -662,7 +653,34 @@ function loRow(code,desc,type,k){
 
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-/* PLO/MLO render */
+/* ══════════════════════════════════════════════════════
+   [FIX] parseOutcomes — รองรับทั้ง array และ string format
+   ══════════════════════════════════════════════════════ */
+function parseOutcomes(item){
+  // Format 1: outcomes เป็น array of {th,en,plo,mlo} — จาก PUT semester-subjects
+  if(Array.isArray(item.outcomes)&&item.outcomes.length>0){
+    return item.outcomes.map(o=>({
+      th:o.th||'',
+      en:o.en||'',
+      plo:Array.isArray(o.plo)?o.plo:[],
+      mlo:Array.isArray(o.mlo)?o.mlo:[]
+    }));
+  }
+  // Format 2: outcomes_th / outcomes_en เป็น multiline string — จาก subject API
+  const rawTh=item.outcomes_th||'';
+  const rawEn=item.outcomes_en||'';
+  const thLines=rawTh.split('\n').map(s=>s.trim()).filter(Boolean);
+  const enLines=rawEn.split('\n').map(s=>s.trim()).filter(Boolean);
+  const maxLen=Math.max(thLines.length,enLines.length);
+  if(!maxLen)return[];
+  return Array.from({length:maxLen},(_,i)=>({
+    th:thLines[i]||'',
+    en:enLines[i]||'',
+    plo:[],
+    mlo:[]
+  }));
+}
+
 function renderPLO(){
   const c=document.getElementById('plo-rows');
   if(!PLO_LIST.length){c.innerHTML='<div class="empty-lo"><svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg><strong>ยังไม่มีข้อมูล PLO</strong><p>กรุณาไปบันทึกข้อมูล PLO ที่ <a href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน</p></div>';return;}
@@ -716,6 +734,7 @@ async function selectApiCourse(courseId,courseName){
     el.innerHTML=cloApiMajors.map(m=>`<div class="sp-item${selectedMajorId===m.id?' active':''}" onclick="selectApiMajor(${m.id},'${esc(m.name_th||'')}',${courseId})"><div class="sp-item-name">${esc(m.name_th||m.name_en||'Major '+m.id)}</div>${m.name_en?`<div class="sp-item-sub">${esc(m.name_en)}</div>`:''}</div>`).join('');
   }catch(e){el.innerHTML='<div class="sp-empty">❌ โหลด Major ไม่สำเร็จ</div>';}
 }
+
 async function selectApiMajor(majorId,majorName){
   selectedMajorId=majorId;
   document.getElementById('selected-major-badge').textContent=majorName;
@@ -724,24 +743,56 @@ async function selectApiMajor(majorId,majorName){
   el.innerHTML='<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลดรายวิชา...</div>';
   try{
     const pd=await fetch(`${API_BASE_CLO}/majors/${majorId}/study-plans?page=1&pageSize=50`).then(r=>r.json());
-    const plans=pd.data||[];const subjectMap={};
-    for(const plan of plans){
-      try{
-        const detail=await fetch(`${API_BASE_CLO}/study-plans/${plan.id}`).then(r=>r.json());
-        for(const sem of(detail.semesters||[])){
-          for(const it of(sem.subjects||[])){
-            const _s=it.subject||it,ssId=it.id;
-            if(subjectMap[ssId])continue;
-            subjectMap[ssId]={id:ssId,ssId,code:it.code||_s.code||'',name_th:it.name_th||_s.name_th||'',name_en:it.name_en||_s.name_en||'',credits:it.credits??_s.default_credits??'',desc_th:it.description_th||_s.description_th||'',desc_en:it.description_en||_s.description_en||'',outcomes:(it.outcomes||[]).map(o=>({th:o.th||'',en:o.en||'',plo:o.plo||[],mlo:o.mlo||[]})),semTitle:sem.title||`ภาคเรียน ${sem.term_no}`,termNo:sem.term_no||'',yearNo:plan.year_no||''};
-          }
+    const plans=pd.data||[];
+    const subjectMap={};
+
+    /* ── ดึงทุก plan พร้อมกัน (parallel) ── */
+    const planDetails=await Promise.all(
+      plans.map(plan=>
+        fetch(`${API_BASE_CLO}/study-plans/${plan.id}`)
+          .then(r=>r.json())
+          .then(d=>({plan,detail:d}))
+          .catch(()=>null)
+      )
+    );
+
+    for(const result of planDetails){
+      if(!result)continue;
+      const{plan,detail}=result;
+      for(const sem of(detail.semesters||[])){
+        for(const it of(sem.subjects||[])){
+          const _s=it.subject||it;
+          const ssId=it.id;
+          if(subjectMap[ssId])continue;
+          const mergedItem={
+            ...it,
+            outcomes_th:it.outcomes_th||_s.outcomes_th||'',
+            outcomes_en:it.outcomes_en||_s.outcomes_en||'',
+            outcomes:Array.isArray(it.outcomes)&&it.outcomes.length?it.outcomes
+                    :Array.isArray(_s.outcomes)&&_s.outcomes.length?_s.outcomes:[]
+          };
+          subjectMap[ssId]={
+            id:ssId,ssId,
+            code:it.code||_s.code||'',
+            name_th:it.name_th||_s.name_th||'',
+            name_en:it.name_en||_s.name_en||'',
+            credits:it.credits??_s.default_credits??'',
+            desc_th:it.description_th||_s.description_th||'',
+            desc_en:it.description_en||_s.description_en||'',
+            subjectId:it.subject_id||_s.id||null,
+            outcomes:parseOutcomes(mergedItem),
+            semTitle:sem.title||`ภาคเรียน ${sem.term_no}`,
+            termNo:sem.term_no||'',yearNo:plan.year_no||''
+          };
         }
-      }catch(e){console.warn(e);}
+      }
     }
     cloApiSubjects=Object.values(subjectMap).sort((a,b)=>(Number(a.yearNo)-Number(b.yearNo))*10+(Number(a.termNo)-Number(b.termNo)));
     if(!cloApiSubjects.length){el.innerHTML='<div class="sp-empty">ไม่พบรายวิชา</div>';return;}
     renderSubjectListClo(cloApiSubjects);
   }catch(e){el.innerHTML=`<div class="sp-empty">❌ โหลดรายวิชาไม่สำเร็จ<br><small>${e.message}</small></div>`;}
 }
+
 function renderSubjectListClo(subjects){
   const el=document.getElementById('subject-list-clo');
   if(!subjects.length){el.innerHTML='<div class="sp-empty">ไม่พบรายวิชา</div>';return;}
@@ -751,12 +802,40 @@ function filterSubjectList(q){
   const ql=q.toLowerCase();
   renderSubjectListClo(ql?cloApiSubjects.filter(s=>s.code.toLowerCase().includes(ql)||s.name_th.toLowerCase().includes(ql)||(s.name_en||'').toLowerCase().includes(ql)):cloApiSubjects);
 }
-function selectApiSubject(id){
+
+/* selectApiSubject — แสดงข้อมูลรายวิชาทันที แล้วดึง CLO แบบ lazy ถ้ายังไม่มี */
+const _cloFetchCache={};  // cache ป้องกัน fetch ซ้ำ
+
+async function selectApiSubject(id){
   selectedSubjectData=cloApiSubjects.find(s=>s.id===id);
   if(!selectedSubjectData)return;
   if(!cloMappings[id])cloMappings[id]={};
+
+  // render ทันทีก่อน (ใช้ข้อมูลที่มีอยู่)
   renderCourseCard();
+
+  // ถ้ามี outcomes แล้ว หรือเคย fetch แล้ว → จบ
+  if(selectedSubjectData.outcomes.length||_cloFetchCache[id])return;
+  _cloFetchCache[id]=true;
+
+  // subjectId มี → fetch /api/subjects/{id} รอบเดียว (เร็วกว่า semester-subjects)
+  const subId=selectedSubjectData.subjectId;
+  if(!subId)return;
+  try{
+    const s=await fetch(`${API_BASE_CLO}/subjects/${subId}`).then(r=>r.json());
+    const parsed=parseOutcomes(s);
+    if(!parsed.length)return;
+    selectedSubjectData.outcomes=parsed;
+    if(!selectedSubjectData.desc_th&&s.description_th)selectedSubjectData.desc_th=s.description_th;
+    if(!selectedSubjectData.desc_en&&s.description_en)selectedSubjectData.desc_en=s.description_en;
+    // อัปเดต list badge
+    const idx=cloApiSubjects.findIndex(s=>s.id===id);
+    if(idx>=0)cloApiSubjects[idx].outcomes=parsed;
+    // re-render ถ้า user ยังอยู่ที่รายวิชานี้
+    if(selectedSubjectData.id===id)renderCourseCard();
+  }catch(e){console.warn('lazy CLO fetch failed:',e);}
 }
+
 function showStep(step){['course','major','subject'].forEach(s=>{const el=document.getElementById('step-'+s);if(el)el.style.display=s===step?'block':'none';});}
 function backToStep(step){
   if(step==='course'){
@@ -765,6 +844,7 @@ function backToStep(step){
     renderCourseListClo();showStep('course');
   }else if(step==='major'){selectedMajorId=null;selectedSubjectData=null;showStep('major');}
 }
+
 function renderCourseCard(){
   const s=selectedSubjectData;if(!s)return;
   document.getElementById('clo-main').innerHTML=`
@@ -788,6 +868,7 @@ function renderCourseCard(){
       </div>
     </div>`;
 }
+
 function renderCloRows(s){
   if(!s.outcomes||!s.outcomes.length)return`<div style="text-align:center;padding:40px;color:#94a3b8;font-size:13px;"><div style="font-size:28px;margin-bottom:8px;">📭</div>ไม่พบ CLO ในรายวิชานี้<br><small style="color:#b0c0cc">CLO ถูกกำหนดในหน้าจัดการแผนการศึกษา</small></div>`;
   const sid=s.id;if(!cloMappings[sid])cloMappings[sid]={};
@@ -798,14 +879,22 @@ function renderCloRows(s){
     const linked=(ap2.size+am2.size)>0?[...ap2].map(c=>`<span class="linked-badge">${c}</span>`).join('')+[...am2].map(c=>`<span class="linked-badge" style="background:#e0f7fa;color:var(--teal)">${c}</span>`).join(''):'<span style="color:#94a3b8;font-size:11px">— ยังไม่ได้ map</span>';
     const ctx=JSON.stringify({type:'CLO',subjectId:sid,cloIdx:i}).replace(/"/g,'&quot;');
     return `<div class="clo-row" style="grid-template-columns:1fr 1fr">
-      <div><div class="clo-num">CLO ${i+1}</div><div class="clo-th">${esc(cl.th||'')}</div>${cl.en?`<div class="clo-en">${esc(cl.en)}</div>`:''}</div>
+      <div>
+        <div class="clo-num">CLO ${i+1}</div>
+        <div class="clo-th">${esc(cl.th||'')}</div>
+        ${cl.en?`<div class="clo-en">${esc(cl.en)}</div>`:''}
+      </div>
       <div class="linked-cell" style="cursor:pointer;flex-direction:column;gap:4px;align-items:flex-start;padding:4px 8px;" onclick='openCloModal(${ctx})'>
         <div style="display:flex;flex-wrap:wrap;gap:3px;">${linked}</div>
-        <span style="font-size:10px;color:#b0a0cc;margin-top:2px;"><svg viewBox="0 0 20 20" fill="currentColor" width="10" height="10" style="display:inline;vertical-align:middle"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg> คลิกเพื่อแก้ไข PLO/MLO</span>
+        <span style="font-size:10px;color:#b0a0cc;margin-top:2px;">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="10" height="10" style="display:inline;vertical-align:middle"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+          คลิกเพื่อแก้ไข PLO/MLO
+        </span>
       </div>
     </div>`;
   }).join('');
 }
+
 function showInner(tab,btn){
   document.querySelectorAll('.inner-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
   const ie=document.getElementById('inner-info'),ce=document.getElementById('inner-clo');
@@ -976,7 +1065,6 @@ function exportPDF(section='ALL'){
   },200);
 }
 
-/* Toast */
 let _tt;
 function toast(msg,color='#22c55e'){
   document.getElementById('toast-dot').style.background=color;
