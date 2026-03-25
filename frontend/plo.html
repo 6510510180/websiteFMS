@@ -36,18 +36,15 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .page-subtitle{font-size:14px;color:var(--purple-mid);margin-top:6px;}
 .header-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 
-/* Unsaved */
 .unsaved-badge{display:inline-flex;align-items:center;gap:6px;background:#fff7ed;border:1.5px solid #fed7aa;color:#c2410c;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;transition:opacity .25s;}
 .unsaved-badge.show{opacity:1;}
 .unsaved-dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:pulse 1.2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* Tabs */
 .tab-row{display:flex;background:var(--purple-bg);border-radius:10px;padding:4px;margin:24px 0 0;gap:0;}
 .tab-btn{flex:1;padding:10px 16px;border:none;background:transparent;font-family:'Lexend',sans-serif;font-size:14px;font-weight:700;color:var(--purple-mid);border-radius:8px;cursor:pointer;transition:.18s;}
 .tab-btn.active{background:var(--white);color:var(--purple);box-shadow:0 1px 4px rgba(0,0,0,0.08);}
 
-/* Import bar */
 .import-bar{display:flex;align-items:center;gap:12px;background:var(--white);border:1.5px dashed var(--purple-mid);border-radius:12px;padding:14px 20px;margin-top:20px;transition:border-color .18s,background .18s;}
 .import-bar:hover{border-color:var(--purple);background:var(--purple-light);cursor:pointer;}
 .import-icon{width:40px;height:40px;background:var(--purple-light);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -67,18 +64,16 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .btn-amber:hover{background:#b45309;}
 #fileInput{display:none;}
 
-/* Form card */
 .form-card{background:var(--white);border-radius:14px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(127,19,236,0.06);margin-top:20px;overflow:hidden;}
 .form-card-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .form-card-title{font-size:15px;font-weight:700;color:var(--text);}
 .entry-count{background:var(--purple-light);color:var(--purple);font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;}
 
-/* Row */
 .plo-row{display:flex;align-items:center;gap:0;padding:12px 24px;border-bottom:1px solid #f3eeff;transition:background .15s;}
 .plo-row:last-child{border-bottom:none;}
 .plo-row:hover{background:#fdfbff;}
 .row-num{width:32px;height:32px;border-radius:8px;background:var(--purple-bg);color:var(--purple);font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:12px;}
-.row-fields{flex:1;display:grid;grid-template-columns:180px 1fr;gap:10px;}
+.row-fields{flex:1;display:grid;gap:10px;}
 .field-group{display:flex;flex-direction:column;gap:4px;}
 .field-label{font-size:11px;font-weight:600;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.5px;}
 .field-input{height:40px;padding:0 12px;border:1.5px solid #e5dff0;border-radius:8px;background:var(--white);font-family:'Noto Sans Thai',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .18s,box-shadow .18s;width:100%;}
@@ -87,6 +82,11 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .row-del{width:32px;height:32px;border:none;background:transparent;border-radius:8px;cursor:pointer;color:#ccc;display:flex;align-items:center;justify-content:center;margin-left:10px;transition:.15s;flex-shrink:0;}
 .row-del:hover{background:#fee2e2;color:var(--red);}
 .row-del svg{width:16px;height:16px;fill:currentColor;}
+
+/* hint badge for MLO tab */
+.mlo-hint{display:none;align-items:center;gap:8px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 14px;margin-top:16px;font-size:12px;color:#1e40af;}
+.mlo-hint.show{display:flex;}
+.mlo-hint svg{width:14px;height:14px;fill:#3b82f6;flex-shrink:0;}
 
 .add-row-btn{width:100%;padding:13px;background:transparent;border:none;border-top:1px dashed #e0d8f0;color:var(--purple);font-family:'Noto Sans Thai',sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .18s;}
 .add-row-btn:hover{background:var(--purple-light);}
@@ -107,21 +107,19 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .empty-state svg{width:48px;height:48px;fill:#ddd;margin-bottom:12px;}
 .empty-state p{font-size:14px;}
 
-/* Toast */
 .toast{position:fixed;bottom:28px;right:28px;background:#1a1a2e;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-/* ── PRINT / PDF ── */
 @media print {
-  .topbar, .import-bar, .footer-actions, .header-btns, .unsaved-badge, .add-row-btn, .row-del, .hint-box, .tab-row { display: none !important; }
-  body { background: white; }
-  .page { padding: 20px; max-width: 100%; }
-  .form-card { box-shadow: none; border: 1px solid #ddd; }
-  .field-input { border: 1px solid #ccc; }
-  .print-title { display: block !important; font-size: 18px; font-weight: 700; margin-bottom: 8px; color: #7F13EC; }
+  .topbar,.import-bar,.footer-actions,.header-btns,.unsaved-badge,.add-row-btn,.row-del,.hint-box,.tab-row,.mlo-hint{display:none !important;}
+  body{background:white;}
+  .page{padding:20px;max-width:100%;}
+  .form-card{box-shadow:none;border:1px solid #ddd;}
+  .field-input{border:1px solid #ccc;}
+  .print-title{display:block !important;font-size:18px;font-weight:700;margin-bottom:8px;color:#7F13EC;}
 }
-.print-title { display: none; }
+.print-title{display:none;}
 </style>
 </head>
 <body>
@@ -133,7 +131,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   </a>
   <nav class="topbar-nav">
     <a href="qa-add.html">หน้าหลัก</a>
-    <a href="plo.html" class="active">จัดการ PLO/MLO</a>
+    <a href="plo.html?programId=00000000-0000-0000-0000-000000000001" class="active">จัดการ PLO/MLO</a>
     <a href="matrix.html">Alignment Matrix</a>
     <a href="score-plo.html">คะแนนผลลัพธ์ PLO</a>
     <a href="kas.html">KAS</a>
@@ -165,11 +163,17 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <button class="tab-btn" onclick="switchTab('MLO',this)">MLO (Major Learning Outcome)</button>
   </div>
 
+  <!-- hint เฉพาะ MLO tab -->
+  <div class="mlo-hint" id="mloHint">
+    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+    <span>กรอก <strong>กลุ่ม/วิชาเอก</strong> เพื่อให้ระบบจัดกลุ่มแสดงผลตามชื่อวิชาเอก เช่น "การเงินและการลงทุน", "การตลาด"</span>
+  </div>
+
   <div class="import-bar" onclick="document.getElementById('fileInput').click()">
     <div class="import-icon"><svg viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg></div>
     <div class="import-text">
       <strong>นำเข้าข้อมูลจาก Excel</strong>
-      <span>รองรับไฟล์ .xlsx, .xls — คอลัมน์: รหัส, หัวข้อทักษะ</span>
+      <span id="importHint">PLO: รหัส, หัวข้อทักษะ | MLO: กลุ่ม/วิชาเอก, รหัส, หัวข้อทักษะ</span>
     </div>
     <div class="import-actions" onclick="event.stopPropagation()">
       <button class="btn btn-outline" onclick="downloadTemplate()">
@@ -201,7 +205,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <div class="hint-icon"><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg></div>
     <div class="hint-text">
       <strong>ข้อแนะนำการใช้งาน</strong>
-      <p>การกำหนด PLO ควรครอบคลุมความรู้ ทักษะ และเจตคติที่พึงมีเมื่อจบหลักสูตร ส่วน MLO จะเป็นส่วนขยายเฉพาะทางตามรายวิชาเอกที่นิสิตเลือก ข้อมูลจะถูกบันทึกอัตโนมัติใน browser</p>
+      <p>การกำหนด PLO ควรครอบคลุมความรู้ ทักษะ และเจตคติที่พึงมีเมื่อจบหลักสูตร ส่วน MLO ให้กำหนด <strong>กลุ่ม/วิชาเอก</strong> เพื่อจัดกลุ่มตามชื่อวิชาเอก เช่น "การเงินและการลงทุน" ข้อมูลจะถูกบันทึกอัตโนมัติใน browser</p>
     </div>
   </div>
 
@@ -217,50 +221,68 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 <div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
 
 <script>
-const STORAGE_KEY = 'fms_plo_mlo_data';
+/* ========= CONFIG ========= */
+const API_BASE   = ''; 
+const PROGRAM_ID = new URL(location.href).searchParams.get('programId') 
+                   || '00000000-0000-0000-0000-000000000001';         // ตั้งค่าให้ตรงหลักสูตร หรืออ่านจาก query string ก็ได้
+const USE_BULK_ENDPOINT = true;               // ถ้า serve.js ยังไม่มี bulk endpoint ให้ตั้ง false
+
+// สำรองในเครื่องเป็นแผนสอง (ไม่ใช่แหล่งจริง)
+const STORAGE_KEY = 'fms_plo_mlo_data_backup';
+
+/* ========= STATE ========= */
 let currentTab = 'PLO';
 let hasUnsaved = false;
+let data = { PLO: [], MLO: [] };
 
-// ── Load from localStorage ──
-let data;
-try {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  data = saved ? JSON.parse(saved) : { PLO: [], MLO: [] };
-  if (!data.PLO) data.PLO = [];
-  if (!data.MLO) data.MLO = [];
-} catch { data = { PLO: [], MLO: [] }; }
-
+/* ========= UI FLAGS ========= */
 function markUnsaved() { hasUnsaved = true; document.getElementById('unsavedBadge').classList.add('show'); }
 function markSaved()   { hasUnsaved = false; document.getElementById('unsavedBadge').classList.remove('show'); }
 
+/* ========= TAB / RENDER ========= */
 function switchTab(tab, btn) {
   currentTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('cardTitle').textContent = `รายการ ${tab}`;
   document.getElementById('printTitle').textContent = `รายการ ${tab} — ระบบจัดการผลลัพธ์การเรียนรู้`;
+  const mloHint = document.getElementById('mloHint');
+  tab === 'MLO' ? mloHint.classList.add('show') : mloHint.classList.remove('show');
   renderRows();
 }
 
 function renderRows() {
   const container = document.getElementById('rowContainer');
-  const rows = data[currentTab];
+  const rows = data[currentTab] || [];
+  const isMlo = currentTab === 'MLO';
   document.getElementById('entryCount').textContent = `${rows.length} รายการ`;
+
   if (!rows.length) {
-    container.innerHTML = `<div class="empty-state"><svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg><p>ยังไม่มีข้อมูล กดปุ่ม "เพิ่มรายการ" หรือนำเข้าจาก Excel</p></div>`;
+    container.innerHTML = `<div class="empty-state">
+      <svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+      <p>ยังไม่มีข้อมูล กดปุ่ม "เพิ่มรายการ" หรือนำเข้าจาก Excel</p>
+    </div>`;
     return;
   }
+
+  const gridCols = isMlo ? '160px 140px 1fr' : '180px 1fr';
+
   container.innerHTML = rows.map((r, i) => `
     <div class="plo-row">
       <div class="row-num">${i+1}</div>
-      <div class="row-fields">
+      <div class="row-fields" style="grid-template-columns:${gridCols}">
+        ${isMlo ? `
+        <div class="field-group">
+          <div class="field-label">กลุ่ม / วิชาเอก</div>
+          <input class="field-input" placeholder="เช่น การเงิน" value="${esc(r.group||'')}" oninput="updateField(${i},'group',this.value)">
+        </div>` : ''}
         <div class="field-group">
           <div class="field-label">รหัส</div>
-          <input class="field-input" placeholder="${currentTab}${i+1}" value="${esc(r.code)}" oninput="updateField(${i},'code',this.value)">
+          <input class="field-input" placeholder="${currentTab}${i+1}" value="${esc(r.code||'')}" oninput="updateField(${i},'code',this.value)">
         </div>
         <div class="field-group">
           <div class="field-label">หัวข้อทักษะ</div>
-          <input class="field-input" placeholder="ระบุหัวข้อทักษะหลัก" value="${esc(r.skill)}" oninput="updateField(${i},'skill',this.value)">
+          <input class="field-input" placeholder="ระบุหัวข้อทักษะหลัก" value="${esc(r.skill||'')}" oninput="updateField(${i},'skill',this.value)">
         </div>
       </div>
       <button class="row-del" onclick="deleteRow(${i})">
@@ -270,58 +292,230 @@ function renderRows() {
 }
 
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function addRow()           { data[currentTab].push({code:'',skill:''}); markUnsaved(); renderRows(); setTimeout(()=>{const inp=document.querySelectorAll('.field-input');if(inp.length)inp[inp.length-2].focus();},50); }
+
+function addRow() {
+  const isMlo = currentTab === 'MLO';
+  data[currentTab].push(isMlo ? {group:'',code:'',skill:''} : {code:'',skill:''});
+  markUnsaved();
+  renderRows();
+  setTimeout(() => {
+    const inp = document.querySelectorAll('.field-input');
+    if (inp.length) inp[inp.length - (isMlo?3:2)].focus();
+  }, 50);
+}
+
 function deleteRow(i)       { data[currentTab].splice(i,1); markUnsaved(); renderRows(); }
 function updateField(i,f,v) { data[currentTab][i][f]=v; markUnsaved(); }
-function resetRows()        { if(!data[currentTab].length||confirm('ต้องการล้างข้อมูลทั้งหมดในแท็บนี้?')){data[currentTab]=[];markUnsaved();renderRows();} }
+function resetRows()        { if(!data[currentTab].length||confirm('ต้องการล้างข้อมูลทั้งหมดในแท็บนี้?')){ data[currentTab]=[]; markUnsaved(); renderRows(); } }
 
-// ── Save to localStorage ──
-function saveData() {
-  const incomplete = data[currentTab].filter(r=>!r.code.trim()||!r.skill.trim());
-  if (incomplete.length) { showToast(`⚠️ กรุณากรอกข้อมูลให้ครบ (${incomplete.length} รายการ)`,'#f59e0b'); return; }
+/* ========= LOAD (from API) ========= */
+async function loadFromServer() {
   try {
+    if (USE_BULK_ENDPOINT) {
+      const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo`, { cache:'no-store' });
+      if (!res.ok) throw new Error('bulk-get failed');
+      const payload = await res.json();
+      data = {
+        PLO: (payload.PLO || []).map(r => ({ code: r.code, skill: r.skill })),
+        MLO: (payload.MLO || []).map(r => ({ group: r.group || '', code: r.code, skill: r.skill }))
+      };
+    } else {
+      // LEGACY LOAD: ใช้เส้นทางที่มีอยู่แล้วใน serve.js ปัจจุบัน
+      // 1) PLOs
+      const plos = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plos`, { cache:'no-store' })).json();
+      // 2) Major groups
+      const groups = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/major-groups`, { cache:'no-store' })).json();
+      // 3) MLOs ต่อกลุ่ม
+      const mloArr = [];
+      for (const g of groups) {
+        const mlos = await (await fetch(`${API_BASE}/api/major-groups/${g.id}/mlos`, { cache:'no-store' })).json();
+        for (const m of mlos) {
+          mloArr.push({ group: g.label || '', code: m.code, skill: m.description });
+        }
+      }
+      data = {
+        PLO: (plos || []).map(p => ({ code: p.code, skill: p.description })),
+        MLO: mloArr
+      };
+    }
+
+    markSaved();
+    renderRows();
+  } catch (e) {
+    console.error(e);
+    showToast('ดึงข้อมูลจากเซิร์ฟเวอร์ล้มเหลว','#ef4444');
+    // fallback: ใช้สำรองในเครื่องเพื่อให้ใช้งานต่อได้
+    try {
+      data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"PLO":[],"MLO":[]}');
+      renderRows();
+      showToast('เปิดข้อมูลสำรองในเครื่องชั่วคราว','#f59e0b');
+    } catch {}
+  }
+}
+
+/* ========= SAVE (to API) ========= */
+async function saveData() {
+  const isMlo = currentTab === 'MLO';
+  const incomplete = (data[currentTab]||[]).filter(r => {
+    if (isMlo) return !r.code?.trim() || !r.skill?.trim(); // group ไม่บังคับ
+    return !r.code?.trim() || !r.skill?.trim();
+  });
+  if (incomplete.length) {
+    showToast(`⚠️ กรุณากรอกรหัสและหัวข้อทักษะให้ครบ (${incomplete.length} รายการ)`,'#f59e0b');
+    return;
+  }
+
+  try {
+    if (USE_BULK_ENDPOINT) {
+      // เรียก Bulk PUT → แทนที่ทั้งชุด
+      const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo`, {
+        method: 'PUT',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify({ PLO: data.PLO, MLO: data.MLO })
+      });
+      if (!res.ok) throw new Error('bulk-put failed');
+      await res.json();
+    } else {
+      // LEGACY SAVE: ลบทั้งหมดแล้วสร้างใหม่ (คอลเดียว แต่ชัวร์)
+      await legacySaveAll();
+    }
+
+    // สำรองในเครื่อง (ไม่ใช่แหล่งจริง)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     markSaved();
     showToast(`✓ บันทึก ${currentTab} จำนวน ${data[currentTab].length} รายการสำเร็จ`);
-  } catch { showToast('❌ บันทึกไม่สำเร็จ','#ef4444'); }
+  } catch (e) {
+    console.error(e);
+    showToast('❌ บันทึกไปเซิร์ฟเวอร์ไม่สำเร็จ','#ef4444');
+  }
 }
 
-// ── Export Excel ──
+// LEGACY SAVE: สำหรับกรณีที่ยังไม่มี bulk endpoint ใน serve.js
+async function legacySaveAll() {
+  // 1) โหลดของเดิม
+  const oldPlos = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plos`)).json();
+  const groups = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/major-groups`)).json();
+  // 2) ลบ PLO เดิมทั้งหมด
+  for (const p of (oldPlos||[])) {
+    await fetch(`${API_BASE}/api/plos/${p.id}`, { method:'DELETE', headers:{'Content-Type':'application/json'} });
+  }
+  // 3) สร้าง PLO ใหม่ (เรียงตามลำดับในตาราง)
+  let order = 1;
+  for (const r of data.PLO) {
+    await fetch(`${API_BASE}/api/plos`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ program_id: PROGRAM_ID, code: r.code.trim(), description: r.skill.trim(), sort_order: order++ })
+    });
+  }
+
+  // 4) ลบ MLO เดิมทั้งหมด (ต้องลบจากแต่ละกลุ่ม)
+  const groupMap = new Map(groups.map(g => [g.label, g]));
+  for (const g of groups) {
+    const mlos = await (await fetch(`${API_BASE}/api/major-groups/${g.id}/mlos`)).json();
+    for (const m of mlos) {
+      await fetch(`${API_BASE}/api/mlos/${m.id}`, { method:'DELETE', headers:{'Content-Type':'application/json'} });
+    }
+  }
+
+  // 5) สร้างกลุ่มที่ยังไม่มี + ใส่ MLO ใหม่
+  //    สแกนกลุ่มตามลำดับปรากฏใน data.MLO
+  const orderedGroupLabels = [];
+  for (const r of data.MLO) {
+    const label = (r.group||'').trim() || 'ทั่วไป';
+    if (!orderedGroupLabels.includes(label)) orderedGroupLabels.push(label);
+  }
+  // ensure/สร้าง group ตามลำดับ
+  for (let idx=0; idx<orderedGroupLabels.length; idx++) {
+    const label = orderedGroupLabels[idx];
+    if (!groupMap.has(label)) {
+      // สร้าง group ใหม่
+      await fetch(`${API_BASE}/api/major-groups`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ program_id: PROGRAM_ID, label, sort_order: idx+1 })
+      });
+    } else {
+      // อัปเดตลำดับ (optional)
+      const g = groupMap.get(label);
+      await fetch(`${API_BASE}/api/major-groups/${g.id}`, {
+        method:'PUT', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ sort_order: idx+1 })
+      });
+    }
+  }
+  // รีโหลดกลุ่มเพื่อได้ id ล่าสุด
+  const groupsLatest = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/major-groups`)).json();
+  const grpLabelToId = new Map(groupsLatest.map(g => [g.label, g.id]));
+
+  // ใส่ MLO ใหม่ (ออเดอร์ตามการปรากฏ)
+  const perGroupOrder = {};
+  for (const r of data.MLO) {
+    const label = (r.group||'').trim() || 'ทั่วไป';
+    const mgId = grpLabelToId.get(label);
+    if (!perGroupOrder[mgId]) perGroupOrder[mgId] = 1;
+    await fetch(`${API_BASE}/api/mlos`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        major_group_id: mgId,
+        code: r.code.trim(),
+        description: r.skill.trim(),
+        sort_order: perGroupOrder[mgId]++
+      })
+    });
+  }
+}
+
+/* ========= EXPORT / IMPORT (เดิม) ========= */
+// (ฟังก์ชัน exportExcel(), exportPDF(), downloadTemplate(), importExcel() คงเดิมด้านล่าง)
+
 function exportExcel() {
-  const allSheets = ['PLO','MLO'];
   const wb = XLSX.utils.book_new();
-  allSheets.forEach(tab => {
-    const rows = data[tab];
-    const header = ['ลำดับ','รหัส','หัวข้อทักษะ'];
-    const body = rows.map((r,i)=>[i+1, r.code, r.skill]);
+  { const header = ['ลำดับ','รหัส','หัวข้อทักษะ'];
+    const body = data.PLO.map((r,i) => [i+1, r.code, r.skill]);
     const ws = XLSX.utils.aoa_to_sheet([header,...body]);
     ws['!cols'] = [{wch:8},{wch:14},{wch:60}];
-    XLSX.utils.book_append_sheet(wb, ws, tab);
-  });
+    XLSX.utils.book_append_sheet(wb, ws, 'PLO'); }
+  { const header = ['ลำดับ','กลุ่ม/วิชาเอก','รหัส','หัวข้อทักษะ'];
+    const body = data.MLO.map((r,i) => [i+1, r.group||'', r.code, r.skill]);
+    const ws = XLSX.utils.aoa_to_sheet([header,...body]);
+    ws['!cols'] = [{wch:8},{wch:28},{wch:14},{wch:60}];
+    XLSX.utils.book_append_sheet(wb, ws, 'MLO'); }
   XLSX.writeFile(wb, `PLO_MLO_export_${new Date().toISOString().slice(0,10)}.xlsx`);
   showToast('✓ Export Excel สำเร็จ');
 }
-
-// ── Export PDF (Print Layout) ──
-function exportPDF() {
-  window.print();
-}
-
-// ── Template ──
+function exportPDF() { window.print(); }
 function downloadTemplate() {
-  const header = [['รหัส','หัวข้อทักษะ']];
-  const examples = [[`${currentTab}1`,'ความรู้ด้านทฤษฎีและแนวคิดหลักของสาขาวิชา'],[`${currentTab}2`,'ทักษะการวิเคราะห์และแก้ปัญหาอย่างเป็นระบบ']];
-  const ws = XLSX.utils.aoa_to_sheet([...header,...examples]);
-  ws['!cols']=[{wch:14},{wch:56}];
+  const isMlo = currentTab === 'MLO';
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, `${currentTab} Template`);
-  XLSX.writeFile(wb, `${currentTab}_template.xlsx`);
+  if (isMlo) {
+    const header = [['กลุ่ม/วิชาเอก','รหัส','หัวข้อทักษะ']];
+    const examples = [
+      ['การเงินและการลงทุน','MLO1.1','อธิบายทฤษฎีวิเคราะห์ตราสารทางการเงินภายใต้หลักเกณฑ์ของ ก.ล.ต.'],
+      ['การเงินและการลงทุน','MLO1.2','วางแผนการเงินส่วนบุคคลตามมาตรฐานของสมาคมนักวางแผนการเงินไทย'],
+      ['การตลาดและการสื่อสาร','MLO2.1','วิเคราะห์กลยุทธ์ทางการตลาดอย่างสร้างสรรค์'],
+      ['การตลาดและการสื่อสาร','MLO2.2','วิเคราะห์แนวทางการแก้ไขปัญหาทางการตลาดเชิงนวัตกรรม'],
+    ];
+    const ws = XLSX.utils.aoa_to_sheet([...header,...examples]);
+    ws['!cols'] = [{wch:28},{wch:14},{wch:60}];
+    XLSX.utils.book_append_sheet(wb, ws, 'MLO Template');
+    XLSX.writeFile(wb, 'MLO_template.xlsx');
+  } else {
+    const header = [['รหัส','หัวข้อทักษะ']];
+    const examples = [
+      ['PLO1','ความรู้ด้านทฤษฎีและแนวคิดหลักของวิชาเอก'],
+      ['PLO2','ทักษะการวิเคราะห์และแก้ปัญหาอย่างเป็นระบบ'],
+    ];
+    const ws = XLSX.utils.aoa_to_sheet([...header,...examples]);
+    ws['!cols'] = [{wch:14},{wch:56}];
+    XLSX.utils.book_append_sheet(wb, ws, 'PLO Template');
+    XLSX.writeFile(wb, 'PLO_template.xlsx');
+  }
   showToast(`✓ ดาวน์โหลด Template สำเร็จ`);
 }
-
-// ── Import Excel ──
 function importExcel(e) {
   const file = e.target.files[0]; if(!file) return;
+  const isMlo = currentTab === 'MLO';
   const reader = new FileReader();
   reader.onload = ev => {
     try {
@@ -330,13 +524,20 @@ function importExcel(e) {
       const json = XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
       const imported = [];
       for(let i=1;i<json.length;i++){
-        const row=json[i];
-        const code=String(row[0]||'').trim();
-        const skill=String(row[1]||'').trim();
-        if(code||skill) imported.push({code,skill});
+        const row = json[i];
+        if (isMlo) {
+          const group = String(row[0]||'').trim();
+          const code  = String(row[1]||'').trim();
+          const skill = String(row[2]||'').trim();
+          if(code||skill) imported.push({group, code, skill});
+        } else {
+          const code  = String(row[0]||'').trim();
+          const skill = String(row[1]||'').trim();
+          if(code||skill) imported.push({code, skill});
+        }
       }
       if(!imported.length){showToast('⚠️ ไม่พบข้อมูลในไฟล์','#f59e0b');return;}
-      data[currentTab]=[...data[currentTab],...imported];
+      data[currentTab] = [...data[currentTab],...imported];
       markUnsaved();
       renderRows();
       showToast(`✓ นำเข้า ${imported.length} รายการสำเร็จ`);
@@ -346,7 +547,7 @@ function importExcel(e) {
   e.target.value='';
 }
 
-// ── Toast ──
+/* ========= TOAST ========= */
 let _tt;
 function showToast(msg,color='#22c55e'){
   document.getElementById('toastDot').style.background=color;
@@ -357,7 +558,11 @@ function showToast(msg,color='#22c55e'){
   _tt=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-renderRows();
+/* ========= INIT ========= */
+window.addEventListener('beforeunload', (e) => {
+  if (hasUnsaved) { e.preventDefault(); e.returnValue = ''; }
+});
+loadFromServer();
 </script>
 </body>
 </html>

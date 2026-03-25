@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หลักสูตรบริหารธุรกิจบัณฑิต</title>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตารางแสดงผลลัพธ์การเรียนรู้ระดับหลักสูตรและระดับวิชาเอก (PLOs & MLOs) กับ Knowledge / Attitude / Skill</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
 :root{
-  --pu:#5B21B6;--pu2:#7C3AED;--pu3:#A78BFA;--pu-l:#EDE9FE;--pu-m:#DDD6FE;--pu-tab:#EDE9FE;
+  --pu:#9b51e0;--pu2:#7C3AED;--pu3:#A78BFA;--pu-l:#EDE9FE;--pu-m:#DDD6FE;
   --bg:#F0EFF8;--wh:#ffffff;--tx:#1E1B4B;--ts:#6B7280;--bd:#E5E7EB;
   --kc:#2563EB;--kl:#EFF6FF;--km:#DBEAFE;
   --ac:#DC2626;--al:#FEF2F2;--am:#FEE2E2;
@@ -17,9 +17,11 @@
   --card-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(91,33,182,.06);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'IBM Plex Sans Thai','Plus Jakarta Sans',sans-serif;background:var(--bg);background-image:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(124,58,237,.08) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 110%,rgba(167,139,250,.06) 0%,transparent 60%);background-attachment:fixed;color:var(--tx);line-height:1.65;font-size:14px;}
+body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;font-size:14px;}
+/* NAVBAR */
 .navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:60px;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(229,231,235,.8);position:sticky;top:0;z-index:1000;}
-.navbar .logo{display:flex;align-items:center;} .navbar .logo img{height:36px;}
+.navbar .logo{display:flex;align-items:center;}
+.navbar .logo img{height:36px;}
 nav{flex:1;display:flex;justify-content:center;}
 .nav-links{list-style:none;display:flex;gap:30px;align-items:center;}
 .nav-links a{font-size:13.5px;text-decoration:none;color:#6B7280;font-weight:500;transition:color .2s;}
@@ -29,32 +31,60 @@ nav{flex:1;display:flex;justify-content:center;}
 .search-box:focus-within{background:#fff;border-color:var(--pu-m);}
 .search-box input{border:none;background:none;outline:none;font-family:inherit;font-size:13px;width:100%;}
 .search-box i{color:#9CA3AF;font-size:12px;}
+
+/* MAIN */
 .main-content{padding:36px 0 60px;min-height:100vh;}
 .container{width:92%;max-width:1360px;margin:0 auto;}
-h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;color:var(--tx);line-height:1.2;margin-bottom:6px;letter-spacing:-.02em;}
+h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:800;color:var(--tx);line-height:1.2;margin-bottom:6px;letter-spacing:-.02em;}
 h1 span{font-family:'IBM Plex Sans Thai',sans-serif;font-size:13px;font-weight:400;color:var(--ts);display:block;margin-top:5px;}
+
+/* TABS BAR */
 .action-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;}
 .tab-btn{padding:9px 20px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:600;background:rgba(255,255,255,.85);color:#6B7280;display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--bd);cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap;backdrop-filter:blur(6px);}
 .tab-btn:hover{border-color:var(--pu3);color:var(--pu2);background:#fff;}
-.tab-btn.active{background:var(--pu2);color:#fff;border-color:var(--pu2);font-weight:700;box-shadow:0 2px 12px rgba(124,58,237,.3);}
-.btn-download{background:linear-gradient(135deg,var(--pu2),var(--pu));color:#fff;padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13.5px;display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 2px 16px rgba(124,58,237,.35);transition:all .2s;}
+.tab-btn.active{background:#ede9fe;color:var(--pu2);border-color:var(--pu3);font-weight:700;}
+.btn-act{padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;}
+.btn-download{background:linear-gradient(135deg,var(--pu2),var(--pu));color:#fff;box-shadow:0 2px 16px rgba(124,58,237,.35);}
 .btn-download:hover{transform:translateY(-1px);box-shadow:0 4px 24px rgba(124,58,237,.45);}
-/* KAS control bar */
-.ph{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.9);padding:14px 20px;border-radius:14px 14px 0 0;border:1px solid var(--bd);border-bottom:none;margin-top:20px;flex-wrap:wrap;gap:12px;backdrop-filter:blur(8px);width:100%;}
-.controls{display:flex;align-items:center;gap:14px;}
+.btn-import{background:#fff;color:var(--pu2);border:1.5px solid var(--pu3);}
+.btn-import:hover{background:var(--pu-l);}
+.btn-excel{background:linear-gradient(135deg,#059669,#10b981);color:#fff;box-shadow:0 2px 12px rgba(5,150,105,.25);}
+.btn-excel:hover{transform:translateY(-1px);}
+.btn-group{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+
+/* SOURCE BANNER */
+.source-banner{display:flex;align-items:center;gap:12px;padding:12px 18px;border-radius:12px;margin-bottom:16px;border:1.5px solid;}
+.source-banner.live{background:#f0fdf4;border-color:#86efac;color:#166534;}
+.source-banner.default{background:#fefce8;border-color:#fde68a;color:#854d0e;}
+.source-banner.excel{background:#eff6ff;border-color:#bfdbfe;color:#1e40af;}
+.sb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sb-dot.live{background:#22c55e;animation:pulse 1.6s infinite;}
+.sb-dot.default{background:#f59e0b;}
+.sb-dot.excel{background:#3b82f6;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* CONTROL BAR */
+.ph{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.9);padding:14px 20px;border-radius:14px 14px 0 0;border:1px solid var(--bd);border-bottom:none;margin-top:10px;flex-wrap:wrap;gap:12px;backdrop-filter:blur(8px);}
+.controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
 .sg{display:flex;background:#F3F4F6;padding:4px;border-radius:10px;}
-.sb{border:none;padding:7px 22px;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--ts);transition:all .2s;font-family:inherit;}
-.sb.on{background:#fff;color:var(--pu2);box-shadow:0 2px 10px rgba(0,0,0,.09);}
+.sb2{border:none;padding:7px 22px;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--ts);transition:all .2s;font-family:inherit;}
+.sb2.on{background:#fff;color:var(--pu2);box-shadow:0 2px 10px rgba(0,0,0,.09);}
 .mdd-wrap{position:relative;display:flex;align-items:center;}
-.mdd{appearance:none;background:#fff;border:1.5px solid var(--bd);padding:7px 34px 7px 14px;border-radius:9px;font-size:13px;color:#334155;cursor:pointer;outline:none;font-family:inherit;transition:border-color .2s;}
+.mdd{appearance:none;background:#fff;border:1.5px solid var(--bd);padding:7px 34px 7px 14px;border-radius:9px;font-size:13px;color:#334155;cursor:pointer;outline:none;font-family:inherit;}
 .mdd:focus{border-color:var(--pu2);}
 .mdd-wrap::after{content:'';position:absolute;right:12px;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--ts);top:50%;transform:translateY(-50%);pointer-events:none;}
 .legend{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--ts);}
 .lg-item{display:flex;align-items:center;gap:5px;font-weight:600;}
 .lg-dot{width:8px;height:8px;border-radius:50%;}
-.fl-info{font-size:12px;color:var(--ts);}
-/* Table */
+
+/* SEARCH */
+.srch-wrap{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--bd);border-radius:9px;padding:6px 13px;transition:.2s;}
+.srch-wrap:focus-within{border-color:var(--pu2);}
+.srch-wrap input{border:none;outline:none;font-family:inherit;font-size:13px;width:180px;color:var(--tx);}
+.srch-wrap i{color:#9CA3AF;font-size:12px;}
+
+/* TABLE */
 .tw{background:#fff;border:1px solid var(--bd);border-radius:0 0 16px 16px;overflow-x:auto;box-shadow:var(--card-shadow);width:100%;margin-bottom:40px;}
 .kt{width:100%;border-collapse:collapse;font-size:13px;min-width:900px;}
 .kt th{padding:11px 15px;background:#FAFAF9;border-bottom:2px solid #F3F4F6;font-size:10.5px;color:var(--ts);font-weight:700;text-transform:uppercase;letter-spacing:.6px;text-align:left;}
@@ -62,246 +92,633 @@ h1 span{font-family:'IBM Plex Sans Thai',sans-serif;font-size:13px;font-weight:4
 .kt tbody tr:hover td{background:#FAFAF9;}
 .sr{background:var(--pu-l)!important;}
 .sr td{color:var(--pu2);font-weight:700;font-size:11.5px;letter-spacing:.5px;}
-.ci{width:82px;} .cn{min-width:220px;} .tn{width:38px;text-align:center!important;}
-.tk{min-width:160px;} .ta{min-width:160px;} .ts2{min-width:160px;}
-.ck{font-size:11.5px!important;}
-.dn{color:#374151;line-height:1.55;}
-.dc{text-align:center;font-weight:700;color:var(--ts);}
-.dc.z{color:#E5E7EB;}
-.bs{display:flex;flex-wrap:wrap;gap:5px;}
-/* ID badges */
+.hide{display:none!important;}
+
+/* BADGES */
 .ip{background:var(--pu-l);color:var(--pu2);padding:3px 11px;border-radius:7px;font-weight:800;font-size:12px;white-space:nowrap;letter-spacing:.2px;}
 .ip.ml{background:#FEF3C7;color:#92400E;}
-/* KAS badges */
+.bs-wrap{display:flex;flex-wrap:wrap;gap:5px;}
 .b{display:inline-flex;align-items:center;padding:3px 9px;border-radius:7px;font-size:11.5px;font-weight:700;cursor:default;transition:transform .12s,box-shadow .12s;}
 .b:hover{transform:translateY(-1px) scale(1.05);box-shadow:0 2px 8px rgba(0,0,0,.12);}
 .bk{background:var(--km);color:#1D4ED8;}
 .ba{background:var(--am);color:#B91C1C;}
 .bs2{background:var(--sm);color:#065F46;}
 .be{color:#D1D5DB;font-size:13px;}
-/* Tooltip */
-#tip{position:fixed;background:#1E1B2E;color:#E2D9F3;padding:13px 17px;border-radius:12px;font-size:13px;line-height:1.65;max-width:265px;z-index:9999;pointer-events:none;visibility:hidden;opacity:0;transition:opacity .12s;box-shadow:0 10px 30px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.2);}
+
+/* COUNT BADGES */
+.cnt-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;font-size:11px;font-weight:800;}
+.cnt-k{background:var(--km);color:#1D4ED8;}
+.cnt-a{background:var(--am);color:#B91C1C;}
+.cnt-s{background:var(--sm);color:#065F46;}
+.cnt-empty{background:#F3F4F6;color:#9CA3AF;}
+
+/* TOOLTIP */
+#tip{position:fixed;background:#1E1B2E;color:#E2D9F3;padding:13px 17px;border-radius:12px;font-size:13px;line-height:1.65;max-width:280px;z-index:9999;pointer-events:none;visibility:hidden;opacity:0;transition:opacity .12s;box-shadow:0 10px 30px rgba(0,0,0,.3);}
 .tt{display:flex;align-items:center;gap:7px;font-weight:700;font-size:13px;margin-bottom:7px;}
 .td2{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
 .td3{font-size:12px;color:#C4B5FD;margin-bottom:9px;line-height:1.5;}
 .tdv{height:1px;background:#3B2F6B;margin-bottom:9px;}
-.tr2{display:flex;justify-content:space-between;gap:20px;font-size:12px;}
+.tr2{display:flex;justify-content:space-between;gap:20px;font-size:12px;margin-bottom:2px;}
 .tl{color:#94A3B8;}.tv{font-weight:700;}
+
+/* IMPORT MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s;}
+.modal-bg.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:18px;width:580px;max-width:95vw;box-shadow:0 24px 72px rgba(0,0,0,.22);transform:translateY(20px) scale(.97);transition:transform .24s cubic-bezier(.34,1.56,.64,1);overflow:hidden;}
+.modal-bg.open .modal{transform:none;}
+.m-head{padding:20px 24px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+.m-title{font-size:17px;font-weight:800;color:var(--tx);}
+.m-close{width:28px;height:28px;border:none;background:#f3f4f6;border-radius:7px;cursor:pointer;font-size:15px;color:var(--ts);display:flex;align-items:center;justify-content:center;}
+.m-close:hover{background:#fee2e2;color:#dc2626;}
+.m-body{padding:20px 24px;}
+.m-foot{padding:14px 24px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:8px;}
+.drop-zone{border:2.5px dashed var(--pu3);border-radius:14px;padding:36px 20px;text-align:center;cursor:pointer;transition:.18s;background:var(--pu-l);}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--pu2);background:var(--pu-m);}
+.drop-zone-icon{font-size:36px;margin-bottom:10px;}
+.drop-zone-main{font-size:15px;font-weight:700;color:var(--tx);}
+.drop-zone-sub{font-size:12.5px;color:var(--ts);margin-top:4px;}
+.drop-zone-sub span{color:var(--pu2);font-weight:700;}
+.drop-file-name{font-size:12px;font-weight:700;color:var(--sc);margin-top:8px;}
+.hint-box{background:#f8f4ff;border:1px solid var(--pu-m);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:12px;color:var(--ts);line-height:1.8;}
+.hint-box strong{color:var(--pu2);}
+.hint-box code{background:#fff;padding:1px 6px;border-radius:4px;font-size:11px;color:var(--pu2);border:1px solid var(--pu3);}
+.preview-wrap{margin-top:14px;display:none;}
+.preview-title{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:6px;}
+.preview-scroll{overflow-x:auto;border:1px solid var(--bd);border-radius:8px;max-height:130px;overflow-y:auto;}
+.preview-scroll table{width:100%;font-size:11px;border-collapse:collapse;}
+.preview-scroll thead th{background:#f7f4fd;padding:6px 9px;font-weight:700;color:var(--ts);border-bottom:1px solid var(--bd);white-space:nowrap;}
+.preview-scroll tbody td{padding:4px 9px;border-bottom:1px solid var(--bd);}
+.btn-m{padding:9px 22px;border-radius:9px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.15s;}
+.btn-cancel{background:#f3f4f6;color:var(--ts);}
+.btn-cancel:hover{background:#e5e7eb;}
+.btn-confirm{background:var(--pu2);color:#fff;box-shadow:0 3px 10px rgba(124,58,237,.3);}
+.btn-confirm:hover{background:var(--pu);}
+.btn-confirm:disabled{opacity:.5;cursor:not-allowed;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;color:var(--ts);}
+.empty-state .ei{font-size:48px;margin-bottom:14px;}
+.empty-state strong{font-size:16px;font-weight:700;color:var(--tx);display:block;margin-bottom:8px;}
+.empty-state p{font-size:13px;line-height:1.7;}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;z-index:9999;background:#1e1b2e;color:#fff;padding:11px 17px;border-radius:11px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateY(72px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+.toast.show{transform:none;opacity:1;}
+.t-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+
+/* STATS ROW */
+.stats-row{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.stat-card{background:#fff;border:1.5px solid var(--bd);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:12px;box-shadow:var(--card-shadow);}
+.stat-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.stat-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;color:var(--tx);line-height:1;}
+.stat-lbl{font-size:11px;color:var(--ts);font-weight:600;margin-top:2px;}
+
+@media print{
+  .navbar,.action-bar,.source-banner,.ph .controls,.ph .legend .fl-info,
+  .btn-group,.modal-bg,.toast{display:none!important;}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{background:#fff!important;}
+  @page{size:A4 landscape;margin:12mm 10mm;}
+}
 </style>
 </head>
 <body>
 
 <header class="navbar">
-    <div class="logo"><img src="logo.jpg" alt="PSU Logo"></div>
-    <nav>
-        <ul class="nav-links">
-            <li><a href="bba-home.html">หน้าหลัก</a></li>
-            <li><a href="bba-public.html">ข้อมูลทั่วไป</a></li>
-            <li><a href="student.html">นักศึกษา</a></li>
-            <li><a href="plans.html">แผนการศึกษา</a></li>
-            <li><a href="bba-qa.html"class="active">QA</a></li>
-        </ul>
-    </nav>
-
-    <div class="search-container">
-        <div class="search-box">
-            <i class="fas fa-search"></i> <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร">
-        </div>
+  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
+  <nav>
+    <ul class="nav-links">
+       <li><a href="bba-qa.html">หน้าหลัก</a></li>
+      <li><a href="bba-plo.html"class="active">ผลลัพธ์การเรียนรู้</a></li>
+      <li><a href="bba-stake.html">ผู้มีส่วนร่วมในหลักสูตร</a></li>
+      <li><a href="bba-students.html">ข้อมูลนักศึกษา</a></li>
+      <li><a href="achievements.html" >ผลงานและความสำเร็จ</a></li>
+    </ul>
+  </nav>
+  <div class="search-container">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="gs" placeholder="ค้นหาข้อมูล..." oninput="filterTable()">
     </div>
+  </div>
 </header>
+
 <main class="main-content">
-    <div class="container">
-        <h1>ตารางแสดงผลลัพธ์การเรียนรู้ระดับหลักสูตรและระดับวิชาเอก (PLOs & MLOs)<br>กับ Knowledge / Attitude / Skill</h1>
-        <p style="color: #888; margin-top: -10px;">หลักสูตรบริหารธุรกิจบัณฑิต (หลักสูตรปรับปรุง พ.ศ. 2567)</p>
+  <div class="container">
 
-        <div class="action-bar">
-            <div class="tabs">
-                <a href="bba-plo.html" class="tab-btn"><i class="fas fa-th-large"></i> PLOs/MLOs</a>
-                <a href="score.html" class="tab-btn"><i class="fas fa-chart-bar"></i> คะแนนผลลัพธ์</a>
-                <a href="bba-matrix1.html" class="tab-btn"><i class="fas fa-project-diagram"></i> Alignment Matrix</a>
-                <a href="kas1.html" class="tab-btn active"><i class="fas fa-book"></i> KAS</a>
-            </div>
-            <a href="#" class="btn-download"><i class="fas fa-file-download"></i> Download Document</a>
+    <h1>
+      ตารางแสดงผลลัพธ์การเรียนรู้ระดับหลักสูตรและระดับวิชาเอก (PLOs &amp; MLOs)<br>
+      กับ Knowledge / Attitude / Skill
+      <span>หลักสูตรบริหารธุรกิจบัณฑิต (หลักสูตรปรับปรุง พ.ศ. 2567)</span>
+    </h1>
+
+    <div class="action-bar">
+      <div class="tabs">
+        <a href="bba-plo.html" class="tab-btn"><i class="fas fa-th-large"></i> PLOs/MLOs</a>
+        <a href="score.html"   class="tab-btn"><i class="fas fa-chart-bar"></i> คะแนนผลลัพธ์</a>
+        <a href="bba-matrix1.html" class="tab-btn"><i class="fas fa-project-diagram"></i> Alignment Matrix</a>
+        <a href="kas1.html"   class="tab-btn active"><i class="fas fa-book"></i> KAS</a>
+      </div>
+      <div class="btn-group">
+        <button class="btn-act btn-import" onclick="openImport()">
+          <i class="fas fa-file-upload"></i> นำเข้า Excel
+        </button>
+        <button class="btn-act btn-excel" onclick="exportExcel()">
+          <i class="fas fa-file-excel"></i> Export Excel
+        </button>
+        <button class="btn-act btn-download" onclick="window.print()">
+          <i class="fas fa-print"></i> พิมพ์ / PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- SOURCE BANNER -->
+    <div class="source-banner default" id="sourceBanner">
+      <div class="sb-dot default" id="sbDot"></div>
+      <span id="sbText">กำลังโหลดข้อมูล...</span>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row" id="statsRow" style="display:none">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#ede9fe;">📋</div>
+        <div><div class="stat-val" id="st-plo">0</div><div class="stat-lbl">PLOs</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#fef3c7;">🎓</div>
+        <div><div class="stat-val" id="st-mlo">0</div><div class="stat-lbl">MLOs</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#dbeafe;">📖</div>
+        <div><div class="stat-val" id="st-k">0</div><div class="stat-lbl">Knowledge (K)</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#fee2e2;">♥</div>
+        <div><div class="stat-val" id="st-a">0</div><div class="stat-lbl">Attitude (A)</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#d1fae5;">⚙</div>
+        <div><div class="stat-val" id="st-s">0</div><div class="stat-lbl">Skill (S)</div></div>
+      </div>
+    </div>
+
+    <!-- CONTROL BAR -->
+    <div class="ph">
+      <div class="controls">
+        <div class="sg">
+          <button class="sb2 on" id="sPLO" onclick="sw('PLO')">PLOs</button>
+          <button class="sb2"    id="sMLO" onclick="sw('MLO')">MLOs</button>
         </div>
-
-<div class="ph">
-    <div class="controls">
-      <div class="sg">
-        <button class="sb on" id="sPLO" onclick="sw('PLO')">PLOs</button>
-        <button class="sb" id="sMLO" onclick="sw('MLO')">MLOs</button>
+        <div class="mdd-wrap" id="mddWrap" style="display:none">
+          <select class="mdd" id="majorDd" onchange="filterTable()"></select>
+        </div>
+        <div class="srch-wrap">
+          <i class="fas fa-search"></i>
+          <input type="text" id="localSearch" placeholder="ค้นหา PLO/MLO..." oninput="filterTable()">
+        </div>
       </div>
-      <div class="mdd-wrap" id="mddWrap" style="display:none">
-        <select class="mdd" id="majorDd" onchange="onMajorChange()">
-          <option value="ALL">— ทุกวิชาเอก —</option>
-          <option value="FIN">FIN · การเงิน</option>
-          <option value="MTK">MTK · การตลาด</option>
-          <option value="HRM">HRM · การจัดการทรัพยากรมนุษย์</option>
-          <option value="LMS">LMS · โลจิสติกส์และโซ่อุปทาน</option>
-          <option value="BIS">BIS · ระบบสารสนเทศทางธุรกิจ</option>
-          <option value="MICE">MICE · ธุรกิจไมซ์</option>
-        </select>
+      <div class="legend">
+        <div class="lg-item"><div class="lg-dot" style="background:#3B82F6"></div>Knowledge (K)</div>
+        <div class="lg-item"><div class="lg-dot" style="background:#F87171"></div>Attitude (A)</div>
+        <div class="lg-item"><div class="lg-dot" style="background:#10B981"></div>Skill (S)</div>
+        <span class="fl-info" style="font-size:12px;color:var(--ts);">— Hover badges for details</span>
       </div>
     </div>
-    <div class="legend">
-      <div class="lg-item"><div class="lg-dot" style="background:#3B82F6"></div>Knowledge (K)</div>
-      <div class="lg-item"><div class="lg-dot" style="background:#F87171"></div>Attitude (A)</div>
-      <div class="lg-item"><div class="lg-dot" style="background:#10B981"></div>Skill (S)</div>
-      <span class="fl-info">— Hover badges for details</span>
-    </div>
-  </div>
 
-  <div class="tw">
-    <table class="kt">
-      <thead id="th"></thead>
-      <tbody id="tb"></tbody>
-    </table>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid #F3F4F6;font-size:12px;color:var(--ts);">
-      <span id="fl">-</span>
-      <span>ภาคผนวก ข · AUN-QA Version 4.0</span>
+    <div class="tw">
+      <table class="kt">
+        <thead id="th"></thead>
+        <tbody id="tb"></tbody>
+      </table>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid #F3F4F6;font-size:12px;color:var(--ts);">
+        <span id="fl">—</span>
+        <span>ภาคผนวก ข · AUN-QA Version 4.0</span>
+      </div>
     </div>
-  </div>
 
-    </div>
+  </div><!-- /container -->
 </main>
 
-<div class="tip" id="tip"></div>
-<script>
-const D={"PLO1":{"name_th":"พัฒนาตนเองจากการเรียนรู้เมื่อได้รับคำวิพากษ์วิจารณ์","K":{"K1":"รูปแบบและคุณลักษณะการเป็นผู้นำ","K2":"วิธีการปรับตัว"},"A":{"A1":"การคิดเชิงบวก","A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A3":"ความฉลาดทางอารมณ์","A4":"การรับรู้ความสามารถของตนเอง"},"S":{"S1":"การปรับตัว","S2":"การทำงานภายใต้แรงกดดัน","S3":"การเข้าสังคม"}},"PLO2":{"name_th":"วิเคราะห์และนำเสนอข้อมูลต่อผู้บริหารเพื่อการตัดสินใจ","K":{"K3":"บริหารธุรกิจ","K4":"เทคโนโลยีสารสนเทศ","K5":"รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร","K6":"ธุรกิจอัจฉริยะ","K7":"ระบบฐานข้อมูล","K69":"การบัญชี"},"A":{"A1":"การคิดเชิงบวก","A6":"ความรับผิดชอบ","A10":"ความใฝ่รู้","A12":"ความรอบคอบ"},"S":{"S4":"การคิดเชิงระบบ","S5":"การคิดวิเคราะห์","S6":"การนำเสนอ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S9":"การใช้โปรแกรมคอมพิวเตอร์","S10":"การประเมินผล"}},"PLO3":{"name_th":"ประยุกต์ความรู้ทางด้านบริหารธุรกิจเพื่อวางแผนกลยุทธ์ให้องค์กร","K":{"K3":"บริหารธุรกิจ","K8":"กลยุทธ์ทางธุรกิจ"},"A":{"A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A12":"ความรอบคอบ","A16":"การมีวิสัยทัศน์"},"S":{"S8":"การแก้ปัญหา","S11":"การประยุกต์","S12":"การสืบค้นข้อมูล","S13":"การวางแผน","S14":"การจัดการ"}},"PLO4":{"name_th":"ประยุกต์กรอบแนวคิดความเป็นผู้ประกอบการ (Entrepreneurial Mindset) เพื่อการสร้างธุรกิจ","K":{"K1":"รูปแบบและคุณลักษณะการเป็นผู้นำ","K3":"บริหารธุรกิจ","K9":"การเป็นผู้ประกอบการ"},"A":{"A4":"การรับรู้ความสามารถของตนเอง","A6":"ความรับผิดชอบ","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A10":"ความใฝ่รู้","A16":"การมีวิสัยทัศน์"},"S":{"S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S11":"การประยุกต์","S13":"การวางแผน","S14":"การจัดการ","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S17":"การสื่อสาร","S18":"การเป็นผู้ประกอบการ"}},"PLO5":{"name_th":"ประยุกต์ใช้กระบวนการวิจัยเพื่อแก้ไขปัญหาทางธุรกิจ","K":{"K3":"บริหารธุรกิจ","K10":"ระเบียบวิธีวิจัย","K11":"การอ้างอิงข้อมูล"},"A":{"A9":"จริยธรรม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ"},"S":{"S4":"การคิดเชิงระบบ","S5":"การคิดวิเคราะห์","S8":"การแก้ปัญหา","S10":"การประเมินผล","S11":"การประยุกต์","S12":"การสืบค้นข้อมูล","S19":"ความคิดเชิงสังเคราะห์","S21":"การคิดอย่างมีเหตุมีผล"}},"PLO6":{"name_th":"สื่อสารภายใต้ความหลากหลายทางสังคมและวัฒนธรรม","K":{"K2":"วิธีการปรับตัว","K5":"รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร","K21":"วิธีการสื่อสาร"},"A":{"A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A13":"การยอมรับความต่างทางพหุวัฒนธรรม","A14":"ความอ่อนน้อมถ่อมตน","A15":"เคารพผู้อื่น"},"S":{"S1":"การปรับตัว","S3":"การเข้าสังคม","S17":"การสื่อสาร","S20":"การใช้ภาษาไทยและภาษาอังกฤษ"}},"PLO7":{"name_th":"ทำงานร่วมกับผู้อื่นในองค์กร","K":{"K1":"รูปแบบและคุณลักษณะการเป็นผู้นำ","K2":"วิธีการปรับตัว","K13":"จิตวิทยา","K14":"แนวทางการทำงานเป็นทีม","K64":"การจัดการ"},"A":{"A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A5":"ความอดทนอดกลั้น","A14":"ความอ่อนน้อมถ่อมตน","A15":"เคารพผู้อื่น","A17":"การรู้จักกาลเทศะ"},"S":{"S1":"การปรับตัว","S2":"การทำงานภายใต้แรงกดดัน","S3":"การเข้าสังคม","S16":"การประสานงาน","S17":"การสื่อสาร","S22":"การทำงานเป็นทีม","S23":"การบริหารเวลา"}},"PLO8":{"name_th":"เลือกใช้เทคโนโลยีดิจิทัลในการทำงานให้บรรลุเป้าหมาย","K":{"K4":"เทคโนโลยีสารสนเทศ","K5":"รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร","K15":"นวัตกรรม"},"A":{"A6":"ความรับผิดชอบ","A10":"ความใฝ่รู้","A12":"ความรอบคอบ"},"S":{"S5":"การคิดวิเคราะห์","S7":"การตัดสินใจ","S9":"การใช้โปรแกรมคอมพิวเตอร์","S24":"การใช้สื่อออนไลน์"}},"PLO9":{"name_th":"แสดงพฤติกรรมที่แสดงถึงการมีจริยธรรมและความรับผิดชอบต่อสังคม","K":{"K2":"วิธีการปรับตัว","K16":"กฎหมายแรงงาน","K17":"กฎหมายทางธุรกิจ","K18":"จริยธรรม","K19":"จรรยาบรรณ"},"A":{"A6":"ความรับผิดชอบ","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A11":"ความมีวินัย"},"S":{"S1":"การปรับตัว","S4":"การคิดเชิงระบบ","S7":"การตัดสินใจ","S25":"ความเป็นผู้นำ"}},"MLO1.1":{"name_th":"เขียนบทวิเคราะห์ตราสารทางการเงินภายใต้หลักเกณฑ์ของคณะกรรมการกำกับหลักทรัพย์และตลาดหลักทรัพย์","major":"FIN","K":{"K4":"เทคโนโลยีสารสนเทศ","K22":"การลงทุน","K24":"การกระจายการลงทุน","K27":"กองทุนรวม","K30":"การบริหารความเสี่ยงทางการเงิน","K31":"การประเมินมูลค่า","K33":"การวิเคราะห์ทางการเงิน","K34":"การวิเคราะห์สภาพแวดล้อม","K35":"งบการเงิน","K36":"ตราสารทุน","K37":"ตราสารหนี้","K38":"ตราสารอนุพันธ์","K39":"มูลค่าของเงินตามเวลา","K40":"ระบบการเงินไทยและต่างประเทศ","K41":"วิเคราะห์แนวโน้ม","K43":"สินทรัพย์ลงทุนและสินทรัพย์ทางเลือก","K44":"อัตราผลตอบแทนและความเสี่ยง"},"A":{"A4":"การรับรู้ความสามารถของตนเอง","A5":"ความอดทนอดกลั้น","A6":"ความรับผิดชอบ","A7":"ความกระตือรือร้น","A8":"ความรับผิดชอบต่อสังคม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ","A15":"เคารพผู้อื่น","A16":"การมีวิสัยทัศน์","A17":"การรู้จักกาลเทศะ","A18":"ความเชื่อมั่นในตนเอง","A20":"ความซื่อสัตย์"},"S":{"S2":"การทำงานภายใต้แรงกดดัน","S4":"การคิดเชิงระบบ","S5":"การคิดวิเคราะห์","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S9":"การใช้โปรแกรมคอมพิวเตอร์","S10":"การประเมินผล","S12":"การสืบค้นข้อมูล","S13":"การวางแผน","S14":"การจัดการ","S16":"การประสานงาน","S17":"การสื่อสาร","S19":"ความคิดเชิงสังเคราะห์","S20":"การใช้ภาษาไทยและภาษาอังกฤษ","S21":"การคิดอย่างมีเหตุมีผล","S22":"การทำงานเป็นทีม","S23":"การบริหารเวลา","S24":"การใช้สื่อออนไลน์","S26":"การคำนวณ","S27":"การคาดการณ์","S28":"การตั้งคำถามเชิงสร้างสรรค์"}},"MLO1.2":{"name_th":"วางแผนการเงินส่วนบุคคลตามมาตรฐานของสมาคมนักวางแผนการเงินไทย","major":"FIN","K":{"K4":"เทคโนโลยีสารสนเทศ","K13":"จิตวิทยา","K21":"วิธีการสื่อสาร","K22":"การลงทุน","K24":"การกระจายการลงทุน","K27":"กองทุนรวม","K30":"การบริหารความเสี่ยงทางการเงิน","K33":"การวิเคราะห์ทางการเงิน","K35":"งบการเงิน","K36":"ตราสารทุน","K37":"ตราสารหนี้","K38":"ตราสารอนุพันธ์","K39":"มูลค่าของเงินตามเวลา","K44":"อัตราผลตอบแทนและความเสี่ยง","K45":"การบริหารความเสี่ยง","K46":"การประกันภัย","K47":"การประมาณการทางการเงิน","K48":"การวางแผนการเงินส่วนบุคคล","K49":"การวางแผนการเงินสำหรับการเกษียณ","K50":"การวางแผนการเงินองค์รวม","K51":"การวางแผนภาษี","K52":"การวางแผนมรดก","K53":"มาตรฐานการปฏิบัติวิชาชีพทางการเงิน","K54":"ตลาดเงินและตลาดทุน"},"A":{"A1":"การคิดเชิงบวก","A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A3":"ความฉลาดทางอารมณ์","A4":"การรับรู้ความสามารถของตนเอง","A5":"ความอดทนอดกลั้น","A6":"ความรับผิดชอบ","A7":"ความกระตือรือร้น","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ","A13":"การยอมรับความต่างทางพหุวัฒนธรรม","A15":"เคารพผู้อื่น","A16":"การมีวิสัยทัศน์","A17":"การรู้จักกาลเทศะ","A18":"ความเชื่อมั่นในตนเอง","A19":"ความพยายามอุตสาหะ","A20":"ความซื่อสัตย์"},"S":{"S1":"การปรับตัว","S2":"การทำงานภายใต้แรงกดดัน","S4":"การคิดเชิงระบบ","S5":"การคิดวิเคราะห์","S6":"การนำเสนอ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S9":"การใช้โปรแกรมคอมพิวเตอร์","S12":"การสืบค้นข้อมูล","S13":"การวางแผน","S14":"การจัดการ","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S17":"การสื่อสาร","S21":"การคิดอย่างมีเหตุมีผล","S22":"การทำงานเป็นทีม","S23":"การบริหารเวลา","S26":"การคำนวณ","S27":"การคาดการณ์","S28":"การตั้งคำถามเชิงสร้างสรรค์","S29":"การเจรจาต่อรอง","S30":"การสังเกต","S33":"ความยืดหยุ่น"}},"MLO1.3":{"name_th":"วิเคราะห์ข้อมูลทางการเงินเพื่อการบริหารการเงินขององค์กร","major":"FIN","K":{"K4":"เทคโนโลยีสารสนเทศ","K28":"การกำกับดูแลการฟอกเงิน","K29":"การเงินระหว่างประเทศ","K32":"การวางแผนธุรกิจ","K33":"การวิเคราะห์ทางการเงิน","K35":"งบการเงิน","K39":"มูลค่าของเงินตามเวลา","K40":"ระบบการเงินไทยและต่างประเทศ","K41":"วิเคราะห์แนวโน้ม","K44":"อัตราผลตอบแทนและความเสี่ยง","K45":"การบริหารความเสี่ยง","K47":"การประมาณการทางการเงิน","K54":"ตลาดเงินและตลาดทุน","K55":"การจัดหาเงินทุน","K56":"การบริหารการเงิน","K57":"การบริหารเงินทุนหมุนเวียน","K58":"การบริหารสินเชื่อ","K59":"งบลงทุน","K60":"นโยบายการเงินและนโยบายการคลัง","K61":"บริหารต้นทุน","K62":"บัญชีบริหาร","K63":"สถาบันการเงิน"},"A":{"A4":"การรับรู้ความสามารถของตนเอง","A5":"ความอดทนอดกลั้น","A6":"ความรับผิดชอบ","A7":"ความกระตือรือร้น","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ","A13":"การยอมรับความต่างทางพหุวัฒนธรรม","A15":"เคารพผู้อื่น","A16":"การมีวิสัยทัศน์","A19":"ความพยายามอุตสาหะ","A20":"ความซื่อสัตย์"},"S":{"S2":"การทำงานภายใต้แรงกดดัน","S4":"การคิดเชิงระบบ","S5":"การคิดวิเคราะห์","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S9":"การใช้โปรแกรมคอมพิวเตอร์","S10":"การประเมินผล","S12":"การสืบค้นข้อมูล","S14":"การจัดการ","S16":"การประสานงาน","S18":"การเป็นผู้ประกอบการ","S21":"การคิดอย่างมีเหตุมีผล","S22":"การทำงานเป็นทีม","S26":"การคำนวณ","S27":"การคาดการณ์","S31":"การจัดการความขัดแย้ง","S32":"การรู้เท่าทัน"}},"MLO2.1":{"name_th":"วิเคราะห์กลยุทธ์ทางการตลาดอย่างสร้างสรรค์","major":"MTK","K":{"K1":"รูปแบบและคุณลักษณะการเป็นผู้นำ","K2":"วิธีการปรับตัว","K3":"บริหารธุรกิจ","K5":"รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร","K8":"กลยุทธ์ทางธุรกิจ","K10":"ระเบียบวิธีวิจัย","K13":"จิตวิทยา","K18":"จริยธรรม","K19":"จรรยาบรรณ","K64":"การจัดการ","K68":"การตลาด","K70":"พฤติกรรมผู้บริโภค","K72":"แบรนด์และผลิตภัณฑ์","K73":"พหุวัฒนธรรม","K74":"การวิเคราะห์ราคา","K75":"การตลาดเพื่อสังคม","K76":"การจัดการช่องทางการตลาดสมัยใหม่","K77":"การวัดและการประเมินผลทางการตลาด","K78":"การสื่อสารทางการตลาดเชิงบูรณาการ","K79":"การตลาดดิจิทัล","K80":"การตลาดบริการ"},"A":{"A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A4":"การรับรู้ความสามารถของตนเอง","A5":"ความอดทนอดกลั้น","A6":"ความรับผิดชอบ","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ","A14":"ความอ่อนน้อมถ่อมตน","A15":"เคารพผู้อื่น","A16":"การมีวิสัยทัศน์","A17":"การรู้จักกาลเทศะ","A19":"ความพยายามอุตสาหะ","A20":"ความซื่อสัตย์"},"S":{"S1":"การปรับตัว","S4":"การคิดเชิงระบบ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S9":"การใช้โปรแกรมคอมพิวเตอร์","S12":"การสืบค้นข้อมูล","S13":"การวางแผน","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S18":"การเป็นผู้ประกอบการ","S21":"การคิดอย่างมีเหตุมีผล","S24":"การใช้สื่อออนไลน์","S28":"การตั้งคำถามเชิงสร้างสรรค์","S32":"การรู้เท่าทัน","S34":"ความคิดเชิงวิพากษ์","S35":"การกล้าแสดงออก"}},"MLO2.2":{"name_th":"วิเคราะห์แนวทางการแก้ไขปัญหาทางการตลาดเชิงนวัตกรรม","major":"MTK","K":{"K1":"รูปแบบและคุณลักษณะการเป็นผู้นำ","K2":"วิธีการปรับตัว","K5":"รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร","K8":"กลยุทธ์ทางธุรกิจ","K10":"ระเบียบวิธีวิจัย","K14":"แนวทางการทำงานเป็นทีม","K16":"กฎหมายแรงงาน","K21":"วิธีการสื่อสาร","K68":"การตลาด","K70":"พฤติกรรมผู้บริโภค","K71":"กลยุทธ์"},"A":{"A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A4":"การรับรู้ความสามารถของตนเอง","A6":"ความรับผิดชอบ","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ","A14":"ความอ่อนน้อมถ่อมตน","A15":"เคารพผู้อื่น","A16":"การมีวิสัยทัศน์","A19":"ความพยายามอุตสาหะ","A20":"ความซื่อสัตย์"},"S":{"S1":"การปรับตัว","S4":"การคิดเชิงระบบ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S9":"การใช้โปรแกรมคอมพิวเตอร์","S12":"การสืบค้นข้อมูล","S13":"การวางแผน","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S18":"การเป็นผู้ประกอบการ","S21":"การคิดอย่างมีเหตุมีผล","S22":"การทำงานเป็นทีม","S24":"การใช้สื่อออนไลน์","S28":"การตั้งคำถามเชิงสร้างสรรค์","S32":"การรู้เท่าทัน","S34":"ความคิดเชิงวิพากษ์","S35":"การกล้าแสดงออก"}},"MLO2.3":{"name_th":"กำหนดกลยุทธ์การตลาดเพื่อใช้ในธุรกิจ","major":"MTK","K":{"K1":"รูปแบบและคุณลักษณะการเป็นผู้นำ","K5":"รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร","K8":"กลยุทธ์ทางธุรกิจ","K10":"ระเบียบวิธีวิจัย","K14":"แนวทางการทำงานเป็นทีม","K20":"การเงิน","K21":"วิธีการสื่อสาร","K65":"การจัดการการดำเนินงาน","K66":"การจัดการทรัพยากรมนุษย์","K67":"การจัดการโลจิสติกส์และโซ่อุปทาน"},"A":{"A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A4":"การรับรู้ความสามารถของตนเอง","A5":"ความอดทนอดกลั้น","A6":"ความรับผิดชอบ","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ","A14":"ความอ่อนน้อมถ่อมตน","A15":"เคารพผู้อื่น","A16":"การมีวิสัยทัศน์","A19":"ความพยายามอุตสาหะ","A20":"ความซื่อสัตย์"},"S":{"S1":"การปรับตัว","S4":"การคิดเชิงระบบ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S9":"การใช้โปรแกรมคอมพิวเตอร์","S12":"การสืบค้นข้อมูล","S13":"การวางแผน","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S18":"การเป็นผู้ประกอบการ","S21":"การคิดอย่างมีเหตุมีผล","S22":"การทำงานเป็นทีม","S24":"การใช้สื่อออนไลน์","S28":"การตั้งคำถามเชิงสร้างสรรค์","S32":"การรู้เท่าทัน","S34":"ความคิดเชิงวิพากษ์","S35":"การกล้าแสดงออก"}},"MLO3.1":{"name_th":"ใช้แนวคิดการจัดการทรัพยากรมนุษย์ในการสร้างกิจกรรมเพื่อพัฒนาคน","major":"HRM","K":{"K1":"รูปแบบและคุณลักษณะการเป็นผู้นำ","K13":"จิตวิทยา","K14":"แนวทางการทำงานเป็นทีม","K18":"จริยธรรม","K21":"วิธีการสื่อสาร","K66":"การจัดการทรัพยากรมนุษย์","K83":"การพยากรณ์กำลังคน","K85":"ทฤษฎีและแนวเกี่ยวกับพฤติกรรมมนุษย์","K87":"การวางแผนกำลังคน","K88":"การฝึกอบรมและพัฒนา","K89":"แรงจูงใจ","K91":"การจัดการความขัดแย้ง"},"A":{"A1":"การคิดเชิงบวก","A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A3":"ความฉลาดทางอารมณ์","A5":"ความอดทนอดกลั้น","A6":"ความรับผิดชอบ","A7":"ความกระตือรือร้น","A9":"จริยธรรม","A12":"ความรอบคอบ","A13":"การยอมรับความต่างทางพหุวัฒนธรรม","A15":"เคารพผู้อื่น","A18":"ความเชื่อมั่นในตนเอง"},"S":{"S1":"การปรับตัว","S2":"การทำงานภายใต้แรงกดดัน","S3":"การเข้าสังคม","S5":"การคิดวิเคราะห์","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S10":"การประเมินผล","S11":"การประยุกต์","S14":"การจัดการ","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S17":"การสื่อสาร","S22":"การทำงานเป็นทีม","S23":"การบริหารเวลา","S24":"การใช้สื่อออนไลน์","S31":"การจัดการความขัดแย้ง","S33":"ความยืดหยุ่น","S35":"การกล้าแสดงออก","S36":"ความเป็นผู้นำ"}},"MLO3.2":{"name_th":"ใช้เทคโนโลยีดิจิทัลในการบริหารทรัพยากรมนุษย์","major":"HRM","K":{"K2":"วิธีการปรับตัว","K4":"เทคโนโลยีสารสนเทศ","K5":"รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร","K15":"นวัตกรรม","K66":"การจัดการทรัพยากรมนุษย์","K85":"ทฤษฎีและแนวเกี่ยวกับพฤติกรรมมนุษย์","K94":"ระบบคอมพิวเตอร์"},"A":{"A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A6":"ความรับผิดชอบ","A7":"ความกระตือรือร้น","A9":"จริยธรรม","A11":"ความมีวินัย","A12":"ความรอบคอบ","A13":"การยอมรับความต่างทางพหุวัฒนธรรม","A19":"ความพยายามอุตสาหะ"},"S":{"S4":"การคิดเชิงระบบ","S6":"การนำเสนอ","S8":"การแก้ปัญหา","S10":"การประเมินผล","S12":"การสืบค้นข้อมูล","S14":"การจัดการ","S15":"ความคิดเชิงสร้างสรรค์","S23":"การบริหารเวลา","S24":"การใช้สื่อออนไลน์","S33":"ความยืดหยุ่น"}},"MLO4.1":{"name_th":"วางแผนในการลดต้นทุนและเพิ่มกำไรโดยใช้ความรู้ด้านการจัดการโลจิสติกส์และโซ่อุปทานให้กับธุรกิจ","major":"LMS","K":{"K4":"เทคโนโลยีสารสนเทศ","K5":"รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร","K6":"ธุรกิจอัจฉริยะ","K10":"ระเบียบวิธีวิจัย","K19":"จรรยาบรรณ","K21":"วิธีการสื่อสาร","K23":"ภาษาอังกฤษ","K26":"การจำลองสถานการณ์","K29":"การเงินระหว่างประเทศ","K42":"ธุรกิจระหว่างประเทศ","K45":"การบริหารความเสี่ยง","K61":"บริหารต้นทุน","K64":"การจัดการ","K65":"การจัดการการดำเนินงาน","K67":"การจัดการโลจิสติกส์และโซ่อุปทาน","K95":"การจัดการโครงการ","K96":"การบริหารท่าเรือ","K97":"การจัดระวางสินค้า","K98":"การประกันคุณภาพ","K99":"การบริหารคุณภาพ","K100":"มาตรฐานการปฏิบัติทางโลจิสติกส์และโซ่อุปทาน","K101":"นโยบายโลจิสติกส์และโซ่อุปทาน","K102":"การขนส่งสินค้าทางเรือ","K103":"การค้าระหว่างประเทศ","K104":"การบริหารสินค้าคงคลัง","K105":"การจัดการคลังสินค้า","K106":"การขนส่งสินค้าทางบก","K107":"การกระจายสินค้า","K108":"การจัดการโซ่อุปทานระดับโลก","K109":"การขนส่งสินค้าทางอากาศ","K110":"การจัดซื้อจัดหา","K111":"กระบวนการผลิตและการบริการ","K112":"การวิเคราะห์เชิงปริมาณ","K113":"พิธีการศุลกากร","K114":"แบบจำลองโซ่อุปทาน"},"A":{"A1":"การคิดเชิงบวก","A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A3":"ความฉลาดทางอารมณ์","A4":"การรับรู้ความสามารถของตนเอง","A5":"ความอดทนอดกลั้น","A6":"ความรับผิดชอบ","A7":"ความกระตือรือร้น","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ","A13":"การยอมรับความต่างทางพหุวัฒนธรรม","A14":"ความอ่อนน้อมถ่อมตน","A15":"เคารพผู้อื่น","A16":"การมีวิสัยทัศน์","A17":"การรู้จักกาลเทศะ","A18":"ความเชื่อมั่นในตนเอง","A19":"ความพยายามอุตสาหะ","A20":"ความซื่อสัตย์","A21":"จิตอาสา","A22":"ความเสียสละ","A23":"ความยุติธรรม"},"S":{"S1":"การปรับตัว","S2":"การทำงานภายใต้แรงกดดัน","S3":"การเข้าสังคม","S4":"การคิดเชิงระบบ","S5":"การคิดวิเคราะห์","S6":"การนำเสนอ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S10":"การประเมินผล","S11":"การประยุกต์","S12":"การสืบค้นข้อมูล","S13":"การวางแผน","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S17":"การสื่อสาร","S18":"การเป็นผู้ประกอบการ","S19":"ความคิดเชิงสังเคราะห์","S20":"การใช้ภาษาไทยและภาษาอังกฤษ","S21":"การคิดอย่างมีเหตุมีผล","S22":"การทำงานเป็นทีม","S23":"การบริหารเวลา","S25":"ความเป็นผู้นำ","S26":"การคำนวณ","S27":"การคาดการณ์","S28":"การตั้งคำถามเชิงสร้างสรรค์","S29":"การเจรจาต่อรอง","S30":"การสังเกต","S32":"การรู้เท่าทัน","S33":"ความยืดหยุ่น","S34":"ความคิดเชิงวิพากษ์","S35":"การกล้าแสดงออก","S36":"มารยาทและบุคลิกภาพ","S37":"การออกแบบ"}},"MLO4.2":{"name_th":"ประยุกต์ความรู้ทางด้านการจัดการโลจิสติกส์และโซ่อุปทานในการแก้ไขปัญหาของธุรกิจในฝั่ง outbound และบริบทพื้นที่ภาคใต้","major":"LMS","K":{"K4":"เทคโนโลยีสารสนเทศ","K5":"รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร","K6":"ธุรกิจอัจฉริยะ","K10":"ระเบียบวิธีวิจัย","K19":"จรรยาบรรณ","K21":"วิธีการสื่อสาร","K23":"ภาษาอังกฤษ","K26":"การจำลองสถานการณ์","K29":"การเงินระหว่างประเทศ","K42":"ธุรกิจระหว่างประเทศ","K45":"การบริหารความเสี่ยง","K61":"บริหารต้นทุน","K64":"การจัดการ","K65":"การจัดการการดำเนินงาน","K67":"การจัดการโลจิสติกส์และโซ่อุปทาน","K95":"การจัดการโครงการ","K96":"การบริหารท่าเรือ","K97":"การจัดระวางสินค้า","K98":"การประกันคุณภาพ","K99":"การบริหารคุณภาพ","K100":"มาตรฐานการปฏิบัติทางโลจิสติกส์และโซ่อุปทาน","K101":"นโยบายโลจิสติกส์และโซ่อุปทาน","K102":"การขนส่งสินค้าทางเรือ","K103":"การค้าระหว่างประเทศ","K104":"การบริหารสินค้าคงคลัง","K105":"การจัดการคลังสินค้า","K106":"การขนส่งสินค้าทางบก","K107":"การกระจายสินค้า","K108":"การจัดการโซ่อุปทานระดับโลก","K109":"การขนส่งสินค้าทางอากาศ","K110":"การจัดซื้อจัดหา","K111":"กระบวนการผลิตและการบริการ","K112":"การวิเคราะห์เชิงปริมาณ","K113":"พิธีการศุลกากร","K114":"แบบจำลองโซ่อุปทาน"},"A":{"A1":"การคิดเชิงบวก","A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A3":"ความฉลาดทางอารมณ์","A4":"การรับรู้ความสามารถของตนเอง","A5":"ความอดทนอดกลั้น","A6":"ความรับผิดชอบ","A7":"ความกระตือรือร้น","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ","A13":"การยอมรับความต่างทางพหุวัฒนธรรม","A14":"ความอ่อนน้อมถ่อมตน","A15":"เคารพผู้อื่น","A16":"การมีวิสัยทัศน์","A17":"การรู้จักกาลเทศะ","A18":"ความเชื่อมั่นในตนเอง","A19":"ความพยายามอุตสาหะ","A20":"ความซื่อสัตย์","A21":"จิตอาสา","A22":"ความเสียสละ","A23":"ความยุติธรรม"},"S":{"S1":"การปรับตัว","S2":"การทำงานภายใต้แรงกดดัน","S3":"การเข้าสังคม","S4":"การคิดเชิงระบบ","S5":"การคิดวิเคราะห์","S6":"การนำเสนอ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S10":"การประเมินผล","S11":"การประยุกต์","S12":"การสืบค้นข้อมูล","S13":"การวางแผน","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S17":"การสื่อสาร","S18":"การเป็นผู้ประกอบการ","S19":"ความคิดเชิงสังเคราะห์","S20":"การใช้ภาษาไทยและภาษาอังกฤษ","S21":"การคิดอย่างมีเหตุมีผล","S22":"การทำงานเป็นทีม","S23":"การบริหารเวลา","S25":"ความเป็นผู้นำ","S26":"การคำนวณ","S27":"การคาดการณ์","S28":"การตั้งคำถามเชิงสร้างสรรค์","S29":"การเจรจาต่อรอง","S30":"การสังเกต","S32":"การรู้เท่าทัน","S33":"ความยืดหยุ่น","S34":"ความคิดเชิงวิพากษ์","S35":"การกล้าแสดงออก","S36":"มารยาทและบุคลิกภาพ","S37":"การออกแบบ"}},"MLO5.1":{"name_th":"พัฒนาระบบสารสนเทศทางธุรกิจเพื่อใช้ในการวางแผนธุรกิจ","major":"BIS","K":{"K3":"บริหารธุรกิจ","K4":"เทคโนโลยีสารสนเทศ","K7":"ระบบฐานข้อมูล","K12":"การเขียนโปรแกรมคอมพิวเตอร์","K81":"โครงสร้างข้อมูลและอัลกอริทึม","K82":"การเขียนโปรแกรมระบบเว็บ","K84":"ออกแบบระบบสารสนเทศทางธุรกิจ","K93":"ออกแบบกราฟิก"},"A":{"A1":"การคิดเชิงบวก","A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A4":"การรับรู้ความสามารถของตนเอง","A6":"ความรับผิดชอบ","A9":"จริยธรรม","A11":"ความมีวินัย","A12":"ความรอบคอบ","A19":"ความพยายามอุตสาหะ","A20":"ความซื่อสัตย์"},"S":{"S2":"การทำงานภายใต้แรงกดดัน","S4":"การคิดเชิงระบบ","S5":"การคิดวิเคราะห์","S6":"การนำเสนอ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S9":"การใช้โปรแกรมคอมพิวเตอร์","S11":"การประยุกต์","S13":"การวางแผน","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S17":"การสื่อสาร","S19":"ความคิดเชิงสังเคราะห์","S21":"การคิดอย่างมีเหตุมีผล","S22":"การทำงานเป็นทีม","S26":"การคำนวณ","S28":"การตั้งคำถามเชิงสร้างสรรค์","S37":"การออกแบบ"}},"MLO5.2":{"name_th":"วางแผนและติดตั้งระบบสารสนเทศได้ถูกต้องตามกฎหมาย","major":"BIS","K":{"K3":"บริหารธุรกิจ","K4":"เทคโนโลยีสารสนเทศ","K86":"เครือข่ายคอมพิวเตอร์","K90":"ความมั่นคงของระบบสารสนเทศ","K92":"วางแผนระบบสารสนเทศทางธุรกิจ","K94":"ระบบคอมพิวเตอร์"},"A":{"A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A6":"ความรับผิดชอบ","A8":"ความรับผิดชอบต่อสังคม","A9":"จริยธรรม","A10":"ความใฝ่รู้","A11":"ความมีวินัย","A12":"ความรอบคอบ","A16":"การมีวิสัยทัศน์","A19":"ความพยายามอุตสาหะ"},"S":{"S2":"การทำงานภายใต้แรงกดดัน","S4":"การคิดเชิงระบบ","S5":"การคิดวิเคราะห์","S6":"การนำเสนอ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S9":"การใช้โปรแกรมคอมพิวเตอร์","S10":"การประเมินผล","S11":"การประยุกต์","S12":"การสืบค้นข้อมูล","S13":"การวางแผน","S14":"การจัดการ","S15":"ความคิดเชิงสร้างสรรค์","S16":"การประสานงาน","S17":"การสื่อสาร","S19":"ความคิดเชิงสังเคราะห์","S21":"การคิดอย่างมีเหตุมีผล","S22":"การทำงานเป็นทีม","S31":"การจัดการความขัดแย้ง","S32":"การรู้เท่าทัน","S37":"การออกแบบ"}},"MLO6.1":{"name_th":"จัดงานไมซ์ได้ตามเป้าหมายการพัฒนาที่ยั่งยืน (SDGs) และสอดคล้องกับความต้องการของผู้มีส่วนได้ส่วนเสีย","major":"MICE","K":{"K1":"รูปแบบและคุณลักษณะการเป็นผู้นำ","K2":"วิธีการปรับตัว","K14":"แนวทางการทำงานเป็นทีม","K18":"จริยธรรม","K19":"จรรยาบรรณ","K25":"หน้าที่พลเมือง","K64":"การจัดการ"},"A":{"A1":"การคิดเชิงบวก","A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A3":"ความฉลาดทางอารมณ์","A4":"การรับรู้ความสามารถของตนเอง","A7":"ความกระตือรือร้น","A8":"ความรับผิดชอบต่อสังคม","A10":"ความใฝ่รู้","A16":"การมีวิสัยทัศน์","A18":"ความเชื่อมั่นในตนเอง","A19":"ความพยายามอุตสาหะ"},"S":{"S1":"การปรับตัว","S2":"การทำงานภายใต้แรงกดดัน","S3":"การเข้าสังคม","S4":"การคิดเชิงระบบ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S12":"การสืบค้นข้อมูล","S15":"ความคิดเชิงสร้างสรรค์","S16":"การรู้เท่าทัน","S21":"การคิดอย่างมีเหตุมีผล","S28":"การตั้งคำถามเชิงสร้างสรรค์","S34":"ความคิดเชิงวิพากษ์","S35":"การกล้าแสดงออก"}},"MLO6.2":{"name_th":"ปรับตัวในสถานการณ์การจัดงานไมซ์ที่มีความกดดันและหาทางแก้ไขปัญหาผ่านความคิดสร้างสรรค์","major":"MICE","K":{"K1":"รูปแบบและคุณลักษณะการเป็นผู้นำ","K2":"วิธีการปรับตัว","K14":"แนวทางการทำงานเป็นทีม","K18":"จริยธรรม","K19":"จรรยาบรรณ","K21":"วิธีการสื่อสาร","K25":"หน้าที่พลเมือง","K64":"การจัดการ"},"A":{"A1":"การคิดเชิงบวก","A2":"การยอมรับฟังความคิดเห็นของผู้อื่น","A3":"ความฉลาดทางอารมณ์","A4":"การรับรู้ความสามารถของตนเอง","A5":"ความอดทนอดกลั้น","A7":"ความกระตือรือร้น","A8":"ความรับผิดชอบต่อสังคม","A10":"ความใฝ่รู้","A16":"การมีวิสัยทัศน์","A18":"ความเชื่อมั่นในตนเอง","A19":"ความพยายามอุตสาหะ"},"S":{"S1":"การปรับตัว","S2":"การทำงานภายใต้แรงกดดัน","S3":"การเข้าสังคม","S4":"การคิดเชิงระบบ","S7":"การตัดสินใจ","S8":"การแก้ปัญหา","S12":"การสืบค้นข้อมูล","S15":"ความคิดเชิงสร้างสรรค์","S16":"การรู้เท่าทัน","S21":"การคิดอย่างมีเหตุมีผล","S28":"การตั้งคำถามเชิงสร้างสรรค์","S29":"การเจรจาต่อรอง","S34":"ความคิดเชิงวิพากษ์","S35":"การกล้าแสดงออก"}}};
+<!-- IMPORT MODAL -->
+<div class="modal-bg" id="modalBg" onclick="bgClose(event)">
+  <div class="modal">
+    <div class="m-head">
+      <div class="m-title">นำเข้าข้อมูลจาก Excel</div>
+      <button class="m-close" onclick="closeImport()">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="drop-zone" id="dropZone"
+           ondragover="dzOver(event)" ondragleave="dzLeave()" ondrop="dzDrop(event)"
+           onclick="document.getElementById('fileInput').click()">
+        <div class="drop-zone-icon">📊</div>
+        <div class="drop-zone-main">ลากไฟล์ Excel มาวางที่นี่</div>
+        <div class="drop-zone-sub">หรือ <span>คลิกเพื่อเลือกไฟล์</span> (.xlsx, .xls)</div>
+        <div class="drop-file-name" id="dropFileName"></div>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="fileChosen(event)">
 
-const MAJORS = {
-  FIN:  {label:'FIN · การเงิน',          color:'#0EA5E9', bg:'#E0F2FE'},
-  MTK:  {label:'MTK · การตลาด',          color:'#8B5CF6', bg:'#EDE9FE'},
-  HRM:  {label:'HRM · ทรัพยากรมนุษย์',   color:'#F59E0B', bg:'#FEF3C7'},
-  LMS:  {label:'LMS · โลจิสติกส์',       color:'#10B981', bg:'#D1FAE5'},
-  BIS:  {label:'BIS · ระบบสารสนเทศ',     color:'#EF4444', bg:'#FEE2E2'},
-  MICE: {label:'MICE · ธุรกิจไมซ์',      color:'#EC4899', bg:'#FCE7F3'},
+      <div class="hint-box">
+        <strong>📋 รูปแบบ Excel ที่รองรับ:</strong><br>
+        Sheet <code>PLO_KAS</code>: คอลัมน์ <code>PLO</code> · <code>DESCRIPTION</code> · <code>K1,K2,...</code> · <code>A1,A2,...</code> · <code>S1,S2,...</code><br>
+        Sheet <code>MLO_KAS</code>: คอลัมน์ <code>MLO</code> · <code>DESCRIPTION</code> · <code>MAJOR</code> · <code>K1,K2,...</code> · <code>A1,A2,...</code> · <code>S1,S2,...</code><br>
+        <small>ค่าในช่อง KAS: ใส่ชื่อ KAS เช่น <code>รูปแบบการเป็นผู้นำ</code> หรือรหัส <code>K1</code> หรือ <code>✓</code> หรือ <code>1</code></small>
+      </div>
+
+      <div class="preview-wrap" id="previewWrap">
+        <div class="preview-title">ตัวอย่างข้อมูล (5 แถวแรก)</div>
+        <div class="preview-scroll" id="previewTable"></div>
+      </div>
+    </div>
+    <div class="m-foot">
+      <button class="btn-m btn-cancel" onclick="closeImport()">ยกเลิก</button>
+      <button class="btn-m btn-confirm" id="importBtn" disabled onclick="doImport()">นำเข้าข้อมูล</button>
+    </div>
+  </div>
+</div>
+
+<div id="tip"></div>
+<div class="toast" id="toast"><div class="t-dot" id="tDot"></div><span id="tMsg"></span></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   DATA STRUCTURES
+═══════════════════════════════════════════════════════ */
+// แก้ CONFIG ให้เหมือน kas.html
+const API_BASE = ''; 
+const KAS_STORAGE_KEY = 'fms_kas_mapping_data';
+const PROGRAM_ID = new URLSearchParams(window.location.search).get("program_id")
+                   || "00000000-0000-0000-0000-000000000001";
+
+
+
+const K_LABELS = {
+  K1:'รูปแบบและคุณลักษณะการเป็นผู้นำ',K2:'วิธีการปรับตัว',K3:'บริหารธุรกิจ',K4:'เทคโนโลยีสารสนเทศ',
+  K5:'รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร',K6:'ธุรกิจอัจฉริยะ',K7:'ระบบฐานข้อมูล',K8:'กลยุทธ์ทางธุรกิจ',
+  K9:'การเป็นผู้ประกอบการ',K10:'ระเบียบวิธีวิจัย',K11:'การอ้างอิงข้อมูล',K12:'การเขียนโปรแกรมคอมพิวเตอร์',
+  K13:'จิตวิทยา',K14:'แนวทางการทำงานเป็นทีม',K15:'นวัตกรรม',K16:'กฎหมายแรงงาน',
+  K17:'กฎหมายทางธุรกิจ',K18:'จริยธรรม',K19:'จรรยาบรรณ',K20:'การเงิน',K21:'วิธีการสื่อสาร',
+  K22:'การลงทุน',K23:'ภาษาอังกฤษ',K24:'การกระจายการลงทุน',K25:'หน้าที่พลเมือง',
+  K26:'การจำลองสถานการณ์',K27:'กองทุนรวม',K28:'การกำกับดูแลการฟอกเงิน',K29:'การเงินระหว่างประเทศ',
+  K30:'การบริหารความเสี่ยงทางการเงิน',K31:'การประเมินมูลค่า',K32:'การวางแผนธุรกิจ',K33:'การวิเคราะห์ทางการเงิน',
+  K34:'การวิเคราะห์สภาพแวดล้อม',K35:'งบการเงิน',K36:'ตราสารทุน',K37:'ตราสารหนี้',K38:'ตราสารอนุพันธ์',
+  K39:'มูลค่าของเงินตามเวลา',K40:'ระบบการเงินไทยและต่างประเทศ',K41:'วิเคราะห์แนวโน้ม',
+  K42:'ธุรกิจระหว่างประเทศ',K43:'สินทรัพย์ลงทุนและสินทรัพย์ทางเลือก',K44:'อัตราผลตอบแทนและความเสี่ยง',
+  K45:'การบริหารความเสี่ยง',K46:'การประกันภัย',K47:'การประมาณการทางการเงิน',K48:'การวางแผนการเงินส่วนบุคคล',
+  K49:'การวางแผนการเงินสำหรับการเกษียณ',K50:'การวางแผนการเงินองค์รวม',K51:'การวางแผนภาษี',
+  K52:'การวางแผนมรดก',K53:'มาตรฐานการปฏิบัติวิชาชีพทางการเงิน',K54:'ตลาดเงินและตลาดทุน',
+  K55:'การจัดหาเงินทุน',K56:'การบริหารการเงิน',K57:'การบริหารเงินทุนหมุนเวียน',K58:'การบริหารสินเชื่อ',
+  K59:'งบลงทุน',K60:'นโยบายการเงินและนโยบายการคลัง',K61:'บริหารต้นทุน',K62:'บัญชีบริหาร',
+  K63:'สถาบันการเงิน',K64:'การจัดการ',K65:'การจัดการการดำเนินงาน',K66:'การจัดการทรัพยากรมนุษย์',
+  K67:'การจัดการโลจิสติกส์และโซ่อุปทาน',K68:'การตลาด',K69:'การบัญชี',K70:'พฤติกรรมผู้บริโภค',
+  K71:'กลยุทธ์',K72:'แบรนด์และผลิตภัณฑ์',K73:'พหุวัฒนธรรม',K74:'การวิเคราะห์ราคา',
+  K75:'การตลาดเพื่อสังคม',K76:'การจัดการช่องทางการตลาดสมัยใหม่',K77:'การวัดและการประเมินผลทางการตลาด',
+  K78:'การสื่อสารทางการตลาดเชิงบูรณาการ',K79:'การตลาดดิจิทัล',K80:'การตลาดบริการ',
+  K81:'โครงสร้างข้อมูลและอัลกอริทึม',K82:'การเขียนโปรแกรมระบบเว็บ',K83:'การพยากรณ์กำลังคน',
+  K84:'ออกแบบระบบสารสนเทศทางธุรกิจ',K85:'ทฤษฎีและแนวเกี่ยวกับพฤติกรรมมนุษย์',K86:'เครือข่ายคอมพิวเตอร์',
+  K87:'การวางแผนกำลังคน',K88:'การฝึกอบรมและพัฒนา',K89:'แรงจูงใจ',K90:'ความมั่นคงของระบบสารสนเทศ',
+  K91:'การจัดการความขัดแย้ง',K92:'วางแผนระบบสารสนเทศทางธุรกิจ',K93:'ออกแบบกราฟิก',
+  K94:'ระบบคอมพิวเตอร์',K95:'การจัดการโครงการ',K96:'การบริหารท่าเรือ',K97:'การจัดระวางสินค้า',
+  K98:'การประกันคุณภาพ',K99:'การบริหารคุณภาพ',K100:'มาตรฐานการปฏิบัติทางโลจิสติกส์และโซ่อุปทาน',
+  K101:'นโยบายโลจิสติกส์และโซ่อุปทาน',K102:'การขนส่งสินค้าทางเรือ',K103:'การค้าระหว่างประเทศ',
+  K104:'การบริหารสินค้าคงคลัง',K105:'การจัดการคลังสินค้า',K106:'การขนส่งสินค้าทางบก',
+  K107:'การกระจายสินค้า',K108:'การจัดการโซ่อุปทานระดับโลก',K109:'การขนส่งสินค้าทางอากาศ',
+  K110:'การจัดซื้อจัดหา',K111:'กระบวนการผลิตและการบริการ',K112:'การวิเคราะห์เชิงปริมาณ',
+  K113:'พิธีการศุลกากร',K114:'แบบจำลองโซ่อุปทาน',
+};
+const A_LABELS = {
+  A1:'การคิดเชิงบวก',A2:'การยอมรับฟังความคิดเห็นของผู้อื่น',A3:'ความฉลาดทางอารมณ์',
+  A4:'การรับรู้ความสามารถของตนเอง',A5:'ความอดทนอดกลั้น',A6:'ความรับผิดชอบ',A7:'ความกระตือรือร้น',
+  A8:'ความรับผิดชอบต่อสังคม',A9:'จริยธรรม',A10:'ความใฝ่รู้',A11:'ความมีวินัย',A12:'ความรอบคอบ',
+  A13:'การยอมรับความต่างทางพหุวัฒนธรรม',A14:'ความอ่อนน้อมถ่อมตน',A15:'เคารพผู้อื่น',
+  A16:'การมีวิสัยทัศน์',A17:'การรู้จักกาลเทศะ',A18:'ความเชื่อมั่นในตนเอง',A19:'ความพยายามอุตสาหะ',
+  A20:'ความซื่อสัตย์',A21:'จิตอาสา',A22:'ความเสียสละ',A23:'ความยุติธรรม',
+};
+const S_LABELS = {
+  S1:'การปรับตัว',S2:'การทำงานภายใต้แรงกดดัน',S3:'การเข้าสังคม',S4:'การคิดเชิงระบบ',
+  S5:'การคิดวิเคราะห์',S6:'การนำเสนอ',S7:'การตัดสินใจ',S8:'การแก้ปัญหา',
+  S9:'การใช้โปรแกรมคอมพิวเตอร์',S10:'การประเมินผล',S11:'การประยุกต์',S12:'การสืบค้นข้อมูล',
+  S13:'การวางแผน',S14:'การจัดการ',S15:'ความคิดเชิงสร้างสรรค์',S16:'การประสานงาน',
+  S17:'การสื่อสาร',S18:'การเป็นผู้ประกอบการ',S19:'ความคิดเชิงสังเคราะห์',
+  S20:'การใช้ภาษาไทยและภาษาอังกฤษ',S21:'การคิดอย่างมีเหตุมีผล',S22:'การทำงานเป็นทีม',
+  S23:'การบริหารเวลา',S24:'การใช้สื่อออนไลน์',S25:'ความเป็นผู้นำ',S26:'การคำนวณ',
+  S27:'การคาดการณ์',S28:'การตั้งคำถามเชิงสร้างสรรค์',S29:'การเจรจาต่อรอง',S30:'การสังเกต',
+  S31:'การจัดการความขัดแย้ง',S32:'การรู้เท่าทัน',S33:'ความยืดหยุ่น',S34:'ความคิดเชิงวิพากษ์',
+  S35:'การกล้าแสดงออก',S36:'มารยาทและบุคลิกภาพ',S37:'การออกแบบ',
 };
 
-const PK=Object.keys(D).filter(k=>k.startsWith('PLO'));
-const MK=Object.keys(D).filter(k=>k.startsWith('MLO'));
-const TC={K:{c:'#3B82F6',cl:'bk',lb:'Knowledge'},A:{c:'#F87171',cl:'ba',lb:'Attitude'},S:{c:'#10B981',cl:'bs2',lb:'Skill'}};
+// all label maps combined for reverse lookup
+const ALL_LABELS = {};
+Object.entries(K_LABELS).forEach(([k,v])=>{ ALL_LABELS[k]=v; ALL_LABELS[v]=k; });
+Object.entries(A_LABELS).forEach(([k,v])=>{ ALL_LABELS[k]=v; ALL_LABELS[v]=k; });
+Object.entries(S_LABELS).forEach(([k,v])=>{ ALL_LABELS[k]=v; ALL_LABELS[v]=k; });
 
-function buildRev(){
-  const r={K:{},A:{},S:{}};
-  for(const[id,row]of Object.entries(D)){
-    for(const t of['K','A','S']){
-      for(const code of Object.keys(row[t])){
-        if(!r[t][code])r[t][code]={p:[],m:[]};
-        if(id.startsWith('PLO'))r[t][code].p.push(id);
-        else r[t][code].m.push(id);
-      }
-    }
+// MAJOR colors
+const MAJORS = {
+  FIN: {label:'FIN',color:'#0EA5E9',bg:'#E0F2FE'},
+  MTK: {label:'MTK',color:'#8B5CF6',bg:'#EDE9FE'},
+  HRM: {label:'HRM',color:'#F59E0B',bg:'#FEF3C7'},
+  LMS: {label:'LMS',color:'#10B981',bg:'#D1FAE5'},
+  BIS: {label:'BIS',color:'#EF4444',bg:'#FEE2E2'},
+  MICE:{label:'MICE',color:'#EC4899',bg:'#FCE7F3'},
+};
+
+const TC = {
+  K:{c:'#3B82F6',cl:'bk',lb:'Knowledge'},
+  A:{c:'#F87171',cl:'ba',lb:'Attitude'},
+  S:{c:'#10B981',cl:'bs2',lb:'Skill'},
+};
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+let DATA = {};          // { code: {name_th, K:{}, A:{}, S:{}, major?} }
+let DATA_SRC = 'none';  // 'localStorage' | 'excel' | 'none'
+let CV = 'PLO';         // current view
+let pendingXL = null;   // pending import data
+
+/* ═══════════════════════════════════════════════════════
+   INIT — load from localStorage (kas.html saves here)
+═══════════════════════════════════════════════════════ */
+// แก้ init() — ลบ storage listener ออกจากข้างใน
+async function init() {
+  // 1) ดึง PLO/MLO จาก API
+  try {
+    const res = await fetch(`${API_BASE}/api/programs/${PROGRAM_ID}/plo-mlo`);
+    const d = await res.json();
+    const pa = d.PLO || [], ma = d.MLO || [];
+
+    pa.forEach(p => {
+      DATA[p.code] = { name_th: p.skill || '', K: {}, A: {}, S: {}, type: 'PLO' };
+    });
+
+    ma.forEach(m => {
+      DATA[m.code] = {
+        name_th: m.skill || '',
+        K: {}, A: {}, S: {},
+        type: 'MLO',
+        major: guessMajor(m.code, m.group || m.label_group || '')
+      };
+    });
+
+    DATA_SRC = (pa.length || ma.length) ? 'localStorage' : 'none';
+  } catch(e) {
+    console.warn('API load failed:', e);
+    DATA_SRC = 'none';
   }
-  return r;
-}
-const REV=buildRev();
-let CV='PLO';
-let selectedMajor='ALL';
 
-function sw(v){
-  CV=v;
-  document.getElementById('sPLO').classList.toggle('on',v==='PLO');
-  document.getElementById('sMLO').classList.toggle('on',v==='MLO');
+  // 2) โหลด KAS mapping จาก localStorage
+  try {
+    const saved = localStorage.getItem(KAS_STORAGE_KEY);
+    if (saved) {
+      const kas = JSON.parse(saved);
+
+      // ฟังก์ชัน helper รองรับทั้ง array และ Set-serialized
+      const toSet = (v) => Array.isArray(v) ? v : Object.keys(v || {});
+
+      Object.entries(kas.ploKas || {}).forEach(([code, v]) => {
+        if (!DATA[code]) DATA[code] = { name_th: '', K: {}, A: {}, S: {}, type: 'PLO' }; // ← สร้างใหม่ถ้าไม่มี
+        DATA[code].K = arr2obj(toSet(v.K || []), K_LABELS);
+        DATA[code].A = arr2obj(toSet(v.A || []), A_LABELS);
+        DATA[code].S = arr2obj(toSet(v.S || []), S_LABELS);
+      });
+
+      Object.entries(kas.mloKas || {}).forEach(([code, v]) => {
+        if (!DATA[code]) DATA[code] = { // ← สร้างใหม่ถ้า API ไม่ส่งมา
+          name_th: '',
+          K: {}, A: {}, S: {},
+          type: 'MLO',
+          major: guessMajor(code, '')
+        };
+        DATA[code].K = arr2obj(toSet(v.K || []), K_LABELS);
+        DATA[code].A = arr2obj(toSet(v.A || []), A_LABELS);
+        DATA[code].S = arr2obj(toSet(v.S || []), S_LABELS);
+      });
+
+      if (DATA_SRC !== 'none') DATA_SRC = 'localStorage';
+    }
+  } catch(e) { console.warn(e); }
+
+  buildMajorDropdown();
+  render();
+  updateBanner();
+  updateStats();
+}
+
+// ย้าย storage listener ออกมาข้างนอก — add แค่ครั้งเดียว
+window.addEventListener('storage', (e) => {
+  if (e.key === KAS_STORAGE_KEY) {
+    init();
+    toast('✓ อัปเดตข้อมูล KAS แล้ว', '#7C3AED');
+  }
+});
+
+// INIT
+init();
+
+
+function arr2obj(arr, labelMap) {
+  const obj = {};
+  arr.forEach(code => {
+    // code could be "K1" or label text
+    const c = String(code).trim();
+    if (!c) return;
+    if (labelMap[c]) { obj[c] = labelMap[c]; }
+    else {
+      // try reverse lookup
+      const found = Object.entries(labelMap).find(([k,v]) => v === c);
+      if (found) obj[found[0]] = found[1];
+      else obj[c] = c; // fallback: use as-is
+    }
+  });
+  return obj;
+}
+
+function guessMajor(code, group) {
+  // Infer from code pattern: MLO1.x → FIN, MLO2.x → MTK, etc.
+  const n = parseInt((code.match(/MLO(\d+)/i)||[])[1] || '0');
+  const map = {1:'FIN',2:'MTK',3:'HRM',4:'LMS',5:'BIS',6:'MICE'};
+  return map[n] || group || '';
+}
+
+/* ═══════════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════════ */
+const PLO_ORDER = ['PLO','PLO1','PLO2','PLO3','PLO4','PLO5','PLO6','PLO7','PLO8','PLO9'];
+const MAJOR_ORDER = ['FIN','MTK','HRM','LMS','BIS','MICE'];
+
+function getPLOs() { return Object.entries(DATA).filter(([k])=>k.startsWith('PLO')).sort((a,b)=>natSort(a[0],b[0])); }
+function getMLOs() { return Object.entries(DATA).filter(([k])=>k.startsWith('MLO')).sort((a,b)=>natSort(a[0],b[0])); }
+function natSort(a,b){ return a.localeCompare(b, undefined, {numeric:true, sensitivity:'base'}); }
+
+function buildMajorDropdown() {
+  const dd = document.getElementById('majorDd');
+  dd.innerHTML = '<option value="ALL">— ทุกวิชาเอก —</option>';
+  Object.entries(MAJORS).forEach(([k,v]) => {
+    dd.innerHTML += `<option value="${k}">${v.label}</option>`;
+  });
+}
+
+function sw(v) {
+  CV = v;
+  document.getElementById('sPLO').classList.toggle('on', v==='PLO');
+  document.getElementById('sMLO').classList.toggle('on', v==='MLO');
   document.getElementById('mddWrap').style.display = v==='MLO' ? 'inline-flex' : 'none';
   render();
 }
 
-function onMajorChange(){
-  selectedMajor=document.getElementById('majorDd').value;
-  render();
+function render() {
+  buildRev();
+  if (CV === 'PLO') renderPLO();
+  else renderMLO();
 }
 
-function render(){
-  if(CV==='PLO') rPLO();
-  else rMLO();
+// Reverse index: for each KAS code, which PLO/MLO reference it
+let REV = {K:{},A:{},S:{}};
+function buildRev() {
+  REV = {K:{},A:{},S:{}};
+  Object.entries(DATA).forEach(([id, row]) => {
+    ['K','A','S'].forEach(t => {
+      Object.keys(row[t]||{}).forEach(code => {
+        if (!REV[t][code]) REV[t][code] = {p:[],m:[]};
+        if (id.startsWith('PLO')) REV[t][code].p.push(id);
+        else REV[t][code].m.push(id);
+      });
+    });
+  });
 }
 
-function rPLO(){
-  document.getElementById('th').innerHTML=`<tr>
-    <th class="ci">รหัส</th><th class="cn">ผลลัพธ์การเรียนรู้</th>
-    <th class="tn">K</th><th class="tn">A</th><th class="tn">S</th>
-    <th class="tk ck"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3B82F6;display:inline-block"></span>Knowledge (K)</span></th>
-    <th class="ta ck"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#F87171;display:inline-block"></span>Attitude (A)</span></th>
-    <th class="ts2 ck"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#10B981;display:inline-block"></span>Skill (S)</span></th>
-  </tr>`;
-  let h=`<tr class="sr"><td colspan="8">Program Learning Outcomes (PLOs) &nbsp;·&nbsp; ผลลัพธ์การเรียนรู้ระดับหลักสูตร</td></tr>`;
-  PK.forEach((id,i)=>{h+=bRow(id,D[id],i,'PLO');});
-  document.getElementById('tb').innerHTML=h;
-  document.getElementById('fl').textContent=`Showing ${PK.length} PLOs`;
+function renderPLO() {
+  const plos = getPLOs();
+  document.getElementById('th').innerHTML = buildTHead();
+  if (!plos.length) {
+    document.getElementById('tb').innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="ei">📋</div><strong>ยังไม่มีข้อมูล PLO</strong><p>กรุณาไปบันทึกข้อมูล KAS ที่หน้า <a href="kas.html" style="color:var(--pu2);font-weight:700">KAS Management</a> ก่อน หรือนำเข้าจาก Excel</p></div></td></tr>`;
+    document.getElementById('fl').textContent = 'ไม่พบข้อมูล PLO';
+    return;
+  }
+  const q = getQ();
+  let visible = 0;
+  let h = `<tr class="sr"><td colspan="8">Program Learning Outcomes (PLOs) &nbsp;·&nbsp; ผลลัพธ์การเรียนรู้ระดับหลักสูตร</td></tr>`;
+  plos.forEach(([id, row], i) => {
+    const hide = q && !matchQ(q, id, row);
+    if (!hide) visible++;
+    h += buildRow(id, row, i, 'PLO', hide);
+  });
+  document.getElementById('tb').innerHTML = h;
+  document.getElementById('fl').textContent = `Showing ${visible} / ${plos.length} PLOs`;
 }
 
-function rMLO(){
-  // filter by major
-  let keys = MK;
-  if(selectedMajor!=='ALL'){
-    keys=MK.filter(k=>D[k].major===selectedMajor);
+function renderMLO() {
+  const allMlo = getMLOs();
+  const selMajor = document.getElementById('majorDd').value;
+  const q = getQ();
+  document.getElementById('th').innerHTML = buildTHead();
+
+  if (!allMlo.length) {
+    document.getElementById('tb').innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="ei">🎓</div><strong>ยังไม่มีข้อมูล MLO</strong><p>กรุณาไปบันทึกข้อมูล KAS ที่หน้า <a href="kas.html" style="color:var(--pu2);font-weight:700">KAS Management</a> ก่อน หรือนำเข้าจาก Excel</p></div></td></tr>`;
+    document.getElementById('fl').textContent = 'ไม่พบข้อมูล MLO';
+    return;
   }
 
-  document.getElementById('th').innerHTML=`<tr>
-    <th class="ci">รหัส</th><th class="cn">ผลลัพธ์การเรียนรู้</th>
-    <th class="tn">K</th><th class="tn">A</th><th class="tn">S</th>
-    <th class="tk ck"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3B82F6;display:inline-block"></span>Knowledge (K)</span></th>
-    <th class="ta ck"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#F87171;display:inline-block"></span>Attitude (A)</span></th>
-    <th class="ts2 ck"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#10B981;display:inline-block"></span>Skill (S)</span></th>
-  </tr>`;
+  const majorsToShow = selMajor === 'ALL' ? MAJOR_ORDER : [selMajor];
+  let h = '', visible = 0, total = 0;
 
-  let h='';
-  // group by major for display
-  const majorOrder=['FIN','MTK','HRM','LMS','BIS','MICE'];
-  const majorsToShow = selectedMajor==='ALL' ? majorOrder : [selectedMajor];
-
-  majorsToShow.forEach(maj=>{
-    const grp=keys.filter(k=>D[k].major===maj);
-    if(!grp.length) return;
-    const mc=MAJORS[maj];
-    h+=`<tr class="sr"><td colspan="8" style="color:${mc.color}">
+  majorsToShow.forEach(maj => {
+    const grp = allMlo.filter(([k,v]) => (v.major || guessMajor(k,'')) === maj);
+    if (!grp.length) return;
+    const mc = MAJORS[maj] || {label:maj, color:'#6B7280', bg:'#F3F4F6'};
+    h += `<tr class="sr"><td colspan="8" style="color:${mc.color}">
       <span style="background:${mc.bg};color:${mc.color};padding:2px 10px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.8px;margin-right:8px">${maj}</span>
       ${mc.label} &nbsp;·&nbsp; ผลลัพธ์การเรียนรู้ระดับวิชาเอก
     </td></tr>`;
-    grp.forEach((id,i)=>{h+=bRow(id,D[id],i,'MLO');});
+    grp.forEach(([id,row], i) => {
+      total++;
+      const hide = q && !matchQ(q, id, row);
+      if (!hide) visible++;
+      h += buildRow(id, row, i, 'MLO', hide);
+    });
   });
-
-  document.getElementById('tb').innerHTML=h;
-  const count=keys.length;
-  document.getElementById('fl').textContent=`Showing ${count} MLOs${selectedMajor!=='ALL'?' · '+MAJORS[selectedMajor].label:''}`;
+  if (!h) h = `<tr><td colspan="8"><div class="empty-state"><div class="ei">🔍</div><strong>ไม่พบข้อมูล</strong><p>ลองเปลี่ยน filter หรือ search ใหม่</p></div></td></tr>`;
+  document.getElementById('tb').innerHTML = h;
+  document.getElementById('fl').textContent = `Showing ${visible} / ${total} MLOs${selMajor!=='ALL'?' · '+MAJORS[selMajor]?.label:''}`;
 }
 
-function bRow(id,row,idx,kind){
-  const kc=Object.keys(row.K),ac=Object.keys(row.A),sc=Object.keys(row.S);
-  return `<tr style="animation-delay:${idx*.013}s">
-    <td class="di"><span class="ip${kind==='MLO'?' ml':''}">${id}</span></td>
-    <td class="dn">${row.name_th}</td>
-    <td class="dc${kc.length===0?' z':''}">${kc.length||'—'}</td>
-    <td class="dc${ac.length===0?' z':''}">${ac.length||'—'}</td>
-    <td class="dc${sc.length===0?' z':''}">${sc.length||'—'}</td>
-    <td class="dk"><div class="bs">${mkB(row.K,'K')}</div></td>
-    <td class="dk"><div class="bs">${mkB(row.A,'A')}</div></td>
-    <td class="dk"><div class="bs">${mkB(row.S,'S')}</div></td>
+function buildTHead() {
+  return `<tr>
+    <th style="width:82px">รหัส</th>
+    <th style="min-width:220px">ผลลัพธ์การเรียนรู้</th>
+    <th style="width:38px;text-align:center">K</th>
+    <th style="width:38px;text-align:center">A</th>
+    <th style="width:38px;text-align:center">S</th>
+    <th style="min-width:170px"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3B82F6;display:inline-block"></span>Knowledge (K)</span></th>
+    <th style="min-width:170px"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#F87171;display:inline-block"></span>Attitude (A)</span></th>
+    <th style="min-width:170px"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#10B981;display:inline-block"></span>Skill (S)</span></th>
   </tr>`;
 }
 
-function mkB(obj,type){
-  const codes=Object.keys(obj);
-  if(!codes.length)return`<span class="be">—</span>`;
-  return codes.map(code=>{
-    const desc=obj[code];
-    const rv=REV[type][code]||{p:[],m:[]};
-    return`<span class="b ${TC[type].cl}"
+function buildRow(id, row, idx, kind, hide) {
+  const kk = Object.keys(row.K||{}), ak = Object.keys(row.A||{}), sk = Object.keys(row.S||{});
+  const kn = kk.length, an = ak.length, sn = sk.length;
+  return `<tr${hide?' class="hide"':''}>
+    <td><span class="ip${kind==='MLO'?' ml':''}">${id}</span></td>
+    <td style="font-size:12.5px;color:var(--tx);line-height:1.55">${esc(row.name_th||'')}</td>
+    <td style="text-align:center;font-weight:700;color:${kn?'var(--tx)':'#E5E7EB'}">${kn||'—'}</td>
+    <td style="text-align:center;font-weight:700;color:${an?'var(--tx)':'#E5E7EB'}">${an||'—'}</td>
+    <td style="text-align:center;font-weight:700;color:${sn?'var(--tx)':'#E5E7EB'}">${sn||'—'}</td>
+    <td><div class="bs-wrap">${mkBadges(row.K||{}, 'K')}</div></td>
+    <td><div class="bs-wrap">${mkBadges(row.A||{}, 'A')}</div></td>
+    <td><div class="bs-wrap">${mkBadges(row.S||{}, 'S')}</div></td>
+  </tr>`;
+}
+
+function mkBadges(obj, type) {
+  const codes = Object.keys(obj);
+  if (!codes.length) return `<span class="be">—</span>`;
+  const rv = REV[type] || {};
+  return codes.map(code => {
+    const desc = obj[code] || code;
+    const r = rv[code] || {p:[],m:[]};
+    return `<span class="b ${TC[type].cl}"
       data-code="${code}" data-type="${type}"
-      data-desc="${desc.replace(/"/g,'&quot;')}"
-      data-plo="${rv.p.length}" data-mlo="${rv.m.length}"
-      onmouseenter="sT(event,this)" onmouseleave="hT()"
+      data-desc="${esc(desc)}"
+      data-plo="${r.p.length}" data-mlo="${r.m.length}"
+      onmouseenter="showTip(event,this)" onmouseleave="hideTip()"
     >${code}</span>`;
   }).join('');
 }
 
-const tipEl=document.getElementById('tip');
-let tT=null;
-function sT(e,el){
-  clearTimeout(tT);
-  const{code,type,desc,plo,mlo}=el.dataset;
-  const cfg=TC[type],tot=(+plo)+(+mlo);
-  tipEl.innerHTML=`
+/* ═══════════════════════════════════════════════════════
+   FILTER
+═══════════════════════════════════════════════════════ */
+function getQ() {
+  const g = (document.getElementById('gs').value||'').toLowerCase().trim();
+  const l = (document.getElementById('localSearch').value||'').toLowerCase().trim();
+  return g || l;
+}
+
+function matchQ(q, id, row) {
+  if (id.toLowerCase().includes(q)) return true;
+  if ((row.name_th||'').toLowerCase().includes(q)) return true;
+  for (const t of ['K','A','S']) {
+    for (const [code,label] of Object.entries(row[t]||{})) {
+      if (code.toLowerCase().includes(q) || (label||'').toLowerCase().includes(q)) return true;
+    }
+  }
+  return false;
+}
+
+function filterTable() { render(); }
+
+/* ═══════════════════════════════════════════════════════
+   TOOLTIP
+═══════════════════════════════════════════════════════ */
+const tipEl = document.getElementById('tip');
+let tipTimer = null;
+function showTip(e, el) {
+  clearTimeout(tipTimer);
+  const {code,type,desc,plo,mlo} = el.dataset;
+  const cfg = TC[type] || {};
+  const tot = (+plo) + (+mlo);
+  tipEl.innerHTML = `
     <div class="tt"><div class="td2" style="background:${cfg.c}"></div>${code} — ${cfg.lb}</div>
     <div class="td3">${desc}</div>
     <div class="tdv"></div>
@@ -309,19 +726,310 @@ function sT(e,el){
     <div class="tr2"><span class="tl">ปรากฏใน MLO</span><span class="tv" style="color:#FCD34D">${mlo} รายการ</span></div>
     <div class="tr2"><span class="tl">รวม</span><span class="tv" style="color:${cfg.c}">${tot} รายการ</span></div>
   `;
-  tipEl.style.visibility='visible';tipEl.style.opacity='1';pT(e);
+  tipEl.style.visibility = 'visible'; tipEl.style.opacity = '1';
+  posTip(e);
 }
-function hT(){tT=setTimeout(()=>{tipEl.style.visibility='hidden';tipEl.style.opacity='0';},80);}
-function pT(e){
-  const tw=tipEl.offsetWidth,th=tipEl.offsetHeight;
-  let x=e.clientX-tw/2,y=e.clientY-th-14;
-  if(x<8)x=8;
-  if(x+tw>window.innerWidth-8)x=window.innerWidth-tw-8;
-  if(y<8){y=e.clientY+18;tipEl.classList.add('up');}else tipEl.classList.remove('up');
-  tipEl.style.left=x+'px';tipEl.style.top=y+'px';
+function hideTip() { tipTimer = setTimeout(()=>{ tipEl.style.visibility='hidden'; tipEl.style.opacity='0'; }, 80); }
+function posTip(e) {
+  const tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
+  let x = e.clientX - tw/2, y = e.clientY - th - 14;
+  if (x < 8) x = 8;
+  if (x + tw > window.innerWidth - 8) x = window.innerWidth - tw - 8;
+  if (y < 8) y = e.clientY + 18;
+  tipEl.style.left = x+'px'; tipEl.style.top = y+'px';
 }
-document.addEventListener('mousemove',e=>{if(tipEl.style.visibility==='visible')pT(e);});
-render();
+document.addEventListener('mousemove', e => { if (tipEl.style.visibility==='visible') posTip(e); });
+
+/* ═══════════════════════════════════════════════════════
+   BANNER + STATS
+═══════════════════════════════════════════════════════ */
+function updateBanner() {
+  const b = document.getElementById('sourceBanner');
+  const dot = document.getElementById('sbDot');
+  const txt = document.getElementById('sbText');
+  const plos = getPLOs().length, mlos = getMLOs().length;
+
+  if (DATA_SRC === 'localStorage') {
+    b.className = 'source-banner live';
+    dot.className = 'sb-dot live';
+    txt.innerHTML = `✓ โหลดข้อมูลจาก KAS Management สำเร็จ — PLO <strong>${plos}</strong> รายการ · MLO <strong>${mlos}</strong> รายการ`;
+  } else if (DATA_SRC === 'excel') {
+    b.className = 'source-banner excel';
+    dot.className = 'sb-dot excel';
+    txt.innerHTML = `📊 โหลดจาก Excel — PLO <strong>${plos}</strong> รายการ · MLO <strong>${mlos}</strong> รายการ`;
+  } else {
+    b.className = 'source-banner default';
+    dot.className = 'sb-dot default';
+    txt.innerHTML = `⚠ ไม่พบข้อมูลใน localStorage — กรุณาไปบันทึกข้อมูลที่ <a href="kas.html" style="color:inherit;font-weight:700;text-decoration:underline">หน้า KAS Management</a> ก่อน หรือนำเข้าจาก Excel`;
+  }
+
+  const statsRow = document.getElementById('statsRow');
+  statsRow.style.display = (plos + mlos) > 0 ? 'flex' : 'none';
+}
+
+function updateStats() {
+  const plos = getPLOs(), mlos = getMLOs();
+  document.getElementById('st-plo').textContent = plos.length;
+  document.getElementById('st-mlo').textContent = mlos.length;
+
+  const allEntries = [...plos, ...mlos];
+  const kSet = new Set(), aSet = new Set(), sSet = new Set();
+  allEntries.forEach(([,row]) => {
+    Object.keys(row.K||{}).forEach(c=>kSet.add(c));
+    Object.keys(row.A||{}).forEach(c=>aSet.add(c));
+    Object.keys(row.S||{}).forEach(c=>sSet.add(c));
+  });
+  document.getElementById('st-k').textContent = kSet.size;
+  document.getElementById('st-a').textContent = aSet.size;
+  document.getElementById('st-s').textContent = sSet.size;
+}
+
+/* ═══════════════════════════════════════════════════════
+   EXPORT EXCEL
+═══════════════════════════════════════════════════════ */
+function exportExcel() {
+  const wb = XLSX.utils.book_new();
+
+  // PLO sheet
+  const plos = getPLOs();
+  if (plos.length) {
+    const rows = [['PLO','DESCRIPTION','K_CODES','K_LABELS','A_CODES','A_LABELS','S_CODES','S_LABELS']];
+    plos.forEach(([id,row]) => {
+      const kc = Object.keys(row.K||{}).join(', ');
+      const kl = Object.values(row.K||{}).join(', ');
+      const ac = Object.keys(row.A||{}).join(', ');
+      const al = Object.values(row.A||{}).join(', ');
+      const sc = Object.keys(row.S||{}).join(', ');
+      const sl = Object.values(row.S||{}).join(', ');
+      rows.push([id, row.name_th||'', kc, kl, ac, al, sc, sl]);
+    });
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), 'PLO_KAS');
+  }
+
+  // MLO sheet
+  const mlos = getMLOs();
+  if (mlos.length) {
+    const rows = [['MLO','DESCRIPTION','MAJOR','K_CODES','K_LABELS','A_CODES','A_LABELS','S_CODES','S_LABELS']];
+    mlos.forEach(([id,row]) => {
+      const kc = Object.keys(row.K||{}).join(', ');
+      const kl = Object.values(row.K||{}).join(', ');
+      const ac = Object.keys(row.A||{}).join(', ');
+      const al = Object.values(row.A||{}).join(', ');
+      const sc = Object.keys(row.S||{}).join(', ');
+      const sl = Object.values(row.S||{}).join(', ');
+      rows.push([id, row.name_th||'', row.major||'', kc, kl, ac, al, sc, sl]);
+    });
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), 'MLO_KAS');
+  }
+
+  XLSX.writeFile(wb, 'PLO_MLO_KAS_Mapping.xlsx');
+  toast('✓ Export Excel สำเร็จ', '#059669');
+}
+
+/* ═══════════════════════════════════════════════════════
+   IMPORT EXCEL
+═══════════════════════════════════════════════════════ */
+function openImport() {
+  document.getElementById('modalBg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeImport() {
+  document.getElementById('modalBg').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('dropFileName').textContent = '';
+  document.getElementById('previewWrap').style.display = 'none';
+  document.getElementById('importBtn').disabled = true;
+  pendingXL = null;
+}
+function bgClose(e) { if (e.target === document.getElementById('modalBg')) closeImport(); }
+
+function dzOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag'); }
+function dzLeave() { document.getElementById('dropZone').classList.remove('drag'); }
+function dzDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) processFile(f);
+}
+function fileChosen(e) {
+  const f = e.target.files[0];
+  if (f) processFile(f);
+  e.target.value = '';
+}
+
+function processFile(file) {
+  if (!/\.(xlsx|xls)$/i.test(file.name)) { toast('กรุณาใช้ไฟล์ .xlsx หรือ .xls', '#dc2626'); return; }
+  document.getElementById('dropFileName').textContent = `📄 ${file.name}`;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const wb = XLSX.read(ev.target.result, { type: 'array' });
+      pendingXL = wb;
+
+      // Preview from first sheet
+      const sn = wb.SheetNames[0];
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], {header:1, defval:''});
+      if (!rows.length) { toast('ไม่พบข้อมูลในไฟล์', '#dc2626'); return; }
+
+      const preview5 = rows.slice(0, 6);
+      const hdrs = preview5[0];
+      let tbl = `<table><thead><tr>${hdrs.map(h=>`<th>${esc(String(h||''))}</th>`).join('')}</tr></thead><tbody>`;
+      preview5.slice(1).forEach(r => {
+        tbl += `<tr>${hdrs.map((_,i)=>`<td>${esc(String(r[i]||''))}</td>`).join('')}</tr>`;
+      });
+      tbl += '</tbody></table>';
+      document.getElementById('previewTable').innerHTML = tbl;
+      document.getElementById('previewWrap').style.display = 'block';
+      document.getElementById('importBtn').disabled = false;
+    } catch(err) {
+      toast('อ่านไฟล์ไม่ได้: ' + err.message, '#dc2626');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function doImport() {
+  if (!pendingXL) return;
+  const wb = pendingXL;
+  const newData = {};
+
+  // Parse PLO_KAS sheet
+  if (wb.SheetNames.includes('PLO_KAS')) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets['PLO_KAS'], {defval:''});
+    rows.forEach(row => {
+      const id = String(row['PLO']||row['plo']||'').trim();
+      const desc = String(row['DESCRIPTION']||row['description']||row['desc']||'').trim();
+      if (!id || !id.startsWith('PLO')) return;
+      newData[id] = {
+        name_th: desc,
+        K: parseKasCell(row, K_LABELS, 'K'),
+        A: parseKasCell(row, A_LABELS, 'A'),
+        S: parseKasCell(row, S_LABELS, 'S'),
+        type: 'PLO'
+      };
+    });
+  }
+
+  // Parse MLO_KAS sheet
+  if (wb.SheetNames.includes('MLO_KAS')) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets['MLO_KAS'], {defval:''});
+    rows.forEach(row => {
+      const id = String(row['MLO']||row['mlo']||'').trim();
+      const desc = String(row['DESCRIPTION']||row['description']||row['desc']||'').trim();
+      const major = String(row['MAJOR']||row['major']||'').trim();
+      if (!id || !id.startsWith('MLO')) return;
+      newData[id] = {
+        name_th: desc,
+        K: parseKasCell(row, K_LABELS, 'K'),
+        A: parseKasCell(row, A_LABELS, 'A'),
+        S: parseKasCell(row, S_LABELS, 'S'),
+        type: 'MLO',
+        major: major || guessMajor(id, '')
+      };
+    });
+  }
+
+  // If no dedicated sheets, try to parse from first sheet generically
+  if (!Object.keys(newData).length) {
+    const sn = wb.SheetNames[0];
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], {defval:''});
+    rows.forEach(row => {
+      const id = String(row['PLO']||row['MLO']||row['plo']||row['mlo']||'').trim();
+      const desc = String(row['DESCRIPTION']||row['description']||'').trim();
+      if (!id) return;
+      const isPlo = id.toUpperCase().startsWith('PLO');
+      newData[id] = {
+        name_th: desc,
+        K: parseKasCell(row, K_LABELS, 'K'),
+        A: parseKasCell(row, A_LABELS, 'A'),
+        S: parseKasCell(row, S_LABELS, 'S'),
+        type: isPlo ? 'PLO' : 'MLO',
+        major: isPlo ? '' : guessMajor(id, String(row['MAJOR']||''))
+      };
+    });
+  }
+
+  if (!Object.keys(newData).length) {
+    toast('ไม่พบข้อมูลที่สามารถนำเข้าได้', '#dc2626');
+    return;
+  }
+
+  DATA = newData;
+  DATA_SRC = 'excel';
+  buildMajorDropdown();
+  render();
+  updateBanner();
+  updateStats();
+  closeImport();
+  const ploC = Object.values(newData).filter(d=>d.type==='PLO').length;
+  const mloC = Object.values(newData).filter(d=>d.type==='MLO').length;
+  toast(`✓ นำเข้าสำเร็จ: ${ploC} PLO · ${mloC} MLO`, '#059669');
+}
+
+// Parse KAS columns from a row object
+// Supports: K_CODES (comma-separated codes), K_LABELS (comma-separated labels),
+//   or individual columns K1, K2, ... (value = ✓, 1, or text)
+function parseKasCell(row, labelMap, prefix) {
+  const result = {};
+
+  // Method 1: K_CODES column (codes like "K1, K2, K3")
+  const codesCol = row[`${prefix}_CODES`] || row[`${prefix}_codes`] || '';
+  if (codesCol) {
+    String(codesCol).split(',').forEach(c => {
+      const code = c.trim();
+      if (code && labelMap[code]) result[code] = labelMap[code];
+    });
+  }
+
+  // Method 2: K_LABELS column (label text, comma-separated)
+  const labelsCol = row[`${prefix}_LABELS`] || row[`${prefix}_labels`] || '';
+  if (labelsCol) {
+    String(labelsCol).split(',').forEach(lbl => {
+      const l = lbl.trim();
+      if (!l) return;
+      // Try to find code by label
+      const found = Object.entries(labelMap).find(([,v]) => v === l);
+      if (found) result[found[0]] = found[1];
+      else if (labelMap[l]) result[l] = labelMap[l]; // it's a code
+    });
+  }
+
+  // Method 3: individual columns K1, K2, ... with ✓ or 1 or text
+  Object.entries(labelMap).forEach(([code, label]) => {
+    const v = row[code];
+    if (v === undefined || v === '' || v === null) return;
+    const sv = String(v).trim();
+    if (sv === '✓' || sv === '1' || sv.toLowerCase() === 'true' || sv === 'x' || sv === 'X') {
+      result[code] = label;
+    } else if (sv.length > 0 && sv !== '0') {
+      // value is the label itself
+      result[code] = sv;
+    }
+  });
+
+  return result;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════ */
+let _tTimer;
+function toast(msg, color='#059669') {
+  document.getElementById('tDot').style.background = color;
+  document.getElementById('tMsg').textContent = msg;
+  const el = document.getElementById('toast');
+  el.classList.add('show');
+  clearTimeout(_tTimer);
+  _tTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// INIT
+init();
+
 </script>
 </body>
 </html>

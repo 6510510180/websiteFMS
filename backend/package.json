@@ -4,7 +4,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "echo 'build handled by render'"
+    "dev": "nodemon server.js",
+    "build": "echo 'No build needed'"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -14,6 +15,10 @@
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
-    "pg": "^8.11.3"
+    "mysql2": "^3.11.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "kill-port": "^2.0.1"
   }
 }

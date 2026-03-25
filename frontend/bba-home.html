@@ -16,40 +16,20 @@
         .navbar a:hover { color: #9b51e0; }
         .navbar a.active { color: #9b51e0; font-weight: bold; }
         .nav-right { display: flex; align-items: center; gap: 15px; }
-
-        /* ── Dropdown ── */
         .nav-dropdown { position: relative; }
-        .nav-dropdown-toggle {
-            font-size: 14px; color: #555; background: none; border: none;
-            cursor: pointer; font-family: inherit; padding: 0;
-            display: flex; align-items: center; gap: 4px; transition: color 0.3s;
-        }
-        .nav-dropdown-toggle:hover,
-        .nav-dropdown.open .nav-dropdown-toggle { color: #9b51e0; }
+        .nav-dropdown-toggle { font-size: 14px; color: #555; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; display: flex; align-items: center; gap: 4px; transition: color 0.3s; }
+        .nav-dropdown-toggle:hover, .nav-dropdown.open .nav-dropdown-toggle { color: #9b51e0; }
         .nav-dropdown-toggle .chevron { transition: transform 0.18s; display: inline-block; font-style: normal; font-size: 10px; }
         .nav-dropdown.open .nav-dropdown-toggle .chevron { transform: rotate(180deg); }
-        .nav-dropdown-menu {
-            display: none; position: absolute; top: calc(100% + 10px); left: 0;
-            background: #fff; border: 1px solid #eee; border-radius: 10px;
-            min-width: 210px; box-shadow: 0 8px 24px rgba(155,81,224,0.13);
-            overflow: hidden; z-index: 999;
-            animation: dropIn 0.15s ease;
-        }
+        .nav-dropdown-menu { display: none; position: absolute; top: calc(100% + 10px); left: 0; background: #fff; border: 1px solid #eee; border-radius: 10px; min-width: 210px; box-shadow: 0 8px 24px rgba(155,81,224,0.13); overflow: hidden; z-index: 999; animation: dropIn 0.15s ease; }
         @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
         .nav-dropdown.open .nav-dropdown-menu { display: block; }
-        .dropdown-item {
-            display: block; width: 100%; padding: 11px 16px;
-            font-size: 13px; color: #444; background: none; border: none;
-            border-bottom: 1px solid #f5f5f5; text-align: left;
-            cursor: pointer; font-family: inherit; text-decoration: none;
-            transition: all 0.12s;
-        }
+        .dropdown-item { display: block; width: 100%; padding: 11px 16px; font-size: 13px; color: #444; background: none; border: none; border-bottom: 1px solid #f5f5f5; text-align: left; cursor: pointer; font-family: inherit; text-decoration: none; transition: all 0.12s; }
         .dropdown-item:last-child { border-bottom: none; }
         .dropdown-item:hover { background: #f8f0ff; color: #9b51e0; padding-left: 20px; }
         .dropdown-loading { padding: 12px 16px; font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 8px; }
         .spinner-sm { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #e9d5ff; border-top-color: #9b51e0; animation: spin 0.7s linear infinite; flex-shrink: 0; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
         .container { width: 90%; margin: 20px auto; }
         .main-content { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
         .hero-banner { background-color: #f1e1ff; padding: 40px 30px; border-radius: 15px; margin-bottom: 30px; }
@@ -62,7 +42,6 @@
         .img-placeholder { background-color: #ddd; height: 100px; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .course-label { background-color: #c084fc; color: #fff; padding: 12px; font-size: 13px; min-height: 60px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
         .no-link .course-label { cursor: default; }
-        .no-link .course-label:hover { background-color: #c084fc; }
         .course-link { text-decoration: none; color: inherit; display: block; }
         .course-link:hover .course-label { background-color: #a855f7; }
         .course-img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -74,7 +53,8 @@
         .more-header { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
         .calendar-link { color: #9b51e0; text-decoration: none; font-size: 13px; margin-right: 5%; }
         .more-options { display: flex; gap: 15px; margin-top: 15px; }
-        .option-card { flex: 1; display: flex; align-items: center; gap: 12px; background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 12px; }
+        .option-card { flex: 1; display: flex; align-items: center; gap: 12px; background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 12px; cursor: pointer; transition: 0.2s; text-decoration: none; color: inherit; }
+        .option-card:hover { border-color: #c084fc; box-shadow: 0 4px 12px rgba(155,81,224,0.12); }
         .resources-box { background: #9b51e0; margin-top: 20px; padding: 20px; border-radius: 15px; color: white; }
         .resources-box h4 { margin: 0 0 15px 0; font-size: 18px; }
         .resources-box a { display: flex; align-items: center; gap: 10px; color: white; text-decoration: none; margin-bottom: 12px; font-size: 14px; opacity: 0.9; transition: 0.2s; }
@@ -91,18 +71,32 @@
         .footer-bottom { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 20px; border-top: 1px solid #f5f5f5; font-size: 12px; color: #bbb; }
         .footer-legal { display: flex; gap: 25px; }
         .footer-legal a { text-decoration: none; color: #999; }
+        .search-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); align-items: flex-start; justify-content: center; padding-top: 80px; }
+        .search-overlay.open { display: flex; }
+        .search-modal { background: #fff; border-radius: 16px; width: 90%; max-width: 600px; box-shadow: 0 20px 60px rgba(155,81,224,0.2); overflow: hidden; }
+        .search-input-wrap { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid #eee; }
+        .search-input-wrap i { color: #9b51e0; font-size: 16px; }
+        .search-input-wrap input { flex: 1; border: none; outline: none; font-size: 16px; font-family: 'Sarabun', sans-serif; color: #333; }
+        .search-close { background: none; border: none; cursor: pointer; font-size: 18px; color: #aaa; padding: 4px; }
+        .search-close:hover { color: #333; }
+        .search-results { max-height: 400px; overflow-y: auto; }
+        .search-empty { padding: 40px; text-align: center; color: #aaa; font-size: 14px; }
+        .search-section-label { padding: 10px 20px 6px; font-size: 11px; font-weight: bold; color: #9b51e0; text-transform: uppercase; letter-spacing: 0.5px; background: #faf5ff; }
+        .search-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #f5f5f5; text-decoration: none; color: #333; transition: 0.15s; cursor: pointer; }
+        .search-item:hover { background: #f8f0ff; }
+        .search-item-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+        .search-item-title { font-size: 14px; font-weight: 600; color: #333; }
+        .search-item-sub { font-size: 12px; color: #888; margin-top: 2px; }
+        .search-highlight { color: #9b51e0; font-weight: 700; }
     </style>
 </head>
 <body>
     <header class="navbar">
-        <div class="logo"><img src="logo.jpg" alt="Logo"></div>
-        <nav>
+  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
+  <nav>
             <ul>
                 <li><a href="bba-home.html" class="active">หน้าหลัก</a></li>
-                <li><a href="bba-public.html" id="nav-general">ข้อมูลทั่วไป</a></li>
-                <li><a href="student.html">นักศึกษา</a></li>
                 <li>
-                    <!-- Dropdown แผนการศึกษา -->
                     <div class="nav-dropdown" id="planDropdown">
                         <button class="nav-dropdown-toggle" onclick="togglePlanDropdown()">
                             แผนการศึกษา <i class="chevron">▾</i>
@@ -119,7 +113,10 @@
             </ul>
         </nav>
         <div class="nav-right">
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-solid fa-magnifying-glass" onclick="openSearch()"
+               style="cursor:pointer; font-size:16px; color:#555; transition:0.2s;"
+               onmouseover="this.style.color='#9b51e0'"
+               onmouseout="this.style.color='#555'"></i>
         </div>
     </header>
 
@@ -132,68 +129,49 @@
         <div class="main-content">
             <div class="left-column">
                 <h3 class="section-title">หลักสูตร</h3>
-                <div class="course-grid" id="courseGrid">
-                    <div class="course-card no-link" data-static="true">
-                        <div class="img-placeholder"><img src="p3.jpg" alt="p3" class="course-img"></div>
-                        <div class="course-label">การจัดการความเป็นผู้ประกอบการ<br>ปีหลักสูตร 2565</div>
-                    </div>
-                    <div class="course-card no-link" data-static="true">
-                        <div class="img-placeholder"><img src="p4.jpg" alt="p4" class="course-img"></div>
-                        <div class="course-label">หลักสูตรบัญชีบัณฑิต<br>ปีหลักสูตร 2568</div>
-                    </div>
-                    <div class="course-card no-link" data-static="true">
-                        <div class="img-placeholder"><img src="p5.jpg" alt="p5" class="course-img"></div>
-                        <div class="course-label">หลักสูตรบัญชีบัณฑิต<br>ปีหลักสูตร 2564</div>
-                    </div>
-                    <div class="course-card no-link" data-static="true">
-                        <div class="img-placeholder"><img src="p6.jpg" alt="p6" class="course-img"></div>
-                        <div class="course-label">หลักสูตรรัฐประศาสนศาสตรบัณฑิต<br>ปีหลักสูตร 2564</div>
-                    </div>
-                </div>
+                <div class="course-grid" id="courseGrid"></div>
 
                 <div class="more-header">
                     <h3 class="section-title" style="margin:0;">เพิ่มเติม</h3>
                     <span class="calendar-link">View Full Calendar</span>
                 </div>
                 <div class="more-options">
-                    <div class="option-card">
+                    <div class="option-card" onclick="openCourseSelectModal('plan')" style="cursor:pointer;">
                         <i class="fa-regular fa-calendar-days" style="color:#9b51e0;"></i>
                         <div><strong>แผนการศึกษา</strong><p>แผนการศึกษาหลักสูตรบริหาร</p></div>
                     </div>
-                    <div class="option-card">
+                    <div class="option-card" onclick="openCourseSelectModal('student')" style="cursor:pointer;">
                         <i class="fa-solid fa-users" style="color:#f2994a;"></i>
                         <div><strong>นักศึกษา</strong><p>ข้อมูลทั่วไปที่นักศึกษาควรรู้</p></div>
                     </div>
-                    <div class="option-card">
+                    <a class="option-card" href="search.html">
                         <i class="fa-solid fa-magnifying-glass" style="color:#27ae60;"></i>
                         <div><strong>ค้นหา</strong><p>ค้นหาข้อมูลภายในระบบ</p></div>
-                    </div>
+                    </a>
                 </div>
             </div>
 
             <div class="right-column">
                 <div class="announcement-box">
-                    <div>
-                        <div class="announce-header">
-                            <span class="bold-text">ประกาศ</span>
-                            <i class="fa-regular fa-bell" style="color:#9b51e0;"></i>
-                        </div>
-                        <ul class="announce-list">
-                            <li><strong>Registration Deadline</strong><p>Fall 2024 registration closes in 3 days.</p><small>2 hours ago</small></li>
-                            <li><strong>Campus Job Fair</strong><p>Join us at the Student Center this Friday.</p><small>Yesterday</small></li>
-                            <li><strong>Library Hours Extended</strong><p>The main library will be open 24/7.</p><small>Oct 20</small></li>
-                        </ul>
-                    </div>
-                    <button class="btn-all">View All Notices</button>
-                </div>
-                <div class="resources-box">
-                    <h4>Resources</h4>
-                    <a href="#"><i class="fa-solid fa-book"></i> Library Catalog</a>
-                    <a href="#"><i class="fa-solid fa-headset"></i> Student Support</a>
-                    <a href="#"><i class="fa-solid fa-hand-holding-dollar"></i> Financial Aid</a>
-                </div>
-            </div>
+    <div>
+        <div class="announce-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <span class="bold-text">ประกาศ</span>
+            <i class="fa-regular fa-bell" style="color:#9b51e0;"></i>
         </div>
+        <!-- ประกาศจะถูก render ที่นี่โดย JS -->
+        <ul class="announce-list" id="homeAnnounceList">
+            <!-- loading placeholder -->
+            <li style="color:#bbb;font-size:13px;padding:8px 0 8px 15px;">กำลังโหลด...</li>
+        </ul>
+    </div>
+    <div style="display:flex;gap:8px;flex-direction:column;">
+        <button class="btn-all" onclick="window.location.href='admin-announcements.html'">
+            <i class="fa-solid fa-gear" style="margin-right:6px;font-size:12px;"></i>จัดการประกาศ (Admin)
+        </button>
+    </div>
+</div>
+                
+       
     </main>
 
     <footer class="footer">
@@ -233,14 +211,40 @@
         </div>
     </footer>
 
-<script>
-const BASE_URL = "https://websitefms.onrender.com";
-const API = BASE_URL + "/api";
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay" onclick="closeSearch(event)">
+        <div class="search-modal">
+            <div class="search-input-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="ค้นหาหลักสูตร วิชาเอก หรือแผนการศึกษา..."
+                       oninput="onSearch(this.value)" autocomplete="off" />
+                <button class="search-close" onclick="closeSearchModal()">✕</button>
+            </div>
+            <div class="search-results" id="searchResults">
+                <div class="search-empty">พิมพ์เพื่อค้นหา...</div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal เลือกหลักสูตร -->
+    <div id="courseSelectModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:3000;align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:16px;padding:28px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+            <h3 style="font-family:'Sarabun',sans-serif;margin-bottom:16px;font-size:17px;">เลือกปีหลักสูตร</h3>
+            <div id="courseSelectList" style="display:flex;flex-direction:column;gap:10px;"></div>
+            <button onclick="closeCourseSelectModal()" style="margin-top:16px;width:100%;padding:10px;border:1.5px solid #e5e7eb;border-radius:8px;background:#fff;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:14px;">ยกเลิก</button>
+        </div>
+    </div>
+
+<script>
+const BASE = ''; 
+const API  = BASE + "/api";
 const CLOUDINARY_CLOUD_NAME = "your_cloud_name";
 const CL_BASE = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
-// ── Dropdown toggle ──
+// cache courses จาก API
+let _coursesCache = [];
+
+// ── Dropdown ──────────────────────────────────────────────────
 function togglePlanDropdown() {
     document.getElementById('planDropdown').classList.toggle('open');
 }
@@ -249,7 +253,6 @@ document.addEventListener('click', e => {
     if (dd && !dd.contains(e.target)) dd.classList.remove('open');
 });
 
-// ── Build plan dropdown from API ──
 async function buildPlanDropdown(courses) {
     const menu = document.getElementById('planDropdownMenu');
     if (!courses || courses.length === 0) {
@@ -261,38 +264,87 @@ async function buildPlanDropdown(courses) {
     ).join('');
 }
 
+// ── Modal เลือกปีหลักสูตร ─────────────────────────────────────
+function openCourseSelectModal(target) {
+    const modal = document.getElementById('courseSelectModal');
+    const list  = document.getElementById('courseSelectList');
+    list.innerHTML = '';
+    console.log("_coursesCache:", _coursesCache); 
+
+    if (!_coursesCache.length) {
+        list.innerHTML = '<div style="padding:12px;color:#aaa;text-align:center;">กำลังโหลด...</div>';
+        modal.style.display = 'flex';
+        return;
+    }
+
+    _coursesCache.forEach(course => {
+        const btn = document.createElement('button');
+        btn.textContent = course.name_th || 'หลักสูตร ' + course.id;
+        btn.style.cssText = 'padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fff;cursor:pointer;font-family:Sarabun,sans-serif;font-size:14px;text-align:left;transition:.15s;width:100%;';
+        btn.onmouseover = () => btn.style.borderColor = '#9b51e0';
+        btn.onmouseout  = () => btn.style.borderColor = '#e5e7eb';
+        btn.onclick = () => {
+            const pageMap = {
+                'student': 'student.html',
+                'plan':    'plans.html',
+                'public':  'bba-public.html',
+            };
+            const page = pageMap[target] || 'bba-public.html';
+            closeCourseSelectModal();
+            window.location.href = `${page}?courseId=${course.id}`;
+        };
+        list.appendChild(btn);
+    });
+
+    modal.style.display = 'flex';
+}
+
+function closeCourseSelectModal() {
+    document.getElementById('courseSelectModal').style.display = 'none';
+}
+
+document.getElementById('courseSelectModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('courseSelectModal')) closeCourseSelectModal();
+});
+
+// ── Image helper ──────────────────────────────────────────────
 function resolveImageUrl(heroImage) {
     if (!heroImage) return null;
     if (heroImage.startsWith("http://") || heroImage.startsWith("https://")) return heroImage;
-    if (heroImage.startsWith("/")) return BASE_URL + heroImage;
+    if (heroImage.startsWith("/")) return BASE + heroImage;
     return `${CL_BASE}/q_auto,f_auto,w_400,h_200,c_fill/${heroImage}`;
 }
 
+// ── Load courses & build cards ────────────────────────────────
 async function appendNewCourses() {
     const grid = document.getElementById("courseGrid");
-
     try {
-        const res = await fetch(`${API}/courses`);
-        if (!res.ok) return;
+        const res = await fetch(`${API}/public/courses`);
+        if (!res.ok) throw new Error("API error");
         const courses = await res.json();
         if (!courses || courses.length === 0) return;
 
-        const newestId = Math.max(...courses.map(c => c.id));
+        // เก็บ cache
+        _coursesCache = courses;
 
-        // Update ข้อมูลทั่วไป link
-        const navGeneral = document.getElementById("nav-general");
-        if (navGeneral) navGeneral.href = `bba-public.html?courseId=${newestId}`;
+        // หา newestId (active ล่าสุด)
+        const activeCourses = courses.filter(c => c.status === 'active');
+        const newestId = activeCourses.length ? activeCourses[0].id : courses[0].id;
 
-        // Build plan dropdown
+        // build dropdown
         buildPlanDropdown(courses);
 
-        const sorted = [...courses].sort((a, b) => b.id - a.id);
-        const staticCards = [...grid.querySelectorAll('[data-static="true"]')];
-        staticCards.forEach(c => c.remove());
+        // sort: active → maintenance → draft, แล้ว id DESC
+        const sorted = [...courses].sort((a, b) => {
+            const order = { active: 0, maintenance: 1, draft: 2 };
+            const diff = (order[a.status] ?? 9) - (order[b.status] ?? 9);
+            return diff !== 0 ? diff : b.id - a.id;
+        });
 
         sorted.forEach(course => {
-            const isNew    = course.id === newestId;
-            const isActive = course.status === "active";
+            const isActive      = course.status === "active";
+            const isMaintenance = course.status === "maintenance";
+            const isNew         = course.id === newestId;
 
             const card = document.createElement("div");
             card.className = `course-card${isActive ? "" : " no-link"}`;
@@ -304,29 +356,187 @@ async function appendNewCourses() {
                        onerror="this.style.display='none';this.parentElement.innerHTML+='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e9d8fd;color:#9b51e0;font-size:32px;\\'><i class=\\'fa-solid fa-graduation-cap\\'></i></div>'">`
                 : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e9d8fd;color:#9b51e0;font-size:32px;"><i class="fa-solid fa-graduation-cap"></i></div>`;
 
+            // card หลักสูตร active → ไป bba-public.html ตรงๆ
             const labelHTML = isActive
-                ? `<a href="bba-public.html?courseId=${course.id}" class="course-link"><div class="course-label">${course.name_th || '-'}</div></a>`
-                : `<div class="course-label">${course.name_th || '-'}</div>`;
+                ? `<a href="bba-public.html?courseId=${course.id}" class="course-link">
+                       <div class="course-label">${course.name_th || '-'}</div>
+                   </a>`
+                : `<div class="course-label" style="${isMaintenance ? 'opacity:0.6;' : ''}">
+                       ${course.name_th || '-'}
+                   </div>`;
 
             card.innerHTML = `
                 ${isNew ? '<span class="badge-new">NEW</span>' : ""}
+                ${isMaintenance ? '<span class="badge-new" style="background:#f59e0b;">ปิดปรับปรุง</span>' : ""}
                 <div class="img-placeholder">${imgHTML}</div>
                 ${labelHTML}
             `;
             grid.appendChild(card);
         });
 
-        staticCards.forEach(c => grid.appendChild(c));
-
     } catch (err) {
-        console.warn("appendNewCourses: API ไม่ตอบสนอง ใช้ข้อมูล static แทน", err);
-        // Fallback: ยังให้ dropdown ลิงก์ไป plans.html เลย
+        console.warn("appendNewCourses error:", err);
         document.getElementById('planDropdownMenu').innerHTML =
             `<a class="dropdown-item" href="plans.html">ดูแผนการศึกษา</a>`;
     }
 }
 
+// ── Search ────────────────────────────────────────────────────
+let searchData = { courses: [], majors: [] };
+
+async function loadSearchData() {
+    try {
+        const cRes = await fetch(`${API}/public/courses`);
+        const courses = await cRes.json();
+        searchData.courses = courses || [];
+        const majorArrays = await Promise.all(
+            courses.map(c =>
+                fetch(`${API}/public/courses/${c.id}/majors`)
+                    .then(r => r.json())
+                    .then(majors => majors.map(m => ({ ...m, courseName: c.name_th, courseId: c.id })))
+                    .catch(() => [])
+            )
+        );
+        searchData.majors = majorArrays.flat();
+    } catch(e) {
+        console.warn('loadSearchData error:', e);
+    }
+}
+
+function openSearch() {
+    document.getElementById('searchOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('searchInput').focus(), 100);
+    if (!searchData.courses.length) loadSearchData();
+}
+
+function closeSearchModal() {
+    document.getElementById('searchOverlay').classList.remove('open');
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchResults').innerHTML = '<div class="search-empty">พิมพ์เพื่อค้นหา...</div>';
+}
+
+function closeSearch(e) {
+    if (e.target === document.getElementById('searchOverlay')) closeSearchModal();
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSearchModal();
+});
+
+function highlight(text, query) {
+    if (!query) return text;
+    const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(re, '<span class="search-highlight">$1</span>');
+}
+
+function onSearch(q) {
+    const results = document.getElementById('searchResults');
+    q = q.trim();
+    if (!q) { results.innerHTML = '<div class="search-empty">พิมพ์เพื่อค้นหา...</div>'; return; }
+    const ql = q.toLowerCase();
+    let html = '';
+
+    const matchCourses = searchData.courses.filter(c =>
+        (c.name_th || '').toLowerCase().includes(ql) || (c.name_en || '').toLowerCase().includes(ql)
+    );
+    if (matchCourses.length) {
+        html += `<div class="search-section-label">หลักสูตร</div>`;
+        html += matchCourses.map(c => `
+            <a class="search-item" href="bba-public.html?courseId=${c.id}">
+                <div class="search-item-icon" style="background:#f3e8ff;">🎓</div>
+                <div>
+                    <div class="search-item-title">${highlight(c.name_th || '', q)}</div>
+                    <div class="search-item-sub">${c.degree_level || 'หลักสูตร'}</div>
+                </div>
+            </a>`).join('');
+    }
+
+    const matchMajors = searchData.majors.filter(m =>
+        (m.name_th || '').toLowerCase().includes(ql) || (m.name_en || '').toLowerCase().includes(ql)
+    );
+    if (matchMajors.length) {
+        html += `<div class="search-section-label">วิชาเอก</div>`;
+        html += matchMajors.map(m => `
+            <a class="search-item" href="bba-public.html?courseId=${m.courseId}&majorId=${m.id}">
+                <div class="search-item-icon" style="background:#e0f2fe;">📚</div>
+                <div>
+                    <div class="search-item-title">${highlight(m.name_th || '', q)}</div>
+                    <div class="search-item-sub">${m.courseName || ''}</div>
+                </div>
+            </a>`).join('');
+    }
+
+    const planKeywords = ['แผน', 'plan', 'semester', 'ภาคเรียน', 'ปีการศึกษา'];
+    const isPlanSearch = planKeywords.some(k => ql.includes(k));
+    if (isPlanSearch && searchData.courses.length) {
+        html += `<div class="search-section-label">แผนการศึกษา</div>`;
+        html += searchData.courses.slice(0, 3).map(c => `
+            <a class="search-item" href="plans.html?courseId=${c.id}">
+                <div class="search-item-icon" style="background:#ecfdf5;">📅</div>
+                <div>
+                    <div class="search-item-title">แผนการศึกษา — ${highlight(c.name_th || '', q)}</div>
+                    <div class="search-item-sub">ดูตารางแผนการศึกษา</div>
+                </div>
+            </a>`).join('');
+    }
+
+    results.innerHTML = html || `<div class="search-empty">ไม่พบผลลัพธ์สำหรับ "${q}"</div>`;
+}
+
+// ── Init ──────────────────────────────────────────────────────
 appendNewCourses();
 </script>
+<script>
+// ── Load announcements from localStorage ──────────────────────
+const ANNOUNCE_KEY = 'bba_announcements';
+ 
+function loadHomeAnnouncements() {
+    const list = document.getElementById('homeAnnounceList');
+    if (!list) return;
+ 
+    let items = [];
+    try {
+        const raw = localStorage.getItem(ANNOUNCE_KEY);
+        items = raw ? JSON.parse(raw) : [];
+    } catch { items = []; }
+ 
+    // sort: pinned first → priority → createdAt
+    const pOrder = { high: 0, medium: 1, low: 2 };
+    items.sort((a, b) => {
+        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+        return (pOrder[a.priority] ?? 9) - (pOrder[b.priority] ?? 9);
+    });
+ 
+    // แสดงแค่ 3 รายการบนหน้าหลัก
+    const show = items.slice(0, 3);
+ 
+    if (!show.length) {
+        list.innerHTML = `<li style="color:#bbb;font-size:13px;padding:8px 0 8px 15px;">ยังไม่มีประกาศ</li>`;
+        return;
+    }
+ 
+    // สี border ตาม priority
+    const borderColor = { high: '#e74c3c', medium: '#f59e0b', low: '#9b51e0' };
+ 
+    list.innerHTML = show.map(a => `
+        <li style="margin-bottom:15px;padding-left:15px;border-left:3px solid ${borderColor[a.priority] || '#9b51e0'};">
+            <strong>${escapeHtml(a.title)}</strong>
+            ${a.pinned ? '<span style="font-size:10px;margin-left:4px;">📌</span>' : ''}
+            <p style="margin:4px 0 2px;font-size:13px;color:#555;">${escapeHtml(a.desc)}</p>
+            <small style="color:#aaa;">${escapeHtml(a.date)}</small>
+        </li>
+    `).join('');
+}
+ 
+function escapeHtml(str) {
+    return String(str || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+ 
+// โหลดเมื่อหน้าพร้อม
+loadHomeAnnouncements();
+</script>
+
 </body>
 </html>

@@ -119,31 +119,52 @@
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <aside class="sidebar-qa">
   <div class="sidebar-brand">
     <div class="sidebar-brand-title">FMS Admin</div>
     <div class="sidebar-brand-sub">PSU Faculty of Management</div>
   </div>
-  <div class="sidebar-section-label">เมนูหลัก</div>
+
   <nav class="sidebar-nav-qa">
+
+    <!-- กลุ่ม: ภาพรวม -->
+    <div class="sidebar-section-label">ภาพรวม</div>
     <a class="nav-item-qa" href="dashboard.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
       แดชบอร์ด
+    </a>
+
+    <!-- กลุ่ม: จัดการหลักสูตร -->
+    <div class="sidebar-section-label" style="margin-top:6px;">จัดการหลักสูตร</div>
+    <a class="nav-item-qa active" href="course-list.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+      หลักสูตร
     </a>
     <a class="nav-item-qa" href="study-plan.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
       แผนการศึกษา
     </a>
-    <a class="nav-item-qa active" href="course-list.html">
-      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
-      หลักสูตร
+
+    <!-- กลุ่ม: นักศึกษา -->
+    <div class="sidebar-section-label" style="margin-top:6px;">นักศึกษา</div>
+    <a class="nav-item-qa" href="admin-student-content.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
+      หน้านักศึกษา
     </a>
+    <a class="nav-item-qa" href="admin-subjects.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
+      รายวิชา
+    </a>
+
+    <!-- กลุ่ม: ระบบ -->
+    <div class="sidebar-section-label" style="margin-top:6px;">ระบบ</div>
     <a class="nav-item-qa" href="qa-dashboard.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
       ประกันคุณภาพการศึกษา
     </a>
+
   </nav>
+
   <div class="sidebar-footer-qa">
     <a class="nav-item-qa" href="login.html" id="logoutBtn">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
@@ -152,11 +173,12 @@
   </div>
 </aside>
 
+
 <!-- MAIN -->
 <div class="main">
   <div class="page-header">
     <small>แดชบอร์ด / จัดการหลักสูตร / ข้อมูลทั่วไป</small>
-    <h2>สาขาวิชา</h2>
+    <h2>วิชาเอกวิชา</h2>
     <p>จัดการ เพิ่ม ลบ และแก้ไขข้อมูลรายวิชาในคณะบริหารธุรกิจ</p>
   </div>
 
@@ -175,25 +197,25 @@
       </div>
 
       <div class="editor-block">
-        <div class="editor-label">แนะนำสาขาวิชา</div>
+        <div class="editor-label">แนะนำวิชาเอก</div>
         <div class="fake-toolbar"><span>B</span><span>I</span><span>U</span><span>•</span><span>1.</span><span>🔗</span></div>
-        <textarea id="intro" class="editor-textarea" placeholder="เขียนคำอธิบายสาขาวิชา เช่น จุดเด่น รายวิชาสำคัญ กลุ่มเป้าหมาย ฯลฯ"></textarea>
+        <textarea id="intro" class="editor-textarea" placeholder="เขียนคำอธิบายวิชาเอกวิชา เช่น จุดเด่น รายวิชาสำคัญ กลุ่มเป้าหมาย ฯลฯ"></textarea>
       </div>
 
       <!-- ══ รูปภาพ ══ -->
-      <div class="img-section-title">รูปภาพสาขาวิชา</div>
+      <div class="img-section-title">รูปภาพวิชาเอก</div>
 
       <div class="img-upload-grid">
 
-        <!-- ── Hero Image (หน้าสาขาวิชา) ── -->
+        <!-- ── Hero Image (หน้าวิชาเอกวิชา) ── -->
         <div class="img-upload-item" id="wrap-hero">
           <div class="img-upload-label">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
             ภาพหลัก (Hero)
-            <span class="badge-tag badge-hero">หน้าสาขาวิชา</span>
+            <span class="badge-tag badge-hero">หน้าวิชาเอก</span>
           </div>
           <div class="img-upload-desc">
-            แสดงในส่วน Hero ของหน้าข้อมูลสาขา<br>
+            แสดงในส่วน Hero ของหน้าข้อมูลวิชาเอก<br>
             แนะนำขนาด <strong>800×500px</strong> · JPG, PNG, WEBP
           </div>
           <button type="button" class="img-upload-btn" onclick="document.getElementById('heroFile').click()">
@@ -217,11 +239,11 @@
         <div class="img-upload-item" id="wrap-img">
           <div class="img-upload-label">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
-            ภาพการ์ดสาขา
+            ภาพการ์ดวิชาเอก
             <span class="badge-tag badge-card">หน้าหลักสูตร</span>
           </div>
           <div class="img-upload-desc">
-            แสดงเป็น thumbnail ในการ์ดสาขาวิชา<br>
+            แสดงเป็น thumbnail ในการ์ดวิชาเอกวิชา<br>
             แนะนำขนาด <strong>400×300px</strong> · JPG, PNG, WEBP
           </div>
           <button type="button" class="img-upload-btn" onclick="document.getElementById('imgFile').click()">
@@ -248,7 +270,7 @@
                 <svg width="24" height="24" viewBox="0 0 20 20" fill="rgba(255,255,255,0.7)"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
               </div>
               <div class="card-sim-body">
-                <div class="card-sim-title" id="cardSimTitle">ชื่อสาขาวิชา</div>
+                <div class="card-sim-title" id="cardSimTitle">ชื่อวิชาเอก</div>
                 <div class="card-sim-sub" id="cardSimSub"></div>
                 <div class="card-sim-link">View Details →</div>
               </div>
@@ -297,8 +319,8 @@
 </div>
 
 <script>
-const BASE_URL = "https://websitefms.onrender.com";
-const API = BASE_URL + "/api";
+const BASE = ''; 
+const API = BASE + "/api";
 
 const token = localStorage.getItem("user");
 if (!token) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
@@ -316,7 +338,7 @@ if (majorId)  loadMajor(majorId);
 
 /* live preview ชื่อในการ์ดจำลอง */
 document.getElementById("major_name_th").addEventListener("input", e => {
-  document.getElementById("cardSimTitle").textContent = e.target.value || "ชื่อสาขาวิชา";
+  document.getElementById("cardSimTitle").textContent = e.target.value || "ชื่อวิชาเอก";
 });
 document.getElementById("major_name_en").addEventListener("input", e => {
   document.getElementById("cardSimSub").textContent = e.target.value || "";
@@ -361,14 +383,14 @@ async function uploadImg(type) {
     document.getElementById(hiddenId).value = data.url;
 
     const prevWrap = document.getElementById(prevWrapId);
-    document.getElementById(prevElId).src = data.url.startsWith("http") ? data.url : BASE_URL + data.url;
+    document.getElementById(prevElId).src = data.url.startsWith("http") ? data.url : BASE + data.url;
     prevWrap.style.display = "block";
     document.getElementById(wrapId).classList.add("has-image");
 
     // อัปเดต card sim เฉพาะ card image
     if (type === 'card') {
       document.getElementById("cardSimImg").innerHTML =
-        `<img src="${BASE_URL + data.url}" style="width:90px;height:72px;object-fit:cover;display:block;">`;
+        `<img src="${BASE + data.url}" style="width:90px;height:72px;object-fit:cover;display:block;">`;
       document.getElementById("cardSimWrap").style.display = "block";
     }
 
@@ -409,7 +431,7 @@ async function loadMajor(id) {
     });
     if (res.status === 401) { localStorage.removeItem("user"); window.location.href = "login.html"; return; }
     const m = await res.json();
-    if (!res.ok) { alert(m.message || "ไม่สามารถดึงข้อมูลสาขาวิชาได้"); return; }
+    if (!res.ok) { alert(m.message || "ไม่สามารถดึงข้อมูลวิชาเอกได้"); return; }
 
     document.getElementById("major_name_th").value = m.name_th    || "";
     document.getElementById("major_name_en").value = m.name_en    || "";
@@ -422,7 +444,7 @@ async function loadMajor(id) {
 
     // restore hero_image
     if (m.hero_image) {
-      const src = m.hero_image.startsWith("http") ? m.hero_image : BASE_URL + m.hero_image;
+      const src = m.hero_image.startsWith("http") ? m.hero_image : BASE + m.hero_image;
       document.getElementById("hero_image").value = m.hero_image;
       document.getElementById("prevHeroEl").src = src;
       document.getElementById("prevHero").style.display = "block";
@@ -431,7 +453,7 @@ async function loadMajor(id) {
 
     // restore image_url (card image)
     if (m.image_url) {
-      const src = m.image_url.startsWith("http") ? m.image_url : BASE_URL + m.image_url;
+      const src = m.image_url.startsWith("http") ? m.image_url : BASE + m.image_url;
       document.getElementById("image_url").value = m.image_url;
       document.getElementById("prevImgEl").src = src;
       document.getElementById("prevImg").style.display = "block";
@@ -441,11 +463,11 @@ async function loadMajor(id) {
       document.getElementById("cardSimWrap").style.display = "block";
     }
 
-    document.getElementById("cardSimTitle").textContent = m.name_th || "ชื่อสาขาวิชา";
+    document.getElementById("cardSimTitle").textContent = m.name_th || "ชื่อวิชาเอกวิชา";
     document.getElementById("cardSimSub").textContent   = m.name_en || "";
     document.getElementById("submitBtn").textContent = "Update";
 
-  } catch { alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (โหลดข้อมูลสาขา)"); }
+  } catch { alert("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (โหลดข้อมูลวิชาเอก)"); }
 }
 
 /* ══ SAVE / UPDATE ══ */
@@ -480,9 +502,9 @@ form.addEventListener("submit", async (e) => {
     });
     if (res.status === 401) { localStorage.removeItem("user"); window.location.href = "login.html"; return; }
     const data = await res.json();
-    if (!res.ok) { msg.textContent = data.message || "บันทึกสาขาวิชาไม่สำเร็จ"; return; }
+    if (!res.ok) { msg.textContent = data.message || "บันทึกวิชาเอกไม่สำเร็จ"; return; }
     msg.style.color = "green";
-    msg.textContent = majorId ? "อัปเดตสาขาวิชาสำเร็จ" : "บันทึกสาขาวิชาสำเร็จ";
+    msg.textContent = majorId ? "อัปเดตวิชาเอกสำเร็จ" : "บันทึกวิชาเอกสำเร็จ";
     window.location.href = `course-info.html?courseId=${courseId}`;
   } catch { msg.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้"; }
 });

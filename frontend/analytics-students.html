@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -6,8 +7,10 @@
 <title>Student Data Hub — BBA PSU</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="api-client.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f0edf8;--white:#fff;--sidebar:#1e1145;--card:#fff;--border:#e2daf0;
@@ -399,11 +402,11 @@ tbody tr:hover td{background:var(--acc-ll)}
               <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">ข้อมูลรับเข้า (Intake)</div>
               <div class="form-row c2">
                 <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fi_yr"></select></div>
-                <div class="fg"><label>สาขาวิชาเอก <span class="req">*</span></label>
-                  <select id="fi_mj"><option value="">— เลือกสาขา —</option>
+                <div class="fg"><label>วิชาเอก <span class="req">*</span></label>
+                  <select id="fi_mj"><option value="">— เลือกวิชาเอก —</option>
                     <option value="fin">FIN</option><option value="mkt">MKT</option><option value="hrm">HRM</option>
-                    <option value="log">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
-                  </select>
+                    <option value="lsm">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
+                  </select><!-- หา option เดิมที่มีอยู่แล้ว แล้วเพิ่มต่อท้าย -->
                 </div>
               </div>
               <div class="form-row c5">
@@ -452,7 +455,7 @@ tbody tr:hover td{background:var(--acc-ll)}
         </div>
         <div class="card-body">
           <div class="tbl-wrap"><table>
-            <thead><tr><th>ปี</th><th>สาขา</th><th>แผนรับ</th><th>สัมภาษณ์</th><th>ยืนยัน</th><th>รายงานตัว</th><th>ไม่รายงานตัว</th><th></th></tr></thead>
+            <thead><tr><th>ปี</th><th>วิชาเอก</th><th>แผนรับ</th><th>สัมภาษณ์</th><th>ยืนยัน</th><th>รายงานตัว</th><th>ไม่รายงานตัว</th><th></th></tr></thead>
             <tbody id="tbody-intake"></tbody>
           </table></div>
           <div id="intake-show-more" class="show-more-row"></div>
@@ -471,24 +474,24 @@ tbody tr:hover td{background:var(--acc-ll)}
           <div class="preview-body">
             <div class="kpi-grid">
               <div class="kpi"><div class="kpi-ico">🎓</div><div class="kpi-lbl">นักศึกษาที่รายงานตัว</div><div class="kpi-val" id="kpi-s1">—</div></div>
-              <div class="kpi"><div class="kpi-ico">📊</div><div class="kpi-lbl">สาขาวิชาเอก</div><div class="kpi-val" id="kpi-s2">6</div></div>
+              <div class="kpi"><div class="kpi-ico">📊</div><div class="kpi-lbl">วิชาเอก</div><div class="kpi-val" id="kpi-s2">6</div></div>
               <div class="kpi"><div class="kpi-ico">⏱</div><div class="kpi-lbl">ระยะเวลาหลักสูตร</div><div class="kpi-val">4 ปี</div></div>
             </div>
             <div class="chart-row2">
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามสาขา</div><div class="chart-sub" id="pie-s-sub">—</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามวิชาเอก</div><div class="chart-sub" id="pie-s-sub">—</div></div></div>
                 <div class="pie-layout">
                   <div class="pie-canvas-wrap" style="width:170px;height:170px"><canvas id="chart-pie-s"></canvas></div>
                   <div class="pie-legend" id="pie-s-legend"></div>
                 </div>
               </div>
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">รายงานตัวแยกสาขา</div><div class="chart-sub" id="bar-s-sub">—</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">รายงานตัวแยกวิชาเอก</div><div class="chart-sub" id="bar-s-sub">—</div></div></div>
                 <div style="height:170px"><canvas id="chart-bar-s"></canvas></div>
               </div>
             </div>
             <div class="chart-card">
-              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">ข้อมูลรับนักศึกษา (Intake) แยกสาขา</div></div></div>
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">ข้อมูลรับนักศึกษา (Intake) แยกวิชาเอก</div></div></div>
               <div style="height:220px"><canvas id="chart-intake-s"></canvas></div>
               <div class="clegend" id="leg-intake-s"></div>
             </div>
@@ -567,10 +570,10 @@ tbody tr:hover td{background:var(--acc-ll)}
               </div>
               <div class="form-row c3">
                 <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fcoop_yr"></select></div>
-                <div class="fg"><label>สาขา <span class="req">*</span></label>
+                <div class="fg"><label>วิชาเอก <span class="req">*</span></label>
                   <select id="fcoop_mj"><option value="">— เลือก —</option>
                     <option value="fin">FIN</option><option value="mkt">MKT</option><option value="hrm">HRM</option>
-                    <option value="log">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
+                    <option value="lsm">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
                   </select>
                 </div>
                 <div class="fg"><label>จำนวนนักศึกษา (คน) <span class="req">*</span></label><input type="number" id="fcoop_n" placeholder="0" min="0"></div>
@@ -611,7 +614,7 @@ tbody tr:hover td{background:var(--acc-ll)}
         </div>
         <div class="card-body">
           <div class="tbl-wrap"><table>
-            <thead><tr><th>ปี</th><th>สาขา</th><th>จำนวน (คน)</th><th></th></tr></thead>
+            <thead><tr><th>ปี</th><th>วิชาเอก</th><th>จำนวน (คน)</th><th></th></tr></thead>
             <tbody id="tbody-coop-only"></tbody>
           </table></div>
           <div id="coop-show-more" class="show-more-row"></div>
@@ -634,17 +637,17 @@ tbody tr:hover td{background:var(--acc-ll)}
               </div>
             </div>
             <div class="chart-card">
-              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#2563eb">สถิตินักศึกษาสหกิจ แยกสาขาตามปี</div></div></div>
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#2563eb">สถิตินักศึกษาสหกิจ แยกวิชาเอกตามปี</div></div></div>
               <div style="height:240px"><canvas id="chart-coop-bar"></canvas></div>
               <div class="clegend" id="leg-coop-bar"></div>
             </div>
             <div class="chart-row2">
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี (รวมทุกสาขา)</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี (รวมทุกวิชาเอก)</div></div></div>
                 <div style="height:180px"><canvas id="chart-coop-trend"></canvas></div>
               </div>
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามสาขา</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามวิชาเอก</div></div></div>
                 <div class="pie-layout">
                   <div class="pie-canvas-wrap" style="width:150px;height:150px"><canvas id="chart-coop-pie"></canvas></div>
                   <div class="pie-legend" id="coop-pie-leg"></div>
@@ -724,10 +727,10 @@ tbody tr:hover td{background:var(--acc-ll)}
               </div>
               <div class="form-row c3">
                 <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fintern_yr"></select></div>
-                <div class="fg"><label>สาขา <span class="req">*</span></label>
+                <div class="fg"><label>วิชาเอก <span class="req">*</span></label>
                   <select id="fintern_mj"><option value="">— เลือก —</option>
                     <option value="fin">FIN</option><option value="mkt">MKT</option><option value="hrm">HRM</option>
-                    <option value="log">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
+                    <option value="lsm">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
                   </select>
                 </div>
                 <div class="fg"><label>จำนวนนักศึกษา (คน) <span class="req">*</span></label><input type="number" id="fintern_n" placeholder="0" min="0"></div>
@@ -768,7 +771,7 @@ tbody tr:hover td{background:var(--acc-ll)}
         </div>
         <div class="card-body">
           <div class="tbl-wrap"><table>
-            <thead><tr><th>ปี</th><th>สาขา</th><th>จำนวน (คน)</th><th></th></tr></thead>
+            <thead><tr><th>ปี</th><th>วิชาเอก</th><th>จำนวน (คน)</th><th></th></tr></thead>
             <tbody id="tbody-intern-only"></tbody>
           </table></div>
           <div id="intern-show-more" class="show-more-row"></div>
@@ -791,7 +794,7 @@ tbody tr:hover td{background:var(--acc-ll)}
               </div>
             </div>
             <div class="chart-card">
-              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#059669">สถิตินักศึกษาฝึกงาน แยกสาขาตามปี</div></div></div>
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#059669">สถิตินักศึกษาฝึกงาน แยกวิชาเอกตามปี</div></div></div>
               <div style="height:240px"><canvas id="chart-intern-bar"></canvas></div>
               <div class="clegend" id="leg-intern-bar"></div>
             </div>
@@ -801,7 +804,7 @@ tbody tr:hover td{background:var(--acc-ll)}
                 <div style="height:180px"><canvas id="chart-intern-trend"></canvas></div>
               </div>
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามสาขา</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามวิชาเอก</div></div></div>
                 <div class="pie-layout">
                   <div class="pie-canvas-wrap" style="width:150px;height:150px"><canvas id="chart-intern-pie"></canvas></div>
                   <div class="pie-legend" id="intern-pie-leg"></div>
@@ -916,22 +919,24 @@ const MJ={
   fin:{name:'การเงินและการลงทุน',short:'FIN',color:'#7c3aed'},
   mkt:{name:'การตลาดและการสื่อสาร',short:'MKT',color:'#2563eb'},
   hrm:{name:'จัดการทรัพยากรมนุษย์',short:'HRM',color:'#0891b2'},
-  log:{name:'โลจิสติกส์',short:'LSM',color:'#ea580c'},
+  lsm:{name:'โลจิสติกส์',short:'LSM',color:'#ea580c'},
   mice:{name:'การจัดการไมซ์',short:'MICE',color:'#059669'},
   bis:{name:'ระบบสารสนเทศ',short:'BIS',color:'#db2777'},
 };
-const MJ_KEYS=['fin','mkt','hrm','log','mice','bis'];
-const MJ_MAP={fin:'fin',mkt:'mkt',hrm:'hrm',log:'log',bis:'bis',mice:'mice',
-  FIN:'fin',MKT:'mkt',HRM:'hrm',LSM:'log',BIS:'bis',MICE:'mice',
-  'Finance_Investment':'fin','Marketing_Communication':'mkt','HR_Management':'hrm',
-  'Logistics':'log','Business_IT':'bis','MICE_Management':'mice'};
+const MJ_KEYS = ['fin','mkt','hrm','lsm','mice','bis'
+];
+const MJ_MAP={fin:'fin',mkt:'mkt',hrm:'hrm',lsm:'lsm',bis:'bis',mice:'mice',
+  FIN:'fin',MKT:'mkt',HRM:'hrm',LSM:'lsm',LMS:'lsm',lms:'lsm',BIS:'bis',MICE:'mice',
+ 'Finance_Investment':'fin','Marketing_Communication':'mkt','HR_Management':'hrm',
+  'Logistics':'lsm','Business_IT':'bis','MICE_Management':'mice',bba:'bba', BBA:'bba',
+  };
 
 let DB={
   intake:{
     fin:[[2562,60,88,52,50,2],[2563,60,118,71,70,1],[2564,60,118,71,72,1],[2565,70,139,57,56,1],[2566,70,199,80,79,1],[2567,70,122,80,76,4]],
     mkt:[[2563,60,104,71,69,2],[2564,60,96,74,71,3],[2565,70,134,71,67,4],[2566,70,143,78,76,2],[2567,70,139,93,90,3]],
     hrm:[[2563,60,106,73,71,2],[2564,60,131,73,72,1],[2565,70,104,56,54,2],[2566,70,102,96,94,2],[2567,70,132,97,94,3]],
-    log:[[2563,60,113,79,77,2],[2564,60,107,85,81,4],[2565,70,139,75,74,1],[2566,70,145,100,99,1],[2567,70,120,90,90,0]],
+    lsm:[[2563,60,113,79,77,2],[2564,60,107,85,81,4],[2565,70,139,75,74,1],[2566,70,145,100,99,1],[2567,70,120,90,90,0]],
     bis:[[2563,60,102,70,67,3],[2564,60,101,89,88,1],[2565,70,121,76,73,3],[2566,70,142,99,98,1],[2567,70,123,91,87,4]],
     mice:[[2563,60,114,77,76,1],[2564,60,105,73,72,1],[2565,70,116,76,75,1],[2566,70,108,78,77,1],[2567,70,118,80,80,0]],
   },
@@ -945,14 +950,14 @@ let DB={
   },
   coop:{
     fin:[9,5,7,7,23,12,22],mkt:[38,34,11,25,22,37,30],hrm:[13,5,2,6,6,10,32],
-    log:[16,25,21,38,60,57,49],bis:[8,22,17,26,33,48,34],mice:[12,17,30,10,18,15,7],
+    lsm:[16,25,21,38,60,57,49],bis:[8,22,17,26,33,48,34],mice:[12,17,30,10,18,15,7],
   },
   coopYrs:[2562,2563,2564,2565,2566,2567,2568],
   top5Coop:['กรุงเทพมหานคร','สมุทรปราการ','ภูเก็ต','สงขลา','สุราษฎร์ธานี'],
   partnersCoop:['UOB','Tops','JobsDB','2S'],
   intern:{
     fin:[29,28,25,40,41],mkt:[58,45,68,65,65],hrm:[26,33,27,39,40],
-    log:[51,52,60,66,70],bis:[38,36,45,48,50],mice:[41,36,38,52,60],
+    lsm:[51,52,60,66,70],bis:[38,36,45,48,50],mice:[41,36,38,52,60],
   },
   internYrs:[2563,2564,2565,2566,2567],
   top5Intern:['บริษัท Tops จำกัด','สมาคมตลาดทุน','บริษัท ไทยออยล์ จำกัด','บริษัท โอสถสภา จำกัด','บริษัท เจมาร์ท จำกัด'],
@@ -970,48 +975,79 @@ let _pendingPub=null;
 let pubState={students:{published:false,publishedAt:null}};
 try{const ps=localStorage.getItem(STUDENTS_PUBLISH_KEY);if(ps)pubState=JSON.parse(ps);}catch{}
 function savePubState(){localStorage.setItem(STUDENTS_PUBLISH_KEY,JSON.stringify(pubState));}
-function saveStudentsData(){localStorage.setItem(STUDENTS_DATA_KEY,JSON.stringify(DB));}
+// แทนที่ฟังก์ชัน saveStudentsData เดิม
+async function saveStudentsData() {
+  localStorage.setItem(STUDENTS_DATA_KEY, JSON.stringify(DB));
 
-/* ════════════ PUBLISH LOGIC ════════════ */
-function onPubToggle(section,checked){
-  document.getElementById('pub-toggle-'+section).checked=pubState[section]?.published||false;
-  _pendingPub={section,willPublish:checked};
-  showPubConfirm(section,checked);
-}
-function showPubConfirm(section,willPublish){
-  const icon=document.getElementById('pub-confirm-icon');
-  const svg=document.getElementById('pub-confirm-svg');
-  const title=document.getElementById('pub-confirm-title');
-  const body=document.getElementById('pub-confirm-body');
-  const doBtn=document.getElementById('pub-btn-do');
-  if(willPublish){
-    icon.className='pub-confirm-icon go';
-    svg.innerHTML='<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>';
-    title.textContent='ยืนยันการเผยแพร่ Dashboard';
-    body.innerHTML='ข้อมูลสถิตินักศึกษาจะถูก<strong>แสดงในหน้า bba-students.html</strong> ทันที<br><br>ผู้เยี่ยมชมจะสามารถดูกราฟและตัวเลขสถิติทั้งหมดได้';
-    doBtn.textContent='เผยแพร่ Dashboard';doBtn.className='pub-btn-do go';
-  }else{
-    icon.className='pub-confirm-icon stop';
-    svg.innerHTML='<path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524L13.477 14.89zm1.414-1.414L6.524 5.11A6 6 0 0114.89 13.476zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>';
-    title.textContent='ยืนยันการปิดเผยแพร่';
-    body.innerHTML='Dashboard สถิตินักศึกษาจะ<strong>ถูกซ่อนจากสาธารณะ</strong> ทันที<br><br>ผู้เยี่ยมชม bba-students.html จะเห็นข้อความ "ยังไม่เผยแพร่" แทน';
-    doBtn.textContent='ปิดเผยแพร่';doBtn.className='pub-btn-do stop';
+  // ส่งข้อมูลไป server ด้วย
+  try {
+    const payload = {
+      intake:        DB.intake,
+      trend:         DB.trend,
+      status:        DB.status,
+      coop:          DB.coop,
+      coopYrs:       DB.coopYrs,
+      intern:        DB.intern,
+      internYrs:     DB.internYrs,
+      top5Coop:      DB.top5Coop,
+      top5Intern:    DB.top5Intern,
+      partnersCoop:  DB.partnersCoop,
+      partnersIntern:DB.partnersIntern,
+    };
+    const res = await fetch('/api/admin/students/data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || 'unknown');
+  } catch(e) {
+    console.error('saveStudentsData to server failed:', e);
+    toast('⚠ บันทึก server ไม่สำเร็จ: ' + e.message, '#ef4444');
   }
-  document.getElementById('pub-confirm-overlay').classList.add('open');
 }
-function cancelPubConfirm(){document.getElementById('pub-confirm-overlay').classList.remove('open');_pendingPub=null;}
-function doPubConfirm(){
-  if(!_pendingPub)return;
-  const{section,willPublish}=_pendingPub;
-  document.getElementById('pub-confirm-overlay').classList.remove('open');_pendingPub=null;
-  if(!pubState[section])pubState[section]={};
-  pubState[section].published=willPublish;
-  pubState[section].publishedAt=willPublish?new Date().toISOString():null;
+
+// แทนที่ฟังก์ชัน doPubConfirm เดิม
+async function doPubConfirm() {
+  if (!_pendingPub) return;
+  const { section, willPublish } = _pendingPub;
+
+  document.getElementById('pub-confirm-overlay').classList.remove('open');
+  _pendingPub = null;
+
+  if (!pubState[section]) pubState[section] = {};
+  pubState[section].published   = willPublish;
+  pubState[section].publishedAt = willPublish ? new Date().toISOString() : null;
   savePubState();
-  if(willPublish)saveStudentsData();
-  document.getElementById('pub-toggle-'+section).checked=willPublish;
+
+  // ถ้าเปิดเผยแพร่ → save ข้อมูลไป server ก่อน
+  if (willPublish) await saveStudentsData();
+
+  // แล้วค่อย publish/unpublish
+  try {
+    const res = await fetch('/api/admin/students/publish', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ published: willPublish }),
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || 'unknown');
+  } catch(e) {
+    console.error('publish to server failed:', e);
+    toast('⚠ เผยแพร่ server ไม่สำเร็จ: ' + e.message, '#ef4444');
+    return;
+  }
+
+  const toggle = document.getElementById('pub-toggle-' + section);
+  if (toggle) toggle.checked = willPublish;
   updatePubBar(section);
-  toast(willPublish?'✓ เผยแพร่ Dashboard สำเร็จ · หน้า bba-students.html พร้อมแล้ว':'✓ ปิดเผยแพร่แล้ว · ซ่อนจากสาธารณะแล้ว',willPublish?'#22c55e':'#f59e0b');
+
+  toast(
+    willPublish
+      ? '✓ เผยแพร่ Dashboard สำเร็จ · หน้า bba-students.html พร้อมแล้ว'
+      : '✓ ปิดเผยแพร่แล้ว',
+    willPublish ? '#22c55e' : '#f59e0b'
+  );
 }
 document.getElementById('pub-confirm-overlay').addEventListener('click',function(e){if(e.target===this)cancelPubConfirm();});
 
@@ -1040,12 +1076,6 @@ function initSelects(){
     DEFAULT_YRS.forEach(y=>{s.innerHTML+=`<option value="${y}">${y}</option>`;});
   });
 }
-function init(){
-  initSelects();
-  renderIntakeTable();renderCoopOnlyTable();renderInternOnlyTable();
-  renderYrFilterDropdown();renderSavedReports();
-  updatePubBar('students');
-}
 
 /* ════════════ NAV ════════════ */
 function gotoView(name,navEl,sbEl){
@@ -1065,40 +1095,66 @@ function switchImportTab(name,tabEl){
 
 /* ════════════ SAVE ════════════ */
 function saveIntake(){
-  const yr=+document.getElementById('fi_yr').value,mid=document.getElementById('fi_mj').value;
-  if(!yr||!mid){toast('กรุณาเลือกปีและสาขา','#ef4444');return;}
-  const row=[yr,+document.getElementById('fi_pl').value||0,+document.getElementById('fi_in').value||0,+document.getElementById('fi_co').value||0,+document.getElementById('fi_re').value||0,+document.getElementById('fi_nr').value||0];
-  if(!DB.intake[mid])DB.intake[mid]=[];
-  const idx=DB.intake[mid].findIndex(r=>r[0]===yr);
-  if(idx>=0)DB.intake[mid][idx]=row;else DB.intake[mid].push(row);
-  _intakeShowAll=false;renderIntakeTable();renderYrFilterDropdown();
+  const yr = +document.getElementById('fi_yr').value;
+  const mid = document.getElementById('fi_mj').value;
+  if(!yr || !mid){ toast('กรุณาเลือกปีและวิชาเอก','#ef4444'); return; }
+
+  const row = [
+    yr,
+    +document.getElementById('fi_pl').value || 0,
+    +document.getElementById('fi_in').value || 0,
+    +document.getElementById('fi_co').value || 0,
+    +document.getElementById('fi_re').value || 0,
+    +document.getElementById('fi_nr').value || 0
+  ];
+
+  if(!DB.intake[mid]) DB.intake[mid] = [];
+  const idx = DB.intake[mid].findIndex(r => r[0] === yr);
+  if (idx >= 0) DB.intake[mid][idx] = row; else DB.intake[mid].push(row);
+
+  _intakeShowAll = false;
+  renderIntakeTable(); renderYrFilterDropdown();
+
+  saveStudentsData();
   toast('✓ บันทึก Intake '+MJ[mid].short+' ปี '+yr);
 }
+
 function saveTrend(){
-  const yr=+document.getElementById('ft_yr').value;if(!yr){toast('เลือกปีก่อน','#ef4444');return;}
-  if(!DB.trend[yr])DB.trend[yr]={enrolled:0,graduated:0};
-  DB.trend[yr].enrolled=+document.getElementById('ft_enr').value||0;
-  DB.trend[yr].graduated=+document.getElementById('ft_grad').value||0;
+  const yr = +document.getElementById('ft_yr').value;
+  if(!yr){ toast('เลือกปีก่อน','#ef4444'); return; }
+
+  if(!DB.trend[yr]) DB.trend[yr] = { enrolled:0, graduated:0 };
+  DB.trend[yr].enrolled  = +document.getElementById('ft_enr').value  || 0;
+  DB.trend[yr].graduated = +document.getElementById('ft_grad').value || 0;
+
+  saveStudentsData();
   toast('✓ บันทึกแนวโน้ม ปี '+yr);
 }
+
 function saveStatus(){
-  const yr=+document.getElementById('fs_yr').value;if(!yr){toast('เลือกปีก่อน','#ef4444');return;}
-  DB.status[yr]=[
-    {label:'ยังเป็นนักศึกษา',val:+document.getElementById('fs_cur').value||0,color:'#7c3aed'},
-    {label:'สำเร็จการศึกษา',val:+document.getElementById('fs_grad').value||0,color:'#2563eb'},
-    {label:'ไม่รายงานตัว',val:+document.getElementById('fs_nr').value||0,color:'#ea580c'},
-    {label:'โอนย้าย',val:+document.getElementById('fs_tr').value||0,color:'#059669'},
-    {label:'ออกกลางคัน',val:+document.getElementById('fs_dr').value||0,color:'#eab308'},
-    {label:'พัก/ลา',val:+document.getElementById('fs_lv').value||0,color:'#ef4444'},
-  ].filter(x=>x.val>0);
+  const yr = +document.getElementById('fs_yr').value;
+  if(!yr){ toast('เลือกปีก่อน','#ef4444'); return; }
+
+  DB.status[yr] = [
+    {label:'ยังเป็นนักศึกษา',  val:+document.getElementById('fs_cur').value  || 0, color:'#7c3aed'},
+    {label:'สำเร็จการศึกษา',   val:+document.getElementById('fs_grad').value || 0, color:'#2563eb'},
+    {label:'ไม่รายงานตัว',     val:+document.getElementById('fs_nr').value   || 0, color:'#ea580c'},
+    {label:'โอนย้าย',          val:+document.getElementById('fs_tr').value   || 0, color:'#059669'},
+    {label:'ออกกลางคัน',       val:+document.getElementById('fs_dr').value   || 0, color:'#eab308'},
+    {label:'พักการศึกษา',      val:+document.getElementById('fs_lv').value   || 0, color:'#ef4444'},
+  ].filter(x => x.val > 0);
+
+  saveStudentsData();
   toast('✓ บันทึกสถานะ ปี '+yr);
 }
+  
+
 function saveCoopEntry(type){
   const prefix=type==='coop'?'fcoop':'fintern';
   const yr=+document.getElementById(prefix+'_yr').value;
   const mid=document.getElementById(prefix+'_mj').value;
   const n=+document.getElementById(prefix+'_n').value||0;
-  if(!yr||!mid){toast('กรุณาเลือกปีและสาขา','#ef4444');return;}
+  if(!yr||!mid){toast('กรุณาเลือกปีและวิชาเอก','#ef4444');return;}
   if(type==='coop'){
     if(!DB.coopYrs.includes(yr)){DB.coopYrs.push(yr);DB.coopYrs.sort((a,b)=>a-b);}
     const yi=DB.coopYrs.indexOf(yr);
@@ -1234,50 +1290,133 @@ function buildSheetPreview(sn,sfx,tabEl){
 }
 function cancelImport(sfx){pendingWB[sfx]=null;document.getElementById('xl-'+sfx+'-preview').style.display='none';}
 function confirmImport(target){
-  const sfx=target==='students'?'s':target==='coopOnly'?'coop':'intern';
-  const wb=pendingWB[sfx];if(!wb)return;let cnt=0;
-  wb.SheetNames.forEach(sn=>{
-    const snl=sn.toLowerCase().trim();const data=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:''});
-    if(target==='students'&&['intake','fin','mkt','hrm','log','bis','mice'].some(k=>snl.includes(k))){
-      data.forEach(row=>{
-        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||row['year']||0);
-        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||snl).trim()];
-        if(!yr||!mid)return;
-        const r=[yr,+row['แผนรับ']||0,+row['สัมภาษณ์']||0,+row['ยืนยัน']||0,+row['รายงานตัว']||0,+row['ไม่รายงานตัว']||0];
-        if(!DB.intake[mid])DB.intake[mid]=[];
-        const idx=DB.intake[mid].findIndex(x=>x[0]===yr);
-        if(idx>=0)DB.intake[mid][idx]=r;else DB.intake[mid].push(r);cnt++;
+  const sfx = target==='students' ? 's' : target==='coopOnly' ? 'coop' : 'intern';
+  const wb  = pendingWB[sfx];
+  if (!wb) return;
+
+  let cnt = 0;
+  // ── Clear ข้อมูลเก่าก่อน import ใหม่ ──
+if (target === 'internOnly') {
+  MJ_KEYS.forEach(m => { DB.intern[m] = []; });
+  DB.internYrs = [];
+}
+if (target === 'coopOnly') {
+  MJ_KEYS.forEach(m => { DB.coop[m] = []; });
+  DB.coopYrs = [];
+}
+if (target === 'students') {
+  MJ_KEYS.forEach(m => { DB.intake[m] = []; });
+}
+  // ... โค้ดเดิม
+
+  wb.SheetNames.forEach(sn => {
+    const snl  = sn.toLowerCase().trim();
+    const data = XLSX.utils.sheet_to_json(wb.Sheets[sn], { defval:'' });
+
+    /* ── STUDENTS: Intake ── */
+    if (target==='students' && ['intake','fin','mkt','hrm','lsm','bis','mice'].some(k => snl.includes(k))) {
+      data.forEach(row => {
+        const yr  = parseInt(row['ปีการศึกษา'] || row['ปี'] || row['year'] || 0, 10);
+        const mid = MJ_MAP[String(row['วิชาเอก'] || row['major'] || snl).trim()];
+        if (!yr || !mid) return;
+        const r = [
+          yr,
+          +row['แผนรับ']        || 0,
+          +row['สัมภาษณ์']      || 0,
+          +row['ยืนยัน']         || 0,
+          +row['รายงานตัว']      || 0,
+          +row['ไม่รายงานตัว']   || 0
+        ];
+        if (!DB.intake[mid]) DB.intake[mid] = [];
+        const idx = DB.intake[mid].findIndex(x => x[0] === yr);
+        if (idx >= 0) DB.intake[mid][idx] = r; else DB.intake[mid].push(r);
+        cnt++;
       });
     }
-    if(target==='coopOnly'&&(snl.includes('coop')||snl.includes('สหกิจ'))){
-      data.forEach(row=>{
-        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||0);
-        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||'').trim()];const n=+row['จำนวน']||0;
-        if(!yr||!mid)return;
-        if(!DB.coopYrs.includes(yr)){DB.coopYrs.push(yr);DB.coopYrs.sort((a,b)=>a-b);}
-        const yi=DB.coopYrs.indexOf(yr);if(!DB.coop[mid])DB.coop[mid]=DB.coopYrs.map(()=>0);
-        while(DB.coop[mid].length<DB.coopYrs.length)DB.coop[mid].push(0);DB.coop[mid][yi]=n;cnt++;
+
+    /* ── STUDENTS: Enrolled (ลงทะเบียน) ── */
+    if (target==='students' && (snl.includes('enrolled') || snl.includes('ลงทะเบียน'))) {
+      data.forEach(row => {
+        const yr = parseInt((row['ปีการศึกษา'] ?? row['ปี'] ?? '0').toString().trim(), 10);
+        const enrolled = +row['จำนวนลงทะเบียน'] || +row['enrolled'] || 0;
+        if (!yr) return;
+        if (!DB.trend[yr]) DB.trend[yr] = { enrolled:0, graduated:0 };
+        DB.trend[yr].enrolled = enrolled;
+        cnt++;
       });
-      if(snl.includes('top5')){const names=data.map(r=>r['บริษัท']||r['company']||Object.values(r)[0]).filter(Boolean);if(names.length)DB.top5Coop=names.slice(0,5);}
     }
-    if(target==='internOnly'&&(snl.includes('intern')||snl.includes('ฝึกงาน'))){
-      data.forEach(row=>{
-        const yr=parseInt(row['ปีการศึกษา']||row['ปี']||0);
-        const mid=MJ_MAP[String(row['วิชาเอก']||row['major']||'').trim()];const n=+row['จำนวน']||0;
-        if(!yr||!mid)return;
-        if(!DB.internYrs.includes(yr)){DB.internYrs.push(yr);DB.internYrs.sort((a,b)=>a-b);}
-        const yi=DB.internYrs.indexOf(yr);if(!DB.intern[mid])DB.intern[mid]=DB.internYrs.map(()=>0);
-        while(DB.intern[mid].length<DB.internYrs.length)DB.intern[mid].push(0);DB.intern[mid][yi]=n;cnt++;
+
+    /* ── STUDENTS: Graduated (สำเร็จการศึกษา) ── */
+    if (target==='students' && (snl.includes('graduated') || snl.includes('สำเร็จ'))) {
+      data.forEach(row => {
+        const yr = parseInt((row['ปีการศึกษา'] ?? row['ปี'] ?? '0').toString().trim(), 10);
+        const graduated = +row['จำนวนสำเร็จการศึกษา'] || +row['graduated'] || 0;
+        if (!yr) return;
+        if (!DB.trend[yr]) DB.trend[yr] = { enrolled:0, graduated:0 };
+        DB.trend[yr].graduated = graduated;
+        cnt++;
       });
-      if(snl.includes('top5')){const names=data.map(r=>r['บริษัท']||r['company']||Object.values(r)[0]).filter(Boolean);if(names.length)DB.top5Intern=names.slice(0,5);}
+    }
+
+    /* ── COOP ONLY ── */
+    if (target==='coopOnly' && (snl.includes('coop') || snl.includes('สหกิจ'))) {
+      data.forEach(row => {
+        const yr  = parseInt(row['ปีการศึกษา'] || row['ปี'] || 0, 10);
+        const mid = MJ_MAP[String(row['วิชาเอก'] || row['major'] || '').trim()];
+        const n   = +row['จำนวน'] || 0;
+        if (!yr || !mid) return;
+
+        if (!DB.coopYrs.includes(yr)) { DB.coopYrs.push(yr); DB.coopYrs.sort((a,b)=>a-b); }
+        const yi = DB.coopYrs.indexOf(yr);
+        if (!DB.coop[mid]) DB.coop[mid] = DB.coopYrs.map(()=>0);
+        while (DB.coop[mid].length < DB.coopYrs.length) DB.coop[mid].push(0);
+        DB.coop[mid][yi] = n;
+        cnt++;
+      });
+      if (snl.includes('top5')) {
+        const names = data.map(r => r['บริษัท'] || r['company'] || Object.values(r)[0]).filter(Boolean);
+        if (names.length) DB.top5Coop = names.slice(0,5);
+      }
+    }
+
+    /* ── INTERN ONLY ── */
+    if (target==='internOnly' && (snl.includes('intern') || snl.includes('ฝึกงาน'))) {
+      data.forEach(row => {
+        const yr  = parseInt(row['ปีการศึกษา'] || row['ปี'] || 0, 10);
+        const mid = MJ_MAP[String(row['วิชาเอก'] || row['major'] || '').trim()];
+        const n   = +row['จำนวน'] || 0;
+        if (!yr || !mid) return;
+
+        if (!DB.internYrs.includes(yr)) { DB.internYrs.push(yr); DB.internYrs.sort((a,b)=>a-b); }
+        const yi = DB.internYrs.indexOf(yr);
+        if (!DB.intern[mid]) DB.intern[mid] = DB.internYrs.map(()=>0);
+        while (DB.intern[mid].length < DB.internYrs.length) DB.intern[mid].push(0);
+        DB.intern[mid][yi] = n;
+        cnt++;
+      });
+      if (snl.includes('top5')) {
+        const names = data.map(r => r['บริษัท'] || r['company'] || Object.values(r)[0]).filter(Boolean);
+        if (names.length) DB.top5Intern = names.slice(0,5);
+      }
     }
   });
-  const sid=target==='students'?'students-import-status':target==='coopOnly'?'coop-import-status':'intern-import-status';
-  document.getElementById(sid).innerHTML=`<div class="import-status ok">✓ นำเข้าสำเร็จ ${cnt} แถว</div>`;
-  pendingWB[sfx]=null;document.getElementById('xl-'+sfx+'-preview').style.display='none';
-  if(target==='students'){_intakeShowAll=false;renderIntakeTable();renderYrFilterDropdown();}
-  else if(target==='coopOnly'){_coopShowAll=false;renderCoopOnlyTable();}
-  else{_internShowAll=false;renderInternOnlyTable();}
+
+  // สรุปผลนำเข้า + ปิดพรีวิว
+  const sid = target==='students' ? 'students-import-status'
+            : target==='coopOnly' ? 'coop-import-status'
+            : 'intern-import-status';
+  document.getElementById(sid).innerHTML = `<div class="import-status ok">✓ นำเข้าสำเร็จ ${cnt} แถว</div>`;
+  pendingWB[sfx] = null;
+  document.getElementById('xl-'+sfx+'-preview').style.display = 'none';
+
+  // รีเฟรชตารางที่เกี่ยวข้อง
+  if (target==='students') { _intakeShowAll=false; renderIntakeTable(); renderYrFilterDropdown(); }
+  else if (target==='coopOnly') { _coopShowAll=false; renderCoopOnlyTable(); }
+  else { _internShowAll=false; renderInternOnlyTable(); }
+
+  // ถ้ากำลังเผยแพร่อยู่ → เซฟ DB ลง localStorage ทันที
+  saveStudentsData();
+
   toast(`✓ นำเข้าสำเร็จ ${cnt} แถว`);
 }
 
@@ -1397,20 +1536,33 @@ function exportXLSX(){
   MJ_KEYS.forEach(m=>{if((DB.intake[m]||[]).length>0){const ws=XLSX.utils.aoa_to_sheet([['ปีการศึกษา','แผนรับ','สัมภาษณ์','ยืนยัน','รายงานตัว','ไม่รายงานตัว'],...DB.intake[m].sort((a,b)=>a[0]-b[0])]);XLSX.utils.book_append_sheet(wb,ws,MJ[m].short);}});
   const tYrs=Object.keys(DB.trend).map(Number).sort((a,b)=>a-b);
   if(tYrs.length)XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','ลงทะเบียน','สำเร็จการศึกษา'],...tYrs.map(y=>[y,DB.trend[y].enrolled,DB.trend[y].graduated])]),'Trend');
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['สาขา (สหกิจ 4 เดือน)',...DB.coopYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.coop[m]||DB.coopYrs.map(()=>0)),(DB.coop[m]||[]).reduce((a,b)=>a+b,0)])]),'Coop_4mo');
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['สาขา (ฝึกงาน 2 เดือน)',...DB.internYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.intern[m]||DB.internYrs.map(()=>0)),(DB.intern[m]||[]).reduce((a,b)=>a+b,0)])]),'Intern_2mo');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['วิชาเอก (สหกิจ 4 เดือน)',...DB.coopYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.coop[m]||DB.coopYrs.map(()=>0)),(DB.coop[m]||[]).reduce((a,b)=>a+b,0)])]),'Coop_4mo');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['วิชาเอก (ฝึกงาน 2 เดือน)',...DB.internYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.intern[m]||DB.internYrs.map(()=>0)),(DB.intern[m]||[]).reduce((a,b)=>a+b,0)])]),'Intern_2mo');
   XLSX.writeFile(wb,'student_data_hub_export.xlsx');
   toast('✓ Export Excel สำเร็จ');
 }
 function exportCSV(){
-  let csv='ปีการศึกษา,สาขา,แผนรับ,สัมภาษณ์,ยืนยัน,รายงานตัว,ไม่รายงานตัว\n';
+  let csv='ปีการศึกษา,วิชาเอก,แผนรับ,สัมภาษณ์,ยืนยัน,รายงานตัว,ไม่รายงานตัว\n';
   MJ_KEYS.forEach(m=>(DB.intake[m]||[]).forEach(r=>{csv+=`${r[0]},${MJ[m].short},${r.slice(1).join(',')}\n`;}));
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\ufeff'+encodeURIComponent(csv);a.download='intake_data.csv';a.click();
   toast('✓ Export CSV สำเร็จ');
 }
 function exportGSheets(){
-  const data={intake:DB.intake,trend:DB.trend,status:DB.status,coop:DB.coop,coopYrs:DB.coopYrs,intern:DB.intern,internYrs:DB.internYrs};
-  const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));a.download='student_data.json';a.click();
+  const data = {
+    ok: true,
+    published: true,
+    intake:    DB.intake,
+    trend:     DB.trend,
+    status:    DB.status,
+    coop:      DB.coop,
+    coopYrs:   DB.coopYrs,
+    intern:    DB.intern,
+    internYrs: DB.internYrs,
+  };
+  const a = document.createElement('a');
+  a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data, null, 2));
+  a.download = 'student_data.json';
+  a.click();
   toast('✓ Export JSON สำเร็จ');
 }
 function downloadTemplate(type){
@@ -1446,6 +1598,107 @@ function toast(msg,color='#6d28d9'){
   const el=document.getElementById('toast');el.classList.add('show');clearTimeout(_tt);
   _tt=setTimeout(()=>el.classList.remove('show'),2800);
 }
+/* ════════════ LOAD FROM LOCALSTORAGE ════════════ */
+function loadStudentsDataFromLS() {
+  try {
+    const raw = localStorage.getItem(STUDENTS_DATA_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    DB.intake    = saved.intake    ?? DB.intake;
+    DB.trend     = saved.trend     ?? DB.trend;
+    DB.status    = saved.status    ?? DB.status;
+    DB.coop      = saved.coop      ?? DB.coop;
+    DB.coopYrs   = saved.coopYrs   ?? DB.coopYrs;
+    DB.intern    = saved.intern    ?? DB.intern;
+    DB.internYrs = saved.internYrs ?? DB.internYrs;
+    DB.top5Coop      = saved.top5Coop      ?? DB.top5Coop;
+    DB.top5Intern    = saved.top5Intern    ?? DB.top5Intern;
+    DB.partnersCoop  = saved.partnersCoop  ?? DB.partnersCoop;
+    DB.partnersIntern= saved.partnersIntern?? DB.partnersIntern;
+  } catch(e) { /* ignore */ }
+}
+
+/* ════════════ PUBLISH TOGGLE / CONFIRM ════════════ */
+function onPubToggle(section, checked) {
+  // reset toggle กลับก่อน รอ confirm แล้วค่อยเปลี่ยน
+  document.getElementById('pub-toggle-' + section).checked =
+    pubState[section]?.published || false;
+  _pendingPub = { section, willPublish: checked };
+  showPubConfirm(section, checked);
+}
+
+function showPubConfirm(section, willPublish) {
+  const icon  = document.getElementById('pub-confirm-icon');
+  const svg   = document.getElementById('pub-confirm-svg');
+  const title = document.getElementById('pub-confirm-title');
+  const body  = document.getElementById('pub-confirm-body');
+  const doBtn = document.getElementById('pub-btn-do');
+
+  if (willPublish) {
+    icon.className = 'pub-confirm-icon go';
+    svg.innerHTML  = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>';
+    title.textContent = 'ยืนยันการเผยแพร่ Dashboard';
+    body.innerHTML    = 'ข้อมูลสถิตินักศึกษาจะถูก<strong>แสดงในหน้า bba-students.html</strong> ทันที<br><br>ผู้เยี่ยมชมจะสามารถดูกราฟและตัวเลขสถิติทั้งหมดได้';
+    doBtn.textContent = 'เผยแพร่ Dashboard';
+    doBtn.className   = 'pub-btn-do go';
+  } else {
+    icon.className = 'pub-confirm-icon stop';
+    svg.innerHTML  = '<path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524L13.477 14.89zm1.414-1.414L6.524 5.11A6 6 0 0114.89 13.476zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>';
+    title.textContent = 'ยืนยันการปิดเผยแพร่';
+    body.innerHTML    = 'Dashboard สถิตินักศึกษาจะ<strong>ถูกซ่อนจากสาธารณะ</strong> ทันที<br><br>ผู้เยี่ยมชม bba-students.html จะเห็นข้อความ "ยังไม่เผยแพร่" แทน';
+    doBtn.textContent = 'ปิดเผยแพร่';
+    doBtn.className   = 'pub-btn-do stop';
+  }
+  document.getElementById('pub-confirm-overlay').classList.add('open');
+}
+
+function cancelPubConfirm() {
+  document.getElementById('pub-confirm-overlay').classList.remove('open');
+  _pendingPub = null;
+}
+
+async function syncFromServer() {
+  try {
+    const res  = await fetch('/api/admin/students/data?_=' + Date.now());
+    const json = await res.json();
+    if (!json.ok) return;
+
+    // ทับ DB ด้วยข้อมูลจาก server เสมอ
+    if (json.intake)         DB.intake         = json.intake;
+    if (json.trend)          DB.trend          = json.trend;
+    if (json.status)         DB.status         = json.status;
+    if (json.coop)           DB.coop           = json.coop;
+    if (json.coopYrs)        DB.coopYrs        = json.coopYrs;
+    if (json.intern)         DB.intern         = json.intern;
+    if (json.internYrs)      DB.internYrs      = json.internYrs;
+    if (json.top5Coop)       DB.top5Coop       = json.top5Coop;
+    if (json.top5Intern)     DB.top5Intern     = json.top5Intern;
+    if (json.partnersCoop)   DB.partnersCoop   = json.partnersCoop;
+    if (json.partnersIntern) DB.partnersIntern = json.partnersIntern;
+
+    // อัปเดต localStorage ให้ตรงกับ server
+    localStorage.setItem(STUDENTS_DATA_KEY, JSON.stringify(DB));
+
+    renderIntakeTable();
+    renderCoopOnlyTable();
+    renderInternOnlyTable();
+    renderYrFilterDropdown();
+    toast('✓ ซิงค์ข้อมูลจาก server แล้ว', '#22c55e');
+  } catch(e) {
+    console.warn('syncFromServer failed:', e);
+  }
+}
+
+// ← เปลี่ยน init เป็น async และ await syncFromServer
+async function init(){
+  initSelects();
+  loadStudentsDataFromLS();   // โหลด localStorage ก่อน (UI ไม่กระพริบ)
+  await syncFromServer();     // ← รอดึงจาก server ให้เสร็จก่อนทำอะไรต่อ
+  renderIntakeTable(); renderCoopOnlyTable(); renderInternOnlyTable();
+  renderYrFilterDropdown(); renderSavedReports();
+  updatePubBar('students');
+}
+
 
 init();
 </script>

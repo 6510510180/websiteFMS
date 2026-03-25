@@ -135,11 +135,8 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .empty-lo strong{font-size:15px;font-weight:700;color:var(--text);}
 .empty-lo p{font-size:13px;text-align:center;max-width:360px;line-height:1.6;}
 .empty-lo a{color:var(--purple);font-weight:700;text-decoration:underline;cursor:pointer;}
-
-/* CLO loading indicator */
 .clo-loading-row{display:flex;align-items:center;gap:10px;padding:24px 20px;color:var(--text-sub);font-size:13px;}
 .clo-spinner{width:16px;height:16px;border:2px solid #e8deff;border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
-
 .status-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 40px;border-top:1px solid var(--border);background:var(--white);font-size:11px;color:var(--text-sub);flex-wrap:wrap;gap:8px;margin-top:auto;}
 .status-dots{display:flex;gap:16px;flex-wrap:wrap;}
 .sdot{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;}
@@ -262,8 +259,8 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 <div class="page">
   <div class="page-header">
     <div>
-      <div class="page-title">ตารางวิเคราะห์ความสอดคล้อง (Alignment Matrix)</div>
-      <div class="page-subtitle">PLOs &amp; MLOs กับวิสัยทัศน์ พันธกิจ คุณลักษณะของบัณฑิต และความต้องการของผู้มีส่วนได้ส่วนเสีย</div>
+      <div class="page-title">ตารางวิเคราะห์ความสอดคล้อง KAS</div>
+      <div class="page-subtitle">PLOs &amp; MLOs กับ Knowledge / Attitude / Skill</div>
     </div>
     <div class="header-actions">
       <button class="btn btn-outline" onclick="downloadTemplate()">
@@ -297,18 +294,18 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
       </div>
       <button class="btn btn-outline" onclick="saveKasData()" style="color:#16a34a;border-color:#16a34a;">
         <svg viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-        บันทึก
+        บันทึก KAS
       </button>
     </div>
     <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="importExcel(event)">
   </div>
 
-  <div class="data-banner default" id="dataBanner">
-    <div class="banner-dot default" id="bannerDot"></div>
-    <span id="bannerText">แสดงข้อมูล Default — กดปุ่มเพื่อดึงข้อมูลจากหน้าจัดการ PLO/MLO</span>
+  <div class="data-banner idle" id="dataBanner">
+    <div class="banner-dot idle" id="bannerDot"></div>
+    <span id="bannerText">กำลังโหลดข้อมูล PLO/MLO จาก Database...</span>
     <button class="btn-pull" id="pullBtn" onclick="pullPloMloData()">
       <svg class="spin-icon" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg>
-      ดึงข้อมูล PLO/MLO
+      รีโหลด PLO/MLO
     </button>
   </div>
 
@@ -394,7 +391,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <span class="sdot"><span class="dot" style="background:var(--a-color)"></span>ATTITUDE (A)</span>
     <span class="sdot"><span class="dot" style="background:var(--s-color)"></span>SKILL (S)</span>
   </div>
-  <div id="status-source">แหล่งข้อมูล: Default</div>
+  <div id="status-source">กำลังโหลด...</div>
 </div>
 
 <div class="modal-overlay" id="modal-overlay" onclick="closeBg(event)">
@@ -402,7 +399,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <div class="m-header">
       <div class="m-top-row">
         <div>
-          <span class="m-badge" id="m-badge">CLO1</span>
+          <span class="m-badge" id="m-badge">PLO1</span>
           <span class="m-title">Selection Mapping</span>
           <div class="m-sub" id="m-sub">Select the Knowledge, Attitude, and Skill components.</div>
         </div>
@@ -459,172 +456,216 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 <div class="toast" id="toast"><div class="toast-dot" id="toast-dot"></div><span id="toast-msg"></span></div>
 
 <script>
-const PLO_STORAGE_KEY='fms_plo_mlo_data';
-const KAS_STORAGE_KEY='fms_kas_mapping_data';
+/* ═══════════════════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════════════════ */
+const API_BASE       = ''; 
+const KAS_STORAGE_KEY = 'fms_kas_mapping_data';
+const PROGRAM_ID     = new URLSearchParams(window.location.search).get("program_id")
+                       || "00000000-0000-0000-0000-000000000001";
 
-const DEFAULT_PLO=[
-  {code:'PLO1',desc:'พัฒนาตนเองจากการเรียนรู้เมื่อได้รับคำวิพากษ์วิจารณ์'},
-  {code:'PLO2',desc:'วิเคราะห์และนำเสนอข้อมูลต่อผู้บริหารเพื่อการตัดสินใจ'},
-  {code:'PLO3',desc:'ประยุกต์ความรู้ทางด้านบริหารธุรกิจเพื่อวางแผนกลยุทธ์ให้องค์กร'},
-  {code:'PLO4',desc:'ประยุกต์กรอบแนวคิดความเป็นผู้ประกอบการ (Entrepreneurial Mindset) เพื่อการสร้างธุรกิจ'},
-  {code:'PLO5',desc:'ประยุกต์ใช้กระบวนการวิจัยเพื่อแก้ไขปัญหาทางธุรกิจ'},
-  {code:'PLO6',desc:'สื่อสารภายใต้ความหลากหลายทางสังคมและวัฒนธรรม'},
-  {code:'PLO7',desc:'ทำงานร่วมกับผู้อื่นในองค์กร'},
-  {code:'PLO8',desc:'เลือกใช้เทคโนโลยีดิจิทัลในการทำงานให้บรรลุเป้าหมาย'},
-  {code:'PLO9',desc:'แสดงพฤติกรรมที่แสดงถึงการมีจริยธรรมและความรับผิดชอบต่อสังคม'},
-];
-const DEFAULT_MLO_GROUPS=[
-  {label:'การเงินและการลงทุน',icon:'💰',items:[
-    {code:'MLO1.1',desc:'เขียนบทวิเคราะห์ตราสารทางการเงินภายใต้หลักเกณฑ์ของคณะกรรมการกำกับหลักทรัพย์และตลาดหลักทรัพย์'},
-    {code:'MLO1.2',desc:'วางแผนการเงินส่วนบุคคลตามมาตรฐานของสมาคมนักวางแผนการเงินไทย'},
-    {code:'MLO1.3',desc:'วิเคราะห์ข้อมูลทางการเงินเพื่อการบริหารการเงินขององค์กร'},
-  ]},
-  {label:'การตลาดและการสื่อสาร',icon:'📢',items:[
-    {code:'MLO2.1',desc:'วิเคราะห์กลยุทธ์ทางการตลาดอย่างสร้างสรรค์'},
-    {code:'MLO2.2',desc:'วิเคราะห์แนวทางการแก้ไขปัญหาทางการตลาดเชิงนวัตกรรม'},
-    {code:'MLO2.3',desc:'กำหนดกลยุทธ์การตลาดเพื่อใช้ในธุรกิจ'},
-  ]},
-  {label:'การจัดการทรัพยากรมนุษย์',icon:'👥',items:[
-    {code:'MLO3.1',desc:'ใช้แนวคิดการจัดการทรัพยากรมนุษย์ในการสร้างกิจกรรมเพื่อพัฒนาคน'},
-    {code:'MLO3.2',desc:'ใช้เทคโนโลยีดิจิทัลในการบริหารทรัพยากรมนุษย์'},
-  ]},
-  {label:'การจัดการโลจิสติกส์',icon:'🚚',items:[
-    {code:'MLO4.1',desc:'วางแผนในการลดต้นทุนและเพิ่มกำไรโดยใช้ความรู้ด้านการจัดการโลจิสติกส์และโซ่อุปทานให้กับธุรกิจ'},
-    {code:'MLO4.2',desc:'ประยุกต์ความรู้ทางด้านการจัดการโลจิสติกส์และโซ่อุปทานในการแก้ไขปัญหาของธุรกิจ'},
-  ]},
-  {label:'ระบบสารสนเทศทางธุรกิจ',icon:'💻',items:[
-    {code:'MLO5.1',desc:'พัฒนาระบบสารสนเทศทางธุรกิจเพื่อใช้ในการวางแผนธุรกิจ'},
-    {code:'MLO5.2',desc:'วางแผนและติดตั้งระบบสารสนเทศได้ถูกต้องตามกฎหมาย'},
-  ]},
-  {label:'การจัดการไมซ์ (MICE)',icon:'🎪',items:[
-    {code:'MLO6.1',desc:'จัดงานไมซ์ได้ตามเป้าหมายการพัฒนาที่ยั่งยืน (SDGs)'},
-    {code:'MLO6.2',desc:'ปรับตัวในสถานการณ์การจัดงานไมซ์ที่มีความกดดันและหาทางแก้ไขปัญหาผ่านความคิดสร้างสรรค์'},
-  ]},
-];
+/* ═══════════════════════════════════════════════════════
+   KAS MASTER DATA
+═══════════════════════════════════════════════════════ */
+let K_DATA = [], A_DATA = [], S_DATA = [];
 
-const K_DATA=[
-  {code:'K1',label:'รูปแบบและคุณลักษณะการเป็นผู้นำ'},{code:'K2',label:'วิธีการปรับตัว'},{code:'K3',label:'บริหารธุรกิจ'},{code:'K4',label:'เทคโนโลยีสารสนเทศ'},{code:'K5',label:'รูปแบบและเครื่องมือเทคโนโลยีการสื่อสาร'},{code:'K6',label:'ธุรกิจอัจฉริยะ'},{code:'K7',label:'ระบบฐานข้อมูล'},{code:'K8',label:'กลยุทธ์ทางธุรกิจ'},{code:'K9',label:'การเป็นผู้ประกอบการ'},{code:'K10',label:'ระเบียบวิธีวิจัย'},
-  {code:'K11',label:'การอ้างอิงข้อมูล'},{code:'K12',label:'การเขียนโปรแกรมคอมพิวเตอร์'},{code:'K13',label:'จิตวิทยา'},{code:'K14',label:'แนวทางการทำงานเป็นทีม'},{code:'K15',label:'นวัตกรรม'},{code:'K16',label:'กฎหมายแรงงาน'},{code:'K17',label:'กฎหมายทางธุรกิจ'},{code:'K18',label:'จริยธรรม'},{code:'K19',label:'จรรยาบรรณ'},{code:'K20',label:'การเงิน'},
-  {code:'K21',label:'วิธีการสื่อสาร'},{code:'K22',label:'การลงทุน'},{code:'K23',label:'ภาษาอังกฤษ'},{code:'K24',label:'การกระจายการลงทุน'},{code:'K25',label:'หน้าที่พลเมือง'},{code:'K26',label:'การจำลองสถานการณ์'},{code:'K27',label:'กองทุนรวม'},{code:'K28',label:'การกำกับดูแลการฟอกเงิน'},{code:'K29',label:'การเงินระหว่างประเทศ'},{code:'K30',label:'การบริหารความเสี่ยงทางการเงิน'},
-  {code:'K31',label:'การประเมินมูลค่า'},{code:'K32',label:'การวางแผนธุรกิจ'},{code:'K33',label:'การวิเคราะห์ทางการเงิน'},{code:'K34',label:'การวิเคราะห์สภาพแวดล้อม'},{code:'K35',label:'งบการเงิน'},{code:'K36',label:'ตราสารทุน'},{code:'K37',label:'ตราสารหนี้'},{code:'K38',label:'ตราสารอนุพันธ์'},{code:'K39',label:'มูลค่าของเงินตามเวลา'},{code:'K40',label:'ระบบการเงินไทยและต่างประเทศ'},
-  {code:'K41',label:'วิเคราะห์แนวโน้ม'},{code:'K42',label:'ธุรกิจระหว่างประเทศ'},{code:'K43',label:'สินทรัพย์ลงทุนและสินทรัพย์ทางเลือก'},{code:'K44',label:'อัตราผลตอบแทนและความเสี่ยง'},{code:'K45',label:'การบริหารความเสี่ยง'},{code:'K46',label:'การประกันภัย'},{code:'K47',label:'การประมาณการทางการเงิน'},{code:'K48',label:'การวางแผนการเงินส่วนบุคคล'},{code:'K49',label:'การวางแผนการเงินสำหรับการเกษียณ'},{code:'K50',label:'การวางแผนการเงินองค์รวม'},
-  {code:'K51',label:'การวางแผนภาษี'},{code:'K52',label:'การวางแผนมรดก'},{code:'K53',label:'มาตรฐานการปฏิบัติวิชาชีพทางการเงิน'},{code:'K54',label:'ตลาดเงินและตลาดทุน'},{code:'K55',label:'การจัดหาเงินทุน'},{code:'K56',label:'การบริหารการเงิน'},{code:'K57',label:'การบริหารเงินทุนหมุนเวียน'},{code:'K58',label:'การบริหารสินเชื่อ'},{code:'K59',label:'งบลงทุน'},{code:'K60',label:'นโยบายการเงินและนโยบายการคลัง'},
-  {code:'K61',label:'บริหารต้นทุน'},{code:'K62',label:'บัญชีบริหาร'},{code:'K63',label:'สถาบันการเงิน'},{code:'K64',label:'การจัดการ'},{code:'K65',label:'การจัดการการดำเนินงาน'},{code:'K66',label:'การจัดการทรัพยากรมนุษย์'},{code:'K67',label:'การจัดการโลจิสติกส์และโซ่อุปทาน'},{code:'K68',label:'การตลาด'},{code:'K69',label:'การบัญชี'},{code:'K70',label:'พฤติกรรมผู้บริโภค'},
-  {code:'K71',label:'กลยุทธ์'},{code:'K72',label:'แบรนด์และผลิตภัณฑ์'},{code:'K73',label:'พหุวัฒนธรรม'},{code:'K74',label:'การวิเคราะห์ราคา'},{code:'K75',label:'การตลาดเพื่อสังคม'},{code:'K76',label:'การจัดการช่องทางการตลาดสมัยใหม่'},{code:'K77',label:'การวัดและการประเมินผลทางการตลาด'},{code:'K78',label:'การสื่อสารทางการตลาดเชิงบูรณาการ'},{code:'K79',label:'การตลาดดิจิทัล'},{code:'K80',label:'การตลาดบริการ'},
-  {code:'K81',label:'โครงสร้างข้อมูลและอัลกอริธึม'},{code:'K82',label:'การเขียนโปรแกรมระบบเว็บ'},{code:'K83',label:'การพยากรณ์กำลังคน'},{code:'K84',label:'การออกแบบและบริหารโครงการ'},{code:'K85',label:'ทฤษฎีและแนวเกี่ยวกับพฤติกรรมมนุษย์'},{code:'K86',label:'เครือข่ายคอมพิวเตอร์'},{code:'K87',label:'การวางแผนกำลังคน'},{code:'K88',label:'การฝึกอบรมและพัฒนา'},{code:'K89',label:'แรงจูงใจ'},{code:'K90',label:'ความมั่นคงของระบบสารสนเทศ'},
-  {code:'K91',label:'การจัดการความขัดแย้ง'},{code:'K92',label:'วางแผนระบบสารสนเทศทางธุรกิจ'},{code:'K93',label:'ออกแบบกราฟิก'},{code:'K94',label:'ระบบคอมพิวเตอร์'},{code:'K95',label:'การจัดการโครงการ'},{code:'K96',label:'การบริหารท่าเรือ'},{code:'K97',label:'การจัดระวางสินค้า'},{code:'K98',label:'การประกันคุณภาพ'},{code:'K99',label:'การบริหารคุณภาพ'},{code:'K100',label:'มาตรฐานการปฏิบัติทางโลจิสติกส์และโซ่อุปทาน'},
-  {code:'K101',label:'นโยบายโลจิสติกส์และโซ่อุปทาน'},{code:'K102',label:'การขนส่งสินค้าทางเรือ'},{code:'K103',label:'การค้าระหว่างประเทศ'},{code:'K104',label:'การบริหารสินค้าคงคลัง'},{code:'K105',label:'การจัดการคลังสินค้า'},{code:'K106',label:'การขนส่งสินค้าทางบก'},{code:'K107',label:'การกระจายสินค้า'},{code:'K108',label:'การจัดการโซ่อุปทานระดับโลก'},{code:'K109',label:'การขนส่งสินค้าทางอากาศ'},{code:'K110',label:'การจัดซื้อจัดหา'},
-  {code:'K111',label:'กระบวนการผลิตและการบริการ'},{code:'K112',label:'การวิเคราะห์เชิงปริมาณ'},{code:'K113',label:'พิธีการศุลกากร'},{code:'K114',label:'แบบจำลองโซ่อุปทาน'},
-];
-const A_DATA=[
-  {code:'A1',label:'การคิดเชิงบวก'},{code:'A2',label:'การยอมรับฟังความคิดเห็นของผู้อื่น'},{code:'A3',label:'ความฉลาดทางอารมณ์'},{code:'A4',label:'การรับรู้ความสามารถของตนเอง'},{code:'A5',label:'ความอดทนอดกลั้น'},{code:'A6',label:'ความรับผิดชอบ'},{code:'A7',label:'ความกระตือรือร้น'},{code:'A8',label:'ความรับผิดชอบต่อสังคม'},{code:'A9',label:'จริยธรรม'},{code:'A10',label:'ความใฝ่รู้'},
-  {code:'A11',label:'ความมีวินัย'},{code:'A12',label:'ความรอบคอบ'},{code:'A13',label:'การยอมรับความต่างทางพหุวัฒนธรรม'},{code:'A14',label:'ความอ่อนน้อมถ่อมตน'},{code:'A15',label:'เคารพผู้อื่น'},{code:'A16',label:'การมีวิสัยทัศน์'},{code:'A17',label:'การรู้จักกาละเทศะ'},{code:'A18',label:'ความเชื่อมั่นในตนเอง'},{code:'A19',label:'ความพยายามอุตสาหะ'},{code:'A20',label:'ความซื่อสัตย์'},
-  {code:'A21',label:'จิตอาสา'},{code:'A22',label:'ความเสียสละ'},{code:'A23',label:'ความยุติธรรม'},
-];
-const S_DATA=[
-  {code:'S1',label:'การปรับตัว'},{code:'S2',label:'การทำงานภายใต้แรงกดดัน'},{code:'S3',label:'การเข้าสังคม'},{code:'S4',label:'การคิดเชิงระบบ'},{code:'S5',label:'การคิดวิเคราะห์'},{code:'S6',label:'การนำเสนอ'},{code:'S7',label:'การตัดสินใจ'},{code:'S8',label:'การแก้ปัญหา'},{code:'S9',label:'การใช้โปรแกรมคอมพิวเตอร์'},{code:'S10',label:'การประเมินผล'},
-  {code:'S11',label:'การประยุกต์'},{code:'S12',label:'การสืบค้นข้อมูล'},{code:'S13',label:'การวางแผน'},{code:'S14',label:'การจัดการ'},{code:'S15',label:'ความคิดเชิงสร้างสรรค์'},{code:'S16',label:'การประสานงาน'},{code:'S17',label:'การสื่อสาร'},{code:'S18',label:'การเป็นผู้ประกอบการ'},{code:'S19',label:'ความคิดเชิงสังเคราะห์'},{code:'S20',label:'การใช้ภาษาไทยและภาษาอังกฤษ'},
-  {code:'S21',label:'การคิดอย่างมีเหตุมีผล'},{code:'S22',label:'การทำงานเป็นทีม'},{code:'S23',label:'การบริหารเวลา'},{code:'S24',label:'การใช้สื่อออนไลน์'},{code:'S25',label:'ความเป็นผู้นำ'},{code:'S26',label:'การคำนวณ'},{code:'S27',label:'การคาดการณ์'},{code:'S28',label:'การตั้งคำถามเชิงสร้างสรรค์'},{code:'S29',label:'การเจรจาต่อรอง'},{code:'S30',label:'การสังเกต'},
-  {code:'S31',label:'การจัดการความขัดแย้ง'},{code:'S32',label:'การรู้เท่าทัน'},{code:'S33',label:'ความยืดหยุ่น'},{code:'S34',label:'ความคิดเชิงวิพากษ์'},{code:'S35',label:'การกล้าแสดงออก'},{code:'S36',label:'มารยาทและบุคลิกภาพ'},{code:'S37',label:'การออกแบบ'},
-];
+async function loadKasFromDB() {
+  try {
+    const items = await fetch(`${API_BASE}/api/kas`).then(r => r.json());
+    const sort = arr => arr.sort((a,b) => parseInt(a.code.match(/\d+/)||0) - parseInt(b.code.match(/\d+/)||0));
+    K_DATA = sort(items.filter(i=>i.type==='K').map(i=>({code:i.code,label:i.label||i.code})));
+    A_DATA = sort(items.filter(i=>i.type==='A').map(i=>({code:i.code,label:i.label||i.code})));
+    S_DATA = sort(items.filter(i=>i.type==='S').map(i=>({code:i.code,label:i.label||i.code})));
+    return true;
+  } catch(e) { console.warn('KAS DB load failed:', e.message); return false; }
+}
 
-/* STATE */
-let PLO_LIST=[],MLO_GROUPS=[],isLiveData=false;
-let ploKas={},mloKas={};
-let curTab='PLO',curMloGroup=0;
-let mCtx=null,mPanel='PLO_MLO';
-let tKas={K:new Set(),A:new Set(),S:new Set()},tPlo=new Set(),tMlo=new Set();
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+let PLO_LIST = [], MLO_GROUPS = [], isLiveData = false;
+let ploKas = {}, mloKas = {};
+let curTab = 'PLO', curMloGroup = 0;
+let mCtx = null, mPanel = 'KAS';
+let tKas = {K:new Set(),A:new Set(),S:new Set()}, tPlo = new Set(), tMlo = new Set();
 
 function kasLabel(type,code){
-  const data=type==='K'?K_DATA:type==='A'?A_DATA:S_DATA;
+  const data = type==='K'?K_DATA:type==='A'?A_DATA:S_DATA;
   return (data.find(d=>d.code===code)||{}).label||code;
 }
 
-function loadPloMloData(){
-  try{
-    const saved=localStorage.getItem(PLO_STORAGE_KEY);
-    if(saved){
-      const data=JSON.parse(saved);
-      const pa=data.PLO||[],ma=data.MLO||[];
-      if(pa.length||ma.length){
-        PLO_LIST=pa.map(i=>({code:i.code||'',desc:i.skill||i.desc||''})).filter(i=>i.code);
-        MLO_GROUPS=ma.length?[{label:'MLO ทั้งหมด',icon:'🎓',items:ma.map(i=>({code:i.code||'',desc:i.skill||i.desc||''})).filter(i=>i.code)}]:[];
-        isLiveData=true;return;
-      }
+/* ═══════════════════════════════════════════════════════
+   LOAD PLO/MLO FROM API (database)
+═══════════════════════════════════════════════════════ */
+async function loadPloMloFromAPI() {
+  try {
+    const res = await fetch(`${API_BASE}/api/programs/${PROGRAM_ID}/plo-mlo`);
+    if (!res.ok) throw new Error(`API ${res.status}`);
+    const data = await res.json();
+
+    const pa = data.PLO || [];
+    const ma = data.MLO || [];
+
+    if (!pa.length && !ma.length) throw new Error('ไม่พบข้อมูล PLO/MLO ใน database');
+
+    PLO_LIST = pa.map(i => ({
+      code: i.code || '',
+      desc: i.skill || i.description || ''
+    })).filter(i => i.code);
+
+    if (ma.length) {
+      const groupMap = {};
+      ma.forEach(m => {
+        const g = m.group || m.label_group || 'MLO ทั้งหมด';
+        if (!groupMap[g]) groupMap[g] = [];
+        groupMap[g].push({
+          code: m.code || '',
+          desc: m.skill || m.description || ''
+        });
+      });
+      MLO_GROUPS = Object.entries(groupMap).map(([label, items]) => ({
+  label,
+  icon: getGroupIcon(label),
+  items: items.filter(i => i.code)
+})).sort((a, b) => getGroupOrder(a.label) - getGroupOrder(b.label));
+    } else {
+      MLO_GROUPS = [];
     }
-  }catch(e){console.warn(e);}
-  PLO_LIST=DEFAULT_PLO;MLO_GROUPS=DEFAULT_MLO_GROUPS;isLiveData=false;
-}
 
-function initKasState(){
-  PLO_LIST.forEach(p=>{if(!ploKas[p.code])ploKas[p.code]={K:new Set(),A:new Set(),S:new Set()};});
-  MLO_GROUPS.forEach(g=>g.items.forEach(m=>{if(!mloKas[m.code])mloKas[m.code]={K:new Set(),A:new Set(),S:new Set()};}));
-}
-function loadKasData(){
-  try{
-    const saved=localStorage.getItem(KAS_STORAGE_KEY);if(!saved)return;
-    const data=JSON.parse(saved);
-    if(data.ploKas)Object.keys(data.ploKas).forEach(c=>{if(!ploKas[c])ploKas[c]={K:new Set(),A:new Set(),S:new Set()};['K','A','S'].forEach(t=>(data.ploKas[c][t]||[]).forEach(v=>ploKas[c][t].add(v)));});
-    if(data.mloKas)Object.keys(data.mloKas).forEach(c=>{if(!mloKas[c])mloKas[c]={K:new Set(),A:new Set(),S:new Set()};['K','A','S'].forEach(t=>(data.mloKas[c][t]||[]).forEach(v=>mloKas[c][t].add(v)));});
-  }catch(e){console.warn(e);}
-}
-function saveKasData(){
-  try{
-    const out={ploKas:{},mloKas:{}};
-    Object.keys(ploKas).forEach(c=>{out.ploKas[c]={K:[...ploKas[c].K],A:[...ploKas[c].A],S:[...ploKas[c].S]};});
-    Object.keys(mloKas).forEach(c=>{out.mloKas[c]={K:[...mloKas[c].K],A:[...mloKas[c].A],S:[...mloKas[c].S]};});
-    localStorage.setItem(KAS_STORAGE_KEY,JSON.stringify(out));
-    toast('✓ บันทึก KAS Mapping สำเร็จ','#22c55e');
-  }catch(e){toast('❌ บันทึกไม่สำเร็จ: '+e.message,'#ef4444');}
-}
-
-function updateBanner(state){
-  const b=document.getElementById('dataBanner'),d=document.getElementById('bannerDot'),
-        t=document.getElementById('bannerText'),s=document.getElementById('status-source');
-  if(state==='live'){
-    b.className='data-banner live';d.className='banner-dot live';
-    t.innerHTML=`✓ ดึงข้อมูลสำเร็จ — PLO <strong>${PLO_LIST.length}</strong> รายการ, MLO <strong>${MLO_GROUPS.reduce((a,g)=>a+g.items.length,0)}</strong> รายการ`;
-    s.textContent='แหล่งข้อมูล: localStorage (fms_plo_mlo_data)';
-  }else if(state==='notfound'){
-    b.className='data-banner default';d.className='banner-dot default';
-    t.innerHTML='⚠ ไม่พบข้อมูลใน localStorage — แสดงข้อมูล Default อยู่ กรุณา <a class="banner-link" href="plo.html">บันทึกข้อมูลที่หน้า PLO/MLO</a> ก่อน';
-    s.textContent='แหล่งข้อมูล: Default (ไม่พบใน localStorage)';
-  }else{
-    b.className='data-banner default';d.className='banner-dot default';
-    t.innerHTML='แสดงข้อมูล Default — กดปุ่มเพื่อดึงข้อมูลจากหน้าจัดการ PLO/MLO';
-    s.textContent='แหล่งข้อมูล: Default';
+    isLiveData = true;
+    return true;
+  } catch(e) {
+    console.warn('API load failed:', e.message);
+    isLiveData = false;
+    return false;
   }
 }
 
-function pullPloMloData(){
-  const btn=document.getElementById('pullBtn');
-  btn.classList.add('spinning');btn.disabled=true;
-  setTimeout(()=>{
-    loadPloMloData();initKasState();loadKasData();
-    if(isLiveData){updateBanner('live');toast(`✓ ดึงข้อมูลสำเร็จ — PLO ${PLO_LIST.length} MLO ${MLO_GROUPS.reduce((a,g)=>a+g.items.length,0)}`,'#22c55e');}
-    else{updateBanner('notfound');toast('⚠ ไม่พบข้อมูลใน localStorage','#f59e0b');}
-    if(curTab==='PLO')renderPLO();else if(curTab==='MLO')renderMLO();
-    btn.classList.remove('spinning');btn.disabled=false;
-  },500);
+
+const GROUP_ORDER = ['การเงิน','การตลาด','ทรัพยากร','โลจิ','สารสนเทศ','ไมซ์'];
+
+function getGroupOrder(label) {
+  const l = label || '';
+  for (let i = 0; i < GROUP_ORDER.length; i++) {
+    if (l.includes(GROUP_ORDER[i])) return i;
+  }
+  return 99;
 }
 
-document.addEventListener('click',e=>{const w=document.getElementById('pdf-wrap');if(w&&!w.contains(e.target))document.getElementById('pdf-menu').style.display='none';});
-function togglePdfMenu(){const m=document.getElementById('pdf-menu');m.style.display=m.style.display==='none'?'block':'none';}
+function getGroupIcon(label) {
+  const l = (label||'').toLowerCase();
+  if (l.includes('การเงิน')||l.includes('fin'))    return '💰';
+  if (l.includes('ตลาด')||l.includes('mtk'))       return '📢';
+  if (l.includes('ทรัพยากร')||l.includes('hrm'))  return '👥';
+  if (l.includes('โลจิ')||l.includes('lms'))       return '🚚';
+  if (l.includes('สารสนเทศ')||l.includes('bis'))  return '💻';
+  if (l.includes('ไมซ์')||l.includes('mice'))      return '🎪';
+  return '📋';
+}
+
+/* ═══════════════════════════════════════════════════════
+   KAS STATE INIT + LOAD/SAVE (localStorage)
+═══════════════════════════════════════════════════════ */
+function initKasState(){
+  PLO_LIST.forEach(p => { if(!ploKas[p.code]) ploKas[p.code]={K:new Set(),A:new Set(),S:new Set()}; });
+  MLO_GROUPS.forEach(g => g.items.forEach(m => { if(!mloKas[m.code]) mloKas[m.code]={K:new Set(),A:new Set(),S:new Set()}; }));
+}
+
+function loadKasData(){
+  try {
+    const saved = localStorage.getItem(KAS_STORAGE_KEY);
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    if (data.ploKas) Object.keys(data.ploKas).forEach(c => {
+      if (!ploKas[c]) ploKas[c]={K:new Set(),A:new Set(),S:new Set()};
+      ['K','A','S'].forEach(t => (data.ploKas[c][t]||[]).forEach(v => ploKas[c][t].add(v)));
+    });
+    if (data.mloKas) Object.keys(data.mloKas).forEach(c => {
+      if (!mloKas[c]) mloKas[c]={K:new Set(),A:new Set(),S:new Set()};
+      ['K','A','S'].forEach(t => (data.mloKas[c][t]||[]).forEach(v => mloKas[c][t].add(v)));
+    });
+  } catch(e) { console.warn(e); }
+}
+
+function saveKasData(){
+  try {
+    const out = {ploKas:{},mloKas:{}};
+    Object.keys(ploKas).forEach(c => { out.ploKas[c]={K:[...ploKas[c].K],A:[...ploKas[c].A],S:[...ploKas[c].S]}; });
+    Object.keys(mloKas).forEach(c => { out.mloKas[c]={K:[...mloKas[c].K],A:[...mloKas[c].A],S:[...mloKas[c].S]}; });
+    localStorage.setItem(KAS_STORAGE_KEY, JSON.stringify(out));
+    toast('✓ บันทึก KAS Mapping สำเร็จ','#22c55e');
+  } catch(e) { toast('❌ บันทึกไม่สำเร็จ: '+e.message,'#ef4444'); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   BANNER
+═══════════════════════════════════════════════════════ */
+function updateBanner(state) {
+  const b=document.getElementById('dataBanner'),
+        d=document.getElementById('bannerDot'),
+        t=document.getElementById('bannerText'),
+        s=document.getElementById('status-source');
+  const ploN = PLO_LIST.length;
+  const mloN = MLO_GROUPS.reduce((a,g)=>a+g.items.length, 0);
+  if (state==='live') {
+    b.className='data-banner live'; d.className='banner-dot live';
+    t.innerHTML=`✓ ดึงข้อมูลจาก Database สำเร็จ — PLO <strong>${ploN}</strong> รายการ · MLO <strong>${mloN}</strong> รายการ`;
+    s.textContent=`แหล่งข้อมูล: Database (program_id: ${PROGRAM_ID})`;
+  } else {
+    b.className='data-banner default'; d.className='banner-dot default';
+    t.innerHTML=`⚠ ไม่พบข้อมูล PLO/MLO ใน Database — กรุณาไปบันทึกข้อมูลที่ <a class="banner-link" href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน`;
+    s.textContent='แหล่งข้อมูล: ไม่พบใน Database';
+  }
+}
+
+async function pullPloMloData() {
+  const btn = document.getElementById('pullBtn');
+  btn.classList.add('spinning'); btn.disabled = true;
+  // reset
+  PLO_LIST=[]; MLO_GROUPS=[]; ploKas={}; mloKas={};
+  const ok = await loadPloMloFromAPI();
+  if (ok) {
+    initKasState();
+    loadKasData();
+    updateBanner('live');
+    toast(`✓ รีโหลดสำเร็จ — PLO ${PLO_LIST.length} · MLO ${MLO_GROUPS.reduce((a,g)=>a+g.items.length,0)}`,'#22c55e');
+  } else {
+    updateBanner('error');
+    toast('❌ ไม่สามารถดึงข้อมูลจาก Database ได้','#ef4444');
+  }
+  if (curTab==='PLO') renderPLO();
+  else if (curTab==='MLO') renderMLO();
+  btn.classList.remove('spinning'); btn.disabled=false;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════════════ */
+document.addEventListener('click', e => {
+  const w = document.getElementById('pdf-wrap');
+  if (w&&!w.contains(e.target)) document.getElementById('pdf-menu').style.display='none';
+});
+function togglePdfMenu(){ const m=document.getElementById('pdf-menu'); m.style.display=m.style.display==='none'?'block':'none'; }
 
 function switchTab(tab,btn){
   curTab=tab;
-  document.querySelectorAll('.main-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+tab).classList.add('active');
-  if(tab==='PLO')renderPLO();else if(tab==='MLO')renderMLO();else renderCLO();
+  document.querySelectorAll('.main-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.getElementById('panel-'+tab).classList.add('active');
+  if(tab==='PLO') renderPLO();
+  else if(tab==='MLO') renderMLO();
+  else renderCLO();
 }
 
+/* ═══════════════════════════════════════════════════════
+   RENDER PLO / MLO
+═══════════════════════════════════════════════════════ */
 function renderKasTags(codes,type){
-  if(!codes||!codes.size)return`<span class="kas-tag empty">— ยังไม่ได้เลือก</span>`;
+  if(!codes||!codes.size) return `<span class="kas-tag empty">— ยังไม่ได้เลือก</span>`;
   return [...codes].map(code=>`<span class="kas-tag ${type}" title="${esc(kasLabel(type,code))}">${code}</span>`).join('');
 }
 
 function loRow(code,desc,type,k){
-  const ctx=JSON.stringify({type,code}).replace(/"/g,'&quot;');
+  const ctx = JSON.stringify({type,code}).replace(/"/g,'&quot;');
   return `<div class="lo-row">
     <div class="lo-info"><span class="lo-badge${type==='MLO'?' mlo':''}">${code}</span><span class="lo-text">${esc(desc)}</span></div>
     <div class="kas-cell">
@@ -651,202 +692,183 @@ function loRow(code,desc,type,k){
   </div>`;
 }
 
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-/* ══════════════════════════════════════════════════════
-   [FIX] parseOutcomes — รองรับทั้ง array และ string format
-   ══════════════════════════════════════════════════════ */
-function parseOutcomes(item){
-  // Format 1: outcomes เป็น array of {th,en,plo,mlo} — จาก PUT semester-subjects
-  if(Array.isArray(item.outcomes)&&item.outcomes.length>0){
-    return item.outcomes.map(o=>({
-      th:o.th||'',
-      en:o.en||'',
-      plo:Array.isArray(o.plo)?o.plo:[],
-      mlo:Array.isArray(o.mlo)?o.mlo:[]
-    }));
-  }
-  // Format 2: outcomes_th / outcomes_en เป็น multiline string — จาก subject API
-  const rawTh=item.outcomes_th||'';
-  const rawEn=item.outcomes_en||'';
-  const thLines=rawTh.split('\n').map(s=>s.trim()).filter(Boolean);
-  const enLines=rawEn.split('\n').map(s=>s.trim()).filter(Boolean);
-  const maxLen=Math.max(thLines.length,enLines.length);
-  if(!maxLen)return[];
-  return Array.from({length:maxLen},(_,i)=>({
-    th:thLines[i]||'',
-    en:enLines[i]||'',
-    plo:[],
-    mlo:[]
-  }));
-}
+function esc(s){ return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function renderPLO(){
-  const c=document.getElementById('plo-rows');
-  if(!PLO_LIST.length){c.innerHTML='<div class="empty-lo"><svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg><strong>ยังไม่มีข้อมูล PLO</strong><p>กรุณาไปบันทึกข้อมูล PLO ที่ <a href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน</p></div>';return;}
-  c.innerHTML=PLO_LIST.map(p=>loRow(p.code,p.desc,'PLO',ploKas[p.code]||{K:new Set(),A:new Set(),S:new Set()})).join('');
+  const c = document.getElementById('plo-rows');
+  if(!PLO_LIST.length){
+    c.innerHTML=`<div class="empty-lo">
+      <svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
+      <strong>ยังไม่มีข้อมูล PLO</strong>
+      <p>กรุณาไปบันทึกข้อมูล PLO ที่ <a href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน</p>
+    </div>`;
+    return;
+  }
+  c.innerHTML = PLO_LIST.map(p => loRow(p.code,p.desc,'PLO',ploKas[p.code]||{K:new Set(),A:new Set(),S:new Set()})).join('');
 }
+
 function renderMLO(){
   if(!MLO_GROUPS.length){
     document.getElementById('mlo-sidebar').innerHTML='';
-    document.getElementById('mlo-rows').innerHTML='<div class="empty-lo"><svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg><strong>ยังไม่มีข้อมูล MLO</strong><p>กรุณาไปบันทึกข้อมูล MLO ที่ <a href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน</p></div>';
+    document.getElementById('mlo-rows').innerHTML=`<div class="empty-lo">
+      <svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
+      <strong>ยังไม่มีข้อมูล MLO</strong>
+      <p>กรุณาไปบันทึกข้อมูล MLO ที่ <a href="plo.html">หน้าจัดการ PLO/MLO</a> ก่อน</p>
+    </div>`;
     return;
   }
-  if(curMloGroup>=MLO_GROUPS.length)curMloGroup=0;
-  document.getElementById('mlo-sidebar').innerHTML=MLO_GROUPS.map((g,i)=>`<div class="sb-item${i===curMloGroup?' active':''}" onclick="selMloGroup(${i})"><span class="sb-icon">${g.icon||'📋'}</span><span>${g.label}</span></div>`).join('');
-  const g=MLO_GROUPS[curMloGroup];
-  document.getElementById('mlo-rows').innerHTML=g.items.map(m=>loRow(m.code,m.desc,'MLO',mloKas[m.code]||{K:new Set(),A:new Set(),S:new Set()})).join('');
+  if(curMloGroup >= MLO_GROUPS.length) curMloGroup=0;
+  document.getElementById('mlo-sidebar').innerHTML = MLO_GROUPS.map((g,i)=>
+    `<div class="sb-item${i===curMloGroup?' active':''}" onclick="selMloGroup(${i})">
+      <span class="sb-icon">${g.icon||'📋'}</span><span>${g.label}</span>
+    </div>`
+  ).join('');
+  const g = MLO_GROUPS[curMloGroup];
+  document.getElementById('mlo-rows').innerHTML = g.items.map(m =>
+    loRow(m.code,m.desc,'MLO',mloKas[m.code]||{K:new Set(),A:new Set(),S:new Set()})
+  ).join('');
 }
-function selMloGroup(i){curMloGroup=i;renderMLO();}
 
-/* CLO - API driven */
-const API_BASE_CLO='https://websitefms.onrender.com/api';
-let cloApiCourses=[],cloApiMajors=[],cloApiSubjects=[];
-let selectedCourseId=null,selectedMajorId=null,selectedSubjectData=null;
+function selMloGroup(i){ curMloGroup=i; renderMLO(); }
+
+/* ═══════════════════════════════════════════════════════
+   CLO — API driven
+═══════════════════════════════════════════════════════ */
+const API_BASE_CLO = API_BASE + "/api";
+let cloApiCourses=[], cloApiMajors=[], cloApiSubjects=[];
+let selectedCourseId=null, selectedMajorId=null, selectedSubjectData=null;
 let cloMappings={};
 
-function renderCLO(){loadApiCourseList();}
+function renderCLO(){ loadApiCourseList(); }
 
 async function loadApiCourseList(){
-  const el=document.getElementById('course-list-clo');
+  const el = document.getElementById('course-list-clo');
   el.innerHTML='<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลดหลักสูตร...</div>';
   showStep('course');
   try{
-    const d=await fetch(`${API_BASE_CLO}/courses`).then(r=>r.json());
-    cloApiCourses=Array.isArray(d)?d:(d.data||[]);renderCourseListClo();
-  }catch(e){el.innerHTML=`<div class="sp-empty">❌ โหลดหลักสูตรไม่สำเร็จ<br><small>${e.message}</small></div>`;}
+    const d = await fetch(`${API_BASE_CLO}/courses`).then(r=>r.json());
+    cloApiCourses = Array.isArray(d)?d:(d.data||[]);
+    renderCourseListClo();
+  }catch(e){ el.innerHTML=`<div class="sp-empty">❌ โหลดหลักสูตรไม่สำเร็จ<br><small>${e.message}</small></div>`; }
 }
+
 function renderCourseListClo(){
-  const el=document.getElementById('course-list-clo');
-  if(!cloApiCourses.length){el.innerHTML='<div class="sp-empty">ไม่พบหลักสูตร</div>';return;}
-  el.innerHTML=cloApiCourses.map(c=>`<div class="sp-item${selectedCourseId===c.id?' active':''}" onclick="selectApiCourse(${c.id},'${esc(c.name_th||'')}')"><div class="sp-item-name">${esc(c.name_th||c.name_en||'หลักสูตร '+c.id)}</div>${c.degree_level?`<div class="sp-item-sub">${esc(c.degree_level)}</div>`:''}</div>`).join('');
+  const el = document.getElementById('course-list-clo');
+  if(!cloApiCourses.length){ el.innerHTML='<div class="sp-empty">ไม่พบหลักสูตร</div>'; return; }
+  el.innerHTML = cloApiCourses.map(c=>
+    `<div class="sp-item${selectedCourseId===c.id?' active':''}" onclick="selectApiCourse(${c.id},'${esc(c.name_th||'')}')">
+      <div class="sp-item-name">${esc(c.name_th||c.name_en||'หลักสูตร '+c.id)}</div>
+      ${c.degree_level?`<div class="sp-item-sub">${esc(c.degree_level)}</div>`:''}
+    </div>`
+  ).join('');
 }
+
 async function selectApiCourse(courseId,courseName){
-  selectedCourseId=courseId;selectedMajorId=null;
+  selectedCourseId=courseId; selectedMajorId=null;
   document.getElementById('selected-course-badge').textContent=courseName;
   showStep('major');
-  const el=document.getElementById('major-list-clo');
+  const el = document.getElementById('major-list-clo');
   el.innerHTML='<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลด Major...</div>';
   try{
-    const d=await fetch(`${API_BASE_CLO}/courses/${courseId}/majors`).then(r=>r.json());
-    cloApiMajors=Array.isArray(d)?d:(d.data||[]);
-    if(!cloApiMajors.length){el.innerHTML='<div class="sp-empty">ไม่พบ Major</div>';return;}
-    el.innerHTML=cloApiMajors.map(m=>`<div class="sp-item${selectedMajorId===m.id?' active':''}" onclick="selectApiMajor(${m.id},'${esc(m.name_th||'')}',${courseId})"><div class="sp-item-name">${esc(m.name_th||m.name_en||'Major '+m.id)}</div>${m.name_en?`<div class="sp-item-sub">${esc(m.name_en)}</div>`:''}</div>`).join('');
-  }catch(e){el.innerHTML='<div class="sp-empty">❌ โหลด Major ไม่สำเร็จ</div>';}
+    const d = await fetch(`${API_BASE_CLO}/courses/${courseId}/majors`).then(r=>r.json());
+    cloApiMajors = Array.isArray(d)?d:(d.data||[]);
+    if(!cloApiMajors.length){ el.innerHTML='<div class="sp-empty">ไม่พบ Major</div>'; return; }
+    el.innerHTML = cloApiMajors.map(m=>
+      `<div class="sp-item${selectedMajorId===m.id?' active':''}" onclick="selectApiMajor(${m.id},'${esc(m.name_th||'')}',${courseId})">
+        <div class="sp-item-name">${esc(m.name_th||m.name_en||'Major '+m.id)}</div>
+        ${m.name_en?`<div class="sp-item-sub">${esc(m.name_en)}</div>`:''}
+      </div>`
+    ).join('');
+  }catch(e){ el.innerHTML='<div class="sp-empty">❌ โหลด Major ไม่สำเร็จ</div>'; }
 }
 
 async function selectApiMajor(majorId,majorName){
   selectedMajorId=majorId;
   document.getElementById('selected-major-badge').textContent=majorName;
   showStep('subject');
-  const el=document.getElementById('subject-list-clo');
+  const el = document.getElementById('subject-list-clo');
   el.innerHTML='<div class="sp-loading"><div class="sp-spinner"></div> กำลังโหลดรายวิชา...</div>';
   try{
-    const pd=await fetch(`${API_BASE_CLO}/majors/${majorId}/study-plans?page=1&pageSize=50`).then(r=>r.json());
-    const plans=pd.data||[];
-    const subjectMap={};
-
-    /* ── ดึงทุก plan พร้อมกัน (parallel) ── */
-    const planDetails=await Promise.all(
-      plans.map(plan=>
-        fetch(`${API_BASE_CLO}/study-plans/${plan.id}`)
-          .then(r=>r.json())
-          .then(d=>({plan,detail:d}))
-          .catch(()=>null)
-      )
+    const pd = await fetch(`${API_BASE_CLO}/majors/${majorId}/study-plans?page=1&pageSize=50`).then(r=>r.json());
+    const plans = pd.data||[];
+    const subjectMap = {};
+    const planDetails = await Promise.all(
+      plans.map(plan=>fetch(`${API_BASE_CLO}/study-plans/${plan.id}`).then(r=>r.json()).then(d=>({plan,detail:d})).catch(()=>null))
     );
-
     for(const result of planDetails){
-      if(!result)continue;
+      if(!result) continue;
       const{plan,detail}=result;
       for(const sem of(detail.semesters||[])){
         for(const it of(sem.subjects||[])){
           const _s=it.subject||it;
           const ssId=it.id;
-          if(subjectMap[ssId])continue;
-          const mergedItem={
-            ...it,
-            outcomes_th:it.outcomes_th||_s.outcomes_th||'',
-            outcomes_en:it.outcomes_en||_s.outcomes_en||'',
-            outcomes:Array.isArray(it.outcomes)&&it.outcomes.length?it.outcomes
-                    :Array.isArray(_s.outcomes)&&_s.outcomes.length?_s.outcomes:[]
-          };
-          subjectMap[ssId]={
-            id:ssId,ssId,
-            code:it.code||_s.code||'',
-            name_th:it.name_th||_s.name_th||'',
-            name_en:it.name_en||_s.name_en||'',
-            credits:it.credits??_s.default_credits??'',
-            desc_th:it.description_th||_s.description_th||'',
-            desc_en:it.description_en||_s.description_en||'',
-            subjectId:it.subject_id||_s.id||null,
-            outcomes:parseOutcomes(mergedItem),
-            semTitle:sem.title||`ภาคเรียน ${sem.term_no}`,
-            termNo:sem.term_no||'',yearNo:plan.year_no||''
-          };
+          if(subjectMap[ssId]) continue;
+          const mergedItem={...it,outcomes_th:it.outcomes_th||_s.outcomes_th||'',outcomes_en:it.outcomes_en||_s.outcomes_en||'',outcomes:Array.isArray(it.outcomes)&&it.outcomes.length?it.outcomes:Array.isArray(_s.outcomes)&&_s.outcomes.length?_s.outcomes:[]};
+          subjectMap[ssId]={id:ssId,ssId,code:it.code||_s.code||'',name_th:it.name_th||_s.name_th||'',name_en:it.name_en||_s.name_en||'',credits:it.credits??_s.default_credits??'',desc_th:it.description_th||_s.description_th||'',desc_en:it.description_en||_s.description_en||'',subjectId:it.subject_id||_s.id||null,outcomes:parseOutcomes(mergedItem),semTitle:sem.title||`ภาคเรียน ${sem.term_no}`,termNo:sem.term_no||'',yearNo:plan.year_no||''};
         }
       }
     }
-    cloApiSubjects=Object.values(subjectMap).sort((a,b)=>(Number(a.yearNo)-Number(b.yearNo))*10+(Number(a.termNo)-Number(b.termNo)));
-    if(!cloApiSubjects.length){el.innerHTML='<div class="sp-empty">ไม่พบรายวิชา</div>';return;}
+    cloApiSubjects = Object.values(subjectMap).sort((a,b)=>(Number(a.yearNo)-Number(b.yearNo))*10+(Number(a.termNo)-Number(b.termNo)));
+    if(!cloApiSubjects.length){ el.innerHTML='<div class="sp-empty">ไม่พบรายวิชา</div>'; return; }
     renderSubjectListClo(cloApiSubjects);
-  }catch(e){el.innerHTML=`<div class="sp-empty">❌ โหลดรายวิชาไม่สำเร็จ<br><small>${e.message}</small></div>`;}
+  }catch(e){ el.innerHTML=`<div class="sp-empty">❌ โหลดรายวิชาไม่สำเร็จ<br><small>${e.message}</small></div>`; }
+}
+
+function parseOutcomes(item){
+  if(Array.isArray(item.outcomes)&&item.outcomes.length>0) return item.outcomes.map(o=>({th:o.th||'',en:o.en||'',plo:Array.isArray(o.plo)?o.plo:[],mlo:Array.isArray(o.mlo)?o.mlo:[]}));
+  const rawTh=item.outcomes_th||'',rawEn=item.outcomes_en||'';
+  const thLines=rawTh.split('\n').map(s=>s.trim()).filter(Boolean);
+  const enLines=rawEn.split('\n').map(s=>s.trim()).filter(Boolean);
+  const maxLen=Math.max(thLines.length,enLines.length);
+  if(!maxLen) return[];
+  return Array.from({length:maxLen},(_,i)=>({th:thLines[i]||'',en:enLines[i]||'',plo:[],mlo:[]}));
 }
 
 function renderSubjectListClo(subjects){
   const el=document.getElementById('subject-list-clo');
-  if(!subjects.length){el.innerHTML='<div class="sp-empty">ไม่พบรายวิชา</div>';return;}
+  if(!subjects.length){ el.innerHTML='<div class="sp-empty">ไม่พบรายวิชา</div>'; return; }
   el.innerHTML=subjects.map(s=>`<div class="sp-item" onclick="selectApiSubject(${s.id})"><div class="sp-item-code">${esc(s.code)}</div><div class="sp-item-name">${esc(s.name_th)}</div><div class="sp-item-sub">${s.yearNo?`ปี ${s.yearNo} · `:''}${esc(s.semTitle)}${s.outcomes.length?` · <span style="color:var(--green);font-weight:700;">${s.outcomes.length} CLO</span>`:' · <span style="color:#94a3b8">ยังไม่มี CLO</span>'}</div></div>`).join('');
 }
+
 function filterSubjectList(q){
   const ql=q.toLowerCase();
   renderSubjectListClo(ql?cloApiSubjects.filter(s=>s.code.toLowerCase().includes(ql)||s.name_th.toLowerCase().includes(ql)||(s.name_en||'').toLowerCase().includes(ql)):cloApiSubjects);
 }
 
-/* selectApiSubject — แสดงข้อมูลรายวิชาทันที แล้วดึง CLO แบบ lazy ถ้ายังไม่มี */
-const _cloFetchCache={};  // cache ป้องกัน fetch ซ้ำ
-
+const _cloFetchCache={};
 async function selectApiSubject(id){
   selectedSubjectData=cloApiSubjects.find(s=>s.id===id);
-  if(!selectedSubjectData)return;
-  if(!cloMappings[id])cloMappings[id]={};
-
-  // render ทันทีก่อน (ใช้ข้อมูลที่มีอยู่)
+  if(!selectedSubjectData) return;
+  if(!cloMappings[id]) cloMappings[id]={};
   renderCourseCard();
-
-  // ถ้ามี outcomes แล้ว หรือเคย fetch แล้ว → จบ
-  if(selectedSubjectData.outcomes.length||_cloFetchCache[id])return;
+  if(selectedSubjectData.outcomes.length||_cloFetchCache[id]) return;
   _cloFetchCache[id]=true;
-
-  // subjectId มี → fetch /api/subjects/{id} รอบเดียว (เร็วกว่า semester-subjects)
   const subId=selectedSubjectData.subjectId;
-  if(!subId)return;
+  if(!subId) return;
   try{
     const s=await fetch(`${API_BASE_CLO}/subjects/${subId}`).then(r=>r.json());
     const parsed=parseOutcomes(s);
-    if(!parsed.length)return;
+    if(!parsed.length) return;
     selectedSubjectData.outcomes=parsed;
-    if(!selectedSubjectData.desc_th&&s.description_th)selectedSubjectData.desc_th=s.description_th;
-    if(!selectedSubjectData.desc_en&&s.description_en)selectedSubjectData.desc_en=s.description_en;
-    // อัปเดต list badge
+    if(!selectedSubjectData.desc_th&&s.description_th) selectedSubjectData.desc_th=s.description_th;
+    if(!selectedSubjectData.desc_en&&s.description_en) selectedSubjectData.desc_en=s.description_en;
     const idx=cloApiSubjects.findIndex(s=>s.id===id);
-    if(idx>=0)cloApiSubjects[idx].outcomes=parsed;
-    // re-render ถ้า user ยังอยู่ที่รายวิชานี้
-    if(selectedSubjectData.id===id)renderCourseCard();
-  }catch(e){console.warn('lazy CLO fetch failed:',e);}
+    if(idx>=0) cloApiSubjects[idx].outcomes=parsed;
+    if(selectedSubjectData.id===id) renderCourseCard();
+  }catch(e){ console.warn('lazy CLO fetch failed:',e); }
 }
 
-function showStep(step){['course','major','subject'].forEach(s=>{const el=document.getElementById('step-'+s);if(el)el.style.display=s===step?'block':'none';});}
+function showStep(step){ ['course','major','subject'].forEach(s=>{ const el=document.getElementById('step-'+s); if(el) el.style.display=s===step?'block':'none'; }); }
 function backToStep(step){
   if(step==='course'){
-    selectedCourseId=null;selectedMajorId=null;selectedSubjectData=null;
+    selectedCourseId=null; selectedMajorId=null; selectedSubjectData=null;
     document.getElementById('clo-main').innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text-sub);"><div style="font-size:36px;margin-bottom:12px;">🔍</div><div style="font-size:15px;font-weight:700;color:var(--text);">เลือกหลักสูตรและรายวิชา</div><div style="font-size:13px;margin-top:6px;">ใช้แผงด้านขวาเพื่อเลือกหลักสูตร → Major → รายวิชา</div></div>';
-    renderCourseListClo();showStep('course');
-  }else if(step==='major'){selectedMajorId=null;selectedSubjectData=null;showStep('major');}
+    renderCourseListClo(); showStep('course');
+  } else if(step==='major'){ selectedMajorId=null; selectedSubjectData=null; showStep('major'); }
 }
 
 function renderCourseCard(){
-  const s=selectedSubjectData;if(!s)return;
+  const s=selectedSubjectData; if(!s) return;
   document.getElementById('clo-main').innerHTML=`
     <div class="course-card">
       <div class="course-top">
@@ -870,10 +892,10 @@ function renderCourseCard(){
 }
 
 function renderCloRows(s){
-  if(!s.outcomes||!s.outcomes.length)return`<div style="text-align:center;padding:40px;color:#94a3b8;font-size:13px;"><div style="font-size:28px;margin-bottom:8px;">📭</div>ไม่พบ CLO ในรายวิชานี้<br><small style="color:#b0c0cc">CLO ถูกกำหนดในหน้าจัดการแผนการศึกษา</small></div>`;
-  const sid=s.id;if(!cloMappings[sid])cloMappings[sid]={};
+  if(!s.outcomes||!s.outcomes.length) return`<div style="text-align:center;padding:40px;color:#94a3b8;font-size:13px;"><div style="font-size:28px;margin-bottom:8px;">📭</div>ไม่พบ CLO ในรายวิชานี้<br><small style="color:#b0c0cc">CLO ถูกกำหนดในหน้าจัดการแผนการศึกษา</small></div>`;
+  const sid=s.id; if(!cloMappings[sid]) cloMappings[sid]={};
   return s.outcomes.map((cl,i)=>{
-    const m=cloMappings[sid][i]||{plo:new Set(),mlo:new Set()};cloMappings[sid][i]=m;
+    const m=cloMappings[sid][i]||{plo:new Set(),mlo:new Set()}; cloMappings[sid][i]=m;
     const ap=cl.plo||[],am=cl.mlo||[];
     const ap2=new Set([...ap,...m.plo]),am2=new Set([...am,...m.mlo]);
     const linked=(ap2.size+am2.size)>0?[...ap2].map(c=>`<span class="linked-badge">${c}</span>`).join('')+[...am2].map(c=>`<span class="linked-badge" style="background:#e0f7fa;color:var(--teal)">${c}</span>`).join(''):'<span style="color:#94a3b8;font-size:11px">— ยังไม่ได้ map</span>';
@@ -896,19 +918,21 @@ function renderCloRows(s){
 }
 
 function showInner(tab,btn){
-  document.querySelectorAll('.inner-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.inner-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
   const ie=document.getElementById('inner-info'),ce=document.getElementById('inner-clo');
-  if(ie)ie.style.display=tab==='info'?'block':'none';
-  if(ce)ce.style.display=tab==='clo'?'block':'none';
+  if(ie) ie.style.display=tab==='info'?'block':'none';
+  if(ce) ce.style.display=tab==='clo'?'block':'none';
 }
 
-/* CLO modal */
+/* ═══════════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════════ */
 function openCloModal(ctx){
-  if(typeof ctx==='string')ctx=JSON.parse(ctx);
-  mCtx=ctx;mPanel='PLO_MLO';
-  const i=ctx.cloIdx,sid=ctx.subjectId;
-  if(!cloMappings[sid])cloMappings[sid]={};
-  if(!cloMappings[sid][i])cloMappings[sid][i]={plo:new Set(),mlo:new Set()};
+  if(typeof ctx==='string') ctx=JSON.parse(ctx);
+  mCtx=ctx; mPanel='PLO_MLO';
+  const i=ctx.cloIdx, sid=ctx.subjectId;
+  if(!cloMappings[sid]) cloMappings[sid]={};
+  if(!cloMappings[sid][i]) cloMappings[sid][i]={plo:new Set(),mlo:new Set()};
   const outcome=(selectedSubjectData?.outcomes||[])[i]||{};
   tPlo=new Set([...(outcome.plo||[]),...cloMappings[sid][i].plo]);
   tMlo=new Set([...(outcome.mlo||[]),...cloMappings[sid][i].mlo]);
@@ -918,169 +942,226 @@ function openCloModal(ctx){
   document.getElementById('m-toggle').style.display='none';
   document.getElementById('panel-pm').style.display='flex';
   document.getElementById('panel-kas').style.display='none';
-  buildPmLists();updateCount();
-  document.getElementById('modal-overlay').classList.add('show');document.body.style.overflow='hidden';
+  buildPmLists(); updateCount();
+  document.getElementById('modal-overlay').classList.add('show'); document.body.style.overflow='hidden';
 }
 
-/* KAS modal */
 function openModal(ctx,mode,focusType){
-  if(typeof ctx==='string')ctx=JSON.parse(ctx);
-  mCtx=ctx;mPanel=mode;
+  if(typeof ctx==='string') ctx=JSON.parse(ctx);
+  mCtx=ctx; mPanel=mode;
   const badge=ctx.type==='CLO'?`CLO${ctx.cloIdx+1}`:ctx.code;
   document.getElementById('m-badge').textContent=badge;
   document.getElementById('m-sub').textContent=`Select the Knowledge, Attitude, and Skill components associated with ${badge}.`;
   document.getElementById('m-toggle').style.display=ctx.type==='CLO'?'flex':'none';
-  if(ctx.type==='PLO'){const k=ploKas[ctx.code]||{K:new Set(),A:new Set(),S:new Set()};tKas={K:new Set(k.K),A:new Set(k.A),S:new Set(k.S)};tPlo=new Set();tMlo=new Set();}
-  else if(ctx.type==='MLO'){const k=mloKas[ctx.code]||{K:new Set(),A:new Set(),S:new Set()};tKas={K:new Set(k.K),A:new Set(k.A),S:new Set(k.S)};tPlo=new Set();tMlo=new Set();}
-  else{tKas={K:new Set(),A:new Set(),S:new Set()};tPlo=new Set();tMlo=new Set();}
+  if(ctx.type==='PLO'){ const k=ploKas[ctx.code]||{K:new Set(),A:new Set(),S:new Set()}; tKas={K:new Set(k.K),A:new Set(k.A),S:new Set(k.S)}; tPlo=new Set(); tMlo=new Set(); }
+  else if(ctx.type==='MLO'){ const k=mloKas[ctx.code]||{K:new Set(),A:new Set(),S:new Set()}; tKas={K:new Set(k.K),A:new Set(k.A),S:new Set(k.S)}; tPlo=new Set(); tMlo=new Set(); }
+  else{ tKas={K:new Set(),A:new Set(),S:new Set()}; tPlo=new Set(); tMlo=new Set(); }
   const am=mode==='PLO_MLO'?'PLO_MLO':'KAS';
-  switchMTab(am,am==='PLO_MLO'?document.getElementById('t-plomlo'):document.getElementById('t-kas'));
-  buildKasLists();buildPmLists();updateCount();
-  document.getElementById('modal-overlay').classList.add('show');document.body.style.overflow='hidden';
-  if(focusType)setTimeout(()=>{const el=document.getElementById('s-'+focusType.toLowerCase());if(el)el.focus();},80);
+  switchMTab(am, am==='PLO_MLO'?document.getElementById('t-plomlo'):document.getElementById('t-kas'));
+  buildKasLists(); buildPmLists(); updateCount();
+  document.getElementById('modal-overlay').classList.add('show'); document.body.style.overflow='hidden';
+  if(focusType) setTimeout(()=>{ const el=document.getElementById('s-'+focusType.toLowerCase()); if(el) el.focus(); },80);
 }
-function closeModal(){document.getElementById('modal-overlay').classList.remove('show');document.body.style.overflow='';}
-function closeBg(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
+
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('show'); document.body.style.overflow=''; }
+function closeBg(e){ if(e.target===document.getElementById('modal-overlay')) closeModal(); }
+
 function switchMTab(panel,btn){
   mPanel=panel;
-  document.querySelectorAll('.m-toggle-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');
+  document.querySelectorAll('.m-toggle-btn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active');
   document.getElementById('panel-pm').style.display=panel==='PLO_MLO'?'flex':'none';
   document.getElementById('panel-kas').style.display=panel==='KAS'?'flex':'none';
 }
+
 function buildPmLists(){
-  document.getElementById('list-plo').innerHTML=PLO_LIST.length?PLO_LIST.map(p=>{const sel=tPlo.has(p.code);return`<div class="pm-item${sel?' selected':''}" id="pi-${p.code}" onclick="togPM('PLO','${p.code}')"><div class="pm-check"><div class="pm-check-tick"></div></div><span class="pm-code">${p.code}</span><span class="pm-desc">${esc(p.desc)}</span></div>`;}).join(''):'<div class="pm-empty">ยังไม่มีข้อมูล PLO</div>';
+  document.getElementById('list-plo').innerHTML=PLO_LIST.length?PLO_LIST.map(p=>{ const sel=tPlo.has(p.code); return`<div class="pm-item${sel?' selected':''}" id="pi-${p.code}" onclick="togPM('PLO','${p.code}')"><div class="pm-check"><div class="pm-check-tick"></div></div><span class="pm-code">${p.code}</span><span class="pm-desc">${esc(p.desc)}</span></div>`; }).join(''):'<div class="pm-empty">ยังไม่มีข้อมูล PLO</div>';
   document.getElementById('s-plo').value='';
   const allM=MLO_GROUPS.flatMap(g=>g.items);
-  document.getElementById('list-mlo').innerHTML=allM.length?allM.map(m=>{const sel=tMlo.has(m.code),sid=m.code.replace(/\./g,'_');return`<div class="pm-item mlo-sel${sel?' selected':''}" id="mi-${sid}" onclick="togPM('MLO','${m.code}')"><div class="pm-check"><div class="pm-check-tick"></div></div><span class="pm-code mlo-code">${m.code}</span><span class="pm-desc">${esc(m.desc)}</span></div>`;}).join(''):'<div class="pm-empty">ยังไม่มีข้อมูล MLO</div>';
+  document.getElementById('list-mlo').innerHTML=allM.length?allM.map(m=>{ const sel=tMlo.has(m.code),sid=m.code.replace(/\./g,'_'); return`<div class="pm-item mlo-sel${sel?' selected':''}" id="mi-${sid}" onclick="togPM('MLO','${m.code}')"><div class="pm-check"><div class="pm-check-tick"></div></div><span class="pm-code mlo-code">${m.code}</span><span class="pm-desc">${esc(m.desc)}</span></div>`; }).join(''):'<div class="pm-empty">ยังไม่มีข้อมูล MLO</div>';
   document.getElementById('s-mlo').value='';
 }
+
 function buildKasLists(){
   ['K','A','S'].forEach(t=>{
     const data=t==='K'?K_DATA:t==='A'?A_DATA:S_DATA;
-    document.getElementById('list-'+t.toLowerCase()).innerHTML=data.map(item=>{const sel=tKas[t].has(item.code);return`<div class="kas-item ${t}${sel?' selected':''}" id="ki-${item.code}" onclick="togKas('${t}','${item.code}')"><div class="kas-check"><div class="kas-check-tick"></div></div><span class="kas-code ${t}">${item.code}</span><span class="kas-label">${item.label}</span></div>`;}).join('');
+    document.getElementById('list-'+t.toLowerCase()).innerHTML=data.map(item=>{ const sel=tKas[t].has(item.code); return`<div class="kas-item ${t}${sel?' selected':''}" id="ki-${item.code}" onclick="togKas('${t}','${item.code}')"><div class="kas-check"><div class="kas-check-tick"></div></div><span class="kas-code ${t}">${item.code}</span><span class="kas-label">${item.label}</span></div>`; }).join('');
     document.getElementById('s-'+t.toLowerCase()).value='';
   });
 }
+
 function togPM(type,code){
-  const ref=type==='PLO'?tPlo:tMlo;if(ref.has(code))ref.delete(code);else ref.add(code);
+  const ref=type==='PLO'?tPlo:tMlo;
+  if(ref.has(code)) ref.delete(code); else ref.add(code);
   const el=document.getElementById((type==='PLO'?'pi-':'mi-')+code.replace(/\./g,'_'));
-  if(el)el.classList.toggle('selected',ref.has(code));updateCount();
+  if(el) el.classList.toggle('selected',ref.has(code));
+  updateCount();
 }
+
 function togKas(t,code){
-  if(tKas[t].has(code))tKas[t].delete(code);else tKas[t].add(code);
+  if(tKas[t].has(code)) tKas[t].delete(code); else tKas[t].add(code);
   const el=document.getElementById('ki-'+code);
-  if(el){el.classList.toggle('selected',tKas[t].has(code));el.classList.toggle(t,true);}updateCount();
+  if(el){ el.classList.toggle('selected',tKas[t].has(code)); el.classList.toggle(t,true); }
+  updateCount();
 }
+
 function filterPM(type,q){
   const ql=q.toLowerCase();
-  if(type==='PLO')PLO_LIST.forEach(p=>{const el=document.getElementById('pi-'+p.code);if(el)el.classList.toggle('hidden',!!(ql&&!p.code.toLowerCase().includes(ql)&&!p.desc.toLowerCase().includes(ql)));});
-  else MLO_GROUPS.flatMap(g=>g.items).forEach(m=>{const el=document.getElementById('mi-'+m.code.replace(/\./g,'_'));if(el)el.classList.toggle('hidden',!!(ql&&!m.code.toLowerCase().includes(ql)&&!m.desc.toLowerCase().includes(ql)));});
+  if(type==='PLO') PLO_LIST.forEach(p=>{ const el=document.getElementById('pi-'+p.code); if(el) el.classList.toggle('hidden',!!(ql&&!p.code.toLowerCase().includes(ql)&&!p.desc.toLowerCase().includes(ql))); });
+  else MLO_GROUPS.flatMap(g=>g.items).forEach(m=>{ const el=document.getElementById('mi-'+m.code.replace(/\./g,'_')); if(el) el.classList.toggle('hidden',!!(ql&&!m.code.toLowerCase().includes(ql)&&!m.desc.toLowerCase().includes(ql))); });
 }
+
 function filterKAS(t,q){
-  const data=t==='K'?K_DATA:t==='A'?A_DATA:S_DATA,ql=q.toLowerCase();
-  data.forEach(item=>{const el=document.getElementById('ki-'+item.code);if(el)el.classList.toggle('hidden',!!(ql&&!item.code.toLowerCase().includes(ql)&&!item.label.toLowerCase().includes(ql)));});
+  const data=t==='K'?K_DATA:t==='A'?A_DATA:S_DATA, ql=q.toLowerCase();
+  data.forEach(item=>{ const el=document.getElementById('ki-'+item.code); if(el) el.classList.toggle('hidden',!!(ql&&!item.code.toLowerCase().includes(ql)&&!item.label.toLowerCase().includes(ql))); });
 }
+
 function updateCount(){
   const kn=tKas.K.size,an=tKas.A.size,sn=tKas.S.size,pln=tPlo.size,mln=tMlo.size;
   document.getElementById('m-count').innerHTML=`<strong>${kn+an+sn+pln+mln}</strong> items selected total`;
-  document.getElementById('cnt-k').textContent=`${kn} เลือก`;document.getElementById('cnt-a').textContent=`${an} เลือก`;
-  document.getElementById('cnt-s').textContent=`${sn} เลือก`;document.getElementById('cnt-plo').textContent=`${pln} เลือก`;
+  document.getElementById('cnt-k').textContent=`${kn} เลือก`;
+  document.getElementById('cnt-a').textContent=`${an} เลือก`;
+  document.getElementById('cnt-s').textContent=`${sn} เลือก`;
+  document.getElementById('cnt-plo').textContent=`${pln} เลือก`;
   document.getElementById('cnt-mlo').textContent=`${mln} เลือก`;
 }
+
 function saveModal(){
-  if(!mCtx){closeModal();return;}
-  if(mCtx.type==='PLO'){ploKas[mCtx.code]={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)};renderPLO();}
-  else if(mCtx.type==='MLO'){mloKas[mCtx.code]={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)};renderMLO();}
-  else if(mCtx.type==='CLO'){saveCloMapping(mCtx.subjectId,mCtx.cloIdx,[...tPlo],[...tMlo]);return;}
-  closeModal();toast(`✓ บันทึกสำเร็จ (${tKas.K.size+tKas.A.size+tKas.S.size+tPlo.size+tMlo.size} รายการ)`);
+  if(!mCtx){ closeModal(); return; }
+  if(mCtx.type==='PLO'){ ploKas[mCtx.code]={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)}; renderPLO(); }
+  else if(mCtx.type==='MLO'){ mloKas[mCtx.code]={K:new Set(tKas.K),A:new Set(tKas.A),S:new Set(tKas.S)}; renderMLO(); }
+  else if(mCtx.type==='CLO'){ saveCloMapping(mCtx.subjectId,mCtx.cloIdx,[...tPlo],[...tMlo]); return; }
+  closeModal();
+  toast(`✓ บันทึกสำเร็จ (${tKas.K.size+tKas.A.size+tKas.S.size+tPlo.size+tMlo.size} รายการ)`);
 }
+
 async function saveCloMapping(ssId,cloIdx,ploArr,mloArr){
-  if(!cloMappings[ssId])cloMappings[ssId]={};
+  if(!cloMappings[ssId]) cloMappings[ssId]={};
   cloMappings[ssId][cloIdx]={plo:new Set(ploArr),mlo:new Set(mloArr)};
   if(selectedSubjectData&&selectedSubjectData.id===ssId){
     const outcomes=selectedSubjectData.outcomes||[];
-    if(outcomes[cloIdx])outcomes[cloIdx]={...outcomes[cloIdx],plo:ploArr,mlo:mloArr};
+    if(outcomes[cloIdx]) outcomes[cloIdx]={...outcomes[cloIdx],plo:ploArr,mlo:mloArr};
     selectedSubjectData.outcomes=outcomes;
-    const idx=cloApiSubjects.findIndex(s=>s.id===ssId);if(idx>=0)cloApiSubjects[idx].outcomes=outcomes;
+    const idx=cloApiSubjects.findIndex(s=>s.id===ssId); if(idx>=0) cloApiSubjects[idx].outcomes=outcomes;
   }
-  closeModal();renderCourseCard();
-  const s=selectedSubjectData;if(!s){toast('✓ บันทึก PLO/MLO สำเร็จ (local only)');return;}
+  closeModal(); renderCourseCard();
+  const s=selectedSubjectData; if(!s){ toast('✓ บันทึก PLO/MLO สำเร็จ (local only)'); return; }
   const body={outcomes:(s.outcomes||[]).map(o=>({th:o.th||'',en:o.en||'',plo:o.plo||[],mlo:o.mlo||[]}))};
   let saved=false;
   for(const method of['PATCH','PUT']){
-    try{const r=await fetch(`${API_BASE_CLO}/semester-subjects/${ssId}`,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(r.ok){saved=true;break;}}catch{}
+    try{ const r=await fetch(`${API_BASE_CLO}/semester-subjects/${ssId}`,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); if(r.ok){ saved=true; break; } }catch{}
   }
-  toast(saved?`✓ บันทึก PLO/MLO สำเร็จ (CLO ${cloIdx+1})`:`⚠ บันทึกในเครื่องแล้ว แต่ส่ง API ไม่สำเร็จ`,saved?'#22c55e':'#f59e0b');
+  toast(saved?`✓ บันทึก PLO/MLO สำเร็จ (CLO ${cloIdx+1})`:`⚠ บันทึกในเครื่องแล้ว แต่ส่ง API ไม่สำเร็จ`, saved?'#22c55e':'#f59e0b');
 }
 
-/* Export/Import */
+/* ═══════════════════════════════════════════════════════
+   EXPORT / IMPORT
+═══════════════════════════════════════════════════════ */
 function downloadTemplate(){
   const wb=XLSX.utils.book_new();
-  const kc=K_DATA.map(d=>d.code),ac=A_DATA.map(d=>d.code),sc=S_DATA.map(d=>d.code);
-  const ph=['PLO','DESCRIPTION',...kc,...ac,...sc];
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([ph,...PLO_LIST.map(p=>[p.code,p.desc,...new Array(kc.length+ac.length+sc.length).fill('')])]),'PLO_KAS');
+  const kc=K_DATA.map(d=>d.code), ac=A_DATA.map(d=>d.code), sc=S_DATA.map(d=>d.code);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['PLO','DESCRIPTION',...kc,...ac,...sc],...PLO_LIST.map(p=>[p.code,p.desc,...new Array(kc.length+ac.length+sc.length).fill('')])]),'PLO_KAS');
   const allM=MLO_GROUPS.flatMap(g=>g.items);
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['MLO','DESCRIPTION',...kc,...ac,...sc],...allM.map(m=>[m.code,m.desc,...new Array(kc.length+ac.length+sc.length).fill('')])]),'MLO_KAS');
-  XLSX.writeFile(wb,'KAS_Mapping_Template.xlsx');toast('✓ ดาวน์โหลด Template สำเร็จ','#16a34a');
+  XLSX.writeFile(wb,'KAS_Mapping_Template.xlsx');
+  toast('✓ ดาวน์โหลด Template สำเร็จ','#16a34a');
 }
+
 function exportExcel(){
   const wb=XLSX.utils.book_new();
-  const pd=[['PLO','DESCRIPTION','K_CODES','A_CODES','S_CODES'],...PLO_LIST.map(p=>[p.code,p.desc,[...(ploKas[p.code]||{K:new Set()}).K].join(','),[...(ploKas[p.code]||{A:new Set()}).A].join(','),[...(ploKas[p.code]||{S:new Set()}).S].join(',')])];
+  const pd=[['PLO','DESCRIPTION','K_CODES','A_CODES','S_CODES'],
+    ...PLO_LIST.map(p=>[p.code,p.desc,
+      [...(ploKas[p.code]||{K:new Set()}).K].join(','),
+      [...(ploKas[p.code]||{A:new Set()}).A].join(','),
+      [...(ploKas[p.code]||{S:new Set()}).S].join(',')
+    ])
+  ];
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(pd),'PLO_KAS');
   const allM=MLO_GROUPS.flatMap(g=>g.items);
-  const md=[['MLO','DESCRIPTION','K_CODES','A_CODES','S_CODES'],...allM.map(m=>[m.code,m.desc,[...(mloKas[m.code]||{K:new Set()}).K].join(','),[...(mloKas[m.code]||{A:new Set()}).A].join(','),[...(mloKas[m.code]||{S:new Set()}).S].join(',')])];
+  const md=[['MLO','DESCRIPTION','K_CODES','A_CODES','S_CODES'],
+    ...allM.map(m=>[m.code,m.desc,
+      [...(mloKas[m.code]||{K:new Set()}).K].join(','),
+      [...(mloKas[m.code]||{A:new Set()}).A].join(','),
+      [...(mloKas[m.code]||{S:new Set()}).S].join(',')
+    ])
+  ];
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(md),'MLO_KAS');
-  XLSX.writeFile(wb,'KAS_Mapping_Export.xlsx');toast('✓ Export Excel สำเร็จ','#16a34a');
+  XLSX.writeFile(wb,'KAS_Mapping_Export.xlsx');
+  toast('✓ Export Excel สำเร็จ','#16a34a');
 }
+
 function importExcel(e){
-  const file=e.target.files[0];if(!file)return;
+  const file=e.target.files[0]; if(!file) return;
   const reader=new FileReader();
   reader.onload=(ev)=>{
     try{
       const wb=XLSX.read(ev.target.result,{type:'binary'});
       if(wb.SheetNames.includes('PLO_KAS')){
         const rows=XLSX.utils.sheet_to_json(wb.Sheets['PLO_KAS'],{header:1,defval:''});
-        if(rows.length>1){const h=rows[0],ks=h.indexOf('K1'),as=h.indexOf('A1'),ss=h.indexOf('S1');
-          rows.slice(1).forEach(row=>{const code=String(row[0]||'').trim();if(!ploKas[code])return;
-            if(ks>=0)K_DATA.forEach((k,i)=>{if(row[ks+i]==='✓'||row[ks+i]==1)ploKas[code].K.add(k.code);});
-            if(as>=0)A_DATA.forEach((a,i)=>{if(row[as+i]==='✓'||row[as+i]==1)ploKas[code].A.add(a.code);});
-            if(ss>=0)S_DATA.forEach((s,i)=>{if(row[ss+i]==='✓'||row[ss+i]==1)ploKas[code].S.add(s.code);});
+        if(rows.length>1){
+          const h=rows[0], ks=h.indexOf('K1'), as=h.indexOf('A1'), ss=h.indexOf('S1');
+          rows.slice(1).forEach(row=>{
+            const code=String(row[0]||'').trim();
+            if(!ploKas[code]) ploKas[code]={K:new Set(),A:new Set(),S:new Set()};
+            if(ks>=0) K_DATA.forEach((k,i)=>{ if(row[ks+i]==='✓'||row[ks+i]==1) ploKas[code].K.add(k.code); });
+            if(as>=0) A_DATA.forEach((a,i)=>{ if(row[as+i]==='✓'||row[as+i]==1) ploKas[code].A.add(a.code); });
+            if(ss>=0) S_DATA.forEach((s,i)=>{ if(row[ss+i]==='✓'||row[ss+i]==1) ploKas[code].S.add(s.code); });
           });
         }
       }
-      if(curTab==='PLO')renderPLO();else if(curTab==='MLO')renderMLO();
+      if(wb.SheetNames.includes('MLO_KAS')){
+        const rows=XLSX.utils.sheet_to_json(wb.Sheets['MLO_KAS'],{header:1,defval:''});
+        if(rows.length>1){
+          const h=rows[0], ks=h.indexOf('K1'), as=h.indexOf('A1'), ss=h.indexOf('S1');
+          rows.slice(1).forEach(row=>{
+            const code=String(row[0]||'').trim();
+            if(!mloKas[code]) mloKas[code]={K:new Set(),A:new Set(),S:new Set()};
+            if(ks>=0) K_DATA.forEach((k,i)=>{ if(row[ks+i]==='✓'||row[ks+i]==1) mloKas[code].K.add(k.code); });
+            if(as>=0) A_DATA.forEach((a,i)=>{ if(row[as+i]==='✓'||row[as+i]==1) mloKas[code].A.add(a.code); });
+            if(ss>=0) S_DATA.forEach((s,i)=>{ if(row[ss+i]==='✓'||row[ss+i]==1) mloKas[code].S.add(s.code); });
+          });
+        }
+      }
+      if(curTab==='PLO') renderPLO(); else if(curTab==='MLO') renderMLO();
       toast(`✓ Import สำเร็จ: ${file.name}`,'#0891b2');
-    }catch(err){toast('❌ Import ล้มเหลว: '+err.message,'#ef4444');}
+    }catch(err){ toast('❌ Import ล้มเหลว: '+err.message,'#ef4444'); }
   };
-  reader.readAsBinaryString(file);e.target.value='';
+  reader.readAsBinaryString(file);
+  e.target.value='';
 }
+
 function exportPDF(section='ALL'){
   document.getElementById('pdf-menu').style.display='none';
-  const overlay=document.getElementById('pdf-overlay');overlay.classList.add('show');
+  const overlay=document.getElementById('pdf-overlay'); overlay.classList.add('show');
   document.getElementById('pdf-msg').textContent='กำลังเตรียม PDF...';
   setTimeout(()=>{
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active'));
     (section==='ALL'?['PLO','MLO','CLO']:[section]).forEach(id=>document.getElementById('panel-'+id)?.classList.add('print-active'));
-    setTimeout(()=>{overlay.classList.remove('show');window.print();setTimeout(()=>document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active')),500);},300);
+    setTimeout(()=>{ overlay.classList.remove('show'); window.print(); setTimeout(()=>document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active')),500); },300);
   },200);
 }
 
+/* ═══════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════ */
 let _tt;
 function toast(msg,color='#22c55e'){
   document.getElementById('toast-dot').style.background=color;
   document.getElementById('toast-msg').textContent=msg;
-  const t=document.getElementById('toast');t.classList.add('show');
-  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3200);
+  const t=document.getElementById('toast'); t.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),3200);
 }
 
-/* INIT */
-PLO_LIST=DEFAULT_PLO;
-MLO_GROUPS=DEFAULT_MLO_GROUPS;
-isLiveData=false;
-initKasState();
-loadKasData();
-updateBanner('default');
-renderPLO();
+/* ═══════════════════════════════════════════════════════
+   INIT — ดึงข้อมูล PLO/MLO จาก Database
+═══════════════════════════════════════════════════════ */
+(async function init(){
+  await loadKasFromDB();          // ← เพิ่มบรรทัดนี้
+  const ok = await loadPloMloFromAPI();
+  initKasState();
+  loadKasData();
+  updateBanner(ok ? 'live' : 'error');
+  renderPLO();
+})();
 </script>
 </body>
 </html>

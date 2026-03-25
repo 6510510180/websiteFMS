@@ -23,7 +23,7 @@ body { font-family: 'Noto Sans Thai', 'Segoe UI', sans-serif; background: var(--
 .sidebar-brand{padding:20px 20px 16px;border-bottom:1px solid var(--border-col);}
 .sidebar-brand-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text-main);letter-spacing:-0.2px;}
 .sidebar-brand-sub{font-size:11.5px;color:var(--purple);font-weight:500;margin-top:2px;}
-.sidebar-section-label{padding:20px 20px 6px;font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1.2px;}
+.sidebar-section-label{padding:16px 20px 5px;font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1.2px;}
 .sidebar-nav-qa{flex:1;padding:8px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
 .nav-item-qa{
   display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;
@@ -62,20 +62,15 @@ svg{display:block;}
 }
 textarea { resize: vertical; min-height: 80px; }
 
-.img-upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
 .img-upload-item {
   border: 2px dashed #c4b5fd; border-radius: 14px; padding: 16px;
-  background: #faf7ff; transition: .18s; position: relative;
+  background: #faf7ff; transition: .18s; position: relative; max-width: 400px;
 }
 .img-upload-item:hover { border-color: var(--primary); background: #f5f0ff; }
 .img-upload-item.has-image { border-style: solid; border-color: #a78bfa; background: #fff; }
 .img-upload-label {
   display: flex; align-items: center; gap: 7px;
   font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 8px;
-}
-.img-upload-label .badge-tag {
-  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px;
-  background: var(--primary-light); color: var(--primary);
 }
 .img-upload-desc { font-size: 11.5px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
 .img-upload-btn {
@@ -86,8 +81,7 @@ textarea { resize: vertical; min-height: 80px; }
 }
 .img-upload-btn:hover { background: var(--primary-light); border-color: var(--primary); }
 .img-preview-wrap {
-  position: relative; margin-top: 10px; border-radius: 10px; overflow: hidden;
-  display: none;
+  position: relative; margin-top: 10px; border-radius: 10px; overflow: hidden; display: none;
 }
 .img-preview-wrap img { width: 100%; height: 120px; object-fit: cover; display: block; border-radius: 10px; }
 .img-preview-wrap .remove-btn {
@@ -97,27 +91,11 @@ textarea { resize: vertical; min-height: 80px; }
 }
 .img-preview-wrap .remove-btn:hover { background: #ef4444; }
 .upload-progress {
-  margin-top: 8px; font-size: 11.5px; color: var(--muted); display: none;
-  align-items: center; gap: 6px;
+  margin-top: 8px; font-size: 11.5px; color: var(--muted); display: none; align-items: center; gap: 6px;
 }
 .upload-progress.show { display: flex; }
 .prog-bar { flex: 1; height: 4px; background: #e9e2ff; border-radius: 99px; overflow: hidden; }
 .prog-fill { height: 100%; width: 0; border-radius: 99px; background: var(--primary); transition: width .3s; }
-
-.howto-box {
-  background: linear-gradient(135deg, #f5f0ff, #fdf4ff);
-  border: 1.5px solid #c4b5fd; border-radius: 12px;
-  padding: 14px 16px; margin-top: 4px; margin-bottom: 0;
-}
-.howto-box h5 { font-size: 12.5px; font-weight: 700; color: var(--purple); margin-bottom: 8px; }
-.howto-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-.howto-item { background: #fff; border-radius: 9px; padding: 10px 12px; border: 1px solid #e8deff; }
-.howto-item .hi-tag {
-  font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 99px; margin-bottom: 6px;
-  display: inline-block;
-}
-.howto-item .hi-title { font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 3px; }
-.howto-item .hi-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
 
 .footer-actions {
   display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; flex-wrap: wrap;
@@ -142,25 +120,47 @@ textarea { resize: vertical; min-height: 80px; }
     <div class="sidebar-brand-title">FMS Admin</div>
     <div class="sidebar-brand-sub">PSU Faculty of Management</div>
   </div>
-  <div class="sidebar-section-label">เมนูหลัก</div>
+
   <nav class="sidebar-nav-qa">
+
+    <!-- กลุ่ม: ภาพรวม -->
+    <div class="sidebar-section-label">ภาพรวม</div>
     <a class="nav-item-qa" href="dashboard.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
       แดชบอร์ด
+    </a>
+
+    <!-- กลุ่ม: จัดการหลักสูตร -->
+    <div class="sidebar-section-label" style="margin-top:6px;">จัดการหลักสูตร</div>
+    <a class="nav-item-qa active" href="course-list.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+      หลักสูตร
     </a>
     <a class="nav-item-qa" href="study-plan.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
       แผนการศึกษา
     </a>
-    <a class="nav-item-qa active" href="course-list.html">
-      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
-      หลักสูตร
+
+    <!-- กลุ่ม: นักศึกษา -->
+    <div class="sidebar-section-label" style="margin-top:6px;">นักศึกษา</div>
+    <a class="nav-item-qa" href="admin-student-content.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
+      หน้านักศึกษา
     </a>
+    <a class="nav-item-qa" href="admin-subjects.html">
+      <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
+      รายวิชา
+    </a>
+
+    <!-- กลุ่ม: ระบบ -->
+    <div class="sidebar-section-label" style="margin-top:6px;">ระบบ</div>
     <a class="nav-item-qa" href="qa-dashboard.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
       ประกันคุณภาพการศึกษา
     </a>
+
   </nav>
+
   <div class="sidebar-footer-qa">
     <a class="nav-item-qa" href="login.html" id="logoutBtn">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
@@ -237,103 +237,28 @@ textarea { resize: vertical; min-height: 80px; }
         <svg width="18" height="18" viewBox="0 0 20 20" fill="#7c3aed"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
         รูปภาพหลักสูตร
       </div>
-      <div class="card-sub">อัปโหลดรูปภาพที่ใช้แสดงในแต่ละส่วนของหน้าหลักสูตร</div>
+      <div class="card-sub">รูปหน้าปก (Hero Image) แสดงในหน้าหลักสูตร — แนะนำขนาด 800×500px</div>
 
-      <div class="howto-box">
-        <h5>📍 แต่ละรูปใช้แสดงที่ไหน?</h5>
-        <div class="howto-row">
-          <div class="howto-item">
-            <span class="hi-tag" style="background:#ede9fe;color:#7c3aed">Hero Image</span>
-            <div class="hi-title">รูปหน้าปก</div>
-            <div class="hi-desc">รูปใหญ่ด้านขวาบน ในหน้า course-info และหน้าสาขา<br>แนะนำขนาด <strong>800×500px</strong></div>
-          </div>
-          <div class="howto-item">
-            <span class="hi-tag" style="background:#fef9c3;color:#854d0e">Background</span>
-            <div class="hi-title">ภาพพื้นหลัง Banner</div>
-            <div class="hi-desc">รูปพื้นหลังของส่วน Banner/Header ด้านบนสุด<br>แนะนำขนาด <strong>1440×400px</strong> ภาพกว้าง</div>
-          </div>
-          <div class="howto-item">
-            <span class="hi-tag" style="background:#dcfce7;color:#166534">Info Image</span>
-            <div class="hi-title">รูปข้อมูลหลักสูตร</div>
-            <div class="hi-desc">รูปเพิ่มเติมในหน้ารายละเอียดหลักสูตร<br>แนะนำขนาด <strong>600×400px</strong></div>
-          </div>
+      <div class="img-upload-item" id="wrap-hero">
+        <div class="img-upload-label">
+          <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
+          รูปหน้าปก (Hero Image)
         </div>
-      </div>
-
-      <div class="img-upload-grid" style="margin-top:16px;">
-
-        <!-- Hero Image -->
-        <div class="img-upload-item" id="wrap-hero">
-          <div class="img-upload-label">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
-            รูปหน้าปก (Hero Image)
-            <span class="badge-tag">หน้าหลัก</span>
-          </div>
-          <div class="img-upload-desc">รูปใหญ่ด้านขวาบนในหน้าหลักสูตร<br>รองรับ JPG, PNG, WEBP</div>
-          <button type="button" class="img-upload-btn" onclick="document.getElementById('heroFile').click()">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
-            เลือกรูปภาพ
-          </button>
-          <input type="file" id="heroFile" accept="image/*" style="display:none" onchange="uploadImg('heroFile','hero_image','prevHero','wrap-hero','prog-hero')">
-          <input type="hidden" id="hero_image" />
-          <div class="upload-progress" id="prog-hero">
-            <div class="prog-bar"><div class="prog-fill" id="progfill-hero"></div></div>
-            <span id="prog-hero-txt">กำลังอัปโหลด...</span>
-          </div>
-          <div class="img-preview-wrap" id="prevHero">
-            <img id="prevHeroImg" src="" alt="hero preview">
-            <button type="button" class="remove-btn" onclick="removeImg('hero_image','prevHero','wrap-hero')">✕</button>
-          </div>
+        <div class="img-upload-desc">รูปใหญ่ที่แสดงในหน้าหลักสูตร รองรับ JPG, PNG, WEBP</div>
+        <button type="button" class="img-upload-btn" onclick="document.getElementById('heroFile').click()">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+          เลือกรูปภาพ
+        </button>
+        <input type="file" id="heroFile" accept="image/*" style="display:none" onchange="uploadImg('heroFile','hero_image','prevHero','wrap-hero','prog-hero')">
+        <input type="hidden" id="hero_image" />
+        <div class="upload-progress" id="prog-hero">
+          <div class="prog-bar"><div class="prog-fill" id="progfill-hero"></div></div>
+          <span id="prog-hero-txt">กำลังอัปโหลด...</span>
         </div>
-
-        <!-- Background Image -->
-        <div class="img-upload-item" id="wrap-bg">
-          <div class="img-upload-label">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-            ภาพพื้นหลัง Banner
-            <span class="badge-tag" style="background:#fef9c3;color:#854d0e">ใหม่</span>
-          </div>
-          <div class="img-upload-desc">รูปพื้นหลังส่วน Banner บนสุดในหน้าหลักสูตรและหน้าสาขา<br>รองรับ JPG, PNG, WEBP</div>
-          <button type="button" class="img-upload-btn" onclick="document.getElementById('bgFile').click()">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
-            เลือกรูปภาพ
-          </button>
-          <input type="file" id="bgFile" accept="image/*" style="display:none" onchange="uploadImg('bgFile','bg_image','prevBg','wrap-bg','prog-bg')">
-          <input type="hidden" id="bg_image" />
-          <div class="upload-progress" id="prog-bg">
-            <div class="prog-bar"><div class="prog-fill" id="progfill-bg"></div></div>
-            <span id="prog-bg-txt">กำลังอัปโหลด...</span>
-          </div>
-          <div class="img-preview-wrap" id="prevBg">
-            <img id="prevBgImg" src="" alt="bg preview">
-            <button type="button" class="remove-btn" onclick="removeImg('bg_image','prevBg','wrap-bg')">✕</button>
-          </div>
+        <div class="img-preview-wrap" id="prevHero">
+          <img id="prevHeroImg" src="" alt="hero preview">
+          <button type="button" class="remove-btn" onclick="removeImg('hero_image','prevHero','wrap-hero')">✕</button>
         </div>
-
-        <!-- Info Image -->
-        <div class="img-upload-item" id="wrap-info">
-          <div class="img-upload-label">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-            รูปข้อมูลหลักสูตร
-            <span class="badge-tag" style="background:#dcfce7;color:#166534">เสริม</span>
-          </div>
-          <div class="img-upload-desc">รูปเพิ่มเติมในหน้ารายละเอียดหลักสูตร<br>รองรับ JPG, PNG, WEBP</div>
-          <button type="button" class="img-upload-btn" onclick="document.getElementById('infoFile').click()">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
-            เลือกรูปภาพ
-          </button>
-          <input type="file" id="infoFile" accept="image/*" style="display:none" onchange="uploadImg('infoFile','info_image','prevInfo','wrap-info','prog-info')">
-          <input type="hidden" id="info_image" />
-          <div class="upload-progress" id="prog-info">
-            <div class="prog-bar"><div class="prog-fill" id="progfill-info"></div></div>
-            <span id="prog-info-txt">กำลังอัปโหลด...</span>
-          </div>
-          <div class="img-preview-wrap" id="prevInfo">
-            <img id="prevInfoImg" src="" alt="info preview">
-            <button type="button" class="remove-btn" onclick="removeImg('info_image','prevInfo','wrap-info')">✕</button>
-          </div>
-        </div>
-
       </div>
     </div>
 
@@ -346,7 +271,7 @@ textarea { resize: vertical; min-height: 80px; }
       </button>
       <button type="button" class="btn btn-success" id="addMajorBtn">
         <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
-        บันทึกและเพิ่มสาขา
+        บันทึกและเพิ่มวิชาเอก
       </button>
     </div>
     <div id="message"></div>
@@ -355,8 +280,8 @@ textarea { resize: vertical; min-height: 80px; }
 </div>
 
 <script>
-const BASE_URL = "https://websitefms.onrender.com";
-const API = BASE_URL + "/api";
+const BASE = '';
+const API = BASE + "/api";
 
 const user = localStorage.getItem("user");
 if (!user) { alert("กรุณาเข้าสู่ระบบก่อน"); window.location.href = "login.html"; }
@@ -380,14 +305,12 @@ if (isEdit) {
   loadCourse();
 }
 
-// ─── helper: แปลง URL จาก API ให้ใช้งานได้ (เหมือน admin page เดิม) ───
 function resolveUrl(path) {
   if (!path) return "";
-  if (path.indexOf("http") === 0) return path;   // URL เต็มอยู่แล้ว
-  return BASE_URL + path;                         // path สัมพัทธ์
+  if (path.indexOf("http") === 0) return path;
+  return BASE + path;
 }
 
-// ─── Upload image ───────────────────────────────────────────────────────
 async function uploadImg(fileInputId, hiddenId, previewWrapId, wrapId, progId) {
   const fileInput = document.getElementById(fileInputId);
   const file = fileInput.files[0];
@@ -418,9 +341,7 @@ async function uploadImg(fileInputId, hiddenId, previewWrapId, wrapId, progId) {
       return;
     }
 
-    // เก็บ URL ที่ได้จาก API ตรงๆ ไม่ต้องแปลง
     document.getElementById(hiddenId).value = data.url;
-
     const wrap = document.getElementById(previewWrapId);
     wrap.querySelector("img").src = resolveUrl(data.url);
     wrap.style.display = "block";
@@ -448,7 +369,6 @@ function removeImg(hiddenId, previewWrapId, wrapId) {
   document.getElementById(wrapId).classList.remove("has-image");
 }
 
-// ─── Load course (edit mode) ─────────────────────────────────────────────
 async function loadCourse() {
   try {
     const res = await fetch(API + "/courses/" + courseId);
@@ -462,27 +382,19 @@ async function loadCourse() {
       if (el && c[f] != null) el.value = c[f];
     });
 
-    // โหลดรูปภาพ — ใช้ resolveUrl() แทนการต่อ BASE_URL ตรงๆ
-    [
-      { field: "hero_image", wrap: "prevHero", wrapOuter: "wrap-hero" },
-      { field: "bg_image",   wrap: "prevBg",   wrapOuter: "wrap-bg"   },
-      { field: "info_image", wrap: "prevInfo",  wrapOuter: "wrap-info" }
-    ].forEach(function(item) {
-      if (c[item.field]) {
-        document.getElementById(item.field).value = c[item.field];
-        const wrapEl = document.getElementById(item.wrap);
-        wrapEl.querySelector("img").src = resolveUrl(c[item.field]); // ← แก้ตรงนี้
-        wrapEl.style.display = "block";
-        document.getElementById(item.wrapOuter).classList.add("has-image");
-      }
-    });
+    if (c.hero_image) {
+      document.getElementById("hero_image").value = c.hero_image;
+      const wrapEl = document.getElementById("prevHero");
+      wrapEl.querySelector("img").src = resolveUrl(c.hero_image);
+      wrapEl.style.display = "block";
+      document.getElementById("wrap-hero").classList.add("has-image");
+    }
 
   } catch(err) {
     showMsg("โหลดข้อมูลหลักสูตรไม่สำเร็จ", "error");
   }
 }
 
-// ─── Save / Update ───────────────────────────────────────────────────────
 let afterSave = "info";
 document.getElementById("saveBtn").addEventListener("click", function() { afterSave = "info"; });
 document.getElementById("addMajorBtn").addEventListener("click", function() {
@@ -504,9 +416,7 @@ document.getElementById("courseForm").addEventListener("submit", async function(
     total_credits: document.getElementById("total_credits").value,
     short_detail:  document.getElementById("short_detail").value,
     student_range: document.getElementById("student_range").value,
-    hero_image:    document.getElementById("hero_image").value  || null,
-    bg_image:      document.getElementById("bg_image").value    || null,
-    info_image:    document.getElementById("info_image").value  || null
+    hero_image:    document.getElementById("hero_image").value || null,
   };
 
   if (!body.name_th.trim()) { showMsg("กรุณากรอกชื่อหลักสูตรภาษาไทย", "error"); return; }
@@ -539,7 +449,6 @@ document.getElementById("courseForm").addEventListener("submit", async function(
   }
 });
 
-// ─── Delete ──────────────────────────────────────────────────────────────
 document.getElementById("deleteBtn").addEventListener("click", async function() {
   if (!confirm("ยืนยันลบหลักสูตรนี้?\nการลบจะไม่สามารถกู้คืนได้")) return;
   showMsg("กำลังลบ...", "loading");
@@ -553,7 +462,6 @@ document.getElementById("deleteBtn").addEventListener("click", async function() 
   }
 });
 
-// ─── Helper ──────────────────────────────────────────────────────────────
 function showMsg(text, type) {
   const el = document.getElementById("message");
   el.className = type;

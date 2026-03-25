@@ -79,7 +79,7 @@
     .section-majors-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(124,58,237,0.82) 0%, rgba(109,40,217,0.88) 50%, rgba(79,30,170,0.92) 100%); }
     .section-majors-bg.no-bg { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #4f1ea0 100%); }
     .section-majors > * { position: relative; z-index: 1; }
-    .section-majors .section-title { font-family: 'Prompt', sans-serif; font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 32px; color: #fff; }
+    .section-majors .section-title { font-family: 'Prompt', sans-serif; font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 32px; color: #070707; }
     .majors-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 1200px; margin: 0 auto; }
     .major-card { border-radius: 16px; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); transition: transform .2s, box-shadow .2s, border-color .2s; display: flex; flex-direction: column; text-decoration: none; color: inherit; }
     .major-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.25); border-color: rgba(255,255,255,0.5); }
@@ -133,7 +133,7 @@
 
 <header class="navbar">
   <div class="logo">
-    <img src="logo.jpg" alt="Logo" id="logoImg">
+    <img src="logo-fms.png" alt="Logo" id="logoImg">
     <span class="logo-text" id="logoText" style="display:none">FMS PSU</span>
   </div>
   <nav>
@@ -197,8 +197,8 @@
 </footer>
 
 <script>
-  const BASE_URL = "https://websitefms.onrender.com";
-  const API = BASE_URL + "/api";
+  const BASE = ''; 
+  const API = BASE + "/api";
   const app = document.getElementById("app");
 
   document.getElementById("logoImg").onerror = function() {
@@ -212,7 +212,7 @@
   function imgUrl(path, opts = {}) {
     if (!path) return null;
     if (path.startsWith("http://") || path.startsWith("https://")) return path;
-    if (path.startsWith("/")) return BASE_URL + path;
+    if (path.startsWith("/")) return BASE + path;
     const { w = 800, h = 600, crop = "fill" } = opts;
     return `${CL_BASE}/q_auto,f_auto,w_${w},h_${h},c_${crop}/${path}`;
   }
@@ -300,6 +300,13 @@
   }
 
   function render(c, majors) {
+  const ORDER = ["การเงิน","การตลาด","ทรัพยากรมนุษย์","โลจิสติกส์","สารสนเทศ","mice"];
+  const sorted = [...majors].sort((a,b) => {
+    const ai = ORDER.findIndex(k => (a.name_th||'').toLowerCase().includes(k));
+    const bi = ORDER.findIndex(k => (b.name_th||'').toLowerCase().includes(k));
+    return (ai===-1?99:ai) - (bi===-1?99:bi);
+  });
+  // ...
     const heroSrc = imgUrl(c.hero_image, { w: 560, h: 420, crop: "fill" });
     const heroImgHTML = heroSrc
       ? `<img src="${heroSrc}" alt="${c.name_th || ''}" loading="lazy"
@@ -312,7 +319,7 @@
       c.name_th || null,
       c.student_range ? `หลักสูตรปรับปรุง พ.ศ. ${c.student_range}` : null,
       "มหาวิทยาลัยสงขลานครินทร์ คณะวิทยาการจัดการ",
-      c.degree_level ? `สาขาวิชา${c.degree_level}` : null,
+      c.degree_level ? `วิชาเอก${c.degree_level}` : null,
       c.short_detail || null,
     ].filter(Boolean);
     const metaHTML = metaLines.map(l => `<span>${l}</span>`).join("");
@@ -337,8 +344,8 @@
     const bgStyle = bgSrc ? `style="background-image: url('${bgSrc}')"` : "";
     const bgClass = bgSrc ? "" : "no-bg";
 
-    const majorsHTML = majors.length
-      ? majors.map(m => {
+    const majorsHTML = sorted.length
+  ? sorted.map(m => {
           const icon = getIcon((m.name_th || "") + " " + (m.name_en || ""));
           const rawSrc = m.hero_image || m.image_url || m.info_image || null;
           const mSrc = imgUrl(rawSrc, { w: 480, h: 320, crop: "fill" });
@@ -370,7 +377,7 @@
         }).join("")
       : `<div class="empty-state">
            <i class="fa-solid fa-inbox"></i>
-           ยังไม่มีสาขาวิชาในหลักสูตรนี้
+           ยังไม่มีวิชาเอกวิชาในหลักสูตรนี้
          </div>`;
 
     app.innerHTML = `
@@ -389,7 +396,8 @@
       </div>
       <div class="section-majors">
         <div class="section-majors-bg ${bgClass}" ${bgStyle}></div>
-        <h2 class="section-title">สาขาวิชาที่เปิดสอน</h2>
+       <h2 class="section-title">วิชาเอกที่เปิดสอน</h2>
+       <p style="text-align:center;color:#6b7280;font-size:14px;margin-bottom:32px;">เลือกเรียนในวิชาเอกที่คุณสนใจ </p>
         <div class="majors-grid">${majorsHTML}</div>
       </div>
       <div class="tuition-wrap">

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ค้นหา | คณะวิทยาการจัดการ PSU</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Sarabun',sans-serif;background:#f8f5ff;color:#333;min-height:100vh;}
+
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:10px 5%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.05);position:sticky;top:0;z-index:1000;}
+.navbar .logo img{height:40px;}
+.navbar ul{display:flex;gap:20px;margin:0;padding:0;list-style:none;align-items:center;}
+.navbar a{font-size:14px;color:#555;text-decoration:none;transition:.3s;}
+.navbar a:hover{color:#9b51e0;}
+.navbar a.active{color:#9b51e0;font-weight:bold;}
+
+.search-hero{background:linear-gradient(135deg,#7c3aed,#c084fc);padding:48px 5% 64px;text-align:center;}
+.search-hero h1{color:#fff;font-size:28px;font-weight:700;margin-bottom:6px;}
+.search-hero p{color:rgba(255,255,255,.85);font-size:14px;margin-bottom:28px;}
+
+.search-bar-wrap{position:relative;max-width:600px;margin:0 auto 20px;}
+.search-bar{width:100%;padding:16px 56px 16px 22px;border-radius:14px;border:none;font-size:15px;font-family:'Sarabun',sans-serif;outline:none;box-shadow:0 6px 24px rgba(0,0,0,.18);}
+.search-bar-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:10px;background:#7c3aed;border:none;cursor:pointer;color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.search-bar-btn:hover{background:#6d28d9;}
+
+.filter-wrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.filter-pill{padding:6px 16px;border-radius:99px;border:1.5px solid rgba(255,255,255,.5);background:rgba(255,255,255,.15);color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;}
+.filter-pill:hover{background:rgba(255,255,255,.3);}
+.filter-pill.active{background:#fff;color:#7c3aed;border-color:#fff;}
+
+.container{width:90%;max-width:860px;margin:0 auto;padding:28px 0 60px;}
+
+.stats-bar{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:12px;padding:12px 18px;margin-bottom:18px;box-shadow:0 2px 8px rgba(124,58,237,.07);flex-wrap:wrap;gap:8px;}
+.stats-text{font-size:13px;color:#888;}
+.stats-text strong{color:#7c3aed;}
+.sort-select{border:1.5px solid #e8deff;border-radius:8px;padding:5px 10px;font-family:'Sarabun',sans-serif;font-size:13px;color:#555;outline:none;background:#faf7ff;}
+
+.sec-label{font-size:11px;font-weight:700;color:#9b51e0;text-transform:uppercase;letter-spacing:.6px;margin:20px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec-label::after{content:'';flex:1;height:1px;background:#e8deff;}
+
+.result-card{background:#fff;border-radius:12px;border:1px solid #f0e8ff;padding:14px 18px;margin-bottom:8px;display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;transition:.18s;box-shadow:0 1px 6px rgba(124,58,237,.05);}
+.result-card:hover{border-color:#c084fc;box-shadow:0 4px 16px rgba(124,58,237,.12);transform:translateY(-2px);}
+.result-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.result-title{font-size:14.5px;font-weight:700;color:#1a1523;margin-bottom:3px;}
+.result-sub{font-size:12px;color:#999;}
+.result-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0;margin-left:auto;}
+.badge-course{background:#f3e8ff;color:#7c3aed;}
+.badge-major{background:#dbeafe;color:#1d4ed8;}
+.badge-plan{background:#dcfce7;color:#166534;}
+.highlight{color:#9b51e0;font-weight:700;}
+
+.suggest-title{font-size:14px;font-weight:700;color:#555;margin:24px 0 12px;}
+.suggest-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:600px){.suggest-grid{grid-template-columns:1fr;}}
+.suggest-card{background:#fff;border-radius:12px;border:1px solid #f0e8ff;padding:14px 16px;display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;transition:.15s;}
+.suggest-card:hover{border-color:#c084fc;background:#faf5ff;}
+.suggest-icon{font-size:22px;flex-shrink:0;}
+.suggest-name{font-size:13.5px;font-weight:700;color:#333;}
+.suggest-sub{font-size:11.5px;color:#aaa;margin-top:2px;}
+
+.empty-state{text-align:center;padding:56px 20px;}
+.empty-state i{font-size:44px;margin-bottom:14px;display:block;color:#ddd;}
+.empty-state p{font-size:15px;color:#bbb;}
+.empty-state small{font-size:13px;color:#ccc;margin-top:6px;display:block;}
+.spinner{width:32px;height:32px;border:3px solid #e8deff;border-top-color:#9b51e0;border-radius:50%;animation:spin .7s linear infinite;margin:40px auto;}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
+  <nav>
+    <ul>
+      <li><a href="bba-home.html">หน้าหลัก</a></li>
+      <li><a href="bba-public.html">ข้อมูลทั่วไป</a></li>
+      <li><a href="student.html">นักศึกษา</a></li>
+      <li><a href="plans.html">แผนการศึกษา</a></li>
+      <li><a href="bba-qa.html">QA</a></li>
+      <li><a href="search.html" class="active">ค้นหา</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="search-hero">
+  <h1>ค้นหาข้อมูลหลักสูตร</h1>
+  <p>ค้นหาหลักสูตร วิชาเอก และแผนการศึกษา</p>
+  <div class="search-bar-wrap">
+    <input class="search-bar" type="text" id="searchInput"
+           placeholder="เช่น บริหารธุรกิจ, การเงิน, แผนการศึกษา..."
+           oninput="onSearch(this.value)" autocomplete="off"/>
+    <button class="search-bar-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+  </div>
+  <div class="filter-wrap">
+    <button class="filter-pill active" onclick="setFilter('all',this)">ทั้งหมด</button>
+    <button class="filter-pill" onclick="setFilter('course',this)">หลักสูตร</button>
+    <button class="filter-pill" onclick="setFilter('major',this)">วิชาเอก</button>
+    <button class="filter-pill" onclick="setFilter('plan',this)">แผนการศึกษา</button>
+  </div>
+</div>
+
+<div class="container">
+  <div id="statsBar" class="stats-bar" style="display:none;">
+    <div class="stats-text">พบ <strong id="resultCount">0</strong> ผลลัพธ์</div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#888;">
+      เรียงโดย
+      <select class="sort-select" onchange="currentSort=this.value;onSearch(currentQuery)">
+        <option value="relevance">ความเกี่ยวข้อง</option>
+        <option value="name">ชื่อ ก-ฮ</option>
+      </select>
+    </div>
+  </div>
+  <div id="resultsContainer">
+    <div class="spinner"></div>
+  </div>
+</div>
+
+<script>
+const BASE = '';
+const API  = BASE + '/api';
+
+let searchData   = { courses:[], majors:[] };
+let activeFilter = 'all';
+let currentQuery = '';
+let currentSort  = 'relevance';
+
+async function loadData(){
+  try{
+    const courses = await fetch(`${API}/public/courses`).then(r=>r.json());
+    searchData.courses = courses || [];
+
+    const majorArr = await Promise.all(
+      courses.map(c =>
+        fetch(`${API}/public/courses/${c.id}/majors`)
+          .then(r=>r.json())
+          .then(ms=>ms.map(m=>({...m,courseName:c.name_th,courseId:c.id})))
+          .catch(()=>[])
+      )
+    );
+    searchData.majors = majorArr.flat();
+
+    const q = new URLSearchParams(location.search).get('q');
+    if(q){ document.getElementById('searchInput').value=q; onSearch(q); }
+    else{ showSuggestions(); }
+  }catch(e){
+    document.getElementById('resultsContainer').innerHTML =
+      `<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><p>ไม่สามารถโหลดข้อมูลได้</p></div>`;
+  }
+}
+
+function showSuggestions(){
+  const items = [
+    ...searchData.courses.slice(0,2).map(c=>({
+      icon:'🎓', name:c.name_th, sub:'หลักสูตร',
+      href:`bba-public.html?courseId=${c.id}`
+    })),
+    ...searchData.majors.slice(0,2).map(m=>({
+      icon:'📚', name:m.name_th, sub:'วิชาเอก',
+      href:`bba-public.html?courseId=${m.courseId}&majorId=${m.id}`
+    })),
+    { icon:'📅', name:'แผนการศึกษา', sub:'ตารางแผนทุกหลักสูตร', href:'plans.html' },
+    { icon:'✅', name:'QA / ประกันคุณภาพ', sub:'PLO และ Alignment Matrix', href:'bba-qa.html' },
+  ];
+  document.getElementById('statsBar').style.display='none';
+  document.getElementById('resultsContainer').innerHTML = `
+    <div class="suggest-title">หมวดหมู่ยอดนิยม</div>
+    <div class="suggest-grid">
+      ${items.map(it=>`
+      <a class="suggest-card" href="${it.href}">
+        <div class="suggest-icon">${it.icon}</div>
+        <div>
+          <div class="suggest-name">${it.name}</div>
+          <div class="suggest-sub">${it.sub}</div>
+        </div>
+      </a>`).join('')}
+    </div>`;
+}
+
+function setFilter(f,btn){
+  activeFilter=f;
+  document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(currentQuery) onSearch(currentQuery);
+}
+
+function hl(text,q){
+  if(!q||!text) return text||'';
+  const re=new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');
+  return String(text).replace(re,'<span class="highlight">$1</span>');
+}
+
+function onSearch(q){
+  currentQuery=q.trim();
+  if(!currentQuery){ showSuggestions(); return; }
+
+  const ql=currentQuery.toLowerCase();
+  let results=[];
+
+  if(activeFilter==='all'||activeFilter==='course'){
+    searchData.courses
+      .filter(c=>(c.name_th||'').toLowerCase().includes(ql)||(c.name_en||'').toLowerCase().includes(ql)||(c.short_detail||'').toLowerCase().includes(ql))
+      .forEach(c=>results.push({
+        type:'course',title:c.name_th||'',sub:c.degree_level||'หลักสูตร',
+        icon:'🎓',bg:'#f3e8ff',badge:'หลักสูตร',bc:'badge-course',
+        href:`bba-public.html?courseId=${c.id}`
+      }));
+  }
+  if(activeFilter==='all'||activeFilter==='major'){
+    searchData.majors
+      .filter(m=>(m.name_th||'').toLowerCase().includes(ql)||(m.name_en||'').toLowerCase().includes(ql))
+      .forEach(m=>results.push({
+        type:'major',title:m.name_th||'',sub:'วิชาเอก — '+(m.courseName||''),
+        icon:'📚',bg:'#dbeafe',badge:'วิชาเอก',bc:'badge-major',
+        href:`bba-public.html?courseId=${m.courseId}&majorId=${m.id}`
+      }));
+  }
+  if(activeFilter==='all'||activeFilter==='plan'){
+    searchData.courses
+      .filter(c=>(c.name_th||'').toLowerCase().includes(ql)||ql.includes('แผน')||ql.includes('plan'))
+      .forEach(c=>results.push({
+        type:'plan',title:'แผนการศึกษา — '+(c.name_th||''),sub:'ดูตารางแผนการศึกษาทุกชั้นปี',
+        icon:'📅',bg:'#dcfce7',badge:'แผนการศึกษา',bc:'badge-plan',
+        href:`plans.html?courseId=${c.id}`
+      }));
+  }
+
+  if(currentSort==='name') results.sort((a,b)=>a.title.localeCompare(b.title,'th'));
+
+  document.getElementById('resultCount').textContent=results.length;
+  document.getElementById('statsBar').style.display='flex';
+
+  if(!results.length){
+    document.getElementById('resultsContainer').innerHTML=`
+      <div class="empty-state">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <p>ไม่พบผลลัพธ์สำหรับ "${currentQuery}"</p>
+        <small>ลองค้นหาด้วยคำอื่น หรือเปลี่ยนหมวดหมู่</small>
+      </div>`;
+    return;
+  }
+
+  const groups={course:'หลักสูตร',major:'วิชาเอก',plan:'แผนการศึกษา'};
+  let html='';
+  Object.entries(groups).forEach(([type,label])=>{
+    const items=results.filter(r=>r.type===type);
+    if(!items.length) return;
+    if(activeFilter==='all') html+=`<div class="sec-label">${label}</div>`;
+    html+=items.map(r=>`
+      <a class="result-card" href="${r.href}">
+        <div class="result-icon" style="background:${r.bg}">${r.icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="result-title">${hl(r.title,currentQuery)}</div>
+          <div class="result-sub">${r.sub}</div>
+        </div>
+        <span class="result-badge ${r.bc}">${r.badge}</span>
+      </a>`).join('');
+  });
+
+  document.getElementById('resultsContainer').innerHTML=html;
+}
+
+loadData();
+</script>
+</body>
+</html>

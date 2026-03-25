@@ -1,1361 +1,470 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หลักสูตรบริหารธุรกิจบัณฑิต</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-:root {
-  --pu:#6B3FA0; --pu2:#7b2cbf; --pu-l:#F3EEFF; --pu-m:#E8DEFF; --pu-tab:#EDE9FE;
-  --bg:#EEEEF6; --wh:#ffffff; --tx:#1A1523; --ts:#64748B; --bd:#E2E8F0;
-  --green:#10B981; --green-l:#E8F9F1; --blue:#3B82F6;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;font-size:14px;}
-/* Navbar */
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:58px;background:var(--wh);box-shadow:0 1px 0 var(--bd);position:sticky;top:0;z-index:1000;}
-.navbar .logo{display:flex;align-items:center;}
-.navbar .logo img{height:38px;}
-nav{flex:1;display:flex;justify-content:center;}
-.nav-links{list-style:none;display:flex;gap:32px;align-items:center;}
-.nav-links a{font-size:14px;text-decoration:none;color:#555;font-weight:500;}
-.nav-links a:hover,.nav-links a.active{color:var(--pu);font-weight:700;}
-.search-container{display:flex;justify-content:flex-end;}
-.search-box{display:flex;align-items:center;background:#F1F5F9;padding:7px 14px;border-radius:10px;width:240px;gap:8px;}
-.search-box input{border:none;background:none;outline:none;font-family:inherit;font-size:13px;width:100%;}
-.search-box i{color:#94A3B8;}
-/* Main */
-.main-content{padding:36px 0 20px;}
-.container{width:92%;max-width:1380px;margin:0 auto;}
-/* Header banner */
-.header-banner{background:var(--pu-m);border-radius:14px;padding:22px 28px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:22px;}
-.header-text-group{flex:1;}
-.header-title{font-size:20px;font-weight:800;color:var(--tx);line-height:1.35;margin:0;}
-.header-buttons{display:flex;gap:10px;flex-shrink:0;align-items:center;}
-/* Tab bar */
-.action-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;}
-.tab-btn{padding:9px 20px;border-radius:9px;text-decoration:none;font-size:13.5px;font-weight:600;background:var(--wh);color:#555;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd);cursor:pointer;font-family:inherit;transition:all .18s;white-space:nowrap;}
-.tab-btn:hover{border-color:var(--pu);color:var(--pu);}
-.tab-btn.active{background:var(--pu-tab);color:var(--pu);border-color:var(--pu-m);font-weight:700;}
-.btn-excel{background:transparent;color:#555;border:1px solid var(--bd);padding:9px 18px;border-radius:9px;cursor:pointer;font-weight:500;font-size:13.5px;font-family:inherit;display:inline-flex;align-items:center;gap:8px;}
-/* Alignment card */
-.alignment-card{width:94%;max-width:1500px;margin:0 auto 40px;background:var(--wh);border-radius:14px;overflow:auto;box-shadow:0 2px 12px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);}
-.alignment-table{display:none;animation:fadeIn .3s ease;}
-.alignment-table.active{display:block;}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-/* Matrix table */
-.matrix-table{width:100%;border-collapse:collapse;font-size:12.5px;}
-.matrix-table th,.matrix-table td{border:1px solid #EEE8FA;padding:9px 6px;text-align:center;vertical-align:middle;}
-.col-stakeholder{width:280px;min-width:280px;background:#FAFBFE;text-align:left!important;padding:12px 16px!important;}
-.bg-purple-light{background:#F3EFFF!important;color:var(--pu2);font-weight:700;font-size:12px;}
-.bg-green-light{background:var(--green-l)!important;color:#059669;font-weight:700;font-size:12px;}
-.vision-title{color:var(--pu2);font-weight:700;font-size:12px;margin-bottom:3px;}
-.vision-text{color:var(--ts);font-size:12px;font-weight:400;}
-.check-icon{color:#283593;font-size:15px;}
-.matrix-table tbody tr:hover td{background:#F5EEFF;}
-/* Footer nav */
-.table-footer{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid var(--bd);margin-top:0;color:var(--ts);font-size:13px;}
-.btn-nav{background:none;border:none;color:var(--pu2);cursor:pointer;font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px;font-family:inherit;}
-.btn-nav.disabled{color:#CBD5E1;cursor:not-allowed;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alignment Matrix | BBA</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Prompt:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+  <script src="fms-api-client.js"></script>
+
+  <style>
+    :root {
+      --pu:#9b51e0;--pu2:#7b2cbf;--pu-l:#F3EEFF;--pu-m:#E8DEFF;--pu-tab:#EDE9FE;
+      --bg:#EEEEF6;--wh:#ffffff;--tx:#1A1523;--ts:#64748B;--bd:#E2E8F0;
+      --teal:#0891b2;--teal-light:#e0f7fa;
+      --green:#10B981;--amber:#F59E0B;--blue:#3B82F6;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;}
+
+    /* ── Navbar ── */
+    .navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:58px;background:var(--wh);box-shadow:0 1px 0 var(--bd);position:sticky;top:0;z-index:1000;}
+    .navbar .logo img{height:38px;}
+    nav{flex:1;display:flex;justify-content:center;}
+    .nav-links{list-style:none;display:flex;gap:32px;align-items:center;}
+    .nav-links a{font-size:14px;text-decoration:none;color:#555;font-weight:500;transition:color .2s;}
+    .nav-links a:hover,.nav-links a.active{color:var(--pu);font-weight:700;}
+    .search-container{display:flex;justify-content:flex-end;}
+    .search-box{display:flex;align-items:center;background:#F1F5F9;padding:7px 14px;border-radius:10px;width:240px;gap:8px;}
+    .search-box input{border:none;background:none;outline:none;font-family:inherit;font-size:13px;width:100%;}
+    .search-box i{color:#94A3B8;font-size:13px;}
+
+    /* ── Page Layout ── */
+    .main-content{padding:36px 0;min-height:100vh;}
+    .container{width:92%;max-width:1400px;margin:0 auto;}
+    h1.page-title{font-size:28px;font-weight:800;color:var(--tx);line-height:1.25;margin-bottom:4px;}
+    .page-subtitle{font-size:13px;color:var(--ts);margin-bottom:24px;}
+
+    /* ── Action Bar & Tabs (เหมือน bba-plo) ── */
+    .action-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;}
+    .tab-btn{
+      padding:9px 20px;border-radius:9px;text-decoration:none;font-size:13.5px;font-weight:600;
+      background:var(--wh);color:#555;display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--bd);cursor:pointer;font-family:inherit;transition:all .18s;white-space:nowrap;
+    }
+    .tab-btn:hover{border-color:var(--pu);color:var(--pu);}
+    .tab-btn.active{background:var(--pu-tab);color:var(--pu);border-color:var(--pu-m);font-weight:700;}
+    .btn-download{
+      background:var(--pu2);color:#fff;padding:10px 22px;border-radius:9px;text-decoration:none;
+      font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:9px;
+      border:none;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .18s;
+    }
+    .btn-download:hover{background:var(--pu);}
+
+    /* ── State Banners ── */
+    .state-banner{display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;margin-bottom:16px;border:1.5px solid;}
+    .state-banner.loading{background:#fefce8;border-color:#fde68a;color:#854d0e;}
+    .state-banner.ok{background:#f0fdf4;border-color:#86efac;color:#166534;}
+    .state-banner.err{background:#fef2f2;border-color:#fca5a5;color:#991b1b;}
+    .state-banner.unpublished{background:#fff7ed;border-color:#fed7aa;color:#c2410c;}
+
+    /* ── Stats Bar ── */
+    .stats-bar{display:flex;align-items:center;gap:24px;background:var(--wh);border:1px solid var(--bd);border-radius:12px;padding:12px 20px;margin-bottom:16px;flex-wrap:wrap;}
+    .stat-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;}
+    .stat-dot{width:9px;height:9px;border-radius:50%;}
+    .stat-dot.p{background:var(--pu2);}
+    .stat-dot.m{background:var(--teal);}
+    .pub-badge{margin-left:auto;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;background:#f0fdf4;color:#166534;border:1.5px solid #86efac;}
+    .pub-badge .live-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 1.8s infinite;}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 2px rgba(34,197,94,.25)}50%{box-shadow:0 0 0 5px rgba(34,197,94,.05)}}
+
+    /* ── Table Card ── */
+    .table-card{background:var(--wh);border-radius:14px;border:1px solid var(--bd);overflow:visible;box-shadow:0 2px 12px rgba(107,63,160,.07);}
+    .table-scroll{overflow:auto;}
+
+    /* ── Matrix Table ── */
+    .matrix-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-family:'Sarabun',sans-serif;}
+    .matrix-table th,.matrix-table td{border:1px solid #dfe3ea;padding:9px 8px;background:#fff;}
+    .col-stakeholder{min-width:300px;background:#fafafa;padding:10px 14px;font-size:13.5px;font-weight:700;text-align:left;vertical-align:middle;color:var(--tx);}
+    .bg-purple-th{background:var(--pu-l);color:var(--pu2);font-weight:800;text-align:center;padding:10px 8px;font-size:12.5px;letter-spacing:.3px;}
+    .bg-teal-th{background:var(--teal-light);color:var(--teal);font-weight:800;text-align:center;padding:10px 8px;font-size:12.5px;letter-spacing:.3px;}
+    .sub-th-p{background:#faf0ff;color:var(--pu2);text-align:center;padding:9px 6px;font-weight:700;font-size:11.5px;min-width:34px;white-space:nowrap;}
+    .sub-th-m{background:#f0fafd;color:var(--teal);text-align:center;padding:9px 6px;font-weight:700;font-size:11.5px;min-width:34px;white-space:nowrap;}
+    .row-label-cell{background:var(--wh);padding:10px 14px;min-width:300px;border-right:2px solid #e0d8f0;vertical-align:middle;}
+    .row-group{font-size:10px;font-weight:700;color:var(--pu2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;text-align:left;}
+    .row-title{font-size:13px;font-weight:600;color:var(--tx);line-height:1.55;}
+    .row-section td,.row-section{background:#f9f5ff !important;padding:10px 14px;vertical-align:middle;}
+    .row-section-title{font-size:13px;font-weight:800;color:var(--pu2);}
+    .check-cell{text-align:center;vertical-align:middle;padding:8px 4px;}
+    .check-cell.p-col .check-on{color:var(--pu2);}
+    .check-cell.m-col .check-on{color:var(--teal);}
+    .check-on{font-size:14px;}
+    .check-empty{width:12px;height:12px;border-radius:50%;border:1.5px solid #ddd;display:inline-block;vertical-align:middle;}
+    tbody tr:nth-child(even) td{background:#fdfbff;}
+    tbody tr:hover td{background:var(--pu-l) !important;}
+
+    /* ── Tooltip ── */
+    .tip-wrap{position:relative;display:inline-block;width:100%;}
+    .tip-trigger{display:flex;align-items:flex-start;gap:6px;background:none;border:none;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;text-align:left;width:100%;}
+    .tip-trigger:focus-visible{outline:2px solid var(--pu2);outline-offset:2px;border-radius:6px;}
+    .tip-icon{width:14px;height:14px;border-radius:50%;background:#ede9fe;color:#5b21b6;font-size:9px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;line-height:1;transition:background .15s,color .15s;}
+    .tip-wrap.is-open .tip-icon{background:var(--pu2);color:#fff;}
+    .tip-box{position:absolute;left:0;top:calc(100% + 8px);z-index:9999;background:#1f2937;color:#e5e7eb;border-radius:12px;padding:12px 16px;min-width:260px;max-width:340px;box-shadow:0 12px 32px rgba(0,0,0,.25);border:1px solid #374151;white-space:normal;}
+    .tip-box[hidden]{display:none !important;}
+    .tip-box::before{content:'';position:absolute;top:-6px;left:14px;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid #1f2937;}
+    .tip-box-group{font-size:10px;font-weight:700;color:#a07cdd;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;}
+    .tip-box-title{font-size:12.5px;font-weight:700;color:#e8d8ff;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(196,168,255,.2);line-height:1.4;}
+    .tip-box-desc{font-size:12px;line-height:1.7;color:#cbb8f0;}
+
+    /* ── Footer nav ── */
+    .table-footer{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid var(--bd);background:#faf7ff;border-radius:0 0 14px 14px;}
+    .btn-nav{background:none;border:1.5px solid var(--bd);color:var(--pu2);cursor:pointer;font-weight:700;font-size:13px;padding:8px 18px;border-radius:8px;display:flex;align-items:center;gap:8px;transition:.18s;font-family:'Sarabun',sans-serif;}
+    .btn-nav:hover:not([disabled]){background:var(--pu-l);border-color:var(--pu2);}
+    .btn-nav[disabled]{color:#ccc;border-color:#eee;cursor:not-allowed;}
+    .page-indicator{font-size:13px;color:var(--ts);font-weight:600;}
+
+    /* ── Loading skeleton ── */
+    .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .skel-row{height:42px;margin-bottom:4px;}
+
+    /* ── Empty / error ── */
+    .empty-state{text-align:center;padding:60px 20px;color:var(--ts);}
+    .empty-state i{font-size:48px;margin-bottom:16px;opacity:.3;}
+    .empty-state p{font-size:14px;}
+  </style>
 </head>
 <body>
 
 <header class="navbar">
-    <div class="logo"><img src="logo.jpg" alt="PSU Logo"></div>
-    <nav>
-        <ul class="nav-links">
-            <li><a href="bba-home.html">หน้าหลัก</a></li>
-            <li><a href="bba-public.html">ข้อมูลทั่วไป</a></li>
-            <li><a href="student.html">นักศึกษา</a></li>
-            <li><a href="plans.html">แผนการศึกษา</a></li>
-            <li><a href="bba-qa.html"class="active">QA</a></li>
-        </ul>
-    </nav>
-
-    <div class="search-container">
-        <div class="search-box">
-            <i class="fas fa-search"></i> <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร">
-        </div>
+  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="bba-qa.html">หน้าหลัก</a></li>
+      <li><a href="bba-plo.html" class="active">ผลลัพธ์การเรียนรู้</a></li>
+      <li><a href="bba-stake.html">ผู้มีส่วนร่วมในหลักสูตร</a></li>
+      <li><a href="bba-students.html">ข้อมูลนักศึกษา</a></li>
+      <li><a href="achievements.html">ผลงานและความสำเร็จ</a></li>
+    </ul>
+  </nav>
+  <div class="search-container">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร"/>
     </div>
+  </div>
 </header>
+
 <main class="main-content">
-    <div class="container">
-        <header class="header-banner">
-            <h1 class="header-title">ตารางวิเคราะห์ความสอดคล้อง (Alignment Matrix)<br>PLOs & MLOs กับวิสัยทัศน์ พันธกิจ คุณลักษณะของบัณฑิต และความต้องการของผู้มีส่วนได้ส่วนเสีย</h1>
-           
-            <div class="header-buttons">
-                <button class="btn-excel"><i class="fas fa-file-export"></i> ส่งออก Excel</button>
-            </div>
-        </header>
-        
-        <div class="action-bar">
-            <div class="tabs">
-                <a href="bba-plo.html" class="tab-btn"><i class="fas fa-th-large"></i> PLOs/MLOs</a>
-                <a href="score.html" class="tab-btn"><i class="fas fa-chart-bar"></i> คะแนนผลลัพธ์</a>
-                <a href="bba-matrix1.html" class="tab-btn  active"><i class="fas fa-project-diagram"></i> Alignment Matrix</a>
-                <a href="kas1.html" class="tab-btn"><i class="fas fa-book"></i> KAS</a>
-            </div>
-        </div>
+  <div class="container">
+
+    <h1 class="page-title">รายละเอียดผลลัพธ์การเรียนรู้</h1>
+    <p class="page-subtitle">หลักสูตรบริหารธุรกิจบัณฑิต (หลักสูตรปรับปรุง พ.ศ. 2567)</p>
+
+    <!-- Action Bar + Tabs (เหมือน bba-plo) -->
+    <div class="action-bar">
+      <div class="tabs">
+        <a href="bba-plo.html"     class="tab-btn"><i class="fas fa-th-large"></i> PLOs/MLOs</a>
+        <a href="score.html"       class="tab-btn"><i class="fas fa-chart-bar"></i> คะแนนผลลัพธ์</a>
+        <a href="bba-matrix1.html" class="tab-btn active"><i class="fas fa-project-diagram"></i> Alignment Matrix</a>
+        <a href="kas1.html"        class="tab-btn"><i class="fas fa-book"></i> KAS</a>
+      </div>
+      <button class="btn-download" onclick="exportExcel()">
+        <i class="fas fa-file-excel"></i> ส่งออก Excel
+      </button>
     </div>
+
+    <!-- State Banner -->
+    <div class="state-banner loading" id="stateBanner">
+      <i class="fas fa-circle-notch fa-spin"></i>
+      <span id="stateMsg">กำลังโหลดข้อมูลจากฐานข้อมูล...</span>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="statsBar" style="display:none;">
+      <div class="stat-item">
+        <div class="stat-dot p"></div>
+        <span>PLOs Covered: <strong id="ploStat">-</strong></span>
+      </div>
+      <div class="stat-item">
+        <div class="stat-dot m"></div>
+        <span>MLOs Covered: <strong id="mloStat">-</strong></span>
+      </div>
+      <div class="stat-item" style="color:var(--ts);">
+        <i class="fas fa-table" style="font-size:12px;"></i>
+        <span id="rowStat">-</span>
+      </div>
+      <div class="pub-badge" id="pubBadge" style="display:none;">
+        <div class="live-dot"></div>
+        <span id="pubTime">เผยแพร่แล้ว</span>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="table-card" id="tableCard">
+      <div style="padding:40px;">
+        <div class="skeleton skel-row" style="width:100%;margin-bottom:8px;"></div>
+        <div class="skeleton skel-row" style="width:100%;margin-bottom:8px;"></div>
+        <div class="skeleton skel-row" style="width:80%;"></div>
+      </div>
+    </div>
+
+  </div>
 </main>
 
-<div class="alignment-card">
-    <div class="table-container">
-        <div id="table1" class="alignment-table active">
-            <table class="matrix-table">
-        <thead>
-            <tr>
-                <th rowspan="2" class="col-stakeholder">ผู้มีส่วนได้ส่วนเสียของหลักสูตร</th>
-                <th colspan="9" class="bg-purple-light">Program Learning Outcomes (PLOs)</th>
-                <th colspan="14" class="bg-green-light">Module Learning Outcomes (MLOs)</th>
-            </tr>
-            <tr>
-                <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
-                <th>1.1</th><th>1.2</th><th>1.3</th><th>2.1</th><th>2.2</th><th>2.3</th>
-                <th>3.1</th><th>3.2</th><th>4.1</th><th>4.2</th><th>5.1</th><th>5.2</th><th>6.1</th><th>6.2</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-title">Vision (ระดับมหาวิทยาลัย)</div>
-                    <div class="vision-text">มหาวิทยาลัยแห่งคุณค่าเพื่อขับเคลื่อนการพัฒนาที่ยั่งยืนระดับแนวหน้าของโลก</div>
-                </td>
-                <td><i class="fas fa-check-circle check-icon"></i></td> 
-                <td></td> 
-                <td><i class="fas fa-check-circle check-icon"></i></td> 
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td> 
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td> 
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td> 
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-title">Vision (ระดับคณะ)</div>
-                    <div class="vision-text">สถาบันการศึกษาชั้นนำระดับประเทศด้านการจัดการ</div>
-                </td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>                
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-title">Mission 1 (ระดับมหาวิทยาลัย)</div>
-                    <div class="vision-text">สร้างความเป็นผู้นำทางวิชาการและนวัตกรรม โดยมีการวิจัยเป็นฐาน เพื่อการพัฒนาภาคใต้และประเทศ เชื่อมโยงสู่สังคมและเครือข่ายสากล</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-title">Mission 2 (ระดับมหาวิทยาลัย)</div>
-                    <div class="vision-text">สร้างทรัพยากรมนุษย์ที่มีสมรรถนะทางวิชาการและวิชาชีพ ซื่อสัตย์ มีวินัย ใฝ่ปัญญา และมีทักษะในศตวรรษที่ 21 สามารถประยุกต์ความรู้บนพื้นฐานประสบการณ์จากการปฏิบัติ</div>
-                </td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-title">Mission 3 (ระดับมหาวิทยาลัย)</div>
-                    <div class="vision-text">พัฒนามหาวิทยาลัยให้เป็นสังคมฐานความรู้บนพื้นฐานพหุวัฒนธรรมและหลักปรัชญาของเศรษฐกิจพอเพียง เพื่อการพัฒนาสู่ความยั่งยืนและร่วมสร้างสังคมแห่ง โอกาสและความเป็นธรรม</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-title">Mission 1 (ระดับคณะ)</div>
-                    <div class="vision-text">สร้างบัณฑิต นักบริหาร และผู้ประกอบการที่มีภาวะผู้นำ มีสมรรถนะดิจิทัล มีความคิดสร้างสรรค์ เพื่อประโยชน์ของเพื่อนมนุษย์ ด้วยหลักสูตรที่ได้รับรองมาตรฐานสากล</div>
-                </td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>  
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-title">อัตลักษณ์ของมหาวิทยาลัย</div>
-                    <div class="vision-text">ผลการเรียนรู้ของหมวดวิชาศึกษาทั่วไปของมหาวิทยาลัย (GE)</div>
-                </td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>    
-        </tbody>
-        </table>
-        </div>
-        
-<div id="table2" class="alignment-table"> <div class="alignment-card">
-        <div class="table-container">
-            <table class="matrix-table">
-                <thead>
-                    <tr>
-                        <th rowspan="2" class="col-stakeholder">ผู้มีส่วนได้ส่วนเสียของหลักสูตร</th>
-                        <th colspan="9" class="bg-purple-light">Program Learning Outcomes (PLOs)</th>
-                        <th colspan="14" class="bg-green-light">Module Learning Outcomes (MLOs)</th>
-                    </tr>
-                    <tr>
-                        <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
-                        <th>1.1</th><th>1.2</th><th>1.3</th><th>2.1</th><th>2.2</th><th>2.3</th>
-                        <th>3.1</th><th>3.2</th><th>4.1</th><th>4.2</th><th>5.1</th><th>5.2</th><th>6.1</th><th>6.2</th>
-                    </tr>
-                </thead>
-                <tbody>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">Stakeholder Need 1 : ผู้ใช้บัณฑิต</div>
-                </td>
-                <td></td> 
-                <td></td> 
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">1. คิดวิเคราะห์</div>
-                </td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">2. คิดอย่างเป็นระบบ</div>
-                </td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">3. การวิเคราะห์ข้อมูล (Data Analysis)</div>
-                </td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">4. การคิดเชิงบวก (Growth Mindset)</div>
-                </td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">5. การเป็นผู้ประกอบการ</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>  
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">6. การแก้ปัญหา</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-              
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">7. ความรับผิดชอบต่อสังคม</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">Stakeholder Need 2 : ศิษย์เก่า</div>
-                </td>
-                <td></td> 
-                <td></td> 
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">1. การสื่อสาร/ภาษาที่ 3</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">2. ก้าวทันเทคโนโลยี</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">3. ภาวะผู้นำ</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">4. การวิเคราะห์ข้อมูล (Data Analysis)</div>
-                </td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">5. ความรับผิดชอบต่อสังคม</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr> 
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">Stakeholder Need 3 : ศิษย์ปัจจุบัน</div>
-                </td>
-                <td></td> 
-                <td></td> 
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">1. การสื่อสาร/ภาษาที่ 3</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">2. การทำงานเป็นทีม</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">3. ก้าวทันเทคโนโลยี</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">4. การวิเคราะห์ข้อมูล (Data Analysis)</div>
-                </td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">5. การแก้ปัญหา</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>  
-            </tbody>
-            </table>
-        </div> 
-    </div> 
-</div> 
-
-<div id="table3" class="alignment-table"> 
-    <div class="alignment-card">
-        <div class="table-container">
-            <table class="matrix-table">
-                <thead>
-                    <tr>
-                        <th rowspan="2" class="col-stakeholder">ผู้มีส่วนได้ส่วนเสียของหลักสูตร</th>
-                        <th colspan="9" class="bg-purple-light">Program Learning Outcomes (PLOs)</th>
-                        <th colspan="14" class="bg-green-light">Module Learning Outcomes (MLOs)</th>
-                    </tr>
-                    <tr>
-                        <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
-                        <th>1.1</th><th>1.2</th><th>1.3</th><th>2.1</th><th>2.2</th><th>2.3</th>
-                        <th>3.1</th><th>3.2</th><th>4.1</th><th>4.2</th><th>5.1</th><th>5.2</th><th>6.1</th><th>6.2</th>
-                    </tr>
-                </thead>
-                <tbody>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">Stakeholder Need 4 : ผู้สอน</div>
-                </td>
-                <td></td> 
-                <td></td> 
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">1. คิดวิเคราะห์</div>
-                </td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">2. การสื่อสาร/ภาษาที่ 3</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">3. ก้าวทันเทคโนโลยี</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">4. การวิเคราะห์ข้อมูล (Data Analysis)</div>
-                </td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">5. การแก้ปัญหา</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr> 
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">Stakeholder Need 5 : สมาคมที่เกี่ยวข้องกับวิชาชีพบริหารธุรกิจ</div>
-                </td>
-                <td></td> 
-                <td></td> 
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td> 
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">1. การวิเคราะห์ข้อมูล (Data Analysis)</div>
-                </td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">2. ก้าวทันเทคโนโลยี</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">3. การคิดเชิงบวก (Growth Mindset)</div>
-                </td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">4. การแก้ปัญหา</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr>
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">5. การสื่อสาร/ภาษาที่ 3</div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr> 
-            <tr>
-                <td class="col-vision">
-                    <div class="vision-text">6. คิดวิเคราะห์</div>
-                </td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-                <td><i class="fas fa-check-circle check-icon"></i></td>
-            </tr> 
-            </tbody>
-            </table> 
-        </div>
-    </div> 
-</div> 
-
-    <div class="table-footer">
-        <button id="btnBack" class="btn-nav disabled" onclick="changeTable(-1)">
-            <i class="fas fa-chevron-left"></i> Back
-        </button>
-        <div class="table-status">
-            <span>PLOs Covered: <strong id="ploCount">9/9</strong></span>
-            <span>MLOs Covered: <strong id="mloCount">15/15</strong></span>
-        </div>
-        <button id="btnNext" class="btn-nav" onclick="changeTable(1)">
-            Next <i class="fas fa-chevron-right"></i>
-        </button>
-    </div>
-</div>
-
 <script>
-let currentTable = 1;
-const totalTables = 3;
+  const API_BASE = ''; 
+  const PROG_ID  = '00000000-0000-0000-0000-000000000001';
+  FmsApi.setConfig({ baseUrl: API_BASE, programId: PROG_ID });
 
-function changeTable(step) {
-    // คำนวณหน้าถัดไป
-    const nextTable = currentTable + step;
-    
-    // ตรวจสอบขอบเขต (1-3)
-    if (nextTable < 1 || nextTable > totalTables) return;
+  let plos = [], mlos = [], allRows = [], pubState = {};
+  let pages = [[],[],[]];
+  let currentPage = 0;
 
-    // ลบ class active จากทุกตาราง
-    document.querySelectorAll('.alignment-table').forEach(table => {
-        table.classList.remove('active');
+  function loadXLSX(cb){
+    if(window.XLSX){cb();return;}
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload=cb; document.head.appendChild(s);
+  }
+
+  function esc(s){
+    return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function setState(type,msg){
+    const b=document.getElementById('stateBanner');
+    const icons={loading:'fa-circle-notch fa-spin',ok:'fa-check-circle',err:'fa-exclamation-circle',unpublished:'fa-eye-slash'};
+    b.className='state-banner '+type;
+    b.innerHTML=`<i class="fas ${icons[type]||'fa-info-circle'}"></i><span>${msg}</span>`;
+  }
+
+  function closeAllTips(){
+    document.querySelectorAll('.tip-wrap.is-open').forEach(w=>{
+      w.classList.remove('is-open');
+      const btn=w.querySelector('.tip-trigger');
+      const box=w.querySelector('.tip-box');
+      if(btn) btn.setAttribute('aria-expanded','false');
+      if(box) box.hidden=true;
     });
+  }
+  function toggleTip(wrap){
+    const btn=wrap.querySelector('.tip-trigger');
+    const box=wrap.querySelector('.tip-box');
+    const opened=wrap.classList.contains('is-open');
+    closeAllTips();
+    if(!opened){
+      wrap.classList.add('is-open');
+      if(btn) btn.setAttribute('aria-expanded','true');
+      if(box){
+        box.hidden=false;
+        requestAnimationFrame(()=>{
+          const rect=box.getBoundingClientRect();
+          const overflowRight=rect.right-window.innerWidth+12;
+          const overflowLeft=12-rect.left;
+          if(overflowRight>0){box.style.left=`-${overflowRight}px`;}
+          else if(overflowLeft>0){box.style.left=`${overflowLeft}px`;}
+          else{box.style.left='0';}
+        });
+      }
+    }
+  }
+  document.addEventListener('click',(e)=>{
+    const trigger=e.target.closest('.tip-trigger');
+    const inTip=e.target.closest('.tip-wrap');
+    if(trigger&&inTip){e.preventDefault();toggleTip(inTip);return;}
+    if(!inTip){closeAllTips();}
+  });
+  document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){closeAllTips();}});
 
-    // แสดงตารางที่เลือก
-    document.getElementById(`table${nextTable}`).classList.add('active');
-    currentTable = nextTable;
+  function buildColHeader(col,isMlo){
+    const code=col.code||'';
+    const shortCode=code.replace(/^[PM]LO\s*/i,'');
+    const desc=col.description||col.desc||'';
+    const tipId=`tip-${(col.id||code).toString().replace(/\W+/g,'-')}`;
+    if(!desc) return `<span>${esc(shortCode)}</span>`;
+    return `
+      <div class="tip-wrap" style="display:inline-block;">
+        <button class="tip-trigger" type="button" aria-expanded="false" aria-controls="${tipId}" title="แสดงคำอธิบาย ${esc(code)}">
+          <span>${esc(shortCode)}</span>
+          <i class="tip-icon">i</i>
+        </button>
+        <div class="tip-box" id="${tipId}" role="dialog" aria-label="${esc(code)}" hidden>
+          <div class="tip-box-group">${isMlo?'MLO':'PLO'}</div>
+          <div class="tip-box-title">${esc(code)}</div>
+          <div class="tip-box-desc">${esc(desc)}</div>
+        </div>
+      </div>`;
+  }
 
-    // ปรับสไตล์ปุ่ม Back/Next
-    updateButtons();
-}
+  function whichPage(row){
+    const t=`${row.title||''} ${row.group_label||row.group||''}`.toLowerCase();
+    if(/vision|วิสัยทัศน์|mission|พันธกิจ|อัตลักษณ์|identity|ศึกษาทั่วไป|ge/.test(t)) return 0;
+    if(/stakeholder\s*need\s*[1-3]|ผู้ใช้บัณฑิต|ศิษย์เก่า|ศิษย์ปัจจุบัน/.test(t)) return 1;
+    if(/stakeholder\s*need\s*[4-9]|ผู้สอน|สมาคม/.test(t)) return 2;
+    return 0;
+  }
 
-function updateButtons() {
-    const btnBack = document.getElementById('btnBack');
-    const btnNext = document.getElementById('btnNext');
+  function buildThreePages(){
+    pages=[[],[],[]];
+    for(const r of allRows){ pages[whichPage(r)].push(r); }
+  }
 
-    // จัดการปุ่ม Back
-    if (currentTable === 1) {
-        btnBack.classList.add('disabled');
-    } else {
-        btnBack.classList.remove('disabled');
+  function renderTable(){
+    const pageRows=pages[currentPage]||[];
+    const card=document.getElementById('tableCard');
+
+    if(!pageRows.length){
+      card.innerHTML=`<div class="empty-state"><i class="fas fa-table"></i><p>ไม่มีข้อมูลในหน้านี้</p></div>`;
+      return;
     }
 
-    // จัดการปุ่ม Next
-    if (currentTable === totalTables) {
-        btnNext.classList.add('disabled');
-        btnNext.innerHTML = 'Finish <i class="fas fa-check"></i>';
-    } else {
-        btnNext.classList.remove('disabled');
-        btnNext.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
+    const colCount=plos.length+mlos.length;
+    let html=`<div class="table-scroll"><table class="matrix-table"><thead>
+      <tr>
+        <th class="col-stakeholder" rowspan="2">ผู้มีส่วนได้ส่วนเสียของหลักสูตร</th>
+        <th class="bg-purple-th" colspan="${plos.length}">Program Learning Outcomes (PLOs)</th>
+        <th class="bg-teal-th" colspan="${mlos.length}">Module Learning Outcomes (MLOs)</th>
+      </tr>
+      <tr>
+        ${plos.map(p=>`<th class="sub-th-p">${buildColHeader(p,false)}</th>`).join('')}
+        ${mlos.map(m=>`<th class="sub-th-m">${buildColHeader(m,true)}</th>`).join('')}
+      </tr>
+    </thead><tbody>`;
+
+    for(const row of pageRows){
+      const title=row.title||'';
+      const desc=row.description||row.desc||'';
+      const grp=row.group_label||row.group||'';
+      const allZero=row.checks.every(v=>v===0);
+
+      if(allZero&&title&&(title.includes('Stakeholder Need')||/ผู้ใช้|ศิษย์|ผู้สอน|สมาคม/.test(title))){
+        html+=`<tr class="row-section"><td colspan="${colCount+1}"><div class="row-section-title">${esc(title)}</div></td></tr>`;
+        continue;
+      }
+
+      const tipId=`rowtip-${(row.id||row.title).toString().replace(/\W+/g,'-')}`;
+      const labelCell=desc
+        ?`<div class="tip-wrap">
+            <button class="tip-trigger" type="button" aria-expanded="false" aria-controls="${tipId}" title="แสดงคำอธิบาย">
+              <div>${grp?`<div class="row-group">${esc(grp)}</div>`:''}<div class="row-title">${esc(title)}</div></div>
+              <i class="tip-icon">i</i>
+            </button>
+            <div class="tip-box" id="${tipId}" role="dialog" aria-label="${esc(title)}" hidden>
+              <div class="tip-box-group">${esc(grp||'รายละเอียด')}</div>
+              <div class="tip-box-title">${esc(title)}</div>
+              <div class="tip-box-desc">${esc(desc)}</div>
+            </div>
+          </div>`
+        :`<div>${grp?`<div class="row-group">${esc(grp)}</div>`:''}<div class="row-title">${esc(title)}</div></div>`;
+
+      html+=`<tr><td class="row-label-cell">${labelCell}</td>`;
+      row.checks.forEach((v,ci)=>{
+        const isMlo=ci>=plos.length;
+        html+=`<td class="check-cell ${isMlo?'m-col':'p-col'}">`+(v?`<i class="fas fa-check-circle check-on"></i>`:`<span class="check-empty"></span>`)+`</td>`;
+      });
+      html+=`</tr>`;
     }
-}    
+
+    html+=`</tbody></table></div>`;
+    html+=`<div class="table-footer">
+      <button class="btn-nav" onclick="goPage(${currentPage-1})" ${currentPage===0?'disabled':''}>
+        <i class="fas fa-chevron-left"></i> ก่อนหน้า
+      </button>
+      <div class="page-indicator">หน้า ${currentPage+1} / 3</div>
+      <button class="btn-nav" onclick="goPage(${currentPage+1})" ${currentPage===2?'disabled':''}>
+        ถัดไป <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>`;
+
+    card.innerHTML=html;
+  }
+
+  function goPage(idx){
+    currentPage=Math.max(0,Math.min(idx,2));
+    closeAllTips();
+    renderTable();
+  }
+
+  function renderStats(){
+    const pc=plos.filter((_,i)=>allRows.some(r=>r.checks[i])).length;
+    const mc=mlos.filter((_,i)=>allRows.some(r=>r.checks[plos.length+i])).length;
+    document.getElementById('ploStat').textContent=`${pc}/${plos.length}`;
+    document.getElementById('mloStat').textContent=`${mc}/${mlos.length}`;
+    document.getElementById('rowStat').textContent=`${allRows.length} รายการ`;
+    document.getElementById('statsBar').style.display='flex';
+  }
+
+  function renderPubBadge(){
+    if(!pubState.published) return;
+    const badge=document.getElementById('pubBadge');
+    badge.style.display='flex';
+    if(pubState.publishedAt){
+      const d=new Date(pubState.publishedAt);
+      document.getElementById('pubTime').textContent=`เผยแพร่เมื่อ ${d.toLocaleDateString('th-TH')} ${d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}`;
+    }
+  }
+
+  function exportExcel(){
+    loadXLSX(()=>{
+      const cols=[...plos,...mlos];
+      const ws=XLSX.utils.aoa_to_sheet([
+        ['หน้า','กลุ่ม','ชื่อรายการ','คำอธิบาย',...cols.map(c=>c.code)],
+        ...allRows.map(r=>{
+          const pg=whichPage(r)+1;
+          return[pg,r.group_label||r.group||'',r.title,r.description||r.desc||'',...r.checks];
+        })
+      ]);
+      ws['!cols']=[{wch:6},{wch:22},{wch:35},{wch:40},...cols.map(()=>({wch:8}))];
+      const wb=XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb,ws,'Alignment Matrix');
+      XLSX.writeFile(wb,`alignment_matrix_${new Date().toISOString().slice(0,10)}.xlsx`);
+    });
+  }
+
+  async function init(){
+    setState('loading','กำลังเชื่อมต่อฐานข้อมูล...');
+    plos=[];mlos=[];allRows=[];pubState={};pages=[[],[],[]];currentPage=0;
+
+    try{
+      await FmsApi.health();
+    }catch(e){
+      setState('err',`ไม่สามารถเชื่อมต่อ API: ${e.message}`);
+      document.getElementById('tableCard').innerHTML=`<div class="empty-state"><i class="fas fa-plug"></i><p>ไม่สามารถเชื่อมต่อ API Server<br><small>${e.message}</small></p></div>`;
+      return;
+    }
+
+    try{
+      const [matrixData,pubData]=await Promise.all([
+        FmsApi.getMatrixFull(),
+        FmsApi.getPublish().catch(()=>({published:true}))
+      ]);
+
+      pubState={published:!!pubData.published,publishedAt:pubData.published_at};
+      if(!pubState.published){
+        setState('unpublished','ข้อมูลยังไม่ได้เผยแพร่ (Draft) — กำลังแสดงตัวอย่าง');
+      }else{
+        setState('ok','โหลดข้อมูลสำเร็จ — ข้อมูลเผยแพร่แล้ว');
+      }
+
+      plos=matrixData.plos||[];
+      mlos=matrixData.mlos||[];
+      const checkMap=matrixData.checkMap||{};
+      const allCols=[...plos,...mlos];
+
+      allRows=(matrixData.rows||[]).map(r=>({
+        ...r,
+        checks:allCols.map(c=>(checkMap[r.id]||[]).includes(c.id)?1:0)
+      }));
+
+      buildThreePages();
+      document.getElementById('headerMeta') && (document.getElementById('headerMeta').textContent=`PLO ${plos.length} รายการ  |  MLO ${mlos.length} รายการ  |  ${allRows.length} แถว`);
+      renderStats();
+      renderPubBadge();
+      closeAllTips();
+      renderTable();
+
+    }catch(e){
+      setState('err',`โหลดข้อมูลไม่สำเร็จ: ${e.message}`);
+      document.getElementById('tableCard').innerHTML=`<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>เกิดข้อผิดพลาดในการโหลดข้อมูล<br><small>${e.message}</small></p></div>`;
+    }
+  }
+
+  init();
 </script>
 </body>
 </html>

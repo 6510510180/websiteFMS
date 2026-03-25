@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>FMS Major Info Seeder</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',sans-serif;margin:0;padding:0}
+body{min-height:100vh;background:linear-gradient(135deg,#0f0a1e,#1a0a2e,#0d1a2e);display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:100%;max-width:860px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px}
+.hdr{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.ico{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:26px}
+h1{color:#fff;font-size:20px;font-weight:800}.sub{color:#94a3b8;font-size:12px;margin-top:2px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;text-align:center}
+.sv{color:#e2e8f0;font-weight:800;font-size:16px}.ss{color:#64748b;font-size:11px;margin-top:2px}
+.pw{margin-bottom:14px}.pl{display:flex;justify-content:space-between;color:#94a3b8;font-size:12px;margin-bottom:5px}
+.pb{background:rgba(255,255,255,0.1);border-radius:8px;height:8px;overflow:hidden}
+.pf{height:100%;border-radius:8px;background:linear-gradient(90deg,#7c3aed,#3b82f6);transition:width 0.4s}
+.btns{display:flex;gap:10px;margin-bottom:14px}
+button{flex:1;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,#7c3aed,#3b82f6);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+button.sec{background:rgba(255,255,255,0.08);color:#94a3b8;border:1px solid rgba(255,255,255,0.1)}
+button:disabled{opacity:0.45;cursor:not-allowed}
+.done{background:rgba(134,239,172,0.1);border:1px solid rgba(134,239,172,0.3);border-radius:12px;padding:14px;text-align:center;color:#86efac;font-weight:700;margin-bottom:14px;font-size:14px}
+.log{background:#06060c;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px;max-height:500px;overflow-y:auto;font-family:monospace;font-size:11.5px;line-height:1.8}
+.preview{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin-bottom:16px}
+.preview h3{color:#c4b5fd;font-size:13px;margin-bottom:10px}
+.major-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:8px}
+.major-card .mc-name{color:#e2e8f0;font-weight:700;font-size:13px}
+.major-card .mc-desc{color:#94a3b8;font-size:11px;margin-top:4px;line-height:1.5}
+.major-card .mc-careers{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.major-card .mc-tag{background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);border-radius:4px;padding:2px 6px;color:#c4b5fd;font-size:10px}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.sp{display:inline-block;animation:spin 1s linear infinite}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hdr">
+    <div class="ico">📋</div>
+    <div>
+      <h1>FMS Major Info Seeder</h1>
+      <div class="sub">อัปเดต info วิชาเอกวิชา — name_th, name_en, intro, careers · skip ถ้ามีแล้ว</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div style="font-size:18px">🏫</div><div class="sv">6</div><div class="ss">วิชาเอกวิชา</div></div>
+    <div class="stat"><div style="font-size:18px">✏️</div><div class="sv" id="sSkip">-</div><div class="ss">Skip (มีแล้ว)</div></div>
+    <div class="stat"><div style="font-size:18px">✅</div><div class="sv" id="sUpdated">-</div><div class="ss">อัปเดต</div></div>
+  </div>
+
+  <!-- Preview ข้อมูลที่จะ seed -->
+  <div class="preview">
+    <h3>📦 ข้อมูลที่จะ seed เข้า API</h3>
+    <div id="previewList"></div>
+  </div>
+
+  <!-- Manual endpoint override -->
+  <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:12px;padding:14px;margin-bottom:14px">
+    <div style="color:#fde68a;font-size:12px;font-weight:700;margin-bottom:8px">⚙️ กำหนด Update Endpoint เอง (ถ้าสแกนไม่เจอ)</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <div style="color:#94a3b8;font-size:11px;white-space:nowrap">Method:</div>
+      <select id="epMethod" style="background:#1e1e2e;color:#e2e8f0;border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:5px 8px;font-size:12px">
+        <option>PATCH</option>
+        <option>PUT</option>
+      </select>
+      <div style="color:#94a3b8;font-size:11px;white-space:nowrap">Endpoint pattern:</div>
+      <input id="epPattern" placeholder="/majors/:id  หรือ  /courses/:cid/majors/:id"
+        style="flex:1;min-width:200px;background:#1e1e2e;color:#e2e8f0;border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:5px 10px;font-size:12px;font-family:monospace" />
+      <button onclick="testManualEndpoint()" style="flex:none;padding:6px 12px;font-size:11px;border-radius:8px">🧪 Test</button>
+    </div>
+    <div style="color:#64748b;font-size:10px;margin-top:6px">ใช้ :id แทน major id และ :cid แทน course id · ถ้าใส่ค่าไว้จะใช้แทน auto-discover</div>
+  </div>
+
+  <div class="pw" id="pw" style="display:none">
+    <div class="pl"><span id="plbl">กำลังดำเนินการ...</span><span id="ppct">0%</span></div>
+    <div class="pb"><div class="pf" id="pf" style="width:0%"></div></div>
+  </div>
+  <div class="done" id="doneBox" style="display:none">🎉 เสร็จสมบูรณ์!</div>
+
+  <div class="btns">
+    <button id="btn" onclick="run()">🚀 เริ่ม Seed Major Info</button>
+    <button class="sec" onclick="dryRun()">🔍 Preview Only (ไม่ส่ง API)</button>
+    <button class="sec" onclick="exploreApi()">🔬 สแกน Endpoints</button>
+  </div>
+  <div class="log" id="log" style="display:none"></div>
+</div>
+
+<script>
+const API = ''; 
+
+// =================== ข้อมูล Major Info จาก info pages ===================
+
+// แผนการศึกษา YEAR 1-4 (เหมือนกันทุกวิชาเอก)
+const PLAN = {
+  plan_1: 'YEAR 1: พื้นฐานธุรกิจและความรู้รอบด้าน\n- พื้นฐานด้าน บริหารธุรกิจ ทั้งระบบ\n- ความรู้ทั่วไป (GE) เพื่อพัฒนาทักษะชีวิต',
+  plan_2: 'YEAR 2: ความรู้พื้นฐาน\n- เรียนเกี่ยวกับกระบวนการทำงาน\n- ความรู้เบื้องต้นของวิชาเอกวิชา\n- เรียนวิชาเลือก/วิชาโท',
+  plan_3: 'YEAR 3: ความเชี่ยวชาญเฉพาะด้าน\n- เรียนเชิงลึกตามสายวิชา\n- การฝึกงานภาคฤดูร้อน',
+  plan_4: 'YEAR 4: การบูรณาการ\n- เรียนการเชื่อมโยงองค์ความรู้\n- โครงงานแต่ละวิชาเอก\n- การฝึกงานสหกิจ',
+};
+const MAJOR_INFO = {
+  BIS: {
+    name_th: 'ระบบสารสนเทศทางธุรกิจ',
+    name_en: 'Business Information Systems',
+    intro: 'ศึกษาเกี่ยวกับพื้นฐานระบบสารสนเทศ การเขียนโปรแกรมคอมพิวเตอร์ การสื่อสารข้อมูลและเครือข่ายคอมพิวเตอร์ การบริหารโครงการทางเทคโนโลยีสารสนเทศ ระบบสารสนเทศเพื่อการจัดการ',
+    careers: [
+      'เจ้าหน้าที่สนับสนุนการใช้เทคโนโลยีสารสนเทศในองค์กร',
+      'เจ้าหน้าที่ดูแลระบบ',
+      'โปรแกรมเมอร์',
+      'นักออกแบบส่วนติดต่อผู้ใช้',
+      'เจ้าหน้าที่ออกแบบและบริหารระบบสารสนเทศในองค์กร',
+      'ผู้บริหารเว็บไซต์',
+      'ผู้บริหารระบบสารสนเทศ',
+      'อาชีพอิสระ',
+    ]
+  },
+  FIN: {
+    name_th: 'การเงินและการลงทุน',
+    name_en: 'Finance and Investment',
+    intro: 'ศึกษาเกี่ยวกับการบริหารการเงิน หลักการลงทุน การบริหารสินเชื่อ การวิเคราะห์หลักทรัพย์ การบริหารสถาบันการเงิน การเงินระหว่างประเทศ การบริหารโครงการธุรกิจ สัมมนาทางการเงิน',
+    careers: [
+      'พนักงานการเงิน',
+      'นักวิเคราะห์การเงิน',
+      'นักวิชาการเงินและพัสดุ',
+      'ผู้ประกอบวิชาชีพในธุรกิจหลักทรัพย์',
+      'นักบริหารการเงินในองค์กรเอกชนและภาครัฐ',
+      'นักบริหารการเงินในตลาดเงิน',
+      'นักบริหารการเงินในตลาดทุน',
+      'อาชีพอิสระ',
+    ]
+  },
+  HRM: {
+    name_th: 'การจัดการทรัพยากรมนุษย์',
+    name_en: 'Human Resource Management',
+    intro: 'ศึกษาเกี่ยวกับการบริหารทรัพยากรมนุษย์ การวางแผนอัตรากำลัง การพัฒนาทรัพยากรมนุษย์และองค์กร การเจรจาต่อรองทางธุรกิจ กฎหมายเกี่ยวกับการบริหารทรัพยากรมนุษย์',
+    careers: [
+      'เจ้าหน้าที่ฝ่ายบุคคล',
+      'เจ้าหน้าที่สรรหา',
+      'พนักงานบริการลูกค้า',
+      'เลขานุการ',
+      'เจ้าหน้าที่บริหารงานทั่วไป',
+      'อาชีพอิสระ',
+    ]
+  },
+  LSM: {
+    name_th: 'การจัดการโลจิสติกส์และโซ่อุปทาน',
+    name_en: 'Logistics and Supply Chain Management',
+    intro: 'ศึกษาเกี่ยวกับการจัดการโลจิสติกส์และโซ่อุปทาน การวิเคราะห์เชิงปริมาณสำหรับการจัดการโลจิสติกส์ การขนส่งและการกระจายสินค้า การวางแผนอุปสงค์และสินค้าคงคลัง ธุรกิจพาณิชยนาวี การจัดการคลังสินค้า',
+    careers: [
+      'เจ้าหน้าที่จัดซื้อ',
+      'เจ้าหน้าที่วิเคราะห์ข้อมูลโลจิสติกส์',
+      'เจ้าหน้าที่วางแผนระบบโลจิสติกส์',
+      'เจ้าหน้าที่คลังสินค้า',
+      'อาชีพอิสระ',
+    ]
+  },
+  MKT: {
+    name_th: 'การตลาดและการสื่อสาร',
+    name_en: 'Marketing and Communication',
+    intro: 'ศึกษาเกี่ยวกับการบริหารการตลาด พฤติกรรมผู้บริโภค การวิเคราะห์เชิงปริมาณสำหรับการตลาด กลยุทธ์การส่งเสริมการตลาด การตลาดสินค้าระหว่างประเทศ กลยุทธ์การตลาดเพื่อการแข่งขัน การบริหารการขาย',
+    careers: [
+      'เจ้าหน้าที่การตลาด',
+      'นักวิจัยตลาด',
+      'เจ้าหน้าที่ด้านการส่งออก-นำเข้า',
+      'ผู้จัดการธุรกิจขายตรง',
+      'ตัวแทนขาย',
+      'พนักงานขาย',
+      'พนักงานลูกค้าสัมพันธ์',
+      'อาชีพอิสระ',
+    ]
+  },
+  MICE: {
+    name_th: 'การจัดการไมซ์',
+    name_en: 'MICE Management',
+    intro: 'ศึกษาเกี่ยวกับความรู้เบื้องต้นในอุตสาหกรรมไมซ์ การจัดการประชุมและการท่องเที่ยวเพื่อเป็นรางวัล ความรู้เบื้องต้นในอุตสาหกรรมท่องเที่ยว การจัดการนิทรรศการ โลจิสติกส์สำหรับการท่องเที่ยวและอุตสาหกรรมไมซ์',
+    careers: [
+      'Event Organiser',
+      'Professional Exhibition Organiser',
+      'Professional Conference Organiser',
+      'Destination Management Company',
+      'Venue Management',
+      'Catering Service',
+      'Wedding Planner',
+      'อาชีพอิสระ',
+    ]
+  }
+};
+
+// =================== UI Helpers ===================
+const logEl = document.getElementById('log');
+const C = { info:'#cbd5e1', ok:'#86efac', err:'#fca5a5', warn:'#fde68a', h:'#c4b5fd', dim:'#64748b' };
+
+function log(msg, t='info') {
+  logEl.style.display = 'block';
+  const d = document.createElement('div');
+  d.style.color = C[t] || C.info;
+  d.textContent = msg;
+  logEl.appendChild(d);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+function prog(pct, label) {
+  document.getElementById('pf').style.width = pct + '%';
+  document.getElementById('plbl').textContent = label;
+  document.getElementById('ppct').textContent = Math.round(pct) + '%';
+}
+function setStat(id, v) { document.getElementById(id).textContent = v; }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// =================== Preview ===================
+function buildPreview() {
+  const list = document.getElementById('previewList');
+  for (const [code, info] of Object.entries(MAJOR_INFO)) {
+    const d = document.createElement('div');
+    d.className = 'major-card';
+    d.innerHTML = `
+      <div class="mc-name">${code} — ${info.name_th} <span style="color:#64748b">(${info.name_en})</span></div>
+      <div class="mc-desc">${info.intro.substring(0, 150)}...</div>
+      <div class="mc-careers">${info.careers.map(c => `<span class="mc-tag">${c}</span>`).join('')}</div>
+    `;
+    list.appendChild(d);
+  }
+}
+
+// =================== Load Majors from API ===================
+async function loadMajors() {
+  log('🔄 โหลด courses...', 'dim');
+  const cr = await fetch(`${API}/courses?pageSize=50`).then(r => r.json()).catch(() => ({}));
+  _courses = Array.isArray(cr) ? cr : (cr.data || cr.courses || cr.items || []);
+  log(`  📚 courses: ${_courses.map(c => c.id).join(', ')}`, 'dim');
+
+  // ดึง majors จากทุก course พร้อมกัน (parallel) — ไม่รอ /majors ที่ timeout
+  log('🔄 โหลด majors (parallel)...', 'dim');
+  const results = await Promise.all(
+    _courses.map(c =>
+      fetch(`${API}/courses/${c.id}/majors`)
+        .then(r => r.json())
+        .then(d => {
+          const list = Array.isArray(d) ? d : (d.data || d.majors || d.items || []);
+          list.forEach(m => { m._course_id = c.id; });
+          return list;
+        })
+        .catch(() => [])
+    )
+  );
+  const allMajors = results.flat();
+  log(`  ✅ รวม ${allMajors.length} majors`, 'ok');
+  return allMajors;
+}
+
+// =================== Match major code ===================
+// API major มี field เช่น name_th, name_en, code, intro
+function findMajorCode(major) {
+  // ลอง match จาก code field หรือ name
+  const raw = (major.code || major.major_code || major.name_en || major.name_th || '').toUpperCase();
+  for (const code of Object.keys(MAJOR_INFO)) {
+    if (raw.includes(code)) return code;
+    // match by name_th
+    const info = MAJOR_INFO[code];
+    if ((major.name_th || '').includes(info.name_th.substring(0, 8))) return code;
+    if ((major.name_en || '').toLowerCase().includes(info.name_en.toLowerCase().split(' ')[0].toLowerCase())) return code;
+  }
+  return null;
+}
+
+// =================== PATCH major (auto-discover endpoint) ===================
+let _workingEndpointTemplate = null; // cache endpoint ที่ work แล้ว
+
+async function apiFetch(path, method, body, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const r = await fetch(API + path, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    const data = await r.json().catch(() => ({}));
+    return { ok: r.ok, status: r.status, data };
+  } catch (e) {
+    clearTimeout(timer);
+    if (e.name === 'AbortError') return { ok: false, status: 408, data: { error: 'timeout' } };
+    throw e;
+  }
+}
+
+async function patchMajor(major, newFields) {
+  const id = major.id;
+  // ใช้ _course_id ที่ inject ไว้ตอน load หรือ field อื่นๆ
+  const courseId = major._course_id || major.course_id || major.courseId || major.course?.id;
+
+  const fullBody = { ...major, ...newFields };
+  ['id','_course_id','created_at','updated_at','createdAt','updatedAt','__v'].forEach(k => delete fullBody[k]);
+
+  // ถ้ากำหนด endpoint เองหรือ cache แล้ว ใช้เลย
+  if (_workingEndpointTemplate) {
+    const path = _workingEndpointTemplate.replace(':cid', courseId || '').replace(':id', id);
+    const method = _workingMethod || 'PATCH';
+    let r = await apiFetch(path, method, newFields);
+    if (r.ok) return { ...r, endpoint: path, method };
+    if (r.status === 500 || r.status === 400 || r.status === 422) {
+      r = await apiFetch(path, method === 'PATCH' ? 'PUT' : 'PATCH', fullBody);
+      if (r.ok) return { ...r, endpoint: path, method: method === 'PATCH' ? 'PUT' : 'PATCH' };
+      return { ...r, endpoint: path, method };
+    }
+  }
+
+  // candidates — เรียงจาก likely ไป unlikely
+  const candidates = [
+    // 1. course ที่ major นี้อยู่จริง (inject ตอน load)
+    ...(courseId ? [
+      `/courses/${courseId}/majors/${id}`,
+    ] : []),
+    // 2. ลอง standalone
+    `/majors/${id}`,
+    // 3. ลอง course อื่นๆ ที่เหลือ
+    ...(_courses || [])
+      .filter(c => String(c.id) !== String(courseId))
+      .map(c => `/courses/${c.id}/majors/${id}`),
+  ];
+
+  log(`   🔍 ลอง ${candidates.length} endpoints สำหรับ id:${id} course:${courseId}`, 'dim');
+
+  for (const path of candidates) {
+    let r = await apiFetch(path, 'PATCH', newFields);
+    if (r.ok) {
+      _workingEndpointTemplate = courseId ? `/courses/:cid/majors/:id` : `/majors/:id`;
+      _workingMethod = 'PATCH';
+      log(`   💡 PATCH ${path} ✅`, 'warn');
+      return { ...r, endpoint: path, method: 'PATCH' };
+    }
+    if (r.status === 500 || r.status === 400 || r.status === 422) {
+      log(`   ⚡ PATCH ${path} → ${r.status} (endpoint มีอยู่) ลอง PUT+fullBody`, 'warn');
+      log(`      detail: ${JSON.stringify(r.data).substring(0,150)}`, 'dim');
+      r = await apiFetch(path, 'PUT', fullBody);
+      if (r.ok) {
+        _workingEndpointTemplate = courseId ? `/courses/:cid/majors/:id` : `/majors/:id`;
+        _workingMethod = 'PUT';
+        log(`   💡 PUT ${path} fullBody ✅`, 'warn');
+        return { ...r, endpoint: path, method: 'PUT' };
+      }
+      log(`   ❗ PUT ${path} → ${r.status}: ${JSON.stringify(r.data).substring(0,150)}`, 'warn');
+      return { ...r, endpoint: path, method: 'PUT' };
+    }
+    // 404 → ลองต่อ
+  }
+  return { ok: false, status: 404, data: { error: 'ไม่พบ endpoint ที่ใช้งานได้ทั้งหมด' }, endpoint: 'ทุก endpoint' };
+}
+
+let _courses = [];
+let _workingMethod = null;
+
+// =================== Probe endpoint ครั้งเดียวก่อน run ===================
+async function discoverEndpoint(sampleMajor) {
+  const id = sampleMajor.id;
+  const courseId = sampleMajor._course_id;
+  const probe = { _probe: true };
+
+  const candidates = [
+    { path: `/courses/${courseId}/majors/${id}`, method: 'PATCH' },
+    { path: `/courses/${courseId}/majors/${id}`, method: 'PUT' },
+    { path: `/majors/${id}`, method: 'PATCH' },
+    { path: `/majors/${id}`, method: 'PUT' },
+  ];
+
+  log('🔍 Probe endpoint...', 'dim');
+  for (const { path, method } of candidates) {
+    const r = await apiFetch(path, method, probe, 5000);
+    if (r.ok || r.status === 400 || r.status === 422 || r.status === 500) {
+      const template = path.replace(String(courseId), ':cid').replace(String(id), ':id');
+      log(`  ✅ พบ endpoint: ${method} ${path} (${r.status})`, 'ok');
+      if (r.status === 500) log(`     server 500: ${JSON.stringify(r.data).substring(0,120)}`, 'warn');
+      return { template, method, courseIdNeeded: path.includes('/courses/') };
+    }
+    log(`  ✗ ${method} ${path} → ${r.status}`, 'dim');
+  }
+  return null;
+}
+
+// =================== Main Run ===================
+async function run(preview = false) {
+  const btn = document.getElementById('btn');
+  btn.disabled = true;
+  document.getElementById('pw').style.display = 'block';
+  logEl.style.display = 'block';
+  logEl.innerHTML = '';
+
+  let skipped = 0, updated = 0, failed = 0;
+
+  try {
+    prog(10, 'โหลด majors...');
+    const majors = await loadMajors();
+
+    if (majors.length === 0) {
+      log('⚠️ ไม่พบ majors', 'warn');
+      btn.disabled = false;
+      return;
+    }
+
+    // วิเคราะห์ว่าตัวไหนต้อง update
+    // field จริงใน API: career_path (ไม่ใช่ careers)
+    const toUpdate = [];
+    for (const major of majors) {
+      const code = findMajorCode(major);
+      if (!code) { skipped++; continue; }
+      const info = MAJOR_INFO[code];
+
+      const hasCareerPath = !!(major.career_path && String(major.career_path).trim().length > 3);
+      const hasFullIntro  = !!(major.intro && major.intro.trim().length > 80);
+      const hasNameEn     = !!(major.name_en && major.name_en.trim().length > 3);
+      const hasPlan1      = !!(major.plan_1 && String(major.plan_1).trim().length > 3);
+      const hasPlan2      = !!(major.plan_2 && String(major.plan_2).trim().length > 3);
+      const hasPlan3      = !!(major.plan_3 && String(major.plan_3).trim().length > 3);
+      const hasPlan4      = !!(major.plan_4 && String(major.plan_4).trim().length > 3);
+
+      if (hasCareerPath && hasFullIntro && hasNameEn && hasPlan1 && hasPlan2 && hasPlan3 && hasPlan4) {
+        log(`⏭️  SKIP ${code} (ID:${major.id})`, 'dim');
+        skipped++;
+        continue;
+      }
+
+      const newFields = {};
+      if (!hasNameEn)     newFields.name_en     = info.name_en;
+      if (!hasFullIntro)  newFields.intro        = info.intro;
+      if (!hasCareerPath) newFields.career_path  = info.careers.join('\n');
+      if (!hasPlan1)      newFields.plan_1       = PLAN.plan_1;
+      if (!hasPlan2)      newFields.plan_2       = PLAN.plan_2;
+      if (!hasPlan3)      newFields.plan_3       = PLAN.plan_3;
+      if (!hasPlan4)      newFields.plan_4       = PLAN.plan_4;
+
+      toUpdate.push({ major, code, newFields });
+    }
+
+    setStat('sSkip', skipped);
+    log(`📊 จะอัปเดต ${toUpdate.length} | skip ${skipped}`, 'info');
+
+    if (toUpdate.length === 0) {
+      log('✅ ครบแล้วทุกวิชาเอก!', 'ok');
+      document.getElementById('doneBox').style.display = 'block';
+      prog(100, 'เสร็จสิ้น!');
+      btn.disabled = false;
+      return;
+    }
+
+    if (preview) {
+      for (const { major, code, newFields } of toUpdate) {
+        log(`✏️  ${code} (ID:${major.id}) → ${Object.keys(newFields).join(', ')}`, 'info');
+        if (newFields.career_path) log(`    career_path: ${newFields.career_path.substring(0,80)}...`, 'dim');
+      }
+      prog(100, 'เสร็จสิ้น!');
+      btn.disabled = false;
+      return;
+    }
+
+    prog(40, `ส่ง ${toUpdate.length} PATCH requests...`);
+
+    // endpoint จริง: PUT /api/majors/:id (ต้องส่ง full body ทุก field)
+    const results = await Promise.all(
+      toUpdate.map(async ({ major, code, newFields }) => {
+        const path = `/majors/${major.id}`;
+        // ต้องส่งทุก field เพราะ SQL SET ทับทุกตัว
+        const body = {
+          name_th:     major.name_th,
+          name_en:     newFields.name_en     || major.name_en,
+          intro:       newFields.intro       || major.intro,
+          hero_image:  major.hero_image      || null,
+          image_url:   major.image_url       || null,
+          career_path: newFields.career_path || major.career_path || null,
+          plan_1:      newFields.plan_1      || major.plan_1      || null,
+          plan_2:      newFields.plan_2      || major.plan_2      || null,
+          plan_3:      newFields.plan_3      || major.plan_3      || null,
+          plan_4:      newFields.plan_4      || major.plan_4      || null,
+        };
+        const r = await apiFetch(path, 'PUT', body, 8000);
+        return { code, id: major.id, path, ok: r.ok, status: r.status, data: r.data };
+      })
+    );
+
+    prog(95, 'สรุปผล...');
+    for (const res of results) {
+      if (res.ok) {
+        log(`✅ ${res.code} (ID:${res.id}) → ${res.status}`, 'ok');
+        updated++;
+      } else {
+        log(`❌ ${res.code} (ID:${res.id}) [${res.path}] → ${res.status}: ${JSON.stringify(res.data).substring(0,120)}`, 'err');
+        failed++;
+      }
+    }
+
+    prog(100, 'เสร็จสิ้น!');
+    document.getElementById('sSkip').textContent = skipped;
+    document.getElementById('sUpdated').textContent = updated;
+    log(`\n🎯 อัปเดต ${updated} | skip ${skipped} | error ${failed}`, 'h');
+    if (failed === 0) document.getElementById('doneBox').style.display = 'block';
+
+  } catch (err) {
+    log(`\n❌ Error: ${err.message}`, 'err');
+  }
+
+  btn.disabled = false;
+}
+
+// =================== Manual endpoint test ===================
+async function testManualEndpoint() {
+  const pattern = document.getElementById('epPattern').value.trim();
+  const method = document.getElementById('epMethod').value;
+  logEl.innerHTML = ''; logEl.style.display = 'block';
+  if (!pattern) { log('❌ กรอก endpoint pattern ก่อน', 'err'); return; }
+
+  await loadMajors();
+  const testMajorId = (_courses.length > 0) ? 88 : null;
+  const testCourseId = (_courses[0]||{}).id;
+  const path = pattern.replace(':cid', testCourseId).replace(':id', testMajorId);
+
+  log(`🧪 ทดสอบ: ${method} ${API}${path}`, 'info');
+  log(`   (course_id=${testCourseId}, major_id=${testMajorId})`, 'dim');
+
+  const r = await apiFetch(path, method, { _probe: true });
+  if (r.ok) {
+    log(`✅ ${r.status} — endpoint ใช้งานได้! กด 🚀 เริ่ม Seed ได้เลย`, 'ok');
+    _workingEndpointTemplate = pattern;
+    _workingMethod = method;
+  } else if (r.status === 400 || r.status === 422) {
+    log(`⚡ ${r.status} — endpoint มีอยู่! (validation error = field ไม่ถูก แต่ URL ถูก)`, 'warn');
+    log(`   response: ${JSON.stringify(r.data).substring(0,200)}`, 'warn');
+    log(`✅ บันทึก endpoint แล้ว กด 🚀 เริ่ม Seed ได้เลย`, 'ok');
+    _workingEndpointTemplate = pattern;
+    _workingMethod = method;
+  } else if (r.status === 500) {
+    log(`⚡ ${r.status} — endpoint มีอยู่แต่ server error`, 'warn');
+    log(`   response: ${JSON.stringify(r.data).substring(0,200)}`, 'warn');
+    _workingEndpointTemplate = pattern;
+    _workingMethod = method;
+  } else {
+    log(`❌ ${r.status} — ไม่พบ endpoint นี้`, 'err');
+    log(`   response: ${JSON.stringify(r.data).substring(0,100)}`, 'dim');
+  }
+}
+
+async function dryRun() {
+  await run(true);
+}
+
+
+
+// =================== API Explorer ===================
+// สแกนหา endpoint จริงที่ใช้ update major
+async function exploreApi() {
+  logEl.innerHTML = ''; logEl.style.display = 'block';
+  log('🔬 ═══════════════════════════════════════', 'h');
+  log('🔬 API ENDPOINT EXPLORER', 'h');
+  log('🔬 ═══════════════════════════════════════', 'h');
+
+  // โหลด courses + majors ก่อน
+  await loadMajors();
+  if (_courses.length === 0) { log('❌ ไม่พบ courses', 'err'); return; }
+
+  // ใช้ major จริงจาก course แรก — ไม่ hardcode
+  const firstCourse = _courses[0];
+  const courseId = firstCourse.id;
+  const r0 = await fetch(`${API}/courses/${courseId}/majors`).catch(() => null);
+  const d0 = r0 && r0.ok ? await r0.json().catch(()=>({})) : {};
+  const sampleMajors = Array.isArray(d0) ? d0 : (d0.data || d0.majors || d0.items || []);
+  const majorId = sampleMajors[0]?.id || 88;
+
+  log(`\n📌 ทดสอบด้วย course_id=${courseId}, major_id=${majorId} (จาก ${sampleMajors.length} majors ใน course)`, 'info');
+  log(`   API base: ${API}`, 'dim');
+
+  // ทดสอบ GET endpoints ก่อน (safe — ไม่แก้ข้อมูล)
+  const getEndpoints = [
+    `/majors`,
+    `/majors/${majorId}`,
+    `/courses/${courseId}/majors`,
+    `/courses/${courseId}/majors/${majorId}`,
+  ];
+
+  log('\n─── GET endpoints (read-only) ───', 'h');
+  for (const ep of getEndpoints) {
+    try {
+      const r = await fetch(API + ep);
+      const body = await r.json().catch(() => ({}));
+      const keys = Array.isArray(body) ? `[array len=${body.length}]`
+        : Object.keys(body).slice(0,8).join(', ');
+      log(`  GET ${ep} → ${r.status} | ${keys}`, r.ok ? 'ok' : r.status===404 ? 'dim' : 'warn');
+      if (r.ok && !Array.isArray(body) && body.id) {
+        log(`    fields: ${Object.keys(body).join(', ')}`, 'dim');
+      }
+    } catch(e) { log(`  GET ${ep} → ERROR: ${e.message}`, 'err'); }
+  }
+
+  // ทดสอบ PATCH/PUT ด้วย empty body เพื่อดู response (ไม่แก้อะไร)
+  log('\n─── PATCH/PUT endpoints (probe only) ───', 'h');
+  const writeEndpoints = [
+    `/majors/${majorId}`,
+    `/courses/${courseId}/majors/${majorId}`,
+    `/major/${majorId}`,
+    `/majors/${majorId}/update`,
+    `/admin/majors/${majorId}`,
+  ];
+  // เพิ่ม course แต่ละ id
+  for (const c of _courses) {
+    writeEndpoints.push(`/courses/${c.id}/majors/${majorId}`);
+  }
+
+  for (const ep of writeEndpoints) {
+    for (const method of ['PATCH', 'PUT']) {
+      try {
+        const r = await fetch(API + ep, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ _probe: true }), // body ปลอม
+        });
+        const body = await r.json().catch(() => ({}));
+        const msg = `  ${method} ${ep} → ${r.status}`;
+        if (r.ok) {
+          log(msg + ' ✅ FOUND!', 'ok');
+          log(`    response: ${JSON.stringify(body).substring(0,100)}`, 'ok');
+        } else if (r.status === 422 || r.status === 400) {
+          // Validation error = endpoint มีอยู่! แค่ field ไม่ถูก
+          log(msg + ' ⚡ ENDPOINT EXISTS (validation error)', 'warn');
+          log(`    hint: ${JSON.stringify(body).substring(0,150)}`, 'warn');
+        } else if (r.status === 500) {
+          log(msg + ' ⚡ ENDPOINT EXISTS (server error)', 'warn');
+          log(`    hint: ${JSON.stringify(body).substring(0,150)}`, 'warn');
+        } else if (r.status === 404) {
+          log(msg + ' ✗', 'dim');
+        } else {
+          log(msg + ` | ${JSON.stringify(body).substring(0,80)}`, 'info');
+        }
+      } catch(e) { log(`  ${method} ${ep} → ERROR: ${e.message}`, 'err'); }
+    }
+  }
+
+  log('\n🔬 สแกนเสร็จแล้ว — ดู endpoint ที่มี ✅ หรือ ⚡ ด้านบน', 'h');
+  log('💡 แจ้ง endpoint ที่พบให้ทราบเพื่ออัปเดตโค้ด', 'warn');
+}
+
+// Build preview on load
+buildPreview();
+</script>
+</body>
+</html>

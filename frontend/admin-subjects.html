@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin — จัดการรายวิชา | FMS PSU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --purple:#6B3FA0; --purple-dark:#4A2870; --purple-light:#F3EEFF; --purple-mid:#E8DEFF;
+      --accent:#9B6DD1; --bg:#F7F5FA; --white:#FFFFFF; --text:#181117; --text-sub:#64748B;
+      --border:#EDE8F5; --red:#EF4444; --red-bg:#FEE2E2; --green:#16a34a; --amber:#d97706;
+      --blue:#0284c7; --sidebar-w:240px; --topbar-h:64px; --radius:12px;
+      --shadow:0 1px 3px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md:0 4px 12px rgba(107,63,160,0.10);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Noto Sans Thai','Lexend',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:14px;}
+    svg{display:block;}
+
+    /* ── SIDEBAR ── */
+    .sidebar{width:var(--sidebar-w);background:var(--white);height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border);z-index:100;}
+    .sidebar-brand{padding:20px 20px 16px;border-bottom:1px solid var(--border);}
+    .sidebar-brand-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.2px;}
+    .sidebar-brand-sub{font-size:11.5px;color:var(--purple);font-weight:500;margin-top:2px;}
+    .sidebar-section-label{padding:20px 20px 6px;font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1.2px;}
+    .sidebar-nav{flex:1;padding:8px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--text-sub);text-decoration:none;transition:all 0.18s;cursor:pointer;user-select:none;}
+    .nav-item:hover{background:var(--purple-light);color:var(--purple);}
+    .nav-item.active{background:var(--purple-light);color:var(--purple);font-weight:600;}
+    .nav-icon{width:18px;height:18px;flex-shrink:0;opacity:0.75;}
+    .nav-item.active .nav-icon,.nav-item:hover .nav-icon{opacity:1;}
+    .sidebar-footer{padding:12px;border-top:1px solid var(--border);}
+    .sidebar-footer .nav-item{color:var(--red);}
+    .sidebar-footer .nav-item:hover{background:var(--red-bg);color:#DC2626;}
+
+    /* ── TOPBAR ── */
+    .topbar{position:fixed;top:0;left:var(--sidebar-w);right:0;height:var(--topbar-h);background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:90;}
+    .topbar-left{display:flex;flex-direction:column;gap:2px;}
+    .topbar-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.2px;}
+    .topbar-breadcrumb{font-size:11.5px;color:var(--text-sub);}
+    .topbar-right{display:flex;align-items:center;gap:12px;}
+
+    /* ── MAIN ── */
+    .main{margin-left:var(--sidebar-w);padding-top:var(--topbar-h);flex:1;min-width:0;display:flex;flex-direction:column;}
+    .page-body{padding:28px 32px;flex:1;display:flex;flex-direction:column;gap:20px;}
+
+    /* ── PAGE TABS ── */
+    .page-tabs{display:flex;gap:0;background:var(--white);border-bottom:1.5px solid var(--border);padding:0 32px;position:sticky;top:var(--topbar-h);z-index:80;}
+    .ptab{padding:14px 22px;font-family:'Noto Sans Thai',sans-serif;font-size:13.5px;font-weight:600;color:var(--text-sub);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;display:flex;align-items:center;gap:8px;transition:.15s;}
+    .ptab:hover{color:var(--text);}
+    .ptab.active{color:var(--purple);border-bottom-color:var(--purple);}
+    .tab-pane{display:none;}.tab-pane.active{display:block;}
+
+    /* ── STAT CARDS ── */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+    .stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;transition:all .2s;position:relative;overflow:hidden;}
+    .stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--purple));transform:scaleX(0);transition:transform .2s;transform-origin:left;}
+    .stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+    .stat-card:hover::after{transform:scaleX(1);}
+    .stat-icon-wrap{width:44px;height:44px;border-radius:10px;background:var(--card-icon-bg,var(--purple-light));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+    .stat-info{}
+    .stat-label{font-size:11px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;}
+    .stat-value{font-family:'Lexend',sans-serif;font-size:28px;font-weight:800;color:var(--text);line-height:1;}
+    .card-purple{--card-accent:var(--purple);--card-icon-bg:var(--purple-light);}
+    .card-green{--card-accent:#16a34a;--card-icon-bg:#f0fdf4;}
+    .card-amber{--card-accent:#d97706;--card-icon-bg:#fffbeb;}
+    .card-blue{--card-accent:#0284c7;--card-icon-bg:#f0f9ff;}
+
+    /* ── TOOLBAR ── */
+    .toolbar{background:var(--white);border-radius:var(--radius);padding:14px 18px;border:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;box-shadow:var(--shadow);}
+    .toolbar select,.toolbar input{padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);background:var(--white);outline:none;transition:border-color .15s;}
+    .toolbar select:focus,.toolbar input:focus{border-color:var(--accent);}
+    .toolbar input{flex:1;min-width:220px;}
+
+    /* ── BUTTONS ── */
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .18s;white-space:nowrap;}
+    .btn-primary{background:var(--purple);color:#fff;box-shadow:0 4px 12px rgba(107,63,160,.28);}
+    .btn-primary:hover{background:var(--purple-dark);transform:translateY(-1px);}
+    .btn-outline{background:var(--white);color:var(--purple);border:1.5px solid var(--border);}
+    .btn-outline:hover{border-color:var(--accent);background:var(--purple-light);}
+    .btn-danger{background:var(--white);color:var(--red);border:1.5px solid #fecdd3;}
+    .btn-danger:hover{background:#fff1f2;}
+    .btn-sm{padding:5px 11px;font-size:12px;border-radius:7px;}
+    .btn-icon{width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;}
+
+    /* ── TABLE CARD ── */
+    .tcard{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);}
+    .tcard-head{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:var(--white);}
+    .tcard-head-title{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+    .tcard-head-sub{font-size:12px;color:var(--text-sub);font-weight:400;margin-left:6px;}
+    table{width:100%;border-collapse:collapse;}
+    thead tr{background:var(--bg);}
+    thead th{padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--text-sub);text-align:left;border-bottom:1px solid var(--border);}
+    thead th:last-child{text-align:center;width:100px;}
+    tbody tr{border-bottom:1px solid var(--border);transition:background .12s;}
+    tbody tr:last-child{border-bottom:none;}
+    tbody tr:hover{background:var(--purple-light);}
+    td{padding:11px 16px;font-size:13px;vertical-align:middle;}
+    td:last-child{text-align:center;}
+    .code{font-family:'Lexend',monospace;font-size:12px;color:var(--purple);font-weight:700;background:var(--purple-light);padding:2px 8px;border-radius:5px;}
+    .name-th{font-weight:600;line-height:1.4;color:var(--text);}
+    .name-en{font-size:11.5px;color:var(--text-sub);margin-top:2px;}
+    .note-red{font-size:11px;color:var(--red);margin-top:2px;}
+    .badge-type{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;}
+    .req{background:var(--purple-light);color:var(--purple);}
+    .elec{background:#f0fdf4;color:#16a34a;}
+    .badge-major{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;}
+    .act-row{display:flex;gap:6px;justify-content:center;}
+    .grp-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;background:var(--purple-light);color:var(--purple);}
+    .mix-badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;background:#eff6ff;color:#1d4ed8;margin-left:4px;}
+
+    /* ── PAGER ── */
+    .pager{display:flex;gap:5px;align-items:center;justify-content:flex-end;padding:14px 18px;border-top:1px solid var(--border);}
+    .pager-info{font-size:12px;color:var(--text-sub);margin-right:4px;}
+    .pbtn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text-sub);transition:.15s;}
+    .pbtn:hover{border-color:var(--purple);color:var(--purple);}
+    .pbtn.active{background:var(--purple);border-color:var(--purple);color:#fff;}
+
+    /* ── MODAL ── */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(2px);}
+    .overlay.open{display:flex;}
+    .modal{background:var(--white);border-radius:18px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);}
+    .modal-hd{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--white);z-index:1;}
+    .modal-hd h3{font-family:'Lexend',sans-serif;font-size:17px;font-weight:700;color:var(--text);}
+    .modal-hd button{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-sub);padding:4px 8px;border-radius:6px;transition:.15s;}
+    .modal-hd button:hover{background:var(--bg);color:var(--text);}
+    .modal-bd{padding:22px 24px;}
+    .modal-ft{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:var(--white);}
+    .frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+    .frow.full{grid-template-columns:1fr;}
+    .fg{display:flex;flex-direction:column;gap:5px;}
+    .fg label{font-size:11.5px;font-weight:700;color:var(--text-sub);letter-spacing:.3px;text-transform:uppercase;}
+    .fg input,.fg select,.fg textarea{padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .15s;background:var(--white);}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(155,109,209,.12);}
+    .fg textarea{resize:vertical;min-height:80px;}
+    .ferr{font-size:11px;color:var(--red);margin-top:2px;min-height:16px;}
+    .fhint{font-size:11px;color:var(--text-sub);margin-top:3px;line-height:1.5;}
+    .modal-section-title{font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-sub);margin-bottom:12px;margin-top:6px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;}
+
+    /* ── TOGGLE ── */
+    .toggle-row{display:flex;align-items:center;gap:10px;}
+    .toggle{position:relative;display:inline-block;width:40px;height:22px;}
+    .toggle input{opacity:0;width:0;height:0;}
+    .toggle-slider{position:absolute;inset:0;background:#d1d5db;border-radius:99px;cursor:pointer;transition:.2s;}
+    .toggle-slider:before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+    .toggle input:checked + .toggle-slider{background:var(--purple);}
+    .toggle input:checked + .toggle-slider:before{transform:translateX(18px);}
+
+    /* ── CONFIRM ── */
+    .conf-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+    .conf-overlay.open{display:flex;}
+    .conf-box{background:var(--white);border-radius:18px;padding:32px;max-width:360px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.18);text-align:center;}
+    .conf-icon{width:56px;height:56px;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;color:var(--red);}
+    .conf-box h4{font-family:'Lexend',sans-serif;font-size:17px;font-weight:700;margin-bottom:8px;}
+    .conf-box p{font-size:13px;color:var(--text-sub);margin-bottom:24px;line-height:1.6;}
+
+    /* ── TOAST ── */
+    .toasts{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+    .toast{padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.15);animation:tin .25s ease;display:flex;align-items:center;gap:8px;pointer-events:all;}
+    .toast-ok{background:#16a34a;}
+    .toast-err{background:var(--red);}
+    @keyframes tin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .empty td,.loading td{text-align:center;padding:48px;color:var(--text-sub);}
+
+    /* ── TOPBAR CONTROLS ── */
+    .course-select-wrap{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:7px 12px;}
+    .course-select-wrap select{border:none;background:none;outline:none;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;min-width:200px;}
+    .course-select-wrap i{color:var(--text-sub);font-size:12px;}
+
+    @media(max-width:900px){
+      .sidebar{display:none;}
+      .main{margin-left:0;}
+      .topbar{left:0;}
+      .stats{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-title">FMS Admin</div>
+    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <!-- ── ภาพรวม ── -->
+    <div class="sidebar-section-label">ภาพรวม</div>
+    <a class="nav-item" href="dashboard.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+      แดชบอร์ด
+    </a>
+
+    <!-- ── จัดการหลักสูตร ── -->
+    <div class="sidebar-section-label">จัดการหลักสูตร</div>
+    <a class="nav-item" href="course-list.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+      หลักสูตร
+    </a>
+    <a class="nav-item" href="study-plan.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+      แผนการศึกษา
+    </a>
+
+    <!-- ── หน้านักศึกษา ── -->
+    <div class="sidebar-section-label">หน้านักศึกษา</div>
+    <a class="nav-item" href="admin-student-content.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
+      หน้านักศึกษา
+    </a>
+      <a class="nav-item active" href="admin-subjects.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
+      รายวิชา
+    </a>
+
+    <!-- ── ระบบ ── -->
+    <div class="sidebar-section-label">ระบบ</div>
+    <a class="nav-item" href="qa-dashboard.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      ประกันคุณภาพการศึกษา
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+</aside>
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title" id="topbarTitle">จัดการรายวิชาตามวิชาเอก</div>
+    <div class="topbar-breadcrumb">คณะวิทยาการจัดการ · PSU</div>
+  </div>
+  <div class="topbar-right">
+    <div class="course-select-wrap">
+      <i class="fa-solid fa-graduation-cap" style="color:var(--accent)"></i>
+      <select id="courseSelect" onchange="onCourseChange()"></select>
+    </div>
+    <button class="btn btn-primary" id="mainAddBtn" onclick="onMainAdd()">
+      <i class="fa-solid fa-plus"></i> เพิ่มวิชาใหม่
+    </button>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- Page Tabs -->
+  <div class="page-tabs">
+    <button class="ptab active" id="ptab-subjects" onclick="switchTab('subjects')">
+      <i class="fa-solid fa-book"></i> รายวิชา
+    </button>
+    <button class="ptab" id="ptab-minor" onclick="switchTab('minor')">
+      <i class="fa-solid fa-graduation-cap"></i> วิชาโท
+    </button>
+  </div>
+
+  <div class="page-body">
+
+    <!-- Stat Cards -->
+    <div class="stats">
+      <div class="stat-card card-purple">
+        <div class="stat-icon-wrap" style="background:var(--purple-light);color:var(--purple)"><i class="fa-solid fa-book"></i></div>
+        <div class="stat-info"><div class="stat-label">วิชาทั้งหมด</div><div class="stat-value" id="st-total">—</div></div>
+      </div>
+      <div class="stat-card card-green">
+        <div class="stat-icon-wrap" style="background:#f0fdf4;color:#16a34a"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="stat-info"><div class="stat-label">วิชาบังคับ</div><div class="stat-value" id="st-req">—</div></div>
+      </div>
+      <div class="stat-card card-amber">
+        <div class="stat-icon-wrap" style="background:#fffbeb;color:#d97706"><i class="fa-solid fa-list"></i></div>
+        <div class="stat-info"><div class="stat-label">วิชาเลือก</div><div class="stat-value" id="st-elec">—</div></div>
+      </div>
+      <div class="stat-card card-blue">
+        <div class="stat-icon-wrap" style="background:#f0f9ff;color:#0284c7"><i class="fa-solid fa-layer-group"></i></div>
+        <div class="stat-info"><div class="stat-label">วิชาเอก</div><div class="stat-value" id="st-majors">—</div></div>
+      </div>
+    </div>
+
+    <!-- Tab: รายวิชา -->
+    <div class="tab-pane active" id="pane-subjects">
+      <div class="toolbar">
+        <select id="fMajorFilter" onchange="applyFilter()"><option value="">— ทุกวิชาเอก —</option></select>
+        <select id="fTypeFilter" onchange="applyFilter()">
+          <option value="">— ทุกประเภท —</option>
+          <option value="required">วิชาบังคับ</option>
+          <option value="elective">วิชาเลือก</option>
+        </select>
+        <input type="text" id="fSearch" placeholder="🔍  ค้นหารหัส / ชื่อวิชา..." oninput="applyFilter()">
+        <button class="btn btn-outline btn-sm" onclick="clearFilter()"><i class="fa-solid fa-xmark"></i> ล้าง</button>
+      </div>
+      <div class="tcard">
+        <div class="tcard-head">
+          <div><span class="tcard-head-title">รายวิชา</span><span class="tcard-head-sub" id="tcount"></span></div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>รหัสวิชา</th><th>ชื่อวิชา</th><th>วิชาเอก</th>
+            <th>ประเภท</th><th style="text-align:center">หน่วยกิต</th><th>จัดการ</th>
+          </tr></thead>
+          <tbody id="tbody"><tr class="loading"><td colspan="6"><i class="fa-solid fa-spinner fa-spin"></i>  กำลังโหลด...</td></tr></tbody>
+        </table>
+        <div class="pager" id="pager"></div>
+      </div>
+    </div>
+
+    <!-- Tab: วิชาโท -->
+    <div class="tab-pane" id="pane-minor">
+      <div class="toolbar">
+        <select id="fMinorGroup" onchange="applyMinorFilter()"><option value="">— ทุกกลุ่ม —</option></select>
+        <select id="fMinorType" onchange="applyMinorFilter()">
+          <option value="">— ทุกประเภท —</option>
+          <option value="required">วิชาบังคับ</option>
+          <option value="elective">วิชาเลือก</option>
+        </select>
+        <input type="text" id="fMinorSearch" placeholder="🔍  ค้นหารหัส / ชื่อวิชา..." oninput="applyMinorFilter()">
+        <button class="btn btn-outline btn-sm" onclick="clearMinorFilter()"><i class="fa-solid fa-xmark"></i> ล้าง</button>
+      </div>
+      <div class="tcard">
+        <div class="tcard-head">
+          <div><span class="tcard-head-title">รายวิชาโท</span><span class="tcard-head-sub" id="minorCount"></span></div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>รหัสวิชา</th><th>ชื่อวิชา</th><th>กลุ่มวิชาโท</th>
+            <th>ประเภท</th><th style="text-align:center">หน่วยกิต</th><th>จัดการ</th>
+          </tr></thead>
+          <tbody id="minorTbody"><tr class="loading"><td colspan="6"><i class="fa-solid fa-spinner fa-spin"></i>  กำลังโหลด...</td></tr></tbody>
+        </table>
+        <div class="pager" id="minorPager"></div>
+      </div>
+    </div>
+
+  </div><!-- /page-body -->
+</div><!-- /main -->
+
+<!-- Modal เพิ่ม/แก้ไขวิชา -->
+<div class="overlay" id="modalOv">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="modalTitle">เพิ่มวิชาใหม่</h3>
+      <button onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-bd">
+      <input type="hidden" id="editId">
+      <div class="frow">
+        <div class="fg"><label>รหัสวิชา *</label><input id="fCode" placeholder="เช่น 473-200"><div class="ferr" id="fCodeErr"></div></div>
+        <div class="fg"><label>หน่วยกิต *</label><input id="fCredits" placeholder="3"></div>
+      </div>
+      <div class="frow full">
+        <div class="fg"><label>ชื่อวิชาภาษาไทย *</label><input id="fNameTh" placeholder="ชื่อวิชาภาษาไทย"><div class="ferr" id="fNameThErr"></div></div>
+      </div>
+      <div class="frow full">
+        <div class="fg"><label>ชื่อวิชาภาษาอังกฤษ</label><input id="fNameEn" placeholder="Course name in English"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>วิชาเอก *</label><select id="fMajor"><option value="">— เลือกวิชาเอก —</option></select><div class="ferr" id="fMajorErr"></div></div>
+        <div class="fg"><label>ประเภทวิชา *</label><select id="fType"><option value="required">วิชาบังคับ</option><option value="elective">วิชาเลือก</option></select></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>รายละเอียดหน่วยกิต</label><input id="fCreditDetail" placeholder="เช่น 3((3)-0-6)"></div>
+        <div class="fg"><label>ลำดับการแสดงผล</label><input type="number" id="fSort" placeholder="0" min="0"></div>
+      </div>
+      <div class="frow full">
+        <div class="fg"><label>หมายเหตุพิเศษ</label><input id="fNote" placeholder="เช่น แผนปกติ | ประเมินผล G P F"></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-outline" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn btn-primary" id="saveBtn" onclick="save()"><i class="fa-solid fa-floppy-disk"></i> บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal เพิ่ม/แก้ไขวิชาโท -->
+<div class="overlay" id="minorOv">
+  <div class="modal" style="max-width:620px;">
+    <div class="modal-hd">
+      <h3 id="minorModalTitle">เพิ่มวิชาโท</h3>
+      <button onclick="closeMinorModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-bd">
+      <input type="hidden" id="mnEditId">
+      <div class="modal-section-title"><i class="fa-solid fa-book" style="color:var(--purple)"></i> ข้อมูลรายวิชา</div>
+      <div class="frow">
+        <div class="fg"><label>รหัสวิชา *</label><input id="mnCode" placeholder="เช่น 875-103"><div class="ferr" id="mnCodeErr"></div></div>
+        <div class="fg"><label>หน่วยกิต *</label><input id="mnCredits" placeholder="3"></div>
+      </div>
+      <div class="frow full">
+        <div class="fg"><label>ชื่อวิชาภาษาไทย *</label><input id="mnNameTh" placeholder="ชื่อวิชาภาษาไทย"><div class="ferr" id="mnNameThErr"></div></div>
+      </div>
+      <div class="frow full">
+        <div class="fg"><label>ชื่อวิชาภาษาอังกฤษ</label><input id="mnNameEn" placeholder="Course name in English"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>กลุ่มวิชาโท *</label><select id="mnGroup"><option value="">— เลือกกลุ่ม —</option></select><div class="ferr" id="mnGroupErr"></div></div>
+        <div class="fg"><label>ประเภท *</label><select id="mnType"><option value="required">วิชาบังคับ</option><option value="elective">วิชาเลือก</option></select></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>รายละเอียดหน่วยกิต</label><input id="mnCreditDetail" placeholder="เช่น 4((4)-0-8)"></div>
+        <div class="fg"><label>ลำดับ</label><input type="number" id="mnSort" placeholder="0" min="0"></div>
+      </div>
+      <div class="frow full" style="margin-bottom:18px;">
+        <div class="fg"><label>หมายเหตุพิเศษ</label><input id="mnNote" placeholder="หมายเหตุพิเศษ..."></div>
+      </div>
+      <div class="modal-section-title"><i class="fa-solid fa-comment-dots" style="color:var(--purple)"></i> ข้อความแสดงในหน้าวิชาโท</div>
+      <div class="frow full">
+        <div class="fg">
+          <label>ข้อความ info box <span style="font-weight:400;text-transform:none">(แสดงใต้หัวข้อกลุ่ม)</span></label>
+          <textarea id="mnInfoNote" placeholder="เช่น วิชาบังคับและวิชาเลือกทั้งหมดสามารถนำมานับเป็นวิชาโทได้ เลือกรวม 15 หน่วยกิต"></textarea>
+          <div class="fhint">แสดงในกล่องสีม่วงด้านบนตารางรายวิชา</div>
+        </div>
+      </div>
+      <div class="frow full">
+        <div class="fg">
+          <label>หมายเหตุท้ายตาราง</label>
+          <textarea id="mnFreeNote" placeholder="เช่น *นักศึกษาต้องผ่านวิชาพื้นฐานก่อนลงทะเบียน" style="min-height:60px;"></textarea>
+          <div class="fhint">แสดงในกล่องสีเหลืองด้านล่างตาราง</div>
+        </div>
+      </div>
+      <div class="frow full" style="margin-bottom:4px;">
+        <div class="fg">
+          <label>เงื่อนไขการเลือก</label>
+          <div class="toggle-row" style="margin-top:6px;">
+            <label class="toggle"><input type="checkbox" id="mnAllowMix"><span class="toggle-slider"></span></label>
+            <span style="font-size:13px;color:var(--text)">อนุญาตให้เลือก<strong>แบบคละกลุ่มวิชาเอก</strong>ได้</span>
+          </div>
+          <div class="fhint" style="margin-top:6px;">เมื่อเปิด จะแสดง badge "คละกลุ่มได้" บนการ์ดและกล่องแจ้งเตือนสีน้ำเงิน</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-outline" onclick="closeMinorModal()">ยกเลิก</button>
+      <button class="btn btn-primary" id="mnSaveBtn" onclick="saveMinor()"><i class="fa-solid fa-floppy-disk"></i> บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm ลบ -->
+<div class="conf-overlay" id="confOv">
+  <div class="conf-box">
+    <div class="conf-icon"><i class="fa-solid fa-trash"></i></div>
+    <h4>ยืนยันการลบ</h4>
+    <p id="confMsg">ลบรายการนี้ออกจากระบบ?</p>
+    <div class="act-row" style="display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-outline" onclick="closeConf()">ยกเลิก</button>
+      <button class="btn btn-danger" id="confYes">ลบออก</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+const API = '/api';
+const COURSE_ID = new URLSearchParams(location.search).get('course_id') || 5;
+const COLORS = {14:'#0284c7',15:'#7c3aed',16:'#16a34a',17:'#d97706',18:'#e11d48',19:'#c026d3'};
+
+let allData=[],majors=[],filtered=[],page=1;
+let minorGroups=[],minorData=[],minorFiltered=[],minorPage=1;
+const PER=20;
+let deleteId=null,deleteType='subject',currentTab='subjects';
+
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('ptab-'+tab).classList.add('active');
+  document.getElementById('pane-'+tab).classList.add('active');
+  const btn=document.getElementById('mainAddBtn'),title=document.getElementById('topbarTitle');
+  if(tab==='subjects'){btn.innerHTML='<i class="fa-solid fa-plus"></i> เพิ่มวิชาใหม่';btn.onclick=openAdd;title.textContent='จัดการรายวิชาตามวิชาเอก';}
+  else{btn.innerHTML='<i class="fa-solid fa-plus"></i> เพิ่มวิชาโท';btn.onclick=openAddMinor;title.textContent='จัดการวิชาโท';}
+}
+function onMainAdd(){if(currentTab==='subjects')openAdd();else openAddMinor();}
+
+async function init(){
+  await loadCourses();
+  await Promise.all([loadMajors(),loadAll()]);
+  await loadMinorGroups();
+  await loadMinorData();
+}
+
+async function loadCourses(){
+  try{const r=await fetch(`${API}/courses`);const j=await r.json();const sel=document.getElementById('courseSelect');sel.innerHTML='';
+    (j.data||j).forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name_th||`หลักสูตร ${c.id}`;if(String(c.id)===String(COURSE_ID))o.selected=true;sel.appendChild(o);});}catch{}
+}
+function onCourseChange(){const cid=document.getElementById('courseSelect').value;if(cid)location.href=`admin-subjects.html?course_id=${cid}`;}
+
+async function loadMajors(){
+  try{const r=await fetch(`${API}/majors?course_id=${COURSE_ID}`);const j=await r.json();majors=j.data||j;
+    document.getElementById('st-majors').textContent=majors.length;
+    const fSel=document.getElementById('fMajorFilter'),mSel=document.getElementById('fMajor');
+    fSel.innerHTML='<option value="">— ทุกวิชาเอก —</option>';mSel.innerHTML='<option value="">— เลือกวิชาเอก —</option>';
+    majors.forEach(m=>{fSel.innerHTML+=`<option value="${m.id}">${m.name_th}</option>`;mSel.innerHTML+=`<option value="${m.id}">${m.name_th}</option>`;});}
+  catch(e){toast('โหลดวิชาเอกไม่สำเร็จ','err');}
+}
+
+async function loadAll(){
+  try{const r=await fetch(`${API}/major-subjects?course_id=${COURSE_ID}`);const j=await r.json();allData=j.data||j;updateStats();applyFilter();}
+  catch(e){toast('โหลดรายวิชาไม่สำเร็จ','err');}
+}
+function updateStats(){
+  document.getElementById('st-total').textContent=allData.length;
+  document.getElementById('st-req').textContent=allData.filter(s=>s.subject_type==='required').length;
+  document.getElementById('st-elec').textContent=allData.filter(s=>s.subject_type==='elective').length;
+}
+
+function applyFilter(){
+  const mid=document.getElementById('fMajorFilter').value,type=document.getElementById('fTypeFilter').value,q=document.getElementById('fSearch').value.toLowerCase().trim();
+  filtered=allData.filter(s=>{
+    if(mid&&String(s.major_id)!==mid)return false;
+    if(type&&s.subject_type!==type)return false;
+    if(q&&!s.subject_code.toLowerCase().includes(q)&&!s.name_th.toLowerCase().includes(q)&&!(s.name_en||'').toLowerCase().includes(q))return false;
+    return true;
+  });
+  page=1;render();
+}
+function clearFilter(){document.getElementById('fMajorFilter').value='';document.getElementById('fTypeFilter').value='';document.getElementById('fSearch').value='';applyFilter();}
+
+function render(){
+  const tbody=document.getElementById('tbody');
+  document.getElementById('tcount').textContent=`(${filtered.length} รายวิชา)`;
+  const pages=Math.ceil(filtered.length/PER)||1,start=(page-1)*PER,slice=filtered.slice(start,start+PER);
+  if(!slice.length){tbody.innerHTML=`<tr class="empty"><td colspan="6"><i class="fa-regular fa-folder-open" style="font-size:28px;display:block;margin-bottom:10px;opacity:.4"></i>ไม่พบรายวิชา</td></tr>`;document.getElementById('pager').innerHTML='';return;}
+  tbody.innerHTML=slice.map(s=>{
+    const m=majors.find(x=>x.id===s.major_id)||{},color=COLORS[s.major_id]||'#6b7280';
+    return`<tr>
+      <td><span class="code">${s.subject_code}</span></td>
+      <td><div class="name-th">${s.name_th}</div><div class="name-en">${s.name_en||''}</div>${s.special_note?`<div class="note-red">${s.special_note}</div>`:''}</td>
+      <td><span class="badge-major" style="background:${color}18;color:${color}">${m.name_th||'—'}</span></td>
+      <td><span class="badge-type ${s.subject_type==='required'?'req':'elec'}">${s.subject_type==='required'?'บังคับ':'เลือก'}</span></td>
+      <td style="text-align:center;font-family:'Lexend',monospace;font-weight:700;color:var(--text)">${s.credits}</td>
+      <td><div class="act-row">
+        <button class="btn btn-outline btn-sm btn-icon" title="แก้ไข" onclick='openEdit(${JSON.stringify(s)})'><i class="fa-solid fa-pen" style="font-size:11px"></i></button>
+        <button class="btn btn-danger btn-sm btn-icon" title="ลบ" onclick="askDelete(${s.id},'${s.subject_code}','subject')"><i class="fa-solid fa-trash" style="font-size:11px"></i></button>
+      </div></td></tr>`;
+  }).join('');
+  renderPager('pager',page,pages,p=>{page=p;render();});
+}
+
+function openAdd(){document.getElementById('modalTitle').textContent='เพิ่มวิชาใหม่';document.getElementById('editId').value='';['fCode','fNameTh','fNameEn','fCreditDetail','fNote'].forEach(id=>document.getElementById(id).value='');document.getElementById('fCredits').value='3';document.getElementById('fType').value='required';document.getElementById('fMajor').value='';document.getElementById('fSort').value='0';clearErr();document.getElementById('modalOv').classList.add('open');document.getElementById('fCode').focus();}
+function openEdit(s){document.getElementById('modalTitle').textContent='แก้ไขวิชา';document.getElementById('editId').value=s.id;document.getElementById('fCode').value=s.subject_code;document.getElementById('fNameTh').value=s.name_th;document.getElementById('fNameEn').value=s.name_en||'';document.getElementById('fMajor').value=s.major_id;document.getElementById('fType').value=s.subject_type;document.getElementById('fCredits').value=s.credits;document.getElementById('fCreditDetail').value=s.credit_detail||'';document.getElementById('fSort').value=s.sort_order||0;document.getElementById('fNote').value=s.special_note||'';clearErr();document.getElementById('modalOv').classList.add('open');}
+function closeModal(){document.getElementById('modalOv').classList.remove('open');}
+function clearErr(){['fCodeErr','fNameThErr','fMajorErr'].forEach(id=>document.getElementById(id).textContent='');}
+
+async function save(){
+  clearErr();
+  const id=document.getElementById('editId').value,code=document.getElementById('fCode').value.trim(),nameTh=document.getElementById('fNameTh').value.trim(),majorId=document.getElementById('fMajor').value;
+  let ok=true;
+  if(!code){document.getElementById('fCodeErr').textContent='กรุณากรอกรหัสวิชา';ok=false;}
+  if(!nameTh){document.getElementById('fNameThErr').textContent='กรุณากรอกชื่อวิชา';ok=false;}
+  if(!majorId){document.getElementById('fMajorErr').textContent='กรุณาเลือกวิชาเอก';ok=false;}
+  if(!ok)return;
+  const body={major_id:Number(majorId),subject_code:code,name_th:nameTh,name_en:document.getElementById('fNameEn').value.trim(),credits:document.getElementById('fCredits').value.trim()||'3',credit_detail:document.getElementById('fCreditDetail').value.trim(),subject_type:document.getElementById('fType').value,special_note:document.getElementById('fNote').value.trim(),sort_order:Number(document.getElementById('fSort').value)||0};
+  const btn=document.getElementById('saveBtn');btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+  try{const r=await fetch(id?`${API}/major-subjects/${id}`:`${API}/major-subjects`,{method:id?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json();if(!j.success)throw new Error(j.message);toast(id?'แก้ไขวิชาเรียบร้อย ✓':'เพิ่มวิชาเรียบร้อย ✓','ok');closeModal();await loadAll();}
+  catch(e){toast(e.message||'เกิดข้อผิดพลาด','err');}
+  finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-floppy-disk"></i> บันทึก';}
+}
+
+async function loadMinorGroups(){
+  try{const r=await fetch(`${API}/minor-groups`);const j=await r.json();minorGroups=j.data||j;
+    const fSel=document.getElementById('fMinorGroup'),mSel=document.getElementById('mnGroup');
+    fSel.innerHTML='<option value="">— ทุกกลุ่ม —</option>';mSel.innerHTML='<option value="">— เลือกกลุ่ม —</option>';
+    minorGroups.forEach(g=>{const t=g.allow_mix?' (คละกลุ่มได้)':'';fSel.innerHTML+=`<option value="${g.id}">${g.name_th}${t}</option>`;mSel.innerHTML+=`<option value="${g.id}">${g.name_th}${t}</option>`;});}catch{}
+}
+
+async function loadMinorData(){
+  const tbody=document.getElementById('minorTbody');
+  if(tbody)tbody.innerHTML=`<tr class="loading"><td colspan="6"><i class="fa-solid fa-spinner fa-spin"></i>  กำลังโหลด...</td></tr>`;
+  try{const all=[];await Promise.all(minorGroups.map(async g=>{try{const r=await fetch(`${API}/minor-subjects?minor_group_id=${g.id}`);if(!r.ok)return;const j=await r.json();const rows=j.data||j;if(Array.isArray(rows))all.push(...rows);}catch{}}));minorData=all;applyMinorFilter();}
+  catch(e){toast('โหลดวิชาโทไม่สำเร็จ','err');}
+}
+
+function applyMinorFilter(){
+  const gid=document.getElementById('fMinorGroup').value,type=document.getElementById('fMinorType').value,q=document.getElementById('fMinorSearch').value.toLowerCase().trim();
+  minorFiltered=minorData.filter(s=>{
+    if(gid&&String(s.minor_group_id)!==gid)return false;
+    if(type&&s.subject_type!==type)return false;
+    if(q&&!s.subject_code.toLowerCase().includes(q)&&!s.name_th.toLowerCase().includes(q)&&!(s.name_en||'').toLowerCase().includes(q))return false;
+    return true;
+  });
+  minorPage=1;renderMinor();
+}
+function clearMinorFilter(){document.getElementById('fMinorGroup').value='';document.getElementById('fMinorType').value='';document.getElementById('fMinorSearch').value='';applyMinorFilter();}
+
+function renderMinor(){
+  const tbody=document.getElementById('minorTbody');
+  document.getElementById('minorCount').textContent=`(${minorFiltered.length} รายวิชา)`;
+  const pages=Math.ceil(minorFiltered.length/PER)||1,start=(minorPage-1)*PER,slice=minorFiltered.slice(start,start+PER);
+  if(!slice.length){tbody.innerHTML=`<tr class="empty"><td colspan="6"><i class="fa-regular fa-folder-open" style="font-size:28px;display:block;margin-bottom:10px;opacity:.4"></i>ไม่พบวิชาโท</td></tr>`;document.getElementById('minorPager').innerHTML='';return;}
+  tbody.innerHTML=slice.map(s=>{
+    const g=minorGroups.find(x=>x.id===s.minor_group_id)||{},mixBadge=g.allow_mix?`<span class="mix-badge"><i class="fa-solid fa-shuffle" style="font-size:9px"></i> คละ</span>`:'';
+    return`<tr>
+      <td><span class="code">${s.subject_code}</span></td>
+      <td><div class="name-th">${s.name_th}</div><div class="name-en">${s.name_en||''}</div>${s.special_note?`<div class="note-red">${s.special_note}</div>`:''}</td>
+      <td><span class="grp-badge">${g.name_th||'—'}</span>${mixBadge}</td>
+      <td><span class="badge-type ${s.subject_type==='required'?'req':'elec'}">${s.subject_type==='required'?'บังคับ':'เลือก'}</span></td>
+      <td style="text-align:center;font-family:'Lexend',monospace;font-weight:700">${s.credits}</td>
+      <td><div class="act-row">
+        <button class="btn btn-outline btn-sm btn-icon" title="แก้ไข" onclick='openEditMinor(${JSON.stringify(s)})'><i class="fa-solid fa-pen" style="font-size:11px"></i></button>
+        <button class="btn btn-danger btn-sm btn-icon" title="ลบ" onclick="askDelete(${s.id},'${s.subject_code}','minor')"><i class="fa-solid fa-trash" style="font-size:11px"></i></button>
+      </div></td></tr>`;
+  }).join('');
+  renderPager('minorPager',minorPage,pages,p=>{minorPage=p;renderMinor();});
+}
+
+function openAddMinor(){document.getElementById('minorModalTitle').textContent='เพิ่มวิชาโท';document.getElementById('mnEditId').value='';['mnCode','mnNameTh','mnNameEn','mnCreditDetail','mnNote','mnInfoNote','mnFreeNote'].forEach(id=>document.getElementById(id).value='');document.getElementById('mnCredits').value='3';document.getElementById('mnType').value='required';document.getElementById('mnGroup').value='';document.getElementById('mnSort').value='0';document.getElementById('mnAllowMix').checked=false;clearMinorErr();document.getElementById('minorOv').classList.add('open');document.getElementById('mnCode').focus();}
+function openEditMinor(s){document.getElementById('minorModalTitle').textContent='แก้ไขวิชาโท';document.getElementById('mnEditId').value=s.id;document.getElementById('mnCode').value=s.subject_code;document.getElementById('mnNameTh').value=s.name_th;document.getElementById('mnNameEn').value=s.name_en||'';document.getElementById('mnGroup').value=s.minor_group_id;document.getElementById('mnType').value=s.subject_type;document.getElementById('mnCredits').value=s.credits;document.getElementById('mnCreditDetail').value=s.credit_detail||'';document.getElementById('mnSort').value=s.sort_order||0;document.getElementById('mnNote').value=s.special_note||'';document.getElementById('mnInfoNote').value=s.info_note||s.note||'';document.getElementById('mnFreeNote').value=s.free_note||'';document.getElementById('mnAllowMix').checked=!!s.allow_mix;clearMinorErr();document.getElementById('minorOv').classList.add('open');}
+function closeMinorModal(){document.getElementById('minorOv').classList.remove('open');}
+function clearMinorErr(){['mnCodeErr','mnNameThErr','mnGroupErr'].forEach(id=>document.getElementById(id).textContent='');}
+
+async function saveMinor(){
+  clearMinorErr();
+  const id=document.getElementById('mnEditId').value,code=document.getElementById('mnCode').value.trim(),nameTh=document.getElementById('mnNameTh').value.trim(),groupId=document.getElementById('mnGroup').value;
+  let ok=true;
+  if(!code){document.getElementById('mnCodeErr').textContent='กรุณากรอกรหัสวิชา';ok=false;}
+  if(!nameTh){document.getElementById('mnNameThErr').textContent='กรุณากรอกชื่อวิชา';ok=false;}
+  if(!groupId){document.getElementById('mnGroupErr').textContent='กรุณาเลือกกลุ่มวิชาโท';ok=false;}
+  if(!ok)return;
+  const body={minor_group_id:Number(groupId),course_id:Number(COURSE_ID),subject_code:code,name_th:nameTh,name_en:document.getElementById('mnNameEn').value.trim(),credits:document.getElementById('mnCredits').value.trim()||'3',credit_detail:document.getElementById('mnCreditDetail').value.trim(),subject_type:document.getElementById('mnType').value,special_note:document.getElementById('mnNote').value.trim(),sort_order:Number(document.getElementById('mnSort').value)||0,note:document.getElementById('mnInfoNote').value.trim(),free_note:document.getElementById('mnFreeNote').value.trim(),allow_mix:document.getElementById('mnAllowMix').checked};
+  const btn=document.getElementById('mnSaveBtn');btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+  try{const r=await fetch(id?`${API}/minor-subjects/${id}`:`${API}/minor-subjects`,{method:id?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json();if(!j.success)throw new Error(j.message);toast(id?'แก้ไขวิชาโทเรียบร้อย ✓':'เพิ่มวิชาโทเรียบร้อย ✓','ok');closeMinorModal();await loadMinorData();}
+  catch(e){toast(e.message||'เกิดข้อผิดพลาด','err');}
+  finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-floppy-disk"></i> บันทึก';}
+}
+
+function askDelete(id,code,type='subject'){deleteId=id;deleteType=type;document.getElementById('confMsg').textContent=`ลบ "${code}" ออกจากระบบ?`;document.getElementById('confOv').classList.add('open');document.getElementById('confYes').onclick=doDelete;}
+function closeConf(){document.getElementById('confOv').classList.remove('open');deleteId=null;}
+async function doDelete(){
+  if(!deleteId)return;
+  const ep=deleteType==='minor'?'minor-subjects':'major-subjects';
+  try{const r=await fetch(`${API}/${ep}/${deleteId}`,{method:'DELETE'});const j=await r.json();if(!j.success)throw new Error(j.message);toast('ลบเรียบร้อย','ok');closeConf();if(deleteType==='minor')await loadMinorData();else await loadAll();}
+  catch(e){toast(e.message||'ลบไม่สำเร็จ','err');}
+}
+
+function renderPager(elId,curPage,pages,goFn){
+  let ph=`<span class="pager-info">หน้า ${curPage}/${pages}</span>`;
+  for(let i=1;i<=pages;i++){if(pages>7&&i>2&&i<pages-1&&Math.abs(i-curPage)>1){if(i===3||i===pages-2)ph+=`<span style="color:var(--text-sub);padding:0 4px">…</span>`;continue;}ph+=`<button class="pbtn ${i===curPage?'active':''}" onclick="(${goFn.toString()})(${i})">${i}</button>`;}
+  document.getElementById(elId).innerHTML=ph;
+}
+
+function toast(msg,type='ok'){
+  const wrap=document.getElementById('toasts'),t=document.createElement('div');
+  t.className=`toast toast-${type}`;
+  t.innerHTML=`<i class="fa-solid ${type==='ok'?'fa-circle-check':'fa-circle-exclamation'}"></i>${msg}`;
+  wrap.appendChild(t);
+  setTimeout(()=>{t.style.cssText='opacity:0;transform:translateY(8px);transition:.3s';setTimeout(()=>t.remove(),300);},3000);
+}
+
+['modalOv','minorOv'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===e.currentTarget)document.getElementById(id).classList.remove('open');});});
+document.getElementById('confOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeConf();});
+document.getElementById('logoutBtn').addEventListener('click',e=>{e.preventDefault();localStorage.removeItem('user');window.location.href='login.html';});
+
+init();
+</script>
+</body>
+</html>

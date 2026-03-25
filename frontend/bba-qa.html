@@ -14,37 +14,30 @@
   --amber:#d97706; --blue:#2563eb; --teal:#0d9488;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;}
-
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;}
+  .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .navbar .logo img { height: 40px; }
+        .navbar ul { display: flex; gap: 20px; margin: 0; padding: 0; list-style: none; align-items: center; }
+        .navbar a { font-size: 14px; color: #555; text-decoration: none; transition: 0.3s; }
+        .navbar a:hover { color: #9b51e0; }
+        .navbar a.active { color: #9b51e0; font-weight: bold; }
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .nav-dropdown { position: relative; }
+        .nav-dropdown-toggle { font-size: 14px; color: #555; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; display: flex; align-items: center; gap: 4px; transition: color 0.3s; }
+        .nav-dropdown-toggle:hover, .nav-dropdown.open .nav-dropdown-toggle { color: #9b51e0; }
+        .nav-dropdown-toggle .chevron { transition: transform 0.18s; display: inline-block; font-style: normal; font-size: 10px; }
+        .nav-dropdown.open .nav-dropdown-toggle .chevron { transform: rotate(180deg); }
+        .nav-dropdown-menu { display: none; position: absolute; top: calc(100% + 10px); left: 0; background: #fff; border: 1px solid #eee; border-radius: 10px; min-width: 210px; box-shadow: 0 8px 24px rgba(155,81,224,0.13); overflow: hidden; z-index: 999; animation: dropIn 0.15s ease; }
+        @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+        .nav-dropdown.open .nav-dropdown-menu { display: block; }
+        .dropdown-item { display: block; width: 100%; padding: 11px 16px; font-size: 13px; color: #444; background: none; border: none; border-bottom: 1px solid #f5f5f5; text-align: left; cursor: pointer; font-family: inherit; text-decoration: none; transition: all 0.12s; }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover { background: #f8f0ff; color: #9b51e0; padding-left: 20px; }
+        .dropdown-loading { padding: 12px 16px; font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 8px; }
+        .spinner-sm { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #e9d5ff; border-top-color: #9b51e0; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 /* ── NAVBAR ── */
-.navbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 6px rgba(0,0,0,.06);}
-.navbar-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;gap:20px;}
-.navbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
-.navbar-logo img{height:38px;object-fit:contain;}
-.navbar-logo-placeholder{width:44px;height:44px;background:var(--purple);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.navbar-brand{line-height:1.2;}
-.navbar-brand-title{font-size:13px;font-weight:700;color:var(--text);}
-.navbar-brand-sub{font-size:10px;color:var(--muted);}
-.navbar-divider{width:1px;height:28px;background:var(--border);flex-shrink:0;}
-.navbar-nav{display:flex;align-items:center;gap:2px;flex:1;}
-.nav-link{padding:7px 12px;border-radius:7px;font-size:13.5px;font-weight:500;color:var(--muted);text-decoration:none;transition:all .18s;white-space:nowrap;}
-.nav-link:hover{background:var(--surface2);color:var(--text);}
-.nav-link.active{color:var(--purple);font-weight:600;background:var(--purple-light);}
-.navbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.search-box{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 13px;width:200px;transition:border-color .18s;}
-.search-box:focus-within{border-color:var(--purple);}
-.search-box input{background:none;border:none;outline:none;color:var(--text);font-size:13px;width:100%;font-family:inherit;}
-.search-box input::placeholder{color:var(--muted);}
-.search-box i{color:var(--muted);font-size:12px;flex-shrink:0;}
-.icon-btn{width:34px;height:34px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px;transition:all .18s;flex-shrink:0;}
-.icon-btn:hover{border-color:var(--purple);color:var(--purple);}
-.avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--purple),var(--purple3));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;color:#fff;flex-shrink:0;}
-.hamburger{display:none;width:36px;height:36px;border-radius:8px;background:none;border:1px solid var(--border);align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:16px;flex-shrink:0;}
 
-/* ── MOBILE MENU ── */
-.mobile-menu{display:none;flex-direction:column;gap:2px;padding:8px 16px 12px;border-top:1px solid var(--border);background:var(--surface);}
-.mobile-menu.open{display:flex;}
-.mobile-menu .nav-link{padding:10px 12px;border-radius:8px;font-size:14px;}
 
 /* ── PAGE ── */
 .page{max-width:1280px;margin:0 auto;padding:32px 24px;}
@@ -130,45 +123,36 @@ body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);colo
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar">
-  <div class="navbar-inner">
-    <a class="navbar-logo" href="index.html">
-      <img src="logo.jpg" alt="PSU FMS" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-      <div class="navbar-logo-placeholder" style="display:none;">🎓</div>
-      <div class="navbar-brand">
-        <div class="navbar-brand-title">FACULTY OF MANAGEMENT SCIENCES</div>
-        <div class="navbar-brand-sub">Prince of Songkla University</div>
-      </div>
-    </a>
-    <div class="navbar-divider"></div>
-    <div class="navbar-nav">
-      <a class="nav-link" href="bba-home.html">หน้าหลัก</a>
-      <a class="nav-link" href="bba-public.html">ข้อมูลทั่วไป</a>
-      <a class="nav-link" href="student.html">นักศึกษา</a>
-      <a class="nav-link" href="plans.html">แผนการศึกษา</a>
-      <a class="nav-link active" href="#">QA</a>
-    </div>
-    <div class="navbar-right">
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร..."/>
-      </div>
-      <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
-      <div class="avatar">A</div>
-      <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-    </div>
-  </div>
-  <!-- Mobile dropdown menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a class="nav-link" href="bba-home.html">หน้าหลัก</a>
-    <li><a href="bba-public.html" id="nav-general">ข้อมูลทั่วไป</a></li>
-    <a class="nav-link" href="student.html">นักศึกษา</a>
-    <a class="nav-link" href="plans.html">แผนการศึกษา</a>
-    <a class="nav-link active" href="bba-qa.html">QA</a>
-  </div>
-</nav>
+ <header class="navbar">
+  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
+  <nav>
+            <ul>
+                <li><a href="bba-home.html" >หน้าหลัก</a></li>
+                <li>
+                    <div class="nav-dropdown" id="planDropdown">
+                        <button class="nav-dropdown-toggle" onclick="togglePlanDropdown()">
+                            แผนการศึกษา <i class="chevron">▾</i>
+                        </button>
+                        <div class="nav-dropdown-menu" id="planDropdownMenu">
+                            <div class="dropdown-loading">
+                                <div class="spinner-sm"></div>
+                                <span>กำลังโหลด...</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="bba-qa.html" class="active">QA</a></li>
+            </ul>
+        </nav>
+        <div class="nav-right">
+            <i class="fa-solid fa-magnifying-glass" onclick="openSearch()"
+               style="cursor:pointer; font-size:16px; color:#555; transition:0.2s;"
+               onmouseover="this.style.color='#9b51e0'"
+               onmouseout="this.style.color='#555'"></i>
+        </div>
+    </header>
+    
+  
 
 <!-- PAGE CONTENT -->
 <div class="page">
@@ -183,28 +167,28 @@ body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);colo
       <a class="module-card card-plo" href="bba-plo.html">
         <div class="module-card-icon"><i class="fa-solid fa-diagram-project" style="color:#6d28d9;"></i></div>
         <div class="module-card-body">
-          <div class="module-card-title">ผลลัพธ์การเรียนรู้ (PLO/MLO)</div>
-          <div class="module-card-desc">จัดการ Curriculum Mapping และติดตามผลการบรรลุเป้าหมายรายบุคคล</div>
+          <div class="module-card-title">ผลลัพธ์การเรียนรู้</div>
+          <div class="module-card-desc">PLO/MLO/KAS คะแนนผลลัพธ์การเรียนรู้</div>
         </div>
-        <span class="module-card-link">จัดการข้อมูล <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></span>
+        <span class="module-card-link">ดูข้อมูล <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></span>
       </a>
 
       <a class="module-card card-stake" href="bba-stake.html">
         <div class="module-card-icon"><i class="fa-solid fa-comments" style="color:#0d9488;"></i></div>
         <div class="module-card-body">
-          <div class="module-card-title">Stakeholders</div>
-          <div class="module-card-desc">รวบรวมข้อมูลจากผู้มีส่วนได้ส่วนเสีย ศิษย์เก่า และผู้ใช้บัณฑิต เพื่อการปรับปรุงหลักสูตร</div>
+          <div class="module-card-title">ผู้มีส่วนร่วมในหลักสูตร</div>
+          <div class="module-card-desc">รวบรวมข้อมูลจากผู้มีส่วนร่วมในหลักสูตรเพื่อการปรับปรุงหลักสูตร</div>
         </div>
-        <span class="module-card-link">ดูแลการสำรวจ <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></span>
+        <span class="module-card-link">ดูข้อมูล <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></span>
       </a>
 
-      <a class="module-card card-data" href="bba-study.html">
+      <a class="module-card card-data" href="bba-students.html">
         <div class="module-card-icon"><i class="fa-solid fa-chart-line" style="color:#d97706;"></i></div>
         <div class="module-card-body">
-          <div class="module-card-title">ข้อมูลนักศึกษา (Analytics)</div>
-          <div class="module-card-desc">วิเคราะห์สถิติการตรวจสอบ อัตราการสำเร็จ การพัฒนา และแนวโน้มการศึกษา</div>
+          <div class="module-card-title">ข้อมูลนักศึกษา</div>
+          <div class="module-card-desc">วิเคราะห์สถิติการตรวจสอบ อัตราการสำเร็จ และแนวโน้มการศึกษา</div>
         </div>
-        <span class="module-card-link">วิเคราะห์ข้อมูล <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></span>
+        <span class="module-card-link">ดูข้อมูล <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></span>
       </a>
 
       <a class="module-card card-ach" href="achievements.html">
@@ -213,17 +197,41 @@ body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);colo
           <div class="module-card-title">ผลงานและความสำเร็จ</div>
           <div class="module-card-desc">บันทึกรางวัลนักศึกษา และสถิติได้รับตำแหน่งงานปัจจุบัน</div>
         </div>
-        <span class="module-card-link">บันทึกผลงาน <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></span>
+        <span class="module-card-link">ดูผลงาน <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></span>
       </a>
     </div>
   </div>
 </div>
 
 <script>
-function toggleMenu(){
-  const m = document.getElementById("mobileMenu");
-  m.classList.toggle("open");
+const BASE = '';
+const API  = BASE + "/api";
+
+// ── Dropdown ──────────────────────────────────────────────────
+function togglePlanDropdown() {
+  document.getElementById('planDropdown').classList.toggle('open');
 }
+document.addEventListener('click', e => {
+  const dd = document.getElementById('planDropdown');
+  if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+});
+
+// ── Load courses → dropdown ────────────────────────────────────
+async function buildPlanDropdown() {
+  const menu = document.getElementById('planDropdownMenu');
+  try {
+    const res     = await fetch(`${API}/public/courses`);
+    const courses = await res.json();
+    if (!courses?.length) throw new Error('empty');
+    menu.innerHTML = courses.map(c =>
+      `<a class="dropdown-item" href="plans.html?courseId=${c.id}">${c.name_th || 'หลักสูตร ' + c.id}</a>`
+    ).join('');
+  } catch {
+    menu.innerHTML = `<a class="dropdown-item" href="plans.html">ดูแผนการศึกษา</a>`;
+  }
+}
+
+buildPlanDropdown();
 </script>
 </body>
 </html>

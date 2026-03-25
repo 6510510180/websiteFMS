@@ -8,29 +8,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
 :root {
-  --pu:#6B3FA0; --pu2:#7b2cbf; --pu-l:#F3EEFF; --pu-m:#E8DEFF; --pu-tab:#EDE9FE;
+  --pu:#9b51e0; --pu2:#7b2cbf; --pu-l:#F3EEFF; --pu-m:#E8DEFF; --pu-tab:#EDE9FE;
   --bg:#EEEEF6; --wh:#ffffff; --tx:#1A1523; --ts:#64748B; --bd:#E2E8F0;
   --green:#10B981; --amber:#F59E0B; --blue:#3B82F6;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;font-size:14px;}
 .navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:58px;background:var(--wh);box-shadow:0 1px 0 var(--bd);position:sticky;top:0;z-index:1000;}
-.navbar .logo{display:flex;align-items:center;}
 .navbar .logo img{height:38px;}
 nav{flex:1;display:flex;justify-content:center;}
 .nav-links{list-style:none;display:flex;gap:32px;align-items:center;}
 .nav-links a{font-size:14px;text-decoration:none;color:#555;font-weight:500;transition:color .2s;}
-.nav-links a:hover{color:var(--pu);}
-.nav-links a.active{color:var(--pu);font-weight:700;}
+.nav-links a:hover,.nav-links a.active{color:var(--pu);font-weight:700;}
 .search-container{display:flex;justify-content:flex-end;}
 .search-box{display:flex;align-items:center;background:#F1F5F9;padding:7px 14px;border-radius:10px;width:240px;gap:8px;}
 .search-box input{border:none;background:none;outline:none;font-family:inherit;font-size:13px;width:100%;}
 .search-box i{color:#94A3B8;font-size:13px;}
 .main-content{padding:36px 0;min-height:100vh;}
 .container{width:92%;max-width:1380px;margin:0 auto;}
-h1.page-title,h1{font-size:28px;font-weight:800;color:var(--tx);line-height:1.25;margin-bottom:4px;}
-.page-subtitle,.page-sub{font-size:13px;color:var(--ts);margin-bottom:24px;}
-/* Tabs */
+h1.page-title{font-size:28px;font-weight:800;color:var(--tx);line-height:1.25;margin-bottom:4px;}
+.page-subtitle{font-size:13px;color:var(--ts);margin-bottom:24px;}
 .action-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;}
 .tab-btn{padding:9px 20px;border-radius:9px;text-decoration:none;font-size:13.5px;font-weight:600;background:var(--wh);color:#555;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd);cursor:pointer;font-family:inherit;transition:all .18s;white-space:nowrap;}
@@ -38,24 +35,21 @@ h1.page-title,h1{font-size:28px;font-weight:800;color:var(--tx);line-height:1.25
 .tab-btn.active{background:var(--pu-tab);color:var(--pu);border-color:var(--pu-m);font-weight:700;}
 .btn-download{background:var(--pu2);color:#fff;padding:10px 22px;border-radius:9px;text-decoration:none;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .18s;}
 .btn-download:hover{background:var(--pu);}
-/* Section header */
 .section-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
 .section-header h2{font-size:20px;font-weight:700;margin:0;}
 .badge{background:var(--pu-l);color:var(--pu2);padding:3px 10px;border-radius:5px;font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;}
-/* PLO Grid */
 .plo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:44px;}
 .plo-card{background:var(--wh);padding:28px 24px;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);transition:transform .2s,box-shadow .2s;}
 .plo-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(107,63,160,.10);}
 .plo-icon-box{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--pu-l);color:var(--pu2);margin-bottom:16px;font-size:18px;}
 .plo-card p{font-size:14px;line-height:1.6;margin:0;color:var(--tx);}
-.plo-card p strong{color:var(--tx);}
-/* MLO layout */
 .mlo-container{display:flex;background:var(--wh);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);}
 .mlo-sidebar{width:270px;min-width:270px;background:var(--wh);border-right:1px solid var(--bd);padding:8px 0;}
-.sidebar-item{padding:13px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;font-size:14px;font-weight:500;color:var(--ts);transition:.18s;border-left:3px solid transparent;}
+.sidebar-item{padding:13px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;font-size:14px;font-weight:500;color:var(--ts);transition:.18s;border-left:3px solid transparent;line-height:1.4;}
 .sidebar-item:hover{background:var(--pu-l);color:var(--pu);}
 .sidebar-item.active{background:var(--pu2);color:#fff;border-left-color:var(--pu);}
-.sidebar-item .arrow-icon{margin-left:auto;}
+.sidebar-item .arrow-icon{margin-left:auto;flex-shrink:0;}
+.sidebar-item i.fa-icon{flex-shrink:0;width:16px;text-align:center;}
 .mlo-content{flex:1;padding:36px 40px;}
 .tab-content{display:none;animation:fadeIn .3s ease;}
 .tab-content.active{display:block;}
@@ -69,255 +63,250 @@ h1.page-title,h1{font-size:28px;font-weight:800;color:var(--tx);line-height:1.25
 .mlo-row p{font-size:14px;margin:0;line-height:1.5;color:var(--tx);}
 .btn-matrix-view{margin-top:28px;background:none;border:1.5px solid var(--pu-m);padding:11px 28px;border-radius:28px;color:var(--pu2);font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;cursor:pointer;margin-left:auto;margin-right:auto;transition:all .2s;font-family:inherit;}
 .btn-matrix-view:hover{background:var(--pu-l);border-color:var(--pu2);}
-@media(max-width:900px){.plo-grid{grid-template-columns:1fr 1fr;} .mlo-container{flex-direction:column;} .mlo-sidebar{width:100%;border-right:none;border-bottom:1px solid var(--bd);} }
+.empty-state{text-align:center;padding:60px 24px;color:var(--ts);}
+.empty-state i{font-size:48px;color:#D1C4E9;margin-bottom:16px;display:block;}
+.mlo-empty{flex:1;display:flex;align-items:center;justify-content:center;padding:48px;}
+@media(max-width:900px){.plo-grid{grid-template-columns:1fr 1fr;}.mlo-container{flex-direction:column;}.mlo-sidebar{width:100%;border-right:none;border-bottom:1px solid var(--bd);}}
 @media(max-width:600px){.plo-grid{grid-template-columns:1fr;}}
-</style>
+    </style>
 </head>
 <body>
 
 <header class="navbar">
-    <div class="logo"><img src="logo.jpg" alt="PSU Logo"></div>
-    <nav>
-        <ul class="nav-links">
-            <li><a href="bba-home.html">หน้าหลัก</a></li>
-            <li><a href="bba-public.html">ข้อมูลทั่วไป</a></li>
-            <li><a href="student.html">นักศึกษา</a></li>
-            <li><a href="plans.html">แผนการศึกษา</a></li>
-            <li><a href="bba-qa.html"class="active">QA</a></li>
-        </ul>
-    </nav>
-
-    <div class="search-container">
-        <div class="search-box">
-            <i class="fas fa-search"></i> <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร">
-        </div>
+  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="bba-qa.html">หน้าหลัก</a></li>
+      <li><a href="bba-plo.html"class="active">ผลลัพธ์การเรียนรู้</a></li>
+      <li><a href="bba-stake.html">ผู้มีส่วนร่วมในหลักสูตร</a></li>
+      <li><a href="bba-students.html">ข้อมูลนักศึกษา</a></li>
+      <li><a href="achievements.html">ผลงานและความสำเร็จ</a></li>
+    </ul>
+  </nav>
+  <div class="search-container">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร">
     </div>
+  </div>
 </header>
+
 <main class="main-content">
-    <div class="container">
-     
-        <h1 class="page-title">รายละเอียดผลลัพธ์การเรียนรู้</h1>
-        <p class="page-subtitle">หลักสูตรบริหารธุรกิจบัณฑิต (หลักสูตรปรับปรุง พ.ศ. 2567)</p>
+  <div class="container">
+    <h1 class="page-title">รายละเอียดผลลัพธ์การเรียนรู้</h1>
+    <p class="page-subtitle">หลักสูตรบริหารธุรกิจบัณฑิต (หลักสูตรปรับปรุง พ.ศ. 2567)</p>
 
-        <div class="action-bar">
-            <div class="tabs">
-                <a href="bba-plo.html" class="tab-btn active"><i class="fas fa-th-large"></i> PLOs/MLOs</a>
-                <a href="score.html" class="tab-btn"><i class="fas fa-chart-bar"></i> คะแนนผลลัพธ์</a>
-                <a href="bba-matrix1.html" class="tab-btn"><i class="fas fa-project-diagram"></i> Alignment Matrix</a>
-                <a href="kas1.html" class="tab-btn"><i class="fas fa-book"></i> KAS</a>
-            </div>
-            <a href="#" class="btn-download"><i class="fas fa-file-download"></i> Download Document</a>
-        </div>
-
-        <div class="section-header">
-            <h2 style="font-size: 20px; margin: 0;">Program Learning Outcomes (PLOs)</h2>
-            <span class="badge">CORE</span>
-        </div>
-
-        <div class="plo-grid">
-                <div class="plo-card">
-                    <div class="plo-icon-box"><i class="fas fa-globe"></i></div>
-                    <p><strong>PLO1:</strong> พัฒนาตนเองจากการเรียนรู้เมื่อได้รับคำวิพากษ์วิจารณ์</p>
-                </div>
-                <div class="plo-card">
-                    <div class="plo-icon-box"><i class="fas fa-chart-line"></i></div>
-                    <p><strong>PLO2:</strong> วิเคราะห์และนำเสนอข้อมูลต่อผู้บริหารเพื่อการตัดสินใจ</p>
-                </div>
-                <div class="plo-card">
-                    <div class="plo-icon-box"><i class="fas fa-lightbulb"></i></div>
-                    <p><strong>PLO3:</strong> ประยุกต์ความรู้ด้านบริหารธุรกิจเพื่อวางแผนกลยุทธ์ให้องค์กร</p>
-                </div>
-                <div class="plo-card">
-                    <div class="plo-icon-box"><i class="fas fa-users-gear"></i></div>
-                    <p><strong>PLO4:</strong> ประยุกต์กรอบแนวคิดความเป็นผู้ประกอบการเพื่อการสร้างธุรกิจ</p>
-                </div>
-                <div class="plo-card">
-                    <div class="plo-icon-box"><i class="fas fa-microscope"></i></div>
-                    <p><strong>PLO5:</strong> ประยุกต์ใช้กระบวนการวิจัยเพื่อแก้ไขปัญหาทางธุรกิจ</p>
-                </div>
-                <div class="plo-card">
-                    <div class="plo-icon-box"><i class="fas fa-comments"></i></div>
-                    <p><strong>PLO6:</strong> สื่อสารภายใต้ความหลากหลายทางสังคมและวัฒนธรรม</p>
-                </div>
-                <div class="plo-card">
-                    <div class="plo-icon-box"><i class="fas fa-handshake"></i></div>
-                    <p><strong>PLO7:</strong> ทำงานร่วมกับผู้อื่นในองค์กร</p>
-                </div>
-                <div class="plo-card">
-                    <div class="plo-icon-box"><i class="fas fa-laptop-code"></i></div>
-                    <p><strong>PLO8:</strong> เลือกใช้เทคโนโลยีดิจิทัลในการทำงานให้บรรลุเป้าหมาย</p>
-                </div>
-                <div class="plo-card">
-                    <div class="plo-icon-box"><i class="fa-solid fa-bullhorn"></i></div>
-                    <p><strong>PLO9:</strong> แสดงพฤติกรรมที่แสดงถึงการมีจริยธรรมและความรับผิดชอบต่อสังคม</p>
-                </div>
-        </div>
-
-        <div class="section-header">
-            <h2 style="font-size: 20px; margin: 0;">Major Learning Outcomes (MLOs)</h2>
-            <span class="badge">MAJOR SPECIFIC</span>
-        </div>
-
-        <div class="mlo-container">
-            <div class="mlo-sidebar">
-                <div class="sidebar-item active" data-target="finance">
-                    <i class="fa-solid fa-coins"></i> การเงินและการลงทุน <i class="fas fa-chevron-right arrow-icon"></i>       
-                </div>
-                <div class="sidebar-item" data-target="marketing">
-                    <i class="fas fa-bullhorn"></i> การตลาดและการสื่อสาร
-                </div>
-                <div class="sidebar-item" data-target="hr">
-                    <i class="fa-solid fa-users-gear"></i> การจัดการทรัพยากรมนุษย์
-                </div>
-                <div class="sidebar-item" data-target="logistics">
-                    <i class="fas fa-truck-fast"></i> การจัดการโลจิสติกส์
-                </div>
-                <div class="sidebar-item" data-target="bis">
-                    <i class="fa-solid fa-laptop-code"></i> ระบบสารสนเทศทางธุรกิจ
-                </div>
-                <div class="sidebar-item" data-target="mice">
-                    <i class="fas fa-microphone-lines"></i> การจัดการไมซ์
-                </div>    
-            </div>
-
-            <div class="mlo-content">
-        <div id="finance" class="tab-content active">
-            <h3>วิชาเอกการเงินและการลงทุน</h3>
-            <p class="mlo-desc">เป้าหมายผลลัพธ์การเรียนรู้เฉพาะทางระดับวิชาเอก</p>
-            <div class="mlo-list">
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 1.1</span>
-                    <p>อธิบายทฤษฎีวิเคราะห์ตราสารทางการเงินภายใต้หลักเกณฑ์ของ ก.ล.ต.</p>
-                </div>
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 1.2</span>
-                    <p>วางแผนการเงินส่วนบุคคลตามมาตรฐานของสมาคมนักวางแผนการเงินไทย</p>
-                </div>
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 1.3</span>
-                    <p>วิเคราะห์ข้อมูลทางการเงินเพื่อการบริหารการเงินขององค์กร</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="marketing" class="tab-content">
-            <h3>วิชาเอกการตลาดและการสื่อสาร</h3>
-            <p class="mlo-desc">เป้าหมายผลลัพธ์การเรียนรู้เฉพาะทางระดับวิชาเอก</p>
-            <div class="mlo-list">
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 2.1</span>
-                    <p>วิเคราะห์กลยุทธ์ทางการตลาดอย่างสร้างสรรค์</p>
-                </div>
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 2.2</span>
-                    <p>วิเคราะห์แนวทางการแก้ไขปัญหาทางการตลาดเชิงนวัตกรรม</p>
-                </div>
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 2.3</span>
-                    <p>กำหนดกลยุทธ์การตลาดเพื่อใช้ในธุรกิจ</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="hr" class="tab-content">
-            <h3>วิชาเอกการจัดการทรัพยากรมนุษย์</h3>
-            <p class="mlo-desc">เป้าหมายผลลัพธ์การเรียนรู้เฉพาะทางระดับวิชาเอก</p>
-            <div class="mlo-list">
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 3.1</span>
-                    <p>ใช้แนวคิดการจัดการทรัพยากรมนุษย์ในการสร้างกิจกรรมเพื่อพัฒนาคน</p>
-                </div>
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 3.2</span>
-                    <p>ใช้เทคโนโลยีดิจิทัลในการบริหารทรัพยากรมนุษย์</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="logistics" class="tab-content">
-            <h3>วิชาเอกการจัดการโลจิสติกส์</h3>
-            <p class="mlo-desc">เป้าหมายผลลัพธ์การเรียนรู้เฉพาะทางระดับวิชาเอก</p>
-            <div class="mlo-list">
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 4.1</span>
-                    <p>วางแผนในการลดต้นทุนและเพิ่มกำไรโดยใช้ความรู้ด้านการจัดการโลจิสติกส์ให้กับธุรกิจ</p>
-                </div>
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 4.2</span>
-                    <p>ประยุกต์ความรู้ด้านการจัดการโลจิสติกส์ในการแก้ปัญหาธุรกิจฝั่ง outbound และบริบทพื้นที่ภาคใต้</p>
-                </div>
-            </div>
-        </div>    
-
-        <div id="bis" class="tab-content">
-            <h3>วิชาเอกระบบสารสนเทศทางธุรกิจ</h3>
-            <p class="mlo-desc">เป้าหมายผลลัพธ์การเรียนรู้เฉพาะทางระดับวิชาเอก</p>
-            <div class="mlo-list">
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 5.1</span>
-                    <p>พัฒนาระบบสารสนเทศทางธุรกิจเพื่อใช้ในการวางแผนธุรกิจ</p>
-                </div>
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 5.2</span>
-                    <p>วางแผนและติดตั้งระบบสารสนเทศได้ถูกต้องตามกฎหมาย</p>
-                </div>
-            </div>
-        </div>   
-
-        <div id="mice" class="tab-content">
-            <h3>วิชาเอกการจัดการไมซ์</h3>
-            <p class="mlo-desc">เป้าหมายผลลัพธ์การเรียนรู้เฉพาะทางระดับวิชาเอก</p>
-            <div class="mlo-list">
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 6.1</span>
-                    <p>จัดงานไมซ์ได้ตามเป้าหมายและสอดคล้องกับความต้องการของผู้มีส่วนได้ส่วนเสีย</p>
-                </div>
-                <div class="mlo-row">
-                    <span class="mlo-tag">MLO 6.2</span>
-                    <p>ปรับตัวในสถานการณ์การจัดการไมซ์ที่มีความกดดันและหาทางแก้ไขผ่านความคิดสร้างสรรค์</p>
-                </div>
-            </div>
-        </div>   
-
-        <button class="btn-matrix-view">
-            <i class="fas fa-plus-circle"></i> ดูรายละเอียดวิชาที่สอดคล้อง (Mapping Matrix)
-        </button>
-
-            </div>
-        </div>
+    <div class="action-bar">
+      <div class="tabs">
+        <a href="bba-plo.html" class="tab-btn active"><i class="fas fa-th-large"></i> PLOs/MLOs</a>
+        <a href="score.html" class="tab-btn"><i class="fas fa-chart-bar"></i> คะแนนผลลัพธ์</a>
+        <a href="bba-matrix1.html" class="tab-btn"><i class="fas fa-project-diagram"></i> Alignment Matrix</a>
+        <a href="kas1.html" class="tab-btn"><i class="fas fa-book"></i> KAS</a>
+      </div>
+      <button class="btn-download" onclick="printPDF()">
+        <i class="fas fa-file-pdf"></i> Export PDF
+      </button>
     </div>
+
+    <div class="section-header">
+      <h2>Program Learning Outcomes (PLOs)</h2>
+      <span class="badge">CORE</span>
+    </div>
+    <div class="plo-grid" id="ploGrid"></div>
+
+    <div class="section-header">
+      <h2>Major Learning Outcomes (MLOs)</h2>
+      <span class="badge">MAJOR SPECIFIC</span>
+    </div>
+    <div class="mlo-container" id="mloContainer"></div>
+  </div>
 </main>
+
 <script>
-    const menuItems = document.querySelectorAll('.sidebar-item');
-    const contentTabs = document.querySelectorAll('.tab-content');
+const API_BASE = '';
+function qp(name, def='') { return new URL(location.href).searchParams.get(name) || def; }
+const PROGRAM_ID = qp('programId', '00000000-0000-0000-0000-000000000001');
+const USE_PUBLIC_BULK_FIRST = true;
 
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            // 1. ลบคลาส active ออกจากเมนูทั้งหมด
-            menuItems.forEach(i => {
-                i.classList.remove('active');
-                // ลบไอคอนลูกศรอันเก่าออก (ถ้ามี)
-                const arrow = i.querySelector('.arrow-icon');
-                if (arrow) arrow.remove();
-            });
+const PLO_ICONS = ['fa-globe','fa-chart-line','fa-lightbulb','fa-users-gear','fa-microscope','fa-comments','fa-handshake','fa-laptop-code','fa-bullhorn','fa-brain','fa-star','fa-rocket','fa-award','fa-compass'];
+const GROUP_ICONS = ['fa-coins','fa-bullhorn','fa-users-gear','fa-truck-fast','fa-laptop-code','fa-microphone-lines','fa-graduation-cap','fa-chart-pie','fa-globe','fa-seedling','fa-handshake','fa-star'];
 
-            // 2. ลบคลาส active ออกจากเนื้อหาทั้งหมด
-            contentTabs.forEach(tab => tab.classList.remove('active'));
+async function fetchBulkPublic(programId) {
+  const res = await fetch(`${API_BASE}/api/public/programs/${encodeURIComponent(programId)}/plo-mlo`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('public-bulk not available');
+  return await res.json();
+}
 
-            // 3. เซ็ตเมนูที่คลิกให้เป็น active
-            item.classList.add('active');
-            
-            // 4. เพิ่มไอคอนลูกศรเข้าไปในเมนูที่ถูกคลิก (เพื่อความสวยเหมือนในแบบ)
-            const arrowIcon = document.createElement('i');
-            arrowIcon.className = 'fas fa-chevron-right arrow-icon';
-            item.appendChild(arrowIcon);
+async function fetchLegacy(programId) {
+  const plos = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(programId)}/plos`, { cache: 'no-store' })).json();
+  const groups = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(programId)}/major-groups`, { cache: 'no-store' })).json();
+  const MLO = [];
+  for (const g of groups) {
+    const mlos = await (await fetch(`${API_BASE}/api/major-groups/${g.id}/mlos`, { cache: 'no-store' })).json();
+    MLO.push({ group: g.label || '', items: (mlos || []).map(m => ({ code: m.code, skill: m.description })) });
+  }
+  return { programId, PLO: (plos || []).map(p => ({ code: p.code, skill: p.description })), MLO };
+}
 
-            // 5. แสดงเนื้อหาที่ตรงกับ data-target
-            const targetId = item.getAttribute('data-target');
-            const targetContent = document.getElementById(targetId);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            }
-        });
+async function loadData() {
+  try {
+    let payload;
+    if (USE_PUBLIC_BULK_FIRST) {
+      try { payload = await fetchBulkPublic(PROGRAM_ID); }
+      catch { payload = await fetchLegacy(PROGRAM_ID); }
+    } else {
+      payload = await fetchLegacy(PROGRAM_ID);
+    }
+    renderPLO(payload.PLO || []);
+    renderMLO(payload.MLO || []);
+  } catch(e) {
+    console.error(e);
+    document.getElementById('ploGrid').innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-inbox"></i><p>ไม่สามารถดึงข้อมูล PLO ได้</p></div>`;
+    document.getElementById('mloContainer').innerHTML = `<div class="mlo-empty"><div class="empty-state"><i class="fas fa-inbox"></i><p>ไม่สามารถดึงข้อมูล MLO ได้</p></div></div>`;
+  }
+}
+
+function renderPLO(plos) {
+  const grid = document.getElementById('ploGrid');
+  if (!plos.length) { grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-inbox"></i><p>ยังไม่มีข้อมูล PLO</p></div>`; return; }
+  grid.innerHTML = plos.map((plo, i) => `
+    <div class="plo-card">
+      <div class="plo-icon-box"><i class="fas ${PLO_ICONS[i % PLO_ICONS.length]}"></i></div>
+      <p><strong>${esc(plo.code || `PLO${i+1}`)}:</strong> ${esc(plo.skill)}</p>
+    </div>`).join('');
+}
+
+function renderMLO(mloGroups) {
+  const container = document.getElementById('mloContainer');
+  if (!mloGroups.length) { container.innerHTML = `<div class="mlo-empty"><div class="empty-state"><i class="fas fa-inbox"></i><p>ยังไม่มีข้อมูล MLO</p></div></div>`; return; }
+
+  const sidebarHTML = mloGroups.map((g, i) => `
+    <div class="sidebar-item${i===0?' active':''}" data-target="mlo-group-${i}">
+      <i class="fas ${GROUP_ICONS[i % GROUP_ICONS.length]} fa-icon"></i>
+      <span>${esc(g.group || 'ทั่วไป')}</span>
+      ${i===0 ? '<i class="fas fa-chevron-right arrow-icon"></i>' : ''}
+    </div>`).join('');
+
+  const contentHTML = mloGroups.map((g, i) => `
+    <div id="mlo-group-${i}" class="tab-content${i===0?' active':''}">
+      <h3>${esc(g.group || 'ทั่วไป')}</h3>
+      <p class="mlo-desc">เป้าหมายผลลัพธ์การเรียนรู้เฉพาะทางระดับวิชาเอก</p>
+      <div class="mlo-list">
+        ${(g.items || []).map(it => `
+          <div class="mlo-row">
+            <span class="mlo-tag">${esc(it.code)}</span>
+            <p>${esc(it.skill)}</p>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  container.innerHTML = `
+    <div class="mlo-sidebar" id="mloSidebar">${sidebarHTML}</div>
+    <div class="mlo-content">
+      ${contentHTML}
+      <button class="btn-matrix-view" onclick="location.href='bba-matrix1.html'">
+        <i class="fas fa-plus-circle"></i> ดูรายละเอียดวิชาที่สอดคล้อง (Mapping Matrix)
+      </button>
+    </div>`;
+
+  document.querySelectorAll('#mloSidebar .sidebar-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('#mloSidebar .sidebar-item').forEach(i => {
+        i.classList.remove('active');
+        const arr = i.querySelector('.arrow-icon');
+        if (arr) arr.remove();
+      });
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      item.classList.add('active');
+      const arrow = document.createElement('i');
+      arrow.className = 'fas fa-chevron-right arrow-icon';
+      item.appendChild(arrow);
+      const target = document.getElementById(item.getAttribute('data-target'));
+      if (target) target.classList.add('active');
     });
+  });
+}
+
+// ── Export PDF — เปิด window ใหม่ render ข้อความเป็นข้อๆ ──
+function printPDF() {
+  // รวบรวม PLO
+  const ploCards = document.querySelectorAll('#ploGrid .plo-card p');
+  let ploHTML = '';
+  ploCards.forEach((el, i) => {
+    ploHTML += `<div class="item"><span class="num">${i+1}.</span><span>${el.innerHTML}</span></div>`;
+  });
+
+  // รวบรวม MLO ทุกกลุ่ม (รวมที่ซ่อนอยู่)
+  let mloHTML = '';
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    const groupName = tab.querySelector('h3')?.textContent || '';
+    const rows = tab.querySelectorAll('.mlo-row');
+    if (!rows.length) return;
+    mloHTML += `<div class="group-title">${groupName}</div>`;
+    rows.forEach(row => {
+      const code = row.querySelector('.mlo-tag')?.textContent || '';
+      const desc = row.querySelector('p')?.textContent || '';
+      mloHTML += `<div class="item"><span class="code">${code}</span><span>${desc}</span></div>`;
+    });
+  });
+
+  const win = window.open('', '_blank', 'width=820,height=1000');
+  win.document.write(`<!DOCTYPE html>
+<html lang="th"><head>
+<meta charset="UTF-8">
+<title>ผลลัพธ์การเรียนรู้ — หลักสูตร บธ.บ.</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sarabun',sans-serif;font-size:11pt;color:#000;background:#fff;}
+  .page{padding:18mm 16mm 16mm;}
+  .doc-header{margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid #6B3FA0;}
+  .doc-header h1{font-size:17pt;font-weight:800;color:#1A1523;margin-bottom:4px;}
+  .doc-header p{font-size:10pt;color:#555;}
+  .section-title{font-size:13pt;font-weight:700;color:#6B3FA0;
+    margin:22px 0 12px;padding-bottom:6px;border-bottom:2px solid #6B3FA0;}
+  .item{display:flex;gap:10px;margin-bottom:9px;font-size:10.5pt;
+    line-height:1.65;break-inside:avoid;page-break-inside:avoid;}
+  .num{min-width:24px;font-weight:700;color:#6B3FA0;flex-shrink:0;padding-top:1px;}
+  .code{min-width:76px;font-weight:800;color:#6B3FA0;flex-shrink:0;
+    background:#EDE9FE;padding:2px 10px;border-radius:4px;font-size:9.5pt;
+    height:fit-content;margin-top:2px;text-align:center;white-space:nowrap;}
+  .group-title{font-size:11.5pt;font-weight:700;color:#1A1523;
+    background:#F3EEFF;padding:7px 12px;border-radius:6px;
+    margin:20px 0 10px;break-inside:avoid;page-break-inside:avoid;}
+  .footer{text-align:center;font-size:9pt;color:#888;margin-top:28px;
+    padding-top:10px;border-top:1px solid #ddd;}
+  @page{size:A4 portrait;margin:18mm 14mm;}
+  @media print{
+    body{font-size:10.5pt;}
+    .item,.group-title{page-break-inside:avoid;}
+    .section-title{page-break-after:avoid;}
+  }
+</style>
+</head><body>
+<div class="page">
+  <div class="doc-header">
+    <h1>รายละเอียดผลลัพธ์การเรียนรู้</h1>
+    <p>หลักสูตรบริหารธุรกิจบัณฑิต (หลักสูตรปรับปรุง พ.ศ. 2567)</p>
+  </div>
+  <div class="section-title">Program Learning Outcomes (PLOs)</div>
+  ${ploHTML || '<p style="color:#888;font-size:10pt;">ไม่พบข้อมูล PLO</p>'}
+  <div class="section-title">Major Learning Outcomes (MLOs)</div>
+  ${mloHTML || '<p style="color:#888;font-size:10pt;">ไม่พบข้อมูล MLO</p>'}
+  <div class="footer">คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์ (PSU)</div>
+</div>
+</body></html>`);
+  win.document.close();
+  win.focus();
+  // รอ font โหลดก่อน print
+  setTimeout(() => { win.print(); }, 900);
+}
+
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+loadData();
 </script>
+</body>
+</html>

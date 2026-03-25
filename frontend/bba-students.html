@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สถิตินักศึกษา | หลักสูตรบริหารธุรกิจบัณฑิต PSU</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;700;800;900&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f8f7ff;--card2:#ffffff;
+  --border:#6d28d9(139,92,246,.25);
+  --acc:#7c3aed;--acc2:#8b5cf6;--acc-d:#6d28d9;
+  --text:#1f1147;--text2:#3f2e86;--muted:#6b5fa6;
+  --green:#10b981;--blue:#3b82f6;--orange:#f59e0b;--teal:#14b8a6;
+  --text:#1e1040;--text2:#5b4d80;--muted:#9d8ec4;
+  --acc:#7c3aed;--acc2:#8b5cf6;--acc3:#a78bfa;
+  --acc-l:rgba(139,92,246,.08);--acc-l2:rgba(139,92,246,.14);
+  --F-bg:rgba(109,40,217,.10);--F-text:#6d28d9;--F-border:rgba(109,40,217,.28);
+  --M-bg:rgba(3,105,161,.10);--M-text:#0369a1;--M-border:rgba(3,105,161,.28);
+  --P-bg:rgba(180,83,9,.10);--P-text:#b45309;--P-border:rgba(180,83,9,.28);
+  --sh:0 2px 16px rgba(109,40,217,.08),0 1px 4px rgba(0,0,0,.04);
+  --sh2:0 8px 40px rgba(109,40,217,.14),0 2px 8px rgba(0,0,0,.06);
+  --purple:#9b51e0;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 40% at 10% 10%,rgba(139,92,246,.12) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 35% at 90% 80%,rgba(96,165,250,.10) 0%,transparent 60%);}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:60px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(229,231,235,.8);
+  position:sticky;top:0;z-index:300;
+  box-shadow:0 2px 5px rgba(0,0,0,.05);}
+.navbar .logo img{height:40px;}
+.navbar ul{display:flex;gap:20px;margin:0;padding:0;list-style:none;align-items:center;}
+.navbar a{font-size:14px;color:#555;text-decoration:none;transition:.3s;}
+.navbar a:hover{color:var(--purple);}
+.navbar a.active{color:var(--purple);font-weight:bold;}
+.nav-right{display:flex;align-items:center;gap:15px;}
+.nav-dropdown{position:relative;}
+.nav-dropdown-toggle{font-size:14px;color:#555;background:none;border:none;cursor:pointer;
+  font-family:inherit;padding:0;display:flex;align-items:center;gap:4px;transition:color .3s;}
+.nav-dropdown-toggle:hover,.nav-dropdown.open .nav-dropdown-toggle{color:var(--purple);}
+.nav-dropdown-toggle .chevron{transition:transform .18s;display:inline-block;font-style:normal;font-size:10px;}
+.nav-dropdown.open .nav-dropdown-toggle .chevron{transform:rotate(180deg);}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 10px);left:0;background:#fff;
+  border:1px solid #eee;border-radius:10px;min-width:210px;
+  box-shadow:0 8px 24px rgba(155,81,224,.13);overflow:hidden;z-index:999;animation:dropIn .15s ease;}
+@keyframes dropIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+.nav-dropdown.open .nav-dropdown-menu{display:block;}
+.dropdown-item{display:block;width:100%;padding:11px 16px;font-size:13px;color:#444;
+  background:none;border:none;border-bottom:1px solid #f5f5f5;text-align:left;
+  cursor:pointer;font-family:inherit;text-decoration:none;transition:all .12s;}
+.dropdown-item:last-child{border-bottom:none;}
+.dropdown-item:hover{background:#f8f0ff;color:var(--purple);padding-left:20px;}
+.dropdown-loading{padding:12px 16px;font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px;}
+.spinner-sm{width:13px;height:13px;border-radius:50%;border:2px solid #e9d5ff;
+  border-top-color:var(--purple);animation:spins .7s linear infinite;flex-shrink:0;}
+@keyframes spins{to{transform:rotate(360deg);}}
+.hero{position:relative;z-index:1;padding:44px 5% 28px;border-bottom:1px solid var(--border);background:var(--bg)}
+.hero-inner{max-width:1280px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--acc2);margin-bottom:10px;background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.30);padding:4px 14px;border-radius:99px}
+.hero-title{font-family:'Anuphan',sans-serif;font-size:clamp(22px,3.5vw,38px);font-weight:900;color:var(--text);line-height:1.15;margin-bottom:8px}
+.hero-title span{background:linear-gradient(135deg,var(--acc2),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:13px;color:var(--muted);line-height:1.7;max-width:460px}
+.hero-kpis{display:flex;gap:10px;flex-wrap:wrap;align-self:flex-end}
+.hkpi{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:14px 18px;min-width:115px;text-align:center;transition:transform .2s,box-shadow .2s}
+.hkpi:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(17,12,56,.08)}
+.hk-val{font-family:'Anuphan',sans-serif;font-size:26px;font-weight:900;line-height:1;margin-bottom:4px}
+.hk-lbl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}
+.hk-badge{margin-top:4px;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:99px;display:inline-block}
+.filter-bar{position:relative;z-index:1;padding:12px 5%;background:var(--bg2);border-bottom:1px solid var(--border)}
+.filter-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.filter-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.fsel{padding:7px 12px;background:#f3f1ff;border:1.5px solid var(--border);border-radius:9px;font-family:'Sarabun',sans-serif;font-size:12.5px;color:var(--text2);outline:none;cursor:pointer;transition:.15s}
+.fsel:focus{border-color:var(--acc2);box-shadow:0 0 0 3px rgba(139,92,246,.18)}
+.filter-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.yr-btns-wrap{display:flex;gap:6px;flex-wrap:wrap}
+.yr-btn{padding:5px 14px;border-radius:99px;border:1.5px solid var(--border);background:#ffffff;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);transition:.15s}
+.yr-btn:hover{border-color:var(--acc2);color:var(--acc)}
+.yr-btn.active{background:var(--acc-d);color:#fff;border-color:var(--acc-d)}
+.tab-bar{position:relative;z-index:1;padding:0 5%;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto}
+.tab-btn{padding:13px 18px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:.15s;margin-bottom:-1px}
+.tab-btn:hover{color:var(--acc)}
+.tab-btn.active{color:var(--acc);border-bottom-color:var(--acc)}
+.main{position:relative;z-index:1;padding:20px 5% 56px;max-width:1280px;margin:0 auto}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.sec-title{font-family:'Anuphan',sans-serif;font-size:16px;font-weight:800;color:var(--text);margin:20px 0 10px;display:flex;align-items:center;gap:9px}
+.sec-title::before{content:'';width:4px;height:16px;border-radius:2px;background:linear-gradient(135deg,var(--acc),var(--teal))}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kcard{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.kcard:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(17,12,56,.08)}
+.kcard::before{content:'';position:absolute;top:-28px;right:-28px;width:90px;height:90px;border-radius:50%;opacity:.12}
+.kcard.v::before{background:#8b5cf6}.kcard.b::before{background:#60a5fa}
+.kcard.g::before{background:#10b981}.kcard.o::before{background:#f59e0b}
+.kc-ico{font-size:18px;margin-bottom:6px}
+.kc-lbl{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.kc-val{font-family:'Anuphan',sans-serif;font-size:26px;font-weight:900;color:var(--text);line-height:1;position:relative;z-index:1}
+.kc-val small{font-size:12px;color:var(--muted);font-weight:400;margin-left:2px}
+.kc-tag{display:inline-flex;margin-top:6px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;background:rgba(139,92,246,.12);color:var(--acc2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.cbox{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;transition:box-shadow .2s}
+.cbox:hover{box-shadow:0 8px 28px rgba(17,12,56,.08)}
+.cbox.full{grid-column:1/-1}
+.cb-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.cb-title{font-family:'Anuphan',sans-serif;font-size:13px;font-weight:700;color:var(--text)}
+.cb-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.cb-tag{font-size:10px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.cb-tag.p{background:rgba(139,92,246,.15);color:var(--acc2)}
+.cb-tag.t{background:rgba(45,212,191,.12);color:var(--teal)}
+.cb-tag.g{background:rgba(16,185,129,.14);color:var(--green)}
+.cb-tag.o{background:rgba(245,158,11,.15);color:var(--orange)}
+.pie-wrap{display:flex;align-items:center;gap:14px}
+.pie-leg{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+.pl{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+.pl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.pl-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-val{margin-left:auto;font-weight:700;font-size:11px;color:var(--text);white-space:nowrap}
+.leg{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:8px}
+.li{display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--text2)}
+.li-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.major-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:700px){.major-grid{grid-template-columns:repeat(2,1fr)}}
+.mcard{background:rgba(124,58,237,.06);border:1px solid rgba(139,92,246,.28);border-radius:11px;padding:12px 14px;text-align:center;transition:.15s;cursor:pointer}
+.mcard:hover,.mcard.active{background:rgba(139,92,246,.14);border-color:rgba(139,92,246,.45)}
+.mcard.dimmed{opacity:.40}
+.mc-ico{font-size:20px;margin-bottom:4px}
+.mc-name{font-size:10.5px;font-weight:700;color:var(--acc)}
+.mc-val{font-family:'Anuphan',sans-serif;font-size:20px;font-weight:900;color:var(--text)}
+.mc-sub{font-size:9.5px;color:var(--muted);margin-top:2px}
+.status-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:700px){.status-row{grid-template-columns:repeat(2,1fr)}}
+.scard{background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:14px 16px;text-align:center;box-shadow:0 2px 10px rgba(17,12,56,.04)}
+.sc-ico{font-size:20px;margin-bottom:5px}
+.sc-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.sc-val{font-family:'Anuphan',sans-serif;font-size:24px;font-weight:900;color:var(--text)}
+.state-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55vh;text-align:center;padding:40px;position:relative;z-index:1;background:var(--bg)}
+.state-ico{font-size:48px;margin-bottom:12px;opacity:.8}
+.state-title{font-family:'Anuphan',sans-serif;font-size:21px;font-weight:900;color:var(--text);margin-bottom:7px}
+.state-sub{font-size:13px;color:var(--muted);line-height:1.7;max-width:340px}
+.spin{width:40px;height:40px;border:3px solid rgba(139,92,246,.25);border-top-color:var(--acc);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.fade-up{opacity:0;transform:translateY(14px);transition:opacity .4s,transform .4s}
+.fade-up.in{opacity:1;transform:none}
+footer{position:relative;z-index:1;padding:18px 5%;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted);background:var(--bg2)}
+</style>
+</head>
+<body>
+
+ <header class="navbar">
+  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
+  <nav>
+            <ul>
+                 <li><a href="bba-qa.html">หน้าหลัก</a></li>
+      <li><a href="bba-plo.html">ผลลัพธ์การเรียนรู้</a></li>
+      <li><a href="bba-stake.html">ผู้มีส่วนร่วมในหลักสูตร</a></li>
+      <li><a href="bba-students.html"class="active">ข้อมูลนักศึกษา</a></li>
+      <li><a href="achievements.html">ผลงานและความสำเร็จ</a></li>
+            </ul>
+        </nav>
+        <div class="nav-right">
+            <i class="fa-solid fa-magnifying-glass" onclick="openSearch()"
+               style="cursor:pointer; font-size:16px; color:#555; transition:0.2s;"
+               onmouseover="this.style.color='#9b51e0'"
+               onmouseout="this.style.color='#555'"></i>
+        </div>
+    </header>
+
+<div id="s-loading" class="state-wrap">
+  <div class="spin"></div>
+  <p style="color:var(--muted);font-size:13px;margin-top:12px">กำลังโหลดข้อมูล...</p>
+</div>
+<div id="s-unpublished" class="state-wrap" style="display:none">
+  <div class="state-ico">🔒</div>
+  <div class="state-title">ยังไม่เผยแพร่ข้อมูล</div>
+  <div class="state-sub">ผู้ดูแลระบบยังไม่ได้เปิดเผยแพร่ Dashboard<br>กรุณาติดต่อเจ้าหน้าที่</div>
+</div>
+<div id="s-nodata" class="state-wrap" style="display:none">
+  <div class="state-ico">📭</div>
+  <div class="state-title">ยังไม่มีข้อมูล</div>
+  <div class="state-sub">ยังไม่มีข้อมูลนักศึกษาในระบบ<br>กรุณาติดต่อผู้ดูแลระบบ</div>
+</div>
+
+<div id="s-dashboard" style="display:none">
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6z"/></svg>
+          Student Analytics · BBA PSU
+        </div>
+        <h1 class="hero-title">สถิติ<span>นักศึกษา</span><br>หลักสูตรบริหารธุรกิจ</h1>
+        <p class="hero-sub">ข้อมูลสถิติการรับเข้า ลงทะเบียน สำเร็จการศึกษา สหกิจ และฝึกงาน</p>
+      </div>
+      <div class="hero-kpis" id="hero-kpis"></div>
+    </div>
+  </section>
+
+  <div class="filter-bar">
+    <div class="filter-inner">
+      <span class="filter-lbl">ปีการศึกษา</span>
+      <div class="yr-btns-wrap" id="yr-btns"></div>
+      <select id="yr-sel" class="fsel" onchange="setYear(+this.value)" style="min-width:110px"></select>
+      <div class="filter-sep"></div>
+      <span class="filter-lbl">วิชาเอก</span>
+      <select id="major-sel" class="fsel" onchange="onMajorFilter(this.value)">
+        <option value="all">ทุกวิชาเอก</option>
+      </select>
+      <div class="filter-sep"></div>
+      <button onclick="exportPDF()" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff;border:none;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Sarabun',sans-serif;box-shadow:0 3px 10px rgba(124,58,237,.28);transition:.18s;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">
+        <i class="fa-solid fa-file-pdf"></i> Export PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('intake',this)">📊 Intake รับเข้า</button>
+    <button class="tab-btn" onclick="switchTab('status',this)">🎓 สถานะนักศึกษา</button>
+    <button class="tab-btn" onclick="switchTab('coop',this)">🏢 สหกิจ & ฝึกงาน</button>
+  </div>
+
+  <div class="main">
+    <div id="tab-intake" class="tab-panel active"><div id="body-intake"></div></div>
+    <div id="tab-status" class="tab-panel"><div id="body-status"></div></div>
+    <div id="tab-coop"   class="tab-panel"><div id="body-coop"></div></div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์</span>
+  <span id="footer-ts"></span>
+</footer>
+
+<script>
+/* ════════════ CONFIG ════════════ */
+const API_BASE = '';
+
+/* ════════════ MAJOR DEFINITIONS ════════════ */
+const MJ_DEFS = {
+  fin:  { short:'FIN',  name:'การเงินและการลงทุน',   color:'#7c3aed', icon:'💰' },
+  mkt:  { short:'MKT',  name:'การตลาดและการสื่อสาร', color:'#2563eb', icon:'📣' },
+  hrm:  { short:'HRM',  name:'จัดการทรัพยากรมนุษย์', color:'#0891b2', icon:'👥' },
+  lsm:  { short:'LSM',  name:'โลจิสติกส์',           color:'#ea580c', icon:'🚚' },
+  mice: { short:'MICE', name:'การจัดการไมซ์',        color:'#059669', icon:'🎪' },
+  bis:  { short:'BIS',  name:'ระบบสารสนเทศ',         color:'#db2777', icon:'💻' },
+};
+const MJ_KEYS = ['fin','mkt','hrm','lsm','mice','bis'];
+
+/* ════════════ DATALABELS PLUGIN ════════════ */
+// Register globally — จะแสดงตัวเลขบน chart เมื่อ export PDF
+Chart.register(ChartDataLabels);
+// default ซ่อนไว้ก่อน แสดงเฉพาะตอน export
+Chart.defaults.set('plugins.datalabels', { display: false });
+
+/* ════════════ STATE ════════════ */
+let DB       = null;
+let selYear  = null;
+let selMajor = 'all';
+let activeTab= 'intake';
+const CH     = {};
+const TX = { grid:{color:'rgba(0,0,0,.04)'}, ticks:{color:'#7c6aad',font:{size:10}} };
+const TY = { grid:{color:'rgba(0,0,0,.05)'}, beginAtZero:true, ticks:{color:'#7c6aad',font:{size:10}} };
+
+/* ════════════ LOAD DATA ════════════ */
+async function loadData() {
+  show('s-loading');
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+
+    const res  = await fetch(`${API_BASE}/api/bba-students`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    const json = await res.json();
+
+    if (!json.ok || !json.published) {
+      show('s-unpublished'); return;
+    }
+
+    DB = json;
+
+    const hasIntake = MJ_KEYS.some(m => (DB.intake?.[m]||[]).length > 0);
+    if (!hasIntake) { show('s-nodata'); return; }
+
+    // ── เอาเฉพาะ 5 ปีล่าสุด ──
+    const allYears = getAllYears().slice(0, 5);
+    if (!allYears.length) { show('s-nodata'); return; }
+
+    selYear  = allYears[0];
+    selMajor = 'all';
+
+    buildFilters(allYears);
+    buildHero();
+    renderActiveTab();
+    show('s-dashboard');
+
+    document.getElementById('footer-ts').textContent =
+      'ข้อมูล ณ ' + new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+    observeFade();
+
+  } catch(e) {
+    if (e.name === 'AbortError') {
+      show('s-nodata');
+    } else {
+      console.error(e);
+      show('s-nodata');
+    }
+  }
+}
+
+function getAllYears() {
+  const s = new Set();
+  MJ_KEYS.forEach(m => (DB.intake?.[m]||[]).forEach(r => s.add(r[0])));
+  if (DB.trend) Object.keys(DB.trend).forEach(y => s.add(+y));
+  // เรียงจากมากไปน้อย แล้วตัดเหลือ 5 ปี
+  return [...s].sort((a,b) => b-a);
+}
+
+/* ════════════ HERO ════════════ */
+function buildHero() {
+  const ly = getAllYears()[0];
+  let reg=0, plan=0;
+  MJ_KEYS.forEach(m => {
+    const r = (DB.intake?.[m]||[]).find(x => x[0]===ly);
+    if(r){ reg+=r[4]; plan+=r[1]; }
+  });
+  const enrolled = DB.trend?.[ly]?.enrolled || 0;
+
+  const coopYrs  = (DB.coopYrs||[]).slice().sort((a,b)=>a-b);
+  const internYrs= (DB.internYrs||[]).slice().sort((a,b)=>a-b);
+  const latestCY = coopYrs[coopYrs.length-1];
+  const latestIY = internYrs[internYrs.length-1];
+
+  const coopTotal  = latestCY ? MJ_KEYS.reduce((s,m)=>{
+    const yi=(DB.coopYrs||[]).indexOf(latestCY);
+    return s+((yi>=0&&DB.coop?.[m])?(DB.coop[m][yi]||0):0);
+  },0) : 0;
+  const internTotal= latestIY ? MJ_KEYS.reduce((s,m)=>{
+    const yi=(DB.internYrs||[]).indexOf(latestIY);
+    return s+((yi>=0&&DB.intern?.[m])?(DB.intern[m][yi]||0):0);
+  },0) : 0;
+
+  document.getElementById('hero-kpis').innerHTML = `
+    <div class="hkpi"><div class="hk-val" style="color:#a78bfa">${reg.toLocaleString()}</div>
+      <div class="hk-lbl">รายงานตัว (${ly})</div>
+      <div class="hk-badge" style="background:rgba(139,92,246,.15);color:#a78bfa">ปีล่าสุด</div></div>
+    <div class="hkpi"><div class="hk-val" style="color:#60a5fa">${enrolled.toLocaleString()}</div>
+      <div class="hk-lbl">ลงทะเบียน (${ly})</div>
+      <div class="hk-badge" style="background:rgba(96,165,250,.15);color:#60a5fa">Enrolled</div></div>
+    <div class="hkpi"><div class="hk-val" style="color:#34d399">${coopTotal.toLocaleString()}</div>
+      <div class="hk-lbl">สหกิจ (${latestCY||'—'})</div>
+      <div class="hk-badge" style="background:rgba(52,211,153,.15);color:#34d399">4 เดือน</div></div>
+    <div class="hkpi"><div class="hk-val" style="color:#fb923c">${internTotal.toLocaleString()}</div>
+      <div class="hk-lbl">ฝึกงาน (${latestIY||'—'})</div>
+      <div class="hk-badge" style="background:rgba(251,146,60,.15);color:#fb923c">2 เดือน</div></div>`;
+}
+
+/* ════════════ FILTERS ════════════ */
+function buildFilters(years) {
+  // years มาแล้วไม่เกิน 5 ปี
+  document.getElementById('yr-btns').innerHTML = years.map(y=>
+    `<button class="yr-btn${y===selYear?' active':''}" onclick="setYear(${y})">${y}</button>`
+  ).join('');
+  document.getElementById('yr-sel').innerHTML = years.map(y=>
+    `<option value="${y}"${y===selYear?' selected':''}>${y}</option>`
+  ).join('');
+  const ms = document.getElementById('major-sel');
+  ms.innerHTML = '<option value="all">ทุกวิชาเอก</option>' +
+    MJ_KEYS.map(m=>`<option value="${m}">${MJ_DEFS[m].short}</option>`).join('');
+}
+
+function setYear(y) {
+  selYear = y;
+  document.querySelectorAll('.yr-btn').forEach(b=>b.classList.toggle('active',+b.textContent===y));
+  document.getElementById('yr-sel').value = y;
+  renderActiveTab();
+}
+function onMajorFilter(val){ selMajor=val; renderActiveTab(); }
+function filteredMajors(){ return selMajor==='all' ? MJ_KEYS : MJ_KEYS.filter(m=>m===selMajor); }
+
+/* ════════════ TABS ════════════ */
+function switchTab(name, btn) {
+  activeTab = name;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  renderActiveTab();
+}
+function renderActiveTab() {
+  if(activeTab==='intake') renderIntakeTab();
+  else if(activeTab==='status') renderStatusTab();
+  else renderCoopTab();
+}
+
+/* ════════════ TAB: INTAKE ════════════ */
+function renderIntakeTab() {
+  const yr=selYear, mids=filteredMajors();
+  let reg=0,plan=0,inv=0,nr=0;
+  mids.forEach(m=>{const r=(DB.intake?.[m]||[]).find(x=>x[0]===yr);if(r){reg+=r[4];plan+=r[1];inv+=r[2];nr+=r[5];}});
+
+  document.getElementById('body-intake').innerHTML = `
+    <div class="sec-title fade-up">ภาพรวมการรับนักศึกษา ปีการศึกษา ${yr}</div>
+    <div class="kpi-row fade-up">
+      <div class="kcard v"><div class="kc-ico">🎓</div><div class="kc-lbl">รายงานตัว</div>
+        <div class="kc-val">${reg.toLocaleString()}<small>คน</small></div>
+        <div class="kc-tag" style="background:rgba(139,92,246,.15);color:#a78bfa">${plan?((reg/plan)*100).toFixed(1):0}% ของแผน</div></div>
+      <div class="kcard b"><div class="kc-ico">📋</div><div class="kc-lbl">แผนรับ</div>
+        <div class="kc-val">${plan.toLocaleString()}<small>คน</small></div>
+        <div class="kc-tag" style="background:rgba(96,165,250,.15);color:#60a5fa">เป้าหมาย</div></div>
+      <div class="kcard g"><div class="kc-ico">💬</div><div class="kc-lbl">สัมภาษณ์</div>
+        <div class="kc-val">${inv.toLocaleString()}<small>คน</small></div>
+        <div class="kc-tag" style="background:rgba(52,211,153,.15);color:#34d399">${plan?((inv/plan)*100).toFixed(1):0}%</div></div>
+      <div class="kcard o"><div class="kc-ico">❌</div><div class="kc-lbl">ไม่รายงานตัว</div>
+        <div class="kc-val">${nr.toLocaleString()}<small>คน</small></div>
+        <div class="kc-tag" style="background:rgba(251,146,60,.15);color:#fb923c">${reg+nr?((nr/(reg+nr))*100).toFixed(1):0}%</div></div>
+    </div>
+    <div class="grid2 fade-up">
+      <div class="cbox"><div class="cb-hd"><div><div class="cb-title">สัดส่วนการรับเข้าตามวิชาเอก</div><div class="cb-sub">ปี ${yr}</div></div><span class="cb-tag p">Pie</span></div>
+        <div class="pie-wrap"><div style="width:150px;height:150px;flex-shrink:0"><canvas id="ch-pie"></canvas></div><div class="pie-leg" id="pie-leg"></div></div></div>
+      <div class="cbox"><div class="cb-hd"><div><div class="cb-title">แผนรับ vs รายงานตัว</div><div class="cb-sub">ปี ${yr}</div></div><span class="cb-tag t">Bar</span></div>
+        <div style="height:175px"><canvas id="ch-bar-intake"></canvas></div></div>
+    </div>
+    <div class="sec-title fade-up">รายละเอียดการรับเข้าศึกษาแต่ละวิชาเอก — ปี ${yr}</div>
+    <div class="major-grid fade-up" id="major-grid"></div>
+    <div class="sec-title fade-up">สถิติขั้นตอนการรับเข้า — ปี ${yr}</div>
+    <div class="cbox full fade-up">
+      <div class="cb-hd"><div><div class="cb-title">แผนรับ · สัมภาษณ์ · ยืนยัน · รายงานตัว · ไม่รายงานตัว</div></div><span class="cb-tag p">Grouped</span></div>
+      <div style="height:240px"><canvas id="ch-grouped"></canvas></div><div class="leg" id="leg-grouped"></div>
+    </div>
+    <div class="sec-title fade-up">การรายงานตัวสะสมทุกปี</div>
+    <div class="cbox full fade-up">
+      <div class="cb-hd"><div><div class="cb-title">Stacked Bar แยกวิชาเอก</div></div><span class="cb-tag g">Stacked</span></div>
+      <div style="height:240px"><canvas id="ch-stacked"></canvas></div><div class="leg" id="leg-stacked"></div>
+    </div>
+    <div class="sec-title fade-up">แนวโน้มลงทะเบียน & สำเร็จการศึกษา</div>
+    <div class="cbox full fade-up">
+      <div class="cb-hd"><div><div class="cb-title">ลงทะเบียน vs สำเร็จการศึกษา ย้อนหลัง</div></div><span class="cb-tag t">Line</span></div>
+      <div style="height:210px"><canvas id="ch-trend"></canvas></div>
+    </div>`;
+
+  setTimeout(()=>{
+    renderPie(yr,mids); renderBarIntake(yr,mids); renderMajorGrid(yr);
+    renderGrouped(yr,mids); renderStacked(); renderTrend();
+    observeFade();
+  },60);
+}
+
+/* ════════════ TAB: STATUS ════════════ */
+function renderStatusTab() {
+  const yr=selYear, sd=DB.status?.[yr]||[];
+  document.getElementById('body-status').innerHTML = `
+    <div class="sec-title fade-up">สถานะนักศึกษา — ปีการศึกษา ${yr}</div>
+    ${!sd.length
+      ? `<div class="cbox full fade-up" style="text-align:center;padding:36px;color:var(--muted)">ไม่มีข้อมูลสถานะสำหรับปี ${yr}</div>`
+      : `<div class="status-row fade-up">${sd.map(s=>`<div class="scard">
+          <div class="sc-ico">⚫</div><div class="sc-lbl">${s.label}</div>
+          <div class="sc-val" style="color:${s.color}">${(s.val||0).toLocaleString()}</div></div>`).join('')}</div>
+        <div class="grid2 fade-up">
+          <div class="cbox"><div class="cb-hd"><div><div class="cb-title">สัดส่วนสถานะ</div><div class="cb-sub">ปี ${yr}</div></div><span class="cb-tag p">Doughnut</span></div>
+            <div class="pie-wrap"><div style="width:150px;height:150px;flex-shrink:0"><canvas id="ch-status-pie"></canvas></div><div class="pie-leg" id="status-pie-leg"></div></div></div>
+          <div class="cbox"><div class="cb-hd"><div><div class="cb-title">จำนวนแยกสถานะ</div></div><span class="cb-tag t">Horizontal</span></div>
+            <div style="height:185px"><canvas id="ch-status-bar"></canvas></div></div>
+        </div>`}
+    <div class="sec-title fade-up">แนวโน้มลงทะเบียนย้อนหลัง</div>
+    <div class="cbox full fade-up">
+      <div class="cb-hd"><div><div class="cb-title">ลงทะเบียน & สำเร็จการศึกษา ทุกปี</div></div><span class="cb-tag g">Line</span></div>
+      <div style="height:210px"><canvas id="ch-status-trend"></canvas></div>
+    </div>`;
+
+  setTimeout(()=>{
+    if(sd.length){ renderStatusPie(sd); renderStatusBar(sd); }
+    renderStatusTrend(); observeFade();
+  },60);
+}
+
+/* ════════════ TAB: COOP ════════════ */
+function renderCoopTab() {
+  const coopYrs  = (DB.coopYrs||[]).slice().sort((a,b)=>a-b);
+  const internYrs= (DB.internYrs||[]).slice().sort((a,b)=>a-b);
+  const coopByYr  = coopYrs.map((_,yi)=>MJ_KEYS.reduce((s,m)=>s+((DB.coop?.[m]||[])[yi]||0),0));
+  const internByYr= internYrs.map((_,yi)=>MJ_KEYS.reduce((s,m)=>s+((DB.intern?.[m]||[])[yi]||0),0));
+  const totC=coopByYr.reduce((a,b)=>a+b,0), totI=internByYr.reduce((a,b)=>a+b,0);
+  const latCY=coopYrs[coopYrs.length-1]||'—', latIY=internYrs[internYrs.length-1]||'—';
+  const latC=coopByYr[coopByYr.length-1]||0, latI=internByYr[internByYr.length-1]||0;
+  const coopByMaj  = MJ_KEYS.map(m=>(DB.coop?.[m]||[]).reduce((a,b)=>a+b,0));
+  const internByMaj= MJ_KEYS.map(m=>(DB.intern?.[m]||[]).reduce((a,b)=>a+b,0));
+
+  document.getElementById('body-coop').innerHTML = `
+    <div class="sec-title fade-up">สหกิจศึกษา (4 เดือน)</div>
+    <div class="kpi-row fade-up" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kcard v"><div class="kc-ico">🏢</div><div class="kc-lbl">รวมทั้งหมด</div><div class="kc-val">${totC.toLocaleString()}<small>คน</small></div><div class="kc-tag">ทุกปี</div></div>
+      <div class="kcard b"><div class="kc-ico">📅</div><div class="kc-lbl">ปีล่าสุด (${latCY})</div><div class="kc-val">${latC.toLocaleString()}<small>คน</small></div><div class="kc-tag" style="background:rgba(96,165,250,.15);color:#60a5fa">ล่าสุด</div></div>
+      <div class="kcard g"><div class="kc-ico">⏱</div><div class="kc-lbl">ระยะเวลา</div><div class="kc-val" style="font-size:20px">4 เดือน</div><div class="kc-tag" style="background:rgba(52,211,153,.15);color:#34d399">เต็มเวลา</div></div>
+    </div>
+    <div class="grid2 fade-up">
+      <div class="cbox"><div class="cb-hd"><div><div class="cb-title">สัดส่วนสหกิจตามวิชาเอก</div></div><span class="cb-tag p">Pie</span></div>
+        <div class="pie-wrap"><div style="width:150px;height:150px;flex-shrink:0"><canvas id="ch-coop-pie"></canvas></div><div class="pie-leg" id="coop-pie-leg"></div></div></div>
+      <div class="cbox"><div class="cb-hd"><div><div class="cb-title">สหกิจแยกวิชาเอกตามปี</div></div><span class="cb-tag o">Bar</span></div>
+        <div style="height:200px"><canvas id="ch-coop-bar"></canvas></div><div class="leg" id="leg-coop-bar"></div></div>
+    </div>
+    <div class="cbox full fade-up">
+      <div class="cb-hd"><div><div class="cb-title">แนวโน้มสหกิจรายปี</div></div><span class="cb-tag t">Line</span></div>
+      <div style="height:200px"><canvas id="ch-coop-trend"></canvas></div>
+    </div>
+    <div class="fade-up" style="text-align:center;padding:14px 0 4px;">
+      <a href="https://script.google.com/macros/s/AKfycbzU6yTvjqfIRbq2kRonhuVn_Zou4tLxB3HG25RenPyuSLsDq3-xZzZ-i8qLiwzjT4d4rw/exec" target="_blank" rel="noopener"
+        style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(124,58,237,.3);transition:.2s;"
+        onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> ดูข้อมูลเพิ่มได้ที่นี่
+      </a>
+    </div>
+    <div class="sec-title fade-up" style="margin-top:28px">ฝึกงาน (2 เดือน)</div>
+    <div class="kpi-row fade-up" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kcard v"><div class="kc-ico">📋</div><div class="kc-lbl">รวมทั้งหมด</div><div class="kc-val">${totI.toLocaleString()}<small>คน</small></div><div class="kc-tag">ทุกปี</div></div>
+      <div class="kcard b"><div class="kc-ico">📅</div><div class="kc-lbl">ปีล่าสุด (${latIY})</div><div class="kc-val">${latI.toLocaleString()}<small>คน</small></div><div class="kc-tag" style="background:rgba(96,165,250,.15);color:#60a5fa">ล่าสุด</div></div>
+      <div class="kcard g"><div class="kc-ico">⏱</div><div class="kc-lbl">ระยะเวลา</div><div class="kc-val" style="font-size:20px">2 เดือน</div><div class="kc-tag" style="background:rgba(52,211,153,.15);color:#34d399">ระยะสั้น</div></div>
+    </div>
+    <div class="grid2 fade-up">
+      <div class="cbox"><div class="cb-hd"><div><div class="cb-title">สัดส่วนฝึกงานตามวิชาเอก</div></div><span class="cb-tag p">Pie</span></div>
+        <div class="pie-wrap"><div style="width:150px;height:150px;flex-shrink:0"><canvas id="ch-intern-pie"></canvas></div><div class="pie-leg" id="intern-pie-leg"></div></div></div>
+      <div class="cbox"><div class="cb-hd"><div><div class="cb-title">ฝึกงานแยกวิชาเอกตามปี</div></div><span class="cb-tag o">Bar</span></div>
+        <div style="height:200px"><canvas id="ch-intern-bar"></canvas></div><div class="leg" id="leg-intern-bar"></div></div>
+    </div>
+    <div class="cbox full fade-up">
+      <div class="cb-hd"><div><div class="cb-title">แนวโน้มฝึกงานรายปี</div></div><span class="cb-tag t">Line</span></div>
+      <div style="height:200px"><canvas id="ch-intern-trend"></canvas></div>
+    </div>
+    <div class="fade-up" style="text-align:center;padding:14px 0 4px;">
+      <a href="https://sdepfmspsu.web.app/coop_p2_intern.html" target="_blank" rel="noopener"
+        style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:linear-gradient(135deg,#059669,#34d399);color:#fff;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(5,150,105,.3);transition:.2s;"
+        onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> ดูข้อมูลเพิ่มได้ที่นี่
+      </a>
+    </div>`;
+  setTimeout(()=>{
+    renderMajPie('ch-coop-pie','coop-pie-leg', coopByMaj);
+    renderMajPie('ch-intern-pie','intern-pie-leg', internByMaj);
+    renderMajBar('ch-coop-bar','leg-coop-bar', coopYrs, DB.coop);
+    renderMajBar('ch-intern-bar','leg-intern-bar', internYrs, DB.intern);
+    renderLine('ch-coop-trend', coopYrs, coopByYr, '#8b5cf6', 'สหกิจ');
+    renderLine('ch-intern-trend', internYrs, internByYr, '#059669', 'ฝึกงาน');
+    observeFade();
+  },60);
+}
+
+/* ════════════ CHART HELPERS ════════════ */
+function dc(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
+
+function renderPie(yr,mids){
+  const lb=[],dt=[],cl=[];
+  mids.forEach(m=>{const r=(DB.intake?.[m]||[]).find(x=>x[0]===yr);const v=r?r[4]:0;if(v>0){lb.push(MJ_DEFS[m].short);dt.push(v);cl.push(MJ_DEFS[m].color);}});
+  dc('ch-pie'); if(!dt.length) return;
+  CH['ch-pie']=new Chart(document.getElementById('ch-pie'),{type:'doughnut',data:{labels:lb,datasets:[{data:dt,backgroundColor:cl,borderWidth:2,borderColor:'#fff',hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'60%'}});
+  const tot=dt.reduce((a,b)=>a+b,0);
+  document.getElementById('pie-leg').innerHTML=lb.map((l,i)=>`<div class="pl"><div class="pl-dot" style="background:${cl[i]}"></div><span class="pl-name">${l}</span><span class="pl-val">${dt[i]} (${tot?((dt[i]/tot)*100).toFixed(0):0}%)</span></div>`).join('');
+}
+
+function renderBarIntake(yr,mids){
+  dc('ch-bar-intake'); if(!mids.length) return;
+  CH['ch-bar-intake']=new Chart(document.getElementById('ch-bar-intake'),{type:'bar',
+    data:{labels:mids.map(m=>MJ_DEFS[m].short),datasets:[
+      {label:'แผนรับ',data:mids.map(m=>{const r=(DB.intake?.[m]||[]).find(x=>x[0]===yr);return r?r[1]:0;}),backgroundColor:'rgba(139,92,246,.3)',borderColor:'#8b5cf6',borderWidth:1.5,borderRadius:4},
+      {label:'รายงานตัว',data:mids.map(m=>{const r=(DB.intake?.[m]||[]).find(x=>x[0]===yr);return r?r[4]:0;}),backgroundColor:mids.map(m=>MJ_DEFS[m].color),borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#3f2e86',font:{size:11},boxWidth:10}}},scales:{x:TX,y:TY}}});
+}
+
+function renderMajorGrid(yr){
+  const tot=MJ_KEYS.reduce((s,m)=>{const r=(DB.intake?.[m]||[]).find(x=>x[0]===yr);return s+(r?r[4]:0);},0);
+  document.getElementById('major-grid').innerHTML=MJ_KEYS.map(m=>{
+    const isDim=selMajor!=='all'&&m!==selMajor;
+    const r=(DB.intake?.[m]||[]).find(x=>x[0]===yr);const v=r?r[4]:0;
+    return `<div class="mcard${isDim?' dimmed':''} fade-up" onclick="toggleMajorFilter('${m}')">
+      <div class="mc-ico">${MJ_DEFS[m].icon}</div><div class="mc-name" style="color:${MJ_DEFS[m].color}">${MJ_DEFS[m].short}</div>
+      <div class="mc-val">${v}</div><div class="mc-sub">${tot?((v/tot)*100).toFixed(1):0}%</div></div>`;
+  }).join('');
+}
+
+function toggleMajorFilter(mid){ selMajor=(selMajor===mid)?'all':mid; document.getElementById('major-sel').value=selMajor; renderActiveTab(); }
+
+function renderGrouped(yr,mids){
+  const cols=['rgba(139,92,246,.55)','rgba(96,165,250,.65)','rgba(45,212,191,.65)','rgba(251,191,36,.7)','rgba(248,113,113,.65)'];
+  const defs=[{l:'แผนรับ',i:1},{l:'สัมภาษณ์',i:2},{l:'ยืนยัน',i:3},{l:'รายงานตัว',i:4},{l:'ไม่รายงานตัว',i:5}];
+  dc('ch-grouped'); if(!mids.length) return;
+  CH['ch-grouped']=new Chart(document.getElementById('ch-grouped'),{type:'bar',data:{labels:mids.map(m=>MJ_DEFS[m].short),datasets:defs.map((d,ci)=>({label:d.l,data:mids.map(m=>{const r=(DB.intake?.[m]||[]).find(x=>x[0]===yr);return r?r[d.i]:0;}),backgroundColor:cols[ci],borderRadius:3}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:TX,y:TY}}});
+  document.getElementById('leg-grouped').innerHTML=defs.map((d,i)=>`<div class="li"><div class="li-dot" style="background:${cols[i]}"></div>${d.l}</div>`).join('');
+}
+
+function renderStacked(){
+  // กราฟสะสม: ใช้ข้อมูลเฉพาะ 5 ปีล่าสุดที่กรองแล้ว
+  const allYrs = getAllYears().slice(0, 5).sort((a,b)=>a-b);
+  dc('ch-stacked'); if(!allYrs.length) return;
+  CH['ch-stacked']=new Chart(document.getElementById('ch-stacked'),{type:'bar',data:{labels:allYrs,datasets:MJ_KEYS.map(m=>({label:MJ_DEFS[m].short,data:allYrs.map(y=>{const r=(DB.intake?.[m]||[]).find(x=>x[0]===y);return r?r[4]:0;}),backgroundColor:MJ_DEFS[m].color+'cc',borderRadius:2,stack:'s'}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,...TX},y:{stacked:true,...TY}}}});
+  document.getElementById('leg-stacked').innerHTML=MJ_KEYS.map(m=>`<div class="li" style="opacity:${selMajor==='all'||m===selMajor?1:.3}"><div class="li-dot" style="background:${MJ_DEFS[m].color}"></div>${MJ_DEFS[m].short}</div>`).join('');
+}
+
+function renderTrend(){
+  if(!DB.trend) return;
+  // เฉพาะ 5 ปีล่าสุด
+  const yrs=Object.keys(DB.trend).map(Number).sort((a,b)=>a-b).slice(-5);
+  if(!yrs.length) return;
+  dc('ch-trend');
+  CH['ch-trend']=new Chart(document.getElementById('ch-trend'),{type:'line',data:{labels:yrs,datasets:[
+    {label:'ลงทะเบียน',data:yrs.map(y=>DB.trend[y]?.enrolled||0),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.1)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#8b5cf6',pointBorderColor:'#fff',pointBorderWidth:2},
+    {label:'สำเร็จการศึกษา',data:yrs.map(y=>DB.trend[y]?.graduated||0),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#34d399',pointBorderColor:'#fff',pointBorderWidth:2,borderDash:[6,3]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#3f2e86',font:{size:11},boxWidth:10,padding:12}}},scales:{x:TX,y:{...TY,beginAtZero:false}}}});
+}
+
+function renderStatusPie(sd){
+  const a=sd.filter(s=>s.val>0); dc('ch-status-pie'); if(!a.length) return;
+  CH['ch-status-pie']=new Chart(document.getElementById('ch-status-pie'),{type:'doughnut',data:{labels:a.map(s=>s.label),datasets:[{data:a.map(s=>s.val),backgroundColor:a.map(s=>s.color),borderWidth:2,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'58%'}});
+  const tot=a.reduce((t,s)=>t+s.val,0);
+  document.getElementById('status-pie-leg').innerHTML=a.map(s=>`<div class="pl"><div class="pl-dot" style="background:${s.color}"></div><span class="pl-name">${s.label}</span><span class="pl-val">${s.val.toLocaleString()} (${tot?((s.val/tot)*100).toFixed(1):0}%)</span></div>`).join('');
+}
+
+function renderStatusBar(sd){
+  const a=sd.filter(s=>s.val>0); dc('ch-status-bar'); if(!a.length) return;
+  CH['ch-status-bar']=new Chart(document.getElementById('ch-status-bar'),{type:'bar',data:{labels:a.map(s=>s.label),datasets:[{data:a.map(s=>s.val),backgroundColor:a.map(s=>s.color+'cc'),borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{...TX,beginAtZero:true},y:{grid:{display:false},ticks:{color:'#3f2e86',font:{size:10}}}}}});
+}
+
+function renderStatusTrend(){
+  if(!DB.trend) return;
+  const yrs=Object.keys(DB.trend).map(Number).sort((a,b)=>a-b).slice(-5);
+  if(!yrs.length) return;
+  dc('ch-status-trend');
+  CH['ch-status-trend']=new Chart(document.getElementById('ch-status-trend'),{type:'line',data:{labels:yrs,datasets:[
+    {label:'ลงทะเบียน',data:yrs.map(y=>DB.trend[y]?.enrolled||0),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.1)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#8b5cf6'},
+    {label:'สำเร็จการศึกษา',data:yrs.map(y=>DB.trend[y]?.graduated||0),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#34d399',borderDash:[5,3]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#3f2e86',font:{size:11},boxWidth:10,padding:12}}},scales:{x:TX,y:{...TY,beginAtZero:false}}}});
+}
+
+function renderMajPie(cid,lid,data){
+  const nz=MJ_KEYS.map((m,i)=>({m,v:data[i]})).filter(x=>x.v>0);
+  dc(cid); if(!nz.length) return;
+  CH[cid]=new Chart(document.getElementById(cid),{type:'doughnut',data:{labels:nz.map(x=>MJ_DEFS[x.m].short),datasets:[{data:nz.map(x=>x.v),backgroundColor:nz.map(x=>MJ_DEFS[x.m].color),borderWidth:2,borderColor:'#fff',hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'58%'}});
+  const tot=nz.reduce((a,x)=>a+x.v,0);
+  document.getElementById(lid).innerHTML=nz.map(x=>`<div class="pl"><div class="pl-dot" style="background:${MJ_DEFS[x.m].color}"></div><span class="pl-name">${MJ_DEFS[x.m].short}</span><span class="pl-val">${x.v} (${tot?((x.v/tot)*100).toFixed(0):0}%)</span></div>`).join('');
+}
+
+function renderMajBar(cid,lid,yrs,src){
+  dc(cid); if(!yrs.length) return;
+  CH[cid]=new Chart(document.getElementById(cid),{type:'bar',data:{labels:yrs,datasets:MJ_KEYS.map(m=>({label:MJ_DEFS[m].short,data:yrs.map((_,yi)=>(src?.[m]||[])[yi]||0),backgroundColor:MJ_DEFS[m].color+'cc',borderRadius:4}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:TX,y:TY}}});
+  document.getElementById(lid).innerHTML=MJ_KEYS.map(m=>`<div class="li"><div class="li-dot" style="background:${MJ_DEFS[m].color}"></div>${MJ_DEFS[m].short}</div>`).join('');
+}
+
+function renderLine(cid,yrs,data,color,label){
+  dc(cid); if(!yrs.length) return;
+  CH[cid]=new Chart(document.getElementById(cid),{type:'line',data:{labels:yrs,datasets:[{label,data,borderColor:color,backgroundColor:color+'18',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:color,pointBorderColor:'#fff',pointBorderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:TX,y:TY}}});
+}
+
+/* ════════════ UTILS ════════════ */
+function show(id){
+  ['s-loading','s-unpublished','s-nodata','s-dashboard'].forEach(i=>{
+    const el=document.getElementById(i);if(!el)return;
+    el.style.display=(i===id)?(i==='s-dashboard'?'block':'flex'):'none';
+  });
+}
+function observeFade(){
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in');}),{threshold:.05});
+  document.querySelectorAll('.fade-up:not(.in)').forEach(el=>obs.observe(el));
+}
+
+// ── Export PDF with Charts ──
+async function exportPDF(){
+  const yr = selYear;
+  const mids = filteredMajors();
+
+  // helper: update chart พร้อม datalabels แล้วรอ animation เสร็จ
+  function updateWithLabels(chart, labelOpts){
+    return new Promise(resolve => {
+      chart.options.plugins.datalabels = labelOpts;
+      chart.update();
+      // รอ 1 frame หลัง update
+      requestAnimationFrame(() => requestAnimationFrame(resolve));
+    });
+  }
+
+  // เปิด datalabels ทีละ chart แล้ว capture
+  const imgs = {};
+  for(const [id, chart] of Object.entries(CH)){
+    if(!chart) continue;
+    const el = document.getElementById(id);
+    if(!el) continue;
+    const isPie = chart.config.type==='doughnut'||chart.config.type==='pie';
+    const opts = isPie ? {
+      display: true,
+      color: '#fff',
+      font: { weight:'bold', size:10 },
+      formatter: (v, ctx) => {
+        const tot = ctx.dataset.data.reduce((a,b)=>a+b,0);
+        const label = ctx.chart.data.labels?.[ctx.dataIndex] || '';
+        const pct = tot>0 ? ((v/tot)*100).toFixed(1) : '0';
+        return tot>0 ? label + '\n' + pct + '%' : '';
+      },
+      textStrokeColor: 'rgba(0,0,0,.35)',
+      textStrokeWidth: 2,
+      textAlign: 'center',
+    } : {
+      display: true,
+      color: '#fff',
+      font: { weight:'bold', size:9 },
+      formatter: v => v>0 ? v.toLocaleString() : null,
+      anchor: 'center',
+      align: 'center',
+      backgroundColor: 'rgba(0,0,0,.22)',
+      borderRadius: 3,
+      padding: {top:1,bottom:1,left:3,right:3},
+      clip: true,
+    };
+    await updateWithLabels(chart, opts);
+    imgs[id] = el.toDataURL('image/png');
+    // ปิดกลับ
+    chart.options.plugins.datalabels = { display:false };
+    chart.update('none');
+  }
+
+  // รวบรวม KPI
+  let totPlan=0,totReg=0,totInv=0,totNr=0;
+  mids.forEach(m=>{
+    const r=(DB.intake?.[m]||[]).find(x=>x[0]===yr);
+    if(!r)return;
+    totPlan+=r[1];totInv+=r[2];totReg+=r[4];totNr+=(r[5]||0);
+  });
+
+  function chartBox(title,id,tag=''){
+    return imgs[id]
+      ? `<div class="cbox"><div class="cb-hd"><b>${title}</b>${tag?`<span class="tag">${tag}</span>`:''}</div>
+          <img src="${imgs[id]}" style="width:100%;height:auto;display:block;border-radius:6px;"></div>`
+      : '';
+  }
+
+  const allYrs=getAllYears().slice(0,5).sort((a,b)=>a-b);
+  let trendRows='';
+  allYrs.forEach(y=>{
+    let r=0,p=0;
+    MJ_KEYS.forEach(m=>{const row=(DB.intake?.[m]||[]).find(x=>x[0]===y);if(row){r+=row[4];p+=row[1];}});
+    const enr=DB.trend?.[y]?.enrolled||0,grad=DB.trend?.[y]?.graduated||0;
+    trendRows+=`<tr><td>${y}</td><td>${p}</td><td><b>${r}</b></td><td>${enr}</td><td>${grad}</td><td>${p?((r/p)*100).toFixed(1):0}%</td></tr>`;
+  });
+
+  let majorRows='';
+  mids.forEach(m=>{
+    const r=(DB.intake?.[m]||[]).find(x=>x[0]===yr);
+    if(!r)return;
+    majorRows+=`<tr><td><b>${MJ_DEFS[m].short}</b></td><td>${MJ_DEFS[m].name}</td>
+      <td>${r[1]}</td><td>${r[2]}</td><td><b>${r[4]}</b></td><td>${r[5]||0}</td>
+      <td>${r[1]?((r[4]/r[1])*100).toFixed(1):0}%</td></tr>`;
+  });
+
+  const win=window.open('','_blank','width=960,height=1100');
+  win.document.write(`<!DOCTYPE html>
+<html lang="th"><head>
+<meta charset="UTF-8">
+<title>สถิตินักศึกษา BBA PSU — ${yr}</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Sarabun',sans-serif;font-size:10pt;color:#1f1147;background:#fff;}
+.wrap{padding:14mm 12mm 12mm;}
+.doc-header{margin-bottom:16px;padding-bottom:10px;border-bottom:3px solid #7c3aed;}
+.doc-header h1{font-size:15pt;font-weight:800;margin-bottom:3px;}
+.doc-header p{font-size:9pt;color:#555;}
+.section-title{font-size:12pt;font-weight:700;color:#7c3aed;
+  margin:20px 0 10px;padding-bottom:5px;border-bottom:2px solid #7c3aed;
+  page-break-after:avoid;}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.kpi-box{padding:10px 12px;border:1.5px solid #c4b5fd;border-radius:8px;text-align:center;}
+.kpi-val{font-size:18pt;font-weight:900;color:#7c3aed;line-height:1;}
+.kpi-lbl{font-size:8pt;color:#555;margin-top:3px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.grid1{margin-bottom:14px;}
+.cbox{background:#faf8ff;border:1px solid #e4e0f5;border-radius:10px;padding:12px 14px;break-inside:avoid;}
+.cb-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.cb-hd b{font-size:10pt;font-weight:700;color:#1f1147;}
+.tag{font-size:8pt;font-weight:700;padding:2px 8px;border-radius:99px;
+  background:rgba(139,92,246,.15);color:#7c3aed;}
+table{width:100%;border-collapse:collapse;font-size:9pt;margin-bottom:8px;}
+thead th{background:#ede9fe;color:#5b21b6;padding:6px 8px;font-weight:700;border:1px solid #c4b5fd;}
+tbody td{padding:5px 8px;border:1px solid #e4e0f5;}
+tbody tr:nth-child(even){background:#faf8ff;}
+.footer{text-align:center;font-size:8pt;color:#888;margin-top:20px;
+  padding-top:8px;border-top:1px solid #ddd;}
+@page{size:A4 portrait;margin:14mm 10mm;}
+@media print{.cbox,.kpi-box{page-break-inside:avoid;}.section-title{page-break-after:avoid;}tr{page-break-inside:avoid;}}
+</style></head><body>
+<div class="wrap">
+  <div class="doc-header">
+    <h1>สถิตินักศึกษา — หลักสูตรบริหารธุรกิจบัณฑิต</h1>
+    <p>คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์ · ปีการศึกษา ${yr}</p>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-box"><div class="kpi-val">${totReg}</div><div class="kpi-lbl">รายงานตัว (${yr})</div></div>
+    <div class="kpi-box"><div class="kpi-val">${totPlan}</div><div class="kpi-lbl">แผนรับ (${yr})</div></div>
+    <div class="kpi-box"><div class="kpi-val">${totPlan?((totReg/totPlan)*100).toFixed(1):0}%</div><div class="kpi-lbl">% ตามแผน</div></div>
+    <div class="kpi-box"><div class="kpi-val">${totNr}</div><div class="kpi-lbl">ไม่รายงานตัว</div></div>
+  </div>
+  <div class="section-title">📊 สถิติรับเข้า — ปีการศึกษา ${yr}</div>
+  <div style="display:grid;grid-template-columns:160px 1fr;gap:12px;margin-bottom:14px;align-items:stretch;">
+    <div>${chartBox('สัดส่วนการรับเข้าตามวิชาเอก','ch-pie','Pie')}</div>
+    <div>${chartBox('แผนรับ vs รายงานตัว','ch-bar-intake','Bar')}</div>
+  </div>
+  <div class="grid1">${chartBox('สถิติขั้นตอนการรับเข้าทุกวิชาเอก','ch-grouped','Grouped')}</div>
+  <table>
+    <thead><tr><th>รหัส</th><th>วิชาเอก</th><th>แผนรับ</th><th>สัมภาษณ์</th><th>รายงานตัว</th><th>ไม่รายงาน</th><th>%</th></tr></thead>
+    <tbody>${majorRows}</tbody>
+  </table>
+  <div class="section-title">📈 การรายงานตัวสะสมและแนวโน้ม</div>
+  <div class="grid2">
+    ${chartBox('การรายงานตัวสะสมทุกปี','ch-stacked','Stacked')}
+    ${chartBox('ลงทะเบียน & สำเร็จการศึกษา','ch-trend','Line')}
+  </div>
+  <table>
+    <thead><tr><th>ปี</th><th>แผนรับ</th><th>รายงานตัว</th><th>ลงทะเบียน</th><th>สำเร็จการศึกษา</th><th>%</th></tr></thead>
+    <tbody>${trendRows}</tbody>
+  </table>
+  ${imgs['ch-coop-trend']?`
+  <div class="section-title">🏢 สหกิจศึกษา & ฝึกงาน</div>
+  <div class="grid2">
+    ${chartBox('สัดส่วนสหกิจตามวิชาเอก','ch-coop-pie','Pie')}
+    ${chartBox('สัดส่วนฝึกงานตามวิชาเอก','ch-intern-pie','Pie')}
+  </div>
+  <div class="grid2">
+    ${chartBox('แนวโน้มสหกิจรายปี','ch-coop-trend','Line')}
+    ${chartBox('แนวโน้มฝึกงานรายปี','ch-intern-trend','Line')}
+  </div>`:''}
+  <div class="footer">คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์ (PSU) · สร้างเมื่อ ${new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'})}</div>
+</div></body></html>`);
+  win.document.close();
+  win.focus();
+  setTimeout(()=>{ win.print(); }, 600);
+}
+
+loadData();
+</script>
+</body>
+</html>

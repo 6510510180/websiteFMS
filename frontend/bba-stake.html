@@ -4,165 +4,250 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stakeholders' Needs to PLOs — BBA Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-:root{
-  --bg:#08041a;--card:#0f0828;--card2:#150e30;
-  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
-  --text:#f0ebff;--text2:#b8a8e0;--muted:#6b5d8a;
-  --acc:#8b5cf6;--acc2:#a78bfa;--acc3:#c4b5fd;--acc-l:rgba(139,92,246,.15);
-  --F-bg:rgba(109,40,217,.22);--F-text:#c4b5fd;--F-border:rgba(139,92,246,.5);
-  --M-bg:rgba(3,105,161,.22);--M-text:#7dd3fc;--M-border:rgba(14,165,233,.5);
-  --P-bg:rgba(180,83,9,.22);--P-text:#fcd34d;--P-border:rgba(234,179,8,.5);
-  --green:#22c55e;--teal:#2dd4bf;
-  --sh:0 4px 24px rgba(0,0,0,.5);
-  --sh2:0 16px 56px rgba(0,0,0,.6);
+:root {
+  --bg:#f5f3ff;--bg2:#ede9fe;--surface:#ffffff;
+  --border:rgba(139,92,246,.12);--border2:rgba(139,92,246,.24);
+  --text:#1e1040;--text2:#5b4d80;--muted:#9d8ec4;
+  --acc:#7c3aed;--acc2:#8b5cf6;--acc3:#a78bfa;
+  --acc-l:rgba(139,92,246,.08);--acc-l2:rgba(139,92,246,.14);
+  --F-bg:rgba(109,40,217,.10);--F-text:#6d28d9;--F-border:rgba(109,40,217,.28);
+  --M-bg:rgba(3,105,161,.10);--M-text:#0369a1;--M-border:rgba(3,105,161,.28);
+  --P-bg:rgba(180,83,9,.10);--P-text:#b45309;--P-border:rgba(180,83,9,.28);
+  --sh:0 2px 16px rgba(109,40,217,.08),0 1px 4px rgba(0,0,0,.04);
+  --sh2:0 8px 40px rgba(109,40,217,.14),0 2px 8px rgba(0,0,0,.06);
+  --purple:#9b51e0;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{font-size:13px;scroll-behavior:smooth;}
 body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 60% 50% at 10% 10%, rgba(109,40,217,.18) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 90% 80%, rgba(14,165,233,.12) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 50% 50%, rgba(139,92,246,.06) 0%, transparent 80%);}
+  background:radial-gradient(ellipse 70% 50% at 5% 0%,rgba(167,139,250,.20) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 60% at 95% 100%,rgba(196,181,253,.24) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%,rgba(237,233,254,.55) 0%,transparent 70%);}
+.blob{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(70px);opacity:.3;}
+.blob-1{width:420px;height:420px;top:-120px;left:-100px;background:radial-gradient(circle,#c4b5fd,#ddd6fe);}
+.blob-2{width:320px;height:320px;bottom:-100px;right:-80px;background:radial-gradient(circle,#a78bfa,#c4b5fd);}
 
-.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;
-  background:rgba(8,4,26,.85);backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 28px;gap:0;}
-.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;margin-right:28px;}
-.nav-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6d28d9,#4c1d95);
-  display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(109,40,217,.6);}
-.nav-badge svg{width:18px;height:18px;fill:#fff;}
-.nav-brand{font-family:'Anuphan',sans-serif;font-size:14px;font-weight:800;color:#fff;line-height:1.2;}
-.nav-brand small{display:block;font-size:10px;font-weight:400;color:var(--muted);}
-.nav-links{display:flex;align-items:center;gap:4px;}
-.nav-links a{padding:6px 13px;border-radius:7px;font-size:12.5px;color:var(--text2);text-decoration:none;transition:.15s;white-space:nowrap;}
-.nav-links a:hover{background:var(--acc-l);color:var(--acc2);}
-.nav-links a.active{color:var(--acc3);font-weight:700;}
-.nav-r{margin-left:auto;display:flex;align-items:center;gap:10px;}
-.pub-pill{display:flex;align-items:center;gap:7px;padding:5px 14px;border-radius:99px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);font-size:11px;font-weight:700;color:#4ade80;}
-.pub-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.6);animation:ppulse 2s infinite;}
-@keyframes ppulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* ── NAVBAR (เหมือน bba-home) ── */
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:60px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(229,231,235,.8);
+  position:sticky;top:0;z-index:300;
+  box-shadow:0 2px 5px rgba(0,0,0,.05);}
+.navbar .logo img{height:40px;}
+.navbar ul{display:flex;gap:20px;margin:0;padding:0;list-style:none;align-items:center;}
+.navbar a{font-size:14px;color:#555;text-decoration:none;transition:.3s;}
+.navbar a:hover{color:var(--purple);}
+.navbar a.active{color:var(--purple);font-weight:bold;}
+.nav-right{display:flex;align-items:center;gap:15px;}
+.nav-dropdown{position:relative;}
+.nav-dropdown-toggle{font-size:14px;color:#555;background:none;border:none;cursor:pointer;
+  font-family:inherit;padding:0;display:flex;align-items:center;gap:4px;transition:color .3s;}
+.nav-dropdown-toggle:hover,.nav-dropdown.open .nav-dropdown-toggle{color:var(--purple);}
+.nav-dropdown-toggle .chevron{transition:transform .18s;display:inline-block;font-style:normal;font-size:10px;}
+.nav-dropdown.open .nav-dropdown-toggle .chevron{transform:rotate(180deg);}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 10px);left:0;background:#fff;
+  border:1px solid #eee;border-radius:10px;min-width:210px;
+  box-shadow:0 8px 24px rgba(155,81,224,.13);overflow:hidden;z-index:999;animation:dropIn .15s ease;}
+@keyframes dropIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+.nav-dropdown.open .nav-dropdown-menu{display:block;}
+.dropdown-item{display:block;width:100%;padding:11px 16px;font-size:13px;color:#444;
+  background:none;border:none;border-bottom:1px solid #f5f5f5;text-align:left;
+  cursor:pointer;font-family:inherit;text-decoration:none;transition:all .12s;}
+.dropdown-item:last-child{border-bottom:none;}
+.dropdown-item:hover{background:#f8f0ff;color:var(--purple);padding-left:20px;}
+.dropdown-loading{padding:12px 16px;font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px;}
+.spinner-sm{width:13px;height:13px;border-radius:50%;border:2px solid #e9d5ff;
+  border-top-color:var(--purple);animation:spins .7s linear infinite;flex-shrink:0;}
+@keyframes spins{to{transform:rotate(360deg);}}
 
-.page{padding:76px 28px 56px;position:relative;z-index:1;}
+/* ── SEARCH (modal เหมือน bba-home) ── */
+.search-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.45);
+  backdrop-filter:blur(4px);align-items:flex-start;justify-content:center;padding-top:80px;}
+.search-overlay.open{display:flex;}
+.search-modal{background:#fff;border-radius:16px;width:90%;max-width:600px;
+  box-shadow:0 20px 60px rgba(155,81,224,.2);overflow:hidden;}
+.search-input-wrap{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid #eee;}
+.search-input-wrap i{color:var(--purple);font-size:16px;}
+.search-input-wrap input{flex:1;border:none;outline:none;font-size:16px;font-family:'Sarabun',sans-serif;color:#333;}
+.search-close{background:none;border:none;cursor:pointer;font-size:18px;color:#aaa;padding:4px;}
+.search-close:hover{color:#333;}
+.search-results{max-height:400px;overflow-y:auto;}
+.search-empty{padding:40px;text-align:center;color:#aaa;font-size:14px;}
+.search-section-label{padding:10px 20px 6px;font-size:11px;font-weight:bold;color:var(--purple);
+  text-transform:uppercase;letter-spacing:.5px;background:#faf5ff;}
+.search-item{display:flex;align-items:center;gap:12px;padding:12px 20px;
+  border-bottom:1px solid #f5f5f5;text-decoration:none;color:#333;transition:.15s;cursor:pointer;}
+.search-item:hover{background:#f8f0ff;}
+.search-item-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:16px;flex-shrink:0;}
+.search-item-title{font-size:14px;font-weight:600;color:#333;}
+.search-item-sub{font-size:12px;color:#888;margin-top:2px;}
+.search-highlight{color:var(--purple);font-weight:700;}
 
-/* loading */
-.loading-wrap{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);}
-.spinner{width:40px;height:40px;border:3px solid rgba(139,92,246,.2);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite;}
+/* ── PAGE ── */
+.page{padding:80px 28px 64px;position:relative;z-index:1;max-width:1440px;margin:0 auto;}
+.loading-wrap{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);position:relative;z-index:1;}
+.spinner{width:44px;height:44px;border:3px solid var(--acc-l2);border-top-color:var(--acc);border-radius:50%;animation:spin .75s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* error */
-.error-card{background:var(--card);border:1px solid var(--border2);border-radius:24px;padding:52px 48px;max-width:480px;width:100%;text-align:center;box-shadow:var(--sh2);}
-.error-icon{font-size:52px;margin-bottom:18px;}
-.error-title{font-family:'Anuphan',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:10px;}
+.error-card{background:var(--surface);border:1.5px solid var(--border2);border-radius:24px;padding:52px 48px;max-width:460px;width:100%;text-align:center;box-shadow:var(--sh2);}
+.error-icon{font-size:48px;margin-bottom:16px;}
+.error-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px;}
 .error-sub{font-size:13px;color:var(--text2);line-height:1.7;}
 
-.hero{margin-bottom:36px;}
-.hero-tag{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:99px;background:var(--acc-l);border:1px solid rgba(139,92,246,.3);font-size:11.5px;font-weight:700;color:var(--acc3);margin-bottom:14px;}
+/* HERO */
+.hero{margin-bottom:32px;padding-top:8px;}
+.hero-tag{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:99px;
+  background:var(--acc-l2);border:1px solid var(--border2);
+  font-size:11.5px;font-weight:700;color:var(--acc);margin-bottom:14px;}
 .hero-tag svg{width:12px;height:12px;fill:currentColor;}
-.hero-title{font-family:'Anuphan',sans-serif;font-size:28px;font-weight:900;color:#fff;line-height:1.35;margin-bottom:6px;}
+.hero-title{font-size:26px;font-weight:900;line-height:1.4;margin-bottom:7px;
+  background:linear-gradient(135deg,#4c1d95,#7c3aed,#a855f7);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .hero-sub{font-size:13px;color:var(--text2);line-height:1.65;}
-.hero-bottom{display:flex;align-items:center;gap:14px;margin-top:16px;flex-wrap:wrap;}
-.hero-ts{font-size:11.5px;color:var(--muted);}
-.hero-ts strong{color:var(--text2);}
+.hero-ts{font-size:11.5px;color:var(--muted);margin-top:12px;}
+.hero-ts strong{color:var(--acc);}
 
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px;}
 @media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
-.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;}
+.kpi-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:20px 22px;
+  box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--kpi-grad);border-radius:18px 18px 0 0;}
 .kpi-card:hover{transform:translateY(-3px);box-shadow:var(--sh2);}
-.kpi-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:10px;}
-.kpi-val{font-family:'Anuphan',sans-serif;font-size:38px;font-weight:900;color:#fff;line-height:1;}
+.kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:10px;}
+.kpi-val{font-size:40px;font-weight:900;line-height:1;}
 .kpi-sub{font-size:11px;color:var(--text2);margin-top:5px;}
-.kpi-bar{height:3px;border-radius:99px;background:rgba(255,255,255,.06);margin-top:12px;overflow:hidden;}
-.kpi-bar-fill{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.kpi-bar{height:4px;border-radius:99px;background:var(--bg2);margin-top:14px;overflow:hidden;}
+.kpi-bar-fill{height:100%;border-radius:99px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
 
-.section{margin-bottom:32px;}
-.section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
-.section-title{font-family:'Anuphan',sans-serif;font-size:16px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:9px;}
-.section-title::before{content:'';width:4px;height:18px;border-radius:99px;background:var(--acc);flex-shrink:0;}
+/* SECTION */
+.section{margin-bottom:36px;}
+.section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.section-title{font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:9px;}
+.section-title::before{content:'';width:4px;height:18px;border-radius:99px;
+  background:linear-gradient(180deg,var(--acc),var(--acc3));flex-shrink:0;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:4px 0 30px;}
 
-.legend-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-.leg-chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text2);}
-.leg-dot{width:22px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;}
+/* LEGEND */
+.legend-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.leg-chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text2);font-weight:600;}
+.leg-dot{width:26px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;}
 .dot-F{background:var(--F-bg);color:var(--F-text);border:1px solid var(--F-border);}
 .dot-M{background:var(--M-bg);color:var(--M-text);border:1px solid var(--M-border);}
 .dot-P{background:var(--P-bg);color:var(--P-text);border:1px solid var(--P-border);}
 
-.filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-.filter-btn{padding:6px 16px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--border2);background:transparent;color:var(--text2);transition:.15s;}
-.filter-btn:hover{border-color:var(--acc2);color:var(--acc2);}
-.filter-btn.active{background:var(--acc-l);border-color:var(--acc);color:var(--acc3);}
-
-.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--sh);}
+/* TABLE */
+.table-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--sh);}
 .table-scroll{overflow-x:auto;}
-.map-table{width:100%;border-collapse:collapse;min-width:700px;}
-.map-table thead th{background:rgba(139,92,246,.08);font-size:10px;font-weight:700;color:var(--text2);padding:10px 11px;text-align:center;border-bottom:1px solid var(--border2);white-space:nowrap;vertical-align:bottom;}
-.map-table thead th.left{text-align:left;}
+.map-table{width:100%;border-collapse:collapse;min-width:600px;}
+.map-table thead th{background:linear-gradient(180deg,var(--bg2),#f0ecfd);
+  font-size:11px;font-weight:700;color:var(--text2);padding:10px 8px;text-align:center;
+  border-bottom:2px solid var(--border2);white-space:nowrap;vertical-align:bottom;}
+.map-table thead th.th-plo{text-align:left;vertical-align:bottom;padding:10px 14px;width:40%;font-size:15px;color:var(--text);}
 .map-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
 .map-table tbody tr:last-child{border-bottom:none;}
-.map-table tbody tr:hover{background:rgba(139,92,246,.04);}
-.map-table td{padding:11px 11px;vertical-align:middle;}
-.td-no{text-align:center;font-family:'Anuphan',sans-serif;font-size:12px;font-weight:800;color:var(--muted);width:36px;}
-.td-need{font-size:12.5px;color:var(--text);line-height:1.6;min-width:200px;}
-.td-group{font-size:11px;color:var(--acc3);font-weight:700;min-width:120px;}
-.td-cell{text-align:center;padding:8px 3px !important;width:42px;}
-.sh-header{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);font-size:10px;font-weight:700;white-space:nowrap;padding:4px 2px;max-height:80px;overflow:hidden;color:var(--text2);}
-.mc{display:inline-flex;align-items:center;justify-content:center;width:26px;height:22px;border-radius:5px;font-size:10px;font-weight:800;}
-.mc-yes{background:var(--acc-l);color:var(--acc3);border:1px solid rgba(139,92,246,.4);}
-.mc-empty{background:transparent;color:var(--muted);opacity:.25;}
+.map-table tbody tr:nth-child(even){background:rgba(139,92,246,.025);}
+.map-table tbody tr:hover{background:var(--acc-l);}
+.map-table td{padding:11px 8px;vertical-align:middle;}
+.td-plo{padding:11px 14px !important;}
+.td-plo-desc{font-size:13px;color:var(--text);line-height:1.6;}
+.td-cell{text-align:center;width:30px;padding:8px 2px !important;}
+.plo-pill{display:inline-block;font-size:11px;font-weight:800;color:#fff;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  padding:2px 9px;border-radius:99px;margin-right:8px;white-space:nowrap;
+  box-shadow:0 2px 6px rgba(124,58,237,.25);}
+.sh-header{
+  writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);
+  font-size:13px;font-weight:700;color:var(--text2);
+  white-space:nowrap;
+  padding:4px 2px;max-height:220px;overflow:visible;
+  line-height:1.4;}
 
-.plo-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:28px;}
+/* level chips */
+.mc{display:inline-flex;align-items:center;justify-content:center;width:28px;height:24px;border-radius:6px;font-size:10.5px;font-weight:800;line-height:1;}
+.mc-F{background:var(--F-bg);color:var(--F-text);border:1px solid var(--F-border);}
+.mc-M{background:var(--M-bg);color:var(--M-text);border:1px solid var(--M-border);}
+.mc-P{background:var(--P-bg);color:var(--P-text);border:1px solid var(--P-border);}
+.mc-empty{background:transparent;color:var(--muted);opacity:.28;font-size:15px;}
+
+/* PLO STATS */
+.plo-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
 @media(max-width:700px){.plo-stats-grid{grid-template-columns:1fr;}}
-.plo-stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.plo-stat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:16px 18px;
+  box-shadow:var(--sh);transition:transform .18s,box-shadow .18s;}
+.plo-stat-card:hover{transform:translateY(-2px);box-shadow:var(--sh2);}
 .plo-stat-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.plo-stat-name{font-size:11px;font-weight:800;color:var(--acc3);}
-.plo-stat-cnt{font-size:11px;color:var(--muted);}
-.plo-stat-bar-wrap{height:5px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-bottom:8px;}
-.plo-stat-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width 1.2s cubic-bezier(.4,0,.2,1);}
-.plo-stat-desc{font-size:11px;color:var(--text2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.plo-stat-name{font-size:12px;font-weight:800;color:var(--acc);}
+.plo-stat-cnt{font-size:11px;color:var(--muted);font-weight:600;}
+.plo-stat-bar-wrap{height:5px;background:var(--bg2);border-radius:99px;overflow:hidden;margin-bottom:9px;}
+.plo-stat-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc),var(--acc3));transition:width 1.4s cubic-bezier(.4,0,.2,1);}
+.plo-stat-levels{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.plo-stat-lv-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:10.5px;font-weight:700;}
+.lv-F{background:var(--F-bg);color:var(--F-text);border:1px solid var(--F-border);}
+.lv-M{background:var(--M-bg);color:var(--M-text);border:1px solid var(--M-border);}
+.lv-P{background:var(--P-bg);color:var(--P-text);border:1px solid var(--P-border);}
+.plo-stat-desc{font-size:11.5px;color:var(--text2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 
-.sh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:28px;}
-.sh-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 15px;}
-.sh-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;}
-.sh-plo-list{display:flex;gap:4px;flex-wrap:wrap;}
-.sh-plo-pill{display:inline-flex;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:var(--acc-l);color:var(--acc3);border:1px solid rgba(139,92,246,.3);}
-.sh-total{font-size:10px;color:var(--muted);margin-top:5px;}
+/* SH GRID — 5 คอลัมน์ */
+.sh-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+@media(max-width:1100px){.sh-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:700px){.sh-grid{grid-template-columns:repeat(2,1fr);}}
+.sh-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:16px;
+  box-shadow:var(--sh);transition:transform .18s,box-shadow .18s;position:relative;overflow:hidden;}
+.sh-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--acc),var(--acc3));}
+.sh-card:hover{transform:translateY(-2px);box-shadow:var(--sh2);}
+.sh-name{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:10px;}
+.sh-plo-list{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;}
+.sh-plo-pill{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;}
+.sh-plo-pill.lv-F{background:var(--F-bg);color:var(--F-text);border:1px solid var(--F-border);}
+.sh-plo-pill.lv-M{background:var(--M-bg);color:var(--M-text);border:1px solid var(--M-border);}
+.sh-plo-pill.lv-P{background:var(--P-bg);color:var(--P-text);border:1px solid var(--P-border);}
+.sh-plo-pill.lv-default{background:var(--acc-l2);color:var(--acc);border:1px solid var(--border2);}
+.sh-total{font-size:10.5px;color:var(--muted);font-weight:600;}
 
-.fade-up{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease;}
+/* FADE UP */
+.fade-up{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease;}
 .fade-up.visible{opacity:1;transform:none;}
 
-footer{text-align:center;padding:32px 20px;color:var(--muted);font-size:11px;position:relative;z-index:1;}
-footer strong{color:var(--text2);}
+/* FOOTER */
+footer{text-align:center;padding:36px 20px;color:var(--muted);font-size:11.5px;
+  position:relative;z-index:1;border-top:1px solid var(--border);background:rgba(255,255,255,.5);}
+footer strong{color:var(--acc);}
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <a class="nav-logo" href="#">
-    <div class="nav-badge"><svg viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg></div>
-    <div class="nav-brand">FMS — BBA<small>คณะวิทยาการจัดการ PSU</small></div>
-  </a>
-  <div class="nav-links">
-    <a href="bba-home.html">หน้าหลัก</a>
-    <a href="bba-matrix.html">Alignment Matrix</a>
-    <a href="bba-stake.html" class="active">Stakeholders</a>
-    <a href="bba-students.html">Student Data</a>
-  </div>
-  <div class="nav-r">
-    <div class="pub-pill" id="pub-pill" style="display:none">
-      <span class="pub-dot"></span>Live Data
-    </div>
-  </div>
-</nav>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
 
-<!-- LOADING -->
-<div class="loading-wrap" id="loading-screen">
-  <div class="spinner"></div>
-</div>
+<!-- ── NAVBAR (เหมือน bba-home) ── -->
+<header class="navbar">
+  <div class="logo"><img src="logo-fms.png" alt="Logo"></div>
+  <nav>
+    <ul class="nav-links">
+       <li><a href="bba-qa.html">หน้าหลัก</a></li>
+      <li><a href="bba-plo.html">ผลลัพธ์การเรียนรู้</a></li>
+      <li><a href="bba-stake.html"class="active">ผู้มีส่วนร่วมในหลักสูตร</a></li>
+      <li><a href="bba-students.html">ข้อมูลนักศึกษา</a></li>
+      <li><a href="achievements.html">ผลงานและความสำเร็จ</a></li>
+    </ul>
+  </nav>
+  <div class="nav-right">
+    <i class="fa-solid fa-magnifying-glass" onclick="openSearch()"
+       style="cursor:pointer;font-size:16px;color:#555;transition:.2s;"
+       onmouseover="this.style.color='#9b51e0'"
+       onmouseout="this.style.color='#555'"></i>
+  </div>
+</header>
 
-<!-- ERROR -->
+<div class="loading-wrap" id="loading-screen"><div class="spinner"></div></div>
+
 <div class="loading-wrap" id="error-screen" style="display:none">
   <div class="error-card">
     <div class="error-icon">⚠️</div>
@@ -171,31 +256,34 @@ footer strong{color:var(--text2);}
   </div>
 </div>
 
-<!-- MAIN DASHBOARD -->
 <div class="page" id="dashboard" style="display:none">
-
   <div class="hero fade-up">
     <div class="hero-tag">
       <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       Stakeholders' Needs Analysis
     </div>
     <div class="hero-title">การวิเคราะห์ความต้องการของผู้มีส่วนได้ส่วนเสีย<br>ต่อผลลัพธ์การเรียนรู้ (PLOs)</div>
-    <div class="hero-sub">Stakeholders' Needs to Programme Learning Outcomes Mapping — BBA, PSU Faculty of Management</div>
-    <div class="hero-bottom">
-      <div class="hero-ts">อัปเดตข้อมูล: <strong id="snap-date">—</strong></div>
-    </div>
+    <div class="hero-sub">Stakeholders' Needs to Programme Learning Outcomes Mapping — BBA, PSU Faculty of Management Sciences</div>
+    <div class="hero-ts">อัปเดตข้อมูล: <strong id="snap-date">—</strong></div>
   </div>
 
   <div class="kpi-row" id="kpi-row"></div>
+  <div class="divider"></div>
 
   <div class="section fade-up">
     <div class="section-hd">
       <div class="section-title">Mapping Matrix — ความต้องการต่อ PLO</div>
-      <div class="legend-row">
-        <div class="leg-chip"><span class="leg-dot dot-F">✓</span>มีความสัมพันธ์</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div class="legend-row">
+        <div class="leg-chip"><span class="leg-dot dot-F">F</span>Foundational</div>
+        <div class="leg-chip"><span class="leg-dot dot-M">M</span>Main</div>
+        <div class="leg-chip"><span class="leg-dot dot-P">P</span>Peripheral</div>
+        </div>
+        <button onclick="exportPDF()" style="display:inline-flex;align-items:center;gap:7px;padding:8px 18px;background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Sarabun',sans-serif;box-shadow:0 3px 12px rgba(124,58,237,.3);transition:.18s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <i class="fa-solid fa-file-pdf"></i> Export PDF
+        </button>
       </div>
     </div>
-    <div class="filter-bar" id="group-filter"></div>
     <div class="table-wrap">
       <div class="table-scroll">
         <table class="map-table" id="map-table"></table>
@@ -204,187 +292,414 @@ footer strong{color:var(--text2);}
   </div>
 
   <div class="section fade-up">
-    <div class="section-hd">
-      <div class="section-title">สรุปความต้องการรายข้อ PLO</div>
-    </div>
+    <div class="section-hd"><div class="section-title">สรุปความต้องการรายข้อ PLO</div></div>
     <div class="plo-stats-grid" id="plo-stats-grid"></div>
   </div>
 
   <div class="section fade-up">
-    <div class="section-hd">
-      <div class="section-title">สรุปตาม Stakeholder Group</div>
-    </div>
+    <div class="section-hd"><div class="section-title">สรุปตาม Stakeholder Group</div></div>
     <div class="sh-grid" id="sh-grid"></div>
   </div>
-
 </div>
 
 <footer>
   <strong>FMS — Faculty Management System</strong> · คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์ (PSU)
 </footer>
 
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay" onclick="closeSearch(event)">
+  <div class="search-modal">
+    <div class="search-input-wrap">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="ค้นหา PLO วิชาเอก หรือ stakeholder..."
+             oninput="onSearch(this.value)" autocomplete="off"/>
+      <button class="search-close" onclick="closeSearchModal()">✕</button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-empty">พิมพ์เพื่อค้นหา...</div>
+    </div>
+  </div>
+</div>
+
 <script>
-const COURSE_ID = new URLSearchParams(window.location.search).get("course_id") || "19";
-const API_BASE  = "https://websitefms.onrender.com/api";
+const API_BASE   = '';
+const PROGRAM_ID = new URLSearchParams(window.location.search).get("program_id")
+                   || "00000000-0000-0000-0000-000000000002";
+const COURSE_ID  = new URLSearchParams(window.location.search).get("course_id") || "1";
 
-let ploData   = [];
-let needsData = [];
-let groups    = [];
-let activeGroup = "all";
+let ploData = [], needsData = [], groups = [], activeGroup = "all";
 
-async function init() {
-  try {
-    const [ploRes, needRes] = await Promise.all([
-      fetch(`${API_BASE}/courses/${COURSE_ID}/plos`),
-      fetch(`${API_BASE}/courses/${COURSE_ID}/stakeholder-needs`)
-    ]);
+// ── Navbar ──
+function togglePlanDropdown(){ document.getElementById('planDropdown').classList.toggle('open'); }
+document.addEventListener('click', e => {
+  const dd = document.getElementById('planDropdown');
+  if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+});
+async function buildPlanDropdown(){
+  const menu = document.getElementById('planDropdownMenu');
+  try{
+    const r = await fetch(`${API_BASE}/api/courses`); if(!r.ok) throw 0;
+    const cs = await r.json();
+    menu.innerHTML = (cs.data||cs).map(c =>
+      `<a class="dropdown-item" href="plans.html?courseId=${c.id}">${c.name_th||'หลักสูตร '+c.id}</a>`
+    ).join('');
+  }catch{ menu.innerHTML = `<div style="padding:12px 16px;font-size:12px;color:#aaa;">ไม่สามารถโหลดได้</div>`; }
+}
 
-    if (!ploRes.ok || !needRes.ok) throw new Error("API error");
+// ── Search ──
+function openSearch(){
+  document.getElementById('searchOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('searchInput').focus(), 100);
+}
+function closeSearchModal(){
+  document.getElementById('searchOverlay').classList.remove('open');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '<div class="search-empty">พิมพ์เพื่อค้นหา...</div>';
+}
+function closeSearch(e){ if(e.target===document.getElementById('searchOverlay')) closeSearchModal(); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeSearchModal(); });
 
-    ploData   = await ploRes.json();
-    needsData = await needRes.json();
+function highlight(text, q){
+  if(!q) return text;
+  return text.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'),
+    '<span class="search-highlight">$1</span>');
+}
 
-    if (!ploData.length || !needsData.length) throw new Error("ไม่พบข้อมูลใน Course ID " + COURSE_ID);
+function onSearch(q){
+  const results = document.getElementById('searchResults');
+  q = q.trim();
+  if(!q){ results.innerHTML = '<div class="search-empty">พิมพ์เพื่อค้นหา...</div>'; return; }
+  const ql = q.toLowerCase();
+  let html = '';
 
-    groups = [...new Set(needsData.map(n => n.group).filter(Boolean))];
+  // ค้นหา PLO
+  const matchPlo = ploData.filter(p =>
+    (p.code||'').toLowerCase().includes(ql) ||
+    (p.desc||p.name_th||p.description||'').toLowerCase().includes(ql)
+  );
+  if(matchPlo.length){
+    html += `<div class="search-section-label">Programme Learning Outcomes</div>`;
+    html += matchPlo.map(p => `
+      <div class="search-item">
+        <div class="search-item-icon" style="background:#f3e8ff;">🎯</div>
+        <div>
+          <div class="search-item-title">${highlight(p.code||'', q)}</div>
+          <div class="search-item-sub">${highlight((p.desc||p.name_th||p.description||'').slice(0,60), q)}...</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ค้นหา Stakeholder
+  const matchSh = groups.filter(g => g.toLowerCase().includes(ql));
+  if(matchSh.length){
+    html += `<div class="search-section-label">Stakeholder Groups</div>`;
+    html += matchSh.map(g => `
+      <div class="search-item">
+        <div class="search-item-icon" style="background:#e0f2fe;">👥</div>
+        <div>
+          <div class="search-item-title">${highlight(g, q)}</div>
+          <div class="search-item-sub">Stakeholder Group</div>
+        </div>
+      </div>`).join('');
+  }
+
+  results.innerHTML = html || `<div class="search-empty">ไม่พบผลลัพธ์สำหรับ "${q}"</div>`;
+}
+
+// ── Init ──
+async function init(){
+  buildPlanDropdown();
+  try{
+    let pub = { published: 0 };
+    try{ pub = await fetch(`${API_BASE}/api/stakeholders/publish-state`,{cache:"no-store"}).then(r=>r.json()); }catch(_){}
+    if(!pub.published) throw new Error("ข้อมูลยังไม่ได้เผยแพร่สู่สาธารณะ — กรุณาติดต่อผู้ดูแลระบบ");
+
+    const qs  = `program_id=${encodeURIComponent(PROGRAM_ID)}&course_id=${encodeURIComponent(COURSE_ID)}`;
+    const res = await fetch(`${API_BASE}/api/public/stakeholders-plo-mapping?${qs}`,{cache:"no-store"});
+    if(!res.ok){ const e=await res.json().catch(()=>({})); throw new Error(e.message||`API error ${res.status}`); }
+
+    const data = await res.json();
+    ploData   = data.plos   || [];
+    needsData = data.needs  || [];
+    groups    = data.groups || [...new Set(needsData.map(n=>n.group).filter(Boolean))];
+
+    needsData.forEach(n=>{
+      if(!n.plo_levels){ n.plo_levels={};
+        (n.plo_mapping||[]).forEach(code=>{ n.plo_levels[code]="✓"; }); }
+    });
+
+    const ts = data.snapshotAt||pub.published_at||null;
+    document.getElementById("snap-date").textContent = ts
+      ? new Date(ts).toLocaleDateString("th-TH",{year:"numeric",month:"long",day:"numeric"}) : "—";
+
+    if(!ploData.length)   throw new Error("ยังไม่มีข้อมูล PLO ในระบบ");
+    if(!needsData.length) throw new Error("ยังไม่มีข้อมูล Stakeholder Mapping ในระบบ");
 
     document.getElementById("loading-screen").style.display = "none";
     document.getElementById("dashboard").style.display      = "block";
-    document.getElementById("pub-pill").style.display       = "flex";
-    document.getElementById("snap-date").textContent =
-      new Date().toLocaleDateString("th-TH", { year:"numeric", month:"long", day:"numeric" });
 
     buildAll();
     initFadeUp();
-
-  } catch (e) {
+  }catch(e){
     document.getElementById("loading-screen").style.display = "none";
     document.getElementById("error-screen").style.display   = "flex";
-    document.getElementById("error-msg").textContent = e.message || "กรุณาลองใหม่อีกครั้ง";
+    document.getElementById("error-msg").textContent        = e.message||"กรุณาลองใหม่อีกครั้ง";
   }
 }
 
-function buildAll() {
-  buildKPI();
-  buildGroupFilter();
-  buildTable();
-  buildPloStats();
-  buildShGrid();
-}
+function buildAll(){ buildKPI(); buildTable(); buildPloStats(); buildShGrid(); }
 
-/* ── KPI ── */
-function buildKPI() {
-  const filtered = activeGroup === "all" ? needsData : needsData.filter(n => n.group === activeGroup);
-  const totalNeeds = filtered.length;
-  const totalPloLinks = filtered.reduce((s, n) => s + (n.plo_mapping?.length || 0), 0);
-  const coveredPlos = new Set(filtered.flatMap(n => n.plo_mapping || [])).size;
-
+function buildKPI(){
+  const filtered    = needsData;
+  const coveredPlos = new Set(filtered.flatMap(n=>n.plo_mapping||[])).size;
+  const denom       = ploData.length||1;
   const kpis = [
-    { label:"PLOs ทั้งหมด",        val: ploData.length,  sub:"Programme Learning Outcomes", bar:100, color:"#8b5cf6" },
-    { label:"Stakeholder Groups",   val: groups.length,   sub:"กลุ่มผู้มีส่วนได้ส่วนเสีย",   bar:100, color:"#2dd4bf" },
-    { label:"ความต้องการทั้งหมด",   val: totalNeeds,      sub:"Stakeholder Needs items",      bar:100, color:"#22c55e" },
-    { label:"PLO ที่ถูก Map",        val: coveredPlos,     sub:`จาก ${ploData.length} PLOs`,   bar: Math.round(coveredPlos/ploData.length*100), color:"#a78bfa" },
+    {label:"PLOs ทั้งหมด",val:ploData.length,sub:"Programme Learning Outcomes",grad:"linear-gradient(90deg,#7c3aed,#a855f7)",color:"#7c3aed",bar:100},
+    {label:"Stakeholder Groups",val:groups.length,sub:"กลุ่มผู้มีส่วนได้ส่วนเสีย",grad:"linear-gradient(90deg,#0369a1,#0ea5e9)",color:"#0369a1",bar:100},
+    {label:"ความต้องการทั้งหมด",val:filtered.length,sub:"Stakeholder Needs items",grad:"linear-gradient(90deg,#059669,#10b981)",color:"#059669",bar:100},
+    {label:"PLO ที่ถูก Map",val:coveredPlos,sub:`จาก ${ploData.length} PLOs`,grad:"linear-gradient(90deg,#b45309,#f59e0b)",color:"#b45309",bar:Math.round(coveredPlos/denom*100)},
   ];
-
-  document.getElementById("kpi-row").innerHTML = kpis.map(k => `
-    <div class="kpi-card fade-up">
+  document.getElementById("kpi-row").innerHTML = kpis.map(k=>`
+    <div class="kpi-card fade-up" style="--kpi-grad:${k.grad}">
       <div class="kpi-label">${k.label}</div>
-      <div class="kpi-val">${k.val}</div>
+      <div class="kpi-val" style="color:${k.color}">${k.val}</div>
       <div class="kpi-sub">${k.sub}</div>
-      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:0%;background:${k.color}" data-w="${k.bar}%"></div></div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:0%;background:${k.grad}" data-w="${k.bar}%"></div></div>
     </div>`).join("");
-
-  setTimeout(() => {
-    document.querySelectorAll(".kpi-bar-fill").forEach(el => el.style.width = el.dataset.w);
-  }, 200);
+  setTimeout(()=>document.querySelectorAll(".kpi-bar-fill").forEach(el=>el.style.width=el.dataset.w),300);
 }
 
-/* ── GROUP FILTER ── */
-function buildGroupFilter() {
-  const bar = document.getElementById("group-filter");
-  bar.innerHTML = `<button class="filter-btn active" onclick="setGroup('all',this)">ทั้งหมด</button>` +
-    groups.map(g => `<button class="filter-btn" onclick="setGroup('${esc(g)}',this)">${esc(g)}</button>`).join("");
-}
-
-function setGroup(g, btn) {
-  activeGroup = g;
-  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  buildTable();
-  buildKPI();
-}
-
-/* ── TABLE ── */
-function buildTable() {
-  const filtered = activeGroup === "all" ? needsData : needsData.filter(n => n.group === activeGroup);
-  const ploHeaders = ploData.map(p => `<th><div class="sh-header">${p.code}</div></th>`).join("");
-
-  let html = `<thead><tr>
-    <th class="left" style="width:34px">No.</th>
-    <th class="left" style="min-width:120px">กลุ่ม</th>
-    <th class="left" style="min-width:200px">ความต้องการ</th>
-    ${ploHeaders}
+function buildTable(){
+  const pivot = {};
+  needsData.forEach(n=>{
+    Object.entries(n.plo_levels||{}).forEach(([code,lv])=>{
+      if(!pivot[code]) pivot[code]={};
+      pivot[code][n.group]=lv;
+    });
+  });
+  let html=`<thead><tr>
+    <th class="th-plo">Programme Learning Outcomes</th>
+    ${groups.map(g=>`<th><div class="sh-header">${esc(g.replace(/\s+/g,' ').trim())}</div></th>`).join("")}
   </tr></thead><tbody>`;
-
-  filtered.forEach((need, i) => {
-    const ploMap = need.plo_mapping || [];
-    html += `<tr>
-      <td class="td-no">${i+1}</td>
-      <td class="td-group">${esc(need.group || "")}</td>
-      <td class="td-need">${esc(need.need || "")}</td>
-      ${ploData.map(p => {
-        const linked = ploMap.includes(p.code);
-        return `<td class="td-cell">${linked
-          ? `<span class="mc mc-yes" title="${p.code}">✓</span>`
-          : `<span class="mc mc-empty">·</span>`
-        }</td>`;
-      }).join("")}
+  ploData.forEach((p,i)=>{
+    const code=p.code||('PLO'+(p.no??(i+1)));
+    html+=`<tr>
+      <td class="td-plo"><div class="td-plo-desc"><span class="plo-pill">${esc(code)}</span>${esc(p.desc||p.name_th||p.description||"")}</div></td>
+      ${groups.map(g=>`<td class="td-cell">${renderLevel(pivot[code]?.[g]||null)}</td>`).join("")}
     </tr>`;
   });
-
-  html += "</tbody>";
-  document.getElementById("map-table").innerHTML = html;
+  document.getElementById("map-table").innerHTML=html+"</tbody>";
 }
 
-/* ── PLO STATS ── */
-function buildPloStats() {
-  const max = groups.length || 1;
-  document.getElementById("plo-stats-grid").innerHTML = ploData.map(p => {
-    const matched = needsData.filter(n => (n.plo_mapping || []).includes(p.code));
-    const cnt  = matched.length;
-    const pct  = Math.round(cnt / needsData.length * 100);
+function renderLevel(lv){
+  if(lv==="F") return `<span class="mc mc-F" title="Foundational">F</span>`;
+  if(lv==="M") return `<span class="mc mc-M" title="Main">M</span>`;
+  if(lv==="P") return `<span class="mc mc-P" title="Peripheral">P</span>`;
+  if(lv==="✓") return `<span class="mc mc-F" title="มีความสัมพันธ์">✓</span>`;
+  return `<span class="mc mc-empty">·</span>`;
+}
+
+function buildPloStats(){
+  document.getElementById("plo-stats-grid").innerHTML=ploData.map((p,i)=>{
+    const code=p.code||('PLO'+(p.no??(i+1)));
+    const lvC={F:0,M:0,P:0,other:0};
+    needsData.forEach(n=>{
+      const lv=(n.plo_levels||{})[code];
+      if(!lv) return;
+      if(lv==="F")lvC.F++;else if(lv==="M")lvC.M++;else if(lv==="P")lvC.P++;else lvC.other++;
+    });
+    const total=lvC.F+lvC.M+lvC.P+lvC.other;
+    const pct=Math.round(total/(groups.length||1)*100);
+    const chips=[
+      lvC.F?`<span class="plo-stat-lv-chip lv-F">F · ${lvC.F}</span>`:'',
+      lvC.M?`<span class="plo-stat-lv-chip lv-M">M · ${lvC.M}</span>`:'',
+      lvC.P?`<span class="plo-stat-lv-chip lv-P">P · ${lvC.P}</span>`:'',
+      lvC.other?`<span class="plo-stat-lv-chip lv-F">✓ · ${lvC.other}</span>`:'',
+    ].filter(Boolean).join("");
     return `<div class="plo-stat-card fade-up">
       <div class="plo-stat-hd">
-        <span class="plo-stat-name">${p.code}</span>
-        <span class="plo-stat-cnt">${cnt} needs</span>
+        <span class="plo-stat-name">${esc(code)}</span>
+        <span class="plo-stat-cnt">${total} / ${groups.length} stakeholders</span>
       </div>
       <div class="plo-stat-bar-wrap"><div class="plo-stat-bar" style="width:${pct}%"></div></div>
-      <div class="plo-stat-desc">${esc(p.name_th || "")}</div>
+      ${chips?`<div class="plo-stat-levels">${chips}</div>`:''}
+      <div class="plo-stat-desc">${esc(p.desc||p.name_th||p.description||"")}</div>
     </div>`;
   }).join("");
 }
 
-/* ── SH GRID ── */
-function buildShGrid() {
-  document.getElementById("sh-grid").innerHTML = groups.map(g => {
-    const items = needsData.filter(n => n.group === g);
-    const plos  = [...new Set(items.flatMap(n => n.plo_mapping || []))];
+function buildShGrid(){
+  document.getElementById("sh-grid").innerHTML=groups.map(g=>{
+    const n=needsData.find(x=>x.group===g)||{};
+    const lvs=n.plo_levels||{};
+    const plos=Object.entries(lvs);
+    const pills=plos.map(([code,lv])=>{
+      const cls=lv==="F"?"lv-F":lv==="M"?"lv-M":lv==="P"?"lv-P":"lv-default";
+      const label=(lv==="F"||lv==="M"||lv==="P")?` <span style="font-size:8.5px;opacity:.75">${lv}</span>`:'';
+      return `<span class="sh-plo-pill ${cls}">${esc(code)}${label}</span>`;
+    }).join("");
     return `<div class="sh-card fade-up">
       <div class="sh-name">${esc(g)}</div>
-      <div class="sh-plo-list">${plos.map(p => `<span class="sh-plo-pill">${p}</span>`).join("")}</div>
-      <div class="sh-total">${items.length} ความต้องการ · ${plos.length} PLOs</div>
+      <div class="sh-plo-list">${pills||'<span style="font-size:11px;color:var(--muted)">ยังไม่มี mapping</span>'}</div>
+      <div class="sh-total">${plos.length} PLOs ที่เกี่ยวข้อง</div>
     </div>`;
   }).join("");
 }
 
-/* ── UTILS ── */
-function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
 
-function initFadeUp() {
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add("visible"); io.unobserve(e.target); } });
-  }, { threshold:.1 });
-  document.querySelectorAll(".fade-up").forEach(el => io.observe(el));
+function initFadeUp(){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add("visible");io.unobserve(e.target);} });
+  },{threshold:.08});
+  document.querySelectorAll(".fade-up").forEach(el=>io.observe(el));
+}
+
+// ── Export PDF ──
+function exportPDF(){
+  // รวบรวมข้อมูล Mapping table
+  let tableHTML = '';
+  const table = document.getElementById('map-table');
+  if(table) tableHTML = table.outerHTML;
+
+  // รวบรวม PLO stats
+  let statsHTML = '';
+  ploData.forEach((p,i)=>{
+    const code = p.code||('PLO'+(p.no??(i+1)));
+    const lvC = {F:0,M:0,P:0,other:0};
+    needsData.forEach(n=>{
+      const lv=(n.plo_levels||{})[code];
+      if(!lv)return;
+      if(lv==='F')lvC.F++;else if(lv==='M')lvC.M++;else if(lv==='P')lvC.P++;else lvC.other++;
+    });
+    const total=lvC.F+lvC.M+lvC.P+lvC.other;
+    const chips=[];
+    if(lvC.F) chips.push(`<span class="chip chip-f">F · ${lvC.F}</span>`);
+    if(lvC.M) chips.push(`<span class="chip chip-m">M · ${lvC.M}</span>`);
+    if(lvC.P) chips.push(`<span class="chip chip-p">P · ${lvC.P}</span>`);
+    statsHTML+=`<div class="stat-row">
+      <div class="stat-code">${esc(code)}</div>
+      <div class="stat-desc">${esc(p.desc||p.name_th||p.description||'')}</div>
+      <div class="stat-chips">${chips.join('')}<span style="font-size:9pt;color:#888;margin-left:4px;">${total}/${groups.length}</span></div>
+    </div>`;
+  });
+
+  // รวบรวม Stakeholder summary
+  let shHTML = '';
+  groups.forEach(g=>{
+    const n=needsData.find(x=>x.group===g)||{};
+    const lvs=n.plo_levels||{};
+    const plos=Object.entries(lvs);
+    const pills=plos.map(([code,lv])=>{
+      const cls=lv==='F'?'chip-f':lv==='M'?'chip-m':lv==='P'?'chip-p':'chip-d';
+      return `<span class="chip ${cls}">${esc(code)} <span style="opacity:.7;font-size:8pt">${lv}</span></span>`;
+    }).join('');
+    shHTML+=`<div class="sh-item">
+      <div class="sh-name">${esc(g)}</div>
+      <div class="sh-pills">${pills||'<span style="color:#aaa;font-size:9pt">ยังไม่มี mapping</span>'}</div>
+    </div>`;
+  });
+
+  const snapDate = document.getElementById('snap-date')?.textContent||'—';
+
+  const win = window.open('','_blank','width=1000,height=1100');
+  win.document.write(`<!DOCTYPE html>
+<html lang="th"><head>
+<meta charset="UTF-8">
+<title>Stakeholders Mapping — BBA PSU</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Sarabun',sans-serif;font-size:10pt;color:#000;background:#fff;}
+.wrap{padding:16mm 14mm 14mm;}
+.doc-header{margin-bottom:18px;padding-bottom:12px;border-bottom:3px solid #7c3aed;}
+.doc-header h1{font-size:15pt;font-weight:800;color:#1e1040;margin-bottom:3px;}
+.doc-header p{font-size:9.5pt;color:#555;}
+.section-title{font-size:12pt;font-weight:700;color:#7c3aed;
+  margin:20px 0 10px;padding-bottom:5px;border-bottom:2px solid #7c3aed;}
+
+/* Mapping Table */
+.map-table{width:100%;border-collapse:collapse;font-size:8.5pt;margin-bottom:4px;}
+.map-table thead th{background:#ede9fe;color:#5b21b6;padding:7px 5px;
+  font-weight:700;border:1px solid #c4b5fd;text-align:center;vertical-align:bottom;}
+.map-table thead th.th-plo{text-align:left;padding:7px 10px;width:42%;}
+.map-table tbody tr:nth-child(even){background:#faf8ff;}
+.map-table tbody tr:hover{background:#f3f0ff;}
+.map-table td{padding:7px 5px;border:1px solid #e8e4f0;vertical-align:middle;}
+.td-plo{padding:7px 10px !important;}
+.td-plo-desc{font-size:8.5pt;line-height:1.5;}
+.td-cell{text-align:center;}
+.plo-pill{display:inline-block;font-weight:800;color:#fff;
+  background:#7c3aed;padding:1px 7px;border-radius:99px;margin-right:6px;font-size:8pt;}
+.sh-header{writing-mode:vertical-rl;transform:rotate(180deg);
+  font-size:8pt;font-weight:700;white-space:nowrap;padding:3px 1px;}
+.mc{display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:18px;border-radius:4px;font-size:8.5pt;font-weight:800;}
+.mc-F{background:rgba(109,40,217,.12);color:#6d28d9;border:1px solid rgba(109,40,217,.28);}
+.mc-M{background:rgba(3,105,161,.10);color:#0369a1;border:1px solid rgba(3,105,161,.28);}
+.mc-P{background:rgba(180,83,9,.10);color:#b45309;border:1px solid rgba(180,83,9,.28);}
+.mc-empty{color:#ccc;font-size:12pt;}
+
+/* PLO Stats */
+.stat-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;
+  border-bottom:1px solid #f0ecfd;break-inside:avoid;page-break-inside:avoid;}
+.stat-row:last-child{border-bottom:none;}
+.stat-code{min-width:58px;font-weight:800;color:#7c3aed;font-size:9pt;
+  background:#ede9fe;padding:2px 8px;border-radius:4px;text-align:center;
+  height:fit-content;margin-top:1px;flex-shrink:0;}
+.stat-desc{flex:1;font-size:9pt;line-height:1.55;color:#1e1040;}
+.stat-chips{display:flex;gap:4px;flex-wrap:wrap;flex-shrink:0;align-items:center;}
+
+/* Stakeholder */
+.sh-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.sh-item{padding:10px 12px;border:1px solid #e8e4f0;border-radius:8px;break-inside:avoid;page-break-inside:avoid;}
+.sh-name{font-size:10pt;font-weight:700;color:#1e1040;margin-bottom:6px;}
+.sh-pills{display:flex;gap:4px;flex-wrap:wrap;}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;padding:2px 7px;border-radius:99px;font-size:8.5pt;font-weight:700;}
+.chip-f{background:rgba(109,40,217,.10);color:#6d28d9;border:1px solid rgba(109,40,217,.25);}
+.chip-m{background:rgba(3,105,161,.10);color:#0369a1;border:1px solid rgba(3,105,161,.25);}
+.chip-p{background:rgba(180,83,9,.10);color:#b45309;border:1px solid rgba(180,83,9,.25);}
+.chip-d{background:#f3eeff;color:#7c3aed;border:1px solid #c4b5fd;}
+
+.footer{text-align:center;font-size:8.5pt;color:#888;margin-top:24px;
+  padding-top:10px;border-top:1px solid #ddd;}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px;font-size:8.5pt;}
+.leg-item{display:flex;align-items:center;gap:5px;font-weight:600;}
+
+@page{size:A4 landscape;margin:14mm 12mm;}
+@media print{
+  .stat-row,.sh-item,.map-table tr{page-break-inside:avoid;}
+  .section-title{page-break-after:avoid;}
+}
+</style></head><body>
+<div class="wrap">
+  <div class="doc-header">
+    <h1>การวิเคราะห์ความต้องการของผู้มีส่วนได้ส่วนเสียต่อผลลัพธ์การเรียนรู้ (PLOs)</h1>
+    <p>Stakeholders' Needs to Programme Learning Outcomes Mapping — BBA, PSU · อัปเดต: ${snapDate}</p>
+  </div>
+
+  <div class="section-title">Mapping Matrix — ความต้องการต่อ PLO</div>
+  <div class="legend">
+    <span class="leg-item"><span class="chip chip-f">F</span> Foundational</span>
+    <span class="leg-item"><span class="chip chip-m">M</span> Main</span>
+    <span class="leg-item"><span class="chip chip-p">P</span> Peripheral</span>
+  </div>
+  ${tableHTML}
+
+  <div class="section-title" style="margin-top:24px;">สรุปความต้องการรายข้อ PLO</div>
+  ${statsHTML}
+
+  <div class="section-title" style="margin-top:24px;">สรุปตาม Stakeholder Group</div>
+  <div class="sh-grid">${shHTML}</div>
+
+  <div class="footer">คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์ (PSU)</div>
+</div>
+</body></html>`);
+  win.document.close();
+  win.focus();
+  setTimeout(()=>{ win.print(); }, 900);
 }
 
 init();

@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin — จัดการเนื้อหาหน้านักศึกษา | FMS PSU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --purple:#6B3FA0;--purple-dark:#4A2870;--purple-light:#F3EEFF;--purple-mid:#E8DEFF;
+      --accent:#9B6DD1;--bg:#F7F5FA;--white:#FFFFFF;--text:#181117;--text-sub:#64748B;
+      --border:#EDE8F5;--red:#EF4444;--red-bg:#FEE2E2;--green:#16a34a;--amber:#d97706;
+      --blue:#0284c7;--sidebar-w:240px;--topbar-h:64px;--radius:12px;
+      --shadow:0 1px 3px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md:0 4px 12px rgba(107,63,160,0.10);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Noto Sans Thai','Lexend',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:14px;}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sidebar-w);background:var(--white);height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border);z-index:100;}
+    .sidebar-brand{padding:20px 20px 16px;border-bottom:1px solid var(--border);}
+    .sidebar-brand-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+    .sidebar-brand-sub{font-size:11.5px;color:var(--purple);font-weight:500;margin-top:2px;}
+    .sidebar-section-label{padding:20px 20px 6px;font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:1.2px;}
+    .sidebar-nav{flex:1;padding:8px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--text-sub);text-decoration:none;transition:all .18s;cursor:pointer;user-select:none;}
+    .nav-item:hover{background:var(--purple-light);color:var(--purple);}
+    .nav-icon{width:18px;height:18px;flex-shrink:0;opacity:0.75;}
+    .nav-item.active .nav-icon,.nav-item:hover .nav-icon{opacity:1;}
+    .nav-item.active{background:var(--purple-light);color:var(--purple);font-weight:600;}
+    .sidebar-footer{padding:12px;border-top:1px solid var(--border);}
+    .sidebar-footer .nav-item{color:var(--red);}
+    .sidebar-footer .nav-item:hover{background:var(--red-bg);color:#DC2626;}
+
+    /* TOPBAR */
+    .topbar{position:fixed;top:0;left:var(--sidebar-w);right:0;height:var(--topbar-h);background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:90;}
+    .topbar-left{display:flex;flex-direction:column;gap:2px;}
+    .topbar-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+    .topbar-breadcrumb{font-size:11.5px;color:var(--text-sub);}
+    .topbar-right{display:flex;align-items:center;gap:12px;}
+    .course-select-wrap{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:7px 12px;}
+    .course-select-wrap select{border:none;background:none;outline:none;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;min-width:200px;}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);padding-top:var(--topbar-h);flex:1;min-width:0;}
+
+    /* PAGE TABS */
+    .page-tabs{display:flex;gap:0;background:var(--white);border-bottom:1.5px solid var(--border);padding:0 32px;position:sticky;top:var(--topbar-h);z-index:80;}
+    .ptab{padding:14px 22px;font-size:13.5px;font-weight:600;color:var(--text-sub);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;display:flex;align-items:center;gap:8px;transition:.15s;font-family:inherit;}
+    .ptab:hover{color:var(--text);}
+    .ptab.active{color:var(--purple);border-bottom-color:var(--purple);}
+    .tab-pane{display:none;}.tab-pane.active{display:block;}
+
+    /* PAGE BODY */
+    .page-body{padding:28px 32px;display:flex;flex-direction:column;gap:24px;}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .18s;white-space:nowrap;}
+    .btn-primary{background:var(--purple);color:#fff;box-shadow:0 4px 12px rgba(107,63,160,.28);}
+    .btn-primary:hover{background:var(--purple-dark);transform:translateY(-1px);}
+    .btn-outline{background:var(--white);color:var(--purple);border:1.5px solid var(--border);}
+    .btn-outline:hover{border-color:var(--accent);background:var(--purple-light);}
+    .btn-danger{background:var(--white);color:var(--red);border:1.5px solid #fecdd3;}
+    .btn-danger:hover{background:#fff1f2;}
+    .btn-sm{padding:5px 12px;font-size:12px;border-radius:7px;}
+    .btn-icon{width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;}
+    .btn-success{background:#16a34a;color:#fff;}
+    .btn-success:hover{background:#15803d;}
+
+    /* SECTION CARD */
+    .section-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+    .section-card-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .section-card-head-left{display:flex;align-items:center;gap:12px;}
+    .section-card-icon{width:40px;height:40px;border-radius:10px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+    .section-card-title{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;}
+    .section-card-sub{font-size:11.5px;color:var(--text-sub);margin-top:2px;}
+    .section-card-body{padding:22px;}
+
+    /* FORM ELEMENTS */
+    .frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+    .frow.full{grid-template-columns:1fr;}
+    .frow.three{grid-template-columns:1fr 1fr 1fr;}
+    .fg{display:flex;flex-direction:column;gap:5px;}
+    .fg label{font-size:11.5px;font-weight:700;color:var(--text-sub);letter-spacing:.3px;text-transform:uppercase;}
+    .fg input,.fg select,.fg textarea{padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .15s;background:var(--white);}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(155,109,209,.12);}
+    .fg textarea{resize:vertical;min-height:90px;line-height:1.65;}
+    .ferr{font-size:11px;color:var(--red);margin-top:2px;min-height:16px;}
+    .fhint{font-size:11px;color:var(--text-sub);margin-top:3px;line-height:1.5;}
+
+    /* ACCORDION EDITOR ITEMS */
+    .acc-items{display:flex;flex-direction:column;gap:12px;}
+    .acc-item{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .2s;}
+    .acc-item.has-changes{border-color:var(--amber);}
+    .acc-item-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;}
+    .acc-item-head:hover{background:rgba(107,63,160,.04);}
+    .acc-item-num{width:28px;height:28px;border-radius:8px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:'Lexend',sans-serif;}
+    .acc-item-info{flex:1;}
+    .acc-item-name{font-size:14px;font-weight:700;color:var(--text);}
+    .acc-item-desc{font-size:12px;color:var(--text-sub);margin-top:1px;}
+    .acc-item-actions{display:flex;align-items:center;gap:8px;}
+    .acc-item-chevron{font-size:12px;color:var(--text-sub);transition:transform .2s;}
+    .acc-item.open .acc-item-chevron{transform:rotate(180deg);}
+    .acc-item-body{display:none;padding:0 18px 18px;border-top:1px solid var(--border);}
+    .acc-item.open .acc-item-body{display:block;padding-top:18px;}
+    .changed-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:99px;background:#fffbeb;color:var(--amber);font-size:10px;font-weight:700;border:1px solid #fde68a;}
+
+    /* MINOR GROUPS */
+    .minor-groups-list{display:flex;flex-direction:column;gap:10px;}
+    .minor-group-card{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+    .minor-group-card.has-changes{border-color:var(--amber);}
+    .minor-group-head{display:flex;align-items:center;gap:12px;padding:14px 18px;}
+    .mg-drag{color:var(--border);cursor:grab;font-size:14px;flex-shrink:0;}
+    .mg-color{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .mg-info{flex:1;}
+    .mg-name{font-size:14px;font-weight:700;}
+    .mg-sub{font-size:11.5px;color:var(--text-sub);margin-top:1px;}
+    .mg-actions{display:flex;gap:8px;align-items:center;}
+    .mg-body{display:none;padding:0 18px 18px;border-top:1px solid var(--border);}
+    .minor-group-card.open .mg-body{display:block;padding-top:18px;}
+    .toggle-row{display:flex;align-items:center;gap:10px;}
+    .toggle{position:relative;display:inline-block;width:40px;height:22px;}
+    .toggle input{opacity:0;width:0;height:0;}
+    .toggle-slider{position:absolute;inset:0;background:#d1d5db;border-radius:99px;cursor:pointer;transition:.2s;}
+    .toggle-slider:before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+    .toggle input:checked + .toggle-slider{background:var(--purple);}
+    .toggle input:checked + .toggle-slider:before{transform:translateX(18px);}
+
+    /* SAVE BAR */
+    .save-bar{position:sticky;bottom:0;z-index:70;background:var(--white);border-top:1.5px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 -4px 20px rgba(107,63,160,.08);transform:translateY(100%);transition:transform .25s;pointer-events:none;opacity:0;}
+    .save-bar.visible{transform:translateY(0);pointer-events:all;opacity:1;}
+    .save-bar-left{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--amber);font-weight:600;}
+
+    /* MODAL */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+    .overlay.open{display:flex;}
+    .modal{background:var(--white);border-radius:18px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);}
+    .modal-hd{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--white);z-index:1;}
+    .modal-hd h3{font-family:'Lexend',sans-serif;font-size:17px;font-weight:700;}
+    .modal-hd button{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-sub);padding:4px 8px;border-radius:6px;transition:.15s;}
+    .modal-hd button:hover{background:var(--bg);}
+    .modal-bd{padding:22px 24px;}
+    .modal-ft{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:var(--white);}
+
+    /* CONFIRM */
+    .conf-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+    .conf-overlay.open{display:flex;}
+    .conf-box{background:var(--white);border-radius:18px;padding:32px;max-width:360px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.18);text-align:center;}
+    .conf-icon{width:56px;height:56px;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;color:var(--red);}
+    .conf-box h4{font-family:'Lexend',sans-serif;font-size:17px;font-weight:700;margin-bottom:8px;}
+    .conf-box p{font-size:13px;color:var(--text-sub);margin-bottom:24px;line-height:1.6;}
+
+    /* TOAST */
+    .toasts{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+    .toast{padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.15);animation:tin .25s ease;display:flex;align-items:center;gap:8px;pointer-events:all;}
+    .toast-ok{background:#16a34a;}.toast-err{background:var(--red);}.toast-info{background:var(--purple);}
+    @keyframes tin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+    /* PREVIEW PANEL */
+    .preview-strip{background:linear-gradient(135deg,#f8f4ff,#f1eaff);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-top:14px;}
+    .preview-strip-label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+    .preview-acc{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-size:13px;color:var(--text);}
+    .preview-acc-title{font-weight:700;margin-bottom:4px;}
+    .preview-acc-body{color:var(--text-sub);font-size:12.5px;line-height:1.65;}
+
+    /* MINOR GROUPS ADD SECTION */
+    .add-section{background:var(--purple-light);border:1.5px dashed var(--purple-mid);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .18s;}
+    .add-section:hover{background:var(--purple-mid);border-color:var(--accent);}
+    .add-section span{font-size:13px;font-weight:700;color:var(--purple);}
+
+    /* STAT ROW */
+    .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:4px;}
+    .stat-mini{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
+    .stat-mini-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+    .stat-mini-val{font-family:'Lexend',sans-serif;font-size:22px;font-weight:800;color:var(--text);line-height:1;}
+    .stat-mini-label{font-size:11px;color:var(--text-sub);margin-top:2px;}
+
+    /* COLOR DOT PICKER */
+    .color-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+    .color-dot{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:.15s;flex-shrink:0;}
+    .color-dot.selected{border-color:var(--text);transform:scale(1.2);}
+    .color-dot:hover{transform:scale(1.15);}
+
+    .section-divider{height:1px;background:var(--border);margin:18px 0;}
+
+    /* INFO BOX */
+    .info-box{background:var(--purple-light);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:var(--purple);line-height:1.6;}
+
+    @media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;}.topbar{left:0;}.stat-row{grid-template-columns:1fr 1fr;}.frow.three{grid-template-columns:1fr 1fr;}}
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-title">FMS Admin</div>
+    <div class="sidebar-brand-sub">PSU Faculty of Management</div>
+  </div>
+
+ <nav class="sidebar-nav">
+
+    <!-- ── ภาพรวม ── -->
+    <div class="sidebar-section-label">ภาพรวม</div>
+    <a class="nav-item" href="dashboard.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+      แดชบอร์ด
+    </a>
+
+    <!-- ── จัดการหลักสูตร ── -->
+    <div class="sidebar-section-label">จัดการหลักสูตร</div>
+    <a class="nav-item" href="course-list.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+      หลักสูตร
+    </a>
+    <a class="nav-item" href="study-plan.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+      แผนการศึกษา
+    </a>
+
+    <!-- ── หน้านักศึกษา ── -->
+    <div class="sidebar-section-label">หน้านักศึกษา</div>
+    <a class="nav-item active" href="admin-student-content.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
+      หน้านักศึกษา
+    </a>
+      <a class="nav-item " href="admin-subjects.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
+      รายวิชา
+    </a>
+
+    <!-- ── ระบบ ── -->
+    <div class="sidebar-section-label">ระบบ</div>
+    <a class="nav-item" href="qa-dashboard.html">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      ประกันคุณภาพการศึกษา
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <a class="nav-item" href="login.html" id="logoutBtn">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+</aside>
+
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title">จัดการเนื้อหาหน้านักศึกษา</div>
+    <div class="topbar-breadcrumb">Admin · หน้านักศึกษา · student.html</div>
+  </div>
+  <div class="topbar-right">
+    <div class="course-select-wrap">
+      <i class="fa-solid fa-graduation-cap" style="color:var(--accent)"></i>
+      <select id="courseSelect" onchange="onCourseChange()">
+        <option value="">กำลังโหลด...</option>
+      </select>
+    </div>
+    <a class="btn btn-outline" href="student.html" target="_blank" style="font-size:12px;">
+      <i class="fa-solid fa-eye"></i> ดูหน้าจริง
+    </a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PAGE TABS -->
+  <div class="page-tabs">
+    <button class="ptab active" onclick="switchTab('structure')">
+      <i class="fa-solid fa-layer-group"></i> โครงสร้างหมวดวิชา
+    </button>
+    <button class="ptab" onclick="switchTab('minor')">
+      <i class="fa-solid fa-code-branch"></i> วิชาโท
+    </button>
+  </div>
+
+  <!-- TAB 1: โครงสร้างหมวดวิชา -->
+  <div class="tab-pane active" id="pane-structure">
+    <div class="page-body">
+
+      <div class="stat-row">
+        <div class="stat-mini">
+          <div class="stat-mini-icon" style="background:#f0fdf4;color:#16a34a"><i class="fa-solid fa-globe"></i></div>
+          <div><div class="stat-mini-val">1</div><div class="stat-mini-label">วิชาศึกษาทั่วไป</div></div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-icon" style="background:#fffbeb;color:#d97706"><i class="fa-solid fa-book-open"></i></div>
+          <div><div class="stat-mini-val">1</div><div class="stat-mini-label">วิชาเลือกเสรี</div></div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-icon" style="background:var(--purple-light);color:var(--purple)"><i class="fa-solid fa-layer-group"></i></div>
+          <div><div class="stat-mini-val">1</div><div class="stat-mini-label">วิชาเฉพาะ</div></div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fa-solid fa-circle-info"></i>
+        การแก้ไขที่นี่จะอัปเดตเนื้อหาภายใน accordion ทั้ง 3 ส่วนในหน้านักศึกษา — ชื่อหัวข้อ คำอธิบาย และลิงก์ภายนอก
+      </div>
+
+      <!-- ACCORDION 1: ศึกษาทั่วไป -->
+      <div class="section-card">
+        <div class="section-card-head">
+          <div class="section-card-head-left">
+            <div class="section-card-icon" style="background:#f0fdf4;color:#16a34a"><i class="fa-solid fa-globe"></i></div>
+            <div>
+              <div class="section-card-title">หมวดวิชาศึกษาทั่วไป</div>
+              <div class="section-card-sub">General Education Accordion</div>
+            </div>
+          </div>
+          <div id="badge-general" style="display:none"><span class="changed-badge"><i class="fa-solid fa-circle-dot"></i> มีการแก้ไข</span></div>
+        </div>
+        <div class="section-card-body">
+          <div class="frow">
+            <div class="fg">
+              <label>ชื่อหัวข้อ (TH)</label>
+              <input id="gen_title_th" value="หมวดวิชาศึกษาทั่วไป" oninput="markChanged('general','gen')">
+            </div>
+            <div class="fg">
+              <label>ชื่อภาษาอังกฤษ</label>
+              <input id="gen_title_en" value="General Education" oninput="markChanged('general','gen')">
+            </div>
+          </div>
+          <div class="frow full">
+            <div class="fg">
+              <label>คำอธิบายย่อ (แสดงใต้ชื่อ)</label>
+              <input id="gen_subtitle" value="General Education — คลิกเพื่อดูรายละเอียด" oninput="markChanged('general','gen')">
+            </div>
+          </div>
+          <div class="frow full">
+            <div class="fg">
+              <label>เนื้อหาภายใน Accordion</label>
+              <textarea id="gen_content" rows="3" oninput="markChanged('general','gen')">เลือกจากรายวิชาเลือกของหมวดวิชาศึกษาทั่วไปที่เปิดสอนในมหาวิทยาลัยสงขลานครินทร์ ทั้งนี้ต้องตรงตามปริญญาของหมวดวิชาศึกษาทั่วไปซึ่งผ่านความเห็นชอบจากคณะกรรมการพัฒนาหมวดวิชาศึกษาทั่วไปของมหาวิทยาลัยสงขลานครินทร์</textarea>
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fg">
+              <label>ชื่อปุ่มลิงก์</label>
+              <input id="gen_btn_text" value="ดูรายวิชาเลือก มอ. หาดใหญ่" oninput="markChanged('general','gen')">
+            </div>
+            <div class="fg">
+              <label>URL ลิงก์ปุ่ม</label>
+              <input id="gen_btn_url" value="https://gened.psu.ac.th/category/hatyai/" oninput="markChanged('general','gen')">
+              <div class="fhint">เว็บไซต์ภายนอก (เปิดแท็บใหม่)</div>
+            </div>
+          </div>
+
+          <div class="preview-strip">
+            <div class="preview-strip-label"><i class="fa-solid fa-eye"></i> ตัวอย่างการแสดงผล</div>
+            <div class="preview-acc">
+              <div class="preview-acc-title" id="prev_gen_title">หมวดวิชาศึกษาทั่วไป</div>
+              <div class="preview-acc-body" id="prev_gen_content">เลือกจากรายวิชาเลือกของหมวดวิชาศึกษาทั่วไป...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCORDION 2: เลือกเสรี -->
+      <div class="section-card">
+        <div class="section-card-head">
+          <div class="section-card-head-left">
+            <div class="section-card-icon" style="background:#fffbeb;color:#d97706"><i class="fa-solid fa-book-open"></i></div>
+            <div>
+              <div class="section-card-title">หมวดวิชาเลือกเสรี</div>
+              <div class="section-card-sub">Free Elective Accordion</div>
+            </div>
+          </div>
+          <div id="badge-free" style="display:none"><span class="changed-badge"><i class="fa-solid fa-circle-dot"></i> มีการแก้ไข</span></div>
+        </div>
+        <div class="section-card-body">
+          <div class="frow">
+            <div class="fg">
+              <label>ชื่อหัวข้อ (TH)</label>
+              <input id="free_title_th" value="หมวดวิชาเลือกเสรี" oninput="markChanged('free','free')">
+            </div>
+            <div class="fg">
+              <label>ชื่อภาษาอังกฤษ</label>
+              <input id="free_title_en" value="Free Elective" oninput="markChanged('free','free')">
+            </div>
+          </div>
+          <div class="frow full">
+            <div class="fg">
+              <label>คำอธิบายย่อ (แสดงใต้ชื่อ)</label>
+              <input id="free_subtitle" value="Free Elective — คลิกเพื่อดูรายละเอียด" oninput="markChanged('free','free')">
+            </div>
+          </div>
+          <div class="frow full">
+            <div class="fg">
+              <label>เนื้อหาภายใน Accordion</label>
+              <textarea id="free_content" rows="3" oninput="markChanged('free','free')">นักศึกษาสามารถเลือกเรียนรายวิชาใด ๆ ที่สนใจที่เปิดสอนในมหาวิทยาลัยสงขลานครินทร์ หรือ มหาวิทยาลัยอื่นทั้งในประเทศและต่างประเทศ โดยความเห็นชอบของหลักสูตร/วิชาเอกวิชา</textarea>
+            </div>
+          </div>
+
+          <div class="preview-strip">
+            <div class="preview-strip-label"><i class="fa-solid fa-eye"></i> ตัวอย่างการแสดงผล</div>
+            <div class="preview-acc">
+              <div class="preview-acc-title" id="prev_free_title">หมวดวิชาเลือกเสรี</div>
+              <div class="preview-acc-body" id="prev_free_content">นักศึกษาสามารถเลือกเรียนรายวิชาใด ๆ...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCORDION 3: วิชาเฉพาะ -->
+      <div class="section-card">
+        <div class="section-card-head">
+          <div class="section-card-head-left">
+            <div class="section-card-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <div>
+              <div class="section-card-title">หมวดวิชาเฉพาะ</div>
+              <div class="section-card-sub">Specific Courses Accordion — มีหมวดย่อย 5 ส่วน</div>
+            </div>
+          </div>
+          <div id="badge-specific" style="display:none"><span class="changed-badge"><i class="fa-solid fa-circle-dot"></i> มีการแก้ไข</span></div>
+        </div>
+        <div class="section-card-body">
+          <div class="frow">
+            <div class="fg">
+              <label>ชื่อหัวข้อ (TH)</label>
+              <input id="spec_title_th" value="หมวดวิชาเฉพาะ" oninput="markChanged('specific','spec')">
+            </div>
+            <div class="fg">
+              <label>ชื่อภาษาอังกฤษ</label>
+              <input id="spec_title_en" value="Specific Courses" oninput="markChanged('specific','spec')">
+            </div>
+          </div>
+          <div class="frow full">
+            <div class="fg">
+              <label>คำอธิบายย่อ (แสดงใต้ชื่อ)</label>
+              <input id="spec_subtitle" value="Specific Courses — ประกอบด้วยหมวดย่อย 4 ประเภท" oninput="markChanged('specific','spec')">
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+          <div style="font-size:12px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;">หมวดย่อยทั้ง 5</div>
+
+          <div class="acc-items" id="specItems">
+            <!-- วิชาแกน -->
+            <div class="acc-item" id="si-0">
+              <div class="acc-item-head" onclick="toggleSpecItem(0)">
+                <div class="acc-item-num">1</div>
+                <div class="acc-item-info">
+                  <div class="acc-item-name" id="si-name-0">วิชาแกน</div>
+                  <div class="acc-item-desc" id="si-desc-0">รายวิชาพื้นฐานสำคัญ...</div>
+                </div>
+                <div class="acc-item-actions">
+                  <span class="changed-badge" id="si-badge-0" style="display:none"><i class="fa-solid fa-circle-dot"></i> แก้ไข</span>
+                  <i class="fa-solid fa-chevron-down acc-item-chevron"></i>
+                </div>
+              </div>
+              <div class="acc-item-body">
+                <div class="frow">
+                  <div class="fg"><label>ชื่อ</label><input value="วิชาแกน" oninput="updateSpecItem(0,this,'name')"></div>
+                 <div class="fg">
+  <label>ไอคอน</label>
+  <input value="fa-diagram-project" readonly
+    style="background:var(--bg);color:var(--text-sub);cursor:not-allowed;opacity:.7;">
+</div>
+                </div>
+                <div class="frow full">
+                  <div class="fg"><label>คำอธิบาย</label>
+                    <textarea rows="2" oninput="updateSpecItem(0,this,'desc')">รายวิชาพื้นฐานสำคัญที่นักศึกษาทุกวิชาเอกในระดับเดียวกันต้องเรียน เพื่อสร้างความรู้และทักษะร่วมกันก่อนเจาะลึกในวิชาเอกเฉพาะทางของวิชาเอก</textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- วิชาชีพ -->
+            <div class="acc-item" id="si-1">
+              <div class="acc-item-head" onclick="toggleSpecItem(1)">
+                <div class="acc-item-num">2</div>
+                <div class="acc-item-info">
+                  <div class="acc-item-name" id="si-name-1">วิชาชีพ</div>
+                  <div class="acc-item-desc" id="si-desc-1">ประกอบด้วย 3 วิชาดังนี้...</div>
+                </div>
+                <div class="acc-item-actions">
+                  <span class="changed-badge" id="si-badge-1" style="display:none"><i class="fa-solid fa-circle-dot"></i> แก้ไข</span>
+                  <i class="fa-solid fa-chevron-down acc-item-chevron"></i>
+                </div>
+              </div>
+              <div class="acc-item-body">
+                <div class="frow">
+                  <div class="fg"><label>ชื่อ</label><input value="วิชาชีพ" oninput="updateSpecItem(1,this,'name')"></div>
+                  <div class="fg">
+  <label>ไอคอน</label>
+  <input value="fa-briefcase" readonly
+    style="background:var(--bg);color:var(--text-sub);cursor:not-allowed;opacity:.7;">
+</div>
+                </div>
+                <div class="frow full">
+                  <div class="fg"><label>คำอธิบาย</label>
+                    <textarea rows="2" oninput="updateSpecItem(1,this,'desc')">ประกอบด้วย 3 วิชาดังนี้</textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- วิชาบังคับ -->
+            <div class="acc-item" id="si-2">
+              <div class="acc-item-head" onclick="toggleSpecItem(2)">
+                <div class="acc-item-num">3</div>
+                <div class="acc-item-info">
+                  <div class="acc-item-name" id="si-name-2">วิชาบังคับ</div>
+                  <div class="acc-item-desc" id="si-desc-2">เป็นวิชาที่นักศึกษาทุกคนต้องลงทะเบียน...</div>
+                </div>
+                <div class="acc-item-actions">
+                  <span class="changed-badge" id="si-badge-2" style="display:none"><i class="fa-solid fa-circle-dot"></i> แก้ไข</span>
+                  <i class="fa-solid fa-chevron-down acc-item-chevron"></i>
+                </div>
+              </div>
+              <div class="acc-item-body">
+                <div class="frow">
+                  <div class="fg"><label>ชื่อ</label><input value="วิชาบังคับ" oninput="updateSpecItem(2,this,'name')"></div>
+                  <div class="fg">
+  <label>ไอคอน</label>
+  <input value="fa-lock" readonly
+    style="background:var(--bg);color:var(--text-sub);cursor:not-allowed;opacity:.7;">
+</div>
+                </div>
+                <div class="frow full">
+                  <div class="fg"><label>คำอธิบาย</label>
+                    <textarea rows="2" oninput="updateSpecItem(2,this,'desc')">เป็นวิชาที่นักศึกษาทุกคนในหลักสูตรต้องลงทะเบียนเรียนและสอบให้ผ่านตามเกณฑ์ จึงจะสามารถสำเร็จการศึกษาได้</textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- วิชาเลือก -->
+            <div class="acc-item" id="si-3">
+              <div class="acc-item-head" onclick="toggleSpecItem(3)">
+                <div class="acc-item-num">4</div>
+                <div class="acc-item-info">
+                  <div class="acc-item-name" id="si-name-3">วิชาเลือก</div>
+                  <div class="acc-item-desc" id="si-desc-3">รายวิชาที่หลักสูตรเปิดโอกาสให้ผู้เรียนเลือก...</div>
+                </div>
+                <div class="acc-item-actions">
+                  <span class="changed-badge" id="si-badge-3" style="display:none"><i class="fa-solid fa-circle-dot"></i> แก้ไข</span>
+                  <i class="fa-solid fa-chevron-down acc-item-chevron"></i>
+                </div>
+              </div>
+              <div class="acc-item-body">
+                <div class="frow">
+                  <div class="fg"><label>ชื่อ</label><input value="วิชาเลือก" oninput="updateSpecItem(3,this,'name')"></div>
+                  <div class="fg">
+  <label>ไอคอน</label>
+  <input value="fa-sliders" readonly
+    style="background:var(--bg);color:var(--text-sub);cursor:not-allowed;opacity:.7;">
+</div>
+                </div>
+                <div class="frow full">
+                  <div class="fg"><label>คำอธิบาย</label>
+                    <textarea rows="2" oninput="updateSpecItem(3,this,'desc')">รายวิชาที่หลักสูตรเปิดโอกาสให้ผู้เรียนได้เลือกเรียนตามความสนใจ ความถนัด หรือเพื่อขยายความรู้เพิ่มเติมจากวิชาบังคับ</textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- วิชาโท -->
+            <div class="acc-item" id="si-4">
+              <div class="acc-item-head" onclick="toggleSpecItem(4)">
+                <div class="acc-item-num">5</div>
+                <div class="acc-item-info">
+                  <div class="acc-item-name" id="si-name-4">วิชาโท</div>
+                  <div class="acc-item-desc" id="si-desc-4">ให้เลือกจากรายวิชาในกลุ่มวิชา...</div>
+                </div>
+                <div class="acc-item-actions">
+                  <span class="changed-badge" id="si-badge-4" style="display:none"><i class="fa-solid fa-circle-dot"></i> แก้ไข</span>
+                  <i class="fa-solid fa-chevron-down acc-item-chevron"></i>
+                </div>
+              </div>
+              <div class="acc-item-body">
+                <div class="frow">
+                  <div class="fg"><label>ชื่อ</label><input value="วิชาโท" oninput="updateSpecItem(4,this,'name')"></div>
+                  <div class="fg">
+  <label>ไอคอน</label>
+  <input value="fa-code-branch" readonly
+    style="background:var(--bg);color:var(--text-sub);cursor:not-allowed;opacity:.7;">
+</div>
+                </div>
+                <div class="frow full">
+                  <div class="fg"><label>คำอธิบาย</label>
+                    <textarea rows="2" oninput="updateSpecItem(4,this,'desc')">ให้เลือกจากรายวิชาในกลุ่มวิชาใดวิชาหนึ่ง จำนวน 15 หน่วยกิต ที่เปิดสอนโดยวิชาเอกวิชาบริหารธุรกิจหรือวิชาเอกวิชาการบัญชี</textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-body -->
+  </div>
+
+  <!-- TAB 2: วิชาโท -->
+  <div class="tab-pane" id="pane-minor">
+    <div class="page-body">
+
+      <div class="info-box">
+        <i class="fa-solid fa-circle-info"></i>
+        จัดการกลุ่มวิชาโท (Minor Groups) ที่แสดงในหน้านักศึกษา — ชื่อกลุ่ม ข้อความอธิบาย ข้อความท้าย และตั้งค่าการเลือกแบบคละกลุ่ม
+      </div>
+
+      <!-- MINOR HEADER TEXT -->
+      <div class="section-card">
+        <div class="section-card-head">
+          <div class="section-card-head-left">
+            <div class="section-card-icon"><i class="fa-solid fa-align-left"></i></div>
+            <div>
+              <div class="section-card-title">ข้อความส่วนหัว วิชาโท</div>
+              <div class="section-card-sub">แสดงด้านบนสุดของส่วนวิชาโท</div>
+            </div>
+          </div>
+          <div id="badge-minor-header" style="display:none"><span class="changed-badge"><i class="fa-solid fa-circle-dot"></i> มีการแก้ไข</span></div>
+        </div>
+        <div class="section-card-body">
+          <div class="frow full">
+            <div class="fg">
+              <label>ข้อความหัว</label>
+              <input id="minor_header_text" value="วิชาโท เลือกได้จากกลุ่มวิชาใดกลุ่มหนึ่ง รวม 15 หน่วยกิต" oninput="markChanged('minor-header','')">
+              <div class="fhint">ข้อความที่แสดงในกล่องสีเทาบนสุด (ก่อนรายชื่อกลุ่ม)</div>
+            </div>
+          </div>
+          <div class="frow full">
+            <div class="fg">
+              <label>ข้อความเน้น (Bold)</label>
+              <input id="minor_header_bold" value="วิชาบังคับและวิชาเลือกของแต่ละวิชาเอกสามารถนำมานับเป็นวิชาโทได้ทั้งหมด" oninput="markChanged('minor-header','')">
+              <div class="fhint">ข้อความที่แสดงเป็นตัวหนา (ยกเว้นวิชาฝึกงาน/สหกิจ)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MINOR GROUPS LIST -->
+      <div class="section-card">
+        <div class="section-card-head">
+          <div class="section-card-head-left">
+            <div class="section-card-icon"><i class="fa-solid fa-code-branch"></i></div>
+            <div>
+              <div class="section-card-title">กลุ่มวิชาโท</div>
+              <div class="section-card-sub" id="minorGroupCount">กำลังโหลด...</div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openAddMinorGroup()">
+            <i class="fa-solid fa-plus"></i> เพิ่มกลุ่ม
+          </button>
+        </div>
+        <div class="section-card-body">
+          <div class="minor-groups-list" id="minorGroupsList">
+            <div style="text-align:center;padding:32px;color:var(--text-sub)">
+              <i class="fa-solid fa-spinner fa-spin fa-lg"></i>
+              <div style="margin-top:10px;font-size:13px;">กำลังโหลดกลุ่มวิชาโท...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-body -->
+  </div>
+
+  <!-- SAVE BAR -->
+  <div class="save-bar" id="saveBar">
+    <div class="save-bar-left">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span id="saveBarMsg">มีการแก้ไขที่ยังไม่ได้บันทึก</span>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-outline btn-sm" onclick="discardChanges()">
+        <i class="fa-solid fa-xmark"></i> ยกเลิก
+      </button>
+      <button class="btn btn-success btn-sm" onclick="saveAll()" id="saveAllBtn">
+        <i class="fa-solid fa-floppy-disk"></i> บันทึกทั้งหมด
+      </button>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- MODAL: เพิ่ม/แก้ไขกลุ่มวิชาโท -->
+<div class="overlay" id="minorGroupModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="mgModalTitle">เพิ่มกลุ่มวิชาโท</h3>
+      <button onclick="closeMinorGroupModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-bd">
+      <input type="hidden" id="mgEditId">
+      <div class="frow">
+        <div class="fg">
+          <label>ชื่อกลุ่ม (TH) *</label>
+          <input id="mgNameTh" placeholder="เช่น วิชาเอกการเงินและการลงทุน">
+          <div class="ferr" id="mgNameThErr"></div>
+        </div>
+        <div class="fg">
+          <label>ชื่อกลุ่ม (EN)</label>
+          <input id="mgNameEn" placeholder="e.g. Finance and Investment">
+        </div>
+      </div>
+      <div class="frow full">
+        <div class="fg">
+          <label>ข้อความ info box (แสดงด้านบนตาราง)</label>
+          <textarea id="mgInfoNote" placeholder="เช่น วิชาบังคับและวิชาเลือกทั้งหมดสามารถนำมานับเป็นวิชาโทได้ เลือกรวม 15 หน่วยกิต"></textarea>
+          <div class="fhint">แสดงในกล่องสีม่วงด้านบนตารางรายวิชา</div>
+        </div>
+      </div>
+      <div class="frow full">
+        <div class="fg">
+          <label>หมายเหตุท้ายตาราง</label>
+          <textarea id="mgFreeNote" placeholder="เช่น *นักศึกษาต้องผ่านวิชาพื้นฐานก่อนลงทะเบียน" style="min-height:60px;"></textarea>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label>ลำดับการแสดง</label>
+          <input type="number" id="mgSort" value="0" min="0">
+        </div>
+        <div class="fg">
+          <label>สีประจำกลุ่ม</label>
+          <div class="color-row" id="colorPicker">
+            <div class="color-dot selected" style="background:#7c3aed" data-color="#7c3aed" onclick="selectColor(this)"></div>
+            <div class="color-dot" style="background:#e11d48" data-color="#e11d48" onclick="selectColor(this)"></div>
+            <div class="color-dot" style="background:#16a34a" data-color="#16a34a" onclick="selectColor(this)"></div>
+            <div class="color-dot" style="background:#d97706" data-color="#d97706" onclick="selectColor(this)"></div>
+            <div class="color-dot" style="background:#0284c7" data-color="#0284c7" onclick="selectColor(this)"></div>
+            <div class="color-dot" style="background:#c026d3" data-color="#c026d3" onclick="selectColor(this)"></div>
+            <div class="color-dot" style="background:#64748b" data-color="#64748b" onclick="selectColor(this)"></div>
+          </div>
+        </div>
+      </div>
+      <div class="frow full" style="margin-bottom:4px;">
+        <div class="fg">
+          <label>เงื่อนไขการเลือก</label>
+          <div class="toggle-row" style="margin-top:6px;">
+            <label class="toggle"><input type="checkbox" id="mgAllowMix"><span class="toggle-slider"></span></label>
+            <span style="font-size:13px;">อนุญาตให้เลือก<strong>แบบคละกลุ่มวิชาเอก</strong>ได้</span>
+          </div>
+          <div class="fhint">เมื่อเปิด จะแสดง badge "คละกลุ่มได้" และกล่องแจ้งเตือนสีน้ำเงิน</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-outline" onclick="closeMinorGroupModal()">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveMinorGroup()" id="mgSaveBtn">
+        <i class="fa-solid fa-floppy-disk"></i> บันทึก
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM ลบ -->
+<div class="conf-overlay" id="confOv">
+  <div class="conf-box">
+    <div class="conf-icon"><i class="fa-solid fa-trash"></i></div>
+    <h4>ยืนยันการลบ</h4>
+    <p id="confMsg">ลบกลุ่มวิชาโทนี้?</p>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-outline" onclick="closeConf()">ยกเลิก</button>
+      <button class="btn btn-danger" id="confYes">ลบออก</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+const API = '/api';
+let courseId = new URLSearchParams(location.search).get('course_id') || '';
+let minorGroups = [];
+let selectedColor = '#7c3aed';
+let hasChanges = false;
+let deleteId = null;
+
+// ── INIT ──
+async function init() {
+  await loadCourses();
+  await loadPageContent();
+  await loadMinorGroups();
+  syncPreview();
+}
+
+async function loadCourses() {
+  try {
+    const r = await fetch(`${API}/courses`);
+    const j = await r.json();
+    const courses = j.data || j;
+    const sel = document.getElementById('courseSelect');
+    sel.innerHTML = courses.map(c =>
+      `<option value="${c.id}" ${String(c.id)===String(courseId)?'selected':''}>${c.name_th||'หลักสูตร '+c.id}</option>`
+    ).join('');
+    if (!courseId && courses.length) courseId = String(courses[0].id);
+  } catch {}
+}
+
+async function loadPageContent() {
+  if (!courseId) return;
+  try {
+    const r = await fetch(`${API}/student-page-content?course_id=${courseId}`);
+    const j = await r.json();
+    if (!j.success || !j.data) return;
+
+    const { structure, minor_header } = j.data;
+
+    if (structure?.general) {
+      const g = structure.general;
+      if (g.title_th)  document.getElementById('gen_title_th').value  = g.title_th;
+      if (g.title_en)  document.getElementById('gen_title_en').value  = g.title_en;
+      if (g.subtitle)  document.getElementById('gen_subtitle').value  = g.subtitle;
+      if (g.content)   document.getElementById('gen_content').value   = g.content;
+      if (g.btn_text)  document.getElementById('gen_btn_text').value  = g.btn_text;
+      if (g.btn_url)   document.getElementById('gen_btn_url').value   = g.btn_url;
+    }
+
+    if (structure?.free) {
+      const f = structure.free;
+      if (f.title_th)  document.getElementById('free_title_th').value = f.title_th;
+      if (f.title_en)  document.getElementById('free_title_en').value = f.title_en;
+      if (f.subtitle)  document.getElementById('free_subtitle').value = f.subtitle;
+      if (f.content)   document.getElementById('free_content').value  = f.content;
+    }
+
+    if (structure?.specific) {
+      const s = structure.specific;
+      if (s.title_th)  document.getElementById('spec_title_th').value = s.title_th;
+      if (s.title_en)  document.getElementById('spec_title_en').value = s.title_en;
+      if (s.subtitle)  document.getElementById('spec_subtitle').value = s.subtitle;
+    }
+
+    if (minor_header) {
+      if (minor_header.text)      document.getElementById('minor_header_text').value = minor_header.text;
+      if (minor_header.bold_text) document.getElementById('minor_header_bold').value = minor_header.bold_text;
+    }
+
+  } catch(e) {
+    console.warn('loadPageContent error:', e);
+  }
+}
+
+function onCourseChange() {
+  courseId = document.getElementById('courseSelect').value;
+  const url = new URL(location.href);
+  url.searchParams.set('course_id', courseId);
+  history.replaceState({}, '', url);
+  loadPageContent();
+  loadMinorGroups();
+}
+
+// ── TABS ──
+function switchTab(tab) {
+  document.querySelectorAll('.ptab').forEach((t,i)=>{t.classList.toggle('active', (tab==='structure'&&i===0)||(tab==='minor'&&i===1));});
+  document.getElementById('pane-structure').classList.toggle('active', tab==='structure');
+  document.getElementById('pane-minor').classList.toggle('active', tab==='minor');
+}
+
+// ── LIVE PREVIEW ──
+function syncPreview() {
+  const map = [
+    ['gen_title_th','prev_gen_title'],
+    ['gen_content','prev_gen_content'],
+    ['free_title_th','prev_free_title'],
+    ['free_content','prev_free_content'],
+  ];
+  map.forEach(([inp,out]) => {
+    const el = document.getElementById(inp);
+    const pv = document.getElementById(out);
+    if (el && pv) {
+      el.addEventListener('input', () => { pv.textContent = el.value; });
+      pv.textContent = el.value;
+    }
+  });
+}
+
+// ── CHANGE TRACKING ──
+function markChanged(section, prefix) {
+  hasChanges = true;
+  const badge = document.getElementById('badge-'+section);
+  if (badge) badge.style.display = '';
+  showSaveBar();
+}
+
+function showSaveBar() {
+  document.getElementById('saveBar').classList.add('visible');
+}
+function hideSaveBar() {
+  document.getElementById('saveBar').classList.remove('visible');
+}
+
+// ── SPEC ITEMS ──
+function toggleSpecItem(idx) {
+  const el = document.getElementById('si-'+idx);
+  el.classList.toggle('open');
+}
+function updateSpecItem(idx, input, field) {
+  if (field === 'name') document.getElementById('si-name-'+idx).textContent = input.value;
+  if (field === 'desc') document.getElementById('si-desc-'+idx).textContent = input.value.slice(0,40)+'...';
+  document.getElementById('si-badge-'+idx).style.display = '';
+  markChanged('specific','spec');
+}
+
+// ── SAVE ALL ──
+async function saveAll() {
+  const btn = document.getElementById('saveAllBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+
+  const payload = {
+    course_id: courseId,
+    structure: {
+      general: {
+        title_th: document.getElementById('gen_title_th').value,
+        title_en: document.getElementById('gen_title_en').value,
+        subtitle: document.getElementById('gen_subtitle').value,
+        content:  document.getElementById('gen_content').value,
+        btn_text: document.getElementById('gen_btn_text').value,
+        btn_url:  document.getElementById('gen_btn_url').value,
+      },
+      free: {
+        title_th: document.getElementById('free_title_th').value,
+        title_en: document.getElementById('free_title_en').value,
+        subtitle: document.getElementById('free_subtitle').value,
+        content:  document.getElementById('free_content').value,
+      },
+      specific: {
+        title_th: document.getElementById('spec_title_th').value,
+        title_en: document.getElementById('spec_title_en').value,
+        subtitle: document.getElementById('spec_subtitle').value,
+      }
+    },
+    minor_header: {
+      text:      document.getElementById('minor_header_text').value,
+      bold_text: document.getElementById('minor_header_bold').value,
+    }
+  };
+
+  try {
+    const r = await fetch(`${API}/student-page-content`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const j = await r.json();
+    if (!j.success) throw new Error(j.message);
+    toast('บันทึกเรียบร้อย ✓', 'ok');
+    hasChanges = false;
+    hideSaveBar();
+    ['general','free','specific','minor-header'].forEach(s => {
+      const b = document.getElementById('badge-'+s);
+      if (b) b.style.display = 'none';
+    });
+    for(let i=0;i<5;i++) {
+      const b = document.getElementById('si-badge-'+i);
+      if(b) b.style.display = 'none';
+    }
+  } catch(e) {
+    toast(e.message||'บันทึกไม่สำเร็จ', 'err');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกทั้งหมด';
+  }
+}
+
+function discardChanges() {
+  location.reload();
+}
+
+// ── MINOR GROUPS ──
+async function loadMinorGroups() {
+  const container = document.getElementById('minorGroupsList');
+  container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-sub)"><i class="fa-solid fa-spinner fa-spin fa-lg"></i><div style="margin-top:10px;font-size:13px;">กำลังโหลด...</div></div>`;
+  try {
+    const r = await fetch(`${API}/minor-groups?course_id=${courseId||''}`);
+    const j = await r.json();
+    minorGroups = j.data || j;
+    renderMinorGroups();
+    document.getElementById('minorGroupCount').textContent = `${minorGroups.length} กลุ่ม`;
+  } catch {
+    container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-sub)">โหลดไม่สำเร็จ</div>`;
+  }
+}
+
+const GROUP_COLORS = ['#7c3aed','#e11d48','#16a34a','#d97706','#0284c7','#c026d3'];
+
+function renderMinorGroups() {
+  const container = document.getElementById('minorGroupsList');
+  if (!minorGroups.length) {
+    container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-sub)">
+      <i class="fa-solid fa-folder-open fa-2x" style="opacity:.3;margin-bottom:12px;display:block;"></i>
+      ยังไม่มีกลุ่มวิชาโท
+    </div>`;
+    return;
+  }
+  container.innerHTML = minorGroups.map((g, i) => {
+    const color = g.color || GROUP_COLORS[i % GROUP_COLORS.length];
+    const mixBadge = g.allow_mix
+      ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:99px;background:#eff6ff;color:#1d4ed8;font-size:10px;font-weight:700;border:1px solid #bfdbfe;"><i class="fa-solid fa-shuffle" style="font-size:9px"></i> คละกลุ่มได้</span>`
+      : `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:99px;background:#f1f5f9;color:#64748b;font-size:10px;font-weight:700;"><i class="fa-solid fa-lock" style="font-size:9px"></i> เลือกกลุ่มเดียว</span>`;
+    return `<div class="minor-group-card" id="mg-${g.id}">
+      <div class="minor-group-head">
+        <div class="mg-drag"><i class="fa-solid fa-grip-vertical"></i></div>
+        <div class="mg-color" style="background:${color}"></div>
+        <div class="mg-info">
+          <div class="mg-name">${g.name_th||'-'}</div>
+          <div class="mg-sub" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            ${g.name_en?`<span>${g.name_en}</span>`:''}
+            ${mixBadge}
+          </div>
+        </div>
+        <div class="mg-actions">
+          <button class="btn btn-outline btn-sm" onclick="openEditMinorGroup(${g.id})">
+            <i class="fa-solid fa-pen" style="font-size:11px"></i> แก้ไข
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="askDeleteGroup(${g.id},'${(g.name_th||'').replace(/'/g,'')}')">
+            <i class="fa-solid fa-trash" style="font-size:11px"></i>
+          </button>
+        </div>
+      </div>
+      ${g.note ? `<div style="padding:12px 18px 14px;font-size:12.5px;color:var(--text-sub);border-top:1px solid var(--border);">
+        <span style="font-weight:700;color:var(--purple)">Info:</span> ${g.note}
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── MINOR GROUP MODAL ──
+function openAddMinorGroup() {
+  document.getElementById('mgModalTitle').textContent = 'เพิ่มกลุ่มวิชาโท';
+  document.getElementById('mgEditId').value = '';
+  document.getElementById('mgNameTh').value = '';
+  document.getElementById('mgNameEn').value = '';
+  document.getElementById('mgInfoNote').value = '';
+  document.getElementById('mgFreeNote').value = '';
+  document.getElementById('mgSort').value = minorGroups.length;
+  document.getElementById('mgAllowMix').checked = false;
+  selectColorByValue('#7c3aed');
+  clearMgErr();
+  document.getElementById('minorGroupModal').classList.add('open');
+  document.getElementById('mgNameTh').focus();
+}
+
+function openEditMinorGroup(id) {
+  const g = minorGroups.find(x => x.id === id);
+  if (!g) return;
+  document.getElementById('mgModalTitle').textContent = 'แก้ไขกลุ่มวิชาโท';
+  document.getElementById('mgEditId').value = g.id;
+  document.getElementById('mgNameTh').value = g.name_th || '';
+  document.getElementById('mgNameEn').value = g.name_en || '';
+  document.getElementById('mgInfoNote').value = g.note || g.info_note || '';
+  document.getElementById('mgFreeNote').value = g.free_note || '';
+  document.getElementById('mgSort').value = g.sort_order || 0;
+  document.getElementById('mgAllowMix').checked = !!g.allow_mix;
+  selectColorByValue(g.color || '#7c3aed');
+  clearMgErr();
+  document.getElementById('minorGroupModal').classList.add('open');
+}
+
+function closeMinorGroupModal() {
+  document.getElementById('minorGroupModal').classList.remove('open');
+}
+
+function clearMgErr() {
+  document.getElementById('mgNameThErr').textContent = '';
+}
+
+function selectColor(el) {
+  document.querySelectorAll('#colorPicker .color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedColor = el.dataset.color;
+}
+
+function selectColorByValue(val) {
+  document.querySelectorAll('#colorPicker .color-dot').forEach(d => {
+    d.classList.toggle('selected', d.dataset.color === val);
+  });
+  selectedColor = val;
+}
+
+async function saveMinorGroup() {
+  clearMgErr();
+  const id = document.getElementById('mgEditId').value;
+  const nameTh = document.getElementById('mgNameTh').value.trim();
+  if (!nameTh) { document.getElementById('mgNameThErr').textContent = 'กรุณากรอกชื่อกลุ่ม'; return; }
+
+  const body = {
+    course_id:  Number(courseId),
+    name_th:    nameTh,
+    name_en:    document.getElementById('mgNameEn').value.trim(),
+    note:       document.getElementById('mgInfoNote').value.trim(),
+    free_note:  document.getElementById('mgFreeNote').value.trim(),
+    sort_order: Number(document.getElementById('mgSort').value) || 0,
+    allow_mix:  document.getElementById('mgAllowMix').checked,
+    color:      selectedColor,
+  };
+
+  const btn = document.getElementById('mgSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+
+  try {
+    const r = await fetch(id ? `${API}/minor-groups/${id}` : `${API}/minor-groups`, {
+      method: id ? 'PUT' : 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    const j = await r.json();
+    if (!j.success) throw new Error(j.message);
+    toast(id ? 'แก้ไขกลุ่มวิชาโทเรียบร้อย ✓' : 'เพิ่มกลุ่มวิชาโทเรียบร้อย ✓', 'ok');
+    closeMinorGroupModal();
+    await loadMinorGroups();
+  } catch(e) {
+    toast(e.message || 'บันทึกไม่สำเร็จ', 'err');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึก';
+  }
+}
+
+// ── DELETE ──
+function askDeleteGroup(id, name) {
+  deleteId = id;
+  document.getElementById('confMsg').textContent = `ลบกลุ่ม "${name}" ออกจากระบบ? รายวิชาในกลุ่มนี้จะถูกลบด้วย`;
+  document.getElementById('confOv').classList.add('open');
+  document.getElementById('confYes').onclick = doDelete;
+}
+function closeConf() { document.getElementById('confOv').classList.remove('open'); deleteId = null; }
+async function doDelete() {
+  if (!deleteId) return;
+  try {
+    const r = await fetch(`${API}/minor-groups/${deleteId}`, { method: 'DELETE' });
+    const j = await r.json();
+    if (!j.success) throw new Error(j.message);
+    toast('ลบเรียบร้อย', 'ok');
+    closeConf();
+    await loadMinorGroups();
+  } catch(e) {
+    toast(e.message || 'ลบไม่สำเร็จ', 'err');
+  }
+}
+
+// ── TOAST ──
+function toast(msg, type='ok') {
+  const wrap = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.innerHTML = `<i class="fa-solid ${type==='ok'?'fa-circle-check':'fa-circle-exclamation'}"></i>${msg}`;
+  wrap.appendChild(t);
+  setTimeout(() => { t.style.cssText = 'opacity:0;transform:translateY(8px);transition:.3s'; setTimeout(()=>t.remove(),300); }, 3000);
+}
+
+['minorGroupModal'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    if (e.target === document.getElementById(id)) document.getElementById(id).classList.remove('open');
+  });
+});
+document.getElementById('confOv').addEventListener('click', e => {
+  if(e.target===document.getElementById('confOv')) closeConf();
+});
+
+init();
+</script>
+</body>
+</html>

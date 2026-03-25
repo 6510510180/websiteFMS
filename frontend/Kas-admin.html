@@ -191,12 +191,6 @@ tbody tr:hover { background: var(--bg); }
       <div class="stat-card"><div class="stat-label">รวมทั้งหมด</div><div class="stat-value" id="countAll">—</div><div class="stat-sub">รหัส</div></div>
     </div>
 
-    <!-- Import from current data -->
-    <div class="import-card" onclick="importDefaultData()">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" style="margin:0 auto"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <div style="font-size:14px;font-weight:700;color:var(--purple);margin-top:8px">นำเข้าข้อมูลเริ่มต้น (K1-K114, A1-A37, S1-S37)</div>
-      <p>คลิกเพื่อ import ข้อมูลจาก kas-show.html เข้า Supabase ครั้งแรก (จะ overwrite ข้อมูลเดิม)</p>
-    </div>
 
     <!-- Toolbar -->
     <div class="toolbar">
@@ -227,12 +221,7 @@ tbody tr:hover { background: var(--bg); }
           <thead>
             <tr>
               <th>รหัส</th>
-              <th style="text-align:center">PLO Count</th>
-              <th style="text-align:center">MLO Count</th>
-              <th style="text-align:center">Total</th>
-              <th>PLO</th>
-              <th>MLO</th>
-              <th>ระดับ</th>
+              <th>คำอธิบาย</th>
               <th>จัดการ</th>
             </tr>
           </thead>
@@ -251,6 +240,10 @@ tbody tr:hover { background: var(--bg); }
     <input type="hidden" id="editId">
     <div class="form-row">
       <div class="form-group">
+  <label class="form-label">คำอธิบาย (Label)</label>
+  <input class="form-input" type="text" id="fieldLabel" placeholder="เช่น รูปแบบและคุณลักษณะการเป็นผู้นำ">
+</div>
+      <div class="form-group">
         <label class="form-label">ประเภท</label>
         <select class="form-input form-select" id="fieldType">
           <option value="K">K · Knowledge</option>
@@ -261,16 +254,6 @@ tbody tr:hover { background: var(--bg); }
       <div class="form-group">
         <label class="form-label">รหัส (เช่น K1)</label>
         <input class="form-input" type="text" id="fieldCode" placeholder="K1">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">PLO Count</label>
-        <input class="form-input" type="number" id="fieldPlo" placeholder="0" min="0">
-      </div>
-      <div class="form-group">
-        <label class="form-label">MLO Count</label>
-        <input class="form-input" type="number" id="fieldMlo" placeholder="0" min="0">
       </div>
     </div>
     <div class="modal-actions">
@@ -284,7 +267,7 @@ tbody tr:hover { background: var(--bg); }
 <div class="toast" id="toast"></div>
 
 <script>
-const API = "https://websitefms.onrender.com";
+const API = '';
 let allData = [];
 let currentTab = 'K';
 
@@ -330,9 +313,16 @@ function switchTab(tab, btn) {
 // ── Render table ──────────────────────────────────────────────
 function renderTable() {
   const query = document.getElementById("searchInput").value.toLowerCase();
-  let data = allData;
-  if (currentTab !== 'ALL') data = data.filter(d => d.type === currentTab);
-  if (query) data = data.filter(d => d.code.toLowerCase().includes(query));
+  let data = [...allData];
+if (currentTab !== 'ALL') data = data.filter(d => d.type === currentTab);
+if (query) data = data.filter(d => d.code.toLowerCase().includes(query));
+
+// เรียงแบบ K1, K2, ..., K10, K11
+data.sort((a, b) => {
+  const numA = parseInt(a.code.match(/\d+/)?.[0] || 0);
+  const numB = parseInt(b.code.match(/\d+/)?.[0] || 0);
+  return numA - numB;
+});
 
   document.getElementById("tableCount").textContent = `${data.length} รายการ`;
 
@@ -350,32 +340,17 @@ function renderTable() {
     const ploW = Math.round((item.plo_count / maxVal) * 100);
     const mloW = Math.round((item.mlo_count / maxVal) * 100);
 
-    return `
-      <tr>
-        <td class="code-cell">${item.code}</td>
-        <td class="num-cell">${item.plo_count}</td>
-        <td class="num-cell">${item.mlo_count}</td>
-        <td class="total-cell">${total}</td>
-        <td style="min-width:100px">
-          <div class="progress-wrap">
-            <div class="progress-bar"><div class="progress-fill fill-plo" style="width:${ploW}%"></div></div>
-            <span style="font-size:11px;color:var(--text-sub);width:24px;text-align:right">${item.plo_count}</span>
-          </div>
-        </td>
-        <td style="min-width:100px">
-          <div class="progress-wrap">
-            <div class="progress-bar"><div class="progress-fill fill-mlo" style="width:${mloW}%"></div></div>
-            <span style="font-size:11px;color:var(--text-sub);width:24px;text-align:right">${item.mlo_count}</span>
-          </div>
-        </td>
-        <td><span class="badge ${badgeClass}">${badgeText}</span></td>
-        <td>
-          <div class="actions-cell">
-            <button class="btn btn-outline btn-sm" onclick="openEditModal('${item.id}')">✏️ แก้ไข</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteItem('${item.id}','${item.code}')">🗑️</button>
-          </div>
-        </td>
-      </tr>
+   return `
+  <tr>
+    <td class="code-cell">${item.code}</td>
+    <td style="font-size:13px;color:var(--text-sub)">${item.label || '—'}</td>
+    <td>
+      <div class="actions-cell">
+        <button class="btn btn-outline btn-sm" onclick="openEditModal('${item.id}')">✏️ แก้ไข</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('${item.id}','${item.code}')">🗑️</button>
+      </div>
+    </td>
+  </tr>
     `;
   }).join("");
 }
@@ -384,10 +359,9 @@ function renderTable() {
 function openAddModal() {
   document.getElementById("modalTitle").textContent = "เพิ่มรหัส KAS ใหม่";
   document.getElementById("editId").value = "";
+  document.getElementById("fieldLabel").value = '';
   document.getElementById("fieldType").value = currentTab === 'ALL' ? 'K' : currentTab;
   document.getElementById("fieldCode").value = "";
-  document.getElementById("fieldPlo").value = "";
-  document.getElementById("fieldMlo").value = "";
   document.getElementById("fieldCode").disabled = false;
   document.getElementById("fieldType").disabled = false;
   document.getElementById("modalOverlay").classList.add("open");
@@ -396,12 +370,11 @@ function openAddModal() {
 function openEditModal(id) {
   const item = allData.find(d => d.id === id);
   if (!item) return;
+  document.getElementById("fieldLabel").value = item.label || '';
   document.getElementById("modalTitle").textContent = `แก้ไข ${item.code}`;
   document.getElementById("editId").value = item.id;
   document.getElementById("fieldType").value = item.type;
   document.getElementById("fieldCode").value = item.code;
-  document.getElementById("fieldPlo").value = item.plo_count;
-  document.getElementById("fieldMlo").value = item.mlo_count;
   document.getElementById("fieldCode").disabled = true;
   document.getElementById("fieldType").disabled = true;
   document.getElementById("modalOverlay").classList.add("open");
@@ -418,10 +391,11 @@ document.getElementById("modalOverlay").addEventListener("click", e => {
 // ── Save ──────────────────────────────────────────────────────
 async function saveItem() {
   const id = document.getElementById("editId").value;
+  const label = document.getElementById("fieldLabel").value.trim();
   const type = document.getElementById("fieldType").value;
   const code = document.getElementById("fieldCode").value.trim().toUpperCase();
-  const plo_count = parseInt(document.getElementById("fieldPlo").value) || 0;
-  const mlo_count = parseInt(document.getElementById("fieldMlo").value) || 0;
+  const plo_count = 0;
+  const mlo_count = 0;
 
   if (!code) { showToast("กรุณากรอกรหัส", "error"); return; }
 
@@ -431,13 +405,13 @@ async function saveItem() {
       res = await fetch(`${API}/api/kas/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plo_count, mlo_count })
+        body: JSON.stringify({ plo_count, mlo_count, label })
       });
     } else {
       res = await fetch(`${API}/api/kas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, code, plo_count, mlo_count })
+        body: JSON.stringify({ type, code, label, plo_count, mlo_count })
       });
     }
     const data = await res.json();
@@ -476,7 +450,7 @@ async function importDefaultData() {
 
   const items = [];
   Object.entries(defaultData).forEach(([type, list]) => {
-    list.forEach(d => items.push({ type, code: d.code, plo_count: d.plo, mlo_count: d.mlo }));
+    list.forEach(d => items.push({ type, code: d.code, label: d.code, plo_count: d.plo, mlo_count: d.mlo }));
   });
 
   try {

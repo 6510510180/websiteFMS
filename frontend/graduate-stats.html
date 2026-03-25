@@ -4,655 +4,175 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>การได้งานทำของบัณฑิต</title>
-
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@500;600;700;800&display=swap" rel="stylesheet"/>
-<!-- Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-<!-- Excel -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
 <style>
   :root {
-    --purple:       #7C3AED;
-    --purple-dark:  #5B21B6;
-    --purple-mid:   #8B5CF6;
-    --purple-light: #EDE9FE;
-    --purple-pale:  #F5F3FF;
+    --purple:#7C3AED;--purple-dark:#5B21B6;--purple-mid:#8B5CF6;
+    --purple-light:#EDE9FE;--purple-pale:#F5F3FF;
+    --bg:#F4F2FA;--white:#FFFFFF;--text:#1E1B2E;--text-mid:#4B5563;--text-soft:#9CA3AF;
+    --border:#E5E1F5;--border-mid:#D1C8F0;
+    --card-shadow:0 2px 12px rgba(124,58,237,0.07);
+    --card-shadow-hover:0 8px 28px rgba(124,58,237,0.14);
+    --radius:14px;--nav-h:56px;
+    --c0:#7C3AED;--c1:#A78BFA;--c2:#38BDF8;--c3:#34D399;--c4:#FB923C;--c5:#F472B6;
+    --sidebar-w:240px;--surface:#FFFFFF;--muted:#6B7280;--red:#DC2626;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{font-size:14px;}
+  body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px;padding-left:calc(var(--sidebar-w) + 4px);}
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:4px;}
+  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
 
-    --bg:           #F4F2FA;
-    --white:        #FFFFFF;
-    --text:         #1E1B2E;
-    --text-mid:     #4B5563;
-    --text-soft:    #9CA3AF;
+  .nav{background:var(--white);border-bottom:1.5px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:300;gap:0;height:var(--nav-h);margin-left:calc(-1 * var(--sidebar-w) - 4px);padding-left:calc(var(--sidebar-w) + 32px);}
+  .nav-logo{font-family:'Lexend',sans-serif;color:var(--purple);font-size:14px;font-weight:700;margin-right:32px;white-space:nowrap;letter-spacing:-0.3px;display:flex;align-items:center;gap:7px;}
+  .nav-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0;}
+  .tab-btn{height:var(--nav-h);padding:0 18px;border:none;background:transparent;color:var(--text-soft);font-size:13px;font-weight:600;cursor:pointer;border-bottom:2.5px solid transparent;transition:all .18s;font-family:'Noto Sans Thai',sans-serif;white-space:nowrap;}
+  .tab-btn:hover{color:var(--purple);background:var(--purple-pale);}
+  .tab-btn.active{color:var(--purple);border-bottom-color:var(--purple);}
+  .nav-right{margin-left:auto;display:flex;gap:8px;align-items:center;}
 
-    --border:       #E5E1F5;
-    --border-mid:   #D1C8F0;
-    --card-shadow:  0 2px 12px rgba(124,58,237,0.07);
-    --card-shadow-hover: 0 8px 28px rgba(124,58,237,0.14);
+  .btn-primary{background:var(--purple);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;font-family:inherit;white-space:nowrap;box-shadow:0 3px 10px rgba(124,58,237,0.25);}
+  .btn-primary:hover{background:var(--purple-dark);transform:translateY(-1px);}
+  .btn-outline{background:var(--white);color:var(--purple);border:1.5px solid var(--border-mid);border-radius:9px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;font-family:inherit;white-space:nowrap;}
+  .btn-outline:hover{border-color:var(--purple);background:var(--purple-pale);}
+  .btn-sm{padding:7px 14px;font-size:12.5px;}
 
-    --radius:       14px;
-    --nav-h:        56px;
+  .container{max-width:980px;margin:0 auto;padding:28px 28px 28px 32px;}
 
-    --c0: #7C3AED; --c1: #A78BFA; --c2: #38BDF8;
-    --c3: #34D399; --c4: #FB923C; --c5: #F472B6;
+  .page-header{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px 28px 20px;margin-bottom:20px;box-shadow:var(--card-shadow);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .page-header-left{display:flex;align-items:center;gap:16px;}
+  .page-header-icon{width:48px;height:48px;border-radius:14px;background:var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px rgba(124,58,237,0.15);}
+  .page-title{font-family:'Lexend',sans-serif;font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.4px;line-height:1.2;}
+  .page-sub{font-size:12px;color:var(--text-soft);margin-top:3px;}
+  .page-header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 
-    /* Sidebar */
-    --sidebar-w: 240px;
-    --surface: #FFFFFF;
-    --muted:   #6B7280;
-    --red:     #DC2626;
-  }
+  .card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;box-shadow:var(--card-shadow);transition:box-shadow .2s;}
+  .card:hover{box-shadow:var(--card-shadow-hover);}
+  .section-title{color:var(--purple);font-family:'Lexend',sans-serif;font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:18px;text-transform:uppercase;letter-spacing:0.5px;}
+  .section-title::before{content:'';width:3px;height:14px;background:var(--purple);border-radius:2px;display:inline-block;flex-shrink:0;}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 14px; }
+  .grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+  .grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
-  body {
-    font-family: 'Noto Sans Thai', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding-bottom: 80px;
-    padding-left: calc(var(--sidebar-w) + 4px);
-  }
+  .field-label{font-size:11px;color:var(--text-soft);margin-bottom:5px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase;}
+  .input-wrap{display:flex;align-items:center;background:var(--purple-pale);border:1.5px solid var(--border);border-radius:9px;overflow:hidden;transition:border-color .18s,box-shadow .18s;}
+  .input-wrap:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,0.1);}
+  .input-wrap input{flex:1;background:transparent;border:none;outline:none;color:var(--text);padding:8px 10px;font-size:13px;width:0;font-family:inherit;}
+  .input-unit{background:var(--purple-light);padding:8px 9px;font-size:11px;color:var(--purple);font-weight:700;white-space:nowrap;border-left:1px solid var(--border);}
+  .text-input{background:var(--purple-pale);border:1.5px solid var(--border);border-radius:9px;color:var(--text);padding:9px 12px;font-size:13px;outline:none;width:100%;font-family:inherit;transition:border-color .18s,box-shadow .18s;}
+  .text-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,0.1);}
+  select.select-field{background:var(--purple-pale);border:1.5px solid var(--border);border-radius:9px;color:var(--text);padding:9px 12px;font-size:13px;outline:none;font-family:inherit;max-width:240px;transition:border-color .18s;cursor:pointer;}
+  select.select-field:focus{border-color:var(--purple);}
+  .card-footer{display:flex;justify-content:flex-end;margin-top:18px;gap:8px;}
+  .year-sub{font-size:10px;color:var(--text-soft);margin-bottom:3px;font-weight:500;}
 
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 4px; }
-  input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .sidebar{width:var(--sidebar-w);background:var(--surface);height:calc(100vh - var(--nav-h));position:fixed;left:0;top:var(--nav-h);display:flex;flex-direction:column;border-right:1px solid var(--border);z-index:200;box-shadow:2px 0 8px rgba(0,0,0,.04);}
+  .sidebar-brand{padding:16px 16px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .brand-icon{width:40px;height:40px;border-radius:12px;background:var(--purple);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;box-shadow:0 6px 14px rgba(124,58,237,.25);}
+  .brand-title{font-size:15px;font-weight:800;color:var(--text);letter-spacing:.1px;}
+  .brand-sub{font-size:11.5px;color:#9AA0A6;margin-top:2px;}
+  .sidebar-section{padding:14px 16px 8px;font-size:11px;font-weight:800;color:#9AA0A6;text-transform:uppercase;letter-spacing:1.2px;}
+  .sidebar-nav{flex:1;padding:6px 8px 8px;display:flex;flex-direction:column;gap:6px;overflow-y:auto;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;font-size:13.5px;font-weight:600;color:#6B7280;text-decoration:none;transition:all .18s ease;}
+  .nav-item i{width:18px;text-align:center;color:#8B5CF6;}
+  .nav-item:hover{background:rgba(124,58,237,.08);color:var(--purple);}
+  .nav-item.active{background:#EFE7FF;color:#5925DC;box-shadow:inset 0 0 0 1.5px #E0D4FF;}
+  .nav-item.active i{color:#7C3AED;}
+  .nav-sub{margin-left:34px;display:flex;flex-direction:column;gap:4px;}
+  .nav-sub-item{display:block;padding:4px 6px 4px 2px;font-size:13px;color:#6B7280;text-decoration:none;border-radius:6px;transition:color .18s,background .18s;}
+  .nav-sub-item:hover{color:var(--purple);background:rgba(124,58,237,.06);}
+  .sidebar-footer{margin-top:auto;padding:12px 10px 14px;border-top:1px solid var(--border);}
+  .sidebar-footer .nav-item.logout{color:var(--red);}
+  .sidebar-footer .nav-item.logout i{color:var(--red);}
+  .sidebar-footer .nav-item.logout:hover{background:rgba(220,38,38,.08);}
 
-  /* ── NAV ── */
-  .nav {
-    background: var(--white);
-    border-bottom: 1.5px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 28px 0 28px;
-    position: sticky;
-    top: 0;
-    z-index: 300;
-    gap: 0;
-    height: var(--nav-h);
-    /* ยืดเต็มหน้าจอ ครอบ sidebar ด้วย */
-    margin-left: calc(-1 * var(--sidebar-w) - 4px);
-    padding-left: calc(var(--sidebar-w) + 32px);
-  }
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
 
-  .nav-logo {
-    font-family: 'Lexend', sans-serif;
-    color: var(--purple);
-    font-size: 14px;
-    font-weight: 700;
-    padding: 0;
-    margin-right: 32px;
-    white-space: nowrap;
-    letter-spacing: -0.3px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
+  .toast{position:fixed;bottom:72px;right:24px;padding:12px 20px;border-radius:10px;font-size:13px;box-shadow:0 8px 32px rgba(124,58,237,0.18);z-index:999;animation:slideIn .3s ease;pointer-events:none;border-left:4px solid var(--purple);background:var(--white);color:var(--text);font-weight:600;}
+  .toast.error{border-left-color:#EF4444;}
+  @keyframes slideIn{from{transform:translateX(60px);opacity:0;}to{transform:translateX(0);opacity:1;}}
 
-  .nav-logo-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--purple);
-    flex-shrink: 0;
-  }
+  .dashboard-header{background:linear-gradient(135deg,var(--purple) 0%,#9333EA 50%,#6366F1 100%);border-radius:var(--radius);padding:28px 28px 24px;margin-bottom:20px;color:#fff;position:relative;overflow:hidden;}
+  .dashboard-header::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.07);}
+  .dashboard-header::after{content:'';position:absolute;bottom:-60px;right:80px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,0.04);}
+  .dashboard-header-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;position:relative;z-index:1;}
+  .dashboard-title{font-family:'Lexend',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.5px;}
+  .dashboard-sub{font-size:12.5px;opacity:0.8;margin-top:4px;}
+  .dashboard-badge{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;backdrop-filter:blur(4px);}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px;position:relative;z-index:1;}
+  .stat-mini{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:16px;backdrop-filter:blur(4px);}
+  .stat-mini-label{font-size:11px;opacity:0.75;font-weight:600;letter-spacing:0.3px;}
+  .stat-mini-value{font-family:'Lexend',sans-serif;font-size:26px;font-weight:800;letter-spacing:-0.5px;margin-top:4px;line-height:1;}
+  .stat-mini-trend{font-size:11px;opacity:0.75;margin-top:5px;font-weight:600;}
+  .insight-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .chip{background:var(--purple-pale);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11.5px;color:var(--purple);font-weight:600;display:flex;align-items:center;gap:5px;}
+  .chip-dot{width:6px;height:6px;border-radius:50%;background:var(--purple);flex-shrink:0;}
 
-  .tab-btn {
-    height: var(--nav-h);
-    padding: 0 18px;
-    border: none;
-    background: transparent;
-    color: var(--text-soft);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border-bottom: 2.5px solid transparent;
-    transition: all .18s;
-    font-family: 'Noto Sans Thai', sans-serif;
-    white-space: nowrap;
-    letter-spacing: 0.1px;
-  }
+  .preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+  .preview-grid-full{grid-column:1/-1;}
 
-  .tab-btn:hover { color: var(--purple); background: var(--purple-pale); }
-  .tab-btn.active { color: var(--purple); border-bottom-color: var(--purple); }
+  .bar-chart-wrap{display:flex;align-items:flex-end;gap:10px;height:160px;position:relative;padding-bottom:28px;}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;}
+  .bar-val{font-size:10px;color:var(--purple);font-weight:700;margin-bottom:4px;}
+  .bar{width:100%;border-radius:6px 6px 0 0;transition:height .6s cubic-bezier(.4,0,.2,1);opacity:0.85;}
+  .bar:hover{opacity:1;cursor:pointer;}
+  .bar-label{font-size:10.5px;color:var(--text-soft);margin-top:6px;font-weight:600;}
+  .grid-lines{position:absolute;left:0;right:0;top:0;bottom:28px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;}
+  .grid-line{border-bottom:1px dashed var(--border);width:100%;}
 
-  .nav-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .pie-wrap{display:flex;gap:24px;align-items:center;flex-wrap:wrap;}
+  .legend-item{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
 
-  /* ── BUTTONS ── */
-  .btn-primary {
-    background: var(--purple);
-    color: #fff;
-    border: none;
-    border-radius: 9px;
-    padding: 9px 18px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .18s;
-    font-family: inherit;
-    white-space: nowrap;
-    box-shadow: 0 3px 10px rgba(124,58,237,0.25);
-    letter-spacing: 0.1px;
-  }
-  .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(124,58,237,0.3); }
+  .rank-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .rank-table td{padding:10px 8px;border-bottom:1px solid var(--border);color:var(--text-mid);}
+  .rank-table tr:last-child td{border-bottom:none;}
+  .rank-table tr:hover td{background:var(--purple-pale);}
+  .rank-num{width:28px;height:28px;border-radius:8px;background:var(--purple-pale);color:var(--purple);font-weight:800;font-family:'Lexend',sans-serif;font-size:12px;display:flex;align-items:center;justify-content:center;}
+  .rank-bar-bg{background:var(--bg);border-radius:4px;height:6px;overflow:hidden;min-width:80px;}
+  .rank-bar-fill{height:100%;border-radius:4px;transition:width .6s ease;}
 
-  .btn-outline {
-    background: var(--white);
-    color: var(--purple);
-    border: 1.5px solid var(--border-mid);
-    border-radius: 9px;
-    padding: 8px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .18s;
-    font-family: inherit;
-    white-space: nowrap;
-  }
-  .btn-outline:hover { border-color: var(--purple); background: var(--purple-pale); }
-  .btn-sm { padding: 7px 14px; font-size: 12.5px; }
+  .excel-table-wrap{overflow-x:auto;border-radius:10px;border:1.5px solid var(--border);max-height:360px;overflow-y:auto;}
+  table.excel-tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+  table.excel-tbl thead th{background:var(--purple-pale);color:var(--purple);padding:10px 14px;text-align:left;position:sticky;top:0;white-space:nowrap;font-weight:700;border-bottom:1.5px solid var(--border);font-family:'Lexend',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.4px;}
+  table.excel-tbl tbody td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text-mid);white-space:nowrap;}
+  table.excel-tbl tbody tr:hover td{background:var(--purple-pale);}
+  .excel-meta{font-size:11px;color:var(--text-soft);margin-top:10px;}
 
-  /* ── LAYOUT ── */
-  .container { max-width: 980px; margin: 0 auto; padding: 28px 28px 28px 32px; }
+  .upload-zone{border:2px dashed var(--border-mid);border-radius:12px;padding:36px;text-align:center;cursor:pointer;transition:all .2s;}
+  .upload-zone:hover{border-color:var(--purple);background:var(--purple-pale);}
+  .upload-zone-icon{font-size:40px;margin-bottom:12px;}
+  .upload-zone-text{color:var(--text-mid);font-size:14px;font-weight:600;}
+  .upload-zone-sub{color:var(--text-soft);font-size:12px;margin-top:4px;}
 
-  /* ── PAGE HEADER (redesigned) ── */
-  .page-header {
-    background: var(--white);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px 28px 20px;
-    margin-bottom: 20px;
-    box-shadow: var(--card-shadow);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .page-header-left { display: flex; align-items: center; gap: 16px; }
-  .page-header-icon {
-    width: 48px; height: 48px;
-    border-radius: 14px;
-    background: var(--purple-light);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(124,58,237,0.15);
-  }
-  .page-title {
-    font-family: 'Lexend', sans-serif;
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--text);
-    letter-spacing: -0.4px;
-    line-height: 1.2;
-  }
-  .page-sub {
-    font-size: 12px;
-    color: var(--text-soft);
-    margin-top: 3px;
-    line-height: 1.5;
-  }
-  .page-header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .header-actions { display: none; } /* hidden — moved into header row */
+  /* import status */
+  .import-status{background:var(--purple-pale);border:1.5px solid var(--border-mid);border-radius:10px;padding:12px 16px;margin-top:12px;font-size:12.5px;color:var(--purple);display:none;}
+  .import-status.show{display:block;}
+  .import-status ul{margin:6px 0 0 16px;}
+  .import-status li{margin-bottom:4px;}
 
-  /* ── CARD ── */
-  .card {
-    background: var(--white);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    margin-bottom: 16px;
-    box-shadow: var(--card-shadow);
-    transition: box-shadow .2s;
-  }
-  .card:hover { box-shadow: var(--card-shadow-hover); }
-
-  .section-title {
-    color: var(--purple);
-    font-family: 'Lexend', sans-serif;
-    font-size: 12.5px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 18px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .section-title::before {
-    content: '';
-    width: 3px; height: 14px;
-    background: var(--purple);
-    border-radius: 2px;
-    display: inline-block;
-    flex-shrink: 0;
-  }
-
-  /* ── GRID ── */
-  .grid-6 { display: grid; grid-template-columns: repeat(6,1fr); gap: 12px; }
-  .grid-5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-  /* ── FIELDS ── */
-  .field-label { font-size: 11px; color: var(--text-soft); margin-bottom: 5px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
-
-  .input-wrap {
-    display: flex;
-    align-items: center;
-    background: var(--purple-pale);
-    border: 1.5px solid var(--border);
-    border-radius: 9px;
-    overflow: hidden;
-    transition: border-color .18s, box-shadow .18s;
-  }
-  .input-wrap:focus-within {
-    border-color: var(--purple);
-    box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
-  }
-  .input-wrap input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text);
-    padding: 8px 10px;
-    font-size: 13px;
-    width: 0;
-    font-family: inherit;
-  }
-  .input-unit {
-    background: var(--purple-light);
-    padding: 8px 9px;
-    font-size: 11px;
-    color: var(--purple);
-    font-weight: 700;
-    white-space: nowrap;
-    border-left: 1px solid var(--border);
-  }
-
-  .text-input {
-    background: var(--purple-pale);
-    border: 1.5px solid var(--border);
-    border-radius: 9px;
-    color: var(--text);
-    padding: 9px 12px;
-    font-size: 13px;
-    outline: none;
-    width: 100%;
-    font-family: inherit;
-    transition: border-color .18s, box-shadow .18s;
-  }
-  .text-input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
-
-  select.select-field {
-    background: var(--purple-pale);
-    border: 1.5px solid var(--border);
-    border-radius: 9px;
-    color: var(--text);
-    padding: 9px 12px;
-    font-size: 13px;
-    outline: none;
-    font-family: inherit;
-    max-width: 240px;
-    transition: border-color .18s;
-    cursor: pointer;
-  }
-  select.select-field:focus { border-color: var(--purple); }
-
-  .card-footer { display: flex; justify-content: flex-end; margin-top: 18px; gap: 8px; }
-
-  /* ── SIDEBAR ── */
-  .sidebar{
-    width: var(--sidebar-w);
-    background: var(--surface);
-    height: calc(100vh - var(--nav-h));
-    position: fixed;
-    left: 0;
-    top: var(--nav-h);
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid var(--border);
-    z-index: 200;
-    box-shadow: 2px 0 8px rgba(0,0,0,.04);
-  }
-  .sidebar-brand{
-    padding: 16px 16px 14px;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .brand-icon{
-    width: 40px; height: 40px; border-radius: 12px;
-    background: var(--purple);
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 18px; font-weight: 800;
-    box-shadow: 0 6px 14px rgba(124,58,237,.25);
-  }
-  .brand-title{ font-size: 15px; font-weight: 800; color: var(--text); letter-spacing: .1px; }
-  .brand-sub  { font-size: 11.5px; color: #9AA0A6; margin-top: 2px; }
-
-  .sidebar-section{
-    padding: 14px 16px 8px;
-    font-size: 11px; font-weight: 800;
-    color: #9AA0A6;
-    text-transform: uppercase; letter-spacing: 1.2px;
-  }
-
-  .sidebar-nav{
-    flex: 1;
-    padding: 6px 8px 8px;
-    display: flex; flex-direction: column; gap: 6px;
-    overflow-y: auto;
-  }
-
-  .nav-item{
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 10px;
-    border-radius: 10px;
-    font-size: 13.5px; font-weight: 600;
-    color: #6B7280; text-decoration: none;
-    transition: all .18s ease;
-  }
-  .nav-item i{ width: 18px; text-align: center; color: #8B5CF6; }
-  .nav-item:hover{
-    background: rgba(124,58,237,.08);
-    color: var(--purple);
-  }
-  .nav-item.active{
-    background: #EFE7FF;
-    color: #5925DC;
-    box-shadow: inset 0 0 0 1.5px #E0D4FF;
-  }
-  .nav-item.active i{ color: #7C3AED; }
-
-  .nav-sub{ margin-left: 34px; display: flex; flex-direction: column; gap: 4px; }
-  .nav-sub-item{
-    display: block; padding: 4px 6px 4px 2px;
-    font-size: 13px; color: #6B7280; text-decoration: none;
-    border-radius: 6px; transition: color .18s, background .18s;
-  }
-  .nav-sub-item:hover{ color: var(--purple); background: rgba(124,58,237,.06); }
-
-  .sidebar-footer{
-    margin-top: auto;
-    padding: 12px 10px 14px;
-    border-top: 1px solid var(--border);
-  }
-  .sidebar-footer .nav-item.logout{ color: var(--red); }
-  .sidebar-footer .nav-item.logout i{ color: var(--red); }
-  .sidebar-footer .nav-item.logout:hover{ background: rgba(220,38,38,.08); }
-
-  /* ── TAB CONTENT ── */
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  /* ── TOAST ── */
-  .toast {
-    position: fixed; bottom: 72px; right: 24px;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 13px;
-    box-shadow: 0 8px 32px rgba(124,58,237,0.18);
-    z-index: 999;
-    animation: slideIn .3s ease;
-    pointer-events: none;
-    border-left: 4px solid var(--purple);
-    background: var(--white);
-    color: var(--text);
-    font-weight: 600;
-  }
-  .toast.error { border-left-color: #EF4444; }
-  @keyframes slideIn { from { transform: translateX(60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-  /* ── DASHBOARD STATS ── */
-  .dashboard-header {
-    background: linear-gradient(135deg, var(--purple) 0%, #9333EA 50%, #6366F1 100%);
-    border-radius: var(--radius);
-    padding: 28px 28px 24px;
-    margin-bottom: 20px;
-    color: #fff;
-    position: relative;
-    overflow: hidden;
-  }
-  .dashboard-header::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 180px; height: 180px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.07);
-  }
-  .dashboard-header::after {
-    content: '';
-    position: absolute;
-    bottom: -60px; right: 80px;
-    width: 240px; height: 240px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-  }
-  .dashboard-header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 12px;
-    position: relative;
-    z-index: 1;
-  }
-  .dashboard-title {
-    font-family: 'Lexend', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-  }
-  .dashboard-sub { font-size: 12.5px; opacity: 0.8; margin-top: 4px; }
-  .dashboard-badge {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 11px;
-    font-weight: 700;
-    backdrop-filter: blur(4px);
-  }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-top: 20px;
-    position: relative;
-    z-index: 1;
-  }
-  .stat-mini {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 12px;
-    padding: 16px;
-    backdrop-filter: blur(4px);
-  }
-  .stat-mini-label { font-size: 11px; opacity: 0.75; font-weight: 600; letter-spacing: 0.3px; }
-  .stat-mini-value {
-    font-family: 'Lexend', sans-serif;
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-top: 4px;
-    line-height: 1;
-  }
-  .stat-mini-trend { font-size: 11px; opacity: 0.75; margin-top: 5px; font-weight: 600; }
-
-  /* ── MAIN PREVIEW GRID ── */
-  .preview-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .preview-grid-full {
-    grid-column: 1 / -1;
-  }
-
-  /* ── BAR CHART ── */
-  .bar-chart-wrap {
-    display: flex;
-    align-items: flex-end;
-    gap: 10px;
-    height: 160px;
-    position: relative;
-    padding-bottom: 28px;
-  }
-  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; }
-  .bar-val { font-size: 10px; color: var(--purple); font-weight: 700; margin-bottom: 4px; }
-  .bar {
-    width: 100%;
-    border-radius: 6px 6px 0 0;
-    transition: height .6s cubic-bezier(.4,0,.2,1);
-    opacity: 0.85;
-  }
-  .bar:hover { opacity: 1; cursor: pointer; }
-  .bar-label { font-size: 10.5px; color: var(--text-soft); margin-top: 6px; font-weight: 600; }
-  .grid-lines {
-    position: absolute; left: 0; right: 0; top: 0; bottom: 28px;
-    display: flex; flex-direction: column; justify-content: space-between;
-    pointer-events: none;
-  }
-  .grid-line { border-bottom: 1px dashed var(--border); width: 100%; }
-
-  /* ── PIE ── */
-  .pie-wrap { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
-  .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
-
-  /* ── RANK TABLE ── */
-  .rank-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .rank-table td { padding: 10px 8px; border-bottom: 1px solid var(--border); color: var(--text-mid); }
-  .rank-table tr:last-child td { border-bottom: none; }
-  .rank-table tr:hover td { background: var(--purple-pale); }
-  .rank-num {
-    width: 28px; height: 28px;
-    border-radius: 8px;
-    background: var(--purple-pale);
-    color: var(--purple);
-    font-weight: 800;
-    font-family: 'Lexend', sans-serif;
-    font-size: 12px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .rank-bar-bg { background: var(--bg); border-radius: 4px; height: 6px; overflow: hidden; min-width: 80px; }
-  .rank-bar-fill { height: 100%; border-radius: 4px; transition: width .6s ease; }
-
-  /* ── EXCEL TABLE ── */
-  .excel-table-wrap {
-    overflow-x: auto;
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    max-height: 360px;
-    overflow-y: auto;
-  }
-  table.excel-tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-  table.excel-tbl thead th {
-    background: var(--purple-pale);
-    color: var(--purple);
-    padding: 10px 14px;
-    text-align: left;
-    position: sticky;
-    top: 0;
-    white-space: nowrap;
-    font-weight: 700;
-    border-bottom: 1.5px solid var(--border);
-    font-family: 'Lexend', sans-serif;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-  }
-  table.excel-tbl tbody td {
-    padding: 9px 14px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-mid);
-    white-space: nowrap;
-  }
-  table.excel-tbl tbody tr:hover td { background: var(--purple-pale); }
-  .excel-meta { font-size: 11px; color: var(--text-soft); margin-top: 10px; }
-
-  /* ── UPLOAD ZONE ── */
-  .upload-zone {
-    border: 2px dashed var(--border-mid);
-    border-radius: 12px;
-    padding: 36px;
-    text-align: center;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .upload-zone:hover { border-color: var(--purple); background: var(--purple-pale); }
-  .upload-zone-icon { font-size: 40px; margin-bottom: 12px; }
-  .upload-zone-text { color: var(--text-mid); font-size: 14px; font-weight: 600; }
-  .upload-zone-sub { color: var(--text-soft); font-size: 12px; margin-top: 4px; }
-
-  /* ── YEAR SUB LABEL ── */
-  .year-sub { font-size: 10px; color: var(--text-soft); margin-bottom: 3px; font-weight: 500; }
-
-  /* ── INSIGHT CHIP ── */
-  .insight-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-  .chip {
-    background: var(--purple-pale);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 11.5px;
-    color: var(--purple);
-    font-weight: 600;
-    display: flex; align-items: center; gap: 5px;
-  }
-  .chip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--purple); flex-shrink: 0; }
-
-  /* ── Responsive ── */
-  @media (max-width: 960px){
-    body{ padding-left: 0; }
-    .sidebar{
-      top: var(--nav-h);
-      left: -100%;
-      transition: left .25s ease;
-      box-shadow: 8px 0 24px rgba(0,0,0,.12);
-    }
-    .sidebar.open{ left: 0; }
-  }
-
-  @media(max-width:768px){
-    .stats-grid { grid-template-columns: repeat(2,1fr); }
-    .preview-grid { grid-template-columns: 1fr; }
-  }
-
-  @media(max-width:640px){
-    .grid-6 { grid-template-columns: repeat(3,1fr); }
-    .grid-5 { grid-template-columns: repeat(2,1fr); }
-    .grid-2 { grid-template-columns: 1fr; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .nav { padding: 0 16px; }
-    .container { padding: 20px 16px; }
-    .dashboard-header { padding: 20px 18px; }
-  }
+  @media(max-width:960px){body{padding-left:0;}.sidebar{top:var(--nav-h);left:-100%;transition:left .25s ease;box-shadow:8px 0 24px rgba(0,0,0,.12);}.sidebar.open{left:0;}}
+  @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr);}.preview-grid{grid-template-columns:1fr;}}
+  @media(max-width:640px){.grid-6{grid-template-columns:repeat(3,1fr);}.grid-5{grid-template-columns:repeat(2,1fr);}.grid-2{grid-template-columns:1fr;}.stats-grid{grid-template-columns:1fr 1fr;}.nav{padding:0 16px;}.container{padding:20px 16px;}.dashboard-header{padding:20px 18px;}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
-  <div class="nav-logo">
-    <div class="nav-logo-dot"></div>
-    ระบบบันทึกสถิตินักศึกษา
-  </div>
+  <div class="nav-logo"><div class="nav-logo-dot"></div>ระบบบันทึกสถิตินักศึกษา</div>
   <button class="tab-btn active" onclick="switchTab('input',this)">การใส่ข้อมูล</button>
   <button class="tab-btn" onclick="switchTab('preview',this)">Preview รายงาน</button>
-
   <div class="nav-right">
     <button class="btn-outline btn-sm" onclick="downloadTemplate()">📋 ดาวน์โหลด Template</button>
     <button class="btn-outline btn-sm" onclick="document.getElementById('fileInput').click()">📥 นำเข้า Excel</button>
     <button class="btn-primary btn-sm" onclick="saveAll()">💾 บันทึกข้อมูล</button>
-    <button class="btn-outline btn-sm" id="sidebarToggle" aria-label="Toggle sidebar">☰ เมนู</button>
+    <button class="btn-outline btn-sm" id="sidebarToggle">☰ เมนู</button>
   </div>
 </nav>
 
@@ -660,18 +180,12 @@
 
 <div class="container">
 
-  <!-- PAGE HEADER -->
   <div class="page-header">
     <div class="page-header-left">
-      <div class="page-header-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 3L1 9L12 15L21 10.09V17H23V9L12 3Z" fill="#7C3AED"/>
-          <path d="M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" fill="#A78BFA"/>
-        </svg>
-      </div>
+      <div class="page-header-icon">🎓</div>
       <div>
         <h1 class="page-title">การได้งานทำของบัณฑิต</h1>
-        <p class="page-sub">บันทึกข้อมูลอัตราการได้งานทำตามสาขาวิชา ประเภทงาน และระยะเวลา</p>
+        <p class="page-sub">บันทึกข้อมูลอัตราการได้งานทำตามวิชาเอก ประเภทงาน และระยะเวลา</p>
       </div>
     </div>
     <div class="page-header-actions">
@@ -685,24 +199,26 @@
   <div id="tab-input" class="tab-content active">
 
     <div class="card">
-      <div class="section-title">การได้งานทำแต่ละสาขาวิชา (กรอกข้อมูลใหม่)</div>
+      <div class="section-title">อัตราการได้งานทำแต่ละวิชาเอก — ข้อมูลใหม่</div>
+      <p style="font-size:12px;color:var(--text-soft);margin-bottom:14px;">กรอกอัตราการได้งานทำ (%) สำหรับปีการศึกษาล่าสุด</p>
       <div class="grid-6" id="majorInputGrid"></div>
       <div class="card-footer">
-        <button class="btn-primary" onclick="saveMajorNew()">บันทึกข้อมูลสถิติ</button>
+        <button class="btn-primary" onclick="saveMajorNew()">บันทึกและอัปเดต Preview</button>
       </div>
     </div>
 
     <div class="card">
-      <div class="section-title">การได้งานทำแต่ละสาขาวิชา (ข้อมูลปัจจุบัน)</div>
+      <div class="section-title">อัตราการได้งานทำแต่ละวิชาเอก — ข้อมูลปัจจุบัน</div>
       <div class="grid-6" id="majorCurrentGrid"></div>
+      <div id="importStatusRate" class="import-status"></div>
     </div>
 
     <div class="card">
-      <div class="section-title">การได้งานทำแต่ละสาขาวิชา แยกตามปี</div>
+      <div class="section-title">อัตราการได้งานทำแยกตามปีและวิชาเอก</div>
       <div style="margin-bottom:16px">
-        <div class="field-label">สาขาวิชา</div>
+        <div class="field-label">วิชาเอก</div>
         <select class="select-field" id="majorYearSelect" onchange="renderMajorYearGrid()">
-          <option value="">เลือกสาขาวิชาก่อน</option>
+          <option value="">เลือกวิชาเอกก่อน</option>
           <option>FIN</option><option>MKT</option><option>HRM</option>
           <option>LSM</option><option>MICE</option><option>BIS</option>
         </select>
@@ -715,42 +231,20 @@
     </div>
 
     <div class="card">
-      <div class="section-title">การได้งานทำของนักศึกษา ตามประเภทงาน</div>
-      <div class="grid-2">
-        <div>
-          <div class="field-label">การจ้างงาน (จำนวนนักศึกษา)</div>
-          <div class="input-wrap">
-            <input id="catJobType" placeholder="0" type="number"/>
-            <span class="input-unit">คน</span>
-          </div>
-        </div>
-        <div>
-          <div class="field-label">ความท้าทายอื่น (จำนวนนักศึกษา)</div>
-          <div class="input-wrap">
-            <input id="catOther" placeholder="0" type="number"/>
-            <span class="input-unit">คน</span>
-          </div>
-        </div>
-      </div>
+      <div class="section-title">จำนวนนักศึกษาที่มีงานทำ — แยกตามปีการศึกษา</div>
+      <p style="font-size:12px;color:var(--text-soft);margin-bottom:14px;">จำนวนนักศึกษาที่มีงานทำ / จำนวนทั้งหมด ในแต่ละปี</p>
+      <div class="grid-5" id="straightAboveGrid"></div>
+      <div id="importStatusCount" class="import-status"></div>
       <div class="card-footer">
         <button class="btn-primary" onclick="showToast('บันทึกข้อมูลสำเร็จ!')">บันทึกข้อมูลสถิติ</button>
       </div>
     </div>
 
     <div class="card">
-      <div class="section-title">การได้งานทำของนักศึกษาที่ทำงานตรงสาย</div>
-      <div style="margin-bottom:18px">
-        <div style="font-size:12px;color:var(--text-soft);margin-bottom:10px;font-weight:500">
-          นักศึกษาที่มีงานทำในแต่ละปี <span style="font-size:11px">(จำนวน คน / รวมทั้งหมด คน)</span>
-        </div>
-        <div class="grid-5" id="straightAboveGrid"></div>
-      </div>
-      <div>
-        <div style="font-size:12px;color:var(--text-soft);margin-bottom:10px;font-weight:500">
-          นักศึกษาที่ทำงานตรงสาย <span style="font-size:11px">(จำนวน คน / รวมทั้งหมด คน)</span>
-        </div>
-        <div class="grid-5" id="straightBelowGrid"></div>
-      </div>
+      <div class="section-title">จำนวนนักศึกษาที่ทำงานตรงสาย — แยกตามปีการศึกษา</div>
+      <p style="font-size:12px;color:var(--text-soft);margin-bottom:14px;">จำนวนนักศึกษาที่มีงานทำ, จำนวนทั้งหมด, และจำนวนที่ทำงานตรงสาย</p>
+      <div class="grid-5" id="straightBelowGrid"></div>
+      <div id="importStatusStraight" class="import-status"></div>
       <div class="card-footer">
         <button class="btn-primary" onclick="showToast('บันทึกข้อมูลสำเร็จ!')">บันทึกข้อมูลสถิติ</button>
       </div>
@@ -761,60 +255,55 @@
   <!-- ===== TAB: PREVIEW ===== -->
   <div id="tab-preview" class="tab-content">
 
-    <!-- Dashboard Header with Stats -->
     <div class="dashboard-header">
       <div class="dashboard-header-top">
         <div>
           <div class="dashboard-title">Dashboard สรุปภาพรวม</div>
-          <div class="dashboard-sub">อัตราการได้งานทำของบัณฑิต — คณะการจัดการ มหาวิทยาลัยสงขลานครินทร์</div>
+          <div class="dashboard-sub">อัตราการได้งานทำของบัณฑิต — คณะวิทยาการจัดการ มหาวิทยาลัยสงขลานครินทร์</div>
         </div>
         <div class="dashboard-badge">ปีการศึกษา 2567</div>
       </div>
       <div class="stats-grid">
         <div class="stat-mini">
-          <div class="stat-mini-label">อัตราเฉลี่ยทุกสาขา</div>
+          <div class="stat-mini-label">อัตราเฉลี่ยทุกวิชาเอก</div>
           <div class="stat-mini-value" id="previewAvg">—</div>
-          <div class="stat-mini-trend" id="previewAvgTrend">↑ คำนวณจากข้อมูลปัจจุบัน</div>
+          <div class="stat-mini-trend" id="previewAvgTrend">คำนวณจากข้อมูลปัจจุบัน</div>
         </div>
         <div class="stat-mini">
-          <div class="stat-mini-label">สาขาสูงสุด</div>
+          <div class="stat-mini-label">วิชาเอกสูงสุด</div>
           <div class="stat-mini-value" id="topMajorVal">—</div>
           <div class="stat-mini-trend" id="topMajorName">—</div>
         </div>
         <div class="stat-mini">
-          <div class="stat-mini-label">ทำงานตรงสาย</div>
-          <div class="stat-mini-value">0.36%</div>
-          <div class="stat-mini-trend">↓ ลดลง 0.04%</div>
+          <div class="stat-mini-label">วิชาเอกต่ำสุด</div>
+          <div class="stat-mini-value" id="botMajorVal">—</div>
+          <div class="stat-mini-trend" id="botMajorName">—</div>
         </div>
         <div class="stat-mini">
-          <div class="stat-mini-label">จำนวนสาขา</div>
+          <div class="stat-mini-label">จำนวนวิชาเอก</div>
           <div class="stat-mini-value">6</div>
-          <div class="stat-mini-trend">สาขาวิชา</div>
+          <div class="stat-mini-trend">วิชาเอก</div>
         </div>
       </div>
-      <!-- Insight chips -->
       <div class="insight-chips">
         <div class="chip" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.2);color:#fff;">
           <div class="chip-dot" style="background:#fff"></div>
-          <span id="chipHighest">LSM: 18.34%</span>
+          <span id="chipHighest">—</span>
         </div>
         <div class="chip" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.2);color:#fff;">
           <div class="chip-dot" style="background:#fff"></div>
-          <span id="chipLowest">FIN: 14.76%</span>
+          <span id="chipLowest">—</span>
         </div>
         <div class="chip" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.2);color:#fff;">
           <div class="chip-dot" style="background:#fff"></div>
-          <span id="chipSpread">ช่วงห่าง: 3.58%</span>
+          <span id="chipSpread">—</span>
         </div>
       </div>
     </div>
 
-    <!-- Charts Row -->
     <div class="preview-grid">
-
-      <!-- Bar Chart -->
       <div class="card">
-        <div class="section-title">อัตราการได้งานทำแต่ละสาขาวิชา</div>
+        <div class="section-title">อัตราการได้งานทำแต่ละวิชาเอก</div>
         <div class="bar-chart-wrap" id="barChart">
           <div class="grid-lines" id="gridLines">
             <div class="grid-line"></div><div class="grid-line"></div>
@@ -823,29 +312,22 @@
           </div>
         </div>
       </div>
-
-      <!-- Pie Chart -->
       <div class="card">
-        <div class="section-title">สัดส่วนการได้งานทำแต่ละสาขา</div>
+        <div class="section-title">สัดส่วนการได้งานทำแต่ละวิชาเอก</div>
         <div class="pie-wrap">
           <svg id="pieChart" width="150" height="150" viewBox="0 0 180 180" style="flex-shrink:0;filter:drop-shadow(0 4px 12px rgba(124,58,237,0.15))"></svg>
           <div id="pieLegend" style="flex:1;min-width:120px"></div>
         </div>
       </div>
-
-      <!-- Rank Table -->
       <div class="card preview-grid-full">
         <div class="section-title">การจัดอันดับอัตราการได้งานทำ</div>
-        <table class="rank-table">
-          <tbody id="rankTableBody"></tbody>
-        </table>
+        <table class="rank-table"><tbody id="rankTableBody"></tbody></table>
       </div>
-
     </div>
 
-    <!-- Excel Preview -->
     <div class="card" id="excelPreviewCard" style="display:none">
       <div class="section-title" id="excelPreviewTitle">ข้อมูลจากไฟล์ Excel</div>
+      <div id="sheetTabs" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;"></div>
       <div class="excel-table-wrap">
         <table class="excel-tbl" id="excelTable"></table>
       </div>
@@ -856,42 +338,27 @@
       <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
         <div class="upload-zone-icon">📊</div>
         <div class="upload-zone-text">คลิกเพื่อนำเข้าไฟล์ Excel</div>
-        <div class="upload-zone-sub">.xlsx, .xls, .csv — รองรับทุกรูปแบบ</div>
+        <div class="upload-zone-sub">.xlsx, .xls — รองรับ template มาตรฐาน 3 sheet</div>
       </div>
     </div>
 
   </div>
 </div>
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-brand">
     <div class="brand-icon">🎓</div>
-    <div>
-      <div class="brand-title">FMS Admin</div>
-      <div class="brand-sub">PSU Management</div>
-    </div>
+    <div><div class="brand-title">FMS Admin</div><div class="brand-sub">PSU Management</div></div>
   </div>
-
   <div class="sidebar-section">เมนูหลัก</div>
-
   <nav class="sidebar-nav">
-    <a class="nav-item" href="qa-add.html">
-      <i class="fa-solid fa-globe"></i> หน้าหลัก
-    </a>
-    <a class="nav-item" href="achievement.html">
-      <i class="fa-solid fa-trophy"></i> ผลงาน
-    </a>
-    <a class="nav-item active" href="graduate-stats.html">
-      <i class="fa-solid fa-bars-staggered"></i> สถิติการได้งานทำ
-    </a>
+    <a class="nav-item" href="qa-add.html"><i class="fa-solid fa-globe"></i> หน้าหลัก</a>
+    <a class="nav-item" href="achievement.html"><i class="fa-solid fa-trophy"></i> ผลงาน</a>
+    <a class="nav-item active" href="graduate-stats.html"><i class="fa-solid fa-bars-staggered"></i> สถิติการได้งานทำ</a>
     <div class="nav-sub">
-      <a class="nav-sub-item" href="#" onclick="switchTab('preview', document.querySelectorAll('.tab-btn')[1]); return false;">
-        Preview
-      </a>
+      <a class="nav-sub-item" href="#" onclick="switchTab('preview',document.querySelectorAll('.tab-btn')[1]);return false;">Preview</a>
     </div>
   </nav>
-
   <div class="sidebar-footer">
     <a class="nav-item logout" href="login.html" id="logoutBtn">
       <i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ
@@ -902,45 +369,94 @@
 <div id="toast" class="toast" style="display:none"></div>
 
 <script>
-/* ===== DATA CONST ===== */
 const MAJORS = ["FIN","MKT","HRM","LSM","MICE","BIS"];
 const YEARS  = ["2563","2564","2565","2566","2567"];
 const COLORS = ["#7C3AED","#A78BFA","#38BDF8","#34D399","#FB923C","#F472B6"];
 
-let majorCurrentVals = {FIN:14.76,MKT:16.87,HRM:15.64,LSM:18.34,MICE:16.67,BIS:17.80};
+// ข้อมูลอัตรา [major][year]
+let rateByMajorYear = {
+  FIN:{2563:0,2564:0,2565:0,2566:0,2567:0},
+  MKT:{2563:0,2564:0,2565:0,2566:0,2567:0},
+  HRM:{2563:0,2564:0,2565:0,2566:0,2567:0},
+  LSM:{2563:0,2564:0,2565:0,2566:0,2567:0},
+  MICE:{2563:0,2564:0,2565:0,2566:0,2567:0},
+  BIS:{2563:0,2564:0,2565:0,2566:0,2567:0},
+};
+// ค่าปัจจุบัน (ปีล่าสุดที่มีข้อมูล)
+let majorCurrentVals = {FIN:0,MKT:0,HRM:0,LSM:0,MICE:0,BIS:0};
+
+// ข้อมูล sheet 2: จำนวนนักศึกษา [major][year] = {n, t}
+let countData = {};
+
+// ข้อมูล sheet 3: ทำงานตรงสาย [year] = {n, t, s}
+let straightData = {};
+
+// เก็บ all sheets สำหรับ preview
+let allSheetData = {};
 
 /* ===== RENDER INPUT GRIDS ===== */
 function renderMajorGrid(containerId, idPrefix, vals={}) {
   const c = document.getElementById(containerId);
   c.innerHTML = MAJORS.map((m,i) => `
     <div>
-      <div class="field-label">${m}</div>
+      <div class="field-label" style="color:${COLORS[i]}">${m}</div>
       <div class="input-wrap">
-        <input type="number" id="${idPrefix}_${m}" placeholder="0"
-               value="${vals[m]??''}" step="0.01"
+        <input type="number" id="${idPrefix}_${m}" placeholder="0.00"
+               value="${vals[m]||''}" step="0.01"
                oninput="onMajorInput('${idPrefix}','${m}',this.value)"/>
         <span class="input-unit">%</span>
       </div>
     </div>`).join('');
 }
 
-function renderYearGrid(containerId, idPrefix) {
+function renderYearGrid(containerId, idPrefix, label1='จำนวนที่มีงานทำ', label2='จำนวนทั้งหมด') {
   const c = document.getElementById(containerId);
   c.innerHTML = YEARS.map(y => `
     <div>
       <div class="field-label">ปี ${y}</div>
       <div style="display:flex;flex-direction:column;gap:5px">
         <div>
-          <div class="year-sub">จำนวน</div>
+          <div class="year-sub">${label1}</div>
           <div class="input-wrap">
             <input type="number" id="${idPrefix}_${y}_n" placeholder="0" style="min-width:0"/>
             <span class="input-unit">คน</span>
           </div>
         </div>
         <div>
-          <div class="year-sub">รวมทั้งหมด</div>
+          <div class="year-sub">${label2}</div>
           <div class="input-wrap">
             <input type="number" id="${idPrefix}_${y}_t" placeholder="0" style="min-width:0"/>
+            <span class="input-unit">คน</span>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderStraightGrid() {
+  const c = document.getElementById('straightBelowGrid');
+  c.innerHTML = YEARS.map(y => `
+    <div>
+      <div class="field-label">ปี ${y}</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div>
+          <div class="year-sub">มีงานทำ</div>
+          <div class="input-wrap">
+            <input type="number" id="sb_${y}_n" placeholder="0" style="min-width:0"/>
+            <span class="input-unit">คน</span>
+          </div>
+        </div>
+        <div>
+          <div class="year-sub">ทั้งหมด</div>
+          <div class="input-wrap">
+            <input type="number" id="sb_${y}_t" placeholder="0" style="min-width:0"/>
+            <span class="input-unit">คน</span>
+          </div>
+        </div>
+        <div>
+          <div class="year-sub">ตรงสาย</div>
+          <div class="input-wrap">
+            <input type="number" id="sb_${y}_s" placeholder="0" style="min-width:0"/>
             <span class="input-unit">คน</span>
           </div>
         </div>
@@ -955,29 +471,22 @@ function renderMajorYearGrid() {
   c.innerHTML = YEARS.map(y => `
     <div>
       <div class="field-label">ปี ${y}</div>
-      <div style="display:flex;flex-direction:column;gap:5px">
-        <div>
-          <div class="year-sub">จำนวน</div>
-          <div class="input-wrap">
-            <input type="number" id="my_${m}_${y}_n" placeholder="0" style="min-width:0"/>
-            <span class="input-unit">คน</span>
-          </div>
-        </div>
-        <div>
-          <div class="year-sub">รวมทั้งหมด</div>
-          <div class="input-wrap">
-            <input type="number" id="my_${m}_${y}_t" placeholder="0" style="min-width:0"/>
-            <span class="input-unit">คน</span>
-          </div>
-        </div>
+      <div class="input-wrap">
+        <input type="number" id="my_${m}_${y}" placeholder="0.00"
+               value="${rateByMajorYear[m]?.[y]||''}" step="0.01"
+               oninput="rateByMajorYear['${m}']['${y}']=parseFloat(this.value)||0"/>
+        <span class="input-unit">%</span>
       </div>
     </div>`).join('');
 }
 
 function clearMajorYear() {
   const m = document.getElementById('majorYearSelect').value;
+  if (!m) return;
   YEARS.forEach(y => {
-    ['n','t'].forEach(f => { const el=document.getElementById(`my_${m}_${y}_${f}`); if(el) el.value=''; });
+    rateByMajorYear[m][y] = 0;
+    const el = document.getElementById(`my_${m}_${y}`);
+    if (el) el.value = '';
   });
 }
 
@@ -992,16 +501,9 @@ function onMajorInput(prefix, major, val) {
 function init() {
   renderMajorGrid('majorInputGrid','new');
   renderMajorGrid('majorCurrentGrid','cur', majorCurrentVals);
-  renderYearGrid('straightAboveGrid','sa');
-  renderYearGrid('straightBelowGrid','sb');
+  renderYearGrid('straightAboveGrid','sa','จำนวนที่มีงานทำ','จำนวนทั้งหมด');
+  renderStraightGrid();
   updatePreview();
-  updateTime();
-  setInterval(updateTime, 30000);
-}
-
-function updateTime() {
-  const el = document.getElementById('bottomTime');
-  if (el) el.textContent = '🕐 ' + new Date().toLocaleString('th-TH');
 }
 
 function saveMajorNew() {
@@ -1010,37 +512,263 @@ function saveMajorNew() {
     const v = parseFloat(el?.value)||0;
     if (v > 0) {
       majorCurrentVals[m] = v;
-      const cur=document.getElementById(`cur_${m}`);
-      if(cur) cur.value = v;
+      const cur = document.getElementById(`cur_${m}`);
+      if (cur) cur.value = v;
+      rateByMajorYear[m]['2567'] = v;
     }
   });
   updatePreview();
-  showToast('บันทึกและอัปเดตข้อมูลสำเร็จ!');
+  showToast('บันทึกและอัปเดต Preview สำเร็จ!');
 }
 
-function saveAll() { saveMajorNew(); showToast('บันทึกข้อมูลทั้งหมดสำเร็จ!'); }
+function saveAll() {
+  saveMajorNew();
+  showToast('บันทึกข้อมูลทั้งหมดสำเร็จ!');
+}
+
+/* ===== EXCEL IMPORT ===== */
+function handleExcel(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const wb = XLSX.read(ev.target.result, {type:'array'});
+      allSheetData = {};
+      let imported = [];
+
+      // Sheet 1: อัตราการได้งานทำ
+      const ws1 = wb.Sheets['อัตราการได้งานทำ'];
+      if (ws1) {
+        const rows = XLSX.utils.sheet_to_json(ws1, {header:1});
+        allSheetData['อัตราการได้งานทำ'] = rows;
+        const ok = parseSheet1(rows);
+        if (ok) imported.push('อัตราการได้งานทำ (' + ok + ' วิชาเอก)');
+      }
+
+      // Sheet 2: จำนวนนักศึกษา
+      const ws2 = wb.Sheets['จำนวนนักศึกษา'];
+      if (ws2) {
+        const rows = XLSX.utils.sheet_to_json(ws2, {header:1});
+        allSheetData['จำนวนนักศึกษา'] = rows;
+        const ok = parseSheet2(rows);
+        if (ok) imported.push('จำนวนนักศึกษา (' + ok + ' วิชาเอก)');
+      }
+
+      // Sheet 3: ทำงานตรงสาย
+      const ws3 = wb.Sheets['ทำงานตรงสาย'];
+      if (ws3) {
+        const rows = XLSX.utils.sheet_to_json(ws3, {header:1});
+        allSheetData['ทำงานตรงสาย'] = rows;
+        const ok = parseSheet3(rows);
+        if (ok) imported.push('ทำงานตรงสาย (' + ok + ' ปี)');
+      }
+
+      // แสดง preview sheet แรก
+      const firstSheet = Object.keys(allSheetData)[0];
+      if (firstSheet) {
+        renderExcelTable(allSheetData[firstSheet], firstSheet);
+        buildSheetTabs();
+      }
+
+      updatePreview();
+      showToast(`นำเข้า "${file.name}" สำเร็จ — ${imported.join(', ')}`);
+      switchTab('preview', document.querySelectorAll('.tab-btn')[1]);
+
+    } catch(err) {
+      console.error(err);
+      showToast('ไม่สามารถอ่านไฟล์ Excel ได้: ' + err.message, 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+  e.target.value='';
+}
+
+// Sheet 1: อัตราการได้งานทำ
+// แถวที่ 4 (index 3) = header: วิชาเอกวิชา, 2563, 2564, 2565, 2566, 2567
+// แถวที่ 5-10 (index 4-9) = FIN,MKT,HRM,LSM,MICE,BIS
+function parseSheet1(rows) {
+  const MAJOR_KEYS = ['FIN','MKT','HRM','LSM','MICE','BIS'];
+  const dataRows = rows.slice(4, 10);
+  let count = 0;
+  const statusLines = [];
+
+  dataRows.forEach((row, i) => {
+    const m = MAJOR_KEYS[i];
+    if (!m || !row) return;
+
+    let latestVal = 0;
+    YEARS.forEach((y, yi) => {
+      const v = parseFloat(row[yi + 1]);
+      if (!isNaN(v) && v > 0) {
+        rateByMajorYear[m][y] = v;
+        latestVal = v; // เก็บค่าล่าสุด
+      }
+    });
+
+    if (latestVal > 0) {
+      majorCurrentVals[m] = latestVal;
+      const el = document.getElementById(`cur_${m}`);
+      if (el) el.value = latestVal;
+      count++;
+      statusLines.push(`${m}: ${latestVal.toFixed(2)}%`);
+    }
+  });
+
+  // แสดง import status
+  const statusEl = document.getElementById('importStatusRate');
+  if (statusEl && statusLines.length) {
+    statusEl.innerHTML = `<strong>✅ นำเข้าสำเร็จ:</strong><ul>${statusLines.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+    statusEl.classList.add('show');
+  }
+
+  return count;
+}
+
+// Sheet 2: จำนวนนักศึกษา
+// แถวที่ 4 (index 3) = header
+// แถวที่ 5-10 (index 4-9) = FIN..BIS
+// col: มีงานทำ 2563(1), ทั้งหมด 2563(2), มีงานทำ 2564(3), ทั้งหมด 2564(4), ...
+function parseSheet2(rows) {
+  const MAJOR_KEYS = ['FIN','MKT','HRM','LSM','MICE','BIS'];
+  const dataRows = rows.slice(4, 10);
+  let count = 0;
+
+  dataRows.forEach((row, i) => {
+    const m = MAJOR_KEYS[i];
+    if (!m || !row) return;
+    if (!countData[m]) countData[m] = {};
+    let hasData = false;
+
+    YEARS.forEach((y, yi) => {
+      const nVal = parseFloat(row[yi * 2 + 1]);
+      const tVal = parseFloat(row[yi * 2 + 2]);
+      countData[m][y] = { n: isNaN(nVal)?0:nVal, t: isNaN(tVal)?0:tVal };
+      if (!isNaN(nVal) && nVal > 0) hasData = true;
+
+      // อัปเดต input grid sa_ (ใช้ค่ารวมทุกวิชาเอก)
+      const elN = document.getElementById(`sa_${y}_n`);
+      const elT = document.getElementById(`sa_${y}_t`);
+      if (elN && !isNaN(nVal)) {
+        elN.value = (parseFloat(elN.value)||0) + nVal;
+      }
+      if (elT && !isNaN(tVal)) {
+        elT.value = (parseFloat(elT.value)||0) + tVal;
+      }
+    });
+    if (hasData) count++;
+  });
+
+  const statusEl = document.getElementById('importStatusCount');
+  if (statusEl && count) {
+    statusEl.innerHTML = `<strong>✅ นำเข้าข้อมูลจำนวนนักศึกษา ${count} วิชาเอก</strong> — ค่าในช่องเป็นผลรวมทุกวิชาเอก`;
+    statusEl.classList.add('show');
+  }
+  return count;
+}
+
+// Sheet 3: ทำงานตรงสาย
+// แถวที่ 4 (index 3) = header: รายการ, 2563..2567
+// แถวที่ 5 (index 4) = จำนวนนักศึกษาที่มีงานทำ (คน)
+// แถวที่ 6 (index 5) = จำนวนนักศึกษาทั้งหมด (คน)
+// แถวที่ 7 (index 6) = จำนวนที่ทำงานตรงสาย (คน)
+function parseSheet3(rows) {
+  let count = 0;
+  const nRow = rows[4]; // มีงานทำ
+  const tRow = rows[5]; // ทั้งหมด
+  const sRow = rows[6]; // ตรงสาย
+  if (!nRow && !tRow && !sRow) return 0;
+
+  const statusLines = [];
+  YEARS.forEach((y, yi) => {
+    const col = yi + 1;
+    const nVal = parseFloat(nRow?.[col]);
+    const tVal = parseFloat(tRow?.[col]);
+    const sVal = parseFloat(sRow?.[col]);
+    straightData[y] = {
+      n: isNaN(nVal)?0:nVal,
+      t: isNaN(tVal)?0:tVal,
+      s: isNaN(sVal)?0:sVal
+    };
+
+    const elN = document.getElementById(`sb_${y}_n`);
+    const elT = document.getElementById(`sb_${y}_t`);
+    const elS = document.getElementById(`sb_${y}_s`);
+    if (elN && !isNaN(nVal)) { elN.value = nVal; }
+    if (elT && !isNaN(tVal)) { elT.value = tVal; }
+    if (elS && !isNaN(sVal)) { elS.value = sVal; }
+
+    if (!isNaN(nVal) && nVal > 0) {
+      count++;
+      const rate = tVal > 0 ? ((sVal/tVal)*100).toFixed(1) : '—';
+      statusLines.push(`${y}: ตรงสาย ${rate}%`);
+    }
+  });
+
+  const statusEl = document.getElementById('importStatusStraight');
+  if (statusEl && statusLines.length) {
+    statusEl.innerHTML = `<strong>✅ นำเข้าข้อมูลทำงานตรงสาย:</strong><ul>${statusLines.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+    statusEl.classList.add('show');
+  }
+  return count;
+}
+
+/* ===== Excel Preview ===== */
+function renderExcelTable(rows, sheetName) {
+  if (!rows || !rows.length) return;
+  // หา header row (แถวแรกที่มีข้อมูล)
+  let headerIdx = 0;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i] && rows[i].some(c => c != null && String(c).trim() !== '')) {
+      headerIdx = i; break;
+    }
+  }
+  const header = rows[headerIdx] || [];
+  const body   = rows.slice(headerIdx + 1, headerIdx + 51);
+
+  document.getElementById('excelPreviewTitle').textContent = `ข้อมูลจากไฟล์ Excel — ${sheetName}`;
+  const thead = `<thead><tr>${header.map(h=>`<th>${h??''}</th>`).join('')}</tr></thead>`;
+  const tbody = `<tbody>${body.map(r=>`<tr>${header.map((_,ci)=>`<td>${r?.[ci]??''}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  document.getElementById('excelTable').innerHTML = thead + tbody;
+  document.getElementById('excelMeta').textContent = `Sheet: ${sheetName} — แสดง ${body.length} แถว`;
+  document.getElementById('excelPreviewCard').style.display = 'block';
+  document.getElementById('uploadZoneCard').style.display = 'none';
+}
+
+function buildSheetTabs() {
+  const wrap = document.getElementById('sheetTabs');
+  const sheets = Object.keys(allSheetData);
+  wrap.innerHTML = sheets.map((s,i) => `
+    <button class="btn-outline btn-sm${i===0?' active':''}"
+            onclick="renderExcelTable(allSheetData['${s}'],'${s}');document.querySelectorAll('#sheetTabs button').forEach(b=>b.classList.remove('active'));this.classList.add('active')"
+            style="${i===0?'background:var(--purple-pale);border-color:var(--purple);':''}">
+      ${s}
+    </button>`).join('');
+}
 
 /* ===== PREVIEW ===== */
 function updatePreview() {
   const vals = MAJORS.map(m => parseFloat(majorCurrentVals[m])||0);
-  const avg = vals.reduce((a,b)=>a+b,0) / vals.filter(v=>v>0).length || 0;
+  const nonZero = vals.filter(v => v > 0);
+  const avg = nonZero.length ? nonZero.reduce((a,b)=>a+b,0)/nonZero.length : 0;
 
-  // Stat cards
-  document.getElementById('previewAvg').textContent = avg.toFixed(2) + '%';
-  document.getElementById('previewAvgTrend').textContent = '↑ คำนวณจากข้อมูลปัจจุบัน';
+  document.getElementById('previewAvg').textContent = avg > 0 ? avg.toFixed(2)+'%' : '—';
+  document.getElementById('previewAvgTrend').textContent = nonZero.length + ' วิชาเอกที่มีข้อมูล';
 
-  // Top major
-  const maxVal = Math.max(...vals);
-  const maxIdx = vals.indexOf(maxVal);
-  document.getElementById('topMajorVal').textContent = maxVal.toFixed(2) + '%';
-  document.getElementById('topMajorName').textContent = MAJORS[maxIdx];
+  if (nonZero.length) {
+    const maxVal = Math.max(...vals);
+    const maxIdx = vals.indexOf(maxVal);
+    const minVal = Math.min(...nonZero);
+    const minIdx = vals.indexOf(minVal);
 
-  // Insight chips
-  const minVal = Math.min(...vals.filter(v=>v>0));
-  const minIdx = vals.indexOf(minVal);
-  document.getElementById('chipHighest').textContent = `${MAJORS[maxIdx]}: ${maxVal.toFixed(2)}%`;
-  document.getElementById('chipLowest').textContent  = `${MAJORS[minIdx]}: ${minVal.toFixed(2)}%`;
-  document.getElementById('chipSpread').textContent  = `ช่วงห่าง: ${(maxVal - minVal).toFixed(2)}%`;
+    document.getElementById('topMajorVal').textContent = maxVal.toFixed(2)+'%';
+    document.getElementById('topMajorName').textContent = MAJORS[maxIdx];
+    document.getElementById('botMajorVal').textContent = minVal.toFixed(2)+'%';
+    document.getElementById('botMajorName').textContent = MAJORS[minIdx];
+
+    document.getElementById('chipHighest').textContent = `สูงสุด: ${MAJORS[maxIdx]} ${maxVal.toFixed(2)}%`;
+    document.getElementById('chipLowest').textContent  = `ต่ำสุด: ${MAJORS[minIdx]} ${minVal.toFixed(2)}%`;
+    document.getElementById('chipSpread').textContent  = `ช่วงห่าง: ${(maxVal - minVal).toFixed(2)}%`;
+  }
 
   renderBarChart(vals);
   renderPieChart(vals);
@@ -1053,12 +781,12 @@ function renderBarChart(vals) {
   const wrap = document.getElementById('barChart');
   wrap.querySelectorAll('.bar-col').forEach(e=>e.remove());
   MAJORS.forEach((m,i) => {
-    const h = Math.round((vals[i]/max)*HEIGHT);
+    const h = Math.max(Math.round((vals[i]/max)*HEIGHT), vals[i]>0?4:2);
     const col = document.createElement('div');
     col.className = 'bar-col';
     col.innerHTML = `
-      <span class="bar-val">${vals[i].toFixed(1)}%</span>
-      <div class="bar" style="height:${h}px;background:${COLORS[i]};min-height:4px;box-shadow:0 2px 8px ${COLORS[i]}44"></div>
+      <span class="bar-val">${vals[i]>0?vals[i].toFixed(1)+'%':'—'}</span>
+      <div class="bar" style="height:${h}px;background:${COLORS[i]};min-height:${vals[i]>0?4:2}px;box-shadow:0 2px 8px ${COLORS[i]}44"></div>
       <span class="bar-label">${m}</span>`;
     wrap.appendChild(col);
   });
@@ -1070,20 +798,18 @@ function renderPieChart(vals) {
   let cum=0, paths='';
   vals.forEach((v,i) => {
     const pct = v/total;
-    const s = cum*2*Math.PI - Math.PI/2;
-    cum += pct;
+    const s = cum*2*Math.PI - Math.PI/2; cum += pct;
     const e = cum*2*Math.PI - Math.PI/2;
     const x1=cx+r*Math.cos(s),y1=cy+r*Math.sin(s);
     const x2=cx+r*Math.cos(e),y2=cy+r*Math.sin(e);
     const ix1=cx+ir*Math.cos(e),iy1=cy+ir*Math.sin(e);
     const ix2=cx+ir*Math.cos(s),iy2=cy+ir*Math.sin(s);
-    const large=pct>0.5?1:0;
-    paths+=`<path d="M${x1} ${y1} A${r} ${r} 0 ${large} 1 ${x2} ${y2} L${ix1} ${iy1} A${ir} ${ir} 0 ${large} 0 ${ix2} ${iy2}Z" fill="${COLORS[i]}" stroke="white" stroke-width="2"/>`;
+    const large = pct>0.5?1:0;
+    paths += `<path d="M${x1} ${y1} A${r} ${r} 0 ${large} 1 ${x2} ${y2} L${ix1} ${iy1} A${ir} ${ir} 0 ${large} 0 ${ix2} ${iy2}Z" fill="${COLORS[i]}" stroke="white" stroke-width="2"/>`;
   });
-  paths+=`<circle cx="${cx}" cy="${cy}" r="34" fill="white" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.08))"/>
-          <text x="${cx}" y="${cy+5}" text-anchor="middle" fill="${COLORS[0]}" font-size="12" font-weight="700" font-family="Lexend,sans-serif">รวม</text>`;
+  paths += `<circle cx="${cx}" cy="${cy}" r="34" fill="white"/>
+            <text x="${cx}" y="${cy+5}" text-anchor="middle" fill="${COLORS[0]}" font-size="12" font-weight="700" font-family="Lexend,sans-serif">รวม</text>`;
   document.getElementById('pieChart').innerHTML = paths;
-
   document.getElementById('pieLegend').innerHTML = MAJORS.map((m,i)=>`
     <div class="legend-item">
       <div class="legend-dot" style="background:${COLORS[i]}"></div>
@@ -1093,7 +819,7 @@ function renderPieChart(vals) {
 }
 
 function renderRankTable(vals) {
-  const sorted = MAJORS.map((m,i)=>({name:m,val:vals[i],color:COLORS[i],idx:i}))
+  const sorted = MAJORS.map((m,i)=>({name:m,val:vals[i],color:COLORS[i]}))
                         .sort((a,b)=>b.val-a.val);
   const max = sorted[0]?.val || 1;
   const tbody = document.getElementById('rankTableBody');
@@ -1106,68 +832,34 @@ function renderRankTable(vals) {
       <td style="font-weight:700;color:var(--text)">${item.name}</td>
       <td style="width:200px">
         <div class="rank-bar-bg">
-          <div class="rank-bar-fill" style="width:${(item.val/max*100).toFixed(1)}%;background:${item.color}"></div>
+          <div class="rank-bar-fill" style="width:${item.val>0?(item.val/max*100).toFixed(1):0}%;background:${item.color}"></div>
         </div>
       </td>
       <td style="text-align:right;font-weight:700;color:${item.color};font-family:'Lexend',sans-serif">
-        ${item.val.toFixed(2)}%
+        ${item.val>0?item.val.toFixed(2)+'%':'—'}
       </td>
     </tr>`).join('');
 }
 
-/* ===== Excel ===== */
-function handleExcel(e) {
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      const wb = XLSX.read(ev.target.result, {type:'array'});
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, {header:1});
-      renderExcelTable(rows, file.name);
-      tryAutoFill(rows);
-      showToast(`นำเข้า "${file.name}" สำเร็จ (${rows.length} แถว)`);
-      switchTab('preview', document.querySelectorAll('.tab-btn')[1]);
-    } catch(err) {
-      showToast('ไม่สามารถอ่านไฟล์ Excel ได้','error');
-    }
-  };
-  reader.readAsArrayBuffer(file);
-  e.target.value='';
-}
-
-function renderExcelTable(rows, fileName) {
-  if (!rows.length) return;
-  const header = rows[0];
-  const body   = rows.slice(1,51);
-  document.getElementById('excelPreviewTitle').textContent = `ข้อมูลจากไฟล์ Excel: ${fileName}`;
-  const thead = `<thead><tr>${header.map(h=>`<th>${h??''}</th>`).join('')}</tr></thead>`;
-  const tbody = `<tbody>${body.map(r=>`<tr>${header.map((_,ci)=>`<td>${r[ci]??''}</td>`).join('')}</tr>`).join('')}</tbody>`;
-  document.getElementById('excelTable').innerHTML = thead+tbody;
-  document.getElementById('excelMeta').textContent = `แสดง ${body.length} แถวแรก (ทั้งหมด ${rows.length-1} แถว)`;
-  document.getElementById('excelPreviewCard').style.display='block';
-  document.getElementById('uploadZoneCard').style.display='none';
-}
-
-function tryAutoFill(rows) {
-  rows.forEach(row => {
-    MAJORS.forEach(m => {
-      row.forEach((cell,ci) => {
-        if (String(cell).toUpperCase().includes(m) && typeof row[ci+1]==='number') {
-          majorCurrentVals[m] = row[ci+1];
-        }
-      });
-    });
-  });
-  MAJORS.forEach(m => {
-    const el = document.getElementById(`cur_${m}`);
-    if (el) el.value = majorCurrentVals[m];
-  });
-  updatePreview();
-}
+/* ===== Download Template ===== */
+const TEMPLATE_B64 = "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";
 
 function downloadTemplate() {
-  showToast('ฟีเจอร์ดาวน์โหลด Template กำลังพัฒนา');
+  try {
+    const bin = atob(TEMPLATE_B64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const blob = new Blob([bytes], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'graduate_employment_template.xlsx';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('✅ ดาวน์โหลด Template สำเร็จ!');
+  } catch(e) {
+    showToast('ดาวน์โหลดไม่สำเร็จ: ' + e.message, 'error');
+  }
 }
 
 /* ===== Tabs ===== */
@@ -1175,7 +867,7 @@ function switchTab(name, btn) {
   document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
   if (name==='preview') updatePreview();
 }
 
@@ -1185,9 +877,9 @@ function showToast(msg, type='success') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'toast' + (type==='error'?' error':'');
-  t.style.display='block';
+  t.style.display = 'block';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>{ t.style.display='none'; }, 3000);
+  toastTimer = setTimeout(()=>{ t.style.display='none'; }, 3500);
 }
 
 /* ===== Sidebar toggle ===== */

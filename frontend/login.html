@@ -324,8 +324,7 @@
 
   <script>
     /* ---------- CONFIG ---------- */
-    const API_BASE = "https://websitefms.onrender.com";
-
+    const API_BASE = ''; 
     /* ---------- Password toggle ---------- */
     const passwordInput = document.getElementById("password");
     const togglePassword = document.getElementById("togglePassword");
@@ -373,7 +372,7 @@
         messageEl.textContent = "เข้าสู่ระบบสำเร็จ";
 
         setTimeout(() => {
-          window.location.href = "https://websitefms.onrender.com/dashboard.html";
+         window.location.href = `${API_BASE}/dashboard.html`;
         }, 800);
       } catch (err) {
         console.error(err);

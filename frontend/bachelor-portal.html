@@ -195,11 +195,11 @@
 
 <!-- NAVBAR -->
 <header class="navbar">
-  <div class="logo"><img src="logo.jpg" alt="PSU Logo" onerror="this.style.display='none'"></div>
+  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
   <nav>
     <ul class="nav-links">
       <li><a href="bba-home.html">หน้าหลัก</a></li>
-      <li><a href="bba-public.html" class="active">ข้อมูลสาขาวิชา</a></li>
+      <li><a href="bba-public.html" class="active">ข้อมูลสาขา</a></li>
       <li><a href="student.html">นักศึกษา</a></li>
       <li><a href="plans.html">แผนการศึกษา</a></li>
       <li><a href="bba-qa.html">QA</a></li>
@@ -315,8 +315,8 @@
 </footer>
 
 <script>
-  const BASE_URL = 'https://websitefms.onrender.com';
-  const API      = BASE_URL + '/api';
+  const BASE = ''; 
+  const API      = BASE + '/api';
 
   const msgEl   = document.getElementById('message');
   const params  = new URLSearchParams(window.location.search);
@@ -348,9 +348,11 @@
       const major     = majors.find(m => String(m.id) === String(majorId));
 
       if (!major) {
-        msgEl.textContent = `ไม่พบข้อมูลสาขาวิชา (majorId = ${majorId})`;
+        msgEl.textContent = `ไม่พบข้อมูลสาขา (majorId = ${majorId})`;
         return;
       }
+      document.querySelector('a[href="plans.html"]')
+  .href = `plans.html?courseId=${course.id}&majorId=${major.id}`;
       render(course, major);
     } catch(err) {
       msgEl.textContent = 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ — ' + err.message;
@@ -362,7 +364,7 @@
     const bannerEl = document.getElementById('heroBanner');
     const imgPath = major.image_url || major.hero_image || '';
     if (imgPath) {
-      const src = imgPath.startsWith('http') ? imgPath : BASE_URL + imgPath;
+      const src = imgPath.startsWith('http') ? imgPath : BASE + imgPath;
       bannerEl.innerHTML = `<img src="${src}" alt="${major.name_th || ''}" class="hero-banner-img"
         onerror="this.outerHTML='<div class=\\'hero-banner-placeholder\\'><i class=\\'fa-solid fa-graduation-cap\\'></i></div>'">`;
     } else {

@@ -271,7 +271,7 @@ textarea { resize: vertical; min-height: 80px; }
     <div class="footer-actions">
       <button type="button" class="btn btn-secondary" onclick="history.back()">ยกเลิก</button>
       <button type="submit" class="btn btn-primary" id="saveBtn">บันทึกหลักสูตร</button>
-      <button type="button" class="btn btn-success" id="addMajorBtn">บันทึกและเพิ่มสาขา</button>
+      <button type="button" class="btn btn-success" id="addMajorBtn">บันทึกและเพิ่มวิชาเอก</button>
       <button type="button" class="btn btn-secondary" id="deleteBtn" style="display:none; background:#ffdddd; color:#b33939;">ลบหลักสูตร</button>
     </div>
     <div id="message"></div>
@@ -279,7 +279,7 @@ textarea { resize: vertical; min-height: 80px; }
 </div>
 
 <script>
-const BASE_URL = "https://websitefms.onrender.com";
+const BASE = '';
 const API = BASE_URL + "/api";
 
 const user = localStorage.getItem("user");

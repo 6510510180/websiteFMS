@@ -2,180 +2,218 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>คะแนนผลลัพธ์ PLO | FMS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>กรอกคะแนนผลลัพธ์ PLO | FMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {
-  --purple: #7F13EC;
-  --purple-dark: #5c0db0;
-  --purple-mid: #9B6DD1;
-  --purple-light: #F3EEFF;
-  --purple-bg: #EDE7F3;
-  --text: #21111C;
-  --text-sub: #64748B;
-  --border: rgba(0,0,0,0.09);
-  --white: #FFFFFF;
-  --bg: #F7F4FC;
-  --green: #22c55e;
-  --amber: #f59e0b;
-  --red: #ef4444;
-  --teal: #0891b2;
+:root{
+  --pu:#9b51e0;--pu2:#7b2cbf;--pu-m:#E8DEFF;--pu-tab:#EDE9FE;--pu-sec:#F0EBFF;
+  --bg:#EEEEF6;--wh:#fff;--tx:#1A1523;--ts:#64748B;--bd:#E2E8F0;
+  --green:#059669;--amber:#d97706;--red:#dc2626;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Noto Sans Thai', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; font-size: 13px; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;}
 
-/* ── TOPBAR ── */
-.topbar {
-  width: 100%; height: 64px; background: var(--white); border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; padding: 0 40px; gap: 16px;
-  position: sticky; top: 0; z-index: 200; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+/* Topbar — เหมือน matrix.html */
+.topbar{width:100%;height:64px;background:var(--wh);border-bottom:1px solid rgba(0,0,0,.10);display:flex;align-items:center;padding:0 40px;gap:16px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.topbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-icon{width:32px;height:32px;background:var(--pu2);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;fill:white;}
+.brand{font-family:'Lexend',sans-serif;font-size:17px;font-weight:700;color:var(--tx);}
+.topbar-nav{display:flex;align-items:center;gap:4px;margin-left:32px;flex:1;}
+.topbar-nav a{padding:8px 16px;border-radius:8px;font-family:'Lexend',sans-serif;font-size:14px;font-weight:600;color:var(--ts);text-decoration:none;transition:.18s;}
+.topbar-nav a:hover{background:var(--pu-tab);color:var(--pu2);}
+.topbar-nav a.active{color:var(--pu2);border-bottom:2px solid var(--pu2);border-radius:0;padding-bottom:6px;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--pu-tab);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--pu2);}
+
+/* Layout */
+.main-content{padding:28px 0 80px;}
+.container{width:92%;max-width:1200px;margin:0 auto;}
+.header-banner{background:var(--pu-m);border-radius:14px;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap;}
+.header-title{font-size:17px;font-weight:700;color:var(--tx);}
+.header-sub{font-size:12px;color:var(--ts);margin-top:3px;}
+.hbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--bd);font-family:inherit;transition:.15s;text-decoration:none;white-space:nowrap;background:var(--wh);color:#444;}
+.btn:hover{border-color:var(--pu2);color:var(--pu2);}
+.btn-purple{background:var(--pu2);color:#fff;border-color:var(--pu2);}
+.btn-purple:hover{background:#6d28d9;color:#fff;}
+.btn-green{background:#16a34a;color:#fff;border-color:#16a34a;}
+.btn-green:hover{background:#15803d;color:#fff;}
+.btn-green:disabled,.btn-purple:disabled{opacity:.5;cursor:not-allowed;}
+select.btn{cursor:pointer;}
+
+/* Tabs */
+.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.tab-btn{padding:8px 16px;border-radius:9px;font-size:13px;font-weight:600;background:var(--wh);color:#555;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--bd);text-decoration:none;transition:.15s;}
+.tab-btn:hover{border-color:var(--pu);color:var(--pu);}
+.tab-btn.active{background:var(--pu-tab);color:var(--pu2);border-color:var(--pu-m);font-weight:700;}
+
+/* Unsaved */
+.unsaved{display:none;align-items:center;gap:7px;background:#fff7ed;border:1.5px solid #fed7aa;color:#c2410c;padding:5px 14px;border-radius:99px;font-size:12px;font-weight:700;margin-bottom:12px;}
+.unsaved.show{display:inline-flex;}
+.udot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Card */
+.card{background:var(--wh);border-radius:14px;border:1px solid rgba(0,0,0,.05);box-shadow:0 2px 10px rgba(0,0,0,.04);overflow:hidden;margin-bottom:16px;}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-bottom:1px solid var(--bd);}
+.card-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;}
+.scale-badge{background:#EFF6FF;color:#1d4ed8;padding:3px 12px;border-radius:99px;font-size:11px;font-weight:600;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TABLE — exact match to image 1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.tbl-wrap{overflow-x:auto;}
+table.mt{width:100%;border-collapse:collapse;font-size:13.5px;}
+table.mt colgroup col:first-child{width:52%;}
+table.mt colgroup col{width:14%;}
+table.mt colgroup col:last-child{width:52px;}
+
+table.mt th{
+  background:#faf7ff;color:var(--ts);font-weight:700;font-size:11px;
+  text-transform:uppercase;letter-spacing:.5px;padding:11px 16px;
+  border-bottom:2px solid #ede8f5;white-space:nowrap;
 }
-.topbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.logo-icon { width: 32px; height: 32px; background: var(--purple); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-.logo-icon svg { width: 18px; height: 18px; fill: white; }
-.topbar-brand { font-family: 'Lexend', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); }
-.topbar-nav { display: flex; align-items: center; gap: 4px; margin-left: 32px; flex: 1; }
-.topbar-nav a {
-  padding: 8px 16px; border-radius: 8px; font-family: 'Lexend', sans-serif;
-  font-size: 14px; font-weight: 600; color: var(--text-sub); text-decoration: none; transition: .18s; white-space: nowrap;
-}
-.topbar-nav a:hover { background: var(--purple-light); color: var(--purple); }
-.topbar-nav a.active { color: var(--purple); border-bottom: 2px solid var(--purple); border-radius: 0; padding-bottom: 6px; }
-.topbar-right { margin-left: auto; }
-.avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--purple-bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: var(--purple); cursor: pointer; }
+table.mt th.left{text-align:left;}
+table.mt th.ctr{text-align:center;}
 
-/* ── LAYOUT ── */
-.page { display: flex; gap: 24px; padding: 32px 40px 80px; max-width: 100%; }
-.main-col { flex: 1; min-width: 0; }
-.side-col { width: 300px; flex-shrink: 0; }
+/* default data row */
+table.mt td{padding:11px 16px;border-bottom:1px solid #f3eeff;vertical-align:middle;}
+table.mt td.num{text-align:center;}
 
-/* ── PAGE HEADER ── */
-.page-title { font-size: 20px; font-weight: 900; color: var(--text); line-height: 1.3; margin-bottom: 20px; }
-.page-title span { color: var(--purple); }
+/* ── dept header (darkest purple) ── */
+table.mt tr.r-dept > td{background:#3c3489;color:#EEEDFE;font-weight:700;font-size:13px;letter-spacing:.3px;border-bottom:none;}
 
-/* ── UNSAVED BADGE ── */
-.unsaved-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #fff7ed; border: 1.5px solid #fed7aa; color: #c2410c;
-  padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 700;
-  margin-bottom: 16px; opacity: 0; transition: opacity .25s;
-}
-.unsaved-badge.show { opacity: 1; }
-.unsaved-dot { width: 7px; height: 7px; border-radius: 50%; background: #f97316; animation: pulse 1.2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-/* ── CARD ── */
-.card {
-  background: var(--white); border-radius: 14px;
-  border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(127,19,236,0.06);
-  overflow: hidden; margin-bottom: 16px;
-}
-.card-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px; border-bottom: 1px solid var(--border);
-}
-.card-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
-.card-title svg { width: 16px; height: 16px; fill: var(--purple); }
-.avg-badge {
-  font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700;
-  background: var(--purple-bg); color: var(--purple);
-  padding: 3px 10px; border-radius: 999px;
+/* ── section header (purple tint, like image 1) ── */
+table.mt tr.r-sec > td{
+  background:var(--pu-sec);
+  color:var(--pu2);
+  font-weight:700;
+  font-size:13px;
+  padding:10px 16px;
+  border-bottom:1px solid #ddd6fe;
 }
 
-/* ── ACTIONS ── */
-.action-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-.btn {
-  display: flex; align-items: center; gap: 7px;
-  padding: 9px 18px; border-radius: 10px;
-  font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; font-weight: 700;
-  cursor: pointer; border: none; transition: .18s; white-space: nowrap;
+/* ── subtotal row (solid purple, like "บริหารธุรกิจ Total") ── */
+table.mt tr.r-sub > td{
+  background:#7c3aed;
+  color:#fff;
+  font-weight:700;
+  font-size:13.5px;
+  border-bottom:none;
 }
-.btn-primary { background: var(--purple); color: white; box-shadow: 0 4px 10px rgba(127,19,236,0.2); }
-.btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
-.btn-outline { background: white; color: var(--purple); border: 1.5px solid var(--purple); }
-.btn-outline:hover { background: var(--purple-light); }
-.btn-green { background: #16a34a; color: white; }
-.btn-green:hover { background: #15803d; }
-.btn svg { width: 15px; height: 15px; fill: currentColor; }
-#fileInput { display: none; }
+table.mt tr.r-sub > td .sg,
+table.mt tr.r-sub > td .sa,
+table.mt tr.r-sub > td .sr{ color:#e9d5ff; }
 
-/* ── TABLE ── */
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { background: #faf7ff; color: var(--text-sub); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; padding: 10px 14px; border-bottom: 2px solid #ede8f5; text-align: center; white-space: nowrap; }
-th.left { text-align: left; }
-td { padding: 10px 14px; border-bottom: 1px solid #f3eeff; vertical-align: middle; }
-td.label-cell { font-size: 12.5px; color: var(--text); max-width: 280px; line-height: 1.4; }
-td.label-cell .lo-code { font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700; color: var(--purple); margin-bottom: 2px; }
-td.label-cell .lo-desc { font-size: 11.5px; color: var(--text-sub); }
-td.score-cell { text-align: center; }
-
-/* ✅ แก้: input ทศนิยม ใช้ type=text แทน number */
-td.score-cell input {
-  width: 72px; height: 36px;
-  border: 1.5px solid #e0d8f0; border-radius: 8px;
-  text-align: center;
-  font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 700;
-  color: var(--text); background: #faf8ff; outline: none; transition: .15s;
-  /* ✅ ไม่ใช้ type=number เพื่อป้องกัน re-render ขัดการพิมพ์ทศนิยม */
+/* ── group header (darker purple, like "หลายหลักสูตร") ── */
+table.mt tr.r-group > td{
+  background:#6d28d9;
+  color:#DDD6FE;
+  font-weight:700;
+  font-size:13.5px;
+  border-bottom:none;
 }
-td.score-cell input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(127,19,236,0.08); background: white; }
-td.score-cell input.invalid { border-color: var(--red); background: #fff5f5; }
-td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
-.score-avg { font-family: 'Lexend', sans-serif; font-size: 14px; font-weight: 800; }
 
-/* section rows */
-.section-row td { background: #f5eeff; font-size: 12px; font-weight: 700; color: var(--purple); padding: 8px 14px; border-bottom: 1px solid #e8deff; }
-.total-row td { background: #2d1b4e; color: white; font-weight: 700; font-size: 13px; padding: 12px 14px; }
-.total-row td .score-avg { color: #c4b5fd; }
-.subtotal-row td { background: #6b21a8; color: white; font-weight: 700; padding: 10px 14px; }
-
-/* ── SIDE PANEL ── */
-.side-card {
-  background: var(--white); border-radius: 14px;
-  border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(127,19,236,0.06);
-  padding: 18px; margin-bottom: 14px;
+/* ── dept total (very dark, like "ภาควิชาบริหารธุรกิจ Total") ── */
+table.mt tr.r-dtot > td{
+  background:#2d1b4e;
+  color:#C4B5FD;
+  font-weight:700;
+  font-size:13.5px;
+  border-bottom:none;
 }
-.side-card h3 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
-.side-card h3 svg { width: 15px; height: 15px; }
-.compare-item { margin-bottom: 10px; }
-.compare-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
-.compare-label span:first-child { color: var(--text-sub); }
-.compare-label strong { font-family: 'Lexend', sans-serif; font-weight: 700; }
-.bar-bg { height: 8px; background: #f0ebfa; border-radius: 999px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 999px; background: var(--purple); transition: width .5s ease; }
-.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-.stat-block { background: var(--purple-bg); border-radius: 10px; padding: 12px; text-align: center; }
-.stat-block .stat-val { font-family: 'Lexend', sans-serif; font-size: 24px; font-weight: 800; color: var(--purple); }
-.stat-block .stat-label { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
-.summary-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.summary-list li { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; line-height: 1.5; color: var(--text-sub); }
-.bullet { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-.bullet.green { background: var(--green); }
-.bullet.amber { background: var(--amber); }
+table.mt tr.r-dtot > td .sg,
+table.mt tr.r-dtot > td .sa,
+table.mt tr.r-dtot > td .sr{ color:#e9d5ff; }
 
-/* ── TOAST ── */
-.toast {
-  position: fixed; bottom: 28px; right: 28px;
-  background: #1a1a2e; color: white; padding: 12px 18px; border-radius: 12px;
-  font-size: 13px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  display: flex; align-items: center; gap: 10px;
-  transform: translateY(80px); opacity: 0;
-  transition: all .3s cubic-bezier(.34,1.56,.64,1); z-index: 9999; pointer-events: none;
+/* ── grand total (light purple bg, bold purple text) ── */
+table.mt tr.r-grand > td{
+  background:var(--pu-m);
+  color:var(--pu2);
+  font-weight:700;
+  font-size:14px;
+  border-top:2px solid #c4b5fd;
+  border-bottom:none;
 }
-.toast.show { transform: translateY(0); opacity: 1; }
-.toast-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* indent levels */
+.i1{padding-left:20px!important;}
+.i2{padding-left:32px!important;}
+.i3{padding-left:44px!important;}
+
+/* lo-code label above description */
+.lo-code{font-size:10.5px;color:var(--ts);display:block;margin-bottom:2px;font-weight:600;}
+/* badges */
+.bp{display:inline-block;font-size:10px;padding:1px 7px;border-radius:99px;background:#EDE9FE;color:#6d28d9;font-weight:700;margin-right:5px;vertical-align:middle;}
+.bm{display:inline-block;font-size:10px;padding:1px 7px;border-radius:99px;background:#D1FAE5;color:#065F46;font-weight:700;margin-right:5px;vertical-align:middle;}
+
+/* score colors */
+.sg{color:var(--green);font-weight:700;}
+.sa{color:var(--amber);font-weight:700;}
+.sr{color:var(--red);font-weight:700;}
+.sd{color:#bbb;}
+
+/* ── inline score input (matches image 2 style) ── */
+.sinput{
+  width:80px;height:38px;
+  border:1.5px solid #ddd6f0;border-radius:9px;
+  text-align:center;
+  font-family:'Noto Sans Thai',sans-serif;font-size:14px;font-weight:700;
+  color:var(--tx);background:#faf8ff;
+  outline:none;transition:.15s;
+  display:block;margin:0 auto;
+}
+.sinput:focus{border-color:var(--pu2);box-shadow:0 0 0 3px rgba(124,44,191,.08);background:#fff;}
+.sinput.err{border-color:var(--red);background:#fff5f5;}
+
+/* delete button */
+.del-btn{background:none;border:none;cursor:pointer;color:#d8d0ea;font-size:14px;padding:5px 6px;border-radius:6px;transition:.15s;line-height:1;}
+.del-btn:hover{color:var(--red);background:#fee2e2;}
+
+/* add bar */
+.add-bar{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #f3eeff;background:#faf7ff;flex-wrap:wrap;}
+.add-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;background:var(--wh);}
+.add-plo{color:#7c3aed;border:1.5px dashed #c4b5fd;}.add-plo:hover{background:#f5f3ff;border-color:#7c3aed;}
+.add-mlo{color:#065F46;border:1.5px dashed #6ee7b7;}.add-mlo:hover{background:#f0fdfa;border-color:#059669;}
+.add-sec{color:#92400e;border:1.5px dashed #fcd34d;}.add-sec:hover{background:#fffbeb;border-color:#d97706;}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s;}
+.modal-bg.open{opacity:1;pointer-events:all;}
+.modal{background:var(--wh);border-radius:16px;padding:26px;width:430px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.18);transform:translateY(18px);transition:.2s;}
+.modal-bg.open .modal{transform:translateY(0);}
+.modal h3{font-size:15px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.mfield{margin-bottom:13px;}
+.mfield label{display:block;font-size:12px;font-weight:700;color:var(--ts);margin-bottom:5px;}
+.mfield input,.mfield select{width:100%;padding:9px 12px;border:1.5px solid #e0d8f0;border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--tx);outline:none;transition:.15s;}
+.mfield input:focus{border-color:var(--pu2);}
+.mrow{display:flex;gap:10px;}.mrow .mfield{flex:1;}
+.mactions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+.mbtn-cancel{background:#f1f5f9;color:var(--ts);border:none;padding:8px 18px;border-radius:9px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;}
+.mbtn-ok{background:var(--pu2);color:#fff;border:none;padding:8px 20px;border-radius:9px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;}
+.mbtn-ok:hover{background:#6d28d9;}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:#1a1a2e;color:#fff;padding:11px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:9px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+#fileInput{display:none;}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <header class="topbar">
-  <a class="topbar-logo" href="#">
-    <div class="logo-icon"><svg viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg></div>
-    <span class="topbar-brand">ระบบจัดการผลลัพธ์การเรียนรู้</span>
+  <a class="topbar-logo" href="qa-add.html">
+    <div class="logo-icon">
+      <svg viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg>
+    </div>
+    <span class="brand">ระบบจัดการผลลัพธ์การเรียนรู้</span>
   </a>
   <nav class="topbar-nav">
     <a href="qa-add.html">หน้าหลัก</a>
@@ -184,524 +222,678 @@ td.score-cell input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-
     <a href="score-plo.html" class="active">คะแนนผลลัพธ์ PLO</a>
     <a href="kas.html">KAS</a>
   </nav>
-  <div class="topbar-right"><div class="avatar">A</div></div>
+  <div class="topbar-right">
+    <div class="avatar">A</div>
+  </div>
 </header>
 
-<!-- PAGE -->
-<div class="page">
+<main class="main-content">
+<div class="container">
 
-  <!-- MAIN COLUMN -->
-  <div class="main-col">
-    <div class="page-title">สรุปจากระบบการประเมินผลการเรียนรู้และการทวนสอบผลสัมฤทธิ์ของนักศึกษา<br><span>ปีการศึกษา 2567</span></div>
+  <div class="header-banner">
+    <div>
+      <div class="header-title">สรุปคะแนนผลลัพธ์การเรียนรู้ PLO/MLO</div>
+      <div class="header-sub" id="pageSub">ปีการศึกษา — | แก้ไขคะแนนในตารางได้เลย กดบันทึกเมื่อพร้อม</div>
+    </div>
+    <div class="hbtns">
+      <select id="yearSel" class="btn" onchange="onYear(this.value)"></select>
+      <button class="btn" onclick="document.getElementById('fileInput').click()">
+        <i class="fas fa-file-import"></i> นำเข้า Excel
+      </button>
+      <button class="btn" onclick="downloadTemplate()">
+        <i class="fas fa-download"></i> Template
+      </button>
+      <button class="btn btn-green" id="saveBtn" onclick="saveData()" disabled>
+        <i class="fas fa-save"></i> บันทึก
+      </button>
+      <a href="score.html" class="btn btn-purple">
+        <i class="fas fa-eye"></i> ดูรายงาน
+      </a>
+    </div>
+  </div>
+  <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="importExcel(event)">
 
-    <!-- Unsaved indicator -->
-    <div class="unsaved-badge" id="unsavedBadge">
-      <div class="unsaved-dot"></div>
-      มีข้อมูลที่ยังไม่ได้บันทึก
+  <div class="tabs">
+    <a href="bba-plo.html"     class="tab-btn"><i class="fas fa-th-large"></i> PLOs/MLOs</a>
+    <a href="score.html"       class="tab-btn"><i class="fas fa-chart-bar"></i> คะแนนผลลัพธ์</a>
+    <a href="bba-matrix1.html" class="tab-btn"><i class="fas fa-project-diagram"></i> Alignment Matrix</a>
+    <a href="kas1.html"        class="tab-btn"><i class="fas fa-book"></i> KAS</a>
+  </div>
+
+  <div class="unsaved" id="unsaved">
+    <div class="udot"></div> มีข้อมูลที่ยังไม่ได้บันทึก
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">
+        <i class="fas fa-table" style="color:var(--pu2)"></i>
+        ตารางสรุปคะแนนเฉลี่ยตาม PLO/MLO
+      </div>
+      <span class="scale-badge">Average Scale 1.0–5.0</span>
     </div>
 
-    <div class="action-row">
-      <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
-        <svg viewBox="0 0 20 20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/></svg>
-        นำเข้าจาก Excel
-      </button>
-      <button class="btn btn-outline" onclick="downloadTemplate()">
-        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
-        ดาวน์โหลด Template
-      </button>
-      <button class="btn btn-green" onclick="exportExcel()">
-        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"/></svg>
-        Export Excel
-      </button>
-      <button class="btn btn-outline" onclick="addRowModal()">
-        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
-        เพิ่ม PLO/MLO
-      </button>
+    <div class="tbl-wrap">
+      <table class="mt">
+        <colgroup><col><col><col><col><col></colgroup>
+        <thead><tr>
+          <th class="left">ผลลัพธ์การเรียนรู้ (LEARNING OUTCOMES)</th>
+          <th class="ctr">SEM 1</th>
+          <th class="ctr">SEM 2</th>
+          <th class="ctr">GRAND TOTAL</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
     </div>
-    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="importExcel(event)">
 
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <svg viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/></svg>
-          ตารางสรุปคะแนนเฉลี่ยตาม PLO/MLO
-        </div>
-        <span class="avg-badge" id="avgBadge">Average Scale 1.0–5.0</span>
-      </div>
-      <div class="table-wrap">
-        <table id="scoreTable">
-          <thead>
-            <tr>
-              <th class="left" style="min-width:260px">ผลลัพธ์การเรียนรู้ (Learning Outcomes)</th>
-              <th style="width:90px">SEM 1</th>
-              <th style="width:90px">SEM 2</th>
-              <th style="width:100px">GRAND TOTAL</th>
-              <th style="width:50px"></th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
+    <div class="add-bar">
+      <button class="add-btn add-plo" onclick="openModal('PLO')">
+        <i class="fas fa-plus" style="font-size:10px"></i> เพิ่ม PLO
+      </button>
+      <button class="add-btn add-mlo" onclick="openModal('MLO')">
+        <i class="fas fa-plus" style="font-size:10px"></i> เพิ่ม MLO
+      </button>
+      <button class="add-btn add-sec" onclick="openModal('section')">
+        <i class="fas fa-plus" style="font-size:10px"></i> เพิ่มหัวข้อหมวด
+      </button>
     </div>
   </div>
 
-  <!-- SIDE COLUMN -->
-  <div class="side-col">
-    <div class="side-card">
-      <h3>
-        <svg viewBox="0 0 20 20" fill="var(--purple)"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
-        เปรียบเทียบคะแนนรวมแต่ละด้าน
-      </h3>
-      <div id="compareSection"></div>
-    </div>
+</div>
+</main>
 
-    <div class="side-card">
-      <h3>
-        <svg viewBox="0 0 20 20" fill="var(--purple)"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-        ภาพรวม
-      </h3>
-      <div class="stat-grid" id="statGrid"></div>
-      <div style="margin-top:12px">
-        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="saveData()">
-          <svg viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-          บันทึกข้อมูล
-        </button>
-      </div>
-    </div>
-
-    <div class="side-card">
-      <h3>
-        <svg viewBox="0 0 20 20" fill="var(--amber)"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-        สรุปข้อเสนอแนะ
-      </h3>
-      <ul class="summary-list" id="summaryList"></ul>
+<!-- Modal -->
+<div class="modal-bg" id="modalBg" onclick="closeBg(event)">
+  <div class="modal">
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+    <div class="mactions">
+      <button class="mbtn-cancel" onclick="closeModal()">ยกเลิก</button>
+      <button class="mbtn-ok" onclick="confirmModal()">เพิ่มรายการ</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
+<div class="toast" id="toast"><div class="tdot" id="tdot"></div><span id="tmsg"></span></div>
 
 <script>
-// ═══════════════════════════════════════════════
-//  KEY สำหรับ localStorage
-// ═══════════════════════════════════════════════
-const STORAGE_KEY = 'fms_plo_scores_2567';
-
-// ═══════════════════════════════════════════════
-//  DEFAULT DATA
-// ═══════════════════════════════════════════════
-const DEFAULT_DATA = [
-  { type:'section', label:'ผลลัพธ์การเรียนรู้ระดับหลักสูตร (BA)' },
-  { type:'row', code:'PLO1', desc:'การบูรณาการประยุกต์ศาสตร์ด้านบริหารธุรกิจ', sem1:null, sem2:null },
-  { type:'row', code:'PLO2', desc:'การใช้ผู้ประกอบการที่มีจิตสำนึกด้วยความรับผิดชอบต่อสังคม', sem1:null, sem2:null },
-  { type:'row', code:'PLO3', desc:'การประยุกต์เทคโนโลยีดิจิทัลเพื่อวิเคราะห์ทางธุรกิจ', sem1:null, sem2:null },
-  { type:'row', code:'PLO4', desc:'ทักษะความร่วมมือในการทำงานเป็นทีมและการสื่อสาร', sem1:null, sem2:null },
-  { type:'row', code:'PLO5', desc:'จริยธรรม คุณธรรมและจรรยาบรรณ', sem1:null, sem2:null },
-  { type:'row', code:'PLO6', desc:'พัฒนาทักษะและความสามารถในการเรียนรู้ตลอดชีวิต', sem1:null, sem2:null },
-  { type:'row', code:'MLO', desc:'วิชาเอกการจัดการทรัพยากรมนุษย์', sem1:null, sem2:null },
-  { type:'row', code:'MLO', desc:'วิชาเอกการจัดการโซ่อุปทานและโลจิสติกส์', sem1:null, sem2:null },
-  { type:'row', code:'MLO', desc:'วิชาเอกการตลาดและการสื่อสารการตลาด', sem1:null, sem2:null },
-  { type:'row', code:'MLO', desc:'วิชาเอกการเป็นผู้ประกอบการธุรกิจ', sem1:null, sem2:null },
-  { type:'row', code:'PLO', desc:'PLO', sem1:null, sem2:null },
-  { type:'row', code:'ด้านความรู้และทักษะทางวิชาชีพปฎิบัติ', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านทักษะการวิเคราะห์เชิงปริมาณ', desc:'การสื่อสารและการใช้เทคโนโลยีสารสนเทศ', sem1:null, sem2:null },
-  { type:'row', code:'ด้านทักษะความสัมพันธ์ระหว่างบุคคล', desc:'รวมทั้งความรอบรู้ความสามารถในการมีเหตุผล', sem1:null, sem2:null },
-  { type:'subtotal', label:'รวมผลลัพธ์วิชาเอกธุรกิจ (Total)', refRows:'ba' },
-  { type:'section', label:'ผลลัพธ์หลักสูตร (Multi-disciplinary)' },
-  { type:'row', code:'ด้านความรู้', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านความรู้และทักษะทางวิชาชีพปฎิบัติ', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านคุณธรรม-จริยธรรม', desc:'', sem1:null, sem2:null },
-  { type:'row', code:'ด้านทักษะการวิเคราะห์เชิงปริมาณ', desc:'การสื่อสารและการใช้เทคโนโลยีสารสนเทศ', sem1:null, sem2:null },
-  { type:'row', code:'ด้านทักษะความสัมพันธ์ระหว่างบุคคล', desc:'', sem1:null, sem2:null },
-  { type:'subtotal', label:'ผลลัพธ์หลักสูตร Total', refRows:'multi' },
-  { type:'total', label:'ภาควิชาบริหารธุรกิจ Total', refRows:'all_ba' },
-  { type:'grand', label:'Grand Total', refRows:'all' },
-];
-
-// ═══════════════════════════════════════════════
-//  LOAD จาก localStorage (ถ้ามี) หรือใช้ DEFAULT
-// ═══════════════════════════════════════════════
-let tableData;
-try {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  tableData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
-} catch {
-  tableData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-}
-
+const API_BASE   = '/api/plo';
+const PROGRAM_ID = '00000000-0000-0000-0000-000000000001';
+let YEAR = '';
+let DATA = [];
 let hasUnsaved = false;
+let modalType  = '';
 
-function markUnsaved() {
-  hasUnsaved = true;
-  document.getElementById('unsavedBadge').classList.add('show');
+/* ── utils ── */
+function avg(a){
+  const v=a.filter(x=>x!==null&&x!==undefined&&!isNaN(x));
+  return v.length ? v.reduce((s,x)=>s+x,0)/v.length : null;
 }
-function markSaved() {
-  hasUnsaved = false;
-  document.getElementById('unsavedBadge').classList.remove('show');
+function grd(r){ return avg([r.sem1,r.sem2].filter(x=>x!==null)); }
+function parseScore(v){
+  if(v===null||v===undefined||String(v).trim()==='') return null;
+  const n=parseFloat(String(v).replace(',','.'));
+  return isNaN(n)?null:n;
 }
-
-// ═══════════════════════════════════════════════
-//  HELPER
-// ═══════════════════════════════════════════════
-function parseScore(v) {
-  if (v === null || v === undefined || String(v).trim() === '') return null;
-  // รับ comma เป็น dot ด้วย
-  const n = parseFloat(String(v).replace(',', '.'));
-  return isNaN(n) ? null : n;
-}
-
-function avg(vals) {
-  const v = vals.filter(x => x !== null && x !== undefined);
-  if (!v.length) return null;
-  return v.reduce((a, b) => a + b, 0) / v.length;
+/* score display — colored number, no box */
+function fmtS(v, size){
+  if(v===null||v===undefined) return '<span class="sd">—</span>';
+  const c = v>=4.5?'sg':v>=4.0?'sa':'sr';
+  const fs = size ? `font-size:${size}` : '';
+  return `<span class="${c}" style="${fs}">${v.toFixed(2)}</span>`;
 }
 
-function fmt(v) {
-  if (v === null || v === undefined) return '<span style="color:#ccc">—</span>';
-  const color = v >= 4.5 ? 'var(--green)' : v >= 4.0 ? 'var(--amber)' : 'var(--red)';
-  return `<span class="score-avg" style="color:${color}">${v.toFixed(2)}</span>`;
+/* ── year ── */
+async function initYears(){
+  let years=[];
+  try{
+    const r=await fetch(`${API_BASE}/available-years?program_id=${PROGRAM_ID}`);
+    const j=await r.json();
+    years=j.years&&j.years.length?j.years:fallback();
+  }catch{ years=fallback(); }
+  const sel=document.getElementById('yearSel');
+  sel.innerHTML=years.map(y=>`<option value="${y}">ปีการศึกษา ${y}</option>`).join('');
+  YEAR=String(years[0]); sel.value=YEAR;
+  updateSub(); await loadData();
+}
+function fallback(){ const n=new Date().getFullYear()+543; return [n,n-1,n-2,n-3,n-4]; }
+async function onYear(v){ if(!v)return; YEAR=v; updateSub(); await loadData(); }
+function updateSub(){
+  document.getElementById('pageSub').textContent=
+    `ปีการศึกษา ${YEAR} | แก้ไขคะแนนในตารางได้เลย กดบันทึกเมื่อพร้อม`;
 }
 
-function scoreColor(n) {
-  if (n === null) return 'var(--purple)';
-  return n >= 4.5 ? 'var(--green)' : n >= 4.0 ? 'var(--amber)' : 'var(--red)';
+/* ── load ── */
+async function loadData(){
+  try{
+    const r=await fetch(`${API_BASE}/scores?year=${YEAR}&program_id=${PROGRAM_ID}`);
+    const j=await r.json();
+    if(j.success) DATA=j.data||[];
+  }catch{ DATA=[]; }
+  render();
 }
 
-function getRowGrand(row) {
-  return avg([row.sem1, row.sem2].filter(x => x !== null));
-}
-
-function computeGrand(refRows) {
-  let rows;
-  const multiSectionIdx = tableData.findIndex(t => t.type === 'section' && t.label.includes('Multi'));
-  if (refRows === 'ba') {
-    rows = tableData.filter((r, i) => r.type === 'row' && i < multiSectionIdx);
-  } else if (refRows === 'multi') {
-    rows = tableData.filter((r, i) => r.type === 'row' && i > multiSectionIdx);
-  } else {
-    rows = tableData.filter(r => r.type === 'row');
-  }
-  const s1 = avg(rows.map(r => r.sem1).filter(x => x !== null));
-  const s2 = avg(rows.map(r => r.sem2).filter(x => x !== null));
-  const gt = avg([s1, s2].filter(x => x !== null));
-  return { sem1: s1, sem2: s2, grand: gt };
-}
-
-// ═══════════════════════════════════════════════
-//  RENDER TABLE (สร้าง DOM ครั้งเดียว)
-// ═══════════════════════════════════════════════
-function renderTable() {
-  const tbody = document.getElementById('tableBody');
-  let html = '';
-
-  tableData.forEach((item, idx) => {
-    if (item.type === 'section') {
-      html += `<tr class="section-row"><td colspan="5">${item.label}</td></tr>`;
-    } else if (item.type === 'row') {
-      const grand = getRowGrand(item);
-      html += `<tr>
-        <td class="label-cell">
-          ${item.code ? `<div class="lo-code">${item.code}</div>` : ''}
-          ${item.desc ? `<div class="lo-desc">${item.desc}</div>` : ''}
-        </td>
-        <td class="score-cell">
-          <input type="text" inputmode="decimal"
-            value="${item.sem1 !== null ? item.sem1 : ''}"
-            placeholder="—"
-            data-idx="${idx}" data-sem="1"
-            onblur="onScoreBlur(this)"
-            oninput="onScoreTyping(this)">
-        </td>
-        <td class="score-cell">
-          <input type="text" inputmode="decimal"
-            value="${item.sem2 !== null ? item.sem2 : ''}"
-            placeholder="—"
-            data-idx="${idx}" data-sem="2"
-            onblur="onScoreBlur(this)"
-            oninput="onScoreTyping(this)">
-        </td>
-        <td class="score-cell" id="grand-${idx}">${fmt(grand)}</td>
-        <td style="text-align:center">
-          <button onclick="deleteRow(${idx})" title="ลบ"
-            style="border:none;background:none;cursor:pointer;color:#ccc;font-size:16px;padding:4px 6px;border-radius:6px;transition:.15s"
-            onmouseover="this.style.color='#ef4444';this.style.background='#fee2e2'"
-            onmouseout="this.style.color='#ccc';this.style.background='none'">🗑</button>
-        </td>
-      </tr>`;
-    } else if (item.type === 'subtotal') {
-      const c = computeGrand(item.refRows);
-      html += `<tr class="subtotal-row">
-        <td>${item.label}</td>
-        <td style="text-align:center" id="sub1-${idx}">${fmt(c.sem1)}</td>
-        <td style="text-align:center" id="sub2-${idx}">${fmt(c.sem2)}</td>
-        <td style="text-align:center" id="subg-${idx}">${fmt(c.grand)}</td>
-        <td></td>
-      </tr>`;
-    } else if (item.type === 'total' || item.type === 'grand') {
-      const c = computeGrand(item.refRows);
-      html += `<tr class="total-row">
-        <td>${item.label}</td>
-        <td style="text-align:center" id="tot1-${idx}">${fmt(c.sem1)}</td>
-        <td style="text-align:center" id="tot2-${idx}">${fmt(c.sem2)}</td>
-        <td style="text-align:center" id="totg-${idx}">${fmt(c.grand)}</td>
-        <td></td>
-      </tr>`;
-    }
-  });
-
-  tbody.innerHTML = html;
-  updateSidePanel();
-}
-
-// ═══════════════════════════════════════════════
-//  INPUT HANDLERS
-//  ✅ onScoreTyping = แค่ validate สี ไม่ re-render
-//  ✅ onScoreBlur   = บันทึกค่า + อัปเดตเฉพาะ cell ที่เกี่ยวข้อง
-// ═══════════════════════════════════════════════
-function onScoreTyping(el) {
-  const raw = el.value.replace(',', '.');
-  // ถ้ายังพิมพ์ไม่จบ เช่น "4." ให้ผ่าน
-  if (raw === '' || raw === '-' || raw.endsWith('.')) {
-    el.classList.remove('invalid');
+/* ────────────────────────────────────────
+   RENDER — match image 1 exactly
+   hierarchy: section(purple-tint) → rows(white, input) 
+              → subtotal(solid-purple) → group(dark-purple)
+              → deptTotal(darkest) → grand(light-purple)
+──────────────────────────────────────── */
+function render(){
+  const tbody=document.getElementById('tbody');
+  if(!DATA.length){
+    tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:48px 24px;color:var(--ts);">
+      <i class="fas fa-file-import" style="font-size:32px;display:block;margin-bottom:10px;color:#c4b5fd;"></i>
+      ยังไม่มีข้อมูล — กด "นำเข้า Excel" หรือ "เพิ่ม PLO/MLO" ด้านล่าง
+    </td></tr>`;
     return;
   }
-  const n = parseFloat(raw);
-  if (isNaN(n) || n < 0 || n > 5) {
-    el.classList.add('invalid');
-  } else {
-    el.classList.remove('invalid');
-  }
-}
 
-function onScoreBlur(el) {
-  const idx = parseInt(el.dataset.idx);
-  const sem = el.dataset.sem;
-  const raw = el.value.replace(',', '.');
-  const n = raw === '' ? null : parseFloat(raw);
+  let html='';
+  DATA.forEach((item,idx)=>{
 
-  // ถ้าค่าไม่ valid ให้ clear
-  if (n !== null && (isNaN(n) || n < 0 || n > 5)) {
-    el.value = '';
-    el.classList.remove('invalid');
-    if (sem === '1') tableData[idx].sem1 = null;
-    else tableData[idx].sem2 = null;
-  } else {
-    if (sem === '1') tableData[idx].sem1 = n;
-    else tableData[idx].sem2 = n;
-    // แสดงค่าจัดรูปแบบ
-    if (n !== null) el.value = n;
-    el.classList.remove('invalid');
-  }
+    /* section header — purple-tint background, bold purple text */
+    if(item.type==='section'){
+      html+=`<tr class="r-sec">
+        <td colspan="4">${item.label||''}</td>
+        <td><button class="del-btn" onclick="delRow(${idx})" title="ลบ"><i class="fas fa-trash-alt"></i></button></td>
+      </tr>`;
 
-  markUnsaved();
+    /* group header — dark purple solid */
+    } else if(item.type==='group'){
+      html+=`<tr class="r-group">
+        <td colspan="4" class="i1">${item.label||''}</td>
+        <td><button class="del-btn" onclick="delRow(${idx})" title="ลบ"><i class="fas fa-trash-alt"></i></button></td>
+      </tr>`;
 
-  // ✅ อัปเดตเฉพาะ grand total ของ row นี้ (ไม่ re-render ทั้งหน้า)
-  const grandCell = document.getElementById(`grand-${idx}`);
-  if (grandCell) grandCell.innerHTML = fmt(getRowGrand(tableData[idx]));
+    /* dept — darkest purple */
+    } else if(item.type==='dept'){
+      html+=`<tr class="r-dept">
+        <td colspan="4">${item.label||''}</td>
+        <td><button class="del-btn" onclick="delRow(${idx})" title="ลบ"><i class="fas fa-trash-alt"></i></button></td>
+      </tr>`;
 
-  // อัปเดต subtotal / total / grand rows
-  updateComputedRows();
-  updateSidePanel();
-}
+    /* data row — white bg, inline input */
+    } else if(item.type==='row'){
+      const g=grd(item);
+      const badge=item.level==='MLO'?`<span class="bm">MLO</span>`:
+                  item.level==='PLO'?`<span class="bp">PLO</span>`:'';
+      const codeEl=item.code?`<span class="lo-code">${item.code}</span>`:'';
+      /* desc fallback to code if no desc */
+      const descText=item.desc||item.code||'';
+      html+=`<tr>
+        <td class="i2">${codeEl}${badge}${descText}</td>
+        <td class="num">
+          <input class="sinput" type="text" inputmode="decimal"
+            value="${item.sem1!==null&&item.sem1!==undefined?item.sem1:''}"
+            placeholder="—" data-idx="${idx}" data-sem="1"
+            oninput="onInput(this)" onblur="onBlur(this)">
+        </td>
+        <td class="num">
+          <input class="sinput" type="text" inputmode="decimal"
+            value="${item.sem2!==null&&item.sem2!==undefined?item.sem2:''}"
+            placeholder="—" data-idx="${idx}" data-sem="2"
+            oninput="onInput(this)" onblur="onBlur(this)">
+        </td>
+        <td class="num" id="gc-${idx}" style="font-size:15px;">${fmtS(g,'15px')}</td>
+        <td><button class="del-btn" onclick="delRow(${idx})" title="ลบ"><i class="fas fa-trash-alt"></i></button></td>
+      </tr>`;
 
-function updateComputedRows() {
-  tableData.forEach((item, idx) => {
-    if (item.type === 'subtotal') {
-      const c = computeGrand(item.refRows);
-      const e1 = document.getElementById(`sub1-${idx}`);
-      const e2 = document.getElementById(`sub2-${idx}`);
-      const eg = document.getElementById(`subg-${idx}`);
-      if (e1) e1.innerHTML = fmt(c.sem1);
-      if (e2) e2.innerHTML = fmt(c.sem2);
-      if (eg) eg.innerHTML = fmt(c.grand);
-    } else if (item.type === 'total' || item.type === 'grand') {
-      const c = computeGrand(item.refRows);
-      const e1 = document.getElementById(`tot1-${idx}`);
-      const e2 = document.getElementById(`tot2-${idx}`);
-      const eg = document.getElementById(`totg-${idx}`);
-      if (e1) e1.innerHTML = fmt(c.sem1);
-      if (e2) e2.innerHTML = fmt(c.sem2);
-      if (eg) eg.innerHTML = fmt(c.grand);
+    /* subtotal — solid purple */
+    } else if(item.type==='subtotal'){
+      const s1=item.sem1??null, s2=item.sem2??null;
+      const g=item.grand??avg([s1,s2].filter(x=>x!==null));
+      html+=`<tr class="r-sub">
+        <td class="i1"><strong>${item.label||''}</strong></td>
+        <td class="num">${fmtS(s1)}</td>
+        <td class="num">${fmtS(s2)}</td>
+        <td class="num">${fmtS(g)}</td>
+        <td></td>
+      </tr>`;
+
+    /* dept total — very dark purple */
+    } else if(item.type==='deptTotal'){
+      const s1=item.sem1??null, s2=item.sem2??null;
+      const g=item.grand??avg([s1,s2].filter(x=>x!==null));
+      html+=`<tr class="r-dtot">
+        <td><strong>${item.label||''}</strong></td>
+        <td class="num">${fmtS(s1)}</td>
+        <td class="num">${fmtS(s2)}</td>
+        <td class="num">${fmtS(g)}</td>
+        <td></td>
+      </tr>`;
+
+    /* grand total — light purple bg */
+    } else if(item.type==='grand'){
+      const s1=item.sem1??null, s2=item.sem2??null;
+      const g=item.grand??avg([s1,s2].filter(x=>x!==null));
+      html+=`<tr class="r-grand">
+        <td><strong>${item.label||'Grand Total'}</strong></td>
+        <td class="num">${fmtS(s1)}</td>
+        <td class="num">${fmtS(s2)}</td>
+        <td class="num">${fmtS(g)}</td>
+        <td></td>
+      </tr>`;
     }
   });
+
+  tbody.innerHTML=html;
 }
 
-function deleteRow(idx) {
-  if (!confirm('ต้องการลบรายการนี้?')) return;
-  tableData.splice(idx, 1);
-  markUnsaved();
-  renderTable();
+/* ── input handlers ── */
+function onInput(el){
+  const raw=el.value.replace(',','.');
+  if(raw===''||raw==='-'||raw.endsWith('.')){ el.classList.remove('err'); return; }
+  el.classList.toggle('err', isNaN(parseFloat(raw))||parseFloat(raw)<0||parseFloat(raw)>5);
 }
-
-function addRowModal() {
-  const code = prompt('รหัส/ชื่อ PLO-MLO (เช่น PLO7):');
-  if (!code) return;
-  const desc = prompt('คำอธิบาย:') || '';
-  // แทรกก่อน subtotal แรก
-  const insertIdx = tableData.findIndex(r => r.type === 'subtotal' || r.type === 'total' || r.type === 'grand');
-  tableData.splice(insertIdx > 0 ? insertIdx - 1 : tableData.length, 0,
-    { type: 'row', code, desc, sem1: null, sem2: null }
-  );
-  markUnsaved();
-  renderTable();
-  showToast('เพิ่มรายการสำเร็จ');
-}
-
-// ═══════════════════════════════════════════════
-//  SIDE PANEL
-// ═══════════════════════════════════════════════
-function updateSidePanel() {
-  const rows = tableData.filter(r => r.type === 'row');
-  const allGrands = rows.map(r => getRowGrand(r)).filter(v => v !== null);
-  const overallAvg = avg(allGrands);
-
-  const multiSectionIdx = tableData.findIndex(t => t.type === 'section' && t.label.includes('Multi'));
-  const baRows = tableData.filter((r, i) => r.type === 'row' && i < multiSectionIdx);
-  const baAvg = avg(baRows.map(r => getRowGrand(r)).filter(v => v !== null));
-
-  const compareData = [
-    { label: 'Grand Total', val: overallAvg, color: 'var(--purple)' },
-    { label: 'รวมผลลัพธ์วิชาเอกธุรกิจ', val: baAvg, color: 'var(--teal)' },
-  ];
-
-  document.getElementById('compareSection').innerHTML = compareData.map(c => `
-    <div class="compare-item">
-      <div class="compare-label">
-        <span>${c.label}</span>
-        <strong style="color:${c.color}">${c.val !== null ? c.val.toFixed(2) + ' / 5.0' : '—'}</strong>
-      </div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${c.val ? ((c.val / 5) * 100).toFixed(1) : 0}%;background:${c.color}"></div></div>
-    </div>
-  `).join('');
-
-  const pct = overallAvg ? Math.round((overallAvg / 5) * 100) : 0;
-  document.getElementById('statGrid').innerHTML = `
-    <div class="stat-block">
-      <div class="stat-val" style="color:${scoreColor(overallAvg)}">${pct}%</div>
-      <div class="stat-label">TARGET ACHIEVED</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-val" style="color:${scoreColor(overallAvg)}">${overallAvg !== null ? overallAvg.toFixed(2) : '—'}</div>
-      <div class="stat-label">OVERALL AVG</div>
-    </div>
-  `;
-
-  const low = rows.filter(r => { const g = getRowGrand(r); return g !== null && g < 4.33; });
-  let bullets = `<li><span class="bullet green"></span>สอบผ่านมาตรฐานและกระบวนการกลั่นกรองมีมิติมากขึ้น กรอบมาตรฐาน AUN-QA ได้รับการตรวจสอบทุกรายวิชา (5.0)</li>`;
-  if (low.length > 0) {
-    bullets += `<li><span class="bullet amber"></span>PLO/MLO บางรายการมีคะแนนต่ำกว่าเกณฑ์ (${low.map(r => r.code).join(', ')}) ควรดำเนินการแผนพัฒนาคุณภาพ</li>`;
-  } else if (allGrands.length > 0) {
-    bullets += `<li><span class="bullet green"></span>ทุก PLO/MLO ผ่านเกณฑ์ขั้นต่ำที่กำหนด</li>`;
+function onBlur(el){
+  const idx=parseInt(el.dataset.idx), sem=el.dataset.sem;
+  const raw=el.value.replace(',','.');
+  const n=raw===''?null:parseFloat(raw);
+  if(n!==null&&(isNaN(n)||n<0||n>5)){
+    el.value=''; el.classList.remove('err');
+    DATA[idx][sem==='1'?'sem1':'sem2']=null;
+  } else {
+    DATA[idx][sem==='1'?'sem1':'sem2']=n;
+    if(n!==null) el.value=n;
+    el.classList.remove('err');
   }
-  document.getElementById('summaryList').innerHTML = bullets;
+  const gc=document.getElementById(`gc-${idx}`);
+  if(gc) gc.innerHTML=fmtS(grd(DATA[idx]),'15px');
+  markUnsaved();
+  recompute();
 }
 
-// ═══════════════════════════════════════════════
-//  ✅ SAVE → localStorage
-// ═══════════════════════════════════════════════
-function saveData() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tableData));
-    markSaved();
-    showToast('✓ บันทึกข้อมูลสำเร็จ', '#22c55e');
-  } catch (e) {
-    showToast('❌ บันทึกไม่สำเร็จ', '#ef4444');
+/* recompute — ใช้ค่าที่กรอกมาจาก Excel ตรงๆ (ตาม PDF)
+   subtotal/deptTotal/grand ไม่คำนวณใหม่จาก rows
+   อัปเดตเฉพาะ grand column = avg(sem1, sem2) ของแต่ละ total row */
+function recompute(){
+  DATA.forEach(item=>{
+    if(['subtotal','deptTotal','grand'].includes(item.type)){
+      // grand = avg ของ sem1+sem2 ที่กรอกไว้ (ไม่ override sem1/sem2)
+      item.grand = avg([item.sem1, item.sem2].filter(x=>x!==null));
+    }
+  });
+  render();
+}
+
+/* ── delete ── */
+function delRow(idx){
+  if(!confirm('ต้องการลบรายการนี้?')) return;
+  DATA.splice(idx,1);
+  markUnsaved(); recompute();
+}
+
+/* ── modal ── */
+function openModal(type){
+  modalType=type;
+  const bg=document.getElementById('modalBg');
+  const title=document.getElementById('modalTitle');
+  const body=document.getElementById('modalBody');
+
+  if(type==='section'){
+    title.innerHTML='<i class="fas fa-heading" style="color:var(--amber)"></i> เพิ่มหัวข้อหมวด';
+    body.innerHTML=`
+      <div class="mfield"><label>ชื่อหัวข้อหมวด *</label>
+        <input id="mf-label" placeholder="เช่น ผลลัพธ์การเรียนรู้ระดับหลักสูตร (PLO)"></div>`;
+  } else {
+    const icon=type==='PLO'
+      ?'<i class="fas fa-graduation-cap" style="color:var(--pu2)"></i>'
+      :'<i class="fas fa-bookmark" style="color:#065F46"></i>';
+    const groups=[...new Set(DATA.filter(r=>r.type==='row'&&r.group).map(r=>r.group))];
+    title.innerHTML=`${icon} เพิ่มรายการ ${type}`;
+    body.innerHTML=`
+      <div class="mfield"><label>รหัส (Code) *</label>
+        <input id="mf-code" placeholder="${type==='PLO'?'เช่น (BA) PLO7':'เช่น MLO-FIN'}"></div>
+      <div class="mfield"><label>คำอธิบาย</label>
+        <input id="mf-desc" placeholder="คำอธิบายผลลัพธ์การเรียนรู้"></div>
+      <div class="mfield"><label>กลุ่มวิชา</label>
+        <input id="mf-group" list="gl" placeholder="เช่น บริหารธุรกิจ">
+        <datalist id="gl">${groups.map(g=>`<option value="${g}">`).join('')}</datalist></div>
+      <div class="mrow">
+        <div class="mfield"><label>SEM 1</label>
+          <input id="mf-s1" type="number" step="0.01" min="0" max="5" placeholder="4.60"></div>
+        <div class="mfield"><label>SEM 2</label>
+          <input id="mf-s2" type="number" step="0.01" min="0" max="5" placeholder="4.54"></div>
+      </div>`;
   }
+
+  bg.classList.add('open');
+  setTimeout(()=>{ const f=body.querySelector('input'); if(f)f.focus(); },150);
+}
+function closeModal(){ document.getElementById('modalBg').classList.remove('open'); }
+function closeBg(e){ if(e.target===document.getElementById('modalBg')) closeModal(); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+function confirmModal(){
+  if(modalType==='section'){
+    const label=document.getElementById('mf-label').value.trim();
+    if(!label){ toast('⚠️ กรุณากรอกชื่อหัวข้อ','#f59e0b'); return; }
+    DATA.push({type:'section',label});
+  } else {
+    const code =document.getElementById('mf-code').value.trim();
+    const desc =document.getElementById('mf-desc').value.trim();
+    const group=document.getElementById('mf-group').value.trim();
+    const sem1 =parseScore(document.getElementById('mf-s1').value);
+    const sem2 =parseScore(document.getElementById('mf-s2').value);
+    if(!code){ toast('⚠️ กรุณากรอกรหัส','#f59e0b'); return; }
+    DATA.push({type:'row',level:modalType,code,desc,group,dept:'',sem1,sem2});
+  }
+  markUnsaved(); closeModal(); recompute();
+  toast('✓ เพิ่มรายการสำเร็จ','#16a34a');
 }
 
-// ═══════════════════════════════════════════════
-//  IMPORT EXCEL
-// ═══════════════════════════════════════════════
-function importExcel(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      const wb = XLSX.read(ev.target.result, { type: 'binary' });
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-      let imported = 0;
-      const insertIdx = tableData.findIndex(r => r.type === 'subtotal' || r.type === 'total' || r.type === 'grand');
-      for (let i = 1; i < json.length; i++) {
-        const row = json[i];
-        const code = String(row[0] || '').trim();
-        const desc = String(row[1] || '').trim();
-        const sem1 = parseScore(row[2]);
-        const sem2 = parseScore(row[3]);
-        if (!code && !desc) continue;
-        tableData.splice((insertIdx > 0 ? insertIdx : tableData.length) + imported, 0, { type: 'row', code, desc, sem1, sem2 });
-        imported++;
+/* ── import excel ── */
+function importExcel(e){
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const wb=XLSX.read(ev.target.result,{type:'binary'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const json=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      let hRow=-1;
+      for(let i=0;i<json.length;i++){
+        if(String(json[i][0]||'').trim().toLowerCase().split('\n')[0].trim()==='dept_name'){hRow=i;break;}
       }
-      if (!imported) { showToast('⚠️ ไม่พบข้อมูลในไฟล์', '#f59e0b'); return; }
-      markUnsaved();
-      renderTable();
-      showToast(`✓ นำเข้า ${imported} รายการสำเร็จ`);
-    } catch { showToast('❌ ไม่สามารถอ่านไฟล์ได้', '#ef4444'); }
+      if(hRow===-1){ toast('⚠️ ไม่พบ header (dept_name)','#f59e0b'); return; }
+      const hdrs=json[hRow].map(h=>String(h).trim().toLowerCase().split('\n')[0].trim());
+      const col=n=>hdrs.indexOf(n);
+      const raw=[];
+      for(let i=hRow+1;i<json.length;i++){
+        const r=json[i];
+        const code=String(r[col('lo_code')]||'').trim();
+        if(!code) continue;
+        raw.push({
+          dept:  String(r[col('dept_name')]||'').trim(),
+          group: String(r[col('group_name')]||'').trim(),
+          level: String(r[col('lo_level')]||'PLO').trim().toUpperCase(),
+          code,
+          desc:  String(r[col('lo_description')]||'').trim(),
+          sem1:  parseScore(r[col('semester_1')]),
+          sem2:  parseScore(r[col('semester_2')]),
+          note:  String(r[col('note')]||'').trim().toLowerCase(),
+        });
+      }
+      if(!raw.length){ toast('⚠️ ไม่พบข้อมูล','#f59e0b'); return; }
+      DATA=buildHierarchyFromImport(raw);
+      markUnsaved(); render();
+      toast(`✓ นำเข้า ${raw.length} รายการสำเร็จ`,'#16a34a');
+    }catch(err){ toast('❌ อ่านไฟล์ไม่ได้: '+err.message,'#ef4444'); }
   };
   reader.readAsBinaryString(file);
-  e.target.value = '';
+  e.target.value='';
 }
 
-// ═══════════════════════════════════════════════
-//  TEMPLATE & EXPORT
-// ═══════════════════════════════════════════════
-function downloadTemplate() {
-  const header = ['รหัส (Code)', 'คำอธิบาย (Description)', 'คะแนน SEM 1', 'คะแนน SEM 2'];
-  const examples = [
-    ['PLO1', 'การบูรณาการประยุกต์ศาสตร์ด้านบริหารธุรกิจ', 4.60, 4.54],
-    ['PLO2', 'การใช้ผู้ประกอบการที่มีจิตสำนึกด้วยความรับผิดชอบ', 4.57, 4.59],
-    ['MLO1.1', 'วิชาเอกการจัดการทรัพยากรมนุษย์', '', 4.66],
-  ];
-  const ws = XLSX.utils.aoa_to_sheet([header, ...examples]);
-  ws['!cols'] = [{ wch: 14 }, { wch: 50 }, { wch: 14 }, { wch: 14 }];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'PLO Score Template');
-  XLSX.writeFile(wb, 'plo_score_template.xlsx');
-  showToast('✓ ดาวน์โหลด Template สำเร็จ');
-}
+/* ── buildHierarchyFromImport ──
+   Logic: อ่าน note column เพื่อแยกแถว total ออกจาก data rows
+   - note='subtotal'  → แถวรวมกลุ่ม  (match ด้วย group_name)
+   - note='deptTotal' → แถวรวมภาควิชา
+   - note='grand'     → Grand Total
+   - ว่าง            → data row ปกติ
+─────────────────────────────────────── */
+function buildHierarchyFromImport(rows){
+  const result = [];
+  const isTotal = r => ['subtotal','depttotal','grand'].includes((r.note||'').toLowerCase());
+  const totalRows = rows.filter(r => isTotal(r));
+  const dataRows  = rows.filter(r => !isTotal(r));
 
-function exportExcel() {
-  const header = ['รหัส/ชื่อ', 'คำอธิบาย', 'SEM 1', 'SEM 2', 'Grand Total'];
-  const dataRows = [];
-  tableData.forEach(item => {
-    if (item.type === 'section') {
-      dataRows.push([item.label, '', '', '', '']);
-    } else if (item.type === 'row') {
-      const g = getRowGrand(item);
-      dataRows.push([item.code, item.desc, item.sem1 ?? '', item.sem2 ?? '', g !== null ? parseFloat(g.toFixed(2)) : '']);
-    } else if (item.type === 'subtotal' || item.type === 'total' || item.type === 'grand') {
-      const c = computeGrand(item.refRows);
-      dataRows.push([item.label, '', c.sem1 ? parseFloat(c.sem1.toFixed(2)) : '', c.sem2 ? parseFloat(c.sem2.toFixed(2)) : '', c.grand ? parseFloat(c.grand.toFixed(2)) : '']);
+  const depts = [...new Set(dataRows.map(r=>r.dept).filter(Boolean))];
+
+  depts.forEach(dept => {
+    const dRows  = dataRows.filter(r => r.dept === dept);
+    const groups = [...new Set(dRows.map(r => r.group).filter(Boolean))];
+
+    // dept header — ครอบทุกกลุ่มในภาควิชา
+    if(dept) result.push({type:'dept', label: dept});
+
+    groups.forEach(group => {
+      // group header
+      result.push({type:'group', label: group});
+
+      const gRows = dRows.filter(r => r.group === group);
+
+      // แยกตาม level
+      const plo = gRows.filter(r => r.level==='PLO' && r.code.includes('('));
+      const mlo = gRows.filter(r => r.level==='MLO');
+      // domain = rows ที่ไม่ใช่ PLO(BA) และไม่ใช่ MLO
+      const dom = gRows.filter(r => !plo.includes(r) && !mlo.includes(r));
+
+      if(plo.length){
+        result.push({type:'section', label:'ผลลัพธ์การเรียนรู้ระดับหลักสูตร (PLO)'});
+        plo.forEach(r => result.push({type:'row',level:'PLO',code:r.code,desc:r.desc,group,dept,sem1:r.sem1,sem2:r.sem2}));
+      }
+      if(mlo.length){
+        result.push({type:'section', label:'ผลลัพธ์การเรียนรู้ระดับวิชาเอก (MLO)'});
+        mlo.forEach(r => result.push({type:'row',level:'MLO',code:r.code,desc:r.desc,group,dept,sem1:r.sem1,sem2:r.sem2}));
+      }
+      if(dom.length){
+        const ploSum = dom.find(r => r.code==='PLO');
+        if(ploSum){
+          result.push({type:'section', label:'สรุป PLO รวม'});
+          result.push({type:'row',level:'PLO',code:'PLO',desc:'คะแนนรวม PLO',group,dept,sem1:ploSum.sem1,sem2:ploSum.sem2});
+        }
+        const domRest = dom.filter(r => r.code!=='PLO');
+        if(domRest.length){
+          result.push({type:'section', label:'คะแนนรายด้าน'});
+          // ใช้ desc เป็นชื่อแสดง, ซ่อน code ที่มี suffix -2
+          domRest.forEach(r => result.push({
+            type:'row', level:r.level,
+            code: '',          // ไม่แสดง code ที่อาจมี -2
+            desc: r.desc,      // แสดงแค่คำอธิบาย
+            group, dept, sem1:r.sem1, sem2:r.sem2
+          }));
+        }
+      }
+
+      // subtotal: หาจาก totalRows ที่ group ตรงกัน
+      const sub = totalRows.find(r =>
+        (r.note||'').toLowerCase()==='subtotal' &&
+        r.group === group
+      );
+      if(sub){
+        result.push({
+          type:'subtotal', label: sub.code || (group+' Total'),
+          refGroup: group,
+          sem1: sub.sem1, sem2: sub.sem2,
+          grand: avg([sub.sem1, sub.sem2].filter(x=>x!==null))
+        });
+      }
+    });
+
+    // deptTotal
+    const dt = totalRows.find(r => (r.note||'').toLowerCase()==='depttotal');
+    if(dt){
+      result.push({
+        type:'deptTotal', label: dt.code || (dept+' Total'),
+        sem1: dt.sem1, sem2: dt.sem2,
+        grand: avg([dt.sem1, dt.sem2].filter(x=>x!==null))
+      });
     }
   });
-  const ws = XLSX.utils.aoa_to_sheet([header, ...dataRows]);
-  ws['!cols'] = [{ wch: 30 }, { wch: 50 }, { wch: 12 }, { wch: 12 }, { wch: 14 }];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'PLO Score Report');
-  XLSX.writeFile(wb, 'plo_score_report_2567.xlsx');
-  showToast('✓ Export Excel สำเร็จ');
+
+  // grand
+  const gt = totalRows.find(r => (r.note||'').toLowerCase()==='grand');
+  if(gt){
+    result.push({
+      type:'grand', label: gt.code || 'Grand Total',
+      sem1: gt.sem1, sem2: gt.sem2,
+      grand: avg([gt.sem1, gt.sem2].filter(x=>x!==null))
+    });
+  }
+
+  return result;
 }
 
-// ═══════════════════════════════════════════════
-//  TOAST
-// ═══════════════════════════════════════════════
-let toastTimer;
-function showToast(msg, color = '#22c55e') {
-  const t = document.getElementById('toast');
-  document.getElementById('toastDot').style.background = color;
-  document.getElementById('toastMsg').textContent = msg;
+/* ── buildHierarchy (fallback เมื่อไม่มี note column) ── */
+function buildHierarchy(rows){
+  // เรียกใช้ buildHierarchyFromImport เหมือนกัน เพราะ note จะเป็น '' ทั้งหมด
+  // ให้ generate subtotal/total อัตโนมัติจาก PLO row code='PLO'
+  const result = [];
+  const depts = [...new Set(rows.map(r=>r.dept).filter(Boolean))];
+
+  depts.forEach(dept => {
+    const dRows  = rows.filter(r => r.dept===dept);
+    const groups = [...new Set(dRows.map(r=>r.group).filter(Boolean))];
+
+    if(dept) result.push({type:'dept', label: dept});
+
+    groups.forEach(group => {
+      result.push({type:'group', label: group});
+      const gRows = dRows.filter(r => r.group===group);
+      const plo = gRows.filter(r => r.level==='PLO' && r.code.includes('('));
+      const mlo = gRows.filter(r => r.level==='MLO');
+      const dom = gRows.filter(r => !plo.includes(r) && !mlo.includes(r));
+
+      if(plo.length){
+        result.push({type:'section', label:'ผลลัพธ์การเรียนรู้ระดับหลักสูตร (PLO)'});
+        plo.forEach(r => result.push({type:'row',level:'PLO',code:r.code,desc:r.desc,group,dept,sem1:r.sem1,sem2:r.sem2}));
+      }
+      if(mlo.length){
+        result.push({type:'section', label:'ผลลัพธ์การเรียนรู้ระดับวิชาเอก (MLO)'});
+        mlo.forEach(r => result.push({type:'row',level:'MLO',code:r.code,desc:r.desc,group,dept,sem1:r.sem1,sem2:r.sem2}));
+      }
+      if(dom.length){
+        const ploSum = dom.find(r => r.code==='PLO');
+        if(ploSum){
+          result.push({type:'section', label:'สรุป PLO รวม'});
+          result.push({type:'row',level:'PLO',code:'PLO',desc:'คะแนนรวม PLO',group,dept,sem1:ploSum.sem1,sem2:ploSum.sem2});
+        }
+        const domRest = dom.filter(r => r.code!=='PLO');
+        if(domRest.length){
+          result.push({type:'section', label:'คะแนนรายด้าน'});
+          domRest.forEach(r => result.push({type:'row',level:r.level,code:'',desc:r.desc,group,dept,sem1:r.sem1,sem2:r.sem2}));
+        }
+      }
+
+      // subtotal: ถ้ามี PLO row ให้ใช้ค่านั้น มิเช่นนั้น avg dom
+      const ploSum = dom.find(r=>r.code==='PLO');
+      let ts1, ts2;
+      if(ploSum){ ts1=ploSum.sem1; ts2=ploSum.sem2; }
+      else if(dom.length){ ts1=avg(dom.map(r=>r.sem1).filter(x=>x!==null)); ts2=avg(dom.map(r=>r.sem2).filter(x=>x!==null)); }
+      else { ts1=avg([...plo,...mlo].map(r=>r.sem1).filter(x=>x!==null)); ts2=avg([...plo,...mlo].map(r=>r.sem2).filter(x=>x!==null)); }
+
+      result.push({type:'subtotal',label:group+' Total',refGroup:group,
+        sem1:ts1,sem2:ts2,grand:avg([ts1,ts2].filter(x=>x!==null))});
+    });
+
+    const subs = result.filter(r=>r.type==='subtotal');
+    const ds1  = subs.length===1 ? subs[0].sem1 : avg(subs.map(r=>r.sem1).filter(x=>x!==null));
+    const ds2  = subs.length===1 ? subs[0].sem2 : avg(subs.map(r=>r.sem2).filter(x=>x!==null));
+    result.push({type:'deptTotal',label:dept+' Total',sem1:ds1,sem2:ds2,grand:avg([ds1,ds2].filter(x=>x!==null))});
+  });
+
+  const dt = result.find(r=>r.type==='deptTotal');
+  result.push({type:'grand',label:'Grand Total',sem1:dt?.sem1??null,sem2:dt?.sem2??null,grand:dt?.grand??null});
+  return result;
+}
+
+/* ── save ── */
+async function saveData(){
+  if(!YEAR){ toast('⚠️ กรุณาเลือกปีการศึกษา','#f59e0b'); return; }
+  const btn=document.getElementById('saveBtn');
+  btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> บันทึก...';
+  try{
+    const r=await fetch(`${API_BASE}/scores`,{
+      method:'PUT',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({year:YEAR,program_id:PROGRAM_ID,data:DATA})
+    });
+    const j=await r.json();
+    if(!j.success) throw new Error(j.message||'error');
+    markSaved();
+    toast('✓ บันทึกสำเร็จ','#16a34a');
+  }catch(err){ toast('❌ บันทึกไม่สำเร็จ: '+err.message,'#ef4444'); }
+  finally{
+    btn.disabled=false;
+    btn.innerHTML='<i class="fas fa-save"></i> บันทึก';
+  }
+}
+
+/* ── template ── */
+function downloadTemplate(){
+  const yr = YEAR||2567;
+  const hdr=['dept_name','group_name','lo_level','lo_code','lo_description','academic_year','semester_1','semester_2','note'];
+  // คอลัมน์ note ใช้ระบุประเภทแถวพิเศษ: subtotal | deptTotal | grand
+  const s=[
+    // ── กลุ่ม บริหารธุรกิจ ──
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','(BA) PLO1','การบูรณาการและการประยุกต์ศาสตร์ด้านบริหารธุรกิจ',yr,4.60,4.54,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','(BA) PLO2','เป็นผู้ประกอบการที่มีทักษะด้านบริหารธุรกิจ',yr,4.57,4.59,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','(BA) PLO3','การประยุกต์ใช้เทคโนโลยีเพื่อการวิเคราะห์และการตัดสินใจ',yr,4.60,4.54,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','(BA) PLO4','การให้ความร่วมมือในการทำงานเป็นทีมและการสื่อสาร',yr,4.63,4.55,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','(BA) PLO5','จรรยาบรรณ คุณธรรมและจริยธรรม',yr,4.67,4.60,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','(BA) PLO6','พัฒนาทักษะและความสามารถในการเรียนรู้ตลอดชีวิต',yr,4.67,4.61,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','MLO','MLO-HRM','วิชาเอกการจัดการทรัพยากรมนุษย์',yr,'',4.66,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','MLO','MLO-LOG','วิชาเอกการจัดการโลจิสต์และโซ่อุปทาน',yr,'',4.55,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','MLO','MLO-MKT','วิชาเอกการตลาดและการสื่อสาร',yr,4.58,4.59,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','MLO','MLO-MIS','วิชาเอกระบบสารสนเทศทางธุรกิจ',yr,4.57,4.33,''],
+    // domain rows — ใช้คำนวณ subtotal
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','PLO','PLO รวม',yr,4.63,4.57,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','ด้านความรู้และทักษะทางปัญญา','ด้านความรู้และทักษะทางปัญญา',yr,4.63,4.60,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','ด้านคุณธรรม จริยธรรม','ด้านคุณธรรม จริยธรรม',yr,4.60,4.65,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','ด้านทักษะการวิเคราะห์เชิงตัวเลข','ด้านทักษะการวิเคราะห์เชิงตัวเลข การสื่อสารและการใช้เทคโนโลยีสารสนเทศ',yr,4.66,4.70,''],
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','PLO','ด้านทักษะความสัมพันธ์ระหว่างบุคคล','ด้านทักษะความสัมพันธ์ระหว่างบุคคลและความรับผิดชอบ',yr,4.50,4.73,''],
+    // subtotal บริหารธุรกิจ (กรอกค่าตรงๆ)
+    ['ภาควิชาบริหารธุรกิจ','บริหารธุรกิจ','TOTAL','บริหารธุรกิจ Total','',yr,4.63,4.57,'subtotal'],
+    // ── กลุ่ม หลายหลักสูตร ──
+    ['ภาควิชาบริหารธุรกิจ','หลายหลักสูตร ภาควิชาบริหารธุรกิจ','PLO','ด้านความรู้','ด้านความรู้',yr,5.00,4.63,''],
+    ['ภาควิชาบริหารธุรกิจ','หลายหลักสูตร ภาควิชาบริหารธุรกิจ','PLO','ด้านความรู้และทักษะทางปัญญา','ด้านความรู้และทักษะทางปัญญา',yr,5.00,4.83,''],
+    ['ภาควิชาบริหารธุรกิจ','หลายหลักสูตร ภาควิชาบริหารธุรกิจ','PLO','ด้านคุณธรรม จริยธรรม','ด้านคุณธรรม จริยธรรม',yr,5.00,5.00,''],
+    ['ภาควิชาบริหารธุรกิจ','หลายหลักสูตร ภาควิชาบริหารธุรกิจ','PLO','ด้านทักษะการวิเคราะห์เชิงตัวเลข','ด้านทักษะการวิเคราะห์เชิงตัวเลข การสื่อสารและการใช้เทคโนโลยีสารสนเทศ',yr,5.00,4.67,''],
+    ['ภาควิชาบริหารธุรกิจ','หลายหลักสูตร ภาควิชาบริหารธุรกิจ','PLO','ด้านทักษะความสัมพันธ์ระหว่างบุคคล','ด้านทักษะความสัมพันธ์ระหว่างบุคคลและความรับผิดชอบ',yr,5.00,5.00,''],
+    // subtotal หลายหลักสูตร (กรอกค่าตรงๆ)
+    ['ภาควิชาบริหารธุรกิจ','หลายหลักสูตร ภาควิชาบริหารธุรกิจ','TOTAL','หลายหลักสูตร ภาควิชาบริหารธุรกิจ Total','',yr,5.00,4.80,'subtotal'],
+    // dept total & grand total
+    ['ภาควิชาบริหารธุรกิจ','ภาควิชาบริหารธุรกิจ','TOTAL','ภาควิชาบริหารธุรกิจ Total','',yr,4.63,4.57,'deptTotal'],
+    ['','','TOTAL','Grand Total','',yr,4.63,4.57,'grand'],
+  ];
+  const ws=XLSX.utils.aoa_to_sheet([hdr,...s]);
+  // style header row
+  ws['!cols']=[{wch:28},{wch:38},{wch:10},{wch:35},{wch:60},{wch:14},{wch:12},{wch:12},{wch:12}];
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'PLO Scores');
+  // sheet คำแนะนำ
+  const ws2=XLSX.utils.aoa_to_sheet([
+    ['คอลัมน์','คำอธิบาย','ตัวอย่าง'],
+    ['dept_name','ชื่อภาควิชา','ภาควิชาบริหารธุรกิจ'],
+    ['group_name','ชื่อกลุ่มวิชา','บริหารธุรกิจ'],
+    ['lo_level','PLO / MLO / TOTAL','PLO'],
+    ['lo_code','รหัสผลลัพธ์','(BA) PLO1'],
+    ['lo_description','คำอธิบาย','การบูรณาการ...'],
+    ['academic_year','ปีการศึกษา','2567'],
+    ['semester_1','คะแนน SEM 1 (1.00-5.00)','4.60'],
+    ['semester_2','คะแนน SEM 2 (1.00-5.00)','4.54'],
+    ['note','ระบุประเภทแถวพิเศษ: subtotal / deptTotal / grand (ถ้าเป็น data row ปล่อยว่าง)','subtotal'],
+  ]);
+  ws2['!cols']=[{wch:18},{wch:45},{wch:35}];
+  XLSX.utils.book_append_sheet(wb,ws2,'คำแนะนำ');
+  XLSX.writeFile(wb,`plo_scores_template_${yr}.xlsx`);
+  toast('✓ ดาวน์โหลด Template สำเร็จ','#16a34a');
+}
+
+/* ── state ── */
+function markUnsaved(){
+  hasUnsaved=true;
+  document.getElementById('unsaved').classList.add('show');
+  document.getElementById('saveBtn').disabled=false;
+}
+function markSaved(){
+  hasUnsaved=false;
+  document.getElementById('unsaved').classList.remove('show');
+}
+
+/* ── toast ── */
+let tt;
+function toast(msg,color='#16a34a'){
+  document.getElementById('tdot').style.background=color;
+  document.getElementById('tmsg').textContent=msg;
+  const t=document.getElementById('toast');
   t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),4000);
 }
 
-// ═══════════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════════
-renderTable();
+window.addEventListener('beforeunload',e=>{ if(hasUnsaved){e.preventDefault();e.returnValue='';} });
+initYears();
 </script>
 </body>
 </html>

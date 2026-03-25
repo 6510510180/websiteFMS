@@ -304,8 +304,8 @@ tbody tr:hover td{background:var(--acc-ll)}
               <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">ข้อมูลรับเข้า (Intake)</div>
               <div class="form-row c2">
                 <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fi_yr"></select></div>
-                <div class="fg"><label>สาขาวิชาเอก <span class="req">*</span></label>
-                  <select id="fi_mj"><option value="">— เลือกสาขา —</option>
+                <div class="fg"><label>วิชาเอก <span class="req">*</span></label>
+                  <select id="fi_mj"><option value="">— เลือกวิชาเอก —</option>
                     <option value="fin">FIN</option><option value="mkt">MKT</option><option value="hrm">HRM</option>
                     <option value="log">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
                   </select>
@@ -357,7 +357,7 @@ tbody tr:hover td{background:var(--acc-ll)}
         </div>
         <div class="card-body">
           <div class="tbl-wrap"><table>
-            <thead><tr><th>ปี</th><th>สาขา</th><th>แผนรับ</th><th>สัมภาษณ์</th><th>ยืนยัน</th><th>รายงานตัว</th><th>ไม่รายงานตัว</th><th></th></tr></thead>
+            <thead><tr><th>ปี</th><th>วิชาเอก</th><th>แผนรับ</th><th>สัมภาษณ์</th><th>ยืนยัน</th><th>รายงานตัว</th><th>ไม่รายงานตัว</th><th></th></tr></thead>
             <tbody id="tbody-intake"></tbody>
           </table></div>
         </div>
@@ -375,24 +375,24 @@ tbody tr:hover td{background:var(--acc-ll)}
           <div class="preview-body">
             <div class="kpi-grid">
               <div class="kpi"><div class="kpi-ico">🎓</div><div class="kpi-lbl">นักศึกษาที่รายงานตัว</div><div class="kpi-val" id="kpi-s1">—</div></div>
-              <div class="kpi"><div class="kpi-ico">📊</div><div class="kpi-lbl">สาขาวิชาเอก</div><div class="kpi-val" id="kpi-s2">6</div></div>
+              <div class="kpi"><div class="kpi-ico">📊</div><div class="kpi-lbl">วิชาเอก</div><div class="kpi-val" id="kpi-s2">6</div></div>
               <div class="kpi"><div class="kpi-ico">⏱</div><div class="kpi-lbl">ระยะเวลาหลักสูตร</div><div class="kpi-val">4 ปี</div></div>
             </div>
             <div class="chart-row2">
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามสาขา</div><div class="chart-sub" id="pie-s-sub">—</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามวิชาเอก</div><div class="chart-sub" id="pie-s-sub">—</div></div></div>
                 <div class="pie-layout">
                   <div class="pie-canvas-wrap" style="width:170px;height:170px"><canvas id="chart-pie-s"></canvas></div>
                   <div class="pie-legend" id="pie-s-legend"></div>
                 </div>
               </div>
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">รายงานตัวแยกสาขา</div><div class="chart-sub" id="bar-s-sub">—</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">รายงานตัวแยกวิชาเอก</div><div class="chart-sub" id="bar-s-sub">—</div></div></div>
                 <div style="height:170px"><canvas id="chart-bar-s"></canvas></div>
               </div>
             </div>
             <div class="chart-card">
-              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">ข้อมูลรับนักศึกษา (Intake) แยกสาขา</div></div></div>
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">ข้อมูลรับนักศึกษา (Intake) แยกวิชาเอก</div></div></div>
               <div style="height:220px"><canvas id="chart-intake-s"></canvas></div>
               <div class="clegend" id="leg-intake-s"></div>
             </div>
@@ -476,7 +476,7 @@ tbody tr:hover td{background:var(--acc-ll)}
               </div>
               <div class="form-row c3">
                 <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fcoop_yr"></select></div>
-                <div class="fg"><label>สาขา <span class="req">*</span></label>
+                <div class="fg"><label>วิชาเอก <span class="req">*</span></label>
                   <select id="fcoop_mj"><option value="">— เลือก —</option>
                     <option value="fin">FIN</option><option value="mkt">MKT</option><option value="hrm">HRM</option>
                     <option value="log">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
@@ -522,7 +522,7 @@ tbody tr:hover td{background:var(--acc-ll)}
         </div>
         <div class="card-body">
           <div class="tbl-wrap"><table>
-            <thead><tr><th>ปี</th><th>สาขา</th><th>จำนวน (คน)</th><th></th></tr></thead>
+            <thead><tr><th>ปี</th><th>วิชาเอก</th><th>จำนวน (คน)</th><th></th></tr></thead>
             <tbody id="tbody-coop-only"></tbody>
           </table></div>
           <div id="coop-total-row" style="margin-top:10px;text-align:right;font-size:12px;color:var(--muted)"></div>
@@ -546,19 +546,19 @@ tbody tr:hover td{background:var(--acc-ll)}
                 <div class="kpi" style="background:#fff"><div class="kpi-lbl">ระยะเวลา</div><div class="kpi-val" style="font-size:22px;color:#2563eb">4 เดือน</div><div class="kpi-badge" style="background:#dbeafe;color:#1e40af">เต็มเวลา</div></div>
               </div>
             </div>
-            <!-- กราฟแยกสาขา -->
+            <!-- กราฟแยกวิชาเอก -->
             <div class="chart-card">
-              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#2563eb">สถิตินักศึกษาสหกิจ แยกสาขาตามปี</div><div class="chart-sub">ระยะเวลา 4 เดือน</div></div></div>
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#2563eb">สถิตินักศึกษาสหกิจ แยกวิชาเอกตามปี</div><div class="chart-sub">ระยะเวลา 4 เดือน</div></div></div>
               <div style="height:240px"><canvas id="chart-coop-bar"></canvas></div>
               <div class="clegend" id="leg-coop-bar"></div>
             </div>
             <div class="chart-row2">
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี (รวมทุกสาขา)</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี (รวมทุกวิชาเอก)</div></div></div>
                 <div style="height:180px"><canvas id="chart-coop-trend"></canvas></div>
               </div>
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามสาขา</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามวิชาเอก</div></div></div>
                 <div class="pie-layout">
                   <div class="pie-canvas-wrap" style="width:150px;height:150px"><canvas id="chart-coop-pie"></canvas></div>
                   <div class="pie-legend" id="coop-pie-leg"></div>
@@ -644,7 +644,7 @@ tbody tr:hover td{background:var(--acc-ll)}
               </div>
               <div class="form-row c3">
                 <div class="fg"><label>ปีการศึกษา <span class="req">*</span></label><select id="fintern_yr"></select></div>
-                <div class="fg"><label>สาขา <span class="req">*</span></label>
+                <div class="fg"><label>วิชาเอก <span class="req">*</span></label>
                   <select id="fintern_mj"><option value="">— เลือก —</option>
                     <option value="fin">FIN</option><option value="mkt">MKT</option><option value="hrm">HRM</option>
                     <option value="log">LSM</option><option value="bis">BIS</option><option value="mice">MICE</option>
@@ -690,7 +690,7 @@ tbody tr:hover td{background:var(--acc-ll)}
         </div>
         <div class="card-body">
           <div class="tbl-wrap"><table>
-            <thead><tr><th>ปี</th><th>สาขา</th><th>จำนวน (คน)</th><th></th></tr></thead>
+            <thead><tr><th>ปี</th><th>วิชาเอก</th><th>จำนวน (คน)</th><th></th></tr></thead>
             <tbody id="tbody-intern-only"></tbody>
           </table></div>
           <div id="intern-total-row" style="margin-top:10px;text-align:right;font-size:12px;color:var(--muted)"></div>
@@ -714,19 +714,19 @@ tbody tr:hover td{background:var(--acc-ll)}
                 <div class="kpi" style="background:#fff"><div class="kpi-lbl">ระยะเวลา</div><div class="kpi-val" style="font-size:22px;color:#059669">2 เดือน</div><div class="kpi-badge" style="background:#d1fae5;color:#065f46">ระยะสั้น</div></div>
               </div>
             </div>
-            <!-- กราฟแยกสาขา -->
+            <!-- กราฟแยกวิชาเอก -->
             <div class="chart-card">
-              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#059669">สถิตินักศึกษาฝึกงาน แยกสาขาตามปี</div><div class="chart-sub">ระยะเวลา 2 เดือน</div></div></div>
+              <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title" style="color:#059669">สถิตินักศึกษาฝึกงาน แยกวิชาเอกตามปี</div><div class="chart-sub">ระยะเวลา 2 เดือน</div></div></div>
               <div style="height:240px"><canvas id="chart-intern-bar"></canvas></div>
               <div class="clegend" id="leg-intern-bar"></div>
             </div>
             <div class="chart-row2">
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี (รวมทุกสาขา)</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">แนวโน้มรายปี (รวมทุกวิชาเอก)</div></div></div>
                 <div style="height:180px"><canvas id="chart-intern-trend"></canvas></div>
               </div>
               <div class="chart-card">
-                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามสาขา</div></div></div>
+                <div class="chart-hd"><div class="chart-hd-l"><div class="chart-title">สัดส่วนตามวิชาเอก</div></div></div>
                 <div class="pie-layout">
                   <div class="pie-canvas-wrap" style="width:150px;height:150px"><canvas id="chart-intern-pie"></canvas></div>
                   <div class="pie-legend" id="intern-pie-leg"></div>
@@ -911,7 +911,7 @@ function switchImportTab(name,tabEl){
 /* ── SAVE STUDENTS ── */
 function saveIntake(){
   const yr=+document.getElementById('fi_yr').value,mid=document.getElementById('fi_mj').value;
-  if(!yr||!mid){toast('กรุณาเลือกปีและสาขา','#ef4444');return;}
+  if(!yr||!mid){toast('กรุณาเลือกปีและวิชาเอก','#ef4444');return;}
   const row=[yr,+document.getElementById('fi_pl').value||0,+document.getElementById('fi_in').value||0,+document.getElementById('fi_co').value||0,+document.getElementById('fi_re').value||0,+document.getElementById('fi_nr').value||0];
   if(!DB.intake[mid])DB.intake[mid]=[];
   const idx=DB.intake[mid].findIndex(r=>r[0]===yr);
@@ -945,7 +945,7 @@ function saveCoopEntry(type){
   const yr=+document.getElementById(prefix+'_yr').value;
   const mid=document.getElementById(prefix+'_mj').value;
   const n=+document.getElementById(prefix+'_n').value||0;
-  if(!yr||!mid){toast('กรุณาเลือกปีและสาขา','#ef4444');return;}
+  if(!yr||!mid){toast('กรุณาเลือกปีและวิชาเอก','#ef4444');return;}
 
   if(type==='coop'){
     if(!DB.coopYrs.includes(yr)){DB.coopYrs.push(yr);DB.coopYrs.sort((a,b)=>a-b);}
@@ -1252,17 +1252,17 @@ function renderCoopTypeCharts(type){
   const top5Id=isCoop?'top5-coop':'top5-intern';
   const partnersId=isCoop?'partners-coop':'partners-intern';
 
-  // กราฟแยกสาขาตามปี
+  // กราฟแยกวิชาเอกตามปี
   dc(barId);
   CH[barId]=new Chart(document.getElementById('chart-'+barId),{type:'bar',data:{labels:yrs,datasets:MJ_KEYS.map(m=>({label:MJ[m].short,data:yrs.map((_,yi)=>(src[m]||[])[yi]||0),backgroundColor:MJ[m].color,borderRadius:4}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:10}}}}}});
   document.getElementById(legId).innerHTML=MJ_KEYS.map(m=>`<div class="cl-item"><div class="cl-dot" style="background:${MJ[m].color}"></div>${MJ[m].short}</div>`).join('');
 
-  // เส้นแนวโน้ม (รวมทุกสาขา)
+  // เส้นแนวโน้ม (รวมทุกวิชาเอก)
   const trendData=yrs.map((_,yi)=>MJ_KEYS.reduce((s,m)=>s+((src[m]||[])[yi]||0),0));
   dc(trendId);
   CH[trendId]=new Chart(document.getElementById('chart-'+trendId),{type:'line',data:{labels:yrs,datasets:[{label:isCoop?'สหกิจ':'ฝึกงาน',data:trendData,borderColor:color,backgroundColor:isCoop?'rgba(37,99,235,.1)':'rgba(5,150,105,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:color}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'#f3f4f6'},beginAtZero:true,ticks:{font:{size:9}}}}}});
 
-  // Pie สัดส่วนสาขา
+  // Pie สัดส่วนวิชาเอก
   const pieData=MJ_KEYS.map(m=>(src[m]||[]).reduce((a,b)=>a+b,0));
   const pieTotal=pieData.reduce((a,b)=>a+b,0);
   dc(pieId);
@@ -1310,14 +1310,14 @@ function exportXLSX(){
   const tYrs=Object.keys(DB.trend).map(Number).sort((a,b)=>a-b);
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['ปีการศึกษา','ลงทะเบียน','สำเร็จการศึกษา'],...tYrs.map(y=>[y,DB.trend[y].enrolled,DB.trend[y].graduated])]),'Trend');
   // สหกิจ แยกออกมา
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['สาขา (สหกิจ 4 เดือน)',...DB.coopYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.coop[m]||DB.coopYrs.map(()=>0)),(DB.coop[m]||[]).reduce((a,b)=>a+b,0)])]),'Coop_4mo');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['วิชาเอก (สหกิจ 4 เดือน)',...DB.coopYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.coop[m]||DB.coopYrs.map(()=>0)),(DB.coop[m]||[]).reduce((a,b)=>a+b,0)])]),'Coop_4mo');
   // ฝึกงาน แยกออกมา
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['สาขา (ฝึกงาน 2 เดือน)',...DB.internYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.intern[m]||DB.internYrs.map(()=>0)),(DB.intern[m]||[]).reduce((a,b)=>a+b,0)])]),'Intern_2mo');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['วิชาเอก (ฝึกงาน 2 เดือน)',...DB.internYrs,'รวม'],...MJ_KEYS.map(m=>[MJ[m].short,...(DB.intern[m]||DB.internYrs.map(()=>0)),(DB.intern[m]||[]).reduce((a,b)=>a+b,0)])]),'Intern_2mo');
   XLSX.writeFile(wb,'student_data_hub_export.xlsx');
   toast('✓ Export Excel สำเร็จ');
 }
 function exportCSV(){
-  let csv='ปีการศึกษา,สาขา,แผนรับ,สัมภาษณ์,ยืนยัน,รายงานตัว,ไม่รายงานตัว\n';
+  let csv='ปีการศึกษา,วิชาเอก,แผนรับ,สัมภาษณ์,ยืนยัน,รายงานตัว,ไม่รายงานตัว\n';
   MJ_KEYS.forEach(m=>(DB.intake[m]||[]).forEach(r=>{csv+=`${r[0]},${MJ[m].short},${r.slice(1).join(',')}\n`;}));
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\ufeff'+encodeURIComponent(csv);a.download='intake_data.csv';a.click();
   toast('✓ Export CSV สำเร็จ');

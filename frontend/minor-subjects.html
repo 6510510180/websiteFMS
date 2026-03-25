@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>วิชาโท | FMS PSU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root{--purple:#7c3aed;--purple-light:#ede9fe;--purple-mid:#c4b5fd;--text:#1e1b2e;--muted:#6b7280;--border:#e5e7eb;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Sarabun',sans-serif;background:#f8f7ff;color:var(--text);line-height:1.7;}
+    .navbar{display:flex;justify-content:space-between;align-items:center;padding:10px 5%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.06);position:sticky;top:0;z-index:100;}
+    .navbar .logo img{height:40px;}
+    .navbar .logo-text{font-family:'Prompt',sans-serif;font-weight:700;font-size:18px;color:var(--purple);}
+    .navbar ul{display:flex;gap:22px;list-style:none;align-items:center;}
+    .navbar a{font-size:14px;color:#555;text-decoration:none;transition:color .2s;}
+    .navbar a:hover,.navbar a.active{color:var(--purple);font-weight:600;}
+    .nav-right{display:flex;align-items:center;gap:15px;color:#666;}
+    .nav-dropdown{position:relative;}
+    .nav-dropdown-toggle{font-size:14px;color:#555;background:none;border:none;cursor:pointer;font-family:inherit;padding:0;display:flex;align-items:center;gap:4px;transition:color .2s;}
+    .nav-dropdown-toggle:hover,.nav-dropdown.open .nav-dropdown-toggle{color:var(--purple);}
+    .chevron{font-style:normal;font-size:10px;transition:transform .18s;display:inline-block;}
+    .nav-dropdown.open .chevron{transform:rotate(180deg);}
+    .nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 10px);left:0;background:#fff;border:1px solid #eee;border-radius:10px;min-width:210px;box-shadow:0 8px 24px rgba(124,58,237,.13);overflow:hidden;z-index:999;animation:dropIn .15s ease;}
+    @keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+    .nav-dropdown.open .nav-dropdown-menu{display:block;}
+    .dropdown-item{display:block;width:100%;padding:11px 16px;font-size:13px;color:#444;background:none;border:none;border-bottom:1px solid #f5f5f5;text-align:left;cursor:pointer;font-family:inherit;text-decoration:none;transition:all .12s;}
+    .dropdown-item:last-child{border-bottom:none;}
+    .dropdown-item:hover{background:#f5f0ff;color:var(--purple);padding-left:20px;}
+    .dropdown-loading{padding:12px 16px;font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px;}
+    .spinner-sm{width:13px;height:13px;border-radius:50%;border:2px solid #e9d5ff;border-top-color:var(--purple);animation:spin .7s linear infinite;flex-shrink:0;}
+
+    /* Page header */
+    .page-header{background:linear-gradient(135deg,#7c3aed 0%,#9b51e0 50%,#c026d3 100%);padding:52px 6% 48px;color:#fff;}
+    .breadcrumb{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.75;margin-bottom:20px;}
+    .breadcrumb a{color:#fff;text-decoration:none;}
+    .breadcrumb i{font-size:9px;}
+    .page-header h1{font-family:'Prompt',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.15;margin-bottom:12px;}
+    .page-header p{font-size:15px;opacity:.85;max-width:620px;line-height:1.7;}
+    .header-meta{display:flex;gap:16px;margin-top:24px;flex-wrap:wrap;}
+    .header-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:99px;font-size:12px;font-weight:700;backdrop-filter:blur(4px);}
+
+    /* Page body */
+    .page-body{max-width:1200px;margin:0 auto;padding:48px 6% 80px;}
+    .group-intro{background:#fff;border-radius:16px;padding:20px 24px;margin-bottom:32px;border:1.5px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,.05);}
+    .group-intro p{font-size:14px;color:var(--muted);line-height:1.8;}
+    .group-intro strong{color:var(--text);}
+
+    /* ── 2-col selection rules ── */
+    .sel-rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+    @media(max-width:640px){.sel-rules-grid{grid-template-columns:1fr;}}
+    .sel-col{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+    .sel-col-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:flex-start;gap:8px;line-height:1.5;}
+    .sel-col-title i{color:var(--purple);font-size:13px;margin-top:2px;flex-shrink:0;}
+    .sel-col.mix .sel-col-title i{color:#1d4ed8;}
+    .sel-col-list{list-style:none;padding:0;margin:0;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px;}
+    .sel-col-list li{display:flex;align-items:flex-start;gap:6px;line-height:1.55;}
+    .sel-num{font-weight:700;color:var(--purple);flex-shrink:0;min-width:20px;}
+    .sel-col.mix .sel-num{color:#1d4ed8;}
+
+    /* Group tabs */
+    .mg-tab{position:relative;display:flex;flex-direction:column;align-items:flex-start;border-radius:16px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .25s;font-family:'Sarabun',sans-serif;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05);padding:0;text-align:left;}
+    .mg-tab:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(124,58,237,.15);border-color:var(--purple-mid);}
+    .mg-tab.active{border-color:var(--purple);box-shadow:0 8px 28px rgba(124,58,237,.35);transform:translateY(-3px);}
+    .mg-thumb{width:100%;height:80px;overflow:hidden;position:relative;background:#f5f3ff;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+    .mg-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s;}
+    .mg-tab:hover .mg-thumb img{transform:scale(1.07);}
+    .mg-thumb-icon{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;transition:.25s;}
+    .mg-tab.active .mg-thumb-icon{color:#fff;}
+    .mg-tab.active .mg-thumb{background:var(--purple);}
+    .mg-thumb-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.4));opacity:0;transition:.25s;}
+    .mg-tab.active .mg-thumb-overlay,.mg-tab:hover .mg-thumb-overlay{opacity:1;}
+    .mg-badge{position:absolute;top:7px;left:7px;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:800;letter-spacing:.7px;background:rgba(124,58,237,.13);color:var(--purple);transition:all .25s;z-index:1;}
+    .mg-tab.active .mg-badge{background:rgba(255,255,255,.25);color:#fff;}
+    /* badge คละกลุ่ม */
+    .mg-mix-badge{position:absolute;top:7px;right:7px;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:800;letter-spacing:.5px;background:rgba(29,78,216,.18);color:#1d4ed8;z-index:1;transition:all .25s;}
+    .mg-tab.active .mg-mix-badge{background:rgba(255,255,255,.22);color:#fff;}
+    .mg-body{padding:9px 11px 12px;width:100%;}
+    .mg-abbr{display:block;font-size:9px;font-weight:900;letter-spacing:1.5px;color:var(--purple);margin-bottom:2px;}
+    .mg-name{display:block;font-size:11px;font-weight:700;line-height:1.35;color:var(--text);}
+
+    /* Minor panel */
+    .minor-panel{display:none;animation:fadeUp .28s ease;}
+    .minor-panel.active{display:block;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .minor-panel-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+    .minor-panel-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0;overflow:hidden;}
+    .minor-panel-icon img{width:100%;height:100%;object-fit:cover;}
+    .minor-panel-title h3{font-family:'Prompt',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px;}
+    .minor-panel-title p{font-size:13px;color:var(--muted);}
+    .info-box{background:#ede9fe;border:1px solid #c4b5fd;border-radius:12px;padding:13px 18px;margin-bottom:20px;font-size:13px;color:#5b21b6;display:flex;align-items:flex-start;gap:10px;}
+    .info-box i{margin-top:2px;flex-shrink:0;}
+    /* notice สีน้ำเงินสำหรับ mix */
+    .notice-mix{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:13px 18px;margin-bottom:16px;font-size:13px;color:#1d4ed8;display:flex;align-items:flex-start;gap:10px;}
+    .notice-mix i{margin-top:2px;flex-shrink:0;}
+
+    /* Subject table */
+    .subject-table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+    .subject-table thead{background:var(--purple);color:#fff;}
+    .subject-table thead th{padding:12px 16px;font-size:12px;font-weight:700;letter-spacing:.5px;text-align:left;}
+    .subject-table thead th:last-child{text-align:center;width:80px;}
+    .subject-table tbody tr{border-bottom:1px solid #f0f0f0;transition:background .15s;}
+    .subject-table tbody tr:last-child{border-bottom:none;}
+    .subject-table tbody tr:hover{background:#faf8ff;}
+    .subject-table td{padding:11px 16px;font-size:13px;color:var(--text);vertical-align:top;}
+    .subject-table td:last-child{text-align:center;}
+    .subject-code{font-family:monospace;font-size:12px;color:var(--purple);font-weight:700;white-space:nowrap;}
+    .subject-name-th{font-weight:600;line-height:1.4;}
+    .subject-name-en{font-size:11.5px;color:var(--muted);margin-top:2px;}
+    .credit-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--purple-light);color:var(--purple);font-size:12px;font-weight:800;}
+    .req-row{background:#fdfcff;}
+    .req-tag{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.6px;padding:2px 7px;border-radius:4px;background:var(--purple-light);color:var(--purple);margin-bottom:3px;}
+    .elec-tag{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.6px;padding:2px 7px;border-radius:4px;background:#f0fdf4;color:#16a34a;margin-bottom:3px;}
+    .free-note-box{background:#fffbeb;border-radius:10px;padding:12px 16px;margin-top:14px;font-size:12px;color:#92400e;}
+    .empty-box{background:#fff;border-radius:14px;padding:40px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+    .empty-box i{font-size:32px;color:var(--purple-mid);display:block;margin-bottom:12px;}
+    .empty-box p{color:var(--muted);font-size:14px;line-height:1.7;}
+    .sr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+@media(max-width:640px){.sr-grid{grid-template-columns:1fr;}}
+.sr-col{background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:20px 24px;}
+.sr-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:0.5px solid var(--border);}
+.sr-head-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#f5f3ff;color:var(--purple);}
+.sr-head-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;}
+.sr-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;}
+.sr-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;transition:background .15s;}
+.sr-item:hover{background:#f8f7ff;}
+.sr-num{font-size:11px;font-weight:500;color:#9ca3af;min-width:16px;text-align:right;flex-shrink:0;}
+.sr-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sr-name{font-size:13px;color:var(--text);line-height:1.4;}
+.sr-mix{background:#eff6ff;border-color:#bfdbfe;}
+.sr-mix .sr-head{border-bottom-color:#bfdbfe;}
+.sr-mix .sr-head-icon-mix{background:rgba(255,255,255,.5);color:#1d4ed8;}
+.sr-mix .sr-head-title{color:#1e40af;}
+.sr-mix .sr-num{color:#93c5fd;}
+.sr-mix .sr-name{color:#1e40af;}
+.sr-mix .sr-item:hover{background:rgba(255,255,255,.4);}
+.sr-mix-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:#dbeafe;color:#1d4ed8;border:0.5px solid #bfdbfe;margin-bottom:10px;}
+.sr-mix-note{font-size:12px;color:#3b82f6;margin-top:12px;padding-top:10px;border-top:0.5px solid #bfdbfe;line-height:1.6;}
+
+    /* Footer */
+    .footer{background:#fff;padding:48px 6%;border-top:1px solid var(--border);}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:40px;max-width:1200px;margin:0 auto;}
+    .footer-logo h4{display:flex;align-items:center;gap:10px;font-size:15px;margin-bottom:12px;}
+    .footer-logo p{font-size:13px;line-height:1.7;color:#777;}
+    .social{display:flex;gap:14px;margin-top:18px;color:#bbb;font-size:16px;}
+    .fcol h4{font-size:14px;margin-bottom:16px;}
+    .fcol ul{list-style:none;}
+    .fcol li{font-size:13px;color:#666;margin-bottom:9px;}
+    .fcol p{font-size:13px;color:#666;margin-bottom:5px;}
+    .footer-bottom{max-width:1200px;margin:40px auto 0;padding-top:18px;border-top:1px solid #f0f0f0;display:flex;justify-content:space-between;font-size:12px;color:#bbb;}
+    .footer-bottom a{color:#999;text-decoration:none;margin-left:20px;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:500px){.footer-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo"><img src="logo-fms.png" alt="Logo" id="logoImg"><span class="logo-text" id="logoText" style="display:none">FMS PSU</span></div>
+  <nav><ul>
+    <li><a href="bba-home.html" id="nav-home">หน้าหลัก</a></li>
+    <li><a href="bba-public.html" id="nav-general">ข้อมูลทั่วไป</a></li>
+    <li><a href="student.html" class="active" id="nav-student ">นักศึกษา</a></li>
+    <li>
+      <div class="nav-dropdown" id="planDropdown">
+        <button class="nav-dropdown-toggle" onclick="togglePlanDropdown()">แผนการศึกษา <i class="chevron">▾</i></button>
+        <div class="nav-dropdown-menu" id="planDropdownMenu"><div class="dropdown-loading"><div class="spinner-sm"></div><span>กำลังโหลด...</span></div></div>
+      </div>
+    </li>
+    <li><a href="bba-qa.html" id="nav-qa">QA</a></li>
+  </ul></nav>
+  <div class="nav-right"><i class="fa-solid fa-magnifying-glass"></i></div>
+</header>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="student.html"><i class="fa-solid fa-arrow-left"></i> กลับหน้านักศึกษา</a><i class="fa-solid fa-chevron-right"></i><span>วิชาโท</span></div>
+  <h1>รายวิชาโท<br>หลักสูตร บธ.บ. <span id="headerCourseYear">2567</span></h1>
+  <p>เลือกเรียน 15 หน่วยกิต จากกลุ่มวิชาใดกลุ่มวิชาหนึ่ง — วิชาบังคับและวิชาเลือกของแต่ละสาขาสามารถนำมาเป็นวิชาโทได้ทั้งหมด</p>
+  <div class="header-meta">
+    <div class="header-chip"><i class="fa-solid fa-book-open"></i> 15 หน่วยกิต</div>
+    <div class="header-chip" id="chipGroupCount"><i class="fa-solid fa-layer-group"></i> กำลังโหลด...</div>
+    <div class="header-chip"><i class="fa-solid fa-calendar"></i> ปีหลักสูตร <span id="chipYear">2567</span></div>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="group-intro">
+    <p><strong>วิชาโท</strong> เลือกได้จากกลุ่มวิชาใดกลุ่มหนึ่ง รวม <strong>15 หน่วยกิต</strong> โดย<strong>วิชาบังคับและวิชาเลือกของแต่ละสาขาสามารถนำมานับเป็นวิชาโทได้ทั้งหมด</strong> (ยกเว้นวิชาฝึกงาน/สหกิจ)</p>
+  </div>
+
+  <!-- กล่องเงื่อนไขการเลือก -->
+ <!-- กล่องเงื่อนไขการเลือก -->
+<div id="selectionRulesBox">
+  <div class="sr-grid">
+    <div class="sr-col">
+      <div class="sr-head">
+        <div class="sr-head-icon"><i class="fa-solid fa-circle-check" style="font-size:13px"></i></div>
+        <div class="sr-head-title">เลือกจากรายวิชาในกลุ่มวิชาใดวิชาหนึ่ง</div>
+      </div>
+      <ul class="sr-list">
+        <li class="sr-item"><span class="sr-num">1.</span><span class="sr-dot" style="background:#7c3aed"></span><span class="sr-name">วิชาเอกการเงินและการลงทุน</span></li>
+        <li class="sr-item"><span class="sr-num">2.</span><span class="sr-dot" style="background:#e11d48"></span><span class="sr-name">วิชาเอกการตลาดและการสื่อสาร</span></li>
+        <li class="sr-item"><span class="sr-num">3.</span><span class="sr-dot" style="background:#16a34a"></span><span class="sr-name">วิชาเอกการจัดการทรัพยากรมนุษย์</span></li>
+        <li class="sr-item"><span class="sr-num">4.</span><span class="sr-dot" style="background:#d97706"></span><span class="sr-name">วิชาเอกการจัดการโลจิสติกส์และโซ่อุปทาน</span></li>
+        <li class="sr-item"><span class="sr-num">5.</span><span class="sr-dot" style="background:#c026d3"></span><span class="sr-name">วิชาเอกการจัดการไมซ์</span></li>
+      </ul>
+    </div>
+    <div class="sr-col sr-mix">
+      <div class="sr-head">
+        <div class="sr-head-icon sr-head-icon-mix"><i class="fa-solid fa-shuffle" style="font-size:13px"></i></div>
+        <div class="sr-head-title">เลือกจากกลุ่มวิชาใดวิชาหนึ่ง<br>หรือแบบคละกลุ่มวิชาเอก</div>
+      </div>
+      <span class="sr-mix-badge"><i class="fa-solid fa-shuffle" style="font-size:9px"></i> คละกลุ่มได้</span>
+      <ul class="sr-list">
+        <li class="sr-item"><span class="sr-num">1.</span><span class="sr-dot" style="background:#0284c7"></span><span class="sr-name">วิชาเอกระบบสารสนเทศทางธุรกิจ</span></li>
+      </ul>
+      <div class="sr-mix-note">ไม่จำเป็นต้องเลือกจากกลุ่มนี้กลุ่มเดียว สามารถเลือกจากหลายกลุ่มรวมกันได้</div>
+    </div>
+  </div>
+</div>
+
+  <!-- Tab row -->
+  <div id="groupTabContainer">
+    <div style="text-align:center;padding:40px;color:var(--muted)"><i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดกลุ่มวิชาโท...</div>
+  </div>
+
+  <div id="minorPanels"></div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-logo"><h4><i class="fa-solid fa-graduation-cap" style="color:var(--purple)"></i> มหาวิทยาลัยสงขลานครินทร์</h4><p>คณะวิทยาการจัดการ มุ่งเน้นการสร้างผู้นำธุรกิจรุ่นใหม่ที่มีคุณธรรมและนวัตกรรม</p><div class="social"><i class="fa-brands fa-facebook"></i><i class="fa-brands fa-instagram"></i><i class="fa-solid fa-share-nodes"></i></div></div>
+    <div class="fcol"><h4>Programs</h4><ul><li>Bachelor's Degree</li><li>Master's Degree</li><li>PhD Programs</li></ul></div>
+    <div class="fcol"><h4>Resources</h4><ul><li>Admissions</li><li>Student Portal</li><li>Library</li></ul></div>
+    <div class="fcol"><h4>Contact</h4><p>fms@psu.ac.th</p><p>+66-7428-7815</p><p>15 ถนนกาญจนวณิชย์ อ.หาดใหญ่ จ.สงขลา 90112</p></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 มหาวิทยาลัยสงขลานครินทร์. All rights reserved.</span><div><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div>
+</footer>
+
+<script>
+const BASE='', API=BASE+'/api';
+const urlParams=new URLSearchParams(window.location.search);
+let courseId=urlParams.get('courseId');
+
+// ── Icon/color fallback ────────────────────────────────────
+const GROUP_META_MAP={
+  "การเงิน"  :{icon:"fa-coins",            color:"linear-gradient(135deg,#7c3aed,#9b51e0)"},
+  "การตลาด" :{icon:"fa-bullhorn",          color:"linear-gradient(135deg,#e11d48,#f43f5e)"},
+  "ทรัพยากร":{icon:"fa-users-gear",        color:"linear-gradient(135deg,#16a34a,#22c55e)"},
+  "โลจิสติก":{icon:"fa-truck-fast",        color:"linear-gradient(135deg,#d97706,#f59e0b)"},
+  "สารสนเทศ":{icon:"fa-laptop-code",       color:"linear-gradient(135deg,#0284c7,#38bdf8)"},
+  "ไมซ์"    :{icon:"fa-microphone-lines",  color:"linear-gradient(135deg,#c026d3,#e879f9)"},
+  "บัญชี"   :{icon:"fa-file-invoice-dollar",color:"linear-gradient(135deg,#334155,#64748b)"},
+  "เศรษฐ"   :{icon:"fa-chart-line",        color:"linear-gradient(135deg,#0d9488,#14b8a6)"},
+  "วิศว"    :{icon:"fa-gears",             color:"linear-gradient(135deg,#b45309,#d97706)"},
+  "จีน"     :{icon:"fa-language",          color:"linear-gradient(135deg,#b91c1c,#ef4444)"},
+  "ท่องเที่ยว":{icon:"fa-plane",           color:"linear-gradient(135deg,#0369a1,#0ea5e9)"},
+};
+function getGroupMeta(name){
+  for(const[k,v] of Object.entries(GROUP_META_MAP)) if(name&&name.includes(k)) return v;
+  return {icon:"fa-graduation-cap",color:"linear-gradient(135deg,#7c3aed,#9b51e0)"};
+}
+function abbrGroup(name){
+  const map={"การเงิน":"FIN","การตลาด":"MKT","ทรัพยากร":"HRM","โลจิสติก":"LSM","สารสนเทศ":"BIS","ไมซ์":"MICE","บัญชี":"ACC","เศรษฐ":"ECON","วิศว":"ENG","จีน":"CHN","ท่องเที่ยว":"TOUR"};
+  for(const[k,v] of Object.entries(map)) if(name&&name.includes(k)) return v;
+  return name.replace(/[^ก-ฮA-Z]/g,'').slice(0,4).toUpperCase()||'—';
+}
+
+// ── allow_mix: ใช้จาก API เท่านั้น ──────────────────────────
+function isAllowMix(g){ return !!g.allow_mix; }
+
+let groupsData=[];
+let subjectCache={};
+
+// ── กล่องเงื่อนไข 2 คอลัมน์ ──────────────────────────────
+function buildSelectionRules(groups){
+  const normalGroups = groups.filter(g => !isAllowMix(g));
+  const mixGroups    = groups.filter(g =>  isAllowMix(g));
+  if(!normalGroups.length && !mixGroups.length){
+    document.getElementById('selectionRulesBox').innerHTML=''; return;
+  }
+
+  // dot color ตาม group
+  const dotColors = {
+    "การเงิน":"#7c3aed","การตลาด":"#e11d48","ทรัพยากร":"#16a34a",
+    "โลจิสติก":"#d97706","ไมซ์":"#c026d3","สารสนเทศ":"#0284c7",
+    "บัญชี":"#334155","เศรษฐ":"#0d9488","วิศว":"#b45309",
+    "จีน":"#b91c1c","ท่องเที่ยว":"#0369a1"
+  };
+  function getDotColor(name){
+    for(const[k,v] of Object.entries(dotColors)) if(name&&name.includes(k)) return v;
+    return '#7c3aed';
+  }
+
+  const leftItems = normalGroups.map((g,i)=>
+    `<li class="sr-item">
+      <span class="sr-num">${i+1}.</span>
+      <span class="sr-dot" style="background:${getDotColor(g.name_th)}"></span>
+      <span class="sr-name">วิชาเอก${g.name_th}</span>
+    </li>`).join('');
+
+  let rightCol = '';
+  if(mixGroups.length){
+    const rightItems = mixGroups.map((g,i)=>
+      `<li class="sr-item">
+        <span class="sr-num">${i+1}.</span>
+        <span class="sr-dot" style="background:${getDotColor(g.name_th)}"></span>
+        <span class="sr-name">วิชาเอก${g.name_th}</span>
+      </li>`).join('');
+    rightCol = `<div class="sr-col sr-mix">
+      <div class="sr-head">
+        <div class="sr-head-icon sr-head-icon-mix">
+          <i class="fa-solid fa-shuffle" style="font-size:13px"></i>
+        </div>
+        <div class="sr-head-title">เลือกจากกลุ่มวิชาใดวิชาหนึ่ง<br>หรือแบบคละกลุ่มวิชาเอก</div>
+      </div>
+      <span class="sr-mix-badge"><i class="fa-solid fa-shuffle" style="font-size:9px"></i> คละกลุ่มได้</span>
+      <ul class="sr-list">${rightItems}</ul>
+      <div class="sr-mix-note">ไม่จำเป็นต้องเลือกจากกลุ่มนี้กลุ่มเดียว สามารถเลือกจากหลายกลุ่มรวมกันได้</div>
+    </div>`;
+  }
+
+  document.getElementById('selectionRulesBox').innerHTML = `
+  <style>
+    .sr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+    @media(max-width:640px){.sr-grid{grid-template-columns:1fr;}}
+    .sr-col{background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:20px 24px;}
+    .sr-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:0.5px solid var(--border);}
+    .sr-head-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#f5f3ff;color:var(--purple);}
+    .sr-head-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;}
+    .sr-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;}
+    .sr-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;transition:background .15s;}
+    .sr-item:hover{background:#f8f7ff;}
+    .sr-num{font-size:11px;font-weight:500;color:#9ca3af;min-width:16px;text-align:right;flex-shrink:0;}
+    .sr-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+    .sr-name{font-size:13px;color:var(--text);line-height:1.4;}
+    .sr-mix{background:#eff6ff;border-color:#bfdbfe;}
+    .sr-mix .sr-head{border-bottom-color:#bfdbfe;}
+    .sr-mix .sr-head-icon-mix{background:rgba(255,255,255,.5);color:#1d4ed8;}
+    .sr-mix .sr-head-title{color:#1e40af;}
+    .sr-mix .sr-num{color:#93c5fd;}
+    .sr-mix .sr-name{color:#1e40af;}
+    .sr-mix .sr-item:hover{background:rgba(255,255,255,.4);}
+    .sr-mix-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:#dbeafe;color:#1d4ed8;border:0.5px solid #bfdbfe;margin-bottom:10px;}
+    .sr-mix-note{font-size:12px;color:#3b82f6;margin-top:12px;padding-top:10px;border-top:0.5px solid #bfdbfe;line-height:1.6;}
+  </style>
+  <div class="sr-grid">
+    <div class="sr-col">
+      <div class="sr-head">
+        <div class="sr-head-icon"><i class="fa-solid fa-circle-check" style="font-size:13px"></i></div>
+        <div class="sr-head-title">เลือกจากรายวิชาในกลุ่มวิชาใดวิชาหนึ่ง</div>
+      </div>
+      <ul class="sr-list">${leftItems}</ul>
+    </div>
+    ${rightCol}
+  </div>`;
+}
+
+// ── Build tab row ─────────────────────────────────────────
+function buildGroupTabs(groups){
+  const container=document.getElementById('groupTabContainer');
+  const cols=Math.min(groups.length,6);
+  container.innerHTML=`<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:14px;margin-bottom:40px;" id="tabGrid">
+    ${groups.map((g,i)=>{
+      const meta=getGroupMeta(g.name_th||'');
+      const ab=abbrGroup(g.name_th||'');
+      const iconClass=g.icon||meta.icon;
+      const thumbContent=g.image_url
+        ?`<img src="${g.image_url}" alt="${g.name_th}" onerror="this.style.display='none'"><div class="mg-thumb-overlay"></div>`
+        :`<div class="mg-thumb-icon" style="color:${i===0?'#fff':getGroupMeta(g.name_th||'').color.match(/,#([0-9a-f]{6})/i)?.[1]?'#'+getGroupMeta(g.name_th||'').color.match(/,#([0-9a-f]{6})/i)[1]:'var(--purple)'}"><i class="fa-solid ${iconClass}"></i></div>`;
+      const mixBadge=isAllowMix(g)
+        ?`<span class="mg-mix-badge"><i class="fa-solid fa-shuffle" style="font-size:8px"></i> คละกลุ่มได้</span>`:'';
+      return `<button class="mg-tab${i===0?' active':''}" data-gid="${g.id}" onclick="switchGroup(${g.id},this)">
+        <div class="mg-badge">${ab}</div>
+        ${mixBadge}
+        <div class="mg-thumb">${thumbContent}</div>
+        <div class="mg-body">
+          <span class="mg-abbr">${ab}</span>
+          <span class="mg-name">${g.name_th}</span>
+        </div>
+      </button>`;
+    }).join('')}
+  </div>`;
+  if(groups.length<=5){
+    document.getElementById('tabGrid').style.gridTemplateColumns=`repeat(${groups.length},1fr)`;
+  }
+}
+
+// ── Build panels ──────────────────────────────────────────
+function buildGroupPanels(groups){
+  const container=document.getElementById('minorPanels');
+  container.innerHTML=groups.map((g,i)=>{
+    const meta=getGroupMeta(g.name_th||'');
+    const iconClass=g.icon||meta.icon;
+    const iconEl=g.image_url
+      ?`<img src="${g.image_url}" style="width:100%;height:100%;object-fit:cover">`
+      :`<i class="fa-solid ${iconClass}"></i>`;
+    const iconStyle=g.image_url?'':`background:${meta.color}`;
+    const noteText=g.note||'วิชาบังคับและวิชาเลือกทั้งหมดสามารถนำมานับเป็นวิชาโทได้ เลือกรวม 15 หน่วยกิต';
+    const mixNotice=isAllowMix(g)
+      ?`<div class="notice-mix"><i class="fa-solid fa-shuffle"></i><span>กลุ่มวิชานี้ <strong>สามารถเลือกแบบคละกลุ่มวิชาเอกได้</strong> ไม่จำเป็นต้องเลือกจากกลุ่มนี้กลุ่มเดียว</span></div>`:'';
+    return `<div class="minor-panel${i===0?' active':''}" id="mpanel-${g.id}">
+      <div class="minor-panel-header">
+        <div class="minor-panel-icon" style="${iconStyle}">${iconEl}</div>
+        <div class="minor-panel-title">
+          <h3>${g.name_th}</h3>
+          <p>${g.name_en||''}</p>
+        </div>
+      </div>
+      ${mixNotice}
+      <div class="info-box"><i class="fa-solid fa-circle-info"></i><span>${noteText}</span></div>
+      <div id="mpanel-content-${g.id}">
+        <div style="text-align:center;padding:32px;color:var(--muted)"><i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลด...</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Load subjects ─────────────────────────────────────────
+async function loadGroupSubjects(groupId){
+  if(subjectCache[groupId]) return subjectCache[groupId];
+  try{
+    // ── ลองดึงจาก minor-subjects ก่อน ──
+    const r=await fetch(`${API}/minor-subjects?minor_group_id=${groupId}`);
+    const j=await r.json(); let all=j.data||j;
+    if(!Array.isArray(all)) all=[];
+
+    // ── ถ้าไม่มีข้อมูลใน minor-subjects → fallback ดึงจาก major-subjects ──
+    if(!all.length){
+      const group=groupsData.find(g=>g.id===groupId)||{};
+      console.log('[fallback] groupId:', groupId, 'name_th:', group.name_th);
+      let majSubjects=[];
+
+      // ดึง majors ทั้งหมดเพื่อ match ชื่อ
+      const r2=await fetch(`${API}/majors?course_id=${courseId||5}`);
+      const j2=await r2.json(); const majors=j2.data||j2;
+      console.log('[fallback] majors:', majors.map(m=>m.name_th));
+
+      const matched=majors.find(m=>
+        m.name_th&&group.name_th&&(
+          m.name_th===group.name_th||
+          m.name_th.includes(group.name_th)||
+          group.name_th.includes(m.name_th)
+        )
+      );
+      console.log('[fallback] matched major:', matched?.name_th, 'id:', matched?.id);
+
+      if(matched){
+        const r3=await fetch(`${API}/major-subjects?major_id=${matched.id}`);
+        const j3=await r3.json(); majSubjects=j3.data||j3;
+        console.log('[fallback] subjects count:', majSubjects.length);
+      }
+
+      if(!Array.isArray(majSubjects)) majSubjects=[];
+      all=majSubjects;
+    }
+
+    subjectCache[groupId]={
+      req:all.filter(s=>s.subject_type==='required'),
+      elec:all.filter(s=>s.subject_type==='elective'),
+    };
+    return subjectCache[groupId];
+  }catch(e){
+    console.warn('[loadGroupSubjects] error:', e);
+    return {req:[],elec:[]};
+  }
+}
+
+function buildRows(rows,isReq){
+  return rows.map(s=>`<tr class="${isReq?'req-row':''}">
+    <td class="subject-code">${s.subject_code}</td>
+    <td>
+      <div>${isReq?'<span class="req-tag">บังคับ</span>':'<span class="elec-tag">เลือก</span>'}</div>
+      <div class="subject-name-th">${s.name_th}</div>
+      <div class="subject-name-en">${s.name_en||''}</div>
+      ${s.special_note?`<div style="font-size:11px;color:#e11d48;margin-top:2px;">${s.special_note}</div>`:''}
+    </td>
+    <td><span class="credit-badge">${s.credits}</span></td>
+  </tr>`).join('');
+}
+
+function buildSubjectTable(req,elec,group){
+  const freeNote=group.free_note||'';
+  if(!req.length&&!elec.length){
+    return `<div class="empty-box"><i class="fa-solid fa-circle-info"></i>
+      <p>${freeNote||'กรุณาตรวจสอบกับคณะ/สาขาที่เกี่ยวข้องโดยตรง'}</p></div>`;
+  }
+  return `<table class="subject-table">
+    <thead><tr><th>รหัสวิชา</th><th>ชื่อวิชา</th><th>หน่วยกิต</th></tr></thead>
+    <tbody>${buildRows(req,true)}${buildRows(elec,false)}</tbody>
+  </table>
+  ${freeNote?`<div class="free-note-box"><i class="fa-solid fa-triangle-exclamation"></i> ${freeNote}</div>`:''}`;
+}
+
+async function renderGroupPanel(groupId){
+  const el=document.getElementById(`mpanel-content-${groupId}`);
+  if(!el||el.dataset.loaded) return;
+  const group=groupsData.find(g=>g.id===groupId)||{};
+  const {req,elec}=await loadGroupSubjects(groupId);
+  el.innerHTML=buildSubjectTable(req,elec,group);
+  el.dataset.loaded='1';
+}
+
+// ── Tab switch ────────────────────────────────────────────
+async function switchGroup(groupId,btn){
+  document.querySelectorAll('.mg-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.minor-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  const p=document.getElementById('mpanel-'+groupId); if(p) p.classList.add('active');
+  await renderGroupPanel(groupId);
+}
+
+// ── Year helpers ──────────────────────────────────────────
+function extractCourseYear(name){
+  if(!name) return null;
+  const m=name.match(/25\d{2}/);
+  return m?m[0]:null;
+}
+function updateHeaderYear(year){
+  if(!year) return;
+  document.getElementById('headerCourseYear').textContent=year;
+  document.getElementById('chipYear').textContent=year;
+}
+
+// ── Nav ───────────────────────────────────────────────────
+document.getElementById('logoImg').onerror=function(){this.style.display='none';document.getElementById('logoText').style.display='inline';};
+function togglePlanDropdown(){document.getElementById('planDropdown').classList.toggle('open');}
+document.addEventListener('click',e=>{const dd=document.getElementById('planDropdown');if(dd&&!dd.contains(e.target))dd.classList.remove('open');});
+
+async function buildPlanDropdown(){
+  const menu=document.getElementById('planDropdownMenu');
+  try{
+    const r=await fetch(`${API}/courses`);if(!r.ok)throw 0;
+    const j=await r.json();const cs=j.data||j;
+    menu.innerHTML=cs.map(c=>`<a class="dropdown-item" href="minor-subjects.html?courseId=${c.id}">${c.name_th||'หลักสูตร '+c.id}</a>`).join('');
+  }catch{menu.innerHTML=`<div style="padding:12px 16px;font-size:12px;color:#aaa;">ไม่สามารถโหลดข้อมูลได้</div>`;}
+}
+
+function injectNavLinks(cid){
+  if(!cid) return;
+  ['nav-general','nav-student','nav-qa'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    const base=id==='nav-general'?'bba-public.html':id==='nav-student'?'student.html':'bba-qa.html';
+    el.href=`${base}?courseId=${cid}`;
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────
+async function init(){
+  let coursesList=[];
+  if(!courseId){
+    try{
+      const r=await fetch(`${API}/courses`); if(r.ok){
+        const j=await r.json(); coursesList=j.data||j;
+        if(coursesList.length) courseId=String(Math.max(...coursesList.map(c=>c.id)));
+      }
+    }catch{}
+  } else {
+    try{
+      const r=await fetch(`${API}/courses`); if(r.ok){
+        const j=await r.json(); coursesList=j.data||j;
+      }
+    }catch{}
+  }
+
+  injectNavLinks(courseId);
+  buildPlanDropdown();
+
+  // อัปเดตปีหลักสูตรจากชื่อ course
+  const currentCourse=coursesList.find(c=>String(c.id)===String(courseId));
+  if(currentCourse){
+    const yr=extractCourseYear(currentCourse.name_th||currentCourse.name_en||'');
+    if(yr) updateHeaderYear(yr);
+  }
+
+  // โหลดกลุ่มวิชาโทจาก API
+  // หมายเหตุ: ดึงทั้งหมดโดยไม่กรอง course_id เพราะบาง group
+  // อาจไม่ได้ผูก course_id ไว้ในฐานข้อมูล
+  try{
+    const r=await fetch(`${API}/minor-groups`);
+    const j=await r.json();
+    groupsData=j.data||j;
+    if(!Array.isArray(groupsData)) groupsData=[];
+    // debug — ลบออกได้หลังตรวจสอบ
+    console.log('[minor-groups] total:', groupsData.length,
+      'names:', groupsData.map(g=>g.name_th).join(', '));
+  }catch(e){
+    groupsData=[];
+    console.error('[minor-groups] fetch error:', e);
+  }
+
+  const chip=document.getElementById('chipGroupCount');
+  if(chip) chip.innerHTML=`<i class="fa-solid fa-layer-group"></i> ${groupsData.length} กลุ่มวิชา`;
+
+  if(!groupsData.length){
+    document.getElementById('groupTabContainer').innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted)">ไม่พบกลุ่มวิชาโท</div>`;
+    return;
+  }
+
+  buildGroupTabs(groupsData);
+  buildGroupPanels(groupsData);
+  await renderGroupPanel(groupsData[0].id);
+
+  // open=from param
+  const from=urlParams.get('from');
+  if(from){
+    const targetGroup=groupsData.find(g=>String(g.id)===from||g.slug===from);
+    if(targetGroup){
+      const btn=document.querySelector(`.mg-tab[data-gid="${targetGroup.id}"]`);
+      if(btn) switchGroup(targetGroup.id,btn);
+    }
+  }
+}
+
+init();
+</script>
+</body>
+</html>

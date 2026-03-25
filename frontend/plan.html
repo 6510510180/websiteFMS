@@ -563,7 +563,7 @@ body { font-family: 'Noto Sans Thai', sans-serif; background: var(--bg); color: 
 </div>
 
 <script>
-const API = "https://websitefms.onrender.com/api";
+const BASE = ''; 
 
 // Read majorId & courseId from URL
 const params   = new URLSearchParams(window.location.search);
@@ -582,7 +582,7 @@ async function init() {
     // Load major name
     const majors = await fetch(`${API}/courses/${courseId}/majors`).then(r => r.json());
     const major  = majors.find(m => String(m.id) === String(majorId));
-    document.getElementById("heroMajor").textContent = major?.name_th || `สาขา #${majorId}`;
+    document.getElementById("heroMajor").textContent = major?.name_th || `วิชาเอก #${majorId}`;
     document.title = `${major?.name_th || 'แผนการศึกษา'} | FMS`;
   } catch {}
   await loadPlan();
