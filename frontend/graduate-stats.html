@@ -137,6 +137,153 @@
   .rank-num{width:28px;height:28px;border-radius:8px;background:var(--purple-pale);color:var(--purple);font-weight:800;font-family:'Lexend',sans-serif;font-size:12px;display:flex;align-items:center;justify-content:center;}
   .rank-bar-bg{background:var(--bg);border-radius:4px;height:6px;overflow:hidden;min-width:80px;}
   .rank-bar-fill{height:100%;border-radius:4px;transition:width .6s ease;}
+  .help-circle-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1.5px solid var(--border-mid);
+  background: var(--white); color: var(--purple);
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .18s; flex-shrink: 0; font-family: inherit;
+}
+.help-circle-btn:hover { background: var(--purple-pale); border-color: var(--purple); }
+ 
+/* ── Overlay ── */
+#helpOverlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.48); z-index: 9000;
+  align-items: center; justify-content: center;
+  padding: 20px; backdrop-filter: blur(3px);
+}
+ 
+/* ── Modal ── */
+.help-modal {
+  background: #fff; border-radius: 18px;
+  width: 100%; max-width: 620px; max-height: 90vh;
+  overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,.20);
+}
+.hm-header {
+  padding: 20px 24px 16px; border-bottom: 1px solid #EDE8F5;
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0; background: #fff; z-index: 1;
+  border-radius: 18px 18px 0 0;
+}
+.hm-header-left { display: flex; align-items: center; gap: 10px; }
+.hm-icon-box {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--purple-light); color: var(--purple);
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+.hm-title { font-family: 'Lexend', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+.hm-subtitle { font-size: 11.5px; color: var(--text-soft); }
+.hm-close {
+  background: none; border: none; font-size: 22px; cursor: pointer;
+  color: var(--text-soft); padding: 4px 8px; border-radius: 6px;
+  line-height: 1; transition: .15s;
+}
+.hm-close:hover { background: var(--purple-pale); color: var(--purple); }
+ 
+/* ── Body ── */
+.hm-body { padding: 24px; }
+.hm-section {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; color: var(--purple);
+  text-transform: uppercase; letter-spacing: .7px;
+  padding-bottom: 8px; border-bottom: 1px solid #EDE8F5;
+  margin-bottom: 14px; margin-top: 4px;
+}
+.hm-steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.hm-step { display: flex; gap: 12px; align-items: flex-start; }
+.hm-num {
+  min-width: 22px; height: 22px; border-radius: 50%;
+  background: var(--purple-light); color: var(--purple);
+  font-size: 11px; font-weight: 700; display: flex;
+  align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+.hm-step-text { font-size: 13.5px; color: var(--text); line-height: 1.65; }
+.hm-step-text b { color: var(--purple-dark); }
+.hm-step-text code {
+  background: var(--purple-pale); color: var(--purple);
+  font-size: 11.5px; padding: 1px 6px; border-radius: 4px;
+  font-family: monospace;
+}
+ 
+/* ── Badges ── */
+.hm-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10.5px; font-weight: 700; padding: 2px 9px;
+  border-radius: 99px; margin-left: 4px;
+}
+.hm-badge-purple { background: #ede9fe; color: #6d28d9; }
+.hm-badge-amber  { background: #fffbeb; color: #d97706; }
+.hm-badge-green  { background: #dcfce7; color: #166534; }
+.hm-badge-blue   { background: #eff6ff; color: #1d4ed8; }
+.hm-badge-red    { background: #fee2e2; color: #991b1b; }
+ 
+/* ── Flow ── */
+.hm-flow {
+  display: flex; align-items: center; gap: 6px;
+  flex-wrap: wrap; margin: 10px 0 16px;
+}
+.hm-flow-step {
+  background: var(--purple-pale); color: var(--purple);
+  font-size: 12px; font-weight: 700; padding: 5px 12px;
+  border-radius: 8px; white-space: nowrap;
+}
+.hm-flow-arrow { color: #9B6DD1; font-size: 14px; flex-shrink: 0; }
+ 
+/* ── Table ── */
+.hm-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+  margin-bottom: 16px; border-radius: 8px; overflow: hidden;
+  border: 1px solid #EDE8F5;
+}
+.hm-table th {
+  background: var(--purple-pale); color: var(--purple);
+  font-weight: 700; padding: 9px 12px; text-align: left;
+  font-size: 11.5px; text-transform: uppercase; letter-spacing: .5px;
+}
+.hm-table td { padding: 9px 12px; border-top: 1px solid #EDE8F5; color: var(--text); line-height: 1.5; }
+.hm-table tr:nth-child(even) td { background: #fdfbff; }
+ 
+/* ── Notes ── */
+.hm-note {
+  background: var(--purple-pale); border-left: 3px solid var(--purple);
+  border-radius: 0 8px 8px 0; padding: 12px 14px;
+  font-size: 12.5px; color: var(--purple-dark); line-height: 1.65;
+  margin-bottom: 16px;
+}
+.hm-warn {
+  background: #fffbeb; border-left: 3px solid #f59e0b;
+  border-radius: 0 8px 8px 0; padding: 12px 14px;
+  font-size: 12.5px; color: #92400e; line-height: 1.65;
+  margin-bottom: 16px;
+}
+ 
+/* ── Footer ── */
+.hm-footer {
+  padding: 14px 24px; border-top: 1px solid #EDE8F5;
+  display: flex; justify-content: flex-end;
+  position: sticky; bottom: 0; background: #fff;
+  border-radius: 0 0 18px 18px;
+}
+.hm-footer-btn {
+  padding: 9px 26px; border-radius: 9px; border: none;
+  background: var(--purple); color: #fff; font-size: 13px;
+  font-weight: 700; font-family: inherit; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(124,58,237,.28); transition: all .18s;
+}
+.hm-footer-btn:hover { background: var(--purple-dark); }
+ 
+/* ── Sheet Pills ── */
+.hm-sheet-pills { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 16px; }
+.hm-sheet-pill {
+  font-size: 12px; font-weight: 700; padding: 4px 12px;
+  border-radius: 6px; border: 1px solid;
+}
+.hm-pill-1 { background: #f3e8ff; color: #6d28d9; border-color: #ddd6fe; }
+.hm-pill-2 { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+.hm-pill-3 { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
 
   .excel-table-wrap{overflow-x:auto;border-radius:10px;border:1.5px solid var(--border);max-height:360px;overflow-y:auto;}
   table.excel-tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
@@ -172,6 +319,7 @@
     <button class="btn-outline btn-sm" onclick="downloadTemplate()">📋 ดาวน์โหลด Template</button>
     <button class="btn-outline btn-sm" onclick="document.getElementById('fileInput').click()">📥 นำเข้า Excel</button>
     <button class="btn-primary btn-sm" onclick="saveAll()">💾 บันทึกข้อมูล</button>
+    <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
     <button class="btn-outline btn-sm" id="sidebarToggle">☰ เมนู</button>
   </div>
 </nav>
@@ -367,6 +515,209 @@
 </aside>
 
 <div id="toast" class="toast" style="display:none"></div>
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
+ 
+    <!-- Header -->
+    <div class="hm-header">
+      <div class="hm-header-left">
+        <div class="hm-icon-box">🎓</div>
+        <div>
+          <div class="hm-title">คู่มือการใช้งาน</div>
+          <div class="hm-subtitle">หน้าสถิติการได้งานทำของบัณฑิต (graduate-stats.html)</div>
+        </div>
+      </div>
+      <button class="hm-close" onclick="closeHelp()">×</button>
+    </div>
+ 
+    <!-- Body -->
+    <div class="hm-body">
+ 
+      <!-- ── ภาพรวม ── -->
+      <div class="hm-section">📋 ภาพรวมหน้านี้</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">1</span>
+          <div class="hm-step-text">
+            หน้านี้ใช้ <b>บันทึกและแสดงสถิติการได้งานทำของบัณฑิต</b> แยกตามวิชาเอก ปีการศึกษา และประเภทการทำงาน — แบ่งเป็น 2 Tab หลัก
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">2</span>
+          <div class="hm-step-text">
+            Tab <b>การใส่ข้อมูล</b> — กรอกและนำเข้าข้อมูลสถิติ<br>
+            Tab <b>Preview รายงาน</b> — ดู Dashboard กราฟ และข้อมูลจาก Excel
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ── การใส่ข้อมูล ── -->
+      <div class="hm-section">✏️ Tab การใส่ข้อมูล</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">3</span>
+          <div class="hm-step-text">
+            <b>อัตราการได้งานทำแต่ละวิชาเอก — ข้อมูลใหม่</b><br>
+            กรอกอัตรา (%) สำหรับ 6 วิชาเอก ได้แก่ FIN, MKT, HRM, LSM, MICE, BIS แล้วกด <b>บันทึกและอัปเดต Preview</b> ระบบจะอัปเดตกราฟ Dashboard ทันที
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">4</span>
+          <div class="hm-step-text">
+            <b>อัตราการได้งานทำแต่ละวิชาเอก — ข้อมูลปัจจุบัน</b><br>
+            แสดงค่าปัจจุบันที่บันทึกไว้ — สามารถแก้ไขตรงนี้ได้ โดยค่าจะอัปเดต Preview แบบ Real-time
+            <span class="hm-badge hm-badge-blue">Real-time</span>
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">5</span>
+          <div class="hm-step-text">
+            <b>อัตราการได้งานทำแยกตามปีและวิชาเอก</b><br>
+            เลือกวิชาเอกจาก Dropdown ก่อน จากนั้นกรอกอัตรา (%) แต่ละปีการศึกษา (2563–2567) กด <b>บันทึกข้อมูลสถิติ</b> เมื่อเสร็จ หรือ <b>ล้างข้อมูล</b> เพื่อรีเซ็ตวิชาเอกนั้น
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">6</span>
+          <div class="hm-step-text">
+            <b>จำนวนนักศึกษาที่มีงานทำ</b> — กรอกจำนวนที่มีงานทำและจำนวนทั้งหมด แยกตามปี<br>
+            <b>จำนวนที่ทำงานตรงสาย</b> — กรอกเพิ่มช่อง "ตรงสาย" อีก 1 ช่องต่อปี
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ── Import Excel ── -->
+      <div class="hm-section">📂 นำเข้าจาก Excel (Import)</div>
+ 
+      <div class="hm-note">
+        <b>รูปแบบไฟล์ที่รองรับ:</b> ไฟล์ต้องมีชื่อ Sheet ตรงตามที่กำหนดด้านล่าง — ระบบจะอ่านข้อมูลจาก <b>แถวที่ 5 เป็นต้นไป</b> (แถว 1–4 เป็น Header)
+      </div>
+ 
+      <div class="hm-sheet-pills">
+        <span class="hm-sheet-pill hm-pill-1">Sheet 1: อัตราการได้งานทำ</span>
+        <span class="hm-sheet-pill hm-pill-2">Sheet 2: จำนวนนักศึกษา</span>
+        <span class="hm-sheet-pill hm-pill-3">Sheet 3: ทำงานตรงสาย</span>
+      </div>
+ 
+      <table class="hm-table">
+        <thead>
+          <tr>
+            <th>Sheet</th>
+            <th>โครงสร้างข้อมูล</th>
+            <th>หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>อัตราการได้งานทำ</b></td>
+            <td>แถว 5–10 = FIN..BIS, คอลัมน์ B–F = ปี 2563–2567 (%)</td>
+            <td>นำค่าล่าสุดไปอัปเดต Dashboard</td>
+          </tr>
+          <tr>
+            <td><b>จำนวนนักศึกษา</b></td>
+            <td>แถว 5–10 = FIN..BIS, คู่คอลัมน์ = มีงานทำ / ทั้งหมด ต่อปี</td>
+            <td>ค่าในช่องกรอกเป็นผลรวมทุกวิชาเอก</td>
+          </tr>
+          <tr>
+            <td><b>ทำงานตรงสาย</b></td>
+            <td>แถว 5 = มีงานทำ, แถว 6 = ทั้งหมด, แถว 7 = ตรงสาย</td>
+            <td>คอลัมน์ B–F = ปี 2563–2567</td>
+          </tr>
+        </tbody>
+      </table>
+ 
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">7</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>📋 ดาวน์โหลด Template</b> เพื่อได้ไฟล์ตัวอย่างที่มีโครงสร้างถูกต้องพร้อมใช้ — กรอกข้อมูลทับได้เลย
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">8</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>📥 นำเข้า Excel</b> หรือคลิก Upload Zone ใน Tab Preview เพื่ออัปโหลดไฟล์ — ระบบจะนำเข้าทุก Sheet ที่มีชื่อตรงพร้อมกัน
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">9</span>
+          <div class="hm-step-text">
+            หลัง Import สำเร็จ ระบบจะ <b>สลับไป Tab Preview อัตโนมัติ</b> และแสดงตัวเลือก Sheet Tab ให้คลิกดูข้อมูลแต่ละ Sheet ได้
+            <span class="hm-badge hm-badge-green">Auto Preview</span>
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">10</span>
+          <div class="hm-step-text">
+            สถานะการนำเข้าจะแสดงใต้แต่ละส่วน เช่น
+            <code>✅ นำเข้าสำเร็จ: FIN: 85.50%</code> — หากไม่มีข้อความแสดง แสดงว่าชื่อ Sheet ไม่ตรง
+          </div>
+        </div>
+      </div>
+ 
+      <div class="hm-warn">
+        <b>⚠ Admin Note:</b> Import จะ <b>เพิ่มค่าทับ</b> ข้อมูลเดิมทันที — หากต้องการ Reset ให้รีโหลดหน้าเว็บก่อน Import ใหม่ และตรวจสอบชื่อ Sheet ให้ตรงทุกครั้ง
+      </div>
+ 
+      <!-- ── Preview Dashboard ── -->
+      <div class="hm-section">📊 Tab Preview รายงาน</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">11</span>
+          <div class="hm-step-text">
+            <b>Dashboard Header</b> — แสดงค่าเฉลี่ย, วิชาเอกสูงสุด/ต่ำสุด, และ Insight Chips สรุปผลโดยอัตโนมัติ
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">12</span>
+          <div class="hm-step-text">
+            <b>Bar Chart</b> — แสดงอัตราการได้งานทำแยกวิชาเอก อัปเดตทันทีเมื่อกรอกหรือ Import ข้อมูล
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">13</span>
+          <div class="hm-step-text">
+            <b>Pie Chart + Ranking Table</b> — แสดงสัดส่วนและจัดอันดับวิชาเอกอัตโนมัติ วิชาเอกอันดับ 1 จะมีไฮไลท์สีพิเศษ
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">14</span>
+          <div class="hm-step-text">
+            <b>ตารางข้อมูล Excel</b> — ปรากฏหลัง Import สำเร็จ สามารถสลับดูแต่ละ Sheet ได้ผ่าน Sheet Tab ด้านบนตาราง
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ── การบันทึก ── -->
+      <div class="hm-section">💾 การบันทึกข้อมูล</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">15</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>💾 บันทึกข้อมูล</b> มุมขวาบน Nav หรือปุ่ม <b>บันทึกข้อมูลสถิติ</b> ในแต่ละ Section — ระบบจะแสดง Toast แจ้งผล
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">16</span>
+          <div class="hm-step-text">
+            ข้อมูลถูกเก็บ <b>ในหน่วยความจำ Browser เท่านั้น</b> — เมื่อรีโหลดหน้าข้อมูลจะหาย กรุณา Export หรือบันทึกลง Server ทุกครั้ง
+            <span class="hm-badge hm-badge-red">ไม่มี Auto-Save</span>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="hm-note">
+        <b>💡 แนวทางสำหรับ Admin:</b> ดาวน์โหลด Template → กรอกข้อมูลให้ครบทั้ง 3 Sheet → Import ครั้งเดียว → ตรวจสอบ Preview → กด บันทึกข้อมูล เพื่อยืนยัน ขั้นตอนนี้จะได้ผลลัพธ์ที่ถูกต้องและครบถ้วนที่สุด
+      </div>
+ 
+    </div><!-- /hm-body -->
+ 
+    <!-- Footer -->
+    <div class="hm-footer">
+      <button class="hm-footer-btn" onclick="closeHelp()">รับทราบ</button>
+    </div>
+ 
+  </div>
+</div><!-- /helpOverlay -->
 
 <script>
 const MAJORS = ["FIN","MKT","HRM","LSM","MICE","BIS"];
@@ -881,7 +1232,9 @@ function showToast(msg, type='success') {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>{ t.style.display='none'; }, 3500);
 }
-
+function openHelp()  { document.getElementById('helpOverlay').style.display = 'flex'; }
+function closeHelp() { document.getElementById('helpOverlay').style.display = 'none'; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
 /* ===== Sidebar toggle ===== */
 document.getElementById('sidebarToggle')?.addEventListener('click', () => {
   document.querySelector('.sidebar')?.classList.toggle('open');

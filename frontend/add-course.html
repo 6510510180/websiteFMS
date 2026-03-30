@@ -171,10 +171,165 @@ textarea { resize: vertical; min-height: 80px; }
 
 <div class="main">
   <div class="page-header">
-    <small>แดชบอร์ด / เพิ่มหรือแก้ไขหลักสูตร</small>
-    <h2 id="pageTitle">เพิ่มหลักสูตรใหม่</h2>
-    <p id="pageSub">กรอกข้อมูลหลักสูตรให้ครบถ้วน แล้วกดบันทึก</p>
+  <small>แดชบอร์ด / เพิ่มหรือแก้ไขหลักสูตร</small>
+  <div style="display:flex;align-items:center;gap:10px;margin:4px 0;">
+    <h2 id="pageTitle" style="margin:0;">เพิ่มหลักสูตรใหม่</h2>
+    <button onclick="openHelp()" style="
+      width:32px;height:32px;border-radius:50%;border:2px solid #6B3FA0;
+      background:#fff;color:#6B3FA0;font-size:15px;font-weight:700;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:all .18s;flex-shrink:0;
+    " onmouseover="this.style.background='#F3EEFF'" onmouseout="this.style.background='#fff'"
+    title="คู่มือการใช้งาน">?</button>
   </div>
+  <p id="pageSub">กรอกข้อมูลหลักสูตรให้ครบถ้วน แล้วกดบันทึก</p>
+</div>
+<!-- ── HELP MODAL ── -->
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()" style="
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+  z-index:500;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(3px);
+">
+  <div style="
+    background:#fff;border-radius:18px;width:100%;max-width:560px;
+    max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);
+    font-family:'Noto Sans Thai',sans-serif;
+  ">
+    <!-- Header -->
+    <div style="
+      padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;
+      display:flex;justify-content:space-between;align-items:center;
+      position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;
+    ">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="
+          width:36px;height:36px;border-radius:10px;background:#F3EEFF;
+          color:#6B3FA0;display:flex;align-items:center;justify-content:center;font-size:16px;
+        ">📝</div>
+        <div>
+          <div style="font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:#181117;">คู่มือการใช้งาน</div>
+          <div style="font-size:11.5px;color:#64748B;">หน้าเพิ่ม / แก้ไขหลักสูตร</div>
+        </div>
+      </div>
+      <button onclick="closeHelp()" style="
+        background:none;border:none;font-size:20px;cursor:pointer;
+        color:#64748B;padding:4px 8px;border-radius:6px;line-height:1;
+      ">×</button>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:24px;">
+
+      <!-- Section 1 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">📋 ข้อมูลหลักสูตร</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กรอก <b>ชื่อหลักสูตร (ภาษาไทย)</b> — เป็นฟิลด์บังคับ จะแสดงเป็นชื่อหลักในระบบ</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กรอก <b>ชื่อภาษาอังกฤษ</b>, ระดับการศึกษา, รูปแบบหลักสูตร, จำนวนหน่วยกิต ตามข้อมูลจริงของหลักสูตร</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">
+              เลือก <b>สถานะหลักสูตร</b> ให้เหมาะสม
+              <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="padding:2px 10px;border-radius:99px;background:#e6ffe8;color:#2e9a52;font-size:11px;font-weight:700;white-space:nowrap;">Active</span>
+                  <span style="font-size:12.5px;color:#64748B;">แสดงบนเว็บและคลิกเข้าหน้าหลักสูตรได้</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="padding:2px 10px;border-radius:99px;background:#f5e7ff;color:#6B3FA0;font-size:11px;font-weight:700;white-space:nowrap;">Draft</span>
+                  <span style="font-size:12.5px;color:#64748B;">ซ่อนจากหน้าเว็บนักศึกษา ใช้สำหรับร่างข้อมูล</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="padding:2px 10px;border-radius:99px;background:#ffe6e6;color:#c0392b;font-size:11px;font-weight:700;white-space:nowrap;">Maintenance</span>
+                  <span style="font-size:12.5px;color:#64748B;">แสดงชื่อแต่ปิดลิงก์ชั่วคราว</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">🖼️ รูปภาพหลักสูตร</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">4</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <b>เลือกรูปภาพ</b> เพื่ออัปโหลดรูปหน้าปก — รองรับ JPG, PNG, WEBP แนะนำขนาด <b>800×500px</b></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">5</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">หลังอัปโหลดสำเร็จ จะเห็นภาพตัวอย่าง — กดปุ่ม <b>✕</b> มุมขวาบนรูปเพื่อเปลี่ยนรูปใหม่</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">💾 การบันทึก</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">6</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <b>บันทึกหลักสูตร</b> เพื่อบันทึกและไปยังหน้ารายละเอียดหลักสูตร</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">7</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <b>บันทึกและเพิ่มวิชาเอก</b> เพื่อบันทึกแล้วไปต่อที่หน้าเพิ่มวิชาเอกทันที (แนะนำสำหรับหลักสูตรใหม่)</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#FEE2E2;color:#EF4444;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">!</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <span style="color:#EF4444;font-weight:700;">🗑 ลบหลักสูตร</span> (โหมดแก้ไขเท่านั้น) — <span style="color:#EF4444;font-weight:600;">ไม่สามารถกู้คืนได้</span> ข้อมูลวิชาเอกและรายวิชาในหลักสูตรจะถูกลบทั้งหมด</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div style="
+        background:#F3EEFF;border-left:3px solid #6B3FA0;
+        border-radius:0 8px 8px 0;padding:12px 14px;
+        font-size:12.5px;color:#4A2870;line-height:1.6;
+      ">
+        <b>💡 เคล็ดลับ:</b> กรอกข้อมูลใน <b>คำอธิบายสั้น ๆ</b> ให้ครบ จะช่วยให้นักศึกษาเข้าใจจุดเด่นของหลักสูตรได้ดีขึ้น
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- Footer -->
+    <div style="
+      padding:14px 24px;border-top:1px solid #EDE8F5;
+      display:flex;justify-content:flex-end;
+      position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;
+    ">
+      <button onclick="closeHelp()" style="
+        padding:9px 24px;border-radius:9px;border:none;
+        background:#6B3FA0;color:#fff;font-size:13px;font-weight:700;
+        font-family:inherit;cursor:pointer;
+        box-shadow:0 4px 12px rgba(107,63,160,.28);transition:all .18s;
+      " onmouseover="this.style.background='#4A2870'" onmouseout="this.style.background='#6B3FA0'">
+        รับทราบ
+      </button>
+    </div>
+
+  </div>
+</div>
 
   <form id="courseForm">
 
@@ -461,6 +616,9 @@ document.getElementById("deleteBtn").addEventListener("click", async function() 
     showMsg("ลบไม่สำเร็จ", "error");
   }
 });
+function openHelp(){document.getElementById('helpOverlay').style.display='flex';}
+function closeHelp(){document.getElementById('helpOverlay').style.display='none';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelp();});
 
 function showMsg(text, type) {
   const el = document.getElementById("message");

@@ -17,46 +17,66 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-/* NAVBAR */
-.navbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 var(--border);}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand img{height:36px;}
+/* ── NAVBAR ── */
+.navbar{
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  padding:0 40px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 1px 0 var(--border);
+}
+.brand{flex:1;display:flex;align-items:center;gap:10px;min-width:0;}
+.brand img{height:36px;flex-shrink:0;}
 .brand-text{font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;color:var(--text);line-height:1.2;}
 .brand-sub{font-size:10px;color:var(--purple);font-weight:500;}
-.nav-links{display:flex;align-items:center;gap:2px;}
-.nav-link{padding:6px 13px;border-radius:7px;font-size:13px;font-weight:500;color:var(--text-sub);text-decoration:none;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+
+/* เมนูกลาง */
+.nav-center{flex:2;display:flex;align-items:center;justify-content:center;gap:2px;}
+.nav-link{padding:6px 13px;border-radius:7px;font-size:13px;font-weight:500;color:var(--text-sub);text-decoration:none;cursor:pointer;transition:all 0.15s;white-space:nowrap;font-family:'Sarabun',sans-serif;}
 .nav-link:hover{background:var(--purple-light);color:var(--purple);}
 .nav-link.active{background:var(--purple-light);color:var(--purple);font-weight:700;}
+
+/* dropdown */
 .nav-dropdown{position:relative;}
-.nav-dropdown-toggle{padding:6px 13px;border-radius:7px;font-size:13px;font-weight:700;color:var(--purple);cursor:pointer;display:flex;align-items:center;gap:5px;background:var(--purple-light);border:none;font-family:inherit;user-select:none;}
+.nav-dropdown-toggle{padding:6px 13px;border-radius:7px;font-size:13px;font-weight:700;color:var(--purple);cursor:pointer;display:flex;align-items:center;gap:5px;background:var(--purple-light);border:none;font-family:'Sarabun',sans-serif;user-select:none;white-space:nowrap;}
 .nav-dropdown-toggle:hover{background:#ead5ff;}
 .nav-dropdown-toggle svg{transition:transform 0.18s;flex-shrink:0;}
 .nav-dropdown.open .nav-dropdown-toggle svg{transform:rotate(180deg);}
-.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;background:var(--white);border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(123,63,196,0.14);min-width:180px;overflow:hidden;z-index:200;animation:dropIn 0.15s ease;}
-@keyframes dropIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--white);border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(123,63,196,0.14);min-width:200px;overflow:hidden;z-index:200;animation:dropIn 0.15s ease;}
+@keyframes dropIn{from{opacity:0;transform:translateX(-50%) translateY(-6px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 .nav-dropdown.open .nav-dropdown-menu{display:block;}
-.dropdown-item{display:block;width:100%;padding:11px 16px;font-size:13px;font-weight:500;color:var(--text);text-align:left;background:none;border:none;cursor:pointer;font-family:inherit;transition:all 0.12s;border-bottom:1px solid var(--border);text-decoration:none;}
+.dropdown-item{display:block;width:100%;padding:11px 16px;font-size:13px;font-weight:500;color:var(--text);text-align:left;background:none;border:none;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all 0.12s;border-bottom:1px solid var(--border);text-decoration:none;}
 .dropdown-item:last-child{border-bottom:none;}
 .dropdown-item:hover{background:var(--purple-light);color:var(--purple);}
 .dropdown-item.active{background:var(--purple-light);color:var(--purple);font-weight:700;}
 .dropdown-loading{padding:12px 16px;font-size:12px;color:var(--text-sub);display:flex;align-items:center;gap:8px;}
 .spinner-sm{width:14px;height:14px;border-radius:50%;border:2px solid var(--purple-light);border-top-color:var(--purple);animation:spin 0.7s linear infinite;flex-shrink:0;}
 
-/* PAGES */
+/* ค้นหาขวา */
+.nav-right{flex:1;display:flex;justify-content:flex-end;align-items:center;}
+.nav-search-btn{width:34px;height:34px;border-radius:8px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sub);font-size:14px;transition:all 0.15s;}
+.nav-search-btn:hover{background:var(--purple-light);color:var(--purple);}
+
+/* ── PAGES ── */
 .page{display:none;}.page.active{display:block;}
 
-/* PAGE 1 MAJORS */
+/* ── PAGE 1: MAJORS ── */
 .majors-page{padding:40px 40px 60px;max-width:1100px;margin:0 auto;}
 .page1-heading{margin-bottom:28px;}
 .page1-heading h1{font-family:'Lexend',sans-serif;font-size:32px;font-weight:900;color:var(--text);line-height:1.2;margin-bottom:10px;}
 .page1-heading p{font-size:14px;color:var(--text-sub);line-height:1.7;max-width:520px;}
 .filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
-.filter-btn{padding:7px 18px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;border:1.5px solid var(--border);background:var(--white);color:var(--text-sub);font-family:inherit;}
+.filter-btn{padding:7px 18px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;border:1.5px solid var(--border);background:var(--white);color:var(--text-sub);font-family:'Sarabun',sans-serif;}
 .filter-btn.active{background:var(--purple);color:white;border-color:var(--purple);}
 .filter-btn:hover:not(.active){background:var(--purple-light);color:var(--purple);border-color:var(--purple);}
 .filter-search{display:flex;align-items:center;gap:7px;padding:7px 13px;background:var(--white);border:1.5px solid var(--border);border-radius:9px;font-size:13px;flex:1;max-width:260px;transition:border-color 0.15s;}
 .filter-search:focus-within{border-color:var(--purple);}
-.filter-search input{border:none;outline:none;background:transparent;font-size:13px;font-family:inherit;color:var(--text);width:100%;}
+.filter-search input{border:none;outline:none;background:transparent;font-size:13px;font-family:'Sarabun',sans-serif;color:var(--text);width:100%;}
 .majors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 .major-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 20px 16px;cursor:pointer;transition:all 0.22s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;box-shadow:var(--shadow);animation:cardFadeIn 0.35s ease forwards;opacity:0;}
 @keyframes cardFadeIn{to{opacity:1;transform:none;}from{opacity:0;transform:translateY(10px);}}
@@ -76,13 +96,13 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-sub);}
 .empty-icon{font-size:40px;margin-bottom:10px;}
 
-/* PAGE 2 PLAN */
+/* ── PAGE 2: STUDY PLAN ── */
 .plan-page{animation:fadeIn 0.2s ease;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 .plan-hero{background:linear-gradient(135deg,#f0e6ff 0%,#fde8f5 40%,#ede4ff 100%);padding:36px 40px 32px;position:relative;overflow:hidden;}
 .plan-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 85% 30%,rgba(216,180,254,0.4) 0%,transparent 50%),radial-gradient(circle at 15% 70%,rgba(167,139,250,0.25) 0%,transparent 45%);pointer-events:none;}
 .plan-hero-inner{position:relative;z-index:1;}
-.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--purple);cursor:pointer;margin-bottom:10px;opacity:0.8;transition:opacity 0.15s;background:none;border:none;font-family:inherit;padding:0;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--purple);cursor:pointer;margin-bottom:10px;opacity:0.8;transition:opacity 0.15s;background:none;border:none;font-family:'Sarabun',sans-serif;padding:0;}
 .back-link:hover{opacity:1;}
 .plan-hero-major{font-size:13.5px;font-weight:600;color:var(--purple);margin-bottom:3px;opacity:0.85;}
 .plan-hero-title{font-family:'Lexend',sans-serif;font-size:36px;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:20px;}
@@ -90,7 +110,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
 .filters-row{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;}
 .filter-group{display:flex;flex-direction:column;gap:4px;}
 .filter-group label{font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.7px;opacity:0.75;}
-.plan-select{appearance:none;padding:9px 32px 9px 13px;border:1.5px solid rgba(123,63,196,0.22);border-radius:10px;background:rgba(255,255,255,0.78);backdrop-filter:blur(8px);font-size:13px;font-weight:600;font-family:inherit;color:var(--text);cursor:pointer;outline:none;min-width:128px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237B3FC4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:10px;transition:all 0.15s;box-shadow:0 2px 8px rgba(123,63,196,0.07);}
+.plan-select{appearance:none;padding:9px 32px 9px 13px;border:1.5px solid rgba(123,63,196,0.22);border-radius:10px;background:rgba(255,255,255,0.78);backdrop-filter:blur(8px);font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;color:var(--text);cursor:pointer;outline:none;min-width:128px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237B3FC4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:10px;transition:all 0.15s;box-shadow:0 2px 8px rgba(123,63,196,0.07);}
 .plan-select:focus{border-color:var(--purple);background-color:white;}
 .plan-content{padding:26px 40px 60px;max-width:1100px;margin:0 auto;}
 .summary-bar{display:flex;align-items:center;gap:14px;background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:13px 18px;margin-bottom:22px;box-shadow:var(--shadow);}
@@ -121,7 +141,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
 .sc-cat{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--cat-color,var(--text-sub));line-height:1.3;}
 .sc-detail{font-size:12px;font-weight:700;color:var(--purple);display:flex;align-items:center;gap:3px;transition:gap 0.15s;}
 .sc-detail:hover{gap:6px;}
-
 .legend-box{background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:16px 22px;margin-top:6px;box-shadow:var(--shadow);}
 .legend-title{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--purple);margin-bottom:14px;}
 .legend-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
@@ -134,7 +153,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
 .legend-desc{font-size:11.5px;color:var(--text-sub);line-height:1.5;font-weight:500;}
 .legend-desc strong{display:block;font-size:12px;color:var(--text);margin-bottom:1px;}
 
-/* MODAL */
+/* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(15,8,40,0.54);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.open{display:flex;}
 .modal{background:white;border-radius:20px;width:100%;max-width:580px;max-height:88vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.22);animation:modalIn 0.24s cubic-bezier(.34,1.4,.64,1);}
@@ -163,13 +182,28 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
 .modal-clo-text{font-size:13px;color:var(--text);line-height:1.6;margin-bottom:5px;}
 .modal-loading{text-align:center;padding:24px;color:var(--text-sub);font-size:13px;}
 
-@media(max-width:900px){.majors-grid,.subjects-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:600px){.majors-grid,.subjects-grid{grid-template-columns:1fr;}.navbar,.majors-page,.plan-hero,.plan-content{padding-left:20px;padding-right:20px;}.plan-hero-title{font-size:26px;}.legend-grid{grid-template-columns:repeat(2,1fr);}}
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .majors-grid,.subjects-grid{grid-template-columns:repeat(2,1fr);}
+  .navbar{padding:0 20px;}
+  .brand-text,.brand-sub{display:none;}
+}
+@media(max-width:700px){
+  .nav-center{display:none;}
+}
+@media(max-width:600px){
+  .majors-grid,.subjects-grid{grid-template-columns:1fr;}
+  .majors-page,.plan-hero,.plan-content{padding-left:20px;padding-right:20px;}
+  .plan-hero-title{font-size:26px;}
+  .legend-grid{grid-template-columns:repeat(2,1fr);}
+}
 </style>
 </head>
 <body>
 
+<!-- ── NAVBAR ── -->
 <nav class="navbar">
+  <!-- ซ้าย: โลโก้ -->
   <div class="brand">
     <img src="logo-fms.png" alt="FMS" onerror="this.style.display='none'">
     <div>
@@ -177,14 +211,18 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
       <div class="brand-sub">คณะวิทยาการจัดการ</div>
     </div>
   </div>
-  <div class="nav-links">
+
+  <!-- กลาง: เมนู -->
+  <div class="nav-center">
     <a class="nav-link" href="bba-home.html">หน้าหลัก</a>
     <a class="nav-link" href="bba-public.html" id="navGeneral">ข้อมูลทั่วไป</a>
     <a class="nav-link" href="student.html">นักศึกษา</a>
     <div class="nav-dropdown" id="planDropdown">
       <button class="nav-dropdown-toggle" onclick="toggleDropdown()">
         แผนการศึกษา
-        <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+        </svg>
       </button>
       <div class="nav-dropdown-menu" id="planDropdownMenu">
         <div class="dropdown-loading"><div class="spinner-sm"></div><span>กำลังโหลด...</span></div>
@@ -192,9 +230,16 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <a class="nav-link" href="bba-qa.html">QA</a>
   </div>
+
+  <!-- ขวา: ค้นหา -->
+  <div class="nav-right">
+    <button class="nav-search-btn" title="ค้นหา">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+  </div>
 </nav>
 
-<!-- PAGE 1: MAJORS -->
+<!-- ── PAGE 1: MAJORS ── -->
 <div class="page active" id="page-majors">
   <div class="majors-page">
     <div class="page1-heading">
@@ -208,11 +253,13 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
         <input type="text" placeholder="ค้นหาวิชาเอก..." id="majorSearchInput" oninput="filterMajors('search')"/>
       </div>
     </div>
-    <div id="majorsArea"><div class="loading-state"><div class="spinner"></div><div style="font-size:14px;color:var(--text-sub);">กำลังโหลด...</div></div></div>
+    <div id="majorsArea">
+      <div class="loading-state"><div class="spinner"></div><div style="font-size:14px;color:var(--text-sub);">กำลังโหลด...</div></div>
+    </div>
   </div>
 </div>
 
-<!-- PAGE 2: STUDY PLAN -->
+<!-- ── PAGE 2: STUDY PLAN ── -->
 <div class="page" id="page-plan">
   <div class="plan-hero">
     <div class="plan-hero-inner">
@@ -241,8 +288,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
         </div>
         <div class="filter-group">
           <label>ภาคเรียน</label>
-          <!-- ✅ FIX: dropdown นี้ถูก populate หลัง loadPlan() เสร็จ
-               โดยแสดงเฉพาะภาคเรียนของปีที่เลือก ไม่ใช่ทุกปีรวมกัน -->
           <select class="plan-select" id="selSemester" onchange="onSemFilterChange()">
             <option value="all">ทุกภาคเรียน</option>
           </select>
@@ -280,7 +325,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
-<!-- DETAIL MODAL -->
+<!-- ── DETAIL MODAL ── -->
 <div class="modal-overlay" id="detailModal">
   <div class="modal">
     <div class="modal-hero">
@@ -309,9 +354,7 @@ const BASE = '';
 const API  = BASE + '/api';
 
 let allCourses = [], allMajors = [], activeCourseId = null, activeMajor = null;
-// ✅ FIX: เก็บ semesters เฉพาะของปีที่โหลดมาล่าสุด (ไม่สะสมข้ามปี)
 let planSemesters = [];
-// ✅ FIX: ป้องกัน race condition — ถ้า loadPlan() ถูกเรียกซ้อน ให้ยกเลิกอันเก่า
 let loadToken = 0;
 
 const subjectCache = {};
@@ -325,26 +368,28 @@ const CAT_TEXT ={'Core':'Core Course','Elective':'Elective','GE':'General Educat
 
 // ── Dropdown ──
 function toggleDropdown(){document.getElementById('planDropdown').classList.toggle('open');}
-document.addEventListener('click',e=>{const dd=document.getElementById('planDropdown');if(!dd.contains(e.target))dd.classList.remove('open');});
+document.addEventListener('click',e=>{const dd=document.getElementById('planDropdown');if(dd&&!dd.contains(e.target))dd.classList.remove('open');});
 
 // ── Init ──
 async function init(){
   try{
     allCourses = await fetch(`${API}/courses`).then(r=>r.json());
-    buildDropdown(allCourses);
-    const params    = new URLSearchParams(location.search);
+    const params      = new URLSearchParams(location.search);
     const urlCourseId = params.get('courseId') ? Number(params.get('courseId')) : null;
     const urlMajorId  = params.get('majorId')  ? Number(params.get('majorId'))  : null;
 
     const target = allCourses.find(c=>c.id===urlCourseId) || allCourses[0];
     if(target){
       activeCourseId = target.id;
-      markDropdownActive(activeCourseId);
       document.getElementById('navGeneral').href = `bba-public.html?courseId=${activeCourseId}`;
     }
+
+    // build dropdown หลัง activeCourseId set แล้ว
+    buildDropdown(allCourses);
+    markDropdownActive(activeCourseId);
+
     await loadMajorsForCourse(activeCourseId);
 
-    // ✅ ถ้ามี majorId ใน URL ให้ auto-open แผนวิชาเอกนั้นเลย
     if(urlMajorId){
       const major = allMajors.find(m => m.id === urlMajorId);
       if(major) await openMajorPlan(major.id);
@@ -359,24 +404,35 @@ async function init(){
 function buildDropdown(courses){
   const menu=document.getElementById('planDropdownMenu');
   if(!courses||!courses.length){menu.innerHTML='<div style="padding:12px 16px;font-size:12px;color:var(--text-sub);">ไม่พบข้อมูลหลักสูตร</div>';return;}
-  menu.innerHTML=courses.map(c=>`<button class="dropdown-item" data-course-id="${c.id}" onclick="selectCourse(${c.id})">${c.name_th||'หลักสูตร '+c.id}</button>`).join('');
+  menu.innerHTML=courses.map(c=>
+    `<a class="dropdown-item" data-course-id="${c.id}" href="plans.html?courseId=${c.id}"
+        onclick="selectCourse(event,${c.id})">${c.name_th||'หลักสูตร '+c.id}</a>`
+  ).join('');
 }
+
 function markDropdownActive(courseId){
-  document.querySelectorAll('.dropdown-item').forEach(el=>el.classList.toggle('active',Number(el.dataset.courseId)===courseId));
-  const active=allCourses.find(c=>c.id===courseId);
+  document.querySelectorAll('.dropdown-item').forEach(el=>
+    el.classList.toggle('active', Number(el.dataset.courseId)===courseId)
+  );
+  const active = allCourses.find(c=>c.id===courseId);
   if(active){
-    const toggle=document.querySelector('.nav-dropdown-toggle');
-    toggle.childNodes[0].textContent=(active.name_th||'แผนการศึกษา')+' ';
+    const toggle = document.querySelector('.nav-dropdown-toggle');
+    if(toggle) toggle.childNodes[0].textContent = (active.name_th||'แผนการศึกษา')+' ';
   }
 }
-async function selectCourse(courseId){
+
+async function selectCourse(e, courseId){
+  e.preventDefault();
   document.getElementById('planDropdown').classList.remove('open');
-  if(courseId===activeCourseId)return;
-  activeCourseId=courseId;
+  if(courseId===activeCourseId) return;
+  activeCourseId = courseId;
   markDropdownActive(courseId);
-  if(document.getElementById('page-plan').classList.contains('active'))goBack();
+  // อัปเดต URL โดยไม่ reload
+  const url = new URL(location.href);
+  url.searchParams.set('courseId', courseId);
+  history.pushState({}, '', url);
+  if(document.getElementById('page-plan').classList.contains('active')) goBack();
   await loadMajorsForCourse(courseId);
-  const url=new URL(location.href);url.searchParams.set('courseId',courseId);history.pushState({},'',url);
 }
 
 async function loadMajorsForCourse(courseId){
@@ -388,7 +444,9 @@ async function loadMajorsForCourse(courseId){
     const majors=await fetch(`${API}/courses/${courseId}/majors`).then(r=>r.json()).catch(()=>[]);
     allMajors=(majors||[]).map(m=>({...m,course_id:courseId}));
     renderMajorsPage(allMajors);
-  }catch{area.innerHTML=`<div class="empty-state"><div class="empty-icon">❌</div><p>โหลดข้อมูลไม่สำเร็จ</p></div>`;}
+  }catch{
+    area.innerHTML=`<div class="empty-state"><div class="empty-icon">❌</div><p>โหลดข้อมูลไม่สำเร็จ</p></div>`;
+  }
 }
 
 function renderMajorsPage(majors){
@@ -413,49 +471,48 @@ async function loadMajorCredits(m){
     const plans=(json.data||[]).filter(p=>(p.plan_type||'normal')==='normal');
     let total=0;
     for(const p of plans){
-      try{const d=await fetch(`${API}/study-plans/${p.id}`).then(r=>r.json());
+      try{
+        const d=await fetch(`${API}/study-plans/${p.id}`).then(r=>r.json());
         (d.semesters||[]).forEach(s=>(s.subjects||[]).forEach(it=>total+=Number(it.credits??it.default_credits??0)));
       }catch{}
     }
     const el=document.getElementById(`cred_${m.id}`);
-    if(el)el.textContent=total>0?`ไม่น้อยกว่า ${total} หน่วยกิต`:'—';
+    if(el) el.textContent=total>0?`ไม่น้อยกว่า ${total} หน่วยกิต`:'—';
   }catch{}
 }
 
 function filterMajors(){
   const q=document.getElementById('majorSearchInput').value.trim().toLowerCase();
   document.getElementById('btnAllMajors').classList.toggle('active',!q);
-  renderMajorsPage(!q?allMajors:allMajors.filter(m=>(m.name_th||'').toLowerCase().includes(q)||(m.name_en||'').toLowerCase().includes(q)));
+  renderMajorsPage(!q?allMajors:allMajors.filter(m=>
+    (m.name_th||'').toLowerCase().includes(q)||(m.name_en||'').toLowerCase().includes(q)
+  ));
 }
 
 // ── Page 2 ──
 async function openMajorPlan(majorId){
-  activeMajor=allMajors.find(m=>m.id===majorId);if(!activeMajor)return;
+  activeMajor=allMajors.find(m=>m.id===majorId);
+  if(!activeMajor) return;
   document.getElementById('page-majors').classList.remove('active');
   document.getElementById('page-plan').classList.add('active');
   document.getElementById('heroMajorName').textContent=activeMajor.name_th||'-';
   document.getElementById('selPlanType').value='normal';
   document.getElementById('selYear').value='1';
-  // ✅ FIX: reset semester dropdown ก่อน loadPlan
   document.getElementById('selSemester').innerHTML='<option value="all">ทุกภาคเรียน</option>';
   await loadPlan();
 }
+
 function goBack(){
   document.getElementById('page-plan').classList.remove('active');
   document.getElementById('page-majors').classList.add('active');
   activeMajor=null;
   planSemesters=[];
-  // ✅ FIX: ยกเลิก loadPlan ที่กำลังทำงานอยู่
   loadToken++;
 }
 
-// ✅ FIX: ฟังก์ชันหลักที่แก้ bug ทั้งสองจุด
 async function loadPlan(){
-  if(!activeMajor)return;
-
-  // สร้าง token ใหม่ทุกครั้งที่เรียก — ถ้า token เปลี่ยนระหว่าง async ให้หยุด
+  if(!activeMajor) return;
   const myToken = ++loadToken;
-
   const planType=document.getElementById('selPlanType').value;
   const yearNo=Number(document.getElementById('selYear').value);
   const area=document.getElementById('planSubjectsArea');
@@ -463,20 +520,13 @@ async function loadPlan(){
   area.innerHTML=`<div class="loading-state"><div class="spinner"></div></div>`;
   document.getElementById('statCredits').textContent='—';
   document.getElementById('statSubjects').textContent='—';
-
-  // ✅ FIX: reset semester dropdown ทันทีก่อน fetch
-  // เพื่อไม่ให้ dropdown แสดงภาคเรียนของปีเก่า
   document.getElementById('selSemester').innerHTML='<option value="all">ทุกภาคเรียน</option>';
-  planSemesters = [];
+  planSemesters=[];
 
   try{
     const json=await fetch(`${API}/majors/${activeMajor.id}/study-plans?page=1&pageSize=50`).then(r=>r.json());
+    if(myToken!==loadToken) return;
 
-    // ✅ FIX: ตรวจสอบว่า request นี้ยังถูกต้องอยู่ไหม
-    if(myToken !== loadToken) return;
-
-    // ✅ FIX: กรองเฉพาะ plan ของปีและแผนที่เลือก
-    // ไม่เอาทุก plan มารวมกัน
     const plan=(json.data||[]).find(p=>
       Number(p.year_no)===yearNo &&
       (p.plan_type||'normal')===planType
@@ -489,27 +539,19 @@ async function loadPlan(){
     }
 
     const detail=await fetch(`${API}/study-plans/${plan.id}`).then(r=>r.json());
+    if(myToken!==loadToken) return;
 
-    // ✅ FIX: ตรวจสอบอีกครั้งหลัง fetch สอง
-    if(myToken !== loadToken) return;
-
-    // ✅ FIX: เก็บเฉพาะ semesters ของแผนนี้ (ไม่สะสมข้ามปี/แผน)
-    planSemesters = detail.semesters || [];
-
-    // ✅ FIX: populate semester dropdown หลัง fetch เสร็จ
-    // แสดงเฉพาะภาคเรียนของปีที่เลือก ไม่ใช่ทุกปีรวมกัน
+    planSemesters=detail.semesters||[];
     populateSemFilter(planSemesters);
-
     renderPlanSubjects(planSemesters);
     enrichSubjects(planSemesters);
 
   }catch(e){
-    if(myToken !== loadToken) return;
+    if(myToken!==loadToken) return;
     area.innerHTML=`<div class="empty-state"><div class="empty-icon">❌</div><p>โหลดข้อมูลไม่สำเร็จ<br><small style="font-size:11px;color:var(--text-sub)">${e.message||''}</small></p></div>`;
   }
 }
 
-// ✅ FIX: populate เฉพาะภาคเรียนที่ได้รับมา (ไม่สะสม)
 function populateSemFilter(sems){
   const sel=document.getElementById('selSemester');
   sel.innerHTML='<option value="all">ทุกภาคเรียน</option>';
@@ -521,18 +563,13 @@ function populateSemFilter(sems){
   });
 }
 
-// ✅ FIX: onPlanFilterChange ต้อง await loadPlan() เพื่อรอให้เสร็จก่อน
-// ไม่เรียก populateSemFilter ที่นี่ — ให้ loadPlan() จัดการเอง
 async function onPlanFilterChange(){
   await loadPlan();
 }
 
 function onSemFilterChange(){
   const val=document.getElementById('selSemester').value;
-  // กรองจาก planSemesters ที่เป็นของปีปัจจุบัน
-  const filtered = val==='all'
-    ? planSemesters
-    : planSemesters.filter(s=>String(s.id)===val);
+  const filtered=val==='all'?planSemesters:planSemesters.filter(s=>String(s.id)===val);
   renderPlanSubjects(filtered);
 }
 
@@ -591,7 +628,7 @@ async function enrichSubjects(semesters){
   semesters.forEach(sem=>(sem.subjects||[]).forEach((it,idx)=>{
     const _s=it.subject||it;
     const subjectId=it.subject_id||_s.id||null;
-    if(!subjectId||subjectCache[subjectId])return;
+    if(!subjectId||subjectCache[subjectId]) return;
     const dataId=`s_${sem.id}_${idx}`;
     tasks.push({subjectId,dataId});
   }));
@@ -605,7 +642,7 @@ async function enrichSubjects(semesters){
         const thLines=(s.outcomes_th||'').split('\n').filter(Boolean);
         const enLines=(s.outcomes_en||'').split('\n').filter(Boolean);
         const mx=Math.max(thLines.length,enLines.length);
-        for(let i=0;i<mx;i++)outcomes.push({th:thLines[i]||'',en:enLines[i]||''});
+        for(let i=0;i<mx;i++) outcomes.push({th:thLines[i]||'',en:enLines[i]||''});
       }
       subjectCache[subjectId]={desc_th:s.description_th||'',desc_en:s.description_en||'',name_en:s.name_en||'',hours:s.default_hour_structure||'',outcomes};
       const desc=s.description_th||s.description_en||'';
@@ -624,7 +661,7 @@ async function enrichSubjects(semesters){
 
 // ── Modal ──
 async function openDetail(dataId){
-  const d=window._subjectData[dataId];if(!d)return;
+  const d=window._subjectData[dataId]; if(!d) return;
   const modal=document.getElementById('detailModal');
   const body=document.getElementById('md_body');
   const catBg={Core:'rgba(123,63,196,0.12)',Elective:'rgba(59,130,246,0.12)',GE:'rgba(16,163,74,0.12)',Major:'rgba(217,119,6,0.12)'};
@@ -640,6 +677,7 @@ async function openDetail(dataId){
   document.getElementById('md_name_en').style.display='none';
   body.innerHTML=`<div class="modal-loading"><div class="spinner" style="width:24px;height:24px;border-width:2px;margin:0 auto 8px;"></div>กำลังโหลดรายละเอียด...</div>`;
   modal.classList.add('open');
+
   let enriched=d._enriched||null;
   if(!enriched&&d.subjectId){
     if(subjectCache[d.subjectId]){enriched=subjectCache[d.subjectId];}
@@ -648,7 +686,12 @@ async function openDetail(dataId){
         const s=await fetch(`${API}/subjects/${d.subjectId}`).then(r=>r.json());
         let outcomes=[];
         if(Array.isArray(s.outcomes)&&s.outcomes.length){outcomes=s.outcomes;}
-        else{const th=(s.outcomes_th||'').split('\n').filter(Boolean);const en=(s.outcomes_en||'').split('\n').filter(Boolean);const mx=Math.max(th.length,en.length);for(let i=0;i<mx;i++)outcomes.push({th:th[i]||'',en:en[i]||''});}
+        else{
+          const th=(s.outcomes_th||'').split('\n').filter(Boolean);
+          const en=(s.outcomes_en||'').split('\n').filter(Boolean);
+          const mx=Math.max(th.length,en.length);
+          for(let i=0;i<mx;i++) outcomes.push({th:th[i]||'',en:en[i]||''});
+        }
         enriched={desc_th:s.description_th||'',desc_en:s.description_en||'',name_en:s.name_en||'',hours:s.default_hour_structure||'',outcomes};
         subjectCache[d.subjectId]=enriched;
       }catch{}
@@ -658,7 +701,10 @@ async function openDetail(dataId){
     const _s=d._s||{};const it=d.it||{};
     enriched={desc_th:it.description_th||_s.description_th||'',desc_en:it.description_en||_s.description_en||'',name_en:it.name_en||_s.name_en||'',hours:it.hour_structure||_s.default_hour_structure||d.hours||'',outcomes:it.outcomes||[]};
   }
-  if(enriched.name_en){document.getElementById('md_name_en').textContent=enriched.name_en;document.getElementById('md_name_en').style.display='';}
+  if(enriched.name_en){
+    document.getElementById('md_name_en').textContent=enriched.name_en;
+    document.getElementById('md_name_en').style.display='';
+  }
   const hours=enriched.hours||d.hours||'';
   const hoursHtml=hours?`<div class="modal-hours">โครงสร้างชั่วโมง: <strong>${d.cred}(${hours})</strong></div>`:'';
   const desc=enriched.desc_th||enriched.desc_en||'';
@@ -670,15 +716,20 @@ async function openDetail(dataId){
           <div class="modal-clo-n">CLO ${i+1}</div>
           ${o.th?`<div class="modal-clo-text">${o.th}</div>`:''}
           ${o.en?`<div class="modal-clo-text" style="color:var(--text-sub);font-style:italic;">${o.en}</div>`:''}
-        </div>`).join('')}</div>`:
-    '';
+        </div>`).join('')}</div>`
+    :'';
   body.innerHTML=(!hoursHtml&&!descHtml&&!cloHtml)
     ?`<div style="padding:24px;text-align:center;color:var(--text-sub);font-size:13px;">ยังไม่มีคำอธิบายรายวิชา</div>`
     :hoursHtml+descHtml+cloHtml;
 }
 
-document.getElementById('modalCloseBtn').addEventListener('click',()=>document.getElementById('detailModal').classList.remove('open'));
-document.getElementById('detailModal').addEventListener('click',e=>{if(e.target===document.getElementById('detailModal'))document.getElementById('detailModal').classList.remove('open');});
+document.getElementById('modalCloseBtn').addEventListener('click',()=>
+  document.getElementById('detailModal').classList.remove('open')
+);
+document.getElementById('detailModal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('detailModal'))
+    document.getElementById('detailModal').classList.remove('open');
+});
 
 init();
 </script>

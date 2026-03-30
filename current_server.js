@@ -134,7 +134,7 @@ app.get("/api/public/courses/:id/majors", async (req, res) => {
 app.get("/api/public/majors/:id", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM majors WHERE id = $1", [req.params.id]);
-    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบสาขาวิชา" });
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบวิชาเอก" });
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
@@ -303,7 +303,7 @@ app.post("/api/majors", async (req, res) => {
       [course_id, name_th, name_en||null, intro||null, hero_image||null, image_url||null,
        career_path||null, plan_1||null, plan_2||null, plan_3||null, plan_4||null]
     );
-    res.json({ message: "เพิ่มสาขาสำเร็จ", majorId: result.rows[0].id });
+    res.json({ message: "เพิ่มวิชาเอกสำเร็จ", majorId: result.rows[0].id });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -330,8 +330,8 @@ app.put("/api/majors/:id", async (req, res) => {
        career_path||null, plan_1||null, plan_2||null, plan_3||null, plan_4||null,
        req.params.id]
     );
-    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบสาขา" });
-    res.json({ message: "อัปเดตสาขาสำเร็จ" });
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบวิชาเอก" });
+    res.json({ message: "อัปเดตวิชาเอกสำเร็จ" });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -340,8 +340,8 @@ app.put("/api/majors/:id", async (req, res) => {
 app.delete("/api/majors/:id", async (req, res) => {
   try {
     const result = await pool.query("DELETE FROM majors WHERE id=$1 RETURNING *", [req.params.id]);
-    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบสาขา" });
-    res.json({ message: "ลบสาขาสำเร็จ" });
+    if (result.rows.length === 0) return res.status(404).json({ message: "ไม่พบวิชาเอก" });
+    res.json({ message: "ลบวิชาเอกสำเร็จ" });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -930,7 +930,7 @@ app.post("/api/majors/:majorId/study-plans", async (req, res) => {
     res.json({ message: "สร้างแผนการศึกษาสำเร็จ", plan: r.rows[0] });
   } catch (e) {
     if (e.code === "23505")
-      return res.status(409).json({ message: `แผน${plan_type === "coop" ? "สหกิจ" : "ปกติ"}ของสาขานี้ ปี ${year_no} มีอยู่แล้ว` });
+      return res.status(409).json({ message: `แผน${plan_type === "coop" ? "สหกิจ" : "ปกติ"}ของวิชาเอกนี้ ปี ${year_no} มีอยู่แล้ว` });
     res.status(500).json({ message: "Server error" });
   }
 });

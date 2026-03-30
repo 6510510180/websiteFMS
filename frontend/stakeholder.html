@@ -206,6 +206,85 @@ td{padding:12px 11px;vertical-align:middle;}
 .toast{position:fixed;bottom:20px;right:20px;z-index:9999;background:var(--text);color:#fff;padding:11px 17px;border-radius:11px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:var(--sh3);transform:translateY(72px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
 .toast.show{transform:none;opacity:1;}
 .tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.help-btn{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:none;
+  background:#ede9fe;
+  color:#6d28d9;
+  font-weight:800;
+  font-size:16px;
+  cursor:pointer;
+  transition:.2s;
+}
+.help-btn:hover{
+  background:#6d28d9;
+  color:#fff;
+}
+
+/* Modal คู่มือ */
+.help-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  backdrop-filter:blur(4px);
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+.help-overlay.open{
+  opacity:1;
+  pointer-events:all;
+}
+
+.help-modal{
+  width:900px;
+  max-width:95%;
+  max-height:90vh;
+  overflow-y:auto;
+  background:#fff;
+  border-radius:16px;
+  padding:25px 30px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+  transform:translateY(20px);
+  transition:.25s;
+}
+.help-overlay.open .help-modal{
+  transform:none;
+}
+
+.help-close{
+  position:absolute;
+  right:20px;
+  top:15px;
+  font-size:20px;
+  cursor:pointer;
+  border:none;
+  background:none;
+}
+
+.help-modal h2{
+  margin-top:20px;
+  border-left:4px solid #7c3aed;
+  padding-left:8px;
+}
+.help-modal table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+.help-modal th,.help-modal td{
+  border:1px solid #ddd;
+  padding:8px;
+}
+.help-modal th{
+  background:#f5f3ff;
+}
 @media print{
   .tb,.aside,.ctrl,.sbar,.ctx,.mbg,.toast,.ph-acts,.pub-bar,.pub-overlay{display:none!important;}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
@@ -228,6 +307,13 @@ td{padding:12px 11px;vertical-align:middle;}
     <a href="stakeholder.html" class="active">Stakeholders</a>
   </nav>
   <div class="tb-r">
+    <button onclick="openHelp()" style="
+  width:34px;height:34px;border-radius:50%;border:2px solid #6B3FA0;
+  background:#fff;color:#6B3FA0;font-size:15px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .18s;flex-shrink:0;
+" onmouseover="this.style.background='#ede9fe'" onmouseout="this.style.background='#fff'"
+title="คู่มือการใช้งาน">?</button>
     <div class="tb-srch">
       <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/></svg>
       <input type="text" id="gs" placeholder="ค้นหาข้อมูลหลักสูตร..." oninput="filterTable()">
@@ -307,101 +393,190 @@ td{padding:12px 11px;vertical-align:middle;}
         </table>
       </div>
     </div>
+    <div id="helpOverlay" onclick="if(event.target===this)closeHelp()" style="
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+  z-index:9999;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(3px);
+">
+  <div style="
+    background:#fff;border-radius:18px;width:100%;max-width:580px;
+    max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);
+    font-family:'Noto Sans Thai',sans-serif;
+  ">
+    <!-- Header -->
+    <div style="
+      padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;
+      display:flex;justify-content:space-between;align-items:center;
+      position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;
+    ">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="
+          width:36px;height:36px;border-radius:10px;background:#ede9fe;
+          color:#6d28d9;display:flex;align-items:center;justify-content:center;font-size:16px;
+        ">📘</div>
+        <div>
+          <div style="font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:#1a0f2e;">คู่มือการใช้งาน</div>
+          <div style="font-size:11.5px;color:#5a5070;">Stakeholders' Needs to PLOs Mapping</div>
+        </div>
+      </div>
+      <button onclick="closeHelp()" style="
+        background:none;border:none;font-size:20px;cursor:pointer;
+        color:#5a5070;padding:4px 8px;border-radius:6px;line-height:1;
+      ">×</button>
+    </div>
 
-    <div class="sbar">
-      <button class="btn btn-g" onclick="saveData()" style="padding:11px 36px;font-size:14px;">
-        <svg viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-        บันทึกข้อมูล
+    <!-- Body -->
+    <div style="padding:24px;">
+
+      <!-- ระดับความสัมพันธ์ -->
+      <div style="background:#faf8fd;border:1px solid #e8e2f5;border-radius:12px;padding:16px 18px;margin-bottom:20px;">
+        <div style="font-size:11.5px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;">🎯 ระดับความสัมพันธ์</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-family:'Lexend',sans-serif;font-size:20px;font-weight:800;color:#6d28d9;">F</div>
+            <div style="font-size:12px;font-weight:700;color:#6d28d9;">Foundational</div>
+            <div style="font-size:11px;color:#5a5070;margin-top:4px;line-height:1.5;">ความต้องการพื้นฐานที่สำคัญมาก</div>
+          </div>
+          <div style="background:#e0f2fe;border:1px solid #7dd3fc;border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-family:'Lexend',sans-serif;font-size:20px;font-weight:800;color:#0369a1;">M</div>
+            <div style="font-size:12px;font-weight:700;color:#0369a1;">Main</div>
+            <div style="font-size:11px;color:#5a5070;margin-top:4px;line-height:1.5;">ความต้องการหลักของหลักสูตร</div>
+          </div>
+          <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-family:'Lexend',sans-serif;font-size:20px;font-weight:800;color:#b45309;">P</div>
+            <div style="font-size:12px;font-weight:700;color:#b45309;">Peripheral</div>
+            <div style="font-size:11px;color:#5a5070;margin-top:4px;line-height:1.5;">ความต้องการเสริมที่เกี่ยวข้อง</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1: PLO -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
+          📋 จัดการ PLO
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กรอก <b>คำอธิบาย PLO</b> และเลือก <b>ประเภท</b> (Specific / Generic) ในแถบด้านขวา แล้วกดปุ่ม <b>+</b> รหัส PLO จะถูกกำหนดอัตโนมัติ เช่น PLO1, PLO2</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กดปุ่ม <span style="padding:1px 6px;border-radius:4px;background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;">×</span> ท้ายรายการ PLO เพื่อลบ — ระบบจะขอยืนยันและ renumber อัตโนมัติ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Stakeholder -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
+          👥 จัดการ Stakeholders
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">พิมพ์ชื่อผู้มีส่วนได้ส่วนเสียในช่อง <b>เพิ่ม Stakeholder</b> แล้วกด <b>+</b> หรือ Enter — ชื่อจะแสดงเป็นหัวตารางแนวตั้ง</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">4</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กดปุ่ม <span style="padding:1px 6px;border-radius:4px;background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;">×</span> ท้ายรายการเพื่อลบ Stakeholder — ข้อมูล mapping ของ Stakeholder นั้นจะถูกลบทั้งหมด</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: ตาราง -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
+          🗂️ การกำหนดความสัมพันธ์ในตาราง
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">5</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">คลิกช่อง <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;background:#f1f0f5;color:#9088a8;font-size:10px;font-weight:800;border:1.5px dashed #e5e2ef;vertical-align:middle;">+</span> ในตารางเพื่อเปิด popup — เลือก F, M, P หรือ <b>ล้างค่า</b></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">6</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">ใช้ <b>กรองประเภท</b> (Specific / Generic) เพื่อดูเฉพาะ PLO ที่ต้องการ และช่อง <b>ค้นหา</b> บน topbar เพื่อกรองตามคีย์เวิร์ด</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">7</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">แถบด้านขวาจะแสดง <b>Progress Bar</b> ของแต่ละ PLO แบบ real-time ว่า Stakeholder กี่รายให้ความสำคัญ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: บันทึก -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
+          💾 บันทึกและเผยแพร่
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">8</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กดปุ่ม <b style="color:#059669;">บันทึกข้อมูล</b> ด้านล่างตาราง — ข้อมูล PLO, Stakeholder และ mapping ทั้งหมดจะถูกส่งไปยัง API พร้อมกัน</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">9</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">ใช้ <b>Toggle เผยแพร่</b> ในแถบด้านบน เพื่อเปิด/ปิดการแสดงในหน้า <b>bba-stake.html</b> สาธารณะ — ระบบจะขอยืนยันทุกครั้ง</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Import Excel -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
+          📊 Import / Export Excel
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">10</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กดปุ่ม <b>นำเข้าจาก Excel</b> — ลากหรือเลือกไฟล์ .xlsx ที่มีคอลัมน์:
+              <div style="margin-top:7px;background:#f5f3fe;border:1px solid #c4b5fd;border-radius:8px;padding:9px 12px;font-size:12px;color:#5a5070;line-height:1.8;">
+                <code style="background:#fff;padding:1px 5px;border-radius:4px;color:#6d28d9;border:1px solid #c4b5fd;font-size:11px;">plo_no</code> ·
+                <code style="background:#fff;padding:1px 5px;border-radius:4px;color:#6d28d9;border:1px solid #c4b5fd;font-size:11px;">plo_description</code> ·
+                <code style="background:#fff;padding:1px 5px;border-radius:4px;color:#6d28d9;border:1px solid #c4b5fd;font-size:11px;">type</code> ·
+                <b>ชื่อ Stakeholder</b> (ค่า: F, M หรือ P)
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">11</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กด <b>ดาวน์โหลด Template</b> ใน popup เพื่อรับไฟล์ต้นแบบที่มีโครงสร้างถูกต้องพร้อมข้อมูลปัจจุบัน</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">12</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กด <b>Export Excel</b> หรือ <b>Export PDF</b> เพื่อดาวน์โหลดตารางทั้งหมด — PDF จะเปิดหน้าต่าง Print</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#FEE2E2;color:#EF4444;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">!</span>
+            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;"><b style="color:#dc2626;">Import จะเขียนทับข้อมูลเดิมทั้งหมด</b> — ดาวน์โหลด Template ก่อนเพื่อดูโครงสร้างที่ถูกต้อง</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div style="background:#ede9fe;border-left:3px solid #6d28d9;border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:#4c1d95;line-height:1.6;">
+        <b>💡 เคล็ดลับ:</b> บันทึกข้อมูลก่อนเผยแพร่เสมอ — Toggle เผยแพร่จะแสดงข้อมูล <b>ล่าสุดที่บันทึกไว้</b> ในหน้า Dashboard สาธารณะ
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- Footer -->
+    <div style="
+      padding:14px 24px;border-top:1px solid #EDE8F5;
+      display:flex;justify-content:flex-end;
+      position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;
+    ">
+      <button onclick="closeHelp()" style="
+        padding:9px 24px;border-radius:9px;border:none;
+        background:#6d28d9;color:#fff;font-size:13px;font-weight:700;
+        font-family:inherit;cursor:pointer;
+        box-shadow:0 4px 12px rgba(109,40,217,.28);transition:all .18s;
+      " onmouseover="this.style.background='#5b21b6'" onmouseout="this.style.background='#6d28d9'">
+        รับทราบ
       </button>
     </div>
-  </main>
 
-  <aside class="aside">
-    <div class="sb-s">
-      <div class="sb-h">ความต้องการรายข้อ PLO
-        <svg viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
-      </div>
-      <div id="plo-bars"></div>
-    </div>
-    <div class="note"><strong>⚠ หมายเหตุ:</strong> PLO ที่ได้รับคะแนนสูงสุดสะท้อนความต้องการทักษะดิจิทัลและจริยธรรมวิชาชีพจากผู้มีส่วนได้ส่วนเสีย</div>
-    <div class="sb-s">
-      <div class="sb-h">จัดการ PLOs</div>
-      <div style="display:flex;gap:6px;margin-bottom:8px;">
-        <input class="sk-inp" id="nplo-desc" type="text" placeholder="คำอธิบาย PLO..." style="flex:2;">
-        <select class="tsel" id="nplo-type" style="flex:1;font-size:11px;">
-          <option value="Specific">Specific</option>
-          <option value="Generic">Generic</option>
-        </select>
-        <button class="btn btn-p btn-sm" onclick="addPLO()" style="padding:7px 10px;">+</button>
-      </div>
-      <div class="sk-list" id="plo-list" style="max-height:200px;"></div>
-    </div>
-    <div class="sb-s">
-      <div class="sb-h">สถิติสรุป (Statistics)</div>
-      <div class="stg">
-        <div class="stc stc-v"><div class="stn" id="st-p">0</div><div class="stl">TOTAL PLOs</div></div>
-        <div class="stc stc-t"><div class="stn" id="st-s">0</div><div class="stl">STAKEHOLDERS</div></div>
-      </div>
-    </div>
-    <div class="sb-s">
-      <div class="sb-h">จัดการ Stakeholders</div>
-      <div class="sk-add">
-        <input class="sk-inp" id="nsk" type="text" placeholder="เพิ่ม Stakeholder..." onkeydown="if(event.key==='Enter')addSK()">
-        <button class="btn btn-p btn-sm" onclick="addSK()" style="padding:7px 12px;">+</button>
-      </div>
-      <div class="sk-list" id="sk-list"></div>
-    </div>
-  </aside>
-</div>
-
-<div class="ctx" id="ctx">
-  <div class="ci" onclick="setM('F')"><span class="cd cdF">F</span>Foundational</div>
-  <div class="ci" onclick="setM('M')"><span class="cd cdM">M</span>Main</div>
-  <div class="ci" onclick="setM('P')"><span class="cd cdP">P</span>Peripheral</div>
-  <div class="chr"></div>
-  <div class="ci d" onclick="setM(null)"><span class="cd cdX">×</span>ล้างค่า</div>
-</div>
-
-<div class="mbg" id="mbg" onclick="bgClose(event)">
-  <div class="modal">
-    <div class="mh">
-      <div><div class="mht">นำเข้าข้อมูลจาก Excel</div><div class="mhs">รองรับไฟล์ .xlsx และ .xls</div></div>
-      <button class="mcls" onclick="closeImport()">✕</button>
-    </div>
-    <div class="mb">
-      <div class="dz" id="dz" ondragover="dzO(event)" ondragleave="dzL()" ondrop="dzD(event)" onclick="document.getElementById('fi').click()">
-        <div class="dz-ico">📊</div>
-        <div class="dz-m">ลากไฟล์ Excel มาวางที่นี่</div>
-        <div class="dz-s">หรือ <span>คลิกเพื่อเลือกไฟล์</span></div>
-        <div class="dz-f" id="dz-f"></div>
-      </div>
-      <input type="file" id="fi" accept=".xlsx,.xls" style="display:none" onchange="fChosen(event)">
-      <div class="ti">
-        <div class="ti-t">📋 รูปแบบ Excel ที่รองรับ</div>
-        <div class="ti-b">คอลัมน์: <code>plo_no</code> · <code>plo_description</code> · <code>type</code> · ชื่อ Stakeholder (ค่า: <code>F</code>, <code>M</code>, <code>P</code>)</div>
-        <button class="btn btn-o btn-sm" style="margin-top:10px;" onclick="dlTmpl()">ดาวน์โหลด Template</button>
-      </div>
-      <div class="prev-w" id="prev-w" style="display:none">
-        <div class="prev-t">ตัวอย่างข้อมูล (5 แถวแรก)</div>
-        <div class="prev-s" id="prev-s"></div>
-      </div>
-    </div>
-    <div class="mf">
-      <button class="btn btn-o btn-sm" onclick="closeImport()">ยกเลิก</button>
-      <button class="btn btn-p btn-sm" id="do-imp" disabled onclick="doImport()">นำเข้าข้อมูล</button>
-    </div>
-  </div>
-</div>
-
-<div class="pub-overlay" id="pub-overlay">
-  <div class="pub-modal">
-    <div class="pub-icon" id="pub-icon"><svg id="pub-svg" viewBox="0 0 20 20"></svg></div>
-    <div class="pub-title" id="pub-title"></div>
-    <div class="pub-body"  id="pub-body"></div>
-    <div class="pub-btns">
-      <button class="pub-btn-cancel" onclick="cancelPub()">ยกเลิก</button>
-      <button class="pub-btn-do" id="pub-btn-do" onclick="confirmPub()"></button>
-    </div>
   </div>
 </div>
 
@@ -583,6 +758,9 @@ function addSK(){
   render();
   toast(`✓ เพิ่ม "${name}" แล้ว`, '#059669');
 }
+function openHelp(){document.getElementById('helpOverlay').style.display='flex';}
+function closeHelp(){document.getElementById('helpOverlay').style.display='none';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelp();});
 
 function delSK(id){
   const sk = SKS.find(s => s.id === id);

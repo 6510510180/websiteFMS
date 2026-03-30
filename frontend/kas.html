@@ -237,6 +237,49 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   .kas-tags{display:flex!important;flex-wrap:wrap;gap:2pt;}
   .kas-tag{font-size:7.5pt;padding:1.5pt 5pt;border-radius:3pt;}
 }
+.help-circle-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--purple);background:var(--white);color:var(--purple);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;font-family:inherit;}
+.help-circle-btn:hover{background:var(--purple-light);}
+ 
+#helpOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:9000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.help-modal{background:#fff;border-radius:18px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.20);}
+.hm-header{padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;}
+.hm-header-left{display:flex;align-items:center;gap:10px;}
+.hm-icon-box{width:36px;height:36px;border-radius:10px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.hm-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.hm-subtitle{font-size:11.5px;color:var(--text-sub);}
+.hm-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-sub);padding:4px 8px;border-radius:6px;line-height:1;transition:.15s;}
+.hm-close:hover{background:var(--purple-light);color:var(--purple);}
+.hm-body{padding:24px;}
+.hm-section{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.7px;padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:14px;margin-top:4px;}
+.hm-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.hm-step{display:flex;gap:12px;align-items:flex-start;}
+.hm-num{min-width:22px;height:22px;border-radius:50%;background:var(--purple-light);color:var(--purple);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.hm-step-text{font-size:13.5px;color:var(--text);line-height:1.65;}
+.hm-step-text b{color:var(--purple-dark);}
+.hm-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:4px;}
+.hm-badge-purple{background:#ede9fe;color:#6d28d9;}
+.hm-badge-amber{background:#fffbeb;color:#d97706;}
+.hm-badge-green{background:#dcfce7;color:#166534;}
+.hm-badge-blue{background:#eff6ff;color:#1d4ed8;}
+.hm-badge-red{background:#fee2e2;color:#991b1b;}
+.hm-badge-teal{background:#e0f7fa;color:#0e7490;}
+.hm-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid #EDE8F5;}
+.hm-table th{background:var(--purple-light);color:var(--purple);font-weight:700;padding:9px 12px;text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;}
+.hm-table td{padding:9px 12px;border-top:1px solid #EDE8F5;color:var(--text);line-height:1.5;}
+.hm-table tr:nth-child(even) td{background:#fdfbff;}
+.hm-note{background:var(--purple-light);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:var(--purple-dark);line-height:1.65;margin-bottom:16px;}
+.hm-warn{background:#fffbeb;border-left:3px solid #f59e0b;border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:#92400e;line-height:1.65;margin-bottom:16px;}
+.hm-footer{padding:14px 24px;border-top:1px solid #EDE8F5;display:flex;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;}
+.hm-footer-btn{padding:9px 26px;border-radius:9px;border:none;background:var(--purple);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(127,19,236,.28);transition:all .18s;}
+.hm-footer-btn:hover{background:var(--purple-dark);}
+ 
+.hm-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0 16px;}
+.hm-flow-step{background:var(--purple-light);color:var(--purple);font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px;white-space:nowrap;}
+.hm-flow-arrow{color:var(--purple-mid);font-size:14px;flex-shrink:0;}
+.hm-kas-pills{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px;}
+.hm-k-pill{background:#f3e8ff;color:#6d28d9;border:1px solid #ddd6fe;font-size:12px;font-weight:700;padding:4px 12px;border-radius:6px;}
+.hm-a-pill{background:#ffe4e6;color:#e11d48;border:1px solid #fecdd3;font-size:12px;font-weight:700;padding:4px 12px;border-radius:6px;}
+.hm-s-pill{background:#dcfce7;color:#16a34a;border:1px solid #bbf7d0;font-size:12px;font-weight:700;padding:4px 12px;border-radius:6px;}
 </style>
 </head>
 <body>
@@ -253,6 +296,8 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <a href="score-plo.html">คะแนนผลลัพธ์ PLO</a>
     <a href="kas.html" class="active">KAS</a>
   </nav>
+  <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
+  
   <div class="avatar">A</div>
 </header>
 
@@ -328,6 +373,258 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
       </div>
     </div>
   </div>
+  <div id="helpOverlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
+ 
+    <!-- Header -->
+    <div class="hm-header">
+      <div class="hm-header-left">
+        <div class="hm-icon-box">📊</div>
+        <div>
+          <div class="hm-title">คู่มือการใช้งาน</div>
+          <div class="hm-subtitle">หน้าตารางวิเคราะห์ความสอดคล้อง KAS (kas.html)</div>
+        </div>
+      </div>
+      <button class="hm-close" onclick="closeHelp()">×</button>
+    </div>
+ 
+    <!-- Body -->
+    <div class="hm-body">
+ 
+      <!-- ── ภาพรวม ── -->
+      <div class="hm-section">📋 ภาพรวมหน้านี้</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">1</span>
+          <div class="hm-step-text">
+            หน้านี้ใช้ <b>เชื่อมโยง PLO / MLO / CLO</b> เข้ากับองค์ประกอบ KAS — แบ่งเป็น 3 Tab ได้แก่ PLO, MLO และ CLO
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">2</span>
+          <div class="hm-step-text">
+            KAS ย่อมาจาก 3 มิติหลักของผลลัพธ์การเรียนรู้:
+          </div>
+        </div>
+      </div>
+ 
+      <div class="hm-kas-pills">
+        <span class="hm-k-pill">📖 K — Knowledge ความรู้</span>
+        <span class="hm-a-pill">♥ A — Attitude ทัศนคติ</span>
+        <span class="hm-s-pill">⚙ S — Skill ทักษะ</span>
+      </div>
+ 
+      <div class="hm-note">
+        <b>ข้อควรรู้:</b> ข้อมูล PLO และ MLO ในหน้านี้ดึงมาจาก Database โดยตรง — ต้องบันทึกข้อมูลที่ <b>หน้าจัดการ PLO/MLO</b> ก่อน จึงจะแสดงผลได้ถูกต้อง
+      </div>
+ 
+      <!-- ── ขั้นตอนเริ่มต้น ── -->
+      <div class="hm-section">🚀 ขั้นตอนเริ่มต้นใช้งาน</div>
+ 
+      <div class="hm-flow">
+        <span class="hm-flow-step">1. ตรวจสอบ Banner สถานะ</span>
+        <span class="hm-flow-arrow">→</span>
+        <span class="hm-flow-step">2. กด "รีโหลด PLO/MLO"</span>
+        <span class="hm-flow-arrow">→</span>
+        <span class="hm-flow-step">3. Map KAS แต่ละรายการ</span>
+        <span class="hm-flow-arrow">→</span>
+        <span class="hm-flow-step">4. กด "บันทึก KAS"</span>
+      </div>
+ 
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">3</span>
+          <div class="hm-step-text">
+            <b>Banner สถานะ</b> แสดงผลการโหลดข้อมูล PLO/MLO จาก Database:<br>
+            <span class="hm-badge hm-badge-green">● สีเขียว</span> — โหลดสำเร็จ พร้อมใช้งาน<br>
+            <span class="hm-badge hm-badge-amber">● สีเหลือง</span> — ไม่พบข้อมูล กรุณาไปบันทึกที่หน้า PLO/MLO ก่อน
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">4</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>รีโหลด PLO/MLO</b> มุมขวาของ Banner เพื่อดึงข้อมูลใหม่จาก Database เมื่อต้องการซิงค์ข้อมูลล่าสุด
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ── Tab PLO / MLO ── -->
+      <div class="hm-section">🔗 การ Map KAS ให้ PLO และ MLO</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">5</span>
+          <div class="hm-step-text">
+            เลือก Tab <b>PLO</b> หรือ <b>MLO</b> — แต่ละแถวแสดงรหัส, คำอธิบาย และปุ่มแก้ไขแยกตาม K / A / S
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">6</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>แก้ไข K / แก้ไข A / แก้ไข S</b> ในแต่ละแถวเพื่อเปิด Dialog เลือกรายการ KAS ที่สอดคล้อง — สามารถเลือกได้หลายรายการต่อครั้ง
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">7</span>
+          <div class="hm-step-text">
+            Tab <b>MLO</b> มี Sidebar ซ้ายมือสำหรับเลือก <b>กลุ่มวิชาเอก</b> — คลิกชื่อกลุ่มเพื่อสลับแสดง MLO ของกลุ่มนั้น
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ── Tab CLO ── -->
+      <div class="hm-section">📚 การ Map PLO/MLO ให้ CLO</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">8</span>
+          <div class="hm-step-text">
+            Tab <b>CLO</b> ใช้เชื่อมโยง Course Learning Outcomes กับ PLO/MLO — เลือกผ่านแผงด้านขวาตามลำดับ:
+          </div>
+        </div>
+      </div>
+ 
+      <div class="hm-flow">
+        <span class="hm-flow-step">เลือกหลักสูตร</span>
+        <span class="hm-flow-arrow">→</span>
+        <span class="hm-flow-step">เลือก Major</span>
+        <span class="hm-flow-arrow">→</span>
+        <span class="hm-flow-step">เลือกรายวิชา</span>
+        <span class="hm-flow-arrow">→</span>
+        <span class="hm-flow-step">คลิก CLO เพื่อ Map</span>
+      </div>
+ 
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">9</span>
+          <div class="hm-step-text">
+            คลิกที่ช่อง <b>Linked PLO/MLO</b> ของแต่ละ CLO เพื่อเปิด Dialog — เลือก PLO และ MLO ที่สอดคล้องแล้วกด <b>Save Changes</b>
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">10</span>
+          <div class="hm-step-text">
+            ระบบจะพยายามบันทึก CLO mapping ไปยัง API อัตโนมัติ — หาก API ไม่ตอบสนอง ข้อมูลจะถูกเก็บ <b>ชั่วคราวในเครื่อง</b> และแสดง Toast สีเหลืองแจ้งเตือน
+            <span class="hm-badge hm-badge-amber">⚠ ตรวจสอบด้วย</span>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ── Import/Export ── -->
+      <div class="hm-section">📂 Import / Export ข้อมูล KAS</div>
+ 
+      <table class="hm-table">
+        <thead>
+          <tr>
+            <th>ฟังก์ชัน</th>
+            <th>รายละเอียด</th>
+            <th>รูปแบบไฟล์</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Template</b></td>
+            <td>ดาวน์โหลดไฟล์ตัวอย่างพร้อม header PLO/MLO และ KAS columns</td>
+            <td>.xlsx (2 Sheet: PLO_KAS, MLO_KAS)</td>
+          </tr>
+          <tr>
+            <td><b>Import Excel</b></td>
+            <td>อัปโหลดไฟล์ที่กรอก ✓ หรือ 1 ในช่อง K/A/S ที่ต้องการ map</td>
+            <td>.xlsx / .xls</td>
+          </tr>
+          <tr>
+            <td><b>Export Excel</b></td>
+            <td>ส่งออก KAS Mapping ทั้งหมดพร้อมรหัสที่เลือก</td>
+            <td>.xlsx (2 Sheet: PLO_KAS, MLO_KAS)</td>
+          </tr>
+          <tr>
+            <td><b>Export PDF</b></td>
+            <td>เลือก PLO / MLO / CLO หรือทั้งหมด — เปิด Print Dialog</td>
+            <td>PDF ผ่าน Browser Print</td>
+          </tr>
+        </tbody>
+      </table>
+ 
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">11</span>
+          <div class="hm-step-text">
+            กด <b>Template</b> ก่อนเสมอ เพื่อให้ได้ไฟล์ที่มี header ถูกต้อง — จากนั้นกรอก <b>✓ หรือ 1</b> ในช่อง K/A/S ที่ต้องการ แล้วกด Import
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">12</span>
+          <div class="hm-step-text">
+            Import <b>เพิ่มต่อท้าย</b> ข้อมูลที่มีอยู่ (Append Mode) — ไม่ได้แทนที่ข้อมูลเดิม
+            <span class="hm-badge hm-badge-blue">Append Mode</span>
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">13</span>
+          <div class="hm-step-text">
+            Export PDF มีให้เลือก 4 แบบ: <b>ตาราง PLO</b>, <b>ตาราง MLO</b>, <b>ตาราง CLO</b>, หรือ <b>ทั้งหมด</b> — คลิกลูกศรข้างปุ่มเพื่อเลือก
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ── การบันทึก ── -->
+      <div class="hm-section">💾 การบันทึก KAS Mapping</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">14</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>บันทึก KAS</b> (สีเขียว) มุมขวาบนเพื่อบันทึก KAS Mapping ของ PLO และ MLO — ข้อมูลจะถูกเก็บไว้ใน Browser
+            <span class="hm-badge hm-badge-amber">บันทึกใน Browser เท่านั้น</span>
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">15</span>
+          <div class="hm-step-text">
+            CLO Mapping บันทึกผ่าน <b>API อัตโนมัติ</b> ทันทีที่กด Save Changes ใน Dialog — ไม่ต้องกดปุ่ม "บันทึก KAS" อีกครั้ง
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">16</span>
+          <div class="hm-step-text">
+            หากปิด Browser โดยไม่บันทึก PLO/MLO KAS — ข้อมูลที่ยังไม่ได้บันทึกจะ <b>สูญหาย</b>
+            <span class="hm-badge hm-badge-red">ควรบันทึกก่อนปิดเสมอ</span>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="hm-warn">
+        <b>⚠ Admin Note:</b> KAS Mapping ของ PLO/MLO ถูกเก็บใน LocalStorage ของ Browser เท่านั้น — หากเปลี่ยนเครื่องหรือล้าง Browser Cache ข้อมูลจะหาย กรุณา <b>Export Excel สำรองไว้</b> เป็นประจำ
+      </div>
+ 
+      <!-- ── แหล่งข้อมูล KAS ── -->
+      <div class="hm-section">⚙️ การจัดการ KAS Master Data</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">17</span>
+          <div class="hm-step-text">
+            รายการ K / A / S ในระบบดึงมาจาก API <code>/api/kas</code> — หากต้องการเพิ่ม/แก้ไขรายการ KAS ต้องดำเนินการที่ฐานข้อมูลหลักโดย Admin
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">18</span>
+          <div class="hm-step-text">
+            ช่อง Search ใน Dialog ช่วย <b>กรองรายการ KAS</b> แบบ Real-time — พิมพ์รหัสหรือคำค้นเพื่อหารายการที่ต้องการได้รวดเร็ว
+          </div>
+        </div>
+      </div>
+ 
+      <div class="hm-note">
+        <b>💡 แนวทางสำหรับ Admin:</b> ควร Map KAS ให้ PLO ก่อน → จากนั้น MLO → สุดท้าย CLO เพื่อให้ข้อมูลสอดคล้องกันในทุกระดับ และ Export Excel สำรองไว้ทุกครั้งหลังอัปเดตข้อมูล
+      </div>
+ 
+    </div><!-- /hm-body -->
+ 
+    <!-- Footer -->
+    <div class="hm-footer">
+      <button class="hm-footer-btn" onclick="closeHelp()">รับทราบ</button>
+    </div>
+ 
+  </div>
+</div><!-- /helpOverlay -->
+ 
 
   <div class="panel" id="panel-MLO">
     <div class="lo-frame">
@@ -1139,7 +1436,9 @@ function exportPDF(section='ALL'){
     setTimeout(()=>{ overlay.classList.remove('show'); window.print(); setTimeout(()=>document.querySelectorAll('.panel').forEach(p=>p.classList.remove('print-active')),500); },300);
   },200);
 }
-
+function openHelp()  { document.getElementById('helpOverlay').style.display = 'flex'; }
+function closeHelp() { document.getElementById('helpOverlay').style.display = 'none'; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
 /* ═══════════════════════════════════════════════════════
    TOAST
 ═══════════════════════════════════════════════════════ */

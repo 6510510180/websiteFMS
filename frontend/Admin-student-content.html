@@ -34,6 +34,33 @@
     .sidebar-footer{padding:12px;border-top:1px solid var(--border);}
     .sidebar-footer .nav-item{color:var(--red);}
     .sidebar-footer .nav-item:hover{background:var(--red-bg);color:#DC2626;}
+    /* HELP MODAL */
+.help-circle-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--purple);background:#fff;color:var(--purple);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
+.help-circle-btn:hover{background:var(--purple-light);}
+#helpOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.help-modal{background:#fff;border-radius:18px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);}
+.hm-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;}
+.hm-header-left{display:flex;align-items:center;gap:10px;}
+.hm-icon-box{width:36px;height:36px;border-radius:10px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.hm-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.hm-subtitle{font-size:11.5px;color:var(--text-sub);}
+.hm-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-sub);padding:4px 8px;border-radius:6px;line-height:1;transition:.15s;}
+.hm-close:hover{background:var(--purple-light);color:var(--purple);}
+.hm-body{padding:24px;}
+.hm-section{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.7px;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.hm-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.hm-step{display:flex;gap:12px;align-items:flex-start;}
+.hm-num{min-width:22px;height:22px;border-radius:50%;background:var(--purple-light);color:var(--purple);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.hm-step-text{font-size:13.5px;color:var(--text);line-height:1.65;}
+.hm-step-text b{color:var(--purple-dark);}
+.hm-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:5px;}
+.hm-badge-purple{background:#ede9fe;color:#6d28d9;}
+.hm-badge-amber{background:#fffbeb;color:#d97706;}
+.hm-badge-green{background:#dcfce7;color:#166534;}
+.hm-note{background:var(--purple-light);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:var(--purple-dark);line-height:1.65;}
+.hm-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;}
+.hm-footer-btn{padding:9px 26px;border-radius:9px;border:none;background:var(--purple);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(107,63,160,.28);transition:all .18s;}
+.hm-footer-btn:hover{background:var(--purple-dark);}
 
     /* TOPBAR */
     .topbar{position:fixed;top:0;left:var(--sidebar-w);right:0;height:var(--topbar-h);background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:90;}
@@ -257,15 +284,30 @@
     <div class="topbar-breadcrumb">Admin · หน้านักศึกษา · student.html</div>
   </div>
   <div class="topbar-right">
+    <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
     <div class="course-select-wrap">
       <i class="fa-solid fa-graduation-cap" style="color:var(--accent)"></i>
       <select id="courseSelect" onchange="onCourseChange()">
         <option value="">กำลังโหลด...</option>
       </select>
     </div>
-    <a class="btn btn-outline" href="student.html" target="_blank" style="font-size:12px;">
-      <i class="fa-solid fa-eye"></i> ดูหน้าจริง
-    </a>
+    <a href="student.html" target="_blank" style="
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 22px;border-radius:10px;border:none;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:600;
+  background:linear-gradient(135deg,#6B3FA0 0%,#9B6DD1 100%);
+  color:#fff;
+  box-shadow:0 4px 16px rgba(107,63,160,.38);
+  transition:transform .18s,box-shadow .18s;
+  text-decoration:none;
+" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(107,63,160,.48)'"
+   onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(107,63,160,.38)'">
+  <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor">
+    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+  </svg>
+  ดูหน้าจริง
+</a>
   </div>
 </header>
 
@@ -408,6 +450,79 @@
           </div>
         </div>
       </div>
+      <div id="helpOverlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
+    <div class="hm-header">
+      <div class="hm-header-left">
+        <div class="hm-icon-box">🎓</div>
+        <div>
+          <div class="hm-title">คู่มือการใช้งาน</div>
+          <div class="hm-subtitle">หน้าจัดการเนื้อหานักศึกษา</div>
+        </div>
+      </div>
+      <button class="hm-close" onclick="closeHelp()">×</button>
+    </div>
+    <div class="hm-body">
+
+      <div class="hm-section">🎓 เลือกหลักสูตร</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">1</span>
+          <div class="hm-step-text">เลือก <b>หลักสูตร</b> จาก Dropdown มุมขวาบน — ข้อมูลทุกส่วนในหน้าจะโหลดตามหลักสูตรที่เลือก</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">2</span>
+          <div class="hm-step-text">กดปุ่ม <b>ดูหน้าจริง</b> เพื่อเปิดหน้า student.html และตรวจสอบผลลัพธ์จริงในแท็บใหม่</div>
+        </div>
+      </div>
+
+      <div class="hm-section">📋 Tab 1 — โครงสร้างหมวดวิชา</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">3</span>
+          <div class="hm-step-text">แก้ไขเนื้อหาใน <b>3 accordion หลัก</b> ได้แก่ หมวดวิชาศึกษาทั่วไป · วิชาเลือกเสรี · และวิชาเฉพาะ</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">4</span>
+          <div class="hm-step-text">ช่องแต่ละช่องมี <b>Live Preview</b> ด้านล่าง — เนื้อหาจะอัปเดตทันทีที่พิมพ์ <span class="hm-badge hm-badge-purple">Real-time</span></div>
+        </div>
+        <div class="hm-step"><span class="hm-num">5</span>
+          <div class="hm-step-text">ส่วน <b>วิชาเฉพาะ</b> มีหมวดย่อย 5 รายการ (วิชาแกน · วิชาชีพ · วิชาบังคับ · วิชาเลือก · วิชาโท) — กดที่แถวเพื่อขยายแก้ไข</div>
+        </div>
+      </div>
+
+      <div class="hm-section">🔀 Tab 2 — วิชาโท</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">6</span>
+          <div class="hm-step-text">แก้ไข <b>ข้อความส่วนหัว</b> ของวิชาโท — ทั้งข้อความหลักและข้อความเน้น (bold) ที่แสดงในกล่องสีเทา</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">7</span>
+          <div class="hm-step-text">กดปุ่ม <b>+ เพิ่มกลุ่ม</b> เพื่อสร้างกลุ่มวิชาโทใหม่ — กรอกชื่อ สี และตั้งค่าการเลือกแบบคละกลุ่ม</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">8</span>
+          <div class="hm-step-text">กดปุ่ม <b>แก้ไข</b> หรือ <b>🗑 ลบ</b> ในแต่ละแถวเพื่อจัดการกลุ่มวิชาโทที่มีอยู่ <span class="hm-badge hm-badge-amber">ลบแล้วไม่สามารถกู้คืนได้</span></div>
+        </div>
+        <div class="hm-step"><span class="hm-num">9</span>
+          <div class="hm-step-text">Toggle <b>"อนุญาตให้เลือกแบบคละกลุ่มวิชาเอก"</b> — เมื่อเปิด หน้านักศึกษาจะแสดง badge และกล่องแจ้งเตือนสีน้ำเงิน</div>
+        </div>
+      </div>
+
+      <div class="hm-section">💾 การบันทึก</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">10</span>
+          <div class="hm-step-text">เมื่อมีการแก้ไข แถบ <b>Save Bar</b> จะปรากฏด้านล่างพร้อม badge <b>"มีการแก้ไข"</b> สีส้มที่หัวข้อที่เปลี่ยน</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">11</span>
+          <div class="hm-step-text">กด <b>บันทึกทั้งหมด</b> เพื่อบันทึกการเปลี่ยนแปลงทุกส่วนพร้อมกัน — หรือกด <b>ยกเลิก</b> เพื่อโหลดข้อมูลใหม่ <span class="hm-badge hm-badge-green">บันทึกอัตโนมัติไม่มี</span></div>
+        </div>
+      </div>
+
+      <div class="hm-note">
+        <b>💡 เคล็ดลับ:</b> การแก้ไข Tab โครงสร้างหมวดวิชา และ Tab วิชาโท ใช้ปุ่ม <b>บันทึกทั้งหมด</b> เดียวกัน — ไม่ต้องบันทึกแยกทีละ Tab
+      </div>
+
+    </div>
+    <div class="hm-footer">
+      <button class="hm-footer-btn" onclick="closeHelp()">รับทราบ</button>
+    </div>
+  </div>
+</div>
 
       <!-- ACCORDION 3: วิชาเฉพาะ -->
       <div class="section-card">
@@ -1022,6 +1137,10 @@ function renderMinorGroups() {
     </div>`;
   }).join('');
 }
+
+  function openHelp()  { document.getElementById('helpOverlay').style.display = 'flex'; }
+  function closeHelp() { document.getElementById('helpOverlay').style.display = 'none'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
 
 // ── MINOR GROUP MODAL ──
 function openAddMinorGroup() {

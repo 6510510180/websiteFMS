@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>แผนการศึกษา | FMS Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--purple:#6B3FA0;--purple-dark:#4A2870;--purple-light:#F3EEFF;--purple-mid:#E8DEFF;--bg:#F7F5FA;--white:#FFFFFF;--text:#181117;--text-sub:#64748B;--border:#EDE8F5;--red:#EF4444;--red-bg:#FEE2E2;--sidebar-w:240px;--radius:12px;}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -28,6 +28,8 @@ body{font-family:'Noto Sans Thai','Segoe UI',sans-serif;background:var(--bg);col
 .topbar-right{display:flex;align-items:center;gap:12px}
 .search-box{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 12px;width:220px}
 .search-box input{border:none;background:none;outline:none;font-size:13px;color:var(--text);font-family:inherit;width:100%}
+.help-circle-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--purple);background:#fff;color:var(--purple);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
+.help-circle-btn:hover{background:var(--purple-light);}
 .content{padding:28px;flex:1;}
 .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-sub);margin-bottom:16px}
 .breadcrumb a{color:var(--purple);text-decoration:none;cursor:pointer}
@@ -60,25 +62,57 @@ body{font-family:'Noto Sans Thai','Segoe UI',sans-serif;background:var(--bg);col
 .toast.show{transform:translateY(0);opacity:1}
 .toast.success{background:#16a34a}
 .toast.error{background:var(--red)}
+
+/* ══ HELP MODAL ══ */
+#helpOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.help-modal{background:#fff;border-radius:18px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);font-family:'Noto Sans Thai',sans-serif;}
+.hm-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;}
+.hm-header-left{display:flex;align-items:center;gap:10px;}
+.hm-icon-box{width:36px;height:36px;border-radius:10px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.hm-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.hm-subtitle{font-size:11.5px;color:var(--text-sub);}
+.hm-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-sub);padding:4px 8px;border-radius:6px;line-height:1;transition:.15s;}
+.hm-close:hover{background:var(--purple-light);color:var(--purple);}
+.hm-body{padding:24px;}
+.hm-section{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.7px;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.hm-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.hm-step{display:flex;gap:12px;align-items:flex-start;}
+.hm-num{min-width:22px;height:22px;border-radius:50%;background:var(--purple-light);color:var(--purple);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.hm-step-text{font-size:13.5px;color:var(--text);line-height:1.65;}
+.hm-step-text b{color:var(--purple-dark);}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:5px;}
+.badge-purple{background:#ede9fe;color:#6d28d9;}
+.badge-green{background:#dcfce7;color:#166534;}
+.hm-card-sample{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:8px;}
+.hm-card-sample-header{padding:6px 12px;background:var(--purple-light);font-size:11px;font-weight:700;color:var(--purple);display:flex;align-items:center;gap:5px;}
+.hm-card-sample-row{display:grid;grid-template-columns:2fr 2fr 80px;font-size:12px;color:var(--text-sub);padding:9px 12px;background:#fafafa;border-top:1px solid var(--border);}
+.hm-card-sample-data{display:grid;grid-template-columns:2fr 2fr 80px;font-size:12.5px;color:var(--text);padding:10px 12px;}
+.hm-manage-sim{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:var(--purple-light);color:var(--purple);border:1.5px solid var(--purple-mid);border-radius:7px;font-size:11.5px;font-weight:700;}
+.hm-note{background:var(--purple-light);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:var(--purple-dark);line-height:1.65;}
+.hm-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;}
+.hm-footer-btn{padding:9px 26px;border-radius:9px;border:none;background:var(--purple);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(107,63,160,.28);transition:all .18s;}
+.hm-footer-btn:hover{background:var(--purple-dark);}
 </style>
 </head>
 <body>
+
+<!-- ══ SIDEBAR ══ -->
 <aside class="sidebar-qa">
   <div class="sidebar-brand">
     <div class="sidebar-brand-title">FMS Admin</div>
     <div class="sidebar-brand-sub">PSU Faculty of Management</div>
   </div>
- 
+
   <nav class="sidebar-nav-qa">
- 
-    <!-- ── ภาพรวม ── -->
+
+    <!-- ภาพรวม -->
     <div class="sidebar-section-label">ภาพรวม</div>
     <a class="nav-item-qa" href="dashboard.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
       แดชบอร์ด
     </a>
- 
-    <!-- ── จัดการหลักสูตร ── -->
+
+    <!-- จัดการหลักสูตร -->
     <div class="sidebar-section-label">จัดการหลักสูตร</div>
     <a class="nav-item-qa" href="course-list.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
@@ -88,8 +122,8 @@ body{font-family:'Noto Sans Thai','Segoe UI',sans-serif;background:var(--bg);col
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
       แผนการศึกษา
     </a>
- 
-    <!-- ── หน้านักศึกษา ── -->
+
+    <!-- หน้านักศึกษา -->
     <div class="sidebar-section-label">หน้านักศึกษา</div>
     <a class="nav-item-qa" href="admin-student-content.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
@@ -99,17 +133,16 @@ body{font-family:'Noto Sans Thai','Segoe UI',sans-serif;background:var(--bg);col
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
       รายวิชา
     </a>
-    
- 
-    <!-- ── ระบบ ── -->
+
+    <!-- ระบบ -->
     <div class="sidebar-section-label">ระบบ</div>
     <a class="nav-item-qa" href="qa-dashboard.html">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
       ประกันคุณภาพการศึกษา
     </a>
- 
+
   </nav>
- 
+
   <div class="sidebar-footer-qa">
     <a class="nav-item-qa" href="login.html" id="logoutBtn">
       <svg class="nav-icon-qa" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
@@ -118,25 +151,42 @@ body{font-family:'Noto Sans Thai','Segoe UI',sans-serif;background:var(--bg);col
   </div>
 </aside>
 
-
+<!-- ══ MAIN ══ -->
 <div class="main">
   <header class="topbar">
     <div class="topbar-title">แผนการศึกษา (Study Plan)</div>
     <div class="topbar-right">
-      <div class="search-box"><span>🔍</span><input type="text" id="topSearch" placeholder="ค้นหาวิชาเอก..." /></div>
+      <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="topSearch" placeholder="ค้นหาวิชาเอก..." />
+      </div>
     </div>
   </header>
 
   <div class="content">
-    <div class="breadcrumb"><a onclick="window.location.href='dashboard.html'">แดชบอร์ด</a><span>/</span><span>แผนการศึกษา</span></div>
+    <div class="breadcrumb">
+      <a onclick="window.location.href='dashboard.html'">แดชบอร์ด</a>
+      <span>/</span>
+      <span>แผนการศึกษา</span>
+    </div>
     <h1 class="page-heading">แผนการศึกษา</h1>
     <p class="page-sub">คลิกที่วิชาเอกเพื่อจัดการแผนการศึกษา</p>
     <div class="toolbar">
-      <div class="toolbar-search"><span style="color:var(--text-sub)">🔍</span><input type="text" id="searchInput" placeholder="ค้นหาชื่อวิชาเอก..." /></div>
-      <select class="filter-select" id="courseFilter"><option value="">หลักสูตรทั้งหมด</option></select>
+      <div class="toolbar-search">
+        <span style="color:var(--text-sub)">🔍</span>
+        <input type="text" id="searchInput" placeholder="ค้นหาชื่อวิชาเอก..." />
+      </div>
+      <select class="filter-select" id="courseFilter">
+        <option value="">หลักสูตรทั้งหมด</option>
+      </select>
     </div>
     <div class="table-card">
-      <div class="table-header"><div>ชื่อวิชาเอก</div><div>หลักสูตร</div><div>จัดการ</div></div>
+      <div class="table-header">
+        <div>ชื่อวิชาเอก</div>
+        <div>หลักสูตร</div>
+        <div>จัดการ</div>
+      </div>
       <div id="majorTableBody"><div class="loading">⏳ กำลังโหลด...</div></div>
       <div class="table-footer">
         <span id="footerInfo">-</span>
@@ -148,6 +198,110 @@ body{font-family:'Noto Sans Thai','Segoe UI',sans-serif;background:var(--bg);col
 
 <div class="toast" id="toast"></div>
 
+<!-- ══ HELP MODAL ══ -->
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
+
+    <!-- Header -->
+    <div class="hm-header">
+      <div class="hm-header-left">
+        <div class="hm-icon-box">📋</div>
+        <div>
+          <div class="hm-title">คู่มือการใช้งาน</div>
+          <div class="hm-subtitle">หน้าแผนการศึกษา (Study Plan)</div>
+        </div>
+      </div>
+      <button class="hm-close" onclick="closeHelp()">×</button>
+    </div>
+
+    <!-- Body -->
+    <div class="hm-body">
+
+      <!-- ส่วนที่ 1 -->
+      <div class="hm-section">📖 ภาพรวมหน้าแผนการศึกษา</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">1</span>
+          <div class="hm-step-text">หน้านี้แสดง <b>รายชื่อวิชาเอกทั้งหมด</b> ในระบบ พร้อมข้อมูลหลักสูตรที่วิชาเอกนั้นสังกัดอยู่</div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">2</span>
+          <div class="hm-step-text">คอลัมน์ในตารางประกอบด้วย <b>ชื่อวิชาเอก</b> (ไทย/อังกฤษ) · <b>หลักสูตร</b> ที่สังกัด · และปุ่ม <b>จัดการ</b> เพื่อเข้าสู่หน้าจัดการรายวิชา</div>
+        </div>
+      </div>
+
+      <!-- ตัวอย่างตาราง -->
+      <div class="hm-card-sample" style="margin-bottom:20px;">
+        <div class="hm-card-sample-header">👁 ตัวอย่างแถวในตาราง</div>
+        <div class="hm-card-sample-row"><span>ชื่อวิชาเอก</span><span>หลักสูตร</span><span>จัดการ</span></div>
+        <div class="hm-card-sample-data">
+          <div>
+            <div class="major-name">การเงินและการลงทุน</div>
+            <div class="major-en">Finance &amp; Investment</div>
+          </div>
+          <div style="font-size:13px;color:#64748B;align-self:center;">บริหารธุรกิจบัณฑิต</div>
+          <div style="align-self:center;"><span class="hm-manage-sim">✏️ จัดการ</span></div>
+        </div>
+      </div>
+
+      <!-- ส่วนที่ 2 -->
+      <div class="hm-section">🔍 การค้นหาและกรองข้อมูล</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">3</span>
+          <div class="hm-step-text">ใช้ <b>ช่องค้นหา</b> (Topbar หรือ Toolbar) พิมพ์ชื่อวิชาเอกภาษาไทยหรืออังกฤษ — ตารางจะกรองผลลัพธ์แบบ Real-time ทันที</div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">4</span>
+          <div class="hm-step-text">ใช้ <b>Dropdown "หลักสูตรทั้งหมด"</b> เพื่อแสดงเฉพาะวิชาเอกของหลักสูตรที่ต้องการ <span class="badge badge-purple">กรองตามหลักสูตร</span></div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">5</span>
+          <div class="hm-step-text">สามารถใช้ <b>ช่องค้นหาร่วมกับ Dropdown</b> พร้อมกันได้ ระบบจะกรองข้อมูลตามเงื่อนไขทั้งสองโดยอัตโนมัติ</div>
+        </div>
+      </div>
+
+      <!-- ส่วนที่ 3 -->
+      <div class="hm-section">✏️ การจัดการแผนการศึกษา</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">6</span>
+          <div class="hm-step-text">กดปุ่ม <b>จัดการ</b> ในแถวของวิชาเอกที่ต้องการ — ระบบจะนำไปยังหน้า <b>จัดการรายวิชา (add-subject)</b> ของวิชาเอกนั้น</div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">7</span>
+          <div class="hm-step-text">ในหน้าจัดการรายวิชา คุณสามารถ <b>เพิ่ม · แก้ไข · ลบ</b> รายวิชาที่จัดอยู่ในแผนการศึกษาของวิชาเอกนั้น ๆ ได้</div>
+        </div>
+      </div>
+
+      <!-- ส่วนที่ 4 -->
+      <div class="hm-section">📄 การเลื่อนหน้า (Pagination)</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">8</span>
+          <div class="hm-step-text">ตารางแสดงผล <b>10 รายการ / หน้า</b> หากมีรายการมากกว่านั้น จะปรากฏปุ่ม <b>‹ 1 2 ›</b> ที่ด้านล่างตาราง</div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">9</span>
+          <div class="hm-step-text">บรรทัดล่างตารางจะแสดง <b>จำนวนรายการที่กำลังดู</b> เช่น "แสดง 1 ถึง 10 จาก 24 รายการ" <span class="badge badge-green">ข้อมูลเรียลไทม์</span></div>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div class="hm-note">
+        <b>💡 เคล็ดลับ:</b> หากไม่พบวิชาเอกที่ต้องการ ลองตรวจสอบว่าได้สร้างวิชาเอกไว้แล้วในหน้า <b>จัดการหลักสูตร → หลักสูตร</b> หรือยัง วิชาเอกต้องถูกสร้างและผูกกับหลักสูตรก่อนจึงจะปรากฏในหน้านี้
+      </div>
+
+    </div><!-- /hm-body -->
+
+    <!-- Footer -->
+    <div class="hm-footer">
+      <button class="hm-footer-btn" onclick="closeHelp()">รับทราบ</button>
+    </div>
+
+  </div><!-- /help-modal -->
+</div><!-- /helpOverlay -->
+
 <script>
 const BASE = '';
 const API  = BASE + "/api";
@@ -155,63 +309,64 @@ if (!localStorage.getItem("user")) { window.location.href = "login.html"; }
 document.getElementById("logoutBtn").addEventListener("click", e => {
   e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html";
 });
+
 function toast(msg, type="") {
-  const el=document.getElementById("toast");
-  el.textContent=msg; el.className="toast show "+type;
-  setTimeout(()=>{el.className="toast";},2800);
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.className = "toast show " + type;
+  setTimeout(() => { el.className = "toast"; }, 2800);
 }
 
-let allMajors=[], allCourses=[], filtered=[];
-let currentPage=1, PAGE_SIZE=10;
+let allMajors = [], allCourses = [], filtered = [];
+let currentPage = 1, PAGE_SIZE = 10;
 
 async function init() {
   try {
-    allCourses = await fetch(`${API}/courses`).then(r=>r.json());
+    allCourses = await fetch(`${API}/courses`).then(r => r.json());
     const sel = document.getElementById("courseFilter");
-    allCourses.forEach(c=>{
-      const opt=document.createElement("option");
-      opt.value=c.id; opt.textContent=c.name_th||`Course #${c.id}`;
+    allCourses.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.id; opt.textContent = c.name_th || `Course #${c.id}`;
       sel.appendChild(opt);
     });
     const arrays = await Promise.all(
-      allCourses.map(c=>fetch(`${API}/courses/${c.id}/majors`).then(r=>r.json()).catch(()=>[]))
+      allCourses.map(c => fetch(`${API}/courses/${c.id}/majors`).then(r => r.json()).catch(() => []))
     );
-    allMajors = arrays.flatMap((majors,i)=>
-      majors.map(m=>({...m, course_name:allCourses[i]?.name_th||"-", course_id:allCourses[i]?.id}))
+    allMajors = arrays.flatMap((majors, i) =>
+      majors.map(m => ({ ...m, course_name: allCourses[i]?.name_th || "-", course_id: allCourses[i]?.id }))
     );
     applyFilter();
   } catch {
-    document.getElementById("majorTableBody").innerHTML=`<div class="loading">❌ เชื่อมต่อไม่ได้</div>`;
+    document.getElementById("majorTableBody").innerHTML = `<div class="loading">❌ เชื่อมต่อไม่ได้</div>`;
   }
 }
 
 function applyFilter() {
-  const q=(document.getElementById("searchInput").value+" "+document.getElementById("topSearch").value).trim().toLowerCase();
-  const courseId=document.getElementById("courseFilter").value;
-  filtered=allMajors.filter(m=>
-    (!q||(m.name_th||"").toLowerCase().includes(q)||(m.name_en||"").toLowerCase().includes(q))&&
-    (!courseId||String(m.course_id)===courseId)
+  const q = (document.getElementById("searchInput").value + " " + document.getElementById("topSearch").value).trim().toLowerCase();
+  const courseId = document.getElementById("courseFilter").value;
+  filtered = allMajors.filter(m =>
+    (!q || (m.name_th || "").toLowerCase().includes(q) || (m.name_en || "").toLowerCase().includes(q)) &&
+    (!courseId || String(m.course_id) === courseId)
   );
-  currentPage=1; renderTable();
+  currentPage = 1; renderTable();
 }
 
 function renderTable() {
-  const start=(currentPage-1)*PAGE_SIZE;
-  const page=filtered.slice(start,start+PAGE_SIZE);
-  const tbody=document.getElementById("majorTableBody");
-  if(!filtered.length){
-    tbody.innerHTML=`<div class="empty-state"><div class="icon">🔍</div><p>ไม่พบข้อมูล</p></div>`;
-    document.getElementById("footerInfo").textContent="ไม่พบข้อมูล";
-    document.getElementById("pagination").innerHTML="";
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page = filtered.slice(start, start + PAGE_SIZE);
+  const tbody = document.getElementById("majorTableBody");
+  if (!filtered.length) {
+    tbody.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>ไม่พบข้อมูล</p></div>`;
+    document.getElementById("footerInfo").textContent = "ไม่พบข้อมูล";
+    document.getElementById("pagination").innerHTML = "";
     return;
   }
-  tbody.innerHTML=page.map(m=>`
+  tbody.innerHTML = page.map(m => `
     <div class="table-row">
       <div>
-        <div class="major-name">${m.name_th||"-"}</div>
-        <div class="major-en">${m.name_en||""}</div>
+        <div class="major-name">${m.name_th || "-"}</div>
+        <div class="major-en">${m.name_en || ""}</div>
       </div>
-      <div style="font-size:13px;color:var(--text-sub)">${m.course_name||"-"}</div>
+      <div style="font-size:13px;color:var(--text-sub)">${m.course_name || "-"}</div>
       <div>
         <a class="manage-btn" href="add-subject.html?majorId=${m.id}&courseId=${m.course_id}">
           <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
@@ -220,20 +375,24 @@ function renderTable() {
       </div>
     </div>`).join("");
 
-  const total=filtered.length, totalPages=Math.ceil(total/PAGE_SIZE);
-  document.getElementById("footerInfo").textContent=`แสดง ${start+1} ถึง ${Math.min(start+PAGE_SIZE,total)} จาก ${total} รายการ`;
-  let pg="";
-  if(currentPage>1) pg+=`<button class="page-btn" onclick="gotoPage(${currentPage-1})">‹</button>`;
-  for(let i=1;i<=totalPages;i++) pg+=`<button class="page-btn ${i===currentPage?'active':''}" onclick="gotoPage(${i})">${i}</button>`;
-  if(currentPage<totalPages) pg+=`<button class="page-btn" onclick="gotoPage(${currentPage+1})">›</button>`;
-  document.getElementById("pagination").innerHTML=pg;
+  const total = filtered.length, totalPages = Math.ceil(total / PAGE_SIZE);
+  document.getElementById("footerInfo").textContent = `แสดง ${start + 1} ถึง ${Math.min(start + PAGE_SIZE, total)} จาก ${total} รายการ`;
+  let pg = "";
+  if (currentPage > 1) pg += `<button class="page-btn" onclick="gotoPage(${currentPage - 1})">‹</button>`;
+  for (let i = 1; i <= totalPages; i++) pg += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="gotoPage(${i})">${i}</button>`;
+  if (currentPage < totalPages) pg += `<button class="page-btn" onclick="gotoPage(${currentPage + 1})">›</button>`;
+  document.getElementById("pagination").innerHTML = pg;
 }
 
-function gotoPage(p){currentPage=p;renderTable();}
+function gotoPage(p) { currentPage = p; renderTable(); }
 
-document.getElementById("searchInput").addEventListener("input",applyFilter);
-document.getElementById("topSearch").addEventListener("input",applyFilter);
-document.getElementById("courseFilter").addEventListener("change",applyFilter);
+function openHelp()  { document.getElementById('helpOverlay').style.display = 'flex'; }
+function closeHelp() { document.getElementById('helpOverlay').style.display = 'none'; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
+
+document.getElementById("searchInput").addEventListener("input", applyFilter);
+document.getElementById("topSearch").addEventListener("input", applyFilter);
+document.getElementById("courseFilter").addEventListener("change", applyFilter);
 init();
 </script>
 </body>

@@ -164,18 +164,6 @@ footer{position:relative;z-index:1;padding:20px 5%;border-top:1px solid var(--bo
 </head>
 <body>
 
-<header class="navbar">
-  <div class="logo"><img src="logo-fms.png" alt="Logo" onerror="this.style.display='none'"></div>
-  <nav>
-    <ul>
-      <li><a href="bba-qa.html">หน้าหลัก</a></li>
-      <li><a href="bba-plo.html">ผลลัพธ์การเรียนรู้</a></li>
-      <li><a href="bba-stake.html">ผู้มีส่วนร่วมในหลักสูตร</a></li>
-      <li><a href="bba-students.html">ข้อมูลนักศึกษา</a></li>
-      <li><a href="achievements.html" class="active">ผลงานและความสำเร็จ</a></li>
-    </ul>
-  </nav>
-</header>
 
 <section class="hero">
   <div class="hero-inner">
@@ -299,6 +287,7 @@ function renderPage(){
   document.getElementById("countLabel").textContent=`แสดง ${Math.min(shown,filtered.length)} จาก ${filtered.length} รายการ`;
 }
 
+
 function loadMore(){page++;renderPage();}
 
 function buildCard(d,idx){
@@ -321,5 +310,6 @@ function buildCard(d,idx){
 
 loadData();
 </script>
+<script src="navbar.js"></script>
 </body>
 </html>

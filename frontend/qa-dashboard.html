@@ -18,6 +18,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans Thai','Lexend',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;}
 
+/* ── SIDEBAR ── */
 .sidebar{width:var(--sidebar-w);background:var(--white);height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;border-right:1px solid var(--border);z-index:100;}
 .sidebar-brand{padding:20px 20px 16px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .sidebar-brand-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.2px;}
@@ -33,6 +34,7 @@ body{font-family:'Noto Sans Thai','Lexend',sans-serif;background:var(--bg);color
 .sidebar-footer .nav-item{color:var(--red);}
 .sidebar-footer .nav-item:hover{background:var(--red-bg);color:#DC2626;}
 
+/* ── TOPBAR ── */
 .topbar{position:fixed;top:0;left:var(--sidebar-w);right:0;height:var(--topbar-h);background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:90;}
 .topbar-left{display:flex;flex-direction:column;}
 .topbar-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.2px;}
@@ -47,12 +49,44 @@ body{font-family:'Noto Sans Thai','Lexend',sans-serif;background:var(--bg);color
 .avatar-name{font-size:13px;font-weight:600;color:var(--purple);}
 .avatar-circle{width:34px;height:34px;border-radius:50%;background:var(--purple-mid);border:2px solid var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--purple);}
 
+/* ── HELP BUTTON ── */
+.help-circle-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--purple);background:#fff;color:var(--purple);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
+.help-circle-btn:hover{background:var(--purple-light);}
+
+/* ── HELP MODAL ── */
+#helpOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.help-modal{background:#fff;border-radius:18px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);}
+.hm-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;}
+.hm-header-left{display:flex;align-items:center;gap:10px;}
+.hm-icon-box{width:36px;height:36px;border-radius:10px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.hm-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.hm-subtitle{font-size:11.5px;color:var(--text-sub);}
+.hm-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-sub);padding:4px 8px;border-radius:6px;line-height:1;transition:.15s;}
+.hm-close:hover{background:var(--purple-light);color:var(--purple);}
+.hm-body{padding:24px;}
+.hm-section{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.7px;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.hm-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.hm-step{display:flex;gap:12px;align-items:flex-start;}
+.hm-num{min-width:22px;height:22px;border-radius:50%;background:var(--purple-light);color:var(--purple);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.hm-step-text{font-size:13.5px;color:var(--text);line-height:1.65;}
+.hm-step-text b{color:var(--purple-dark);}
+.hm-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:5px;}
+.hm-badge-purple{background:#ede9fe;color:#6d28d9;}
+.hm-badge-amber{background:#fffbeb;color:#d97706;}
+.hm-badge-green{background:#dcfce7;color:#166534;}
+.hm-badge-blue{background:#eff6ff;color:#1d4ed8;}
+.hm-badge-red{background:#fee2e2;color:#991b1b;}
+.hm-note{background:var(--purple-light);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:var(--purple-dark);line-height:1.65;}
+.hm-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;}
+.hm-footer-btn{padding:9px 26px;border-radius:9px;border:none;background:var(--purple);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(107,63,160,.28);transition:all .18s;}
+.hm-footer-btn:hover{background:var(--purple-dark);}
+
+/* ── PAGE ── */
 .main{margin-left:var(--sidebar-w);padding-top:var(--topbar-h);flex:1;min-width:0;}
 .page-body{padding:32px;display:flex;flex-direction:column;gap:28px;}
 .page-heading-wrap{display:flex;flex-direction:column;gap:4px;}
 .page-heading{font-family:'Lexend',sans-serif;font-size:26px;font-weight:800;color:var(--purple);letter-spacing:-0.4px;line-height:1.2;}
 .page-sub{font-size:14px;color:var(--text-sub);}
-
 .action-grid{display:grid;grid-template-columns:1fr;gap:16px;}
 .action-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;cursor:pointer;transition:all 0.2s ease;text-decoration:none;box-shadow:var(--shadow);position:relative;overflow:hidden;}
 .action-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--purple);transform:scaleX(0);transition:transform 0.2s ease;transform-origin:left;}
@@ -63,11 +97,9 @@ body{font-family:'Noto Sans Thai','Lexend',sans-serif;background:var(--bg);color
 .action-card-title{font-family:'Lexend',sans-serif;font-size:20px;font-weight:700;color:var(--text);line-height:1.2;}
 .action-card-desc{font-size:13px;color:var(--text-sub);margin-top:2px;}
 .action-card-icon{width:56px;height:56px;border-radius:12px;background:var(--purple-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .section-title{display:flex;align-items:center;gap:8px;font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
 .section-title-dot{width:8px;height:8px;border-radius:50%;background:var(--purple);}
-
 .recent-list{display:flex;flex-direction:column;gap:10px;}
 .recent-item{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:var(--shadow);transition:box-shadow 0.15s,border-color 0.15s;animation:fadeUp 0.4s ease both;}
 .recent-item:hover{border-color:#D8C8F0;box-shadow:var(--shadow-md);}
@@ -87,22 +119,19 @@ svg{display:block;}
 </style>
 </head>
 <body>
+
+<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-brand">
     <div class="sidebar-brand-title">FMS Admin</div>
     <div class="sidebar-brand-sub">PSU Faculty of Management</div>
   </div>
- 
   <nav class="sidebar-nav">
- 
-    <!-- ── ภาพรวม ── -->
     <div class="sidebar-section-label">ภาพรวม</div>
     <a class="nav-item" href="dashboard.html">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
       แดชบอร์ด
     </a>
- 
-    <!-- ── จัดการหลักสูตร ── -->
     <div class="sidebar-section-label">จัดการหลักสูตร</div>
     <a class="nav-item" href="course-list.html">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
@@ -112,8 +141,6 @@ svg{display:block;}
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
       แผนการศึกษา
     </a>
- 
-    <!-- ── หน้านักศึกษา ── -->
     <div class="sidebar-section-label">หน้านักศึกษา</div>
     <a class="nav-item" href="admin-student-content.html">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
@@ -123,16 +150,12 @@ svg{display:block;}
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
       รายวิชา
     </a>
- 
-    <!-- ── ระบบ ── -->
     <div class="sidebar-section-label">ระบบ</div>
     <a class="nav-item active" href="qa-dashboard.html">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
       ประกันคุณภาพการศึกษา
     </a>
- 
   </nav>
- 
   <div class="sidebar-footer">
     <a class="nav-item" href="login.html" id="logoutBtn">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
@@ -141,6 +164,7 @@ svg{display:block;}
   </div>
 </aside>
 
+<!-- TOPBAR -->
 <header class="topbar">
   <div class="topbar-left">
     <div class="topbar-title">ประกันคุณภาพการศึกษา</div>
@@ -151,6 +175,8 @@ svg{display:block;}
       <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg>
       <input type="text" placeholder="ค้นหาข้อมูล..." />
     </div>
+    <!-- ปุ่ม ? เปิดคู่มือ -->
+    <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
     <div class="avatar-wrap">
       <div class="avatar-name">Administrator</div>
       <div class="avatar-circle">A</div>
@@ -158,14 +184,13 @@ svg{display:block;}
   </div>
 </header>
 
+<!-- MAIN PAGE CONTENT (เหมือนเดิม) -->
 <main class="main">
   <div class="page-body">
-
     <div class="page-heading-wrap">
       <div class="page-heading">เลือกหมวดหมู่ข้อมูล</div>
       <div class="page-sub">คุณสามารถจัดการหลักสูตรหรือดำเนินการได้ที่นี่</div>
     </div>
-
     <div>
       <div class="section-header">
         <div class="section-title">
@@ -188,9 +213,7 @@ svg{display:block;}
         </a>
       </div>
     </div>
-
     <div class="divider"></div>
-
     <div>
       <div class="section-header">
         <div class="section-title">
@@ -199,7 +222,6 @@ svg{display:block;}
         </div>
       </div>
       <div class="recent-list">
-
         <div class="recent-item">
           <div class="recent-icon" style="background:var(--purple-light)">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color:var(--purple)"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
@@ -210,7 +232,6 @@ svg{display:block;}
           </div>
           <a href="kas-show.html"><button class="btn-edit">ดู</button></a>
         </div>
-
         <div class="recent-item">
           <div class="recent-icon" style="background:var(--blue-bg)">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color:var(--blue)"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
@@ -221,7 +242,6 @@ svg{display:block;}
           </div>
           <a href="sankey.html"><button class="btn-edit">ดู</button></a>
         </div>
-
         <div class="recent-item">
           <div class="recent-icon" style="background:var(--amber-bg)">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color:var(--amber)"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
@@ -232,7 +252,6 @@ svg{display:block;}
           </div>
           <a href="Kas-admin.html"><button class="btn-edit">ดู</button></a>
         </div>
-
         <div class="recent-item">
           <div class="recent-icon" style="background:var(--red-bg)">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color:var(--red)"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
@@ -243,7 +262,6 @@ svg{display:block;}
           </div>
           <a href="admin-announcements.html"><button class="btn-edit">ดู</button></a>
         </div>
-
         <div class="recent-item">
           <div class="recent-icon" style="background:var(--green-bg)">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="color:var(--green)"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clip-rule="evenodd"/></svg>
@@ -254,18 +272,153 @@ svg{display:block;}
           </div>
           <a href="Template.html"><button class="btn-edit">ดู</button></a>
         </div>
-
       </div>
     </div>
-
   </div>
 </main>
 
+<!-- ══════════════════════════════════════════
+     HELP MODAL — qa-dashboard.html
+     ══════════════════════════════════════════ -->
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
+
+    <!-- Header -->
+    <div class="hm-header">
+      <div class="hm-header-left">
+        <div class="hm-icon-box">🛡️</div>
+        <div>
+          <div class="hm-title">คู่มือการใช้งาน</div>
+          <div class="hm-subtitle">หน้าประกันคุณภาพการศึกษา (qa-dashboard)</div>
+        </div>
+      </div>
+      <button class="hm-close" onclick="closeHelp()">×</button>
+    </div>
+
+    <!-- Body -->
+    <div class="hm-body">
+
+      <!-- ── ภาพรวมหน้า ── -->
+      <div class="hm-section">🗂️ ภาพรวมหน้านี้</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">1</span>
+          <div class="hm-step-text">
+            หน้านี้เป็น <b>ศูนย์กลาง</b> ของระบบประกันคุณภาพการศึกษา (QA) — ใช้เลือกเข้าถึงข้อมูลและเครื่องมือต่าง ๆ ที่เกี่ยวข้องกับ PLO, KAS, Sankey และเอกสาร
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">2</span>
+          <div class="hm-step-text">
+            แต่ละรายการในหน้านี้คือ <b>ทางเข้าสู่หน้าย่อย</b> — กดปุ่ม <b>ดู</b> เพื่อไปยังหน้านั้น ๆ ได้ทันที
+          </div>
+        </div>
+      </div>
+
+      <!-- ── เพิ่มข้อมูลใหม่ ── -->
+      <div class="hm-section">➕ เพิ่มข้อมูลใหม่</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">3</span>
+          <div class="hm-step-text">
+            กดการ์ด <b>เพิ่มข้อมูลใหม่</b> เพื่อไปยังหน้า <code style="background:var(--purple-light);padding:1px 6px;border-radius:4px;font-size:12px;">qa-add.html</code> — สำหรับเพิ่ม PLO, Stakeholders, Analytics หรือผลงานใหม่เข้าระบบ
+          </div>
+        </div>
+      </div>
+
+      <!-- ── รายการข้อมูลเพิ่มเติม ── -->
+      <div class="hm-section">📋 รายการข้อมูลเพิ่มเติม</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">4</span>
+          <div class="hm-step-text">
+            <b>ความสัมพันธ์ของ KAS และผลลัพธ์การเรียนรู้</b>
+            <span class="hm-badge hm-badge-purple">kas-show.html</span><br>
+            แสดงตารางความสัมพันธ์ระหว่าง KAS กับ PLO และ MLO ของหลักสูตร
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">5</span>
+          <div class="hm-step-text">
+            <b>ผลลัพธ์การเรียนรู้และรายวิชา</b>
+            <span class="hm-badge hm-badge-blue">sankey.html</span><br>
+            แผนภาพ Sankey แสดงการไหลของ PLO → รายวิชา ช่วยให้เห็นภาพรวมหลักสูตรได้ชัดเจน
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">6</span>
+          <div class="hm-step-text">
+            <b>แก้ไขข้อมูล KAS</b>
+            <span class="hm-badge hm-badge-amber">Kas-admin.html</span><br>
+            ค้นหาและแก้ไขข้อมูล KAS ที่มีอยู่ในระบบ
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">7</span>
+          <div class="hm-step-text">
+            <b>คำประกาศ</b>
+            <span class="hm-badge hm-badge-red">admin-announcements.html</span><br>
+            จัดการคำประกาศและประกาศที่เกี่ยวข้องกับการประกันคุณภาพ
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">8</span>
+          <div class="hm-step-text">
+            <b>เอกสาร Excel</b>
+            <span class="hm-badge hm-badge-green">Template.html</span><br>
+            รวมไฟล์เทมเพลต Excel สำหรับดาวน์โหลดและใช้งานในกระบวนการ QA
+          </div>
+        </div>
+      </div>
+
+      <!-- ── การนำทาง ── -->
+      <div class="hm-section">🧭 การนำทางในระบบ</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">9</span>
+          <div class="hm-step-text">
+            ใช้ <b>Sidebar ด้านซ้าย</b> เพื่อสลับระหว่างส่วนต่าง ๆ ของระบบ Admin ได้ตลอดเวลา โดยไม่ต้องกลับหน้าหลัก
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">10</span>
+          <div class="hm-step-text">
+            ช่อง <b>ค้นหา</b> มุมขวาบนใช้สำหรับค้นหาข้อมูลภายในหน้า
+            <span class="hm-badge hm-badge-amber">ฟีเจอร์อยู่ระหว่างพัฒนา</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- หมายเหตุ -->
+      <div class="hm-note">
+        <b>💡 เคล็ดลับ:</b> หากต้องการเริ่มต้นจากศูนย์ ให้ไปที่ <b>เพิ่มข้อมูลใหม่</b> ก่อนเสมอ จากนั้นค่อยตรวจสอบผลลัพธ์ผ่านหน้า KAS หรือ Sankey เพื่อยืนยันความถูกต้องของข้อมูลที่บันทึกไว้
+      </div>
+
+    </div><!-- /hm-body -->
+
+    <!-- Footer -->
+    <div class="hm-footer">
+      <button class="hm-footer-btn" onclick="closeHelp()">รับทราบ</button>
+    </div>
+
+  </div>
+</div>
+
 <script>
-if (!localStorage.getItem("user")) { window.location.href = "login.html"; }
-document.getElementById("logoutBtn").addEventListener("click", e => {
-  e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html";
-});
+  function openHelp()  { 
+    const el = document.getElementById('helpOverlay');
+    el.style.display = 'flex'; 
+  }
+  function closeHelp() { 
+    document.getElementById('helpOverlay').style.display = 'none'; 
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
+
+  // Login guard & logout (เหมือนต้นฉบับ)
+  if (!localStorage.getItem("user")) { window.location.href = "login.html"; }
+  document.getElementById("logoutBtn").addEventListener("click", e => {
+    e.preventDefault(); localStorage.removeItem("user"); window.location.href = "login.html";
+  });
 </script>
 </body>
 </html>

@@ -287,6 +287,13 @@ tbody tr:hover td{background:var(--acc-ll)}
     </button>
   </nav>
   <div class="tn-r">
+    <button onclick="openHelp()" style="
+      width:34px;height:34px;border-radius:50%;border:2px solid #6d28d9;
+      background:#fff;color:#6d28d9;font-size:15px;font-weight:700;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:all .18s;flex-shrink:0;
+    " onmouseover="this.style.background='#ede9fe'" onmouseout="this.style.background='#fff'"
+    title="คู่มือการใช้งาน">?</button>
     <button class="tn-pill" onclick="openExportModal()">
       <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V4h3v4H12zm-6 2h12v1.5H2z"/></svg>
       Export ทั้งหมด
@@ -445,6 +452,159 @@ tbody tr:hover td{background:var(--acc-ll)}
           </div>
         </div>
       </div>
+      <!-- ── HELP MODAL ── -->
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()" style="
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+  z-index:9999;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(3px);
+">
+  <div style="
+    background:#fff;border-radius:18px;width:100%;max-width:580px;
+    max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);
+    font-family:'Sarabun',sans-serif;
+  ">
+    <!-- Header -->
+    <div style="
+      padding:20px 24px 16px;border-bottom:1px solid #e2daf0;
+      display:flex;justify-content:space-between;align-items:center;
+      position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;
+    ">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="
+          width:36px;height:36px;border-radius:10px;background:#ede9fe;
+          color:#6d28d9;display:flex;align-items:center;justify-content:center;font-size:16px;
+        ">📊</div>
+        <div>
+          <div style="font-family:'Anuphan',sans-serif;font-size:16px;font-weight:700;color:#180e30;">คู่มือการใช้งาน</div>
+          <div style="font-size:11.5px;color:#9585b8;">Student Data Hub · BBA PSU</div>
+        </div>
+      </div>
+      <button onclick="closeHelp()" style="
+        background:none;border:none;font-size:20px;cursor:pointer;
+        color:#9585b8;padding:4px 8px;border-radius:6px;line-height:1;
+      ">×</button>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:24px;">
+
+      <!-- Overview -->
+      <div style="background:#ede9fe;border-radius:10px;padding:14px 16px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:18px;flex-shrink:0;">💡</span>
+        <div style="font-size:13px;color:#4c1d95;line-height:1.7;">
+          หน้านี้แบ่งเป็น <b>3 มุมมอง</b> — <b>จำนวนนักศึกษา, สหกิจ/ฝึกงาน</b> และ <b>Looker Studio</b> เลือกจาก Topbar หรือ Sidebar ด้านซ้าย
+        </div>
+      </div>
+
+      <!-- Section 1 -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e2daf0;margin-bottom:12px;">
+          🎓 จำนวนนักศึกษา
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;"><b>นำเข้าจาก Excel</b> — ลากหรือเลือกไฟล์ .xlsx ที่มี Sheet: <code style="background:#ede9fe;padding:1px 6px;border-radius:4px;font-size:11px;color:#6d28d9;">Intake</code> · <code style="background:#ede9fe;padding:1px 6px;border-radius:4px;font-size:11px;color:#6d28d9;">Enrolled</code> · <code style="background:#ede9fe;padding:1px 6px;border-radius:4px;font-size:11px;color:#6d28d9;">Graduated</code> · <code style="background:#ede9fe;padding:1px 6px;border-radius:4px;font-size:11px;color:#6d28d9;">Status</code></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;">หรือใช้แท็บ <b>กรอกข้อมูลด้วยตนเอง</b> — มี 3 ส่วนคือ ข้อมูลรับเข้า (Intake), ลงทะเบียน/สำเร็จการศึกษา และสถานะการศึกษา</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;">กดปุ่ม <b>Template Excel</b> เพื่อดาวน์โหลดไฟล์ต้นแบบที่มีโครงสร้างถูกต้องพร้อมตัวอย่างข้อมูล</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">4</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;">กดปุ่ม <b>Preview Dashboard</b> เพื่อดูกราฟสรุปสถิติ — เลือกปีการศึกษาจาก Dropdown ในหน้า Preview</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e2daf0;margin-bottom:12px;">
+          🏢 สหกิจ (4 เดือน) และ 📋 ฝึกงาน (2 เดือน)
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">5</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;"><b>สหกิจ</b> และ <b>ฝึกงาน</b> เป็นระบบแยกอิสระ — มีตาราง, กราฟ และ Template Excel แยกกัน เลือกจาก Sidebar ด้านซ้าย</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">6</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;">สามารถกรอก <b>Top 5 สถานประกอบการ</b> และ <b>MOU พาร์ทเนอร์</b> ได้ในแท็บกรอกข้อมูลด้วยตนเอง — จะแสดงในหน้า Preview</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">7</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;">ตารางด้านล่างแสดง <b>6 รายการแรก</b> — กด <b>"ดูเพิ่มเติม"</b> เพื่อดูทั้งหมด และกด <b>ลบ</b> ที่ท้ายแถวเพื่อลบรายการนั้น</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3 -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e2daf0;margin-bottom:12px;">
+          🟢 การเผยแพร่ Dashboard
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">8</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;">ใช้ <b>Toggle เผยแพร่</b> ในแถบสีเขียวด้านบน เพื่อเปิดให้หน้า <b>bba-students.html</b> แสดงข้อมูลสู่สาธารณะ — ระบบจะบันทึกข้อมูลไปยัง server ก่อนเผยแพร่อัตโนมัติ</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">9</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;">กด <b>ดูหน้า Dashboard สาธารณะ</b> เพื่อเปิดหน้า bba-students.html ในแท็บใหม่ และตรวจสอบว่าข้อมูลแสดงถูกต้อง</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4 -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e2daf0;margin-bottom:12px;">
+          📤 Export และ Looker Studio
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">10</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;">กดปุ่ม <b>Export ทั้งหมด</b> มุมขวาบน เพื่อดาวน์โหลดเป็น Excel, CSV หรือ JSON ครอบคลุมข้อมูลทุกส่วน</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">11</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;">ในหน้า <b>Looker Studio</b> — วาง Embed URL จาก Looker Studio แล้วกด <b>Load Report</b> เพื่อฝัง Dashboard BI ในหน้านี้โดยตรง บันทึก URL ได้หลายรายการ</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#FEE2E2;color:#EF4444;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">!</span>
+            <div style="font-size:13.5px;color:#180e30;line-height:1.6;"><b style="color:#dc2626;">Import จะเขียนทับข้อมูลเดิม</b> ของประเภทนั้น — ดาวน์โหลด Template ก่อนเพื่อดูโครงสร้างที่ถูกต้อง</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div style="background:#ede9fe;border-left:3px solid #6d28d9;border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:#4c1d95;line-height:1.6;">
+        <b>💡 เคล็ดลับ:</b> ข้อมูลถูกบันทึกใน <b>localStorage</b> และ <b>server</b> อัตโนมัติทุกครั้งที่กดบันทึก — เมื่อเปิดหน้าใหม่ระบบจะ sync ข้อมูลจาก server ให้อัตโนมัติ
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- Footer -->
+    <div style="
+      padding:14px 24px;border-top:1px solid #e2daf0;
+      display:flex;justify-content:flex-end;
+      position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;
+    ">
+      <button onclick="closeHelp()" style="
+        padding:9px 24px;border-radius:9px;border:none;
+        background:#6d28d9;color:#fff;font-size:13px;font-weight:700;
+        font-family:inherit;cursor:pointer;
+        box-shadow:0 4px 12px rgba(109,40,217,.28);transition:all .18s;
+      " onmouseover="this.style.background='#5b21b6'" onmouseout="this.style.background='#6d28d9'">
+        รับทราบ
+      </button>
+    </div>
+
+  </div>
+</div>
       <div class="card">
         <div class="card-hd">
           <div class="card-num">📋</div>
@@ -1189,6 +1349,9 @@ function _renderShowMore(wrapperId,total,shown,showAll,toggleFn){
 function toggleIntake(v){_intakeShowAll=v;renderIntakeTable();}
 function toggleCoop(v){_coopShowAll=v;renderCoopOnlyTable();}
 function toggleIntern(v){_internShowAll=v;renderInternOnlyTable();}
+function openHelp(){document.getElementById('helpOverlay').style.display='flex';}
+function closeHelp(){document.getElementById('helpOverlay').style.display='none';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelp();});
 
 /* ════════════ TABLES ════════════ */
 function renderYrFilterDropdown(){

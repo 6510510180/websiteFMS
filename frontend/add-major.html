@@ -178,9 +178,170 @@
 <div class="main">
   <div class="page-header">
     <small>แดชบอร์ด / จัดการหลักสูตร / ข้อมูลทั่วไป</small>
-    <h2>วิชาเอกวิชา</h2>
+    <div style="display:flex;align-items:center;gap:10px;margin:4px 0;">
+      <h2 style="margin:0;">วิชาเอก</h2>
+      <button onclick="openHelp()" style="
+        width:32px;height:32px;border-radius:50%;border:2px solid #6B3FA0;
+        background:#fff;color:#6B3FA0;font-size:15px;font-weight:700;
+        cursor:pointer;display:flex;align-items:center;justify-content:center;
+        transition:all .18s;flex-shrink:0;
+      " onmouseover="this.style.background='#F3EEFF'" onmouseout="this.style.background='#fff'"
+      title="คู่มือการใช้งาน">?</button>
+    </div>
     <p>จัดการ เพิ่ม ลบ และแก้ไขข้อมูลรายวิชาในคณะบริหารธุรกิจ</p>
   </div>
+  <!-- ── HELP MODAL ── -->
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()" style="
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+  z-index:500;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(3px);
+">
+  <div style="
+    background:#fff;border-radius:18px;width:100%;max-width:560px;
+    max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);
+    font-family:'Noto Sans Thai',sans-serif;
+  ">
+    <!-- Header -->
+    <div style="
+      padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;
+      display:flex;justify-content:space-between;align-items:center;
+      position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;
+    ">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="
+          width:36px;height:36px;border-radius:10px;background:#F3EEFF;
+          color:#6B3FA0;display:flex;align-items:center;justify-content:center;font-size:16px;
+        ">🎓</div>
+        <div>
+          <div style="font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:#181117;">คู่มือการใช้งาน</div>
+          <div style="font-size:11.5px;color:#64748B;">หน้าเพิ่ม / แก้ไขวิชาเอก</div>
+        </div>
+      </div>
+      <button onclick="closeHelp()" style="
+        background:none;border:none;font-size:20px;cursor:pointer;
+        color:#64748B;padding:4px 8px;border-radius:6px;line-height:1;
+      ">×</button>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:24px;">
+
+      <!-- Section 1 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">📋 ข้อมูลวิชาเอก</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กรอก <b>ชื่อวิชาเอก (ภาษาไทย และอังกฤษ)</b> — ชื่อจะแสดงในการ์ดบนหน้าหลักสูตร และ Live Preview ด้านขวาจะอัปเดตอัตโนมัติ</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กรอก <b>แนะนำวิชาเอก</b> — อธิบายจุดเด่น รายวิชาสำคัญ และกลุ่มเป้าหมายของวิชาเอก</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กรอก <b>แนวทางการประกอบอาชีพ</b> — ระบุอาชีพที่เกี่ยวข้องหลังสำเร็จการศึกษา</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">🖼️ รูปภาพวิชาเอก</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">4</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">
+              <b>ภาพหลัก (Hero)</b> — แสดงในส่วน Hero ของหน้าข้อมูลวิชาเอก
+              <span style="display:inline-block;padding:1px 8px;border-radius:99px;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;margin-left:4px;">แนะนำ 800×500px</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">5</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">
+              <b>ภาพการ์ดวิชาเอก</b> — แสดงเป็น thumbnail ในการ์ดบนหน้าหลักสูตร
+              <span style="display:inline-block;padding:1px 8px;border-radius:99px;background:#fef9c3;color:#854d0e;font-size:11px;font-weight:700;margin-left:4px;">แนะนำ 400×300px</span>
+              <div style="font-size:12.5px;color:#64748B;margin-top:4px;">หลังอัปโหลดจะเห็น <b>ตัวอย่างการ์ด</b> แบบ Live Preview ใต้ช่องอัปโหลด</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">6</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <b>✕</b> มุมขวาบนของรูปเพื่อลบและเปลี่ยนรูปใหม่</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">📅 โครงสร้างแผนการศึกษา</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">7</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">มี <b>4 ช่อง</b> สำหรับกรอกแผนการศึกษา — ใช้แบ่งเป็น <b>ปีที่ 1–4</b> หรือจัดเป็น <b>กลุ่มหมวดวิชา</b> ตามต้องการ</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">8</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">ไม่จำเป็นต้องกรอกครบทั้ง 4 ช่อง — ช่องที่เว้นว่างไว้จะไม่แสดงในหน้านักศึกษา</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">💾 การบันทึก</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">9</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <b>Finish</b> เพื่อบันทึกวิชาเอกและกลับไปหน้ารายละเอียดหลักสูตร — หากอยู่ในโหมดแก้ไขปุ่มจะเปลี่ยนเป็น <b>Update</b></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div style="
+        background:#F3EEFF;border-left:3px solid #6B3FA0;
+        border-radius:0 8px 8px 0;padding:12px 14px;
+        font-size:12.5px;color:#4A2870;line-height:1.6;
+      ">
+        <b>💡 เคล็ดลับ:</b> กรอกทั้ง <b>ชื่อไทยและอังกฤษ</b> เพื่อให้การ์ดวิชาเอกในหน้านักศึกษาแสดงผลครบถ้วนสวยงาม
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- Footer -->
+    <div style="
+      padding:14px 24px;border-top:1px solid #EDE8F5;
+      display:flex;justify-content:flex-end;
+      position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;
+    ">
+      <button onclick="closeHelp()" style="
+        padding:9px 24px;border-radius:9px;border:none;
+        background:#6B3FA0;color:#fff;font-size:13px;font-weight:700;
+        font-family:inherit;cursor:pointer;
+        box-shadow:0 4px 12px rgba(107,63,160,.28);transition:all .18s;
+      " onmouseover="this.style.background='#4A2870'" onmouseout="this.style.background='#6B3FA0'">
+        รับทราบ
+      </button>
+    </div>
+
+  </div>
+</div>
 
   <form id="majorForm">
     <div class="card">
@@ -508,6 +669,9 @@ form.addEventListener("submit", async (e) => {
     window.location.href = `course-info.html?courseId=${courseId}`;
   } catch { msg.textContent = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้"; }
 });
+function openHelp(){document.getElementById('helpOverlay').style.display='flex';}
+function closeHelp(){document.getElementById('helpOverlay').style.display='none';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelp();});
 </script>
 </body>
 </html>

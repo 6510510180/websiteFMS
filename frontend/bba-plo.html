@@ -14,16 +14,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;font-size:14px;}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:58px;background:var(--wh);box-shadow:0 1px 0 var(--bd);position:sticky;top:0;z-index:1000;}
-.navbar .logo img{height:38px;}
-nav{flex:1;display:flex;justify-content:center;}
-.nav-links{list-style:none;display:flex;gap:32px;align-items:center;}
-.nav-links a{font-size:14px;text-decoration:none;color:#555;font-weight:500;transition:color .2s;}
-.nav-links a:hover,.nav-links a.active{color:var(--pu);font-weight:700;}
-.search-container{display:flex;justify-content:flex-end;}
-.search-box{display:flex;align-items:center;background:#F1F5F9;padding:7px 14px;border-radius:10px;width:240px;gap:8px;}
-.search-box input{border:none;background:none;outline:none;font-family:inherit;font-size:13px;width:100%;}
-.search-box i{color:#94A3B8;font-size:13px;}
+
 .main-content{padding:36px 0;min-height:100vh;}
 .container{width:92%;max-width:1380px;margin:0 auto;}
 h1.page-title{font-size:28px;font-weight:800;color:var(--tx);line-height:1.25;margin-bottom:4px;}
@@ -72,24 +63,6 @@ h1.page-title{font-size:28px;font-weight:800;color:var(--tx);line-height:1.25;ma
 </head>
 <body>
 
-<header class="navbar">
-  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
-  <nav>
-    <ul class="nav-links">
-      <li><a href="bba-qa.html">หน้าหลัก</a></li>
-      <li><a href="bba-plo.html"class="active">ผลลัพธ์การเรียนรู้</a></li>
-      <li><a href="bba-stake.html">ผู้มีส่วนร่วมในหลักสูตร</a></li>
-      <li><a href="bba-students.html">ข้อมูลนักศึกษา</a></li>
-      <li><a href="achievements.html">ผลงานและความสำเร็จ</a></li>
-    </ul>
-  </nav>
-  <div class="search-container">
-    <div class="search-box">
-      <i class="fas fa-search"></i>
-      <input type="text" placeholder="ค้นหาข้อมูลหลักสูตร">
-    </div>
-  </div>
-</header>
 
 <main class="main-content">
   <div class="container">
@@ -308,5 +281,6 @@ function esc(s) {
 
 loadData();
 </script>
+<script src="navbar.js"></script>
 </body>
 </html>

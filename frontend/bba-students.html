@@ -153,26 +153,6 @@ footer{position:relative;z-index:1;padding:18px 5%;border-top:1px solid var(--bo
 </style>
 </head>
 <body>
-
- <header class="navbar">
-  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px;"></div>
-  <nav>
-            <ul>
-                 <li><a href="bba-qa.html">หน้าหลัก</a></li>
-      <li><a href="bba-plo.html">ผลลัพธ์การเรียนรู้</a></li>
-      <li><a href="bba-stake.html">ผู้มีส่วนร่วมในหลักสูตร</a></li>
-      <li><a href="bba-students.html"class="active">ข้อมูลนักศึกษา</a></li>
-      <li><a href="achievements.html">ผลงานและความสำเร็จ</a></li>
-            </ul>
-        </nav>
-        <div class="nav-right">
-            <i class="fa-solid fa-magnifying-glass" onclick="openSearch()"
-               style="cursor:pointer; font-size:16px; color:#555; transition:0.2s;"
-               onmouseover="this.style.color='#9b51e0'"
-               onmouseout="this.style.color='#555'"></i>
-        </div>
-    </header>
-
 <div id="s-loading" class="state-wrap">
   <div class="spin"></div>
   <p style="color:var(--muted);font-size:13px;margin-top:12px">กำลังโหลดข้อมูล...</p>
@@ -221,7 +201,7 @@ footer{position:relative;z-index:1;padding:18px 5%;border-top:1px solid var(--bo
   </div>
 
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('intake',this)">📊 Intake รับเข้า</button>
+    <button class="tab-btn active" onclick="switchTab('intake',this)">📊 การรับเข้าศึกษา </button>
     <button class="tab-btn" onclick="switchTab('status',this)">🎓 สถานะนักศึกษา</button>
     <button class="tab-btn" onclick="switchTab('coop',this)">🏢 สหกิจ & ฝึกงาน</button>
   </div>
@@ -840,5 +820,6 @@ tbody tr:nth-child(even){background:#faf8ff;}
 
 loadData();
 </script>
+<script src="navbar.js"></script>
 </body>
 </html>

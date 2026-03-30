@@ -175,9 +175,9 @@ select:focus { outline: none; border-color: var(--accent); }
         </select>
       </div>
       <div class="select-group">
-        <label>สาขาวิชา</label>
+        <label>วิชาเอก</label>
         <select id="selMajor" onchange="onMajorChange()" disabled>
-          <option value="">-- เลือกสาขา --</option>
+          <option value="">-- เลือกวิชาเอก --</option>
         </select>
       </div>
       <div class="select-group">
@@ -196,7 +196,7 @@ select:focus { outline: none; border-color: var(--accent); }
     <div class="empty">
       <div class="empty-icon">📚</div>
       <h3>เลือกแผนการเรียนเพื่อเริ่มต้น</h3>
-      <p style="font-size:13px;margin-top:6px">กด "Seed ข้อมูลทั้งหมด" แล้วเลือก หลักสูตร → สาขา → ประเภทแผน</p>
+      <p style="font-size:13px;margin-top:6px">กด "Seed ข้อมูลทั้งหมด" แล้วเลือก หลักสูตร → วิชาเอก → ประเภทแผน</p>
     </div>
   </div>
 </div>
@@ -367,7 +367,7 @@ function onCurrChange(){
   const pt = document.getElementById('selPlanType');
   maj.disabled = !curr;
   pt.disabled = !curr;
-  maj.innerHTML = '<option value="">-- เลือกสาขา --</option>';
+  maj.innerHTML = '<option value="">-- เลือกวิชาเอก --</option>';
   const list = curr==='2563' ? MAJORS_2563 : MAJORS_2567;
   list.forEach(m => maj.innerHTML += `<option value="${m.key}">${m.label}</option>`);
   renderPlan();

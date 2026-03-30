@@ -199,7 +199,7 @@
   <nav>
     <ul class="nav-links">
       <li><a href="bba-home.html">หน้าหลัก</a></li>
-      <li><a href="bba-public.html" class="active">ข้อมูลสาขา</a></li>
+      <li><a href="bba-public.html" class="active">ข้อมูลวิชาเอก</a></li>
       <li><a href="student.html">นักศึกษา</a></li>
       <li><a href="plans.html">แผนการศึกษา</a></li>
       <li><a href="bba-qa.html">QA</a></li>
@@ -348,7 +348,7 @@
       const major     = majors.find(m => String(m.id) === String(majorId));
 
       if (!major) {
-        msgEl.textContent = `ไม่พบข้อมูลสาขา (majorId = ${majorId})`;
+        msgEl.textContent = `ไม่พบข้อมูลวิชาเอก (majorId = ${majorId})`;
         return;
       }
       document.querySelector('a[href="plans.html"]')

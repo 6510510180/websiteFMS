@@ -175,6 +175,23 @@
 .subj-accordion-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(0.4,0,0.2,1);background:#fff;border-radius:0 0 20px 20px;border:1.5px solid rgba(124,58,237,.2);border-top:none;}
 .subj-accordion.open .subj-accordion-body{max-height:9999px;}
 .subj-accordion-inner{padding:40px 26px 48px;}
+.search-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); align-items: flex-start; justify-content: center; padding-top: 80px; }
+        .search-overlay.open { display: flex; }
+        .search-modal { background: #fff; border-radius: 16px; width: 90%; max-width: 600px; box-shadow: 0 20px 60px rgba(155,81,224,0.2); overflow: hidden; }
+        .search-input-wrap { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid #eee; }
+        .search-input-wrap i { color: #9b51e0; font-size: 16px; }
+        .search-input-wrap input { flex: 1; border: none; outline: none; font-size: 16px; font-family: 'Sarabun', sans-serif; color: #333; }
+        .search-close { background: none; border: none; cursor: pointer; font-size: 18px; color: #aaa; padding: 4px; }
+        .search-close:hover { color: #333; }
+        .search-results { max-height: 400px; overflow-y: auto; }
+        .search-empty { padding: 40px; text-align: center; color: #aaa; font-size: 14px; }
+        .search-section-label { padding: 10px 20px 6px; font-size: 11px; font-weight: bold; color: #9b51e0; text-transform: uppercase; letter-spacing: 0.5px; background: #faf5ff; }
+        .search-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #f5f5f5; text-decoration: none; color: #333; transition: 0.15s; cursor: pointer; }
+        .search-item:hover { background: #f8f0ff; }
+        .search-item-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+        .search-item-title { font-size: 14px; font-weight: 600; color: #333; }
+        .search-item-sub { font-size: 12px; color: #888; margin-top: 2px; }
+        .search-highlight { color: #9b51e0; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -198,7 +215,7 @@
     </li>
     <li><a href="bba-qa.html" id="nav-qa">QA</a></li>
   </ul></nav>
-  <div class="nav-right"><i class="fa-solid fa-magnifying-glass"></i></div>
+  <div class="nav-right"><i class="fa-solid fa-magnifying-glass" onclick="openSearch()"></i></div>
 </header>
 
 <section class="hero">
@@ -349,6 +366,20 @@
   </div>
   <div class="footer-bottom"><span>© 2026 มหาวิทยาลัยสงขลานครินทร์. All rights reserved.</span><div><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div></div>
 </footer>
+<!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay" onclick="closeSearch(event)">
+        <div class="search-modal">
+            <div class="search-input-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="ค้นหาหลักสูตร วิชาเอก หรือแผนการศึกษา..."
+                       oninput="onSearch(this.value)" autocomplete="off" />
+                <button class="search-close" onclick="closeSearchModal()">✕</button>
+            </div>
+            <div class="search-results" id="searchResults">
+                <div class="search-empty">พิมพ์เพื่อค้นหา...</div>
+            </div>
+        </div>
+    </div>
 
 <script>
 const BASE='', API=BASE+'/api';
@@ -506,6 +537,106 @@ function buildMinorCTA(majorId){
     <div class="minor-preview-list">${others}</div>
   </div>`;
 }
+let searchData = { courses: [], majors: [] };
+
+async function loadSearchData() {
+    try {
+        const cRes = await fetch(`${API}/public/courses`);
+        const courses = await cRes.json();
+        searchData.courses = courses || [];
+        const majorArrays = await Promise.all(
+            courses.map(c =>
+                fetch(`${API}/public/courses/${c.id}/majors`)
+                    .then(r => r.json())
+                    .then(majors => majors.map(m => ({ ...m, courseName: c.name_th, courseId: c.id })))
+                    .catch(() => [])
+            )
+        );
+        searchData.majors = majorArrays.flat();
+    } catch(e) {
+        console.warn('loadSearchData error:', e);
+    }
+}
+
+function openSearch() {
+    document.getElementById('searchOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('searchInput').focus(), 100);
+    if (!searchData.courses.length) loadSearchData();
+}
+
+function closeSearchModal() {
+    document.getElementById('searchOverlay').classList.remove('open');
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchResults').innerHTML = '<div class="search-empty">พิมพ์เพื่อค้นหา...</div>';
+}
+
+function closeSearch(e) {
+    if (e.target === document.getElementById('searchOverlay')) closeSearchModal();
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSearchModal();
+});
+
+function highlight(text, query) {
+    if (!query) return text;
+    const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(re, '<span class="search-highlight">$1</span>');
+}
+
+function onSearch(q) {
+    const results = document.getElementById('searchResults');
+    q = q.trim();
+    if (!q) { results.innerHTML = '<div class="search-empty">พิมพ์เพื่อค้นหา...</div>'; return; }
+    const ql = q.toLowerCase();
+    let html = '';
+
+    const matchCourses = searchData.courses.filter(c =>
+        (c.name_th || '').toLowerCase().includes(ql) || (c.name_en || '').toLowerCase().includes(ql)
+    );
+    if (matchCourses.length) {
+        html += `<div class="search-section-label">หลักสูตร</div>`;
+        html += matchCourses.map(c => `
+            <a class="search-item" href="bba-public.html?courseId=${c.id}">
+                <div class="search-item-icon" style="background:#f3e8ff;">🎓</div>
+                <div>
+                    <div class="search-item-title">${highlight(c.name_th || '', q)}</div>
+                    <div class="search-item-sub">${c.degree_level || 'หลักสูตร'}</div>
+                </div>
+            </a>`).join('');
+    }
+
+    const matchMajors = searchData.majors.filter(m =>
+        (m.name_th || '').toLowerCase().includes(ql) || (m.name_en || '').toLowerCase().includes(ql)
+    );
+    if (matchMajors.length) {
+        html += `<div class="search-section-label">วิชาเอก</div>`;
+        html += matchMajors.map(m => `
+            <a class="search-item" href="bba-public.html?courseId=${m.courseId}&majorId=${m.id}">
+                <div class="search-item-icon" style="background:#e0f2fe;">📚</div>
+                <div>
+                    <div class="search-item-title">${highlight(m.name_th || '', q)}</div>
+                    <div class="search-item-sub">${m.courseName || ''}</div>
+                </div>
+            </a>`).join('');
+    }
+
+    const planKeywords = ['แผน', 'plan', 'semester', 'ภาคเรียน', 'ปีการศึกษา'];
+    const isPlanSearch = planKeywords.some(k => ql.includes(k));
+    if (isPlanSearch && searchData.courses.length) {
+        html += `<div class="search-section-label">แผนการศึกษา</div>`;
+        html += searchData.courses.slice(0, 3).map(c => `
+            <a class="search-item" href="plans.html?courseId=${c.id}">
+                <div class="search-item-icon" style="background:#ecfdf5;">📅</div>
+                <div>
+                    <div class="search-item-title">แผนการศึกษา — ${highlight(c.name_th || '', q)}</div>
+                    <div class="search-item-sub">ดูตารางแผนการศึกษา</div>
+                </div>
+            </a>`).join('');
+    }
+
+    results.innerHTML = html || `<div class="search-empty">ไม่พบผลลัพธ์สำหรับ "${q}"</div>`;
+}
 
 async function renderPanel(majorId){
   const data=await loadSubjectsForMajor(majorId);
@@ -548,8 +679,15 @@ async function buildPlanDropdown(){
   try{
     const r=await fetch(`${API}/courses`); if(!r.ok) throw 0;
     const j=await r.json(); const cs=j.data||j;
-    menu.innerHTML=cs.map(c=>`<a class="dropdown-item" href="plans.html?courseId=${c.id}">${c.name_th||'หลักสูตร '+c.id}</a>`).join('');
-  }catch{menu.innerHTML=`<div style="padding:12px 16px;font-size:12px;color:#aaa;">ไม่สามารถโหลดข้อมูลได้</div>`;}
+    menu.innerHTML=cs.map(c=>
+      `<a class="dropdown-item${String(c.id)===String(courseId)?' active':''}" 
+          href="plans.html?courseId=${c.id}">
+        ${c.name_th||'หลักสูตร '+c.id}
+      </a>`
+    ).join('');
+  }catch{
+    menu.innerHTML=`<div style="padding:12px 16px;font-size:12px;color:#aaa;">ไม่สามารถโหลดข้อมูลได้</div>`;
+  }
 }
 
 function injectNavLinks(cid){
@@ -589,7 +727,7 @@ async function init(){
   }
   await loadCourseSelector();
   injectNavLinks(courseId);
-  buildPlanDropdown();
+  await buildPlanDropdown();
   loadCourseData(); // อัปเดตทั้ง hero + ปีใน header
 
   try{

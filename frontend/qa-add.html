@@ -49,7 +49,44 @@ body { font-family: 'Noto Sans Thai', 'Lexend', sans-serif; background: var(--bg
 .sidebar-footer { padding: 12px; border-top: 1px solid var(--border); flex-shrink: 0; }
 .sidebar-footer .nav-item { color: var(--red); }
 .sidebar-footer .nav-item:hover { background: var(--red-bg); color: #DC2626; }
-
+.search-wrap { position: relative; }
+#adminDropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 340px;
+  background: #fff;
+  border: 1.5px solid #EDE8F5;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(107,63,160,.14);
+  z-index: 9999;
+  overflow: hidden;
+}
+#adminDropdown.open { display: block; animation: fadeUp .15s ease; }
+.adrop-header {
+  padding: 9px 14px;
+  font-size: 10px; font-weight: 700;
+  color: #9d8ec4; letter-spacing: .8px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #f3eeff;
+}
+.adrop-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; text-decoration: none;
+  transition: background .12s;
+}
+.adrop-item:hover, .adrop-item.focused { background: #f3eeff; }
+.adrop-icon {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: #ede7f3;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.adrop-icon svg { width: 14px; height: 14px; fill: #6B3FA0; }
+.adrop-label { font-size: 13px; font-weight: 600; color: #181117; }
+.adrop-label mark { background: rgba(107,63,160,.15); color: #6B3FA0; border-radius: 3px; padding: 0 2px; }
+.adrop-section { font-size: 11px; color: #9d8ec4; margin-top: 1px; }
+.adrop-empty { padding: 24px; text-align: center; font-size: 13px; color: #b0a0c8; }
 /* ── TOPBAR ── */
 .topbar { position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: var(--topbar-h); background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; z-index: 90; }
 .topbar-left { display: flex; flex-direction: column; }
@@ -240,6 +277,7 @@ svg { display: block; }
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
       ประกันคุณภาพการศึกษา
     </a>
+  
  
   </nav>
  
@@ -259,15 +297,16 @@ svg { display: block; }
     </div>
   </div>
   <div class="topbar-right">
-    <div class="search-wrap">
-      <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg>
-      <input type="text" placeholder="ค้นหาข้อมูล..." />
-    </div>
-    <div class="avatar-wrap">
-      <div class="avatar-name">Administrator</div>
-      <div class="avatar-circle">A</div>
-    </div>
-  </div>
+  <div class="search-wrap">
+  <svg width="15" height="15" viewBox="0 0 20 20" fill="none" 
+    stroke="currentColor" stroke-width="2">
+    <circle cx="8.5" cy="8.5" r="5.5"/>
+    <path d="M15 15l-3.5-3.5"/>
+  </svg>
+  <input type="text" id="adminSearch" placeholder="ค้นหาข้อมูล..." autocomplete="off"/>
+  <div id="adminDropdown"></div>
+</div>
+ </div>
 </header>
 
 <!-- MAIN -->
@@ -542,9 +581,75 @@ document.getElementById("modeSwitchBtn").addEventListener("click", () => {
   history.replaceState(null, "", newUrl);
   applyMode();
 });
+// ── Admin Search (ใช้ SEARCH_INDEX จาก navbar.js) ──
+(function() {
+  const input = document.getElementById('adminSearch');
+  const drop  = document.getElementById('adminDropdown');
+  if (!input || !drop) return;
 
+  // รอ navbar.js โหลด SEARCH_INDEX ก่อน
+  function getIndex() {
+    return (typeof SEARCH_INDEX !== 'undefined') ? SEARCH_INDEX : [];
+  }
+
+  let focusIdx = -1;
+
+  function highlight(text, q) {
+    if (!q) return text;
+    const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+    return text.replace(re, '<mark>$1</mark>');
+  }
+
+  function render(q) {
+    const results = getIndex().filter(item =>
+      item.label.toLowerCase().includes(q) ||
+      item.section.toLowerCase().includes(q) ||
+      item.keywords.some(k => k.toLowerCase().includes(q))
+    ).slice(0, 8);
+
+    focusIdx = -1;
+
+    if (!results.length) {
+      drop.innerHTML = `<div class="adrop-empty">ไม่พบ "<strong>${q}</strong>"</div>`;
+    } else {
+      drop.innerHTML = `<div class="adrop-header">พบ ${results.length} ผลลัพธ์</div>` +
+        results.map((r, i) => `
+          <a class="adrop-item" href="${r.url}" data-idx="${i}">
+            <div class="adrop-icon">
+              <svg viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div>
+              <div class="adrop-label">${highlight(r.label, q)}</div>
+              <div class="adrop-section">${r.section}</div>
+            </div>
+          </a>`).join('');
+    }
+    drop.classList.add('open');
+  }
+
+  input.addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) { drop.classList.remove('open'); return; }
+    render(q);
+  });
+
+  input.addEventListener('keydown', e => {
+    const items = drop.querySelectorAll('.adrop-item');
+    if (e.key === 'ArrowDown') { e.preventDefault(); focusIdx = Math.min(focusIdx+1, items.length-1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); focusIdx = Math.max(focusIdx-1, -1); }
+    else if (e.key === 'Enter' && focusIdx >= 0) { items[focusIdx]?.click(); return; }
+    else if (e.key === 'Escape') { drop.classList.remove('open'); input.blur(); return; }
+    items.forEach((el, i) => el.classList.toggle('focused', i === focusIdx));
+  });
+
+  document.addEventListener('click', e => {
+    if (!input.closest('.search-wrap').contains(e.target)) drop.classList.remove('open');
+  });
+})();
 // เริ่มต้น
 applyMode();
-</script>
+</script> 
 </body>
 </html>

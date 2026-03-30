@@ -23,18 +23,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse 55% 35% at 8% 8%,rgba(139,92,246,.08) 0%,transparent 60%),
              radial-gradient(ellipse 45% 30% at 92% 85%,rgba(99,102,241,.06) 0%,transparent 60%)}
 
-/* NAV */
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:60px;
-  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(229,231,235,.8);position:sticky;top:0;z-index:300;
-  box-shadow:0 2px 5px rgba(0,0,0,.05)}
-.navbar .logo img{height:40px}
-.navbar ul{display:flex;gap:20px;margin:0;padding:0;list-style:none;align-items:center}
-.navbar a{font-size:14px;color:#555;text-decoration:none;transition:.3s}
-.navbar a:hover{color:var(--purple)}
-.navbar a.active{color:var(--purple);font-weight:bold}
-
-/* PDF BUTTON */
 .btn-pdf{display:inline-flex;align-items:center;gap:7px;
   background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;
   border:none;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;
@@ -43,7 +31,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .btn-pdf:hover{background:linear-gradient(135deg,#b91c1c,#991b1b);
   transform:translateY(-1px);box-shadow:0 6px 18px rgba(220,38,38,.38)}
 
-/* HERO */
 .hero{position:relative;z-index:1;padding:52px 5% 32px;border-bottom:1px solid var(--border);
   background:linear-gradient(135deg,#faf8ff 0%,#f0ebff 100%)}
 .hero-inner{max-width:1280px;margin:0 auto;display:flex;align-items:flex-start;
@@ -66,7 +53,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .hk-lbl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
 .hk-badge{margin-top:5px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:99px;display:inline-block}
 
-/* FILTER */
 .filter-bar{position:relative;z-index:1;padding:14px 5%;background:var(--bg2);border-bottom:1px solid var(--border)}
 .filter-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .filter-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
@@ -80,14 +66,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   color:var(--text2);outline:none;cursor:pointer;transition:border-color .15s}
 .fsel:focus{border-color:var(--acc2)}
 
-/* MAIN */
 .main{position:relative;z-index:1;padding:24px 5% 64px;max-width:1280px;margin:0 auto}
 .sec-title{font-family:'Anuphan',sans-serif;font-size:18px;font-weight:800;color:var(--text);
   margin:24px 0 14px;display:flex;align-items:center;gap:10px}
 .sec-title::before{content:'';width:4px;height:18px;border-radius:2px;
   background:linear-gradient(135deg,var(--acc),var(--teal))}
 
-/* CARDS */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
 @media(max-width:900px){.grid2{grid-template-columns:1fr}}
 .cbox{background:#fff;border:1.5px solid var(--border);border-radius:16px;
@@ -103,70 +87,35 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .cb-tag.g{background:rgba(5,150,105,.10);color:var(--green)}
 .cb-tag.o{background:rgba(217,119,6,.10);color:var(--orange)}
 
-/* ── BAR CHART (clean rewrite) ── */
 .bar-chart-outer{display:flex;gap:0;width:100%;margin-top:4px}
-.bar-chart-yaxis{
-  display:flex;flex-direction:column;justify-content:space-between;
-  padding-bottom:44px;
-  min-width:38px;padding-right:8px;
-  align-items:flex-end;
-}
-.bar-chart-yaxis span{
-  font-size:10px;color:var(--muted);font-weight:600;
-  font-family:'Anuphan',sans-serif;line-height:1;
-}
+.bar-chart-yaxis{display:flex;flex-direction:column;justify-content:space-between;
+  padding-bottom:44px;min-width:38px;padding-right:8px;align-items:flex-end}
+.bar-chart-yaxis span{font-size:10px;color:var(--muted);font-weight:600;
+  font-family:'Anuphan',sans-serif;line-height:1}
 .bar-chart-right{flex:1;display:flex;flex-direction:column;min-width:0}
-.bar-chart-plot{
-  position:relative;
-  height:160px;
-}
-/* grid lines */
-.bar-gridlines{
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;justify-content:space-between;
-  pointer-events:none;
-}
+.bar-chart-plot{position:relative;height:160px}
+.bar-gridlines{position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:space-between;pointer-events:none}
 .bar-gridline{width:100%;border-top:1px dashed rgba(124,58,237,.13)}
-/* bars row */
-.bar-bars-row{
-  position:absolute;bottom:0;left:0;right:0;
-  display:flex;align-items:flex-end;gap:6px;
-  height:100%;padding:0 2px;
-}
-.bar-col{
-  flex:1;display:flex;flex-direction:column;
-  align-items:center;justify-content:flex-end;
-  height:100%;padding-top:22px;
-}
-.bar-val{
-  font-size:11px;font-weight:800;
-  font-family:'Anuphan',sans-serif;
-  margin-bottom:4px;text-align:center;
-  white-space:nowrap;line-height:1;flex-shrink:0;
-}
-.bar-body{
-  width:100%;border-radius:6px 6px 0 0;
-  cursor:pointer;position:relative;
-  transition:filter .18s;min-height:3px;
-}
+.bar-bars-row{position:absolute;bottom:0;left:0;right:0;display:flex;
+  align-items:flex-end;gap:6px;height:100%;padding:0 2px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-end;height:100%;padding-top:22px}
+.bar-val{font-size:11px;font-weight:800;font-family:'Anuphan',sans-serif;
+  margin-bottom:4px;text-align:center;white-space:nowrap;line-height:1;flex-shrink:0}
+.bar-body{width:100%;border-radius:6px 6px 0 0;cursor:pointer;position:relative;
+  transition:filter .18s;min-height:3px}
 .bar-body:hover{filter:brightness(1.1)}
-.bar-body-inner{
-  position:absolute;bottom:5px;left:0;right:0;
-  text-align:center;font-size:10px;font-weight:800;
-  color:rgba(255,255,255,.92);
-  font-family:'Anuphan',sans-serif;pointer-events:none;
-}
-/* label row */
-.bar-labels-row{
-  display:flex;gap:6px;padding:0 2px;margin-top:6px;
-}
+.bar-body-inner{position:absolute;bottom:5px;left:0;right:0;text-align:center;
+  font-size:10px;font-weight:800;color:rgba(255,255,255,.92);
+  font-family:'Anuphan',sans-serif;pointer-events:none}
+.bar-labels-row{display:flex;gap:6px;padding:0 2px;margin-top:6px}
 .bar-lbl-col{flex:1;text-align:center;min-width:0}
 .bar-lbl-abbr{font-size:11px;font-weight:700;font-family:'Anuphan',sans-serif}
 .bar-lbl-th{font-size:8.5px;color:var(--muted);margin-top:1px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bar-hint{font-size:10px;color:var(--muted);text-align:center;margin-top:8px;font-style:italic}
 
-/* PIE */
 .pie-wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 .pie-leg{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
 .pl{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text2)}
@@ -174,7 +123,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .pl-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pl-val{margin-left:auto;font-weight:700;font-size:11px;color:var(--text);white-space:nowrap}
 
-/* TABLE */
 .tbl-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
 table.tbl{width:100%;border-collapse:collapse;font-size:12.5px;min-width:600px}
 table.tbl thead th{background:rgba(124,58,237,.06);color:var(--text2);
@@ -191,7 +139,6 @@ table.tbl tbody tr.avg-row td{background:rgba(124,58,237,.07);font-weight:700;co
 .pct-low{color:#dc2626;font-weight:700}
 .pct-normal{color:var(--text);font-weight:600}
 
-/* TREND */
 .trend-wrap{overflow-x:auto}
 .trend-inner{display:flex;gap:14px;align-items:flex-end;padding:8px 4px 28px;min-width:500px;position:relative}
 .trend-yr-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
@@ -203,7 +150,6 @@ table.tbl tbody tr.avg-row td{background:rgba(124,58,237,.07);font-weight:700;co
 .tleg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
 .tleg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
 
-/* METRIC PILLS */
 .metric-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
 .mpill{padding:5px 14px;border-radius:99px;border:1.5px solid var(--border);
   background:#fff;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;
@@ -211,7 +157,6 @@ table.tbl tbody tr.avg-row td{background:rgba(124,58,237,.07);font-weight:700;co
 .mpill:hover{border-color:var(--acc2);color:var(--acc)}
 .mpill.active{color:#fff;border-color:transparent}
 
-/* STATES */
 .state-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
   min-height:55vh;text-align:center;padding:40px;position:relative;z-index:1}
 .spin{width:40px;height:40px;border:3px solid rgba(124,58,237,.18);
@@ -220,7 +165,6 @@ table.tbl tbody tr.avg-row td{background:rgba(124,58,237,.07);font-weight:700;co
 .fade-up{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
 .fade-up.in{opacity:1;transform:none}
 
-/* TAB BAR */
 .tab-bar{position:relative;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 5%}
 .tab-bar-inner{max-width:1280px;margin:0 auto;display:flex}
 .tbar-btn{padding:14px 24px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;
@@ -230,7 +174,6 @@ table.tbl tbody tr.avg-row td{background:rgba(124,58,237,.07);font-weight:700;co
 .tbar-btn:hover{color:var(--acc)}
 .tbar-btn.active{color:var(--acc);border-bottom-color:var(--acc);font-weight:700}
 
-/* PDF OVERLAY */
 #pdf-overlay{display:none;position:fixed;inset:0;background:rgba(30,16,64,.6);
   z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:14px;
   backdrop-filter:blur(6px)}
@@ -239,10 +182,9 @@ table.tbl tbody tr.avg-row td{background:rgba(124,58,237,.07);font-weight:700;co
   border-top-color:#fff;border-radius:50%;animation:sp .8s linear infinite}
 .pdf-txt{color:#fff;font-size:14px;font-weight:700;font-family:'Anuphan',sans-serif}
 
-/* PRINT */
 @media print{
   body{background:#fff;padding:0}
-  .navbar,.tab-bar,.filter-bar,.nav-right,.btn-pdf,#pdf-overlay,footer,.metric-pills{display:none!important}
+  .global-topbar,.tab-bar,.filter-bar,.btn-pdf,#pdf-overlay,footer,.metric-pills{display:none!important}
   .hero{padding:20px 20px 16px;background:#f8f7ff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .main{padding:16px 20px 40px}
   .cbox{box-shadow:none;break-inside:avoid;border:1px solid rgba(124,58,237,.25)}
@@ -251,6 +193,9 @@ table.tbl tbody tr.avg-row td{background:rgba(124,58,237,.07);font-weight:700;co
   .fade-up{opacity:1;transform:none}
   #s-loading,#s-error{display:none!important}
   #s-dashboard{display:block!important}
+  .trend-wrap{overflow:visible!important}
+  .trend-inner{min-width:0!important;flex-wrap:wrap!important;gap:10px!important}
+  .trend-yr-group{flex:0 0 auto!important}
 }
 
 footer{position:relative;z-index:1;padding:20px 5%;border-top:1px solid var(--border);
@@ -268,26 +213,11 @@ footer{position:relative;z-index:1;padding:20px 5%;border-top:1px solid var(--bo
   <div class="pdf-txt">กำลังเตรียม PDF...</div>
 </div>
 
-<header class="navbar">
-  <div class="logo"><img src="logo-fms.png" alt="Logo" style="height:40px"></div>
-  <nav>
-    <ul style="display:flex;gap:20px;list-style:none;padding:0;margin:0">
-      <li><a href="bba-qa.html">หน้าหลัก</a></li>
-      <li><a href="bba-plo.html">ผลลัพธ์การเรียนรู้</a></li>
-      <li><a href="bba-stake.html">ผู้มีส่วนร่วมในหลักสูตร</a></li>
-      <li><a href="bba-students.html">ข้อมูลนักศึกษา</a></li>
-      <li><a href="achievements.html" class="active">ผลงานและความสำเร็จ</a></li>
-    </ul>
-  </nav>
-</header>
-
-<!-- LOADING -->
 <div id="s-loading" class="state-wrap" style="display:flex">
   <div class="spin"></div>
   <p style="color:var(--muted);font-size:13px;margin-top:12px">กำลังโหลดข้อมูล...</p>
 </div>
 
-<!-- ERROR -->
 <div id="s-error" class="state-wrap" style="display:none">
   <div style="font-size:48px;margin-bottom:14px;opacity:.6">⚠️</div>
   <div style="font-family:'Anuphan',sans-serif;font-size:22px;font-weight:900;color:var(--text);margin-bottom:8px">โหลดข้อมูลไม่สำเร็จ</div>
@@ -298,7 +228,6 @@ footer{position:relative;z-index:1;padding:20px 5%;border-top:1px solid var(--bo
     ลองใหม่</button>
 </div>
 
-<!-- DASHBOARD -->
 <div id="s-dashboard" style="display:none">
 
   <section class="hero">
@@ -311,7 +240,7 @@ footer{position:relative;z-index:1;padding:20px 5%;border-top:1px solid var(--bo
           Graduate Employment · BBA PSU
         </div>
         <h1 class="hero-title">การได้<span>งานทำ</span><br>ของบัณฑิต</h1>
-        <p class="hero-sub">สถิติอัตราการได้งานทำ อาชีพอิสระ และการทำงานตรงวิชาเอกของบัณฑิต แยกตามวิชาเอกวิชาเอกและปีการศึกษา</p>
+        <p class="hero-sub">สถิติอัตราการได้งานทำ อาชีพอิสระ และการทำงานตรงวิชาเอกของบัณฑิต แยกตามวิชาเอกและปีการศึกษา</p>
       </div>
       <div class="hero-kpis" id="hero-kpis"></div>
     </div>
@@ -354,12 +283,12 @@ const MAJOR_TH = {
   LSM:'โลจิสติกส์', MICE:'การจัดการไมซ์', BIS:'ระบบสารสนเทศ'
 };
 const METRICS = [
-  { key:'rate_employed',  label:'%ทำงาน',       color:'#7c3aed' },
-  { key:'rate_freelance', label:'%อาชีพอิสระ',  color:'#2563eb' },
-  { key:'rate_total',     label:'%ได้งานทำ',    color:'#059669' },
-  { key:'rate_promoted',  label:'%เปลี่ยนงาน',  color:'#d97706' },
-  { key:'rate_on_track',  label:'%ตรงวิชาเอก',     color:'#0d9488' },
-  { key:'rate_study',     label:'%ศึกษาต่อ',    color:'#db2777' },
+  { key:'rate_employed',  label:'%ทำงาน',      color:'#7c3aed' },
+  { key:'rate_freelance', label:'%อาชีพอิสระ', color:'#2563eb' },
+  { key:'rate_total',     label:'%ได้งานทำ',   color:'#059669' },
+  { key:'rate_promoted',  label:'%เปลี่ยนงาน', color:'#d97706' },
+  { key:'rate_on_track',  label:'%ตรงวิชาเอก', color:'#0d9488' },
+  { key:'rate_study',     label:'%ศึกษาต่อ',   color:'#db2777' },
 ];
 const MAJOR_COLORS = ['#7c3aed','#2563eb','#0d9488','#d97706','#059669','#db2777'];
 
@@ -368,7 +297,6 @@ let selYear   = '';
 let selMetric = 'rate_total';
 let allYears  = [];
 
-/* ════ LOAD ════ */
 async function loadData() {
   show('s-loading');
   try {
@@ -401,7 +329,7 @@ async function loadData() {
     if (!allYears.length) throw new Error('ยังไม่มีข้อมูลในระบบ');
 
     selYear = allYears[allYears.length - 1];
-    buildHero();
+    buildHero(selYear);
     buildFilters();
     buildDashboard();
     show('s-dashboard');
@@ -415,11 +343,12 @@ async function loadData() {
   }
 }
 
-/* ════ HERO ════ */
-function buildHero() {
-  const ly  = allYears[allYears.length - 1];
+function buildHero(yr) {
+  const ly = yr || allYears[allYears.length - 1];
   const avg = key => {
-    const vals = MAJORS.map(m => DB[ly]?.[m]?.[key]).filter(v => v != null && v > 0);
+    const vals = MAJORS
+      .map(m => parseFloat(DB[ly]?.[m]?.[key]))
+      .filter(v => !isNaN(v));
     return vals.length ? (vals.reduce((a,b) => a+b, 0) / vals.length).toFixed(1) : '—';
   };
   document.getElementById('hero-kpis').innerHTML = `
@@ -445,7 +374,6 @@ function buildHero() {
     </div>`;
 }
 
-/* ════ FILTERS ════ */
 function buildFilters() {
   document.getElementById('yr-btns').innerHTML = allYears.slice(-5).map(y =>
     `<button class="yr-btn${y===selYear?' active':''}" onclick="setYear('${y}')">${y}</button>`
@@ -454,14 +382,15 @@ function buildFilters() {
     `<option value="${y}"${y===selYear?' selected':''}>${y}</option>`
   ).join('');
 }
+
 function setYear(y) {
   selYear = y;
   document.querySelectorAll('.yr-btn').forEach(b => b.classList.toggle('active', b.textContent === y));
   document.getElementById('yr-sel').value = y;
+  buildHero(y);
   buildDashboard();
 }
 
-/* ════ DASHBOARD ════ */
 function buildDashboard() {
   const yr = selYear;
   document.getElementById('main-content').innerHTML = `
@@ -529,15 +458,6 @@ function buildDashboard() {
       </div>
       <div class="trend-wrap" id="trendWrap"></div>
       <div class="trend-legend" id="trendLeg"></div>
-    </div>
-
-    <div class="sec-title fade-up">แนวโน้มเฉลี่ยทุกตัวชี้วัด</div>
-    <div class="cbox full fade-up">
-      <div class="cb-hd">
-        <div><div class="cb-title">เฉลี่ยทุกวิชาเอก ย้อนหลังทุกปี</div></div>
-        <span class="cb-tag p">Multi-line</span>
-      </div>
-      <div id="metricTrend" style="overflow-x:auto"></div>
     </div>`;
 
   setTimeout(() => {
@@ -545,7 +465,6 @@ function buildDashboard() {
     renderPie(yr);
     renderTable(yr);
     renderTrend();
-    renderMetricTrend();
     observeFade();
   }, 60);
 }
@@ -568,83 +487,52 @@ function setMetric(key) {
   }
 }
 
-/* ════ BAR CHART — clean flex approach ════ */
 function renderBar(yr) {
   const activeMetric = MAJORS.some(m => DB[yr]?.[m]?.[selMetric] != null)
     ? selMetric : 'rate_total';
-
   const vals = MAJORS.map(m => parseFloat(DB[yr]?.[m]?.[activeMetric]) || 0);
   const wrap = document.getElementById('barChart');
-
-  /* Y-axis: 100 → 0 top to bottom */
-  const yLabels = [100, 75, 50, 25, 0].map(v =>
-    `<span>${v}%</span>`
-  ).join('');
-
-  /* bar columns */
+  const yLabels = [100, 75, 50, 25, 0].map(v => `<span>${v}%</span>`).join('');
   const barCols = MAJORS.map((m, i) => {
-    const v      = vals[i];
-    const hasVal = v > 0;
-    const color  = MAJOR_COLORS[i];
-    const hPct   = hasVal ? v : 0; /* CSS height % relative to .bar-chart-plot */
-
+    const v = vals[i], hasVal = v > 0, color = MAJOR_COLORS[i], hPct = hasVal ? v : 0;
     return `
       <div class="bar-col">
         <div class="bar-val" style="color:${hasVal ? color : 'var(--muted)'}">
           ${hasVal ? v.toFixed(1) + '%' : '—'}
         </div>
         <div class="bar-body"
-          style="height:${hPct}%;
-                 background:${hasVal ? color : '#e8e5f0'};
+          style="height:${hPct}%;background:${hasVal ? color : '#e8e5f0'};
                  box-shadow:${hasVal ? '0 3px 10px ' + color + '55' : 'none'}"
           title="${MAJOR_TH[m]}: ${hasVal ? v.toFixed(2) + '%' : 'ไม่มีข้อมูล'}">
-          ${hPct > 22 && hasVal
-            ? `<div class="bar-body-inner">${v.toFixed(1)}%</div>`
-            : ''}
+          ${hPct > 22 && hasVal ? `<div class="bar-body-inner">${v.toFixed(1)}%</div>` : ''}
         </div>
       </div>`;
   }).join('');
-
-  /* label row */
   const labelCols = MAJORS.map((m, i) => {
     const v = vals[i];
     return `
       <div class="bar-lbl-col">
-        <div class="bar-lbl-abbr" style="color:${v > 0 ? MAJOR_COLORS[i] : 'var(--muted)'}">
-          ${m}
-        </div>
+        <div class="bar-lbl-abbr" style="color:${v > 0 ? MAJOR_COLORS[i] : 'var(--muted)'}">${m}</div>
         <div class="bar-lbl-th">${MAJOR_TH[m]}</div>
       </div>`;
   }).join('');
-
   wrap.innerHTML = `
     <div class="bar-chart-outer">
-
-      <!-- Y-axis -->
       <div class="bar-chart-yaxis">${yLabels}</div>
-
-      <!-- plot area -->
       <div class="bar-chart-right">
         <div class="bar-chart-plot">
-          <!-- grid lines (5 lines = 0/25/50/75/100) -->
           <div class="bar-gridlines">
-            <div class="bar-gridline"></div>
-            <div class="bar-gridline"></div>
-            <div class="bar-gridline"></div>
-            <div class="bar-gridline"></div>
+            <div class="bar-gridline"></div><div class="bar-gridline"></div>
+            <div class="bar-gridline"></div><div class="bar-gridline"></div>
             <div class="bar-gridline"></div>
           </div>
-          <!-- bars -->
           <div class="bar-bars-row">${barCols}</div>
         </div>
-        <!-- labels -->
         <div class="bar-labels-row">${labelCols}</div>
       </div>
-
     </div>`;
 }
 
-/* ════ PIE ════ */
 function renderPie(yr) {
   const activeMetric = MAJORS.some(m => DB[yr]?.[m]?.[selMetric] != null)
     ? selMetric : 'rate_total';
@@ -654,20 +542,19 @@ function renderPie(yr) {
   let cum = 0, paths = '';
   vals.forEach((v, i) => {
     const pct = v / total;
-    const s   = cum * 2 * Math.PI - Math.PI / 2; cum += pct;
-    const e   = cum * 2 * Math.PI - Math.PI / 2;
-    const x1  = cx + r * Math.cos(s), y1 = cy + r * Math.sin(s);
-    const x2  = cx + r * Math.cos(e), y2 = cy + r * Math.sin(e);
+    const s = cum * 2 * Math.PI - Math.PI / 2; cum += pct;
+    const e = cum * 2 * Math.PI - Math.PI / 2;
+    const x1 = cx + r * Math.cos(s), y1 = cy + r * Math.sin(s);
+    const x2 = cx + r * Math.cos(e), y2 = cy + r * Math.sin(e);
     const ix1 = cx + ir * Math.cos(e), iy1 = cy + ir * Math.sin(e);
     const ix2 = cx + ir * Math.cos(s), iy2 = cy + ir * Math.sin(s);
-    const lg  = pct > .5 ? 1 : 0;
+    const lg = pct > .5 ? 1 : 0;
     paths += `<path d="M${x1} ${y1} A${r} ${r} 0 ${lg} 1 ${x2} ${y2}
       L${ix1} ${iy1} A${ir} ${ir} 0 ${lg} 0 ${ix2} ${iy2}Z"
       fill="${MAJOR_COLORS[i]}" stroke="#fff" stroke-width="2">
       <title>${MAJOR_TH[MAJORS[i]]}: ${v.toFixed(2)}%</title></path>`;
     if (pct > 0.08) {
-      const mid = (s + e) / 2;
-      const lr  = (r + ir) / 2 + 3;
+      const mid = (s + e) / 2, lr = (r + ir) / 2 + 3;
       paths += `<text x="${(cx + lr * Math.cos(mid)).toFixed(1)}"
         y="${(cy + lr * Math.sin(mid) + 3.5).toFixed(1)}"
         text-anchor="middle" fill="white" font-size="10" font-weight="800"
@@ -692,7 +579,6 @@ function renderPie(yr) {
     </div>`).join('');
 }
 
-/* ════ TABLE ════ */
 function renderTable(yr) {
   const tbody = document.getElementById('mainTableBody'); if (!tbody) return;
   const hasData = {};
@@ -722,7 +608,6 @@ function renderTable(yr) {
   tbody.innerHTML = rows;
 }
 
-/* ════ TREND ════ */
 function renderTrend() {
   if (!allYears.length) return;
   const maxVal = Math.max(...allYears.flatMap(y =>
@@ -747,60 +632,19 @@ function renderTrend() {
   ).join('');
 }
 
-/* ════ METRIC TREND ════ */
-function renderMetricTrend() {
-  if (!allYears.length) return;
-  const maxVal = Math.max(...METRICS.flatMap(met =>
-    allYears.map(y => {
-      const vals = MAJORS.map(m => parseFloat(DB[y]?.[m]?.[met.key]) || 0).filter(v => v > 0);
-      return vals.length ? vals.reduce((a,b) => a+b, 0) / vals.length : 0;
-    })
-  ), 1);
-  const H = 90;
-  let html = `<div style="display:flex;gap:16px;align-items:flex-end;padding:8px 4px 28px;
-    min-width:500px;position:relative">
-    <div style="position:absolute;left:0;right:0;top:0;bottom:28px;display:flex;
-      flex-direction:column;justify-content:space-between;pointer-events:none">
-      <div style="border-bottom:1px dashed rgba(124,58,237,.10)"></div>
-      <div style="border-bottom:1px dashed rgba(124,58,237,.10)"></div>
-      <div style="border-bottom:1px dashed rgba(124,58,237,.10)"></div>
-    </div>`;
-  allYears.forEach(y => {
-    html += `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
-      <div style="display:flex;gap:2px;align-items:flex-end">`;
-    METRICS.forEach(met => {
-      const vals = MAJORS.map(m => parseFloat(DB[y]?.[m]?.[met.key]) || 0).filter(v => v > 0);
-      const avg  = vals.length ? vals.reduce((a,b) => a+b, 0) / vals.length : 0;
-      const h    = Math.max(Math.round((avg / maxVal) * H), 2);
-      html += `<div style="width:12px;height:${h}px;background:${met.color};
-        border-radius:3px 3px 0 0;opacity:.8;cursor:pointer"
-        title="${met.label} ${y}: ${avg.toFixed(2)}%"
-        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.8"></div>`;
-    });
-    html += `</div><div style="font-size:10.5px;color:var(--muted);font-weight:700;margin-top:5px">${y}</div></div>`;
-  });
-  html += `</div>
-  <div style="display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px">
-    ${METRICS.map(m => `<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)">
-      <div style="width:9px;height:9px;border-radius:2px;background:${m.color}"></div>${m.label}</div>`).join('')}
-  </div>`;
-  document.getElementById('metricTrend').innerHTML = html;
-}
-
-/* ════ PDF ════ */
 function exportPDF() {
   const overlay = document.getElementById('pdf-overlay');
   overlay.classList.add('show');
   setTimeout(() => { overlay.classList.remove('show'); window.print(); }, 700);
 }
 
-/* ════ UTILS ════ */
 function show(id) {
   ['s-loading','s-error','s-dashboard'].forEach(i => {
     const el = document.getElementById(i);
     el.style.display = (i === id) ? (i === 's-dashboard' ? 'block' : 'flex') : 'none';
   });
 }
+
 function observeFade() {
   const obs = new IntersectionObserver(
     e => e.forEach(x => { if (x.isIntersecting) x.target.classList.add('in'); }),
@@ -811,5 +655,7 @@ function observeFade() {
 
 loadData();
 </script>
+
+<script src="navbar.js"></script>
 </body>
 </html>

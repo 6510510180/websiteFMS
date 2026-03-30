@@ -1,0 +1,197 @@
+commit 3a91493a72b04cd4d1f36fc017f1bdb1158e220b
+Author: 6510510180 <6510510180@psu.ac.th>
+Date:   Thu Mar 12 20:00:24 2026 +0700
+
+    add qa seed routes
+
+diff --git a/backend/server.js b/backend/server.js
+index ca19d7f..c9b2452 100644
+--- a/backend/server.js
++++ b/backend/server.js
+@@ -2155,6 +2155,186 @@ app.post("/api/courses/:id/stakeholder-needs", async (req, res) => {
+     res.status(500).json({ message: err.message });
+   }
+ });
++// ============================================================
++//  QA SEED COMPAT ROUTES
++//  วาง block นี้ทั้งหมดใน server.js ก่อนบรรทัด app.get("*", ...)
++// ============================================================
++
++// ── POST /api/courses/:id/plos ────────────────────────────────
++app.post("/api/courses/:id/plos", async (req, res) => {
++  const { code, order, name_th, name_en, description } = req.body;
++  if (!code || !name_th) return res.status(400).json({ message: "ข้อมูลไม่ครบ" });
++  try {
++    const result = await pool.query(
++      `INSERT INTO course_plos (course_id, code, "order", name_th, name_en, description)
++       VALUES ($1,$2,$3,$4,$5,$6)
++       ON CONFLICT (course_id, code) DO UPDATE SET
++         name_th     = EXCLUDED.name_th,
++         name_en     = EXCLUDED.name_en,
++         description = EXCLUDED.description,
++         updated_at  = now()
++       RETURNING *`,
++      [req.params.id, code, order || 0, name_th, name_en || null, description || null]
++    );
++    res.json({ message: "บันทึก PLO สำเร็จ", plo: result.rows[0] });
++  } catch (err) {
++    res.status(500).json({ message: err.message });
++  }
++});
++
++// ── GET /api/courses/:id/plos ─────────────────────────────────
++app.get("/api/courses/:id/plos", async (req, res) => {
++  try {
++    const result = await pool.query(
++      `SELECT * FROM course_plos WHERE course_id=$1 ORDER BY "order", code`,
++      [req.params.id]
++    );
++    res.json(result.rows);
++  } catch (err) {
++    res.status(500).json({ message: err.message });
++  }
++});
++
++// ── POST /api/courses/:id/plo-kas ─────────────────────────────
++app.post("/api/courses/:id/plo-kas", async (req, res) => {
++  const { plo_code, kas_knowledge, kas_attitude, kas_skill } = req.body;
++  if (!plo_code) return res.status(400).json({ message: "ต้องส่ง plo_code" });
++  try {
++    const result = await pool.query(
++      `INSERT INTO course_plo_kas (course_id, plo_code, kas_knowledge, kas_attitude, kas_skill)
++       VALUES ($1,$2,$3,$4,$5)
++       ON CONFLICT (course_id, plo_code) DO UPDATE SET
++         kas_knowledge = EXCLUDED.kas_knowledge,
++         kas_attitude  = EXCLUDED.kas_attitude,
++         kas_skill     = EXCLUDED.kas_skill,
++         updated_at    = now()
++       RETURNING *`,
++      [
++        req.params.id,
++        plo_code,
++        JSON.stringify(kas_knowledge || {}),
++        JSON.stringify(kas_attitude  || {}),
++        JSON.stringify(kas_skill     || {}),
++      ]
++    );
++    res.json({ message: "บันทึก PLO KAS สำเร็จ", item: result.rows[0] });
++  } catch (err) {
++    res.status(500).json({ message: err.message });
++  }
++});
++
++// ── POST /api/courses/:id/majors ──────────────────────────────
++app.post("/api/courses/:id/majors", async (req, res) => {
++  const { code, name_th, name_en } = req.body;
++  if (!code || !name_th) return res.status(400).json({ message: "ต้องส่ง code และ name_th" });
++  try {
++    const result = await pool.query(
++      `INSERT INTO course_majors (course_id, code, name_th, name_en)
++       VALUES ($1,$2,$3,$4)
++       ON CONFLICT (course_id, code) DO UPDATE SET
++         name_th = EXCLUDED.name_th,
++         name_en = EXCLUDED.name_en
++       RETURNING *`,
++      [req.params.id, code, name_th, name_en || null]
++    );
++    res.json({ message: "บันทึก Major สำเร็จ", major: result.rows[0] });
++  } catch (err) {
++    res.status(500).json({ message: err.message });
++  }
++});
++
++// ── POST /api/majors/:id/mlos ─────────────────────────────────
++app.post("/api/majors/:id/mlos", async (req, res) => {
++  const { code, name_th, name_en, kas_knowledge, kas_attitude, kas_skill } = req.body;
++  if (!code || !name_th) return res.status(400).json({ message: "ต้องส่ง code และ name_th" });
++  try {
++    const result = await pool.query(
++      `INSERT INTO course_mlos (major_id, code, name_th, name_en, kas_knowledge, kas_attitude, kas_skill)
++       VALUES ($1,$2,$3,$4,$5,$6,$7)
++       ON CONFLICT (major_id, code) DO UPDATE SET
++         name_th       = EXCLUDED.name_th,
++         name_en       = EXCLUDED.name_en,
++         kas_knowledge = EXCLUDED.kas_knowledge,
++         kas_attitude  = EXCLUDED.kas_attitude,
++         kas_skill     = EXCLUDED.kas_skill
++       RETURNING *`,
++      [
++        req.params.id,
++        code,
++        name_th,
++        name_en       || null,
++        JSON.stringify(kas_knowledge || {}),
++        JSON.stringify(kas_attitude  || {}),
++        JSON.stringify(kas_skill     || {}),
++      ]
++    );
++    res.json({ message: "บันทึก MLO สำเร็จ", mlo: result.rows[0] });
++  } catch (err) {
++    res.status(500).json({ message: err.message });
++  }
++});
++
++// ── POST /api/courses/:id/stakeholder-needs ───────────────────
++app.post("/api/courses/:id/stakeholder-needs", async (req, res) => {
++  const { group, need, plo_mapping, mlo_mapping } = req.body;
++  if (!need) return res.status(400).json({ message: "ต้องส่ง need" });
++  try {
++    const result = await pool.query(
++      `INSERT INTO course_stakeholder_needs (course_id, "group", need, plo_mapping, mlo_mapping)
++       VALUES ($1,$2,$3,$4,$5) RETURNING *`,
++      [
++        req.params.id,
++        group       || null,
++        need,
++        JSON.stringify(plo_mapping || []),
++        JSON.stringify(mlo_mapping || []),
++      ]
++    );
++    res.json({ message: "บันทึก Stakeholder Need สำเร็จ", item: result.rows[0] });
++  } catch (err) {
++    res.status(500).json({ message: err.message });
++  }
++});
++
++// ── POST /api/courses/:id/plo-scores ──────────────────────────
++app.post("/api/courses/:id/plo-scores", async (req, res) => {
++  const { plo_code, academic_year, semester_1, semester_2, grand_total } = req.body;
++  if (!plo_code || !academic_year) return res.status(400).json({ message: "ต้องส่ง plo_code และ academic_year" });
++  try {
++    const result = await pool.query(
++      `INSERT INTO course_plo_scores (course_id, plo_code, academic_year, semester_1, semester_2, grand_total)
++       VALUES ($1,$2,$3,$4,$5,$6)
++       ON CONFLICT (course_id, plo_code, academic_year) DO UPDATE SET
++         semester_1  = EXCLUDED.semester_1,
++         semester_2  = EXCLUDED.semester_2,
++         grand_total = EXCLUDED.grand_total,
++         updated_at  = now()
++       RETURNING *`,
++      [req.params.id, plo_code, academic_year, semester_1 ?? null, semester_2 ?? null, grand_total ?? null]
++    );
++    res.json({ message: "บันทึก PLO Score สำเร็จ", score: result.rows[0] });
++  } catch (err) {
++    res.status(500).json({ message: err.message });
++  }
++});
++
++// ── POST /api/courses/:id/vision-mission ──────────────────────
++app.post("/api/courses/:id/vision-mission", async (req, res) => {
++  const { type, text } = req.body;
++  if (!type || !text) return res.status(400).json({ message: "ต้องส่ง type และ text" });
++  try {
++    const result = await pool.query(
++      `INSERT INTO course_vision_mission (course_id, type, text)
++       VALUES ($1,$2,$3)
++       ON CONFLICT (course_id, type) DO UPDATE SET text = EXCLUDED.text
++       RETURNING *`,
++      [req.params.id, type, text]
++    );
++    res.json({ message: "บันทึก Vision/Mission สำเร็จ", item: result.rows[0] });
++  } catch (err) {
++    res.status(500).json({ message: err.message });
++  }
++});
+ 
+ // ============================================================
+ //  Start Server

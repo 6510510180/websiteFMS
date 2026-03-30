@@ -136,6 +136,35 @@ tbody tr:hover .tdl,tbody tr:hover{background:#f5eeff !important;}
 .toast{position:fixed;bottom:28px;right:28px;background:#1a1a2e;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
 .toast.show{transform:translateY(0);opacity:1;}
 .tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+/* HELP MODAL */
+.help-circle-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--purple);background:#fff;color:var(--purple);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
+.help-circle-btn:hover{background:var(--purple-light);}
+#helpOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.help-modal{background:#fff;border-radius:18px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);font-family:'Noto Sans Thai',sans-serif;}
+.hm-header{padding:20px 24px 16px;border-bottom:1px solid #ede8f5;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;}
+.hm-header-left{display:flex;align-items:center;gap:10px;}
+.hm-icon-box{width:36px;height:36px;border-radius:10px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.hm-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.hm-subtitle{font-size:11.5px;color:var(--text-sub);}
+.hm-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-sub);padding:4px 8px;border-radius:6px;line-height:1;transition:.15s;}
+.hm-close:hover{background:var(--purple-light);color:var(--purple);}
+.hm-body{padding:24px;}
+.hm-section{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.7px;padding-bottom:8px;border-bottom:1px solid #ede8f5;margin-bottom:14px;}
+.hm-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.hm-step{display:flex;gap:12px;align-items:flex-start;}
+.hm-num{min-width:22px;height:22px;border-radius:50%;background:var(--purple-light);color:var(--purple);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.hm-step-text{font-size:13.5px;color:var(--text);line-height:1.65;}
+.hm-step-text b{color:var(--purple-dark);}
+.hm-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:5px;}
+.hm-badge-purple{background:#ede9fe;color:#6d28d9;}
+.hm-badge-green{background:#dcfce7;color:#166534;}
+.hm-badge-amber{background:#fffbeb;color:#d97706;}
+.hm-badge-red{background:#fee2e2;color:#991b1b;}
+.hm-badge-teal{background:#e0f7fa;color:#0e7490;}
+.hm-note{background:var(--purple-light);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:var(--purple-dark);line-height:1.65;}
+.hm-footer{padding:14px 24px;border-top:1px solid #ede8f5;display:flex;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;}
+.hm-footer-btn{padding:9px 26px;border-radius:9px;border:none;background:var(--purple);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(127,19,236,.28);transition:all .18s;}
+.hm-footer-btn:hover{background:var(--purple-dark);}
 </style>
 </head>
 <body>
@@ -152,6 +181,7 @@ tbody tr:hover .tdl,tbody tr:hover{background:#f5eeff !important;}
     <a href="kas.html">KAS</a>
   </nav>
   <div class="topbar-right">
+    <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
     <div class="save-st unsaved" id="ss">
       <div class="dot pulse" id="sd"></div>
       <span id="st">กำลังโหลด...</span>
@@ -275,6 +305,88 @@ tbody tr:hover .tdl,tbody tr:hover{background:#f5eeff !important;}
     </div>
   </div>
 </div>
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
+    <div class="hm-header">
+      <div class="hm-header-left">
+        <div class="hm-icon-box">📊</div>
+        <div>
+          <div class="hm-title">คู่มือการใช้งาน</div>
+          <div class="hm-subtitle">หน้า Alignment Matrix</div>
+        </div>
+      </div>
+      <button class="hm-close" onclick="closeHelp()">×</button>
+    </div>
+    <div class="hm-body">
+
+      <div class="hm-section">📊 ภาพรวมตาราง</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">1</span>
+          <div class="hm-step-text">ตารางนี้แสดง <b>ความสอดคล้อง</b> ระหว่างผู้มีส่วนได้ส่วนเสียของหลักสูตรกับ <b>PLO</b> <span class="hm-badge hm-badge-purple">สีม่วง</span> และ <b>MLO</b> <span class="hm-badge hm-badge-teal">สีน้ำเงิน</span></div>
+        </div>
+        <div class="hm-step"><span class="hm-num">2</span>
+          <div class="hm-step-text">กดที่ <b>วงกลม ○</b> ในตารางเพื่อ Toggle ✓/○ — ระบบบันทึกลง Database ทันที แถบสถานะมุมขวาบนจะแจ้งผล</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">3</span>
+          <div class="hm-step-text">แถบด้านล่างตารางแสดง <b>PLOs / MLOs Covered</b> — จำนวน PLO และ MLO ที่มีการเชื่อมโยงอย่างน้อย 1 แถว</div>
+        </div>
+      </div>
+
+      <div class="hm-section">✏️ จัดการแถวข้อมูล</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">4</span>
+          <div class="hm-step-text">กดปุ่ม <b>+ เพิ่มแถวใหม่</b> ด้านล่างตาราง — กรอก กลุ่ม · ชื่อรายการ · คำอธิบาย แล้วกด <b>บันทึก</b></div>
+        </div>
+        <div class="hm-step"><span class="hm-num">5</span>
+          <div class="hm-step-text">Hover ที่แถวใด ๆ เพื่อให้ปุ่ม <b>✏️ แก้ไข</b> และ <b>🗑 ลบ</b> ปรากฏขึ้นทางขวาของชื่อแถว</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">6</span>
+          <div class="hm-step-text">การ <b>เพิ่ม / แก้ไข / ลบ</b> แถวจะยังไม่บันทึกจนกว่าจะกดปุ่ม <b>บันทึก</b> สีเขียวมุมขวาบน <span class="hm-badge hm-badge-amber">ยังไม่บันทึก</span></div>
+        </div>
+        <div class="hm-step"><span class="hm-num">7</span>
+          <div class="hm-step-text">ใช้ <b>Ctrl + Enter</b> เพื่อบันทึก Modal แก้ไขแถวได้รวดเร็ว และ <b>Esc</b> เพื่อปิด Modal ทุกประเภท</div>
+        </div>
+      </div>
+
+      <div class="hm-section">📥 Import / Export Excel</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">8</span>
+          <div class="hm-step-text">กดปุ่ม <b>Template</b> เพื่อดาวน์โหลดไฟล์ Excel ตัวอย่าง — คอลัมน์จะตรงกับ PLO/MLO ที่มีในระบบปัจจุบัน</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">9</span>
+          <div class="hm-step-text">กรอกข้อมูลใน Template แล้วกด <b>Import Excel</b> — ใส่ <b>1</b> ในคอลัมน์ PLO/MLO ที่ต้องการ ✓ และ <b>0</b> หรือเว้นว่างสำหรับ ○</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">10</span>
+          <div class="hm-step-text">กดปุ่ม <b>Export Excel</b> เพื่อดาวน์โหลดตารางปัจจุบัน หรือ <b>PDF</b> เพื่อสั่งพิมพ์ผ่าน Print Dialog <span class="hm-badge hm-badge-green">ไม่ต้องบันทึกก่อน Export</span></div>
+        </div>
+      </div>
+
+      <div class="hm-section">🌐 การเผยแพร่</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">11</span>
+          <div class="hm-step-text">Toggle <b>"เผยแพร่"</b> ในแถบสีเขียวด้านบนตาราง — เมื่อเปิด ข้อมูลจะแสดงในหน้าสาธารณะ <code>bba-matrix1.html</code> ทันที</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">12</span>
+          <div class="hm-step-text">กด <b>Preview</b> เพื่อเปิดหน้าสาธารณะในแท็บใหม่และตรวจสอบก่อนเผยแพร่จริง <span class="hm-badge hm-badge-red">ปิดเผยแพร่ก่อนแก้ไขใหญ่</span></div>
+        </div>
+      </div>
+
+      <div class="hm-note">
+        <b>💡 เคล็ดลับ:</b> แถบสถานะ <b>"โหลดจาก Database แล้ว"</b> (สีเขียว) หมายความว่าเชื่อมต่อสำเร็จ — หากแสดง <b>"เชื่อมต่อไม่ได้"</b> (สีแดง) ให้ตรวจสอบ Server และ <code>fms-api-client.js</code> ก่อนบันทึก
+      </div>
+
+    </div>
+    <div class="hm-footer">
+      <button class="hm-footer-btn" onclick="closeHelp()">รับทราบ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openHelp()  { document.getElementById('helpOverlay').style.display = 'flex'; }
+  function closeHelp() { document.getElementById('helpOverlay').style.display = 'none'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
+</script>
 
 <div class="toast" id="toast"><div class="tdot" id="tdot"></div><span id="tmsg"></span></div>
 

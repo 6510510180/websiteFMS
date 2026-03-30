@@ -177,7 +177,7 @@
 <div class="page-header">
   <div class="breadcrumb"><a href="student.html"><i class="fa-solid fa-arrow-left"></i> กลับหน้านักศึกษา</a><i class="fa-solid fa-chevron-right"></i><span>วิชาโท</span></div>
   <h1>รายวิชาโท<br>หลักสูตร บธ.บ. <span id="headerCourseYear">2567</span></h1>
-  <p>เลือกเรียน 15 หน่วยกิต จากกลุ่มวิชาใดกลุ่มวิชาหนึ่ง — วิชาบังคับและวิชาเลือกของแต่ละสาขาสามารถนำมาเป็นวิชาโทได้ทั้งหมด</p>
+  <p>เลือกเรียน 15 หน่วยกิต จากกลุ่มวิชาใดกลุ่มวิชาหนึ่ง — วิชาบังคับและวิชาเลือกของแต่ละวิชาเอกสามารถนำมาเป็นวิชาโทได้ทั้งหมด</p>
   <div class="header-meta">
     <div class="header-chip"><i class="fa-solid fa-book-open"></i> 15 หน่วยกิต</div>
     <div class="header-chip" id="chipGroupCount"><i class="fa-solid fa-layer-group"></i> กำลังโหลด...</div>
@@ -187,7 +187,7 @@
 
 <div class="page-body">
   <div class="group-intro">
-    <p><strong>วิชาโท</strong> เลือกได้จากกลุ่มวิชาใดกลุ่มหนึ่ง รวม <strong>15 หน่วยกิต</strong> โดย<strong>วิชาบังคับและวิชาเลือกของแต่ละสาขาสามารถนำมานับเป็นวิชาโทได้ทั้งหมด</strong> (ยกเว้นวิชาฝึกงาน/สหกิจ)</p>
+    <p><strong>วิชาโท</strong> เลือกได้จากกลุ่มวิชาใดกลุ่มหนึ่ง รวม <strong>15 หน่วยกิต</strong> โดย<strong>วิชาบังคับและวิชาเลือกของแต่ละสาขาวิชาเอกสามารถนำมานับเป็นวิชาโทได้ทั้งหมด</strong> (ยกเว้นวิชาฝึกงาน/สหกิจ)</p>
   </div>
 
   <!-- กล่องเงื่อนไขการเลือก -->
@@ -485,7 +485,7 @@ function buildSubjectTable(req,elec,group){
   const freeNote=group.free_note||'';
   if(!req.length&&!elec.length){
     return `<div class="empty-box"><i class="fa-solid fa-circle-info"></i>
-      <p>${freeNote||'กรุณาตรวจสอบกับคณะ/สาขาที่เกี่ยวข้องโดยตรง'}</p></div>`;
+      <p>${freeNote||'กรุณาตรวจสอบกับคณะ/วิชาเอกที่เกี่ยวข้องโดยตรง'}</p></div>`;
   }
   return `<table class="subject-table">
     <thead><tr><th>รหัสวิชา</th><th>ชื่อวิชา</th><th>หน่วยกิต</th></tr></thead>

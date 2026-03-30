@@ -199,6 +199,121 @@ table.mt tr.r-grand > td{
 .mbtn-ok{background:var(--pu2);color:#fff;border:none;padding:8px 20px;border-radius:9px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;}
 .mbtn-ok:hover{background:#6d28d9;}
 
+/* ── Help button ── */
+.help-circle-btn{
+  width:36px;height:36px;border-radius:50%;
+  border:2px solid var(--pu2);background:#fff;color:var(--pu2);
+  font-size:15px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;flex-shrink:0;
+}
+.help-circle-btn:hover{background:var(--pu-tab);}
+ 
+/* ── Help overlay & modal ── */
+#helpOverlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.5);z-index:9999;
+  align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(3px);
+}
+.help-modal{
+  background:#fff;border-radius:18px;
+  width:100%;max-width:600px;max-height:90vh;
+  overflow-y:auto;
+  box-shadow:0 24px 64px rgba(0,0,0,.22);
+  font-family:'Noto Sans Thai',sans-serif;
+}
+ 
+/* header */
+.hm-header{
+  padding:20px 24px 16px;
+  border-bottom:1px solid #ede8f5;
+  display:flex;justify-content:space-between;align-items:center;
+  position:sticky;top:0;background:#fff;z-index:1;
+  border-radius:18px 18px 0 0;
+}
+.hm-header-left{display:flex;align-items:center;gap:10px;}
+.hm-icon-box{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--pu-tab);color:var(--pu2);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.hm-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--tx);}
+.hm-subtitle{font-size:11.5px;color:var(--ts);}
+.hm-close{
+  background:none;border:none;font-size:22px;cursor:pointer;
+  color:var(--ts);padding:4px 8px;border-radius:6px;line-height:1;transition:.15s;
+}
+.hm-close:hover{background:var(--pu-tab);color:var(--pu2);}
+ 
+/* body */
+.hm-body{padding:24px;}
+.hm-section{
+  display:flex;align-items:center;gap:8px;
+  font-size:12.5px;font-weight:700;color:var(--pu2);
+  text-transform:uppercase;letter-spacing:.7px;
+  padding-bottom:8px;border-bottom:1px solid #ede8f5;margin-bottom:14px;
+}
+.hm-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.hm-step{display:flex;gap:12px;align-items:flex-start;}
+.hm-num{
+  min-width:22px;height:22px;border-radius:50%;
+  background:var(--pu-tab);color:var(--pu2);
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;
+}
+.hm-step-text{font-size:13.5px;color:var(--tx);line-height:1.65;}
+.hm-step-text b{color:var(--pu2);}
+.hm-step-text code{
+  background:#f3eeff;color:var(--pu2);
+  padding:1px 6px;border-radius:4px;font-size:12px;
+}
+ 
+/* badges */
+.hm-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10.5px;font-weight:700;
+  padding:2px 9px;border-radius:99px;margin-left:5px;
+}
+.hm-badge-purple{background:#ede9fe;color:#6d28d9;}
+.hm-badge-green {background:#dcfce7;color:#166534;}
+.hm-badge-amber {background:#fffbeb;color:#d97706;}
+.hm-badge-red   {background:#fee2e2;color:#991b1b;}
+.hm-badge-teal  {background:#e0f7fa;color:#0e7490;}
+ 
+/* row-type legend */
+.hm-legend{display:flex;flex-direction:column;gap:7px;margin-bottom:20px;}
+.hm-legend-row{display:flex;align-items:center;gap:10px;font-size:13px;}
+.hm-swatch{
+  width:14px;height:14px;border-radius:3px;flex-shrink:0;
+}
+ 
+/* note block */
+.hm-note{
+  background:var(--pu-tab);
+  border-left:3px solid var(--pu2);
+  border-radius:0 8px 8px 0;
+  padding:12px 14px;
+  font-size:12.5px;color:var(--pu2);line-height:1.65;
+}
+ 
+/* footer */
+.hm-footer{
+  padding:14px 24px;border-top:1px solid #ede8f5;
+  display:flex;justify-content:flex-end;
+  position:sticky;bottom:0;background:#fff;
+  border-radius:0 0 18px 18px;
+}
+.hm-footer-btn{
+  padding:9px 26px;border-radius:9px;border:none;
+  background:var(--pu2);color:#fff;
+  font-size:13px;font-weight:700;font-family:inherit;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(124,44,191,.28);
+  transition:all .18s;
+}
+.hm-footer-btn:hover{background:#6d28d9;}
 /* Toast */
 .toast{position:fixed;bottom:24px;right:24px;background:#1a1a2e;color:#fff;padding:11px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:9px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
 .toast.show{transform:translateY(0);opacity:1;}
@@ -223,6 +338,7 @@ table.mt tr.r-grand > td{
     <a href="kas.html">KAS</a>
   </nav>
   <div class="topbar-right">
+    <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
     <div class="avatar">A</div>
   </div>
 </header>
@@ -314,6 +430,191 @@ table.mt tr.r-grand > td{
     </div>
   </div>
 </div>
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
+ 
+    <!-- Header -->
+    <div class="hm-header">
+      <div class="hm-header-left">
+        <div class="hm-icon-box">📈</div>
+        <div>
+          <div class="hm-title">คู่มือการใช้งาน</div>
+          <div class="hm-subtitle">หน้า กรอกคะแนนผลลัพธ์ PLO/MLO</div>
+        </div>
+      </div>
+      <button class="hm-close" onclick="closeHelp()">×</button>
+    </div>
+ 
+    <!-- Body -->
+    <div class="hm-body">
+ 
+      <!-- ① ภาพรวม -->
+      <div class="hm-section">📊 ภาพรวมหน้านี้</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">1</span>
+          <div class="hm-step-text">หน้านี้ใช้ <b>กรอกและบันทึกคะแนนเฉลี่ย PLO/MLO</b> รายภาคการศึกษา
+            ในสเกล <b>1.00–5.00</b> — แก้ไขตัวเลขในตารางได้โดยตรง ไม่ต้องเปิด Modal</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">2</span>
+          <div class="hm-step-text">ตารางมีคอลัมน์ <b>SEM 1 · SEM 2 · Grand Total</b>
+            โดย Grand Total คำนวณอัตโนมัติจากค่าเฉลี่ยของสองภาคที่กรอก</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">3</span>
+          <div class="hm-step-text">สีของตัวเลขบ่งชี้ระดับคะแนน:
+            <span class="hm-badge hm-badge-green">≥ 4.50 ดีมาก</span>
+            <span class="hm-badge hm-badge-amber">4.00–4.49 ดี</span>
+            <span class="hm-badge hm-badge-red">&lt; 4.00 ปรับปรุง</span>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ② ประเภทแถว -->
+      <div class="hm-section">🗂 ประเภทแถวในตาราง</div>
+      <div class="hm-legend">
+        <div class="hm-legend-row">
+          <div class="hm-swatch" style="background:#3c3489;"></div>
+          <div><b>ภาควิชา (Dept)</b> — แถวหัวข้อระดับสูงสุด พื้นหลังม่วงเข้ม</div>
+        </div>
+        <div class="hm-legend-row">
+          <div class="hm-swatch" style="background:#6d28d9;"></div>
+          <div><b>กลุ่มวิชา (Group)</b> — แถวหัวข้อระดับกลาง พื้นหลังม่วงกลาง</div>
+        </div>
+        <div class="hm-legend-row">
+          <div class="hm-swatch" style="background:#F0EBFF;border:1px solid #ddd6fe;"></div>
+          <div><b>หมวด (Section)</b> — แถวชื่อหมวดย่อย พื้นหลังม่วงอ่อน ข้อความม่วง</div>
+        </div>
+        <div class="hm-legend-row">
+          <div class="hm-swatch" style="background:#fff;border:1px solid #e5e7eb;"></div>
+          <div><b>แถวข้อมูล PLO/MLO</b> — กรอกคะแนนได้ มี badge
+            <span class="hm-badge hm-badge-purple">PLO</span>
+            <span class="hm-badge hm-badge-green">MLO</span>
+          </div>
+        </div>
+        <div class="hm-legend-row">
+          <div class="hm-swatch" style="background:#7c3aed;"></div>
+          <div><b>Subtotal</b> — ยอดรวมรายกลุ่มวิชา พื้นหลังม่วงทึบ</div>
+        </div>
+        <div class="hm-legend-row">
+          <div class="hm-swatch" style="background:#2d1b4e;"></div>
+          <div><b>Dept Total</b> — ยอดรวมรายภาควิชา พื้นหลังม่วงเข้มมาก</div>
+        </div>
+        <div class="hm-legend-row">
+          <div class="hm-swatch" style="background:#E8DEFF;border:1px solid #c4b5fd;"></div>
+          <div><b>Grand Total</b> — ยอดรวมทั้งหมด พื้นหลังม่วงพาสเทล</div>
+        </div>
+      </div>
+ 
+      <!-- ③ กรอกคะแนน -->
+      <div class="hm-section">✏️ การกรอกและแก้ไขคะแนน</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">4</span>
+          <div class="hm-step-text">คลิกที่ช่อง <b>SEM 1</b> หรือ <b>SEM 2</b> ในแถวข้อมูล
+            แล้วพิมพ์คะแนน เช่น <code>4.60</code> — รองรับทั้งจุด <code>.</code> และลูกน้ำ <code>,</code></div>
+        </div>
+        <div class="hm-step"><span class="hm-num">5</span>
+          <div class="hm-step-text">ระบบจะแสดง <b>กรอบแดง</b> ทันทีหากค่าที่กรอกไม่ถูกต้อง
+            (ไม่ใช่ตัวเลข หรือน้อยกว่า 0 / มากกว่า 5) — เมื่อ Blur คะแนนนั้นจะถูกล้างโดยอัตโนมัติ</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">6</span>
+          <div class="hm-step-text"><b>Grand Total</b> ของแถวข้อมูลจะอัปเดตทันทีหลัง Blur
+            ไม่จำเป็นต้องกด Enter</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">7</span>
+          <div class="hm-step-text">เมื่อมีการเปลี่ยนแปลงใด ๆ แถบ
+            <span class="hm-badge hm-badge-amber">● มีข้อมูลที่ยังไม่ได้บันทึก</span>
+            จะปรากฏเหนือตาราง และปุ่ม <b>บันทึก</b> จะเปิดใช้งาน</div>
+        </div>
+      </div>
+ 
+      <!-- ④ เพิ่ม/ลบแถว -->
+      <div class="hm-section">➕ เพิ่มและลบแถว</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">8</span>
+          <div class="hm-step-text">กดปุ่ม <b>+ เพิ่ม PLO</b> หรือ <b>+ เพิ่ม MLO</b>
+            ด้านล่างตาราง — กรอก รหัส · คำอธิบาย · กลุ่มวิชา · คะแนน SEM 1/2
+            แล้วกด <b>เพิ่มรายการ</b></div>
+        </div>
+        <div class="hm-step"><span class="hm-num">9</span>
+          <div class="hm-step-text">กดปุ่ม <b>+ เพิ่มหัวข้อหมวด</b> เพื่อเพิ่มแถว Section
+            (พื้นม่วงอ่อน) สำหรับจัดกลุ่มรายการในตาราง</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">10</span>
+          <div class="hm-step-text">กดไอคอน <b>🗑</b> ทางขวาของแถวใดก็ได้เพื่อลบ —
+            ระบบจะขอยืนยันก่อนทุกครั้ง
+            <span class="hm-badge hm-badge-red">การลบไม่สามารถเลิกทำได้</span></div>
+        </div>
+        <div class="hm-step"><span class="hm-num">11</span>
+          <div class="hm-step-text">กด <b>Esc</b> เพื่อปิด Modal เพิ่มรายการได้ทุกเมื่อ</div>
+        </div>
+      </div>
+ 
+      <!-- ⑤ Import / Export -->
+      <div class="hm-section">📥 นำเข้า / ดาวน์โหลด Excel</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">12</span>
+          <div class="hm-step-text">กด <b>Template</b> เพื่อดาวน์โหลดไฟล์ตัวอย่าง —
+            มี 2 Sheet ได้แก่ <code>PLO Scores</code> (ข้อมูลตัวอย่าง) และ
+            <code>คำแนะนำ</code> (อธิบายแต่ละคอลัมน์)</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">13</span>
+          <div class="hm-step-text">คอลัมน์ที่สำคัญใน Template:
+            <code>lo_level</code> = PLO / MLO / TOTAL,
+            <code>note</code> = ระบุประเภทแถวพิเศษ
+            (<code>subtotal</code> · <code>deptTotal</code> · <code>grand</code>)
+            — แถวข้อมูลปกติปล่อย note ว่าง</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">14</span>
+          <div class="hm-step-text">กด <b>นำเข้า Excel</b> และเลือกไฟล์ที่กรอกแล้ว —
+            ระบบจะสร้างลำดับชั้นตาราง (Dept → Group → Section → PLO/MLO → Subtotal)
+            ให้อัตโนมัติ <span class="hm-badge hm-badge-amber">ข้อมูลเดิมในหน้าจะถูกแทนที่ทั้งหมด</span></div>
+        </div>
+      </div>
+ 
+      <!-- ⑥ ปีการศึกษา & บันทึก -->
+      <div class="hm-section">💾 ปีการศึกษาและการบันทึก</div>
+      <div class="hm-steps">
+        <div class="hm-step"><span class="hm-num">15</span>
+          <div class="hm-step-text">เลือก <b>ปีการศึกษา</b> จาก Dropdown มุมขวาบน —
+            ตารางจะโหลดข้อมูลของปีนั้นจาก Database ทันที</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">16</span>
+          <div class="hm-step-text">เมื่อกรอกครบแล้วกดปุ่ม <b>บันทึก</b> สีเขียว —
+            ระบบจะส่งข้อมูลทั้งหมดไปยัง Database และล้างสถานะ "ยังไม่บันทึก"</div>
+        </div>
+        <div class="hm-step"><span class="hm-num">17</span>
+          <div class="hm-step-text">หากพยายามปิดแท็บโดยมีข้อมูลที่ยังไม่บันทึก
+            เบราว์เซอร์จะแสดง <b>คำเตือนก่อนออกจากหน้า</b></div>
+        </div>
+        <div class="hm-step"><span class="hm-num">18</span>
+          <div class="hm-step-text">กด <b>ดูรายงาน</b> เพื่อเปิดหน้า <code>score.html</code>
+            สำหรับดูภาพรวมคะแนนในรูปแบบรายงานสาธารณะ
+            <span class="hm-badge hm-badge-green">บันทึกก่อนดูรายงานเสมอ</span></div>
+        </div>
+      </div>
+ 
+      <div class="hm-note">
+        <b>💡 เคล็ดลับ:</b> แถวประเภท <b>Subtotal / Dept Total / Grand Total</b>
+        ค่า SEM 1 และ SEM 2 <b>ไม่ได้คำนวณจากแถวข้อมูล</b> —
+        ต้องกรอกตรง ๆ ในช่อง Template (คอลัมน์ <code>note = subtotal/deptTotal/grand</code>)
+        หรือเพิ่มแถวเหล่านั้นจาก Import Excel เพื่อให้ยอดรวมถูกต้องตาม PDF ต้นฉบับ
+      </div>
+ 
+    </div><!-- /hm-body -->
+ 
+    <!-- Footer -->
+    <div class="hm-footer">
+      <button class="hm-footer-btn" onclick="closeHelp()">รับทราบ</button>
+    </div>
+ 
+  </div><!-- /help-modal -->
+</div><!-- /helpOverlay -->
+ 
+<!-- ── Script ──────────────────────────────────────────────── -->
+<script>
+  function openHelp()  { document.getElementById('helpOverlay').style.display = 'flex'; }
+  function closeHelp() { document.getElementById('helpOverlay').style.display = 'none'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
+</script>
 
 <div class="toast" id="toast"><div class="tdot" id="tdot"></div><span id="tmsg"></span></div>
 

@@ -168,6 +168,14 @@ tbody tr:hover { background: var(--bg); }
     <div class="topbar-breadcrumb">ประกันคุณภาพ · KAS References</div>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
+
+    <button onclick="openHelp()" style="
+      width:34px;height:34px;border-radius:50%;border:2px solid #6B3FA0;
+      background:#fff;color:#6B3FA0;font-size:15px;font-weight:700;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:all .18s;flex-shrink:0;
+    " onmouseover="this.style.background='#F3EEFF'" onmouseout="this.style.background='#fff'"
+    title="คู่มือการใช้งาน">?</button>
     <div style="font-size:13px;font-weight:600;color:var(--purple)" id="userLabel">Administrator</div>
     <div style="width:34px;height:34px;border-radius:50%;background:var(--purple-mid);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--purple)">A</div>
   </div>
@@ -260,6 +268,168 @@ tbody tr:hover { background: var(--bg); }
       <button class="btn btn-outline" onclick="closeModal()">ยกเลิก</button>
       <button class="btn btn-primary" onclick="saveItem()">💾 บันทึก</button>
     </div>
+  </div>
+</div>
+<!-- ── HELP MODAL ── -->
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()" style="
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+  z-index:500;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(3px);
+">
+  <div style="
+    background:#fff;border-radius:18px;width:100%;max-width:560px;
+    max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);
+    font-family:'Noto Sans Thai',sans-serif;
+  ">
+    <!-- Header -->
+    <div style="
+      padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;
+      display:flex;justify-content:space-between;align-items:center;
+      position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;
+    ">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="
+          width:36px;height:36px;border-radius:10px;background:#F3EEFF;
+          color:#6B3FA0;display:flex;align-items:center;justify-content:center;font-size:16px;
+        ">📊</div>
+        <div>
+          <div style="font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:#181117;">คู่มือการใช้งาน</div>
+          <div style="font-size:11.5px;color:#64748B;">หน้าจัดการ KAS References</div>
+        </div>
+      </div>
+      <button onclick="closeHelp()" style="
+        background:none;border:none;font-size:20px;cursor:pointer;
+        color:#64748B;padding:4px 8px;border-radius:6px;line-height:1;
+      ">×</button>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:24px;">
+
+      <!-- KAS คืออะไร -->
+      <div style="
+        background:#F3EEFF;border-radius:10px;padding:14px 16px;
+        margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;
+      ">
+        <span style="font-size:20px;flex-shrink:0;">💡</span>
+        <div style="font-size:13px;color:#4A2870;line-height:1.7;">
+          <b>KAS คืออะไร?</b><br>
+          KAS ย่อมาจาก <b>K</b>nowledge (ความรู้) · <b>A</b>ttitude (เจตคติ) · <b>S</b>kills (ทักษะ) — ใช้เป็นรหัสอ้างอิงในระบบประกันคุณภาพการศึกษา เชื่อมโยงกับ PLO และ MLO ของแต่ละหลักสูตร
+        </div>
+      </div>
+
+      <!-- Section 1 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">🔍 การดูและกรองข้อมูล</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">
+              กดปุ่ม Tab เพื่อเลือกดูเฉพาะประเภท
+              <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
+                <span style="padding:2px 10px;border-radius:99px;background:#EFF6FF;color:#1e40af;font-size:11px;font-weight:700;">📚 K · Knowledge</span>
+                <span style="padding:2px 10px;border-radius:99px;background:#FDF2F8;color:#9d174d;font-size:11px;font-weight:700;">💝 A · Attitude</span>
+                <span style="padding:2px 10px;border-radius:99px;background:#F0FDF4;color:#166534;font-size:11px;font-weight:700;">🎯 S · Skills</span>
+                <span style="padding:2px 10px;border-radius:99px;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;">ทั้งหมด</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">พิมพ์ในช่อง <b>ค้นหารหัส</b> เพื่อกรองตามรหัส เช่น "K1" หรือ "A3"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">➕ เพิ่มรหัสใหม่</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <b>เพิ่มรหัสใหม่</b> จะเปิด popup ให้กรอก</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">4</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">
+              กรอกข้อมูลใน popup
+              <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px;padding-left:4px;">
+                <div style="font-size:12.5px;color:#64748B;">• <b>รหัส</b> — เช่น K1, A3, S5 (ตัวพิมพ์ใหญ่อัตโนมัติ)</div>
+                <div style="font-size:12.5px;color:#64748B;">• <b>ประเภท</b> — เลือก K, A หรือ S</div>
+                <div style="font-size:12.5px;color:#64748B;">• <b>คำอธิบาย</b> — ชื่อหรือความหมายของรหัสนั้น</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">✏️ แก้ไขและลบ</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">5</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <span style="padding:2px 8px;border-radius:6px;background:#F3EEFF;font-size:12px;font-weight:600;color:#6B3FA0;">✏️ แก้ไข</span> เพื่อแก้ไขคำอธิบายของรหัสนั้น — รหัสและประเภทจะถูกล็อกไม่ให้แก้ไข</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:#FEE2E2;color:#EF4444;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">!</span>
+            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <span style="padding:2px 8px;border-radius:6px;background:#FEE2E2;font-size:12px;font-weight:600;color:#EF4444;">🗑️ ลบ</span> เพื่อลบรหัสออกจากระบบ — <span style="color:#EF4444;font-weight:600;">ไม่สามารถกู้คืนได้</span> และอาจกระทบข้อมูล PLO/MLO ที่อ้างอิงรหัสนั้นอยู่</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4 -->
+      <div style="margin-bottom:20px;">
+        <div style="
+          display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;
+          text-transform:uppercase;letter-spacing:.6px;
+          padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;
+        ">📈 สถิติด้านบน</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">6</span>
+          <div style="font-size:13.5px;color:#181117;line-height:1.6;">การ์ดสถิติ 4 ใบด้านบนแสดงจำนวนรหัสแยกตามประเภท K, A, S และยอดรวมทั้งหมดในระบบ — อัปเดตอัตโนมัติทุกครั้งที่เพิ่มหรือลบรหัส</div>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div style="
+        background:#F3EEFF;border-left:3px solid #6B3FA0;
+        border-radius:0 8px 8px 0;padding:12px 14px;
+        font-size:12.5px;color:#4A2870;line-height:1.6;
+      ">
+        <b>💡 หมายเหตุ:</b> รหัส KAS ที่เพิ่มในหน้านี้จะถูกใช้เป็น reference ในหน้า <b>QA Dashboard</b> สำหรับการ mapping PLO และ MLO ของแต่ละหลักสูตร
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- Footer -->
+    <div style="
+      padding:14px 24px;border-top:1px solid #EDE8F5;
+      display:flex;justify-content:flex-end;
+      position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;
+    ">
+      <button onclick="closeHelp()" style="
+        padding:9px 24px;border-radius:9px;border:none;
+        background:#6B3FA0;color:#fff;font-size:13px;font-weight:700;
+        font-family:inherit;cursor:pointer;
+        box-shadow:0 4px 12px rgba(107,63,160,.28);transition:all .18s;
+      " onmouseover="this.style.background='#4A2870'" onmouseout="this.style.background='#6B3FA0'">
+        รับทราบ
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -467,7 +637,9 @@ async function importDefaultData() {
     showToast("เชื่อมต่อ server ไม่ได้", "error");
   }
 }
-
+function openHelp(){document.getElementById('helpOverlay').style.display='flex';}
+function closeHelp(){document.getElementById('helpOverlay').style.display='none';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelp();});
 // ── Toast ─────────────────────────────────────────────────────
 function showToast(msg, type = "success") {
   const t = document.getElementById("toast");

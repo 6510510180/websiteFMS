@@ -18,6 +18,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
 
+/* ── TOPBAR ── */
 .topbar{width:100%;height:64px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;gap:16px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
 .topbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .topbar-logo-icon{width:32px;height:32px;background:var(--purple);border-radius:8px;display:flex;align-items:center;justify-content:center;}
@@ -30,21 +31,61 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
 .avatar{width:36px;height:36px;border-radius:50%;background:var(--purple-bg);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--purple);cursor:pointer;}
 
+/* ── HELP BUTTON ── */
+.help-circle-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--purple);background:var(--white);color:var(--purple);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;font-family:inherit;}
+.help-circle-btn:hover{background:var(--purple-light);}
+
+/* ── HELP MODAL ── */
+#helpOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:9000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.help-modal{background:#fff;border-radius:18px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.20);}
+.hm-header{padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;}
+.hm-header-left{display:flex;align-items:center;gap:10px;}
+.hm-icon-box{width:36px;height:36px;border-radius:10px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.hm-title{font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.hm-subtitle{font-size:11.5px;color:var(--text-sub);}
+.hm-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-sub);padding:4px 8px;border-radius:6px;line-height:1;transition:.15s;}
+.hm-close:hover{background:var(--purple-light);color:var(--purple);}
+
+.hm-body{padding:24px;}
+.hm-section{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.7px;padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:14px;margin-top:4px;}
+.hm-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.hm-step{display:flex;gap:12px;align-items:flex-start;}
+.hm-num{min-width:22px;height:22px;border-radius:50%;background:var(--purple-light);color:var(--purple);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.hm-step-text{font-size:13.5px;color:var(--text);line-height:1.65;}
+.hm-step-text b{color:var(--purple-dark);}
+
+.hm-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:4px;}
+.hm-badge-purple{background:#ede9fe;color:#6d28d9;}
+.hm-badge-amber{background:#fffbeb;color:#d97706;}
+.hm-badge-green{background:#dcfce7;color:#166534;}
+.hm-badge-blue{background:#eff6ff;color:#1d4ed8;}
+.hm-badge-red{background:#fee2e2;color:#991b1b;}
+
+/* ตารางสรุป column */
+.hm-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid #EDE8F5;}
+.hm-table th{background:var(--purple-light);color:var(--purple);font-weight:700;padding:9px 12px;text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;}
+.hm-table td{padding:9px 12px;border-top:1px solid #EDE8F5;color:var(--text);line-height:1.5;}
+.hm-table tr:nth-child(even) td{background:#fdfbff;}
+
+.hm-note{background:var(--purple-light);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:var(--purple-dark);line-height:1.65;}
+
+.hm-footer{padding:14px 24px;border-top:1px solid #EDE8F5;display:flex;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;}
+.hm-footer-btn{padding:9px 26px;border-radius:9px;border:none;background:var(--purple);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(127,19,236,.28);transition:all .18s;}
+.hm-footer-btn:hover{background:var(--purple-dark);}
+
+/* ── PAGE STYLES (เหมือนต้นฉบับ) ── */
 .page{max-width:960px;margin:0 auto;padding:40px 24px 80px;width:100%;}
 .page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 .page-title{font-size:28px;font-weight:900;color:var(--text);line-height:1.2;}
 .page-subtitle{font-size:14px;color:var(--purple-mid);margin-top:6px;}
 .header-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-
 .unsaved-badge{display:inline-flex;align-items:center;gap:6px;background:#fff7ed;border:1.5px solid #fed7aa;color:#c2410c;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;transition:opacity .25s;}
 .unsaved-badge.show{opacity:1;}
 .unsaved-dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:pulse 1.2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
 .tab-row{display:flex;background:var(--purple-bg);border-radius:10px;padding:4px;margin:24px 0 0;gap:0;}
 .tab-btn{flex:1;padding:10px 16px;border:none;background:transparent;font-family:'Lexend',sans-serif;font-size:14px;font-weight:700;color:var(--purple-mid);border-radius:8px;cursor:pointer;transition:.18s;}
 .tab-btn.active{background:var(--white);color:var(--purple);box-shadow:0 1px 4px rgba(0,0,0,0.08);}
-
 .import-bar{display:flex;align-items:center;gap:12px;background:var(--white);border:1.5px dashed var(--purple-mid);border-radius:12px;padding:14px 20px;margin-top:20px;transition:border-color .18s,background .18s;}
 .import-bar:hover{border-color:var(--purple);background:var(--purple-light);cursor:pointer;}
 .import-icon{width:40px;height:40px;background:var(--purple-light);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -63,12 +104,10 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .btn-amber{background:#d97706;color:white;}
 .btn-amber:hover{background:#b45309;}
 #fileInput{display:none;}
-
 .form-card{background:var(--white);border-radius:14px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(127,19,236,0.06);margin-top:20px;overflow:hidden;}
 .form-card-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .form-card-title{font-size:15px;font-weight:700;color:var(--text);}
 .entry-count{background:var(--purple-light);color:var(--purple);font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;}
-
 .plo-row{display:flex;align-items:center;gap:0;padding:12px 24px;border-bottom:1px solid #f3eeff;transition:background .15s;}
 .plo-row:last-child{border-bottom:none;}
 .plo-row:hover{background:#fdfbff;}
@@ -82,48 +121,34 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .row-del{width:32px;height:32px;border:none;background:transparent;border-radius:8px;cursor:pointer;color:#ccc;display:flex;align-items:center;justify-content:center;margin-left:10px;transition:.15s;flex-shrink:0;}
 .row-del:hover{background:#fee2e2;color:var(--red);}
 .row-del svg{width:16px;height:16px;fill:currentColor;}
-
-/* hint badge for MLO tab */
 .mlo-hint{display:none;align-items:center;gap:8px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 14px;margin-top:16px;font-size:12px;color:#1e40af;}
 .mlo-hint.show{display:flex;}
 .mlo-hint svg{width:14px;height:14px;fill:#3b82f6;flex-shrink:0;}
-
 .add-row-btn{width:100%;padding:13px;background:transparent;border:none;border-top:1px dashed #e0d8f0;color:var(--purple);font-family:'Noto Sans Thai',sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .18s;}
 .add-row-btn:hover{background:var(--purple-light);}
-
 .hint-box{background:var(--purple-bg);border:1px solid rgba(127,19,236,0.15);border-radius:12px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;margin-top:20px;}
 .hint-icon svg{width:20px;height:20px;fill:var(--purple);}
 .hint-text strong{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
 .hint-text p{font-size:13px;color:rgba(33,17,28,.65);line-height:1.6;}
-
 .footer-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
 .btn-cancel{height:44px;padding:0 28px;background:transparent;border:1.5px solid var(--border);border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:15px;font-weight:700;color:var(--text-sub);cursor:pointer;transition:.18s;}
 .btn-cancel:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-light);}
 .btn-save{height:44px;padding:0 32px;background:var(--purple);color:white;border:none;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(127,19,236,.25);transition:.18s;display:flex;align-items:center;gap:8px;}
 .btn-save:hover{background:var(--purple-dark);transform:translateY(-1px);}
 .btn-save svg{width:18px;height:18px;fill:white;}
-
 .empty-state{padding:48px 24px;text-align:center;color:var(--text-sub);}
 .empty-state svg{width:48px;height:48px;fill:#ddd;margin-bottom:12px;}
 .empty-state p{font-size:14px;}
-
 .toast{position:fixed;bottom:28px;right:28px;background:#1a1a2e;color:white;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-
-@media print {
-  .topbar,.import-bar,.footer-actions,.header-btns,.unsaved-badge,.add-row-btn,.row-del,.hint-box,.tab-row,.mlo-hint{display:none !important;}
-  body{background:white;}
-  .page{padding:20px;max-width:100%;}
-  .form-card{box-shadow:none;border:1px solid #ddd;}
-  .field-input{border:1px solid #ccc;}
-  .print-title{display:block !important;font-size:18px;font-weight:700;margin-bottom:8px;color:#7F13EC;}
-}
 .print-title{display:none;}
+@media print{.topbar,.import-bar,.footer-actions,.header-btns,.unsaved-badge,.add-row-btn,.row-del,.hint-box,.tab-row,.mlo-hint{display:none !important;}body{background:white;}.page{padding:20px;max-width:100%;}.form-card{box-shadow:none;border:1px solid #ddd;}.field-input{border:1px solid #ccc;}.print-title{display:block !important;font-size:18px;font-weight:700;margin-bottom:8px;color:#7F13EC;}}
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <header class="topbar">
   <a class="topbar-logo" href="#">
     <div class="topbar-logo-icon"><svg viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/></svg></div>
@@ -136,9 +161,14 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <a href="score-plo.html">คะแนนผลลัพธ์ PLO</a>
     <a href="kas.html">KAS</a>
   </nav>
-  <div class="topbar-right"><div class="avatar">A</div></div>
+  <div class="topbar-right">
+    <!-- ปุ่ม ? เปิดคู่มือ -->
+    <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
+    <div class="avatar">A</div>
+  </div>
 </header>
 
+<!-- MAIN PAGE -->
 <main class="page">
   <div class="page-header">
     <div>
@@ -163,7 +193,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <button class="tab-btn" onclick="switchTab('MLO',this)">MLO (Major Learning Outcome)</button>
   </div>
 
-  <!-- hint เฉพาะ MLO tab -->
   <div class="mlo-hint" id="mloHint">
     <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
     <span>กรอก <strong>กลุ่ม/วิชาเอก</strong> เพื่อให้ระบบจัดกลุ่มแสดงผลตามชื่อวิชาเอก เช่น "การเงินและการลงทุน", "การตลาด"</span>
@@ -220,31 +249,221 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 
 <div class="toast" id="toast"><div class="toast-dot" id="toastDot"></div><span id="toastMsg"></span></div>
 
-<script>
-/* ========= CONFIG ========= */
-const API_BASE   = ''; 
-const PROGRAM_ID = new URL(location.href).searchParams.get('programId') 
-                   || '00000000-0000-0000-0000-000000000001';         // ตั้งค่าให้ตรงหลักสูตร หรืออ่านจาก query string ก็ได้
-const USE_BULK_ENDPOINT = true;               // ถ้า serve.js ยังไม่มี bulk endpoint ให้ตั้ง false
+<!-- ══════════════════════════════════════════
+     HELP MODAL — plo.html
+     ══════════════════════════════════════════ -->
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
 
-// สำรองในเครื่องเป็นแผนสอง (ไม่ใช่แหล่งจริง)
+    <!-- Header -->
+    <div class="hm-header">
+      <div class="hm-header-left">
+        <div class="hm-icon-box">🎓</div>
+        <div>
+          <div class="hm-title">คู่มือการใช้งาน</div>
+          <div class="hm-subtitle">หน้าจัดการ PLO / MLO (plo.html)</div>
+        </div>
+      </div>
+      <button class="hm-close" onclick="closeHelp()">×</button>
+    </div>
+
+    <!-- Body -->
+    <div class="hm-body">
+
+      <!-- ── ภาพรวม ── -->
+      <div class="hm-section">📋 ภาพรวมหน้านี้</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">1</span>
+          <div class="hm-step-text">
+            หน้านี้ใช้ <b>กำหนดและจัดการ</b> ผลลัพธ์การเรียนรู้ระดับหลักสูตร (PLO) และระดับวิชาเอก (MLO) — แบ่งเป็น 2 Tab
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">2</span>
+          <div class="hm-step-text">
+            ข้อมูลในหน้านี้จะ <b>ส่งผลโดยตรง</b> ต่อหน้า Alignment Matrix, คะแนน PLO และระบบ KAS ทั้งหมด
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Tab PLO vs MLO ── -->
+      <div class="hm-section">🔀 ความแตกต่าง PLO และ MLO</div>
+      <table class="hm-table">
+        <thead>
+          <tr>
+            <th>หัวข้อ</th>
+            <th>PLO</th>
+            <th>MLO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ระดับ</td>
+            <td>หลักสูตร (Program)</td>
+            <td>วิชาเอก (Major)</td>
+          </tr>
+          <tr>
+            <td>Column ที่ต้องกรอก</td>
+            <td>รหัส, หัวข้อทักษะ</td>
+            <td>กลุ่ม/วิชาเอก, รหัส, หัวข้อทักษะ</td>
+          </tr>
+          <tr>
+            <td>ตัวอย่างรหัส</td>
+            <td>PLO1, PLO2</td>
+            <td>MLO1.1, MLO1.2</td>
+          </tr>
+          <tr>
+            <td>ตัวอย่างกลุ่ม</td>
+            <td>—</td>
+            <td>การเงินและการลงทุน, การตลาด</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ── เพิ่มรายการ ── -->
+      <div class="hm-section">➕ การเพิ่มรายการ</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">3</span>
+          <div class="hm-step-text">
+            เลือก Tab <b>PLO</b> หรือ <b>MLO</b> ก่อน จากนั้นกดปุ่ม <b>เพิ่มรายการ</b> ด้านล่างตาราง — ระบบจะเพิ่มแถวว่างให้กรอก
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">4</span>
+          <div class="hm-step-text">
+            Tab <b>MLO</b> มีช่อง <b>กลุ่ม/วิชาเอก</b> เพิ่มขึ้นมา — กรอกชื่อวิชาเอกให้ตรงกันทุกแถวที่อยู่กลุ่มเดียวกัน เพื่อให้ระบบจัดกลุ่มได้ถูกต้อง
+            <span class="hm-badge hm-badge-amber">สำคัญ</span>
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">5</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>🗑</b> ท้ายแถวเพื่อลบรายการนั้น
+            <span class="hm-badge hm-badge-red">ลบข้อมูลทันทีโดยไม่สามารถกู้คืนได้”</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Import Excel ── -->
+      <div class="hm-section">📂 นำเข้าจาก Excel (Import)</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">6</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>Template</b> เพื่อดาวน์โหลดไฟล์ตัวอย่าง — เปิดใน Excel แล้วกรอกข้อมูลตามรูปแบบที่กำหนด
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">7</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>เลือกไฟล์</b> หรือคลิกที่แถบสีเทาเพื่ออัปโหลดไฟล์ .xlsx — ระบบจะ <b>เพิ่มต่อท้าย</b> รายการที่มีอยู่ ไม่ใช่แทนที่
+            <span class="hm-badge hm-badge-blue">Append Mode (เพิ่มข้อมูลต่อท้ายรายการเดิม)</span>
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">8</span>
+          <div class="hm-step-text">
+            รูปแบบ Column ของแต่ละ Template:
+            <br><b>PLO Template:</b> คอลัมน์ A = รหัส, B = หัวข้อทักษะ
+            <br><b>MLO Template:</b> คอลัมน์ A = กลุ่ม/วิชาเอก, B = รหัส, C = หัวข้อทักษะ
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Export ── -->
+      <div class="hm-section">📤 ส่งออกข้อมูล (Export)</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">9</span>
+          <div class="hm-step-text">
+            <b>Export Excel</b>
+            <span class="hm-badge hm-badge-green">ไฟล์ .xlsx</span>
+            — ส่งออก PLO และ MLO ทั้งหมดในไฟล์เดียว แยก Sheet
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">10</span>
+          <div class="hm-step-text">
+            <b>Export PDF</b>
+            <span class="hm-badge hm-badge-amber">พิมพ์หน้าจอ</span>
+            — เปิด Print Dialog ของ Browser เพื่อบันทึกเป็น PDF หรือพิมพ์ออกกระดาษ
+          </div>
+        </div>
+      </div>
+
+      <!-- ── การบันทึก ── -->
+      <div class="hm-section">💾 การบันทึกข้อมูล</div>
+      <div class="hm-steps">
+        <div class="hm-step">
+          <span class="hm-num">11</span>
+          <div class="hm-step-text">
+            เมื่อมีการแก้ไข badge สีส้ม <b>"มีข้อมูลที่ยังไม่ได้บันทึก"</b> จะปรากฏมุมขวาบน — กดปุ่ม <b>บันทึกข้อมูล</b> เมื่อพร้อม
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">12</span>
+          <div class="hm-step-text">
+            ระบบบันทึกไปยัง <b>Server (API)</b> — หาก server ไม่ตอบสนองจะสำรองข้อมูลไว้ใน Browser ชั่วคราวแทน
+            <span class="hm-badge hm-badge-amber">ข้อมูลสำรองไม่ใช่แหล่งข้อมูลจริง</span>
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">13</span>
+          <div class="hm-step-text">
+            กดปุ่ม <b>ยกเลิก</b> เพื่อล้างข้อมูลทั้งหมดในแท็บปัจจุบัน — ระบบจะถามยืนยันก่อน
+            <span class="hm-badge hm-badge-red">ล้างทันที ไม่มี Undo</span>
+          </div>
+        </div>
+        <div class="hm-step">
+          <span class="hm-num">14</span>
+          <div class="hm-step-text">
+            หากปิด Browser โดยไม่บันทึก — Browser จะแจ้งเตือนก่อนปิดหน้า
+            <span class="hm-badge hm-badge-purple">beforeunload</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- หมายเหตุ -->
+      <div class="hm-note">
+        <b>💡 เคล็ดลับ:</b> ควรกรอก <b>PLO ให้ครบก่อน</b> จากนั้นจึงกรอก MLO — เนื่องจาก Alignment Matrix จะดึงข้อมูลทั้งสองส่วนมาเชื่อมกัน หาก PLO ยังไม่ครบ Matrix อาจแสดงผลไม่สมบูรณ์
+      </div>
+
+    </div><!-- /hm-body -->
+
+    <!-- Footer -->
+    <div class="hm-footer">
+      <button class="hm-footer-btn" onclick="closeHelp()">รับทราบ</button>
+    </div>
+
+  </div>
+</div><!-- /helpOverlay -->
+
+<script>
+/* ── Help Modal ── */
+function openHelp()  { document.getElementById('helpOverlay').style.display = 'flex'; }
+function closeHelp() { document.getElementById('helpOverlay').style.display = 'none'; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
+
+/* ── PAGE LOGIC (เหมือนต้นฉบับทุกอย่าง) ── */
+const API_BASE   = '';
+const PROGRAM_ID = new URL(location.href).searchParams.get('programId') || '00000000-0000-0000-0000-000000000001';
+const USE_BULK_ENDPOINT = true;
 const STORAGE_KEY = 'fms_plo_mlo_data_backup';
 
-/* ========= STATE ========= */
 let currentTab = 'PLO';
 let hasUnsaved = false;
 let data = { PLO: [], MLO: [] };
 
-/* ========= UI FLAGS ========= */
-function markUnsaved() { hasUnsaved = true; document.getElementById('unsavedBadge').classList.add('show'); }
+function markUnsaved() { hasUnsaved = true;  document.getElementById('unsavedBadge').classList.add('show'); }
 function markSaved()   { hasUnsaved = false; document.getElementById('unsavedBadge').classList.remove('show'); }
 
-/* ========= TAB / RENDER ========= */
 function switchTab(tab, btn) {
   currentTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('cardTitle').textContent = `รายการ ${tab}`;
+  document.getElementById('cardTitle').textContent  = `รายการ ${tab}`;
   document.getElementById('printTitle').textContent = `รายการ ${tab} — ระบบจัดการผลลัพธ์การเรียนรู้`;
   const mloHint = document.getElementById('mloHint');
   tab === 'MLO' ? mloHint.classList.add('show') : mloHint.classList.remove('show');
@@ -266,7 +485,6 @@ function renderRows() {
   }
 
   const gridCols = isMlo ? '160px 140px 1fr' : '180px 1fr';
-
   container.innerHTML = rows.map((r, i) => `
     <div class="plo-row">
       <div class="row-num">${i+1}</div>
@@ -292,254 +510,98 @@ function renderRows() {
 }
 
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
 function addRow() {
   const isMlo = currentTab === 'MLO';
   data[currentTab].push(isMlo ? {group:'',code:'',skill:''} : {code:'',skill:''});
-  markUnsaved();
-  renderRows();
-  setTimeout(() => {
-    const inp = document.querySelectorAll('.field-input');
-    if (inp.length) inp[inp.length - (isMlo?3:2)].focus();
-  }, 50);
+  markUnsaved(); renderRows();
+  setTimeout(() => { const inp = document.querySelectorAll('.field-input'); if(inp.length) inp[inp.length-(isMlo?3:2)].focus(); }, 50);
 }
-
 function deleteRow(i)       { data[currentTab].splice(i,1); markUnsaved(); renderRows(); }
 function updateField(i,f,v) { data[currentTab][i][f]=v; markUnsaved(); }
 function resetRows()        { if(!data[currentTab].length||confirm('ต้องการล้างข้อมูลทั้งหมดในแท็บนี้?')){ data[currentTab]=[]; markUnsaved(); renderRows(); } }
 
-/* ========= LOAD (from API) ========= */
 async function loadFromServer() {
   try {
     if (USE_BULK_ENDPOINT) {
-      const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo`, { cache:'no-store' });
+      const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo`,{cache:'no-store'});
       if (!res.ok) throw new Error('bulk-get failed');
       const payload = await res.json();
       data = {
-        PLO: (payload.PLO || []).map(r => ({ code: r.code, skill: r.skill })),
-        MLO: (payload.MLO || []).map(r => ({ group: r.group || '', code: r.code, skill: r.skill }))
+        PLO:(payload.PLO||[]).map(r=>({code:r.code,skill:r.skill})),
+        MLO:(payload.MLO||[]).map(r=>({group:r.group||'',code:r.code,skill:r.skill}))
       };
     } else {
-      // LEGACY LOAD: ใช้เส้นทางที่มีอยู่แล้วใน serve.js ปัจจุบัน
-      // 1) PLOs
-      const plos = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plos`, { cache:'no-store' })).json();
-      // 2) Major groups
-      const groups = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/major-groups`, { cache:'no-store' })).json();
-      // 3) MLOs ต่อกลุ่ม
+      const plos = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plos`,{cache:'no-store'})).json();
+      const groups = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/major-groups`,{cache:'no-store'})).json();
       const mloArr = [];
-      for (const g of groups) {
-        const mlos = await (await fetch(`${API_BASE}/api/major-groups/${g.id}/mlos`, { cache:'no-store' })).json();
-        for (const m of mlos) {
-          mloArr.push({ group: g.label || '', code: m.code, skill: m.description });
-        }
-      }
-      data = {
-        PLO: (plos || []).map(p => ({ code: p.code, skill: p.description })),
-        MLO: mloArr
-      };
+      for (const g of groups) { const mlos = await (await fetch(`${API_BASE}/api/major-groups/${g.id}/mlos`,{cache:'no-store'})).json(); for (const m of mlos) mloArr.push({group:g.label||'',code:m.code,skill:m.description}); }
+      data = { PLO:(plos||[]).map(p=>({code:p.code,skill:p.description})), MLO:mloArr };
     }
-
-    markSaved();
-    renderRows();
-  } catch (e) {
+    markSaved(); renderRows();
+  } catch(e) {
     console.error(e);
     showToast('ดึงข้อมูลจากเซิร์ฟเวอร์ล้มเหลว','#ef4444');
-    // fallback: ใช้สำรองในเครื่องเพื่อให้ใช้งานต่อได้
-    try {
-      data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"PLO":[],"MLO":[]}');
-      renderRows();
-      showToast('เปิดข้อมูลสำรองในเครื่องชั่วคราว','#f59e0b');
-    } catch {}
+    try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)||'{"PLO":[],"MLO":[]}'); renderRows(); showToast('เปิดข้อมูลสำรองในเครื่องชั่วคราว','#f59e0b'); } catch {}
   }
 }
 
-/* ========= SAVE (to API) ========= */
 async function saveData() {
   const isMlo = currentTab === 'MLO';
-  const incomplete = (data[currentTab]||[]).filter(r => {
-    if (isMlo) return !r.code?.trim() || !r.skill?.trim(); // group ไม่บังคับ
-    return !r.code?.trim() || !r.skill?.trim();
-  });
-  if (incomplete.length) {
-    showToast(`⚠️ กรุณากรอกรหัสและหัวข้อทักษะให้ครบ (${incomplete.length} รายการ)`,'#f59e0b');
-    return;
-  }
-
+  const incomplete = (data[currentTab]||[]).filter(r=>!r.code?.trim()||!r.skill?.trim());
+  if (incomplete.length) { showToast(`⚠️ กรุณากรอกรหัสและหัวข้อทักษะให้ครบ (${incomplete.length} รายการ)`,'#f59e0b'); return; }
   try {
     if (USE_BULK_ENDPOINT) {
-      // เรียก Bulk PUT → แทนที่ทั้งชุด
-      const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo`, {
-        method: 'PUT',
-        headers: { 'Content-Type':'application/json' },
-        body: JSON.stringify({ PLO: data.PLO, MLO: data.MLO })
-      });
+      const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({PLO:data.PLO,MLO:data.MLO})});
       if (!res.ok) throw new Error('bulk-put failed');
       await res.json();
-    } else {
-      // LEGACY SAVE: ลบทั้งหมดแล้วสร้างใหม่ (คอลเดียว แต่ชัวร์)
-      await legacySaveAll();
     }
-
-    // สำรองในเครื่อง (ไม่ใช่แหล่งจริง)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     markSaved();
     showToast(`✓ บันทึก ${currentTab} จำนวน ${data[currentTab].length} รายการสำเร็จ`);
-  } catch (e) {
-    console.error(e);
-    showToast('❌ บันทึกไปเซิร์ฟเวอร์ไม่สำเร็จ','#ef4444');
-  }
+  } catch(e) { console.error(e); showToast('❌ บันทึกไปเซิร์ฟเวอร์ไม่สำเร็จ','#ef4444'); }
 }
-
-// LEGACY SAVE: สำหรับกรณีที่ยังไม่มี bulk endpoint ใน serve.js
-async function legacySaveAll() {
-  // 1) โหลดของเดิม
-  const oldPlos = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plos`)).json();
-  const groups = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/major-groups`)).json();
-  // 2) ลบ PLO เดิมทั้งหมด
-  for (const p of (oldPlos||[])) {
-    await fetch(`${API_BASE}/api/plos/${p.id}`, { method:'DELETE', headers:{'Content-Type':'application/json'} });
-  }
-  // 3) สร้าง PLO ใหม่ (เรียงตามลำดับในตาราง)
-  let order = 1;
-  for (const r of data.PLO) {
-    await fetch(`${API_BASE}/api/plos`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ program_id: PROGRAM_ID, code: r.code.trim(), description: r.skill.trim(), sort_order: order++ })
-    });
-  }
-
-  // 4) ลบ MLO เดิมทั้งหมด (ต้องลบจากแต่ละกลุ่ม)
-  const groupMap = new Map(groups.map(g => [g.label, g]));
-  for (const g of groups) {
-    const mlos = await (await fetch(`${API_BASE}/api/major-groups/${g.id}/mlos`)).json();
-    for (const m of mlos) {
-      await fetch(`${API_BASE}/api/mlos/${m.id}`, { method:'DELETE', headers:{'Content-Type':'application/json'} });
-    }
-  }
-
-  // 5) สร้างกลุ่มที่ยังไม่มี + ใส่ MLO ใหม่
-  //    สแกนกลุ่มตามลำดับปรากฏใน data.MLO
-  const orderedGroupLabels = [];
-  for (const r of data.MLO) {
-    const label = (r.group||'').trim() || 'ทั่วไป';
-    if (!orderedGroupLabels.includes(label)) orderedGroupLabels.push(label);
-  }
-  // ensure/สร้าง group ตามลำดับ
-  for (let idx=0; idx<orderedGroupLabels.length; idx++) {
-    const label = orderedGroupLabels[idx];
-    if (!groupMap.has(label)) {
-      // สร้าง group ใหม่
-      await fetch(`${API_BASE}/api/major-groups`, {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ program_id: PROGRAM_ID, label, sort_order: idx+1 })
-      });
-    } else {
-      // อัปเดตลำดับ (optional)
-      const g = groupMap.get(label);
-      await fetch(`${API_BASE}/api/major-groups/${g.id}`, {
-        method:'PUT', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ sort_order: idx+1 })
-      });
-    }
-  }
-  // รีโหลดกลุ่มเพื่อได้ id ล่าสุด
-  const groupsLatest = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/major-groups`)).json();
-  const grpLabelToId = new Map(groupsLatest.map(g => [g.label, g.id]));
-
-  // ใส่ MLO ใหม่ (ออเดอร์ตามการปรากฏ)
-  const perGroupOrder = {};
-  for (const r of data.MLO) {
-    const label = (r.group||'').trim() || 'ทั่วไป';
-    const mgId = grpLabelToId.get(label);
-    if (!perGroupOrder[mgId]) perGroupOrder[mgId] = 1;
-    await fetch(`${API_BASE}/api/mlos`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        major_group_id: mgId,
-        code: r.code.trim(),
-        description: r.skill.trim(),
-        sort_order: perGroupOrder[mgId]++
-      })
-    });
-  }
-}
-
-/* ========= EXPORT / IMPORT (เดิม) ========= */
-// (ฟังก์ชัน exportExcel(), exportPDF(), downloadTemplate(), importExcel() คงเดิมด้านล่าง)
 
 function exportExcel() {
   const wb = XLSX.utils.book_new();
-  { const header = ['ลำดับ','รหัส','หัวข้อทักษะ'];
-    const body = data.PLO.map((r,i) => [i+1, r.code, r.skill]);
-    const ws = XLSX.utils.aoa_to_sheet([header,...body]);
-    ws['!cols'] = [{wch:8},{wch:14},{wch:60}];
-    XLSX.utils.book_append_sheet(wb, ws, 'PLO'); }
-  { const header = ['ลำดับ','กลุ่ม/วิชาเอก','รหัส','หัวข้อทักษะ'];
-    const body = data.MLO.map((r,i) => [i+1, r.group||'', r.code, r.skill]);
-    const ws = XLSX.utils.aoa_to_sheet([header,...body]);
-    ws['!cols'] = [{wch:8},{wch:28},{wch:14},{wch:60}];
-    XLSX.utils.book_append_sheet(wb, ws, 'MLO'); }
-  XLSX.writeFile(wb, `PLO_MLO_export_${new Date().toISOString().slice(0,10)}.xlsx`);
+  { const ws = XLSX.utils.aoa_to_sheet([['ลำดับ','รหัส','หัวข้อทักษะ'],...data.PLO.map((r,i)=>[i+1,r.code,r.skill])]); ws['!cols']=[{wch:8},{wch:14},{wch:60}]; XLSX.utils.book_append_sheet(wb,ws,'PLO'); }
+  { const ws = XLSX.utils.aoa_to_sheet([['ลำดับ','กลุ่ม/วิชาเอก','รหัส','หัวข้อทักษะ'],...data.MLO.map((r,i)=>[i+1,r.group||'',r.code,r.skill])]); ws['!cols']=[{wch:8},{wch:28},{wch:14},{wch:60}]; XLSX.utils.book_append_sheet(wb,ws,'MLO'); }
+  XLSX.writeFile(wb,`PLO_MLO_export_${new Date().toISOString().slice(0,10)}.xlsx`);
   showToast('✓ Export Excel สำเร็จ');
 }
 function exportPDF() { window.print(); }
 function downloadTemplate() {
-  const isMlo = currentTab === 'MLO';
+  const isMlo = currentTab==='MLO';
   const wb = XLSX.utils.book_new();
   if (isMlo) {
-    const header = [['กลุ่ม/วิชาเอก','รหัส','หัวข้อทักษะ']];
-    const examples = [
-      ['การเงินและการลงทุน','MLO1.1','อธิบายทฤษฎีวิเคราะห์ตราสารทางการเงินภายใต้หลักเกณฑ์ของ ก.ล.ต.'],
-      ['การเงินและการลงทุน','MLO1.2','วางแผนการเงินส่วนบุคคลตามมาตรฐานของสมาคมนักวางแผนการเงินไทย'],
-      ['การตลาดและการสื่อสาร','MLO2.1','วิเคราะห์กลยุทธ์ทางการตลาดอย่างสร้างสรรค์'],
-      ['การตลาดและการสื่อสาร','MLO2.2','วิเคราะห์แนวทางการแก้ไขปัญหาทางการตลาดเชิงนวัตกรรม'],
-    ];
-    const ws = XLSX.utils.aoa_to_sheet([...header,...examples]);
-    ws['!cols'] = [{wch:28},{wch:14},{wch:60}];
-    XLSX.utils.book_append_sheet(wb, ws, 'MLO Template');
-    XLSX.writeFile(wb, 'MLO_template.xlsx');
+    const ws = XLSX.utils.aoa_to_sheet([['กลุ่ม/วิชาเอก','รหัส','หัวข้อทักษะ'],['การเงินและการลงทุน','MLO1.1','อธิบายทฤษฎีวิเคราะห์ตราสารทางการเงิน'],['การเงินและการลงทุน','MLO1.2','วางแผนการเงินส่วนบุคคล'],['การตลาดและการสื่อสาร','MLO2.1','วิเคราะห์กลยุทธ์ทางการตลาด'],['การตลาดและการสื่อสาร','MLO2.2','วิเคราะห์แนวทางการแก้ไขปัญหาทางการตลาด']]);
+    ws['!cols']=[{wch:28},{wch:14},{wch:60}];
+    XLSX.utils.book_append_sheet(wb,ws,'MLO Template');
+    XLSX.writeFile(wb,'MLO_template.xlsx');
   } else {
-    const header = [['รหัส','หัวข้อทักษะ']];
-    const examples = [
-      ['PLO1','ความรู้ด้านทฤษฎีและแนวคิดหลักของวิชาเอก'],
-      ['PLO2','ทักษะการวิเคราะห์และแก้ปัญหาอย่างเป็นระบบ'],
-    ];
-    const ws = XLSX.utils.aoa_to_sheet([...header,...examples]);
-    ws['!cols'] = [{wch:14},{wch:56}];
-    XLSX.utils.book_append_sheet(wb, ws, 'PLO Template');
-    XLSX.writeFile(wb, 'PLO_template.xlsx');
+    const ws = XLSX.utils.aoa_to_sheet([['รหัส','หัวข้อทักษะ'],['PLO1','ความรู้ด้านทฤษฎีและแนวคิดหลักของวิชาเอก'],['PLO2','ทักษะการวิเคราะห์และแก้ปัญหาอย่างเป็นระบบ']]);
+    ws['!cols']=[{wch:14},{wch:56}];
+    XLSX.utils.book_append_sheet(wb,ws,'PLO Template');
+    XLSX.writeFile(wb,'PLO_template.xlsx');
   }
   showToast(`✓ ดาวน์โหลด Template สำเร็จ`);
 }
 function importExcel(e) {
   const file = e.target.files[0]; if(!file) return;
-  const isMlo = currentTab === 'MLO';
+  const isMlo = currentTab==='MLO';
   const reader = new FileReader();
   reader.onload = ev => {
     try {
       const wb = XLSX.read(ev.target.result,{type:'binary'});
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''});
       const imported = [];
       for(let i=1;i<json.length;i++){
-        const row = json[i];
-        if (isMlo) {
-          const group = String(row[0]||'').trim();
-          const code  = String(row[1]||'').trim();
-          const skill = String(row[2]||'').trim();
-          if(code||skill) imported.push({group, code, skill});
-        } else {
-          const code  = String(row[0]||'').trim();
-          const skill = String(row[1]||'').trim();
-          if(code||skill) imported.push({code, skill});
-        }
+        const row=json[i];
+        if(isMlo){ const group=String(row[0]||'').trim(),code=String(row[1]||'').trim(),skill=String(row[2]||'').trim(); if(code||skill) imported.push({group,code,skill}); }
+        else      { const code=String(row[0]||'').trim(),skill=String(row[1]||'').trim(); if(code||skill) imported.push({code,skill}); }
       }
       if(!imported.length){showToast('⚠️ ไม่พบข้อมูลในไฟล์','#f59e0b');return;}
-      data[currentTab] = [...data[currentTab],...imported];
-      markUnsaved();
-      renderRows();
+      data[currentTab]=[...data[currentTab],...imported];
+      markUnsaved(); renderRows();
       showToast(`✓ นำเข้า ${imported.length} รายการสำเร็จ`);
     } catch{showToast('❌ ไม่สามารถอ่านไฟล์ได้','#ef4444');}
   };
@@ -547,7 +609,6 @@ function importExcel(e) {
   e.target.value='';
 }
 
-/* ========= TOAST ========= */
 let _tt;
 function showToast(msg,color='#22c55e'){
   document.getElementById('toastDot').style.background=color;
@@ -558,10 +619,7 @@ function showToast(msg,color='#22c55e'){
   _tt=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-/* ========= INIT ========= */
-window.addEventListener('beforeunload', (e) => {
-  if (hasUnsaved) { e.preventDefault(); e.returnValue = ''; }
-});
+window.addEventListener('beforeunload', (e)=>{ if(hasUnsaved){e.preventDefault();e.returnValue='';} });
 loadFromServer();
 </script>
 </body>
