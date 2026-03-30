@@ -105,7 +105,7 @@ router.post('/major-subjects', async (req, res) => {
     ok(res, rows[0], 201);
   } catch (e) {
     if (e.code === 'ER_DUP_ENTRY')
-      return err(res, `รหัสวิชา "${subject_code}" มีอยู่แล้วในสาขานี้`, 409);
+      return err(res, `รหัสวิชา "${subject_code}" มีอยู่แล้วในวิชาเอกนี้`, 409);
     err(res, e.message);
   }
 });
@@ -140,7 +140,7 @@ router.put('/major-subjects/:id', async (req, res) => {
     ok(res, rows[0]);
   } catch (e) {
     if (e.code === 'ER_DUP_ENTRY')
-      return err(res, 'รหัสวิชานี้ซ้ำในสาขาเดิม', 409);
+      return err(res, 'รหัสวิชานี้ซ้ำในวิชาเอกเดิม', 409);
     err(res, e.message);
   }
 });

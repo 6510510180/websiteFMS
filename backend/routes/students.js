@@ -91,7 +91,7 @@ module.exports = function(pool) {
           const idx = Object.keys(majorMap).length;
           majorMap[r.major_id] = {
             id:      r.major_id,
-            name_th: r.major_name    || `สาขา ${r.major_id}`,
+            name_th: r.major_name    || `วิชาเอก ${r.major_id}`,
             name_en: r.major_name_en || '',
             short:   r.major_name_en || r.major_name || `M${r.major_id}`,
             color:   DEFAULT_COLORS[idx % DEFAULT_COLORS.length],
