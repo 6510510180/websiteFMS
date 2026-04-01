@@ -1,6 +1,6 @@
 // ============================================================
-//  fms-api-year.js  —  Multi-Year API Routes
-//  เพิ่มไฟล์นี้เข้า Express app ด้วย:
+//  fms-api-year.js  —  Multi-Year API Routes (FIXED)
+//  เพิ่มไ��ล์นี้เข้า Express app ด้วย:
 //    const yearRoutes = require('./fms-api-year');
 //    app.use('/api', yearRoutes);
 // ============================================================
@@ -8,21 +8,33 @@ const express = require('express');
 const router  = express.Router();
 
 // ── helper: db query (ปรับให้ตรงกับ pool ที่ใช้อยู่) ──────
-// สมมติใช้ mysql2/promise pool ชื่อ `db`
-// ถ้าใช้ชื่ออื่นให้เปลี่ยนตรงนี้
 let db;
 try { db = require('./db'); }
-catch(_) { db = null; } {
+catch(_) { db = null; }
+if (!db) {
   // fallback สำหรับ test
-  db = { query: async () => [[],[]] };
+  db = { 
+    query: async () => [[], []],
+    getConnection: async () => ({
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      query: async () => [[], []],
+      release: () => {}
+    })
+  };
 }
 
 const q = (sql, params) => db.query(sql, params);
 
-// ── ฟังก์ชัน validate year ────────────────────────────────
+// ── ฟังก์ชัน validate ────────────────────────────────────
 function validYear(year) {
   const n = parseInt(year);
   return Number.isInteger(n) && n >= 2500 && n <= 2700 ? n : null;
+}
+
+function validUUID(id) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -36,6 +48,7 @@ router.get('/academic-years', async (req, res) => {
     );
     res.json({ years: rows });
   } catch (e) {
+    console.error('[GET /academic-years]', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -47,14 +60,20 @@ router.get('/academic-years', async (req, res) => {
 router.post('/academic-years', async (req, res) => {
   const { year, label } = req.body;
   const y = validYear(year);
-  if (!y) return res.status(400).json({ error: 'year ไม่ถูกต้อง' });
+  if (!y) return res.status(400).json({ error: 'year ไม่ถูกต้อง (ต้อง 2500-2700)' });
+  
   try {
     await q(
-      'INSERT IGNORE INTO academic_years (year, label) VALUES (?, ?)',
+      'INSERT IGNORE INTO academic_years (year, label, is_active) VALUES (?, ?, 1)',
       [y, label || `ปีการศึกษา ${y}`]
     );
-    res.json({ year: y, label: label || `ปีการศึกษา ${y}` });
+    res.json({ 
+      year: y, 
+      label: label || `ปีการศึกษา ${y}`,
+      is_active: 1
+    });
   } catch (e) {
+    console.error('[POST /academic-years]', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -65,6 +84,8 @@ router.post('/academic-years', async (req, res) => {
 // ─────────────────────────────────────────────────────────────
 router.get('/programs/:programId/plo-mlo', async (req, res) => {
   const { programId } = req.params;
+  if (!validUUID(programId)) return res.status(400).json({ error: 'programId ไม่ถูกต้อง' });
+  
   const year = validYear(req.query.year) || 2567;
 
   try {
@@ -88,8 +109,9 @@ router.get('/programs/:programId/plo-mlo', async (req, res) => {
       [programId, year]
     );
 
-    res.json({ year, PLO: plos, MLO: mlos });
+    res.json({ year, PLO: plos || [], MLO: mlos || [] });
   } catch (e) {
+    console.error('[GET /programs/:programId/plo-mlo]', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -101,11 +123,14 @@ router.get('/programs/:programId/plo-mlo', async (req, res) => {
 // ─────────────────────────────────────────────────────────────
 router.put('/programs/:programId/plo-mlo', async (req, res) => {
   const { programId } = req.params;
+  if (!validUUID(programId)) return res.status(400).json({ error: 'programId ไม่ถูกต้อง' });
+  
   const year = validYear(req.query.year || req.body.year) || 2567;
   const { PLO = [], MLO = [] } = req.body;
 
-  const conn = await db.getConnection();
+  let conn;
   try {
+    conn = await db.getConnection();
     await conn.beginTransaction();
 
     // ── PLO: ลบของปีนั้นแล้ว insert ใหม่ ──────────────────
@@ -115,10 +140,11 @@ router.put('/programs/:programId/plo-mlo', async (req, res) => {
     );
     for (let i = 0; i < PLO.length; i++) {
       const { code, skill } = PLO[i];
+      if (!code || !code.trim()) continue; // skip empty
       await conn.query(
         `INSERT INTO plos (program_id, academic_year, code, description, sort_order)
          VALUES (?, ?, ?, ?, ?)`,
-        [programId, year, code, skill || '', i + 1]
+        [programId, year, code.trim(), (skill || '').trim(), i + 1]
       );
     }
 
@@ -126,66 +152,75 @@ router.put('/programs/:programId/plo-mlo', async (req, res) => {
     // groupby group label
     const groupMap = {};
     MLO.forEach((m, idx) => {
-      const g = m.group || 'MLO ทั้งหมด';
+      const g = (m.group || 'MLO ทั้งหมด').trim();
       if (!groupMap[g]) groupMap[g] = [];
       groupMap[g].push({ ...m, idx });
     });
 
-    // ลบ mlos ของปีนั้น (major_groups ไม่ลบ เพราะอาจแชร์กันหลายปี)
-    // แต่เพิ่ม academic_year ใน mlos แทน
+    // ลบ mlos ของปีนั้น
     await conn.query(
       `DELETE m FROM mlos m
-       JOIN major_groups mg ON mg.id = m.group_id
+       JOIN major_groups mg ON mg.id = m.major_group_id
        WHERE mg.program_id = ? AND m.academic_year = ?`,
       [programId, year]
     );
 
     let gOrder = 1;
     for (const [groupLabel, items] of Object.entries(groupMap)) {
-      // หา/สร้าง major_group (ไม่ขึ้นกับปี)
-      const [[existG]] = await conn.query(
+      // หา/สร้าง major_group
+      const [existRows] = await conn.query(
         'SELECT id FROM major_groups WHERE program_id = ? AND label = ? LIMIT 1',
         [programId, groupLabel]
       );
+      
       let groupId;
-      if (existG) {
-        groupId = existG.id;
+      if (existRows && existRows.length > 0) {
+        groupId = existRows[0].id;
       } else {
-        const [ins] = await conn.query(
+        const [insResult] = await conn.query(
           'INSERT INTO major_groups (program_id, label, sort_order) VALUES (?, ?, ?)',
           [programId, groupLabel, gOrder]
         );
-        groupId = ins.insertId;
+        groupId = insResult.insertId;
       }
       gOrder++;
 
-      // insert mlos พร้อม academic_year
+      // insert mlos
       for (let j = 0; j < items.length; j++) {
         const { code, skill } = items[j];
+        if (!code || !code.trim()) continue; // skip empty
         await conn.query(
           `INSERT INTO mlos (major_group_id, academic_year, code, description, sort_order)
            VALUES (?, ?, ?, ?, ?)`,
-          [groupId, year, code, skill || '', j + 1]
+          [groupId, year, code.trim(), (skill || '').trim(), j + 1]
         );
       }
     }
 
     await conn.commit();
-    res.json({ ok: true, year, ploCount: PLO.length, mloCount: MLO.length });
+    res.json({ 
+      ok: true, 
+      year, 
+      ploCount: PLO.filter(p => p.code && p.code.trim()).length,
+      mloCount: MLO.filter(m => m.code && m.code.trim()).length
+    });
   } catch (e) {
-    await conn.rollback();
+    if (conn) await conn.rollback();
+    console.error('[PUT /programs/:programId/plo-mlo]', e);
     res.status(500).json({ error: e.message });
   } finally {
-    conn.release();
+    if (conn) conn.release();
   }
 });
 
-// ─────────────────────────────────────────────────────────────
+// ─────────────────��───────────────────────────────────────────
 //  5. GET /api/programs/:programId/matrix?year=2567
 //     ดึงข้อมูล Alignment Matrix ตามปี
 // ─────────────────────────────────────────────────────────────
 router.get('/programs/:programId/matrix', async (req, res) => {
   const { programId } = req.params;
+  if (!validUUID(programId)) return res.status(400).json({ error: 'programId ไม่ถูกต้อง' });
+  
   const year = validYear(req.query.year) || 2567;
 
   try {
@@ -214,7 +249,7 @@ router.get('/programs/:programId/matrix', async (req, res) => {
     );
     const [mlos] = await q(
       `SELECT m.id, m.code FROM mlos m
-       JOIN major_groups mg ON mg.id = m.group_id
+       JOIN major_groups mg ON mg.id = m.major_group_id
        WHERE mg.program_id = ? AND m.academic_year = ?
        ORDER BY mg.sort_order, m.sort_order`,
       [programId, year]
@@ -222,15 +257,22 @@ router.get('/programs/:programId/matrix', async (req, res) => {
 
     // checkMap: { rowId: [colId, ...] }
     const checkMap = {};
-    checks.forEach(c => {
+    (checks || []).forEach(c => {
       if (c.checked) {
         if (!checkMap[c.row_id]) checkMap[c.row_id] = [];
         checkMap[c.row_id].push(c.col_id);
       }
     });
 
-    res.json({ year, plos, mlos, rows, checkMap });
+    res.json({ 
+      year, 
+      plos: plos || [], 
+      mlos: mlos || [], 
+      rows: rows || [], 
+      checkMap 
+    });
   } catch (e) {
+    console.error('[GET /programs/:programId/matrix]', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -241,11 +283,14 @@ router.get('/programs/:programId/matrix', async (req, res) => {
 // ─────────────────────────────────────────────────────────────
 router.put('/programs/:programId/matrix/rows', async (req, res) => {
   const { programId } = req.params;
+  if (!validUUID(programId)) return res.status(400).json({ error: 'programId ไม่ถูกต้อง' });
+  
   const year = validYear(req.query.year || req.body.year) || 2567;
   const { rows = [] } = req.body;
 
-  const conn = await db.getConnection();
+  let conn;
   try {
+    conn = await db.getConnection();
     await conn.beginTransaction();
 
     // ลบ checks ของ rows ที่จะ reset
@@ -263,21 +308,27 @@ router.put('/programs/:programId/matrix/rows', async (req, res) => {
     const savedRows = [];
     for (let i = 0; i < rows.length; i++) {
       const { group_label, title, description } = rows[i];
-      const [ins] = await conn.query(
+      const [insResult] = await conn.query(
         `INSERT INTO matrix_rows (program_id, academic_year, group_label, title, description, sort_order)
          VALUES (?, ?, ?, ?, ?, ?)`,
         [programId, year, group_label || '', title || '', description || '', i + 1]
       );
-      savedRows.push({ id: ins.insertId, group_label, title, description });
+      savedRows.push({ 
+        id: insResult.insertId, 
+        group_label, 
+        title, 
+        description 
+      });
     }
 
     await conn.commit();
     res.json({ ok: true, year, rows: savedRows });
   } catch (e) {
-    await conn.rollback();
+    if (conn) await conn.rollback();
+    console.error('[PUT /programs/:programId/matrix/rows]', e);
     res.status(500).json({ error: e.message });
   } finally {
-    conn.release();
+    if (conn) conn.release();
   }
 });
 
@@ -287,6 +338,10 @@ router.put('/programs/:programId/matrix/rows', async (req, res) => {
 // ─────────────────────────────────────────────────────────────
 router.post('/matrix/toggle-check', async (req, res) => {
   const { row_id, col_type, col_id, checked } = req.body;
+  if (!row_id || !col_type || !col_id) {
+    return res.status(400).json({ error: 'ต้องมี row_id, col_type, col_id' });
+  }
+  
   try {
     await q(
       `INSERT INTO matrix_checks (row_id, col_type, col_id, checked)
@@ -296,6 +351,7 @@ router.post('/matrix/toggle-check', async (req, res) => {
     );
     res.json({ ok: true });
   } catch (e) {
+    console.error('[POST /matrix/toggle-check]', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -306,32 +362,48 @@ router.post('/matrix/toggle-check', async (req, res) => {
 // ─────────────────────────────────────────────────────────────
 router.get('/plo/scores', async (req, res) => {
   const { program_id, year } = req.query;
+  if (!program_id) return res.status(400).json({ error: 'ต้องมี program_id' });
+  
   const y = validYear(year) || 2567;
   try {
-    const [[row]] = await q(
-      'SELECT score_data, updated_at FROM plo_scores WHERE program_id = ? AND academic_year = ?',
+    const [rows] = await q(
+      'SELECT score_data, updated_at FROM plo_scores WHERE program_id = ? AND academic_year = ? LIMIT 1',
       [program_id, y]
     );
-    if (!row) return res.json({ success: true, year: y, data: [] });
-    const data = JSON.parse(row.score_data || '[]');
-    res.json({ success: true, year: y, data, updatedAt: row.updated_at });
+    
+    if (!rows || rows.length === 0) {
+      return res.json({ success: true, year: y, data: [] });
+    }
+    
+    const row = rows[0];
+    const data = row.score_data ? JSON.parse(row.score_data) : [];
+    res.json({ 
+      success: true, 
+      year: y, 
+      data, 
+      updatedAt: row.updated_at 
+    });
   } catch (e) {
+    console.error('[GET /plo/scores]', e);
     res.status(500).json({ success: false, message: e.message });
   }
 });
 
 router.put('/plo/scores', async (req, res) => {
   const { year, program_id, data = [] } = req.body;
+  if (!program_id) return res.status(400).json({ error: 'ต้องมี program_id' });
+  
   const y = validYear(year) || 2567;
   try {
     await q(
-      `INSERT INTO plo_scores (program_id, academic_year, score_data)
-       VALUES (?, ?, ?)
+      `INSERT INTO plo_scores (program_id, academic_year, score_data, updated_at)
+       VALUES (?, ?, ?, NOW())
        ON DUPLICATE KEY UPDATE score_data = VALUES(score_data), updated_at = NOW()`,
       [program_id, y, JSON.stringify(data)]
     );
     res.json({ success: true, year: y, count: data.length });
   } catch (e) {
+    console.error('[PUT /plo/scores]', e);
     res.status(500).json({ success: false, message: e.message });
   }
 });
@@ -342,6 +414,8 @@ router.put('/plo/scores', async (req, res) => {
 // ─────────────────────────────────────────────────────────────
 router.get('/plo/available-years', async (req, res) => {
   const { program_id } = req.query;
+  if (!program_id) return res.status(400).json({ error: 'ต้องมี program_id' });
+  
   try {
     const [rows] = await q(
       `SELECT DISTINCT academic_year AS year
@@ -350,13 +424,15 @@ router.get('/plo/available-years', async (req, res) => {
        ORDER BY academic_year DESC`,
       [program_id]
     );
+    
     // fallback: ถ้าไม่มีเลย ให้ส่งปีปัจจุบัน + ปีก่อน
-    if (!rows.length) {
+    if (!rows || rows.length === 0) {
       const now = new Date().getFullYear() + 543;
       return res.json({ years: [now, now - 1, now - 2] });
     }
     res.json({ years: rows.map(r => r.year) });
   } catch (e) {
+    console.error('[GET /plo/available-years]', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -368,6 +444,8 @@ router.get('/plo/available-years', async (req, res) => {
 // ─────────────────────────────────────────────────────────────
 router.get('/programs/:programId/kas-mappings', async (req, res) => {
   const { programId } = req.params;
+  if (!validUUID(programId)) return res.status(400).json({ error: 'programId ไม่ถูกต้อง' });
+  
   const year = validYear(req.query.year) || 2567;
   try {
     const [rows] = await q(
@@ -377,25 +455,30 @@ router.get('/programs/:programId/kas-mappings', async (req, res) => {
       [programId, year]
     );
     const ploKas = {}, mloKas = {};
-    rows.forEach(r => {
+    (rows || []).forEach(r => {
       const target = r.lo_type === 'PLO' ? ploKas : mloKas;
       if (!target[r.lo_code]) target[r.lo_code] = { K: [], A: [], S: [] };
       target[r.lo_code][r.kas_type] = r.kas_codes ? r.kas_codes.split(',') : [];
     });
     res.json({ year, ploKas, mloKas });
   } catch (e) {
+    console.error('[GET /programs/:programId/kas-mappings]', e);
     res.status(500).json({ error: e.message });
   }
 });
 
 router.post('/programs/:programId/kas-mappings', async (req, res) => {
   const { programId } = req.params;
+  if (!validUUID(programId)) return res.status(400).json({ error: 'programId ไม่ถูกต้อง' });
+  
   const year = validYear(req.query.year || req.body.year) || 2567;
   const { ploKas = {}, mloKas = {} } = req.body;
 
-  const conn = await db.getConnection();
+  let conn;
   try {
+    conn = await db.getConnection();
     await conn.beginTransaction();
+    
     await conn.query(
       'DELETE FROM kas_mappings WHERE program_id = ? AND academic_year = ?',
       [programId, year]
@@ -422,10 +505,11 @@ router.post('/programs/:programId/kas-mappings', async (req, res) => {
     await conn.commit();
     res.json({ ok: true, year });
   } catch (e) {
-    await conn.rollback();
+    if (conn) await conn.rollback();
+    console.error('[POST /programs/:programId/kas-mappings]', e);
     res.status(500).json({ error: e.message });
   } finally {
-    conn.release();
+    if (conn) conn.release();
   }
 });
 
@@ -435,25 +519,29 @@ router.post('/programs/:programId/kas-mappings', async (req, res) => {
 // ─────────────────────────────────────────────────────────────
 router.get('/programs/:programId/years-summary', async (req, res) => {
   const { programId } = req.params;
+  if (!validUUID(programId)) return res.status(400).json({ error: 'programId ไม่ถูกต้อง' });
+  
   try {
-    const [[ploYears]] = await q(
+    const [ploYears] = await q(
       `SELECT GROUP_CONCAT(DISTINCT academic_year ORDER BY academic_year DESC) AS years
        FROM plos WHERE program_id = ?`, [programId]
     );
-    const [[matrixYears]] = await q(
+    const [matrixYears] = await q(
       `SELECT GROUP_CONCAT(DISTINCT academic_year ORDER BY academic_year DESC) AS years
        FROM matrix_rows WHERE program_id = ?`, [programId]
     );
-    const [[scoreYears]] = await q(
+    const [scoreYears] = await q(
       `SELECT GROUP_CONCAT(DISTINCT academic_year ORDER BY academic_year DESC) AS years
        FROM plo_scores WHERE program_id = ?`, [programId]
     );
+    
     res.json({
-      plo:    ploYears.years    ? ploYears.years.split(',').map(Number)    : [],
-      matrix: matrixYears.years ? matrixYears.years.split(',').map(Number) : [],
-      score:  scoreYears.years  ? scoreYears.years.split(',').map(Number)  : [],
+      plo:    (ploYears[0]?.years)    ? ploYears[0].years.split(',').map(Number)    : [],
+      matrix: (matrixYears[0]?.years) ? matrixYears[0].years.split(',').map(Number) : [],
+      score:  (scoreYears[0]?.years)  ? scoreYears[0].years.split(',').map(Number)  : [],
     });
   } catch (e) {
+    console.error('[GET /programs/:programId/years-summary]', e);
     res.status(500).json({ error: e.message });
   }
 });

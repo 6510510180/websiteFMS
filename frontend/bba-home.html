@@ -31,7 +31,7 @@
         .spinner-sm { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #e9d5ff; border-top-color: #9b51e0; animation: spin 0.7s linear infinite; flex-shrink: 0; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .container { width: 90%; margin: 20px auto; }
-        .main-content { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .main-content { display: grid; grid-template-columns: 1fr; gap: 30px; }
         .hero-banner { background-color: #f1e1ff; padding: 40px 30px; border-radius: 15px; margin-bottom: 30px; }
         .welcome-text { color: black !important; margin: 0; font-size: 24px; line-height: 1.2; }
         .sub-text { color: #9b51e0; margin: 10px 0 0 0; font-size: 20px; font-weight: bold; }
@@ -39,7 +39,7 @@
         .course-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; position: relative; transition: 0.3s; }
         .course-card:has(a):hover { transform: translateY(-5px); }
         .badge-new { position: absolute; top: 10px; right: 10px; background-color: #ff4757; color: white; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; z-index: 10; }
-        .img-placeholder { background-color: #ddd; height: 100px; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .img-placeholder { background-color: #ddd; height: 150px; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .course-label { background-color: #c084fc; color: #fff; padding: 12px; font-size: 13px; min-height: 60px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
         .no-link .course-label { cursor: default; }
         .course-link { text-decoration: none; color: inherit; display: block; }
@@ -150,26 +150,6 @@
                     </a>
                 </div>
             </div>
-
-            <div class="right-column">
-                <div class="announcement-box">
-    <div>
-        <div class="announce-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-            <span class="bold-text">ประกาศ</span>
-            <i class="fa-regular fa-bell" style="color:#9b51e0;"></i>
-        </div>
-        <!-- ประกาศจะถูก render ที่นี่โดย JS -->
-        <ul class="announce-list" id="homeAnnounceList">
-            <!-- loading placeholder -->
-            <li style="color:#bbb;font-size:13px;padding:8px 0 8px 15px;">กำลังโหลด...</li>
-        </ul>
-    </div>
-    <div style="display:flex;gap:8px;flex-direction:column;">
-        <button class="btn-all" onclick="window.location.href=''">
-            <i class="fa-solid " style="margin-right:6px;font-size:12px;"></i> ดูคำประกาศ
-        </button>
-    </div>
-</div>
                 
        
     </main>
@@ -236,8 +216,7 @@
     </div>
 
 <script>
-const BASE = ''; 
-const API  = BASE + "/api";
+const API = "http://localhost:3000/api";
 const CLOUDINARY_CLOUD_NAME = "your_cloud_name";
 const CL_BASE = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
@@ -367,7 +346,7 @@ async function appendNewCourses() {
 
             card.innerHTML = `
                 ${isNew ? '<span class="badge-new">NEW</span>' : ""}
-                ${isMaintenance ? '<span class="badge-new" style="background:#f59e0b;">ปิดปรับปรุง</span>' : ""}
+                ${isMaintenance ? '<span class="badge-new" style="background:#f59e0b;">กำลังพัฒนา</span>' : ""}
                 <div class="img-placeholder">${imgHTML}</div>
                 ${labelHTML}
             `;
@@ -487,48 +466,6 @@ function onSearch(q) {
 appendNewCourses();
 </script>
 <script>
-// ── Load announcements from localStorage ──────────────────────
- 
-async function loadHomeAnnouncements() {
-    const list = document.getElementById('homeAnnounceList');
-    if (!list) return;
-
-    list.innerHTML = `<li style="color:#bbb;font-size:13px;padding:8px 0 8px 15px;">กำลังโหลด...</li>`;
-
-    try {
-        const res = await fetch(`${API}/announcements`);
-        const items = await res.json();
-
-        if (!items.length) {
-            list.innerHTML = `<li style="color:#bbb;font-size:13px;padding:8px 0 8px 15px;">ยังไม่มีประกาศ</li>`;
-            return;
-        }
-
-        // sort: pinned → priority
-        const pOrder = { high: 0, medium: 1, low: 2 };
-        items.sort((a, b) => {
-            if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
-            return (pOrder[a.priority] ?? 9) - (pOrder[b.priority] ?? 9);
-        });
-
-        const show = items.slice(0, 3);
-
-        const borderColor = { high: '#e74c3c', medium: '#f59e0b', low: '#9b51e0' };
-
-        list.innerHTML = show.map(a => `
-            <li style="margin-bottom:15px;padding-left:15px;border-left:3px solid ${borderColor[a.priority] || '#9b51e0'};">
-                <strong>${escapeHtml(a.title)}</strong>
-                ${a.pinned ? '<span style="font-size:10px;margin-left:4px;">📌</span>' : ''}
-                <p style="margin:4px 0 2px;font-size:13px;color:#555;">${escapeHtml(a.description)}</p>
-                <small style="color:#aaa;">${escapeHtml(a.display_date)}</small>
-            </li>
-        `).join('');
-
-    } catch (err) {
-        console.error(err);
-        list.innerHTML = `<li style="color:red;padding:8px;">โหลดข้อมูลไม่สำเร็จ</li>`;
-    }
-}
  
 function escapeHtml(str) {
     return String(str || '')

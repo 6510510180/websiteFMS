@@ -24,7 +24,6 @@
 html{font-size:13px;}
 body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
 
-/* ── Topbar — unified with matrix.html / score-plo.html / score.html ── */
 .tb{position:sticky;top:0;z-index:200;height:64px;background:var(--surface);border-bottom:1px solid rgba(0,0,0,.10);box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;align-items:center;padding:0 40px;gap:16px;}
 .tb-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
 .tb-mark{width:32px;height:32px;background:#7b2cbf;border-radius:8px;display:flex;align-items:center;justify-content:center;}
@@ -42,15 +41,16 @@ body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);colo
 .tb-srch input::placeholder{color:var(--text3);}
 .tb-av{width:36px;height:36px;border-radius:50%;background:#EDE9FE;display:flex;align-items:center;justify-content:center;font-family:'Lexend',sans-serif;font-weight:700;font-size:14px;color:#7b2cbf;cursor:pointer;}
 
-/* ── ส่วนที่เหลือเหมือนเดิมทุกอย่าง ── */
 .layout{display:flex;flex:1;min-height:0;overflow:hidden;}
 .main{flex:1;overflow-y:auto;padding:24px 26px 60px;}
-.aside{width:258px;flex-shrink:0;border-left:1px solid var(--border);background:var(--surface);overflow-y:auto;padding:18px 15px;}
+.aside{width:270px;flex-shrink:0;border-left:1px solid var(--border);background:var(--surface);overflow-y:auto;padding:18px 15px;}
+
 .ph{margin-bottom:16px;}
 .ph-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
 .ph-h{font-size:18px;font-weight:900;color:var(--text);line-height:1.35;letter-spacing:-.3px;}
 .ph-s{font-size:11.5px;color:var(--text2);margin-top:3px;font-style:italic;}
 .ph-acts{display:flex;gap:7px;align-items:center;flex-wrap:wrap;flex-shrink:0;}
+
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:9px;font-family:'Noto Sans Thai',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;border:none;white-space:nowrap;transition:all .16s;}
 .btn svg{width:13px;height:13px;fill:currentColor;flex-shrink:0;}
 .btn-p{background:linear-gradient(135deg,var(--acc),#8b5cf6);color:#fff;box-shadow:0 3px 10px rgba(109,40,217,.3);}
@@ -62,6 +62,7 @@ body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);colo
 .btn-pdf{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;box-shadow:0 3px 10px rgba(220,38,38,.28);}
 .btn-pdf:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(220,38,38,.36);}
 .btn-sm{padding:6px 12px;font-size:11.5px;border-radius:7px;}
+
 .ctrl{display:flex;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap;}
 .legend{display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
 .leg-i{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--text2);}
@@ -72,6 +73,7 @@ body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:var(--bg);colo
 .vsep{width:1px;height:18px;background:var(--border2);}
 .tsel{padding:5px 10px;border:1.5px solid var(--border2);border-radius:8px;font-family:inherit;font-size:12px;background:#fff;color:var(--text);cursor:pointer;outline:none;transition:.15s;}
 .tsel:focus{border-color:var(--acc);}
+
 .tc{background:var(--surface);border-radius:14px;border:1px solid var(--border);box-shadow:var(--sh2);overflow:hidden;}
 .tscr{overflow-x:auto;}
 table{border-collapse:collapse;width:100%;}
@@ -101,7 +103,9 @@ td{padding:12px 11px;vertical-align:middle;}
 .cP{background:var(--Pb);color:var(--P);border-color:var(--Pc);}
 .cE{background:#f1f0f5;color:#c4bdd8;border-color:#e5e2ef;border-style:dashed;}
 .cE:hover{background:var(--acc-l);color:var(--acc);border-color:var(--Fc);}
+
 .sbar{display:flex;align-items:center;justify-content:center;gap:12px;padding:20px 0 0;}
+
 .ctx{position:fixed;z-index:500;background:#fff;border:1px solid var(--border2);border-radius:12px;padding:5px;box-shadow:var(--sh3);min-width:164px;opacity:0;pointer-events:none;transform:scale(.93) translateY(-4px);transition:opacity .14s,transform .14s;}
 .ctx.open{opacity:1;pointer-events:all;transform:none;}
 .ci{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--text);cursor:pointer;transition:background .11s;}
@@ -113,6 +117,8 @@ td{padding:12px 11px;vertical-align:middle;}
 .cdP{background:var(--Pb);color:var(--P);}
 .cdX{background:var(--redb);color:var(--red);}
 .chr{height:1px;background:var(--border);margin:4px 0;}
+
+/* ── Sidebar ── */
 .sb-s{margin-bottom:21px;}
 .sb-h{display:flex;align-items:center;justify-content:space-between;font-family:'Lexend',sans-serif;font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;}
 .sb-h svg{width:12px;height:12px;fill:var(--acc);}
@@ -128,7 +134,7 @@ td{padding:12px 11px;vertical-align:middle;}
 .stc-t{background:linear-gradient(135deg,#0369a1,#0ea5e9);}
 .stn{font-family:'Lexend',sans-serif;font-size:28px;font-weight:800;color:#fff;line-height:1;}
 .stl{font-size:10px;font-weight:700;color:rgba(255,255,255,.8);margin-top:3px;}
-.note{background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:10px;border:1px solid var(--Pc);padding:11px 12px;font-size:11px;color:#78350f;line-height:1.65;margin-bottom:15px;}
+
 .sk-add{display:flex;gap:6px;margin-bottom:8px;}
 .sk-inp{flex:1;padding:7px 9px;border:1.5px solid var(--border2);border-radius:8px;font-family:inherit;font-size:12px;color:var(--text);outline:none;transition:.15s;}
 .sk-inp:focus{border-color:var(--acc);}
@@ -137,6 +143,57 @@ td{padding:12px 11px;vertical-align:middle;}
 .sk-name{flex:1;font-size:11.5px;color:var(--text);}
 .sk-del{width:18px;height:18px;border:none;background:#fde8ef;border-radius:4px;cursor:pointer;color:var(--red);font-size:13px;display:flex;align-items:center;justify-content:center;transition:.12s;}
 .sk-del:hover{background:#fca5a5;}
+
+/* ── PLO add form ── */
+.plo-form{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
+.plo-form textarea{padding:7px 9px;border:1.5px solid var(--border2);border-radius:8px;font-family:inherit;font-size:12px;color:var(--text);outline:none;transition:.15s;resize:vertical;min-height:52px;}
+.plo-form textarea:focus{border-color:var(--acc);}
+.plo-form-row{display:flex;gap:6px;}
+.plo-form-row select{flex:1;padding:6px 8px;border:1.5px solid var(--border2);border-radius:8px;font-family:inherit;font-size:12px;background:#fff;color:var(--text);outline:none;}
+.plo-form-row select:focus{border-color:var(--acc);}
+.btn-add-round{width:30px;height:30px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--acc),#8b5cf6);color:#fff;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;}
+.btn-add-round:hover{transform:scale(1.1);}
+
+.pub-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#fff;border-radius:12px;border:1.5px solid var(--border);padding:12px 18px;margin-bottom:16px;box-shadow:var(--sh1);transition:.3s;}
+.pub-bar.on{background:#f0fdf4;border-color:#86efac;}
+.pub-info{display:flex;align-items:center;gap:11px;}
+.pub-dot{width:10px;height:10px;border-radius:50%;background:#d1d5db;flex-shrink:0;transition:.3s;}
+.pub-dot.on{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2);animation:ppulse 1.8s infinite;}
+@keyframes ppulse{0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.18)}50%{box-shadow:0 0 0 7px rgba(34,197,94,.04)}}
+.pub-lbl{font-size:12.5px;font-weight:700;color:var(--text);}
+.pub-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.pub-ts{font-size:10.5px;color:#16a34a;font-weight:600;margin-top:2px;display:none;}
+.pub-r{display:flex;align-items:center;gap:10px;}
+.pub-preview-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-family:'Noto Sans Thai',sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;border:1.5px solid var(--border2);background:#fff;color:var(--text2);text-decoration:none;transition:.15s;}
+.pub-preview-btn:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-l);}
+.pub-preview-btn svg{width:12px;height:12px;fill:currentColor;}
+.pub-tog-lbl{font-size:11.5px;font-weight:700;color:var(--text3);}
+.tog-sw{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0;}
+.tog-sw input{opacity:0;width:0;height:0;position:absolute;}
+.tog-slider{position:absolute;inset:0;background:#d1d5db;border-radius:99px;transition:.3s;}
+.tog-slider::before{content:'';position:absolute;width:16px;height:16px;left:4px;top:4px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.tog-sw input:checked+.tog-slider{background:#22c55e;}
+.tog-sw input:checked+.tog-slider::before{transform:translateX(20px);}
+
+.pub-overlay{position:fixed;inset:0;z-index:9000;background:rgba(14,5,30,.62);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.22s;}
+.pub-overlay.open{opacity:1;pointer-events:all;}
+.pub-modal{background:#fff;border-radius:20px;padding:32px 36px;max-width:460px;width:92%;box-shadow:0 32px 80px rgba(0,0,0,.22);transform:translateY(16px) scale(.97);transition:transform .28s cubic-bezier(.34,1.56,.64,1);}
+.pub-overlay.open .pub-modal{transform:none;}
+.pub-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.pub-icon.go{background:#f0fdf4;} .pub-icon.go svg{fill:#16a34a;}
+.pub-icon.stop{background:#fef2f2;} .pub-icon.stop svg{fill:#ef4444;}
+.pub-icon svg{width:26px;height:26px;}
+.pub-title{font-family:'Lexend',sans-serif;font-size:17px;font-weight:800;color:var(--text);margin-bottom:8px;}
+.pub-body{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:24px;}
+.pub-body strong{color:var(--text);}
+.pub-btns{display:flex;gap:10px;justify-content:flex-end;}
+.pub-btn-cancel{padding:10px 22px;border:1.5px solid var(--border2);background:#fff;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:.15s;}
+.pub-btn-cancel:hover{border-color:var(--text);}
+.pub-btn-do{padding:10px 24px;border:none;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.18s;}
+.pub-btn-do.go{background:#16a34a;color:#fff;} .pub-btn-do.go:hover{background:#15803d;}
+.pub-btn-do.stop{background:#ef4444;color:#fff;} .pub-btn-do.stop:hover{background:#dc2626;}
+
+/* ── Import Modal ── */
 .mbg{position:fixed;inset:0;z-index:400;background:rgba(30,15,60,.55);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .mbg.open{opacity:1;pointer-events:all;}
 .modal{background:#fff;border-radius:18px;width:560px;max-width:96vw;box-shadow:var(--sh3);transform:translateY(24px) scale(.96);transition:transform .24s cubic-bezier(.34,1.56,.64,1);overflow:hidden;}
@@ -166,125 +223,16 @@ td{padding:12px 11px;vertical-align:middle;}
 .prev-s thead th{background:#f7f4fd;padding:6px 8px;font-weight:700;color:var(--text2);white-space:nowrap;border-bottom:1px solid var(--border);}
 .prev-s tbody td{padding:4px 8px;border-bottom:1px solid var(--border);color:var(--text);}
 .prev-s tbody tr:last-child td{border-bottom:none;}
-.pub-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#fff;border-radius:12px;border:1.5px solid var(--border);padding:12px 18px;margin-bottom:16px;box-shadow:var(--sh1);transition:.3s;}
-.pub-bar.on{background:#f0fdf4;border-color:#86efac;}
-.pub-info{display:flex;align-items:center;gap:11px;}
-.pub-dot{width:10px;height:10px;border-radius:50%;background:#d1d5db;flex-shrink:0;transition:.3s;}
-.pub-dot.on{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2);animation:ppulse 1.8s infinite;}
-@keyframes ppulse{0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.18)}50%{box-shadow:0 0 0 7px rgba(34,197,94,.04)}}
-.pub-lbl{font-size:12.5px;font-weight:700;color:var(--text);}
-.pub-sub{font-size:11px;color:var(--text3);margin-top:1px;}
-.pub-ts{font-size:10.5px;color:#16a34a;font-weight:600;margin-top:2px;display:none;}
-.pub-r{display:flex;align-items:center;gap:10px;}
-.pub-preview-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-family:'Noto Sans Thai',sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;border:1.5px solid var(--border2);background:#fff;color:var(--text2);text-decoration:none;transition:.15s;}
-.pub-preview-btn:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-l);}
-.pub-preview-btn svg{width:12px;height:12px;fill:currentColor;}
-.pub-tog-lbl{font-size:11.5px;font-weight:700;color:var(--text3);}
-.tog-sw{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0;}
-.tog-sw input{opacity:0;width:0;height:0;position:absolute;}
-.tog-slider{position:absolute;inset:0;background:#d1d5db;border-radius:99px;transition:.3s;}
-.tog-slider::before{content:'';position:absolute;width:16px;height:16px;left:4px;top:4px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
-.tog-sw input:checked+.tog-slider{background:#22c55e;}
-.tog-sw input:checked+.tog-slider::before{transform:translateX(20px);}
-.pub-overlay{position:fixed;inset:0;z-index:9000;background:rgba(14,5,30,.62);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.22s;}
-.pub-overlay.open{opacity:1;pointer-events:all;}
-.pub-modal{background:#fff;border-radius:20px;padding:32px 36px;max-width:460px;width:92%;box-shadow:0 32px 80px rgba(0,0,0,.22);transform:translateY(16px) scale(.97);transition:transform .28s cubic-bezier(.34,1.56,.64,1);}
-.pub-overlay.open .pub-modal{transform:none;}
-.pub-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
-.pub-icon.go{background:#f0fdf4;} .pub-icon.go svg{fill:#16a34a;}
-.pub-icon.stop{background:#fef2f2;} .pub-icon.stop svg{fill:#ef4444;}
-.pub-icon svg{width:26px;height:26px;}
-.pub-title{font-family:'Lexend',sans-serif;font-size:17px;font-weight:800;color:var(--text);margin-bottom:8px;}
-.pub-body{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:24px;}
-.pub-body strong{color:var(--text);}
-.pub-btns{display:flex;gap:10px;justify-content:flex-end;}
-.pub-btn-cancel{padding:10px 22px;border:1.5px solid var(--border2);background:#fff;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:.15s;}
-.pub-btn-cancel:hover{border-color:var(--text);}
-.pub-btn-do{padding:10px 24px;border:none;border-radius:10px;font-family:'Noto Sans Thai',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.18s;}
-.pub-btn-do.go{background:#16a34a;color:#fff;} .pub-btn-do.go:hover{background:#15803d;}
-.pub-btn-do.stop{background:#ef4444;color:#fff;} .pub-btn-do.stop:hover{background:#dc2626;}
+
 .toast{position:fixed;bottom:20px;right:20px;z-index:9999;background:var(--text);color:#fff;padding:11px 17px;border-radius:11px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:var(--sh3);transform:translateY(72px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
 .toast.show{transform:none;opacity:1;}
 .tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.help-btn{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  border:none;
-  background:#ede9fe;
-  color:#6d28d9;
-  font-weight:800;
-  font-size:16px;
-  cursor:pointer;
-  transition:.2s;
-}
-.help-btn:hover{
-  background:#6d28d9;
-  color:#fff;
-}
 
-/* Modal คู่มือ */
-.help-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.5);
-  backdrop-filter:blur(4px);
-  z-index:9999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-}
-.help-overlay.open{
-  opacity:1;
-  pointer-events:all;
-}
+/* ── Help Modal ── */
+.help-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.help-overlay.flex{display:flex;}
+.help-modal{background:#fff;border-radius:18px;width:100%;max-width:580px;max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);font-family:'Noto Sans Thai',sans-serif;}
 
-.help-modal{
-  width:900px;
-  max-width:95%;
-  max-height:90vh;
-  overflow-y:auto;
-  background:#fff;
-  border-radius:16px;
-  padding:25px 30px;
-  box-shadow:0 20px 60px rgba(0,0,0,.2);
-  transform:translateY(20px);
-  transition:.25s;
-}
-.help-overlay.open .help-modal{
-  transform:none;
-}
-
-.help-close{
-  position:absolute;
-  right:20px;
-  top:15px;
-  font-size:20px;
-  cursor:pointer;
-  border:none;
-  background:none;
-}
-
-.help-modal h2{
-  margin-top:20px;
-  border-left:4px solid #7c3aed;
-  padding-left:8px;
-}
-.help-modal table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-}
-.help-modal th,.help-modal td{
-  border:1px solid #ddd;
-  padding:8px;
-}
-.help-modal th{
-  background:#f5f3ff;
-}
 @media print{
   .tb,.aside,.ctrl,.sbar,.ctx,.mbg,.toast,.ph-acts,.pub-bar,.pub-overlay{display:none!important;}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
@@ -307,13 +255,7 @@ td{padding:12px 11px;vertical-align:middle;}
     <a href="stakeholder.html" class="active">Stakeholders</a>
   </nav>
   <div class="tb-r">
-    <button onclick="openHelp()" style="
-  width:34px;height:34px;border-radius:50%;border:2px solid #6B3FA0;
-  background:#fff;color:#6B3FA0;font-size:15px;font-weight:700;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all .18s;flex-shrink:0;
-" onmouseover="this.style.background='#ede9fe'" onmouseout="this.style.background='#fff'"
-title="คู่มือการใช้งาน">?</button>
+    <button onclick="openHelp()" style="width:34px;height:34px;border-radius:50%;border:2px solid #6B3FA0;background:#fff;color:#6B3FA0;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;" onmouseover="this.style.background='#ede9fe'" onmouseout="this.style.background='#fff'" title="คู่มือการใช้งาน">?</button>
     <div class="tb-srch">
       <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/></svg>
       <input type="text" id="gs" placeholder="ค้นหาข้อมูลหลักสูตร..." oninput="filterTable()">
@@ -347,6 +289,7 @@ title="คู่มือการใช้งาน">?</button>
       </div>
     </div>
 
+    <!-- Publish Bar -->
     <div class="pub-bar" id="pub-bar">
       <div class="pub-info">
         <div class="pub-dot" id="pub-dot"></div>
@@ -389,194 +332,173 @@ title="คู่มือการใช้งาน">?</button>
       <div class="tscr">
         <table id="mt">
           <thead><tr id="tr-h"></tr></thead>
-          <tbody id="tb"></tbody>
+          <tbody id="tb-body"></tbody>
         </table>
       </div>
     </div>
-    <div id="helpOverlay" onclick="if(event.target===this)closeHelp()" style="
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
-  z-index:9999;align-items:center;justify-content:center;padding:20px;
-  backdrop-filter:blur(3px);
-">
-  <div style="
-    background:#fff;border-radius:18px;width:100%;max-width:580px;
-    max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);
-    font-family:'Noto Sans Thai',sans-serif;
-  ">
-    <!-- Header -->
-    <div style="
-      padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;
-      display:flex;justify-content:space-between;align-items:center;
-      position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;
-    ">
+
+    <div class="sbar">
+      <button class="btn btn-g" onclick="saveData()">
+        <svg viewBox="0 0 20 20"><path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293z"/></svg>
+        บันทึกข้อมูล
+      </button>
+    </div>
+  </main>
+
+  <!-- ── Sidebar ── -->
+  <aside class="aside">
+
+    <!-- Stats -->
+    <div class="sb-s">
+      <div class="sb-h">
+        <span>สถิติภาพรวม</span>
+        <svg viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+      </div>
+      <div class="stg">
+        <div class="stc stc-v"><div class="stn" id="st-p">0</div><div class="stl">PLOs</div></div>
+        <div class="stc stc-t"><div class="stn" id="st-s">0</div><div class="stl">Stakeholders</div></div>
+      </div>
+    </div>
+
+    <!-- Add PLO -->
+    <div class="sb-s">
+      <div class="sb-h">
+        <span>เพิ่ม PLO</span>
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+      </div>
+      <div class="plo-form">
+        <textarea id="nplo-desc" placeholder="คำอธิบาย PLO..."></textarea>
+        <div class="plo-form-row">
+          <select id="nplo-type">
+            <option value="Specific">Specific</option>
+            <option value="Generic">Generic</option>
+          </select>
+          <button class="btn-add-round" onclick="addPLO()" title="เพิ่ม PLO">+</button>
+        </div>
+      </div>
+      <div class="sk-list" id="plo-list"></div>
+    </div>
+
+    <!-- Add Stakeholder -->
+    <div class="sb-s">
+      <div class="sb-h">
+        <span>เพิ่ม Stakeholder</span>
+        <svg viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-1a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v1h-3zM4.75 12.094A5.973 5.973 0 004 15v1H1v-1a3 3 0 013.75-2.906z"/></svg>
+      </div>
+      <div class="sk-add">
+        <input class="sk-inp" type="text" id="nsk" placeholder="ชื่อผู้มีส่วนได้ส่วนเสีย..." onkeydown="if(event.key==='Enter')addSK()">
+        <button class="btn-add-round" onclick="addSK()" title="เพิ่ม">+</button>
+      </div>
+      <div class="sk-list" id="sk-list"></div>
+    </div>
+
+    <!-- PLO Progress -->
+    <div class="sb-s">
+      <div class="sb-h">
+        <span>การครอบคลุม PLO</span>
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3z" clip-rule="evenodd"/></svg>
+      </div>
+      <div id="plo-bars"><div style="font-size:11px;color:var(--text3);padding:4px;">ยังไม่มีข้อมูล</div></div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Context Menu -->
+<div class="ctx" id="ctx">
+  <div class="ci" onclick="setM('F')"><span class="cd cdF">F</span>Foundational</div>
+  <div class="ci" onclick="setM('M')"><span class="cd cdM">M</span>Main</div>
+  <div class="ci" onclick="setM('P')"><span class="cd cdP">P</span>Peripheral</div>
+  <div class="chr"></div>
+  <div class="ci d" onclick="setM(null)"><span class="cd cdX">×</span>ล้างค่า</div>
+</div>
+
+<!-- Import Modal -->
+<div class="mbg" id="mbg" onclick="bgClose(event)">
+  <div class="modal">
+    <div class="mh">
+      <div>
+        <div class="mht">นำเข้าข้อมูลจาก Excel</div>
+        <div class="mhs">รองรับไฟล์ .xlsx, .xls — Import จะเขียนทับข้อมูลเดิมทั้งหมด</div>
+      </div>
+      <button class="mcls" onclick="closeImport()">×</button>
+    </div>
+    <div class="mb">
+      <div class="dz" id="dz" ondragover="dzO(event)" ondragleave="dzL()" ondrop="dzD(event)" onclick="document.getElementById('fi').click()">
+        <div class="dz-ico">📂</div>
+        <div class="dz-m">ลากไฟล์มาวางที่นี่ หรือคลิกเพื่อเลือกไฟล์</div>
+        <div class="dz-s">รองรับ <span>.xlsx, .xls</span> เท่านั้น</div>
+        <div class="dz-f" id="dz-f"></div>
+        <input type="file" id="fi" accept=".xlsx,.xls" style="display:none" onchange="fChosen(event)">
+      </div>
+      <div class="ti">
+        <div class="ti-t">📋 โครงสร้างไฟล์ที่รองรับ</div>
+        <div class="ti-b">คอลัมน์ที่จำเป็น: <code>plo_no</code> · <code>plo_description</code> · <code>type</code> (Specific/Generic) · ชื่อ Stakeholder แต่ละคน (ค่า: F, M หรือ P)</div>
+      </div>
+      <div class="prev-w" id="prev-w" style="display:none">
+        <div class="prev-t">ตัวอย่างข้อมูล (5 แถวแรก)</div>
+        <div class="prev-s" id="prev-s"></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="dlTmpl()">ดาวน์โหลด Template</button>
+      <button class="btn btn-o btn-sm" onclick="closeImport()">ยกเลิก</button>
+      <button class="btn btn-p btn-sm" id="do-imp" onclick="doImport()" disabled>นำเข้าข้อมูล</button>
+    </div>
+  </div>
+</div>
+
+<!-- Publish Confirm Overlay -->
+<div class="pub-overlay" id="pub-overlay">
+  <div class="pub-modal">
+    <div class="pub-icon" id="pub-icon">
+      <svg viewBox="0 0 20 20" id="pub-svg"></svg>
+    </div>
+    <div class="pub-title" id="pub-title"></div>
+    <div class="pub-body" id="pub-body"></div>
+    <div class="pub-btns">
+      <button class="pub-btn-cancel" onclick="cancelPub()">ยกเลิก</button>
+      <button class="pub-btn-do" id="pub-btn-do" onclick="confirmPub()"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Help Modal -->
+<div id="helpOverlay" class="help-overlay" onclick="if(event.target===this)closeHelp()">
+  <div class="help-modal">
+    <div style="padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;">
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="
-          width:36px;height:36px;border-radius:10px;background:#ede9fe;
-          color:#6d28d9;display:flex;align-items:center;justify-content:center;font-size:16px;
-        ">📘</div>
+        <div style="width:36px;height:36px;border-radius:10px;background:#ede9fe;color:#6d28d9;display:flex;align-items:center;justify-content:center;font-size:16px;">📘</div>
         <div>
           <div style="font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:#1a0f2e;">คู่มือการใช้งาน</div>
           <div style="font-size:11.5px;color:#5a5070;">Stakeholders' Needs to PLOs Mapping</div>
         </div>
       </div>
-      <button onclick="closeHelp()" style="
-        background:none;border:none;font-size:20px;cursor:pointer;
-        color:#5a5070;padding:4px 8px;border-radius:6px;line-height:1;
-      ">×</button>
+      <button onclick="closeHelp()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#5a5070;padding:4px 8px;border-radius:6px;line-height:1;">×</button>
     </div>
-
-    <!-- Body -->
     <div style="padding:24px;">
-
-      <!-- ระดับความสัมพันธ์ -->
       <div style="background:#faf8fd;border:1px solid #e8e2f5;border-radius:12px;padding:16px 18px;margin-bottom:20px;">
         <div style="font-size:11.5px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;">🎯 ระดับความสัมพันธ์</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
-          <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-family:'Lexend',sans-serif;font-size:20px;font-weight:800;color:#6d28d9;">F</div>
-            <div style="font-size:12px;font-weight:700;color:#6d28d9;">Foundational</div>
-            <div style="font-size:11px;color:#5a5070;margin-top:4px;line-height:1.5;">ความต้องการพื้นฐานที่สำคัญมาก</div>
-          </div>
-          <div style="background:#e0f2fe;border:1px solid #7dd3fc;border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-family:'Lexend',sans-serif;font-size:20px;font-weight:800;color:#0369a1;">M</div>
-            <div style="font-size:12px;font-weight:700;color:#0369a1;">Main</div>
-            <div style="font-size:11px;color:#5a5070;margin-top:4px;line-height:1.5;">ความต้องการหลักของหลักสูตร</div>
-          </div>
-          <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:12px;text-align:center;">
-            <div style="font-family:'Lexend',sans-serif;font-size:20px;font-weight:800;color:#b45309;">P</div>
-            <div style="font-size:12px;font-weight:700;color:#b45309;">Peripheral</div>
-            <div style="font-size:11px;color:#5a5070;margin-top:4px;line-height:1.5;">ความต้องการเสริมที่เกี่ยวข้อง</div>
-          </div>
+          <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Lexend',sans-serif;font-size:20px;font-weight:800;color:#6d28d9;">F</div><div style="font-size:12px;font-weight:700;color:#6d28d9;">Foundational</div><div style="font-size:11px;color:#5a5070;margin-top:4px;line-height:1.5;">ความต้องการพื้นฐานที่สำคัญมาก</div></div>
+          <div style="background:#e0f2fe;border:1px solid #7dd3fc;border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Lexend',sans-serif;font-size:20px;font-weight:800;color:#0369a1;">M</div><div style="font-size:12px;font-weight:700;color:#0369a1;">Main</div><div style="font-size:11px;color:#5a5070;margin-top:4px;line-height:1.5;">ความต้องการหลักของหลักสูตร</div></div>
+          <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:12px;text-align:center;"><div style="font-family:'Lexend',sans-serif;font-size:20px;font-weight:800;color:#b45309;">P</div><div style="font-size:12px;font-weight:700;color:#b45309;">Peripheral</div><div style="font-size:11px;color:#5a5070;margin-top:4px;line-height:1.5;">ความต้องการเสริมที่เกี่ยวข้อง</div></div>
         </div>
       </div>
-
-      <!-- Section 1: PLO -->
-      <div style="margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
-          📋 จัดการ PLO
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กรอก <b>คำอธิบาย PLO</b> และเลือก <b>ประเภท</b> (Specific / Generic) ในแถบด้านขวา แล้วกดปุ่ม <b>+</b> รหัส PLO จะถูกกำหนดอัตโนมัติ เช่น PLO1, PLO2</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กดปุ่ม <span style="padding:1px 6px;border-radius:4px;background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;">×</span> ท้ายรายการ PLO เพื่อลบ — ระบบจะขอยืนยันและ renumber อัตโนมัติ</div>
-          </div>
-        </div>
+      <div style="margin-bottom:16px;font-size:13px;color:#1a0f2e;line-height:1.8;">
+        <b>1.</b> กรอกคำอธิบาย PLO ในช่องด้านขวา เลือกประเภท แล้วกด <b>+</b><br>
+        <b>2.</b> กด <span style="padding:1px 6px;border-radius:4px;background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;">×</span> เพื่อลบ PLO หรือ Stakeholder<br>
+        <b>3.</b> คลิกช่องในตารางเพื่อกำหนดระดับความสัมพันธ์ F / M / P<br>
+        <b>4.</b> กด <b style="color:#059669;">บันทึกข้อมูล</b> เพื่อส่งข้อมูลไปยัง API<br>
+        <b>5.</b> ใช้ Toggle เผยแพร่เพื่อเปิด/ปิดการแสดงในหน้าสาธารณะ
       </div>
-
-      <!-- Section 2: Stakeholder -->
-      <div style="margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
-          👥 จัดการ Stakeholders
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">พิมพ์ชื่อผู้มีส่วนได้ส่วนเสียในช่อง <b>เพิ่ม Stakeholder</b> แล้วกด <b>+</b> หรือ Enter — ชื่อจะแสดงเป็นหัวตารางแนวตั้ง</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">4</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กดปุ่ม <span style="padding:1px 6px;border-radius:4px;background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;">×</span> ท้ายรายการเพื่อลบ Stakeholder — ข้อมูล mapping ของ Stakeholder นั้นจะถูกลบทั้งหมด</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 3: ตาราง -->
-      <div style="margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
-          🗂️ การกำหนดความสัมพันธ์ในตาราง
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">5</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">คลิกช่อง <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;background:#f1f0f5;color:#9088a8;font-size:10px;font-weight:800;border:1.5px dashed #e5e2ef;vertical-align:middle;">+</span> ในตารางเพื่อเปิด popup — เลือก F, M, P หรือ <b>ล้างค่า</b></div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">6</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">ใช้ <b>กรองประเภท</b> (Specific / Generic) เพื่อดูเฉพาะ PLO ที่ต้องการ และช่อง <b>ค้นหา</b> บน topbar เพื่อกรองตามคีย์เวิร์ด</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">7</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">แถบด้านขวาจะแสดง <b>Progress Bar</b> ของแต่ละ PLO แบบ real-time ว่า Stakeholder กี่รายให้ความสำคัญ</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 4: บันทึก -->
-      <div style="margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
-          💾 บันทึกและเผยแพร่
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">8</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กดปุ่ม <b style="color:#059669;">บันทึกข้อมูล</b> ด้านล่างตาราง — ข้อมูล PLO, Stakeholder และ mapping ทั้งหมดจะถูกส่งไปยัง API พร้อมกัน</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">9</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">ใช้ <b>Toggle เผยแพร่</b> ในแถบด้านบน เพื่อเปิด/ปิดการแสดงในหน้า <b>bba-stake.html</b> สาธารณะ — ระบบจะขอยืนยันทุกครั้ง</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 5: Import Excel -->
-      <div style="margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #e8e2f5;margin-bottom:12px;">
-          📊 Import / Export Excel
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">10</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กดปุ่ม <b>นำเข้าจาก Excel</b> — ลากหรือเลือกไฟล์ .xlsx ที่มีคอลัมน์:
-              <div style="margin-top:7px;background:#f5f3fe;border:1px solid #c4b5fd;border-radius:8px;padding:9px 12px;font-size:12px;color:#5a5070;line-height:1.8;">
-                <code style="background:#fff;padding:1px 5px;border-radius:4px;color:#6d28d9;border:1px solid #c4b5fd;font-size:11px;">plo_no</code> ·
-                <code style="background:#fff;padding:1px 5px;border-radius:4px;color:#6d28d9;border:1px solid #c4b5fd;font-size:11px;">plo_description</code> ·
-                <code style="background:#fff;padding:1px 5px;border-radius:4px;color:#6d28d9;border:1px solid #c4b5fd;font-size:11px;">type</code> ·
-                <b>ชื่อ Stakeholder</b> (ค่า: F, M หรือ P)
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">11</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กด <b>ดาวน์โหลด Template</b> ใน popup เพื่อรับไฟล์ต้นแบบที่มีโครงสร้างถูกต้องพร้อมข้อมูลปัจจุบัน</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">12</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;">กด <b>Export Excel</b> หรือ <b>Export PDF</b> เพื่อดาวน์โหลดตารางทั้งหมด — PDF จะเปิดหน้าต่าง Print</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#FEE2E2;color:#EF4444;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">!</span>
-            <div style="font-size:13.5px;color:#1a0f2e;line-height:1.6;"><b style="color:#dc2626;">Import จะเขียนทับข้อมูลเดิมทั้งหมด</b> — ดาวน์โหลด Template ก่อนเพื่อดูโครงสร้างที่ถูกต้อง</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Note -->
       <div style="background:#ede9fe;border-left:3px solid #6d28d9;border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:#4c1d95;line-height:1.6;">
-        <b>💡 เคล็ดลับ:</b> บันทึกข้อมูลก่อนเผยแพร่เสมอ — Toggle เผยแพร่จะแสดงข้อมูล <b>ล่าสุดที่บันทึกไว้</b> ในหน้า Dashboard สาธารณะ
+        <b>💡 เคล็ดลับ:</b> บันทึกข้อมูลก่อนเผยแพร่เสมอ
       </div>
-
-    </div><!-- /body -->
-
-    <!-- Footer -->
-    <div style="
-      padding:14px 24px;border-top:1px solid #EDE8F5;
-      display:flex;justify-content:flex-end;
-      position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;
-    ">
-      <button onclick="closeHelp()" style="
-        padding:9px 24px;border-radius:9px;border:none;
-        background:#6d28d9;color:#fff;font-size:13px;font-weight:700;
-        font-family:inherit;cursor:pointer;
-        box-shadow:0 4px 12px rgba(109,40,217,.28);transition:all .18s;
-      " onmouseover="this.style.background='#5b21b6'" onmouseout="this.style.background='#6d28d9'">
-        รับทราบ
-      </button>
     </div>
-
+    <div style="padding:14px 24px;border-top:1px solid #EDE8F5;display:flex;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;">
+      <button onclick="closeHelp()" style="padding:9px 24px;border-radius:9px;border:none;background:#6d28d9;color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;">รับทราบ</button>
+    </div>
   </div>
 </div>
 
@@ -597,6 +519,11 @@ let ctxT        = null;
 let pending     = null;
 let _pendingPub = null;
 let pubState    = { published: false, publishedAt: null };
+
+// ── Null-safe helpers ──
+function $id(id){ return document.getElementById(id); }
+function setText(id, val){ const el = $id(id); if(el) el.textContent = val; }
+function setHTML(id, val){ const el = $id(id); if(el) el.innerHTML = val; }
 
 (async function init(){
   try {
@@ -667,26 +594,29 @@ async function loadPubState(){
   } catch(_) {}
 }
 
-function render(){ 
-  rHead(); rBody(); rBars(); rSKList(); rPLOList();
-  const stP = document.getElementById('st-p');
-  const stS = document.getElementById('st-s');
-  if (stP) stP.textContent = PLOS.length;
-  if (stS) stS.textContent = SKS.length;
+function render(){
+  rHead();
+  rBody();
+  rBars();
+  rSKList();
+  rPLOList();
+  setText('st-p', PLOS.length);
+  setText('st-s', SKS.length);
 }
 
 function rHead(){
-  document.getElementById('tr-h').innerHTML =
+  setHTML('tr-h',
     `<th class="th-no">No.</th>` +
     `<th class="th-plo">Programme Learning Outcomes</th>` +
     `<th class="th-type">Type</th>` +
-    SKS.map(s => `<th class="th-sk"><div class="th-sk-in">${s.name}</div></th>`).join('');
+    SKS.map(s => `<th class="th-sk"><div class="th-sk-in">${s.name}</div></th>`).join('')
+  );
 }
 
 function rBody(){
-  const tf = document.getElementById('tf').value;
-  const gs = (document.getElementById('gs').value || '').toLowerCase();
-  document.getElementById('tb').innerHTML = PLOS.map(p => {
+  const tf = ($id('tf') || {}).value || '';
+  const gs = (($id('gs') || {}).value || '').toLowerCase();
+  setHTML('tb-body', PLOS.map(p => {
     const hide = (tf && p.type !== tf) || (gs && !p.desc.toLowerCase().includes(gs) && !String(p.no).includes(gs));
     const rowMap = MAP[p.id] || {};
     const chips  = SKS.map(s => {
@@ -695,30 +625,31 @@ function rBody(){
     }).join('');
     const bt = p.type === 'Specific' ? 'bt-Sp' : 'bt-Ge';
     return `<tr${hide ? ' class="hide"' : ''}><td class="td-no">${p.no}</td><td class="td-desc">${p.desc}</td><td class="td-type"><span class="bt ${bt}">${p.type}</span></td>${chips}</tr>`;
-  }).join('');
+  }).join(''));
 }
 
 function rBars(){
-  const el = document.getElementById('plo-bars');
-  if (!el) return;
   const max = SKS.length || 1;
-  document.getElementById('plo-bars').innerHTML = PLOS.map(p => {
+  const el = $id('plo-bars');
+  if (!el) return;
+  if (!PLOS.length) { el.innerHTML = '<div style="font-size:11px;color:var(--text3);padding:4px;">ยังไม่มีข้อมูล</div>'; return; }
+  el.innerHTML = PLOS.map(p => {
     const cnt = SKS.filter(s => MAP[p.id] && MAP[p.id][s.id]).length;
     const pct = Math.round(cnt / max * 100);
-    return `<div class="pbi"><span class="pbc">PLO ${p.no}</span><div class="pbtr"><div class="pbf" style="width:${pct}%"></div></div><span class="pbn">${cnt} Stakeholders</span></div>`;
+    return `<div class="pbi"><span class="pbc">PLO ${p.no}</span><div class="pbtr"><div class="pbf" style="width:${pct}%"></div></div><span class="pbn">${cnt}/${SKS.length}</span></div>`;
   }).join('');
 }
 
 function rSKList(){
-  const el = document.getElementById('sk-list');
+  const el = $id('sk-list');
   if (!el) return;
   el.innerHTML = SKS.map(s =>
     `<div class="sk-tag"><span class="sk-name">${s.name}</span><button class="sk-del" onclick="delSK('${s.id}')">×</button></div>`
-  ).join('');
+  ).join('') || '<div style="font-size:11px;color:#9088a8;padding:4px;">ยังไม่มี Stakeholder</div>';
 }
 
 function rPLOList(){
-  const el = document.getElementById('plo-list');
+  const el = $id('plo-list');
   if (!el) return;
   el.innerHTML = PLOS.map(p =>
     `<div class="sk-tag"><span class="sk-name" style="font-size:11px;"><strong>${p.code || ('PLO' + (p.no || ''))}</strong> ${p.desc.slice(0, 40)}${p.desc.length > 40 ? '…' : ''}</span><button class="sk-del" onclick="delPLO('${p.id}')">×</button></div>`
@@ -728,8 +659,8 @@ function rPLOList(){
 function filterTable(){ rBody(); }
 
 function addPLO(){
-  const desc = (document.getElementById('nplo-desc').value || '').trim();
-  const type = document.getElementById('nplo-type').value;
+  const desc = (($id('nplo-desc') || {}).value || '').trim();
+  const type = ($id('nplo-type') || {}).value || 'Specific';
   if (!desc) { toast('กรอกคำอธิบาย PLO ก่อน', '#f59e0b'); return; }
   const no = PLOS.length + 1;
   const id = 'plo_' + (++_ploCounter) + '_' + Date.now();
@@ -737,7 +668,7 @@ function addPLO(){
   PLOS.push({ id, no, code, desc, type });
   MAP[id] = {};
   SKS.forEach(s => { MAP[id][s.id] = null; });
-  document.getElementById('nplo-desc').value = '';
+  if ($id('nplo-desc')) $id('nplo-desc').value = '';
   render();
   toast(`✓ เพิ่ม ${code} แล้ว`, '#059669');
 }
@@ -754,7 +685,8 @@ function delPLO(id){
 }
 
 function addSK(){
-  const inp  = document.getElementById('nsk');
+  const inp  = $id('nsk');
+  if (!inp) return;
   const name = (inp.value || '').trim();
   if (!name) return;
   if (SKS.find(s => s.name === name)) { toast('มี Stakeholder นี้แล้ว', '#f59e0b'); return; }
@@ -765,9 +697,6 @@ function addSK(){
   render();
   toast(`✓ เพิ่ม "${name}" แล้ว`, '#059669');
 }
-function openHelp(){document.getElementById('helpOverlay').style.display='flex';}
-function closeHelp(){document.getElementById('helpOverlay').style.display='none';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelp();});
 
 function delSK(id){
   const sk = SKS.find(s => s.id === id);
@@ -782,7 +711,7 @@ function delSK(id){
 function ctxO(e, ploId, stakeholderId){
   e.preventDefault(); e.stopPropagation();
   ctxT = { pno: ploId, si: stakeholderId };
-  const m = document.getElementById('ctx');
+  const m = $id('ctx');
   m.classList.add('open');
   m.style.left = Math.min(e.clientX + 4, window.innerWidth  - 180) + 'px';
   m.style.top  = Math.min(e.clientY + 4, window.innerHeight - 170) + 'px';
@@ -794,30 +723,42 @@ function setM(v){
   if (!MAP[pno]) MAP[pno] = {};
   MAP[pno][si] = v;
   ctxT = null;
-  document.getElementById('ctx').classList.remove('open');
+  $id('ctx').classList.remove('open');
   rBody(); rBars();
 }
 
-document.addEventListener('click', () => document.getElementById('ctx').classList.remove('open'));
+document.addEventListener('click', () => { const c = $id('ctx'); if(c) c.classList.remove('open'); });
 
-function openImport(){ document.getElementById('mbg').classList.add('open'); document.body.style.overflow = 'hidden'; }
+// ── Help ──
+function openHelp(){
+  const el = $id('helpOverlay');
+  if (el) { el.style.display = 'flex'; }
+}
+function closeHelp(){
+  const el = $id('helpOverlay');
+  if (el) { el.style.display = 'none'; }
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeHelp(); cancelPub(); } });
+
+// ── Import ──
+function openImport(){ $id('mbg').classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeImport(){
-  document.getElementById('mbg').classList.remove('open');
+  $id('mbg').classList.remove('open');
   document.body.style.overflow = '';
-  document.getElementById('dz-f').textContent = '';
-  document.getElementById('prev-w').style.display = 'none';
-  document.getElementById('do-imp').disabled = true;
+  setText('dz-f', '');
+  const pw = $id('prev-w'); if(pw) pw.style.display = 'none';
+  const di = $id('do-imp'); if(di) di.disabled = true;
   pending = null;
 }
-function bgClose(e){ if (e.target === document.getElementById('mbg')) closeImport(); }
-function dzO(e){ e.preventDefault(); document.getElementById('dz').classList.add('drag'); }
-function dzL(){ document.getElementById('dz').classList.remove('drag'); }
-function dzD(e){ e.preventDefault(); document.getElementById('dz').classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f) procFile(f); }
+function bgClose(e){ if (e.target === $id('mbg')) closeImport(); }
+function dzO(e){ e.preventDefault(); $id('dz').classList.add('drag'); }
+function dzL(){ $id('dz').classList.remove('drag'); }
+function dzD(e){ e.preventDefault(); $id('dz').classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f) procFile(f); }
 function fChosen(e){ const f = e.target.files[0]; if (f) procFile(f); }
 
 function procFile(file){
   if (!/\.(xlsx|xls)$/i.test(file.name)) { toast('กรุณาใช้ไฟล์ .xlsx หรือ .xls', '#dc2626'); return; }
-  document.getElementById('dz-f').textContent = `📄 ${file.name}`;
+  setText('dz-f', `📄 ${file.name}`);
   const rd = new FileReader();
   rd.onload = ev => {
     try {
@@ -826,11 +767,12 @@ function procFile(file){
       if (!data.length) { toast('ไม่พบข้อมูลในไฟล์', '#dc2626'); return; }
       pending = data;
       const keys = Object.keys(data[0]);
-      document.getElementById('prev-s').innerHTML =
+      setHTML('prev-s',
         `<table><thead><tr>${keys.map(k => `<th>${k}</th>`).join('')}</tr></thead>` +
-        `<tbody>${data.slice(0, 5).map(r => `<tr>${keys.map(k => `<td>${r[k]}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
-      document.getElementById('prev-w').style.display = 'block';
-      document.getElementById('do-imp').disabled = false;
+        `<tbody>${data.slice(0, 5).map(r => `<tr>${keys.map(k => `<td>${r[k]}</td>`).join('')}</tr>`).join('')}</tbody></table>`
+      );
+      const pw = $id('prev-w'); if(pw) pw.style.display = 'block';
+      const di = $id('do-imp'); if(di) di.disabled = false;
     } catch(err) { toast('อ่านไฟล์ไม่ได้: ' + err.message, '#dc2626'); }
   };
   rd.readAsArrayBuffer(file);
@@ -925,12 +867,18 @@ async function saveData(){
   } catch(e) { toast('❌ ' + e.message, '#dc2626'); console.error('saveData error:', e); }
 }
 
-function onPubToggle(checked){ document.getElementById('pub-toggle').checked = !!pubState.published; _pendingPub = { willPublish: checked }; showPubConfirm(checked); }
+// ── Publish ──
+function onPubToggle(checked){
+  $id('pub-toggle').checked = !!pubState.published;
+  _pendingPub = { willPublish: checked };
+  showPubConfirm(checked);
+}
 
 function showPubConfirm(pub){
-  const icon = document.getElementById('pub-icon'), svg = document.getElementById('pub-svg');
-  const title = document.getElementById('pub-title'), body = document.getElementById('pub-body');
-  const btn = document.getElementById('pub-btn-do');
+  const icon = $id('pub-icon'), svg = $id('pub-svg');
+  const title = $id('pub-title'), body = $id('pub-body');
+  const btn = $id('pub-btn-do');
+  if (!icon || !svg || !title || !body || !btn) return;
   if (pub) {
     icon.className = 'pub-icon go';
     svg.innerHTML  = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>';
@@ -944,17 +892,22 @@ function showPubConfirm(pub){
     body.innerHTML  = `Dashboard จะ<strong>ถูกซ่อนจากสาธารณะ</strong> ทันที`;
     btn.textContent = 'ปิดเผยแพร่'; btn.className = 'pub-btn-do stop';
   }
-  document.getElementById('pub-overlay').classList.add('open');
+  $id('pub-overlay').classList.add('open');
 }
 
-function cancelPub(){ document.getElementById('pub-overlay').classList.remove('open'); _pendingPub = null; }
+function cancelPub(){
+  const el = $id('pub-overlay'); if(el) el.classList.remove('open');
+  _pendingPub = null;
+}
 
 async function confirmPub(){
   if (!_pendingPub) return;
   const { willPublish } = _pendingPub;
   _pendingPub = null;
-  document.getElementById('pub-overlay').classList.remove('open');
-  const url = willPublish ? `${API_BASE}/api/stakeholders/publish?program_id=${PROGRAM_ID}` : `${API_BASE}/api/stakeholders/unpublish`;
+  $id('pub-overlay').classList.remove('open');
+  const url = willPublish
+    ? `${API_BASE}/api/stakeholders/publish?program_id=${PROGRAM_ID}`
+    : `${API_BASE}/api/stakeholders/unpublish`;
   const res = await fetch(url, { method: 'POST' });
   if (!res.ok) { toast('ดำเนินการไม่สำเร็จ', '#dc2626'); return; }
   const pubRes = await fetch(`${API_BASE}/api/stakeholders/publish-state?program_id=${PROGRAM_ID}`);
@@ -965,25 +918,29 @@ async function confirmPub(){
 
 function updatePubBar(){
   const on = !!pubState.published;
-  document.getElementById('pub-bar').classList.toggle('on', on);
-  document.getElementById('pub-dot').classList.toggle('on', on);
-  document.getElementById('pub-toggle').checked      = on;
-  document.getElementById('pub-tog-lbl').textContent = on ? 'เผยแพร่แล้ว' : 'ปิด';
-  document.getElementById('pub-lbl').textContent     = on ? 'Dashboard เผยแพร่สู่สาธารณะแล้ว' : 'ยังไม่เผยแพร่ข้อมูลสู่สาธารณะ';
-  document.getElementById('pub-sub').textContent     = on ? 'ข้อมูลแสดงในหน้า bba-stake.html เรียบร้อยแล้ว' : 'ข้อมูลจะไม่แสดงในหน้า bba-stake.html จนกว่าจะเปิดเผยแพร่';
-  const ts = document.getElementById('pub-ts');
-  if (on && pubState.publishedAt) {
-    const d = new Date(pubState.publishedAt);
-    ts.textContent = 'เผยแพร่เมื่อ ' + d.toLocaleDateString('th-TH') + ' ' + d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-    ts.style.display = '';
-  } else { ts.style.display = 'none'; }
+  const bar = $id('pub-bar'); if(bar) bar.classList.toggle('on', on);
+  const dot = $id('pub-dot'); if(dot) dot.classList.toggle('on', on);
+  const tog = $id('pub-toggle'); if(tog) tog.checked = on;
+  setText('pub-tog-lbl', on ? 'เผยแพร่แล้ว' : 'ปิด');
+  setText('pub-lbl', on ? 'Dashboard เผยแพร่สู่สาธารณะแล้ว' : 'ยังไม่เผยแพร่ข้อมูลสู่สาธารณะ');
+  setText('pub-sub', on ? 'ข้อมูลแสดงในหน้า bba-stake.html เรียบร้อยแล้ว' : 'ข้อมูลจะไม่แสดงในหน้า bba-stake.html จนกว่าจะเปิดเผยแพร่');
+  const ts = $id('pub-ts');
+  if (ts) {
+    if (on && pubState.publishedAt) {
+      const d = new Date(pubState.publishedAt);
+      ts.textContent = 'เผยแพร่เมื่อ ' + d.toLocaleDateString('th-TH') + ' ' + d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+      ts.style.display = '';
+    } else { ts.style.display = 'none'; }
+  }
 }
 
+// ── Toast ──
 let _tt;
 function toast(msg, color = '#059669'){
-  document.getElementById('tdot').style.background = color;
-  document.getElementById('tmsg').textContent = msg;
-  const el = document.getElementById('toast');
+  const dot = $id('tdot'); if(dot) dot.style.background = color;
+  const msg_el = $id('tmsg'); if(msg_el) msg_el.textContent = msg;
+  const el = $id('toast');
+  if (!el) return;
   el.classList.add('show');
   clearTimeout(_tt);
   _tt = setTimeout(() => el.classList.remove('show'), 3200);

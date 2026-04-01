@@ -19,7 +19,7 @@ const SEARCH_INDEX = [
   { label: 'KAS (Knowledge/Attitude/Skill)', url: 'kas.html',              section: 'ผลลัพธ์การเรียนรู้',    keywords: ['kas','knowledge','attitude','skill','ความรู้','เจตคติ'] },
 
   // ผู้มีส่วนร่วม
-  { label: 'ผู้มีส่วนร่วมในหลักสูตร',       url: 'bba-stake.html',          section: 'ผู้มีส่วนร่วม',         keywords: ['stakeholder','ผู้มีส่วนร่วม','ผู้ใช้บัณฑิต','อาจารย์'] },
+  { label: 'ผู้มีส่วนได้ส่วนเสียในหลักสูตร',       url: 'bba-stake.html',          section: 'ผู้มีส่วนร่วม',         keywords: ['stakeholder','ผู้มีส่วนร่วม','ผู้ใช้บัณฑิต','อาจารย์'] },
 
   // ข้อมูลนักศึกษา
   { label: 'ข้อมูลนักศึกษา',                url: 'bba-students.html',       section: 'ข้อมูลนักศึกษา',        keywords: ['นักศึกษา','student','ทะเบียน','enrollment'] },
@@ -36,7 +36,7 @@ const SEARCH_INDEX = [
 const NAV_LINKS = [
   { label: 'หน้าหลัก',              href: 'bba-qa.html' },
   { label: 'ผลลัพธ์การเรียนรู้',    href: 'bba-plo.html' },
-  { label: 'ผู้มีส่วนร่วมในหลักสูตร', href: 'bba-stake.html' },
+  { label: 'ผู้มีส่วนได้ส่วนเสียในหลักสูตร', href: 'bba-stake.html' },
   { label: 'ข้อมูลนักศึกษา',        href: 'bba-students.html' },
   { label: 'ผลงานและความสำเร็จ',    href: 'achievements.html' },
 ];

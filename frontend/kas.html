@@ -296,8 +296,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     <a href="score-plo.html">คะแนนผลลัพธ์ PLO</a>
     <a href="kas.html" class="active">KAS</a>
   </nav>
-  <script src="fms-year-selector.js"></script>
-<div id="year-selector-wrap"></div>
   <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
   
   <div class="avatar">A</div>
@@ -755,7 +753,6 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 <div class="toast" id="toast"><div class="toast-dot" id="toast-dot"></div><span id="toast-msg"></span></div>
 
 <script>
-  let currentYear = 2567;
 /* ═══════════════════════════════════════════════════════
    CONFIG
 ═══════════════════════════════════════════════════════ */
@@ -797,9 +794,9 @@ function kasLabel(type,code){
 /* ═══════════════════════════════════════════════════════
    LOAD PLO/MLO FROM API (database)
 ═══════════════════════════════════════════════════════ */
-async function loadPloMloFromAPI(year = currentYear) {
+async function loadPloMloFromAPI() {
   try {
-    const res = await fetch(`${API_BASE}/api/programs/${PROGRAM_ID}/plo-mlo?year=${year}`);
+    const res = await fetch(`${API_BASE}/api/programs/${PROGRAM_ID}/plo-mlo`);
     if (!res.ok) throw new Error(`API ${res.status}`);
     const data = await res.json();
 
@@ -1457,22 +1454,13 @@ function toast(msg,color='#22c55e'){
    INIT — ดึงข้อมูล PLO/MLO จาก Database
 ═══════════════════════════════════════════════════════ */
 (async function init(){
-  await loadKasFromDB();
-  currentYear = await FmsYear.init('year-selector-wrap', {
-    programId: PROGRAM_ID,
-    onYearChange: async (year) => {
-      currentYear = year;
-      PLO_LIST = []; MLO_GROUPS = []; ploKas = {}; mloKas = {};
-      const ok = await loadPloMloFromAPI(year);
-      initKasState();
-      loadKasData();
-      updateBanner(ok ? 'live' : 'error');
-      renderPLO();
-    },
-  });
-  const ok = await loadPloMloFromAPI(currentYear);
+  await loadKasFromDB();          // ← เพิ่มบรรทัดนี้
+  const ok = await loadPloMloFromAPI();
   initKasState();
   loadKasData();
   updateBanner(ok ? 'live' : 'error');
   renderPLO();
 })();
+</script>
+</body>
+</html>
