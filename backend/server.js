@@ -1996,21 +1996,31 @@ app.post("/api/courses/:id/plo-scores", async (req, res) => {
 
 app.get("/api/programs/:programId/plo-mlo", async (req, res) => {
   const { programId } = req.params;
+  const year = parseInt(req.query.year) || 2567;
   try {
-    const plos = (await query(
-      "SELECT id, code, description AS skill, sort_order FROM plos WHERE program_id=$1 ORDER BY sort_order, code",
-      [programId]
-    )).rows;
-    const mlos = (await query(
-      "SELECT m.id, mg.label AS label_group, m.code, m.description AS skill, m.sort_order FROM mlos m JOIN major_groups mg ON mg.id = m.major_group_id WHERE mg.program_id = $1 ORDER BY mg.sort_order, mg.label, m.sort_order, m.code",
-      [programId]
-    )).rows;
-    const mlosMapped = mlos.map(r => ({ ...r, group: r.label_group }));
-    res.json({ programId, PLO: plos, MLO: mlosMapped });
+    const [plos] = await pool.execute(
+      `SELECT id, code, description AS skill, sort_order
+       FROM plos
+       WHERE program_id = ? AND academic_year = ?
+       ORDER BY sort_order, code`,
+      [programId, year]
+    );
+    const [mlosRaw] = await pool.execute(
+      `SELECT m.id, m.code, m.description AS skill, m.sort_order,
+              mg.label AS \`group\`, mg.sort_order AS grp_order
+       FROM mlos m
+       JOIN major_groups mg ON mg.id = m.major_group_id
+       WHERE mg.program_id = ? AND m.academic_year = ?
+       ORDER BY mg.sort_order, m.sort_order, m.code`,
+      [programId, year]
+    );
+    res.json({ programId, year, PLO: plos, MLO: mlosRaw });
   } catch (e) {
     res.status(500).json({ message: "Server error: " + e.message });
   }
 });
+
+
 
 app.get("/api/public/programs/:programId/plo-mlo", async (req, res) => {
   const { programId } = req.params;
@@ -2037,82 +2047,101 @@ app.get("/api/public/programs/:programId/plo-mlo", async (req, res) => {
 
 app.put("/api/programs/:programId/plo-mlo", async (req, res) => {
   const { programId } = req.params;
-  const { PLO, MLO } = req.body || {};
+  const year = parseInt(req.query.year || req.body.year) || 2567;
+  const { PLO = [], MLO = [] } = req.body;
+
   if (!Array.isArray(PLO) || !Array.isArray(MLO))
     return res.status(400).json({ message: "ต้องส่ง PLO และ MLO เป็น array" });
+
   const conn = await pool.getConnection();
   try {
     await conn.beginTransaction();
-    await pool.execute("SET FOREIGN_KEY_CHECKS=0");
-    await conn.execute("DELETE FROM plos WHERE program_id=?", [programId]);
-    await pool.execute("SET FOREIGN_KEY_CHECKS=1");
-    let order = 1;
-    for (const r of PLO) {
-      const code = (r.code||"").trim(), skill = (r.skill||"").trim();
-      if (code && skill) await conn.execute(
-        "INSERT INTO plos (program_id, code, description, sort_order) VALUES (?,?,?,?)",
-        [programId, code, skill, order++]
+
+    // ── ลบ PLO ของปีนั้น แล้ว insert ใหม่ ──
+    await conn.execute(
+      'DELETE FROM plos WHERE program_id = ? AND academic_year = ?',
+      [programId, year]
+    );
+    for (let i = 0; i < PLO.length; i++) {
+      const code = (PLO[i].code || '').trim();
+      const skill = (PLO[i].skill || '').trim();
+      if (!code || !skill) continue;
+      await conn.execute(
+        `INSERT INTO plos (program_id, academic_year, code, description, sort_order)
+         VALUES (?, ?, ?, ?, ?)`,
+        [programId, year, code, skill, i + 1]
       );
     }
-    await pool.execute("SET FOREIGN_KEY_CHECKS=0");
+
+    // ── ลบ MLO ของปีนั้น แล้ว insert ใหม่ ──
     await conn.execute(
-      "DELETE m FROM mlos m JOIN major_groups mg ON mg.id=m.major_group_id WHERE mg.program_id=?",
-      [programId]
+      `DELETE m FROM mlos m
+       JOIN major_groups mg ON mg.id = m.major_group_id
+       WHERE mg.program_id = ? AND m.academic_year = ?`,
+      [programId, year]
     );
-    await pool.execute("SET FOREIGN_KEY_CHECKS=1");
+
     const perGroupOrder = {};
     for (const r of MLO) {
-      const label = (r.group||"").trim() || "ทั่วไป";
-      const code = (r.code||"").trim(), skill = (r.skill||"").trim();
+      const label = (r.group || '').trim() || 'ทั่วไป';
+      const code  = (r.code  || '').trim();
+      const skill = (r.skill || '').trim();
       if (!code || !skill) continue;
-      const [exist] = await conn.execute(
-        "SELECT id FROM major_groups WHERE program_id=? AND label=? LIMIT 1", [programId, label]
+
+      // หา major_group (ไม่ขึ้นกับปี)
+      const [[existG]] = await conn.execute(
+        'SELECT id FROM major_groups WHERE program_id = ? AND label = ? LIMIT 1',
+        [programId, label]
       );
       let mgId;
-      if (exist.length) {
-        mgId = exist[0].id;
-     } else {
+      if (existG) {
+        mgId = existG.id;
+      } else {
         const newId = require('crypto').randomUUID();
         await conn.execute(
-          "INSERT INTO major_groups (id, program_id, label, sort_order) VALUES (?,?,?,?)", [newId, programId, label, 0]
+          'INSERT INTO major_groups (id, program_id, label, sort_order) VALUES (?, ?, ?, 0)',
+          [newId, programId, label]
         );
         mgId = newId;
       }
-      console.log("mgId:", mgId, "label:", label);
+
       if (!perGroupOrder[mgId]) perGroupOrder[mgId] = 1;
       await conn.execute(
-        "INSERT INTO mlos (major_group_id, code, description, sort_order) VALUES (?,?,?,?)",
-        [mgId, code, skill, perGroupOrder[mgId]++]
+        `INSERT INTO mlos (major_group_id, academic_year, code, description, sort_order)
+         VALUES (?, ?, ?, ?, ?)`,
+        [mgId, year, code, skill, perGroupOrder[mgId]++]
       );
     }
+
     await conn.commit();
-    res.json({ ok: true, counts: { plo: PLO.length, mlo: MLO.length } });
- } catch (e) {
+    res.json({ ok: true, year, counts: { plo: PLO.length, mlo: MLO.length } });
+  } catch (e) {
     await conn.rollback();
     console.error("PLO-MLO PUT error:", e);
     res.status(500).json({ message: "Server error: " + e.message });
-  }finally {
+  } finally {
     conn.release();
   }
 });
 app.use('/api/publish', require('./routes/publish')(pool));
 app.get("/api/programs/:programId/alignment-matrix/full", async (req, res) => {
   const { programId } = req.params;
+  const year = req.query.year ? parseInt(req.query.year) : null;  // เพิ่มบรรทัดนี้
   try {
-    // PLOs
+    const yearSQL  = year ? " AND academic_year = ?" : "";
+    const baseArgs = year ? [programId, year] : [programId];
+
     const plos = (await query(
-      "SELECT id, code, description, sort_order FROM plos WHERE program_id=$1 ORDER BY sort_order, code",
-      [programId]
+      `SELECT id, code, description, sort_order FROM plos 
+       WHERE program_id=$1${yearSQL} ORDER BY sort_order, code`,
+      baseArgs
     )).rows;
 
-    // MLOs ผ่าน major_groups → majors → programs
-    // เรียงด้วย CAST เพื่อให้ได้ 1.1,1.2,1.3,2.1,2.2... แทน 1.1,2.1,3.1,1.2,2.2...
     const mlosRaw = (await query(
       `SELECT m.id, m.code, m.description, m.sort_order, mg.sort_order AS grp_order
-       FROM mlos m
-       JOIN major_groups mg ON mg.id = m.major_group_id
-       WHERE mg.program_id = $1`,
-      [programId]
+       FROM mlos m JOIN major_groups mg ON mg.id = m.major_group_id
+       WHERE mg.program_id = $1${yearSQL.replace('academic_year', 'm.academic_year')}`,
+      baseArgs
     )).rows;
     // sort ใน JS: แยก prefix (1) กับ suffix (1) จาก "MLO1.1" → [1, 1]
     const mlos = mlosRaw.slice().sort((a, b) => {
@@ -2820,5 +2849,113 @@ saved++;
 app.get("*", (req, res) => {
   if (!req.path.startsWith("/api")) {
     res.sendFile(path.join(__dirname, "../frontend/login.html"));
+  }
+});
+// ================= ANNOUNCEMENTS API =================
+
+// GET
+app.get("/api/announcements", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM announcements ORDER BY pinned DESC, FIELD(priority,'high','medium','low'), created_at DESC"
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST
+app.post("/api/announcements", async (req, res) => {
+  const { title, description, category, display_date, priority } = req.body;
+
+  try {
+    const [result] = await pool.query(
+      `INSERT INTO announcements (title, description, category, display_date, priority)
+       VALUES (?, ?, ?, ?, ?)`,
+      [title, description, category, display_date, priority]
+    );
+
+    res.json({ id: result.insertId });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// PUT
+app.put("/api/announcements/:id", async (req, res) => {
+  const { id } = req.params;
+  const { title, description, category, display_date, priority } = req.body;
+
+  try {
+    await pool.query(
+      `UPDATE announcements 
+       SET title=?, description=?, category=?, display_date=?, priority=? 
+       WHERE id=?`,
+      [title, description, category, display_date, priority, id]
+    );
+
+    res.json({ message: "updated" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// DELETE
+app.delete("/api/announcements/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query("DELETE FROM announcements WHERE id=?", [id]);
+    res.json({ message: "deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// PIN
+app.patch("/api/announcements/:id/pin", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query(
+      "UPDATE announcements SET pinned = NOT pinned WHERE id=?",
+      [id]
+    );
+    res.json({ message: "toggled" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+// ============================================================
+//  ACADEMIC YEARS API
+// ============================================================
+
+// GET /api/academic-years
+app.get('/api/academic-years', async (req, res) => {
+  try {
+    const [rows] = await pool.execute(
+      'SELECT year, label, is_active FROM academic_years ORDER BY year DESC'
+    );
+    res.json({ years: rows });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// POST /api/academic-years  — เพิ่มปีใหม่
+app.post('/api/academic-years', async (req, res) => {
+  const year = parseInt(req.body.year);
+  const label = req.body.label || `ปีการศึกษา ${year}`;
+  if (!year || year < 2500 || year > 2700)
+    return res.status(400).json({ error: 'year ไม่ถูกต้อง' });
+  try {
+    await pool.execute(
+      'INSERT IGNORE INTO academic_years (year, label) VALUES (?, ?)',
+      [year, label]
+    );
+    res.json({ year, label });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
 });

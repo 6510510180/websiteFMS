@@ -50,14 +50,18 @@ const FmsApi = (() => {
   // ── PLO / MLO ─────────────────────────────────────────────
   // GET /api/programs/:programId/plo-mlo  (มีใน server.js)
   // ส่งกลับ { programId, PLO: [{id,code,skill}], MLO: [{id,code,skill,group}] }
-  const getPloMlo = (programId) =>
-    req('GET', `/api/programs/${pid(programId)}/plo-mlo`);
+  const getPloMlo = (year, programId) => {
+  const y = year ? `?year=${year}` : '';
+  return req('GET', `/api/programs/${pid(programId)}/plo-mlo${y}`);
+};
 
   // ── Alignment Matrix — Full load ─────────────────────────
   // GET /api/programs/:programId/alignment-matrix/full  (endpoints ใหม่)
   // ส่งกลับ { plos, mlos, rows, checkMap }
-  const getMatrixFull = (programId) =>
-    req('GET', `/api/programs/${pid(programId)}/alignment-matrix/full`);
+  const getMatrixFull = (year, programId) => {
+  const y = year ? `?year=${year}` : '';
+  return req('GET', `/api/programs/${pid(programId)}/alignment-matrix/full${y}`);
+};
 
   // ── Alignment Matrix — Rows ──────────────────────────────
   // PUT /api/programs/:programId/alignment-matrix/rows  (endpoints ใหม่)

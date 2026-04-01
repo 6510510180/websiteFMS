@@ -181,6 +181,8 @@ tbody tr:hover .tdl,tbody tr:hover{background:#f5eeff !important;}
     <a href="kas.html">KAS</a>
   </nav>
   <div class="topbar-right">
+    <script src="fms-year-selector.js"></script>
+    <div id="year-selector-wrap"></div>
     <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
     <div class="save-st unsaved" id="ss">
       <div class="dot pulse" id="sd"></div>
@@ -389,8 +391,9 @@ tbody tr:hover .tdl,tbody tr:hover{background:#f5eeff !important;}
 </script>
 
 <div class="toast" id="toast"><div class="tdot" id="tdot"></div><span id="tmsg"></span></div>
-
 <script>
+  
+  let currentYear = 2567;
 const API_BASE = '';
 const PROG_ID  = '00000000-0000-0000-0000-000000000001';
 FmsApi.setConfig({ baseUrl: API_BASE, programId: PROG_ID });
@@ -427,9 +430,9 @@ function esc(s) {
 }
 
 // ── Load ─────────────────────────
-async function loadAll() {
+async function loadAll(year = currentYear) {
   setSS('saving','กำลังโหลด...');
-  const d = await FmsApi.getMatrixFull();
+  const d = await FmsApi.getMatrixFull(year, PROG_ID); // ← ส่ง year
   plos = d.plos || []; mlos = d.mlos || []; checkMap = d.checkMap || {};
   rows = (d.rows || []).map(r => ({ ...r, checks: toChecks(r.id) }));
   document.getElementById('progLabel').textContent =
@@ -450,7 +453,7 @@ async function saveAll() {
       description: r.description || r.desc || '',
       sort_order: r.sort_order ?? i,
     }));
-    const { rows: saved } = await FmsApi.saveRows(rp);
+    const { rows: saved } = await FmsApi.saveRows(rp, PROG_ID);
     const withChecks = saved.map((sr, i) => ({ ...sr, checks: rows[i]?.checks || [] }));
     await FmsApi.saveChecks(FmsApi.buildChecksPayload(withChecks, plos, mlos));
     await loadAll();
@@ -761,20 +764,30 @@ window.addEventListener('keydown', e => {
 });
 
 // ── Init ──────────────────────────
-async function init(){
+async function initPage() {
   setDB('loading','กำลังเชื่อมต่อ MySQL...');
   try {
-    await FmsApi.health(); dbOk=true;
-    setDB('ok',`✓ เชื่อมต่อ MySQL สำเร็จ · ${API_BASE||'localhost:3000'}`);
+    await FmsApi.health(); dbOk = true;
+    setDB('ok', `✓ เชื่อมต่อ MySQL สำเร็จ · ${API_BASE||'localhost:3000'}`);
   } catch(e) {
-    dbOk=false; setDB('err',`✗ เชื่อมต่อไม่ได้: ${e.message}`);
+    dbOk = false; setDB('err', `✗ เชื่อมต่อไม่ได้: ${e.message}`);
     setSS('unsaved','ไม่ได้เชื่อมต่อ DB'); return;
   }
-  await loadAll();
+
+  currentYear = await FmsYear.init('year-selector-wrap', {
+    programId: PROG_ID,
+    onYearChange: async (year) => {
+      currentYear = year;
+      await loadAll(year);
+      render();
+    },
+  });
+
+  await loadAll(currentYear);
   await loadPub();
   render();
 }
-init();
+initPage();  // ← เปลี่ยนจาก init()
 </script>
 </body>
 </html>

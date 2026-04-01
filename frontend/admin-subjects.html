@@ -60,7 +60,6 @@
     .stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
     .stat-card:hover::after{transform:scaleX(1);}
     .stat-icon-wrap{width:44px;height:44px;border-radius:10px;background:var(--card-icon-bg,var(--purple-light));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-    .stat-info{}
     .stat-label{font-size:11px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;}
     .stat-value{font-family:'Lexend',sans-serif;font-size:28px;font-weight:800;color:var(--text);line-height:1;}
     .card-purple{--card-accent:var(--purple);--card-icon-bg:var(--purple-light);}
@@ -111,6 +110,29 @@
     .grp-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;background:var(--purple-light);color:var(--purple);}
     .mix-badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;background:#eff6ff;color:#1d4ed8;margin-left:4px;}
 
+    /* ── MINOR GROUP CARDS ── */
+    .group-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;}
+    .group-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:all .2s;position:relative;}
+    .group-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent);}
+    .group-card-top{padding:16px 18px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+    .group-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:#fff;}
+    .group-card-info{flex:1;min-width:0;}
+    .group-card-name{font-family:'Lexend',sans-serif;font-size:14px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:3px;}
+    .group-card-name-en{font-size:11.5px;color:var(--text-sub);}
+    .group-card-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+    .group-card-actions{display:flex;gap:6px;flex-shrink:0;}
+    .group-card-divider{height:1px;background:var(--border);margin:0 18px;}
+    .group-card-stats{padding:10px 18px 14px;display:flex;gap:16px;}
+    .group-stat{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-sub);}
+    .group-stat strong{color:var(--text);font-family:'Lexend',sans-serif;font-weight:700;}
+    .group-card-note{padding:0 18px 12px;font-size:12px;color:var(--text-sub);line-height:1.5;background:#fafafa;border-top:1px solid var(--border);padding-top:10px;}
+    .empty-groups{text-align:center;padding:60px 20px;color:var(--text-sub);}
+    .empty-groups i{font-size:36px;margin-bottom:12px;opacity:.35;display:block;}
+    .empty-groups p{font-size:14px;font-weight:500;}
+    .badge-mix-sm{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:#eff6ff;color:#1d4ed8;}
+    .badge-count{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;background:var(--purple-light);color:var(--purple);}
+    .group-accentbar{height:4px;width:100%;}
+
     /* ── PAGER ── */
     .pager{display:flex;gap:5px;align-items:center;justify-content:flex-end;padding:14px 18px;border-top:1px solid var(--border);}
     .pager-info{font-size:12px;color:var(--text-sub);margin-right:4px;}
@@ -138,6 +160,12 @@
     .ferr{font-size:11px;color:var(--red);margin-top:2px;min-height:16px;}
     .fhint{font-size:11px;color:var(--text-sub);margin-top:3px;line-height:1.5;}
     .modal-section-title{font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-sub);margin-bottom:12px;margin-top:6px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;}
+
+    /* ── COLOR PICKER ── */
+    .color-picker-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+    .color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .15s;flex-shrink:0;}
+    .color-dot:hover{transform:scale(1.15);}
+    .color-dot.selected{border-color:var(--text);transform:scale(1.15);}
 
     /* ── TOGGLE ── */
     .toggle-row{display:flex;align-items:center;gap:10px;}
@@ -169,11 +197,17 @@
     .course-select-wrap select{border:none;background:none;outline:none;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;min-width:200px;}
     .course-select-wrap i{color:var(--text-sub);font-size:12px;}
 
+    /* ── SECTION HEADER ── */
+    .section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .section-hd-title{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+    .section-hd-sub{font-size:12px;color:var(--text-sub);margin-left:6px;}
+
     @media(max-width:900px){
       .sidebar{display:none;}
       .main{margin-left:0;}
       .topbar{left:0;}
       .stats{grid-template-columns:repeat(2,1fr);}
+      .group-grid{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -185,17 +219,12 @@
     <div class="sidebar-brand-title">FMS Admin</div>
     <div class="sidebar-brand-sub">PSU Faculty of Management</div>
   </div>
-
   <nav class="sidebar-nav">
-
-    <!-- ── ภาพรวม ── -->
     <div class="sidebar-section-label">ภาพรวม</div>
     <a class="nav-item" href="dashboard.html">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
       แดชบอร์ด
     </a>
-
-    <!-- ── จัดการหลักสูตร ── -->
     <div class="sidebar-section-label">จัดการหลักสูตร</div>
     <a class="nav-item" href="course-list.html">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
@@ -205,27 +234,21 @@
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
       แผนการศึกษา
     </a>
-
-    <!-- ── หน้านักศึกษา ── -->
     <div class="sidebar-section-label">หน้านักศึกษา</div>
     <a class="nav-item" href="admin-student-content.html">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
       หน้านักศึกษา
     </a>
-      <a class="nav-item active" href="admin-subjects.html">
+    <a class="nav-item active" href="admin-subjects.html">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
       รายวิชา
     </a>
-
-    <!-- ── ระบบ ── -->
     <div class="sidebar-section-label">ระบบ</div>
     <a class="nav-item" href="qa-dashboard.html">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
       ประกันคุณภาพการศึกษา
     </a>
-
   </nav>
-
   <div class="sidebar-footer">
     <a class="nav-item" href="login.html" id="logoutBtn">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
@@ -245,13 +268,7 @@
       <i class="fa-solid fa-graduation-cap" style="color:var(--accent)"></i>
       <select id="courseSelect" onchange="onCourseChange()"></select>
     </div>
-   <button onclick="openHelp()" style="
-      width:36px;height:36px;border-radius:50%;border:2px solid #6B3FA0;
-      background:#fff;color:#6B3FA0;font-size:15px;font-weight:700;
-      cursor:pointer;display:flex;align-items:center;justify-content:center;
-      transition:all .18s;flex-shrink:0;
-    " onmouseover="this.style.background='#F3EEFF'" onmouseout="this.style.background='#fff'"
-    title="คู่มือการใช้งาน">?</button>
+    <button onclick="openHelp()" style="width:36px;height:36px;border-radius:50%;border:2px solid #6B3FA0;background:#fff;color:#6B3FA0;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;" onmouseover="this.style.background='#F3EEFF'" onmouseout="this.style.background='#fff'" title="คู่มือการใช้งาน">?</button>
     <button class="btn btn-primary" id="mainAddBtn" onclick="onMainAdd()">
       <i class="fa-solid fa-plus"></i> เพิ่มวิชาใหม่
     </button>
@@ -260,14 +277,15 @@
 
 <!-- ── MAIN ── -->
 <div class="main">
-
-  <!-- Page Tabs -->
   <div class="page-tabs">
     <button class="ptab active" id="ptab-subjects" onclick="switchTab('subjects')">
       <i class="fa-solid fa-book"></i> รายวิชา
     </button>
     <button class="ptab" id="ptab-minor" onclick="switchTab('minor')">
       <i class="fa-solid fa-graduation-cap"></i> วิชาโท
+    </button>
+    <button class="ptab" id="ptab-groups" onclick="switchTab('groups')">
+      <i class="fa-solid fa-layer-group"></i> กลุ่มวิชาโท
     </button>
   </div>
 
@@ -276,7 +294,7 @@
     <!-- Stat Cards -->
     <div class="stats">
       <div class="stat-card card-purple">
-        <div class="stat-icon-wrap" style="background:var(--purple-light);color:var(--purple)"><i class="fa-solid fa-book"></i></div>
+        <div class="stat-icon-wrap" style="color:var(--purple)"><i class="fa-solid fa-book"></i></div>
         <div class="stat-info"><div class="stat-label">วิชาทั้งหมด</div><div class="stat-value" id="st-total">—</div></div>
       </div>
       <div class="stat-card card-green">
@@ -289,7 +307,7 @@
       </div>
       <div class="stat-card card-blue">
         <div class="stat-icon-wrap" style="background:#f0f9ff;color:#0284c7"><i class="fa-solid fa-layer-group"></i></div>
-        <div class="stat-info"><div class="stat-label">วิชาเอก</div><div class="stat-value" id="st-majors">—</div></div>
+        <div class="stat-info"><div class="stat-label">กลุ่มวิชาโท</div><div class="stat-value" id="st-groups">—</div></div>
       </div>
     </div>
 
@@ -319,146 +337,6 @@
         <div class="pager" id="pager"></div>
       </div>
     </div>
-    <!-- ── HELP MODAL ── -->
-<div id="helpOverlay" onclick="if(event.target===this)closeHelp()" style="
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
-  z-index:500;align-items:center;justify-content:center;padding:20px;
-  backdrop-filter:blur(3px);
-">
-  <div style="
-    background:#fff;border-radius:18px;width:100%;max-width:560px;
-    max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);
-    font-family:'Noto Sans Thai',sans-serif;
-  ">
-    <!-- Header -->
-    <div style="
-      padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;
-      display:flex;justify-content:space-between;align-items:center;
-      position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;
-    ">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="
-          width:36px;height:36px;border-radius:10px;background:#F3EEFF;
-          color:#6B3FA0;display:flex;align-items:center;justify-content:center;font-size:16px;
-        ">📚</div>
-        <div>
-          <div style="font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:#181117;">คู่มือการใช้งาน</div>
-          <div style="font-size:11.5px;color:#64748B;">หน้าจัดการรายวิชา</div>
-        </div>
-      </div>
-      <button onclick="closeHelp()" style="
-        background:none;border:none;font-size:20px;cursor:pointer;
-        color:#64748B;padding:4px 8px;border-radius:6px;line-height:1;
-      ">×</button>
-    </div>
-
-    <!-- Body -->
-    <div style="padding:24px;">
-
-      <!-- Tab overview -->
-      <div style="background:#F3EEFF;border-radius:10px;padding:14px 16px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;">
-        <span style="font-size:18px;flex-shrink:0;">💡</span>
-        <div style="font-size:13px;color:#4A2870;line-height:1.7;">
-          หน้านี้แบ่งเป็น <b>2 แท็บ</b> — <b>รายวิชา</b> (วิชาบังคับ/เลือกตามวิชาเอก) และ <b>วิชาโท</b> (รายวิชาในกลุ่มวิชาโท) สลับได้ที่แถบด้านบน
-        </div>
-      </div>
-
-      <!-- Section 1 -->
-      <div style="margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;">
-          📋 แท็บ "รายวิชา"
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</span>
-            <div style="font-size:13.5px;color:#181117;line-height:1.6;">การ์ดสถิติ 4 ใบด้านบนแสดง <b>วิชาทั้งหมด, วิชาบังคับ, วิชาเลือก</b> และ <b>จำนวนวิชาเอก</b> ของหลักสูตรที่เลือก — อัปเดตอัตโนมัติ</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</span>
-            <div style="font-size:13.5px;color:#181117;line-height:1.6;">ใช้ Dropdown <b>วิชาเอก</b> และ <b>ประเภท</b> เพื่อกรอง พร้อมช่อง <b>ค้นหา</b> รหัส/ชื่อวิชาแบบ real-time — กดปุ่ม <b>ล้าง</b> เพื่อรีเซ็ตตัวกรองทั้งหมด</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</span>
-            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดปุ่ม <b>เพิ่มวิชาใหม่</b> มุมขวาบน จะเปิด popup ให้กรอก รหัสวิชา, ชื่อ, วิชาเอก, ประเภท, หน่วยกิต และหมายเหตุพิเศษ</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">4</span>
-            <div style="font-size:13.5px;color:#181117;line-height:1.6;">
-              ในตารางแต่ละแถวมีปุ่มจัดการ 2 ปุ่ม
-              <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;">
-                <span style="padding:2px 10px;border-radius:6px;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;">✏️ แก้ไข</span>
-                <span style="padding:2px 10px;border-radius:6px;background:#FEE2E2;color:#EF4444;font-size:11px;font-weight:700;">🗑️ ลบ</span>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">5</span>
-            <div style="font-size:13.5px;color:#181117;line-height:1.6;">ตารางแสดง <b>20 รายการต่อหน้า</b> — ใช้ปุ่ม Pagination ด้านล่างตารางเพื่อเลื่อนหน้า</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 2 -->
-      <div style="margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;">
-          🎓 แท็บ "วิชาโท"
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">6</span>
-            <div style="font-size:13.5px;color:#181117;line-height:1.6;">กดแท็บ <b>วิชาโท</b> ปุ่มบนขวาจะเปลี่ยนเป็น <b>เพิ่มวิชาโท</b> — ตัวกรองจะเปลี่ยนเป็น <b>กลุ่มวิชาโท</b> และ <b>ประเภท</b> แทน</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">7</span>
-            <div style="font-size:13.5px;color:#181117;line-height:1.6;">popup เพิ่ม/แก้ไขวิชาโทมีฟิลด์พิเศษเพิ่มเติม ได้แก่ <b>ข้อความ info box</b> (แสดงบนตารางในหน้านักศึกษา) และ <b>หมายเหตุท้ายตาราง</b></div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;">
-            <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">8</span>
-            <div style="font-size:13.5px;color:#181117;line-height:1.6;">
-              Toggle <b>อนุญาตให้เลือกแบบคละกลุ่มวิชาเอก</b> — เมื่อเปิดจะแสดง badge
-              <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:700;margin-left:4px;">คละ</span>
-              บนการ์ดและกล่องแจ้งเตือนสีน้ำเงินในหน้านักศึกษา
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 3 -->
-      <div style="margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#6B3FA0;text-transform:uppercase;letter-spacing:.6px;padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;">
-          🔄 การเลือกหลักสูตร
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">9</span>
-          <div style="font-size:13.5px;color:#181117;line-height:1.6;">ใช้ Dropdown <b>หลักสูตร</b> มุมขวาบนของ topbar เพื่อสลับดูรายวิชาของหลักสูตรอื่น — หน้าจะโหลดข้อมูลใหม่ทั้งหมดอัตโนมัติ</div>
-        </div>
-      </div>
-
-      <!-- Note -->
-      <div style="background:#F3EEFF;border-left:3px solid #6B3FA0;border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:#4A2870;line-height:1.6;">
-        <b>💡 หมายเหตุ:</b> การลบวิชา <span style="color:#EF4444;font-weight:600;">ไม่สามารถกู้คืนได้</span> — ระบบจะขอยืนยันทุกครั้งก่อนดำเนินการ
-      </div>
-
-    </div><!-- /body -->
-
-    <!-- Footer -->
-    <div style="
-      padding:14px 24px;border-top:1px solid #EDE8F5;
-      display:flex;justify-content:flex-end;
-      position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;
-    ">
-      <button onclick="closeHelp()" style="
-        padding:9px 24px;border-radius:9px;border:none;
-        background:#6B3FA0;color:#fff;font-size:13px;font-weight:700;
-        font-family:inherit;cursor:pointer;
-        box-shadow:0 4px 12px rgba(107,63,160,.28);transition:all .18s;
-      " onmouseover="this.style.background='#4A2870'" onmouseout="this.style.background='#6B3FA0'">
-        รับทราบ
-      </button>
-    </div>
-
-  </div>
-</div>
 
     <!-- Tab: วิชาโท -->
     <div class="tab-pane" id="pane-minor">
@@ -487,8 +365,75 @@
       </div>
     </div>
 
+    <!-- ─────────────────────────────────────────────────
+         Tab: กลุ่มวิชาโท  (ใหม่)
+    ───────────────────────────────────────────────── -->
+    <div class="tab-pane" id="pane-groups">
+
+      <!-- Search toolbar -->
+      <div class="toolbar">
+        <input type="text" id="fGroupSearch" placeholder="🔍  ค้นหาชื่อกลุ่มวิชาโท..." oninput="applyGroupFilter()" style="flex:1;min-width:240px;">
+        <select id="fGroupMix" onchange="applyGroupFilter()">
+          <option value="">— ทุกเงื่อนไข —</option>
+          <option value="1">คละกลุ่มได้</option>
+          <option value="0">ไม่คละกลุ่ม</option>
+        </select>
+        <button class="btn btn-outline btn-sm" onclick="clearGroupFilter()"><i class="fa-solid fa-xmark"></i> ล้าง</button>
+      </div>
+
+      <!-- Group grid -->
+      <div class="section-hd">
+        <div>
+          <span class="section-hd-title">กลุ่มวิชาโท</span>
+          <span class="section-hd-sub" id="groupCount"></span>
+        </div>
+      </div>
+      <div class="group-grid" id="groupGrid">
+        <div class="empty-groups" style="grid-column:1/-1">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          <p>กำลังโหลด...</p>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /page-body -->
 </div><!-- /main -->
+
+<!-- ── HELP MODAL ── -->
+<div id="helpOverlay" onclick="if(event.target===this)closeHelp()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.18);font-family:'Noto Sans Thai',sans-serif;">
+    <div style="padding:20px 24px 16px;border-bottom:1px solid #EDE8F5;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;border-radius:18px 18px 0 0;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:#F3EEFF;color:#6B3FA0;display:flex;align-items:center;justify-content:center;font-size:16px;">📚</div>
+        <div>
+          <div style="font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;color:#181117;">คู่มือการใช้งาน</div>
+          <div style="font-size:11.5px;color:#64748B;">หน้าจัดการรายวิชา</div>
+        </div>
+      </div>
+      <button onclick="closeHelp()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#64748B;padding:4px 8px;border-radius:6px;">×</button>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#F3EEFF;border-radius:10px;padding:14px 16px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:18px;flex-shrink:0;">💡</span>
+        <div style="font-size:13px;color:#4A2870;line-height:1.7;">หน้านี้แบ่งเป็น <b>3 แท็บ</b> — <b>รายวิชา</b>, <b>วิชาโท</b> และ <b>กลุ่มวิชาโท</b> — สลับได้ที่แถบด้านบน</div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div style="font-size:13px;font-weight:700;color:#6B3FA0;padding-bottom:8px;border-bottom:1px solid #EDE8F5;margin-bottom:12px;">🗂️ แท็บ "กลุ่มวิชาโท" (ใหม่)</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:#181117;line-height:1.6;">
+          <div style="display:flex;gap:10px;"><span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">1</span><div>กด <b>เพิ่มกลุ่มวิชาโท</b> มุมขวาบนเพื่อสร้างกลุ่มใหม่ — กำหนด ชื่อ, สีประจำกลุ่ม, และเงื่อนไขการเลือก</div></div>
+          <div style="display:flex;gap:10px;"><span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">2</span><div>แต่ละ card แสดงจำนวนวิชาในกลุ่ม, badge "คละกลุ่มได้", และ info box / หมายเหตุท้ายตาราง</div></div>
+          <div style="display:flex;gap:10px;"><span style="min-width:22px;height:22px;border-radius:50%;background:#F3EEFF;color:#6B3FA0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">3</span><div>ปุ่ม <b>✏️ แก้ไข</b> เปิด popup เพื่อแก้ไขข้อมูลกลุ่ม, ปุ่ม <b>🗑️ ลบ</b> ต้องยืนยันก่อน</div></div>
+        </div>
+      </div>
+      <div style="background:#F3EEFF;border-left:3px solid #6B3FA0;border-radius:0 8px 8px 0;padding:12px 14px;font-size:12.5px;color:#4A2870;line-height:1.6;">
+        <b>💡 หมายเหตุ:</b> การลบกลุ่มวิชาโทจะ <span style="color:#EF4444;font-weight:600;">ไม่ลบรายวิชาในกลุ่ม</span> — แต่วิชาในกลุ่มนั้นจะไม่มีกลุ่มผูกอยู่
+      </div>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid #EDE8F5;display:flex;justify-content:flex-end;position:sticky;bottom:0;background:#fff;border-radius:0 0 18px 18px;">
+      <button onclick="closeHelp()" style="padding:9px 24px;border-radius:9px;border:none;background:#6B3FA0;color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;">รับทราบ</button>
+    </div>
+  </div>
+</div>
 
 <!-- Modal เพิ่ม/แก้ไขวิชา -->
 <div class="overlay" id="modalOv">
@@ -592,6 +537,68 @@
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════
+     Modal เพิ่ม/แก้ไข กลุ่มวิชาโท  (ใหม่)
+═══════════════════════════════════════════════ -->
+<div class="overlay" id="groupOv">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-hd">
+      <h3 id="groupModalTitle">เพิ่มกลุ่มวิชาโท</h3>
+      <button onclick="closeGroupModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-bd">
+      <input type="hidden" id="grpEditId">
+
+      <div class="modal-section-title"><i class="fa-solid fa-layer-group" style="color:var(--purple)"></i> ข้อมูลกลุ่ม</div>
+      <div class="frow full">
+        <div class="fg"><label>ชื่อกลุ่มวิชาโท (ไทย) *</label><input id="grpNameTh" placeholder="เช่น การจัดการธุรกิจ"><div class="ferr" id="grpNameThErr"></div></div>
+      </div>
+      <div class="frow full">
+        <div class="fg"><label>ชื่อกลุ่มวิชาโท (อังกฤษ)</label><input id="grpNameEn" placeholder="e.g. Business Management"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>ลำดับการแสดงผล</label><input type="number" id="grpSort" placeholder="0" min="0"></div>
+        <div class="fg">
+          <label>สีประจำกลุ่ม</label>
+          <div class="color-picker-row" id="colorPicker"></div>
+          <input type="hidden" id="grpColor" value="#6B3FA0">
+        </div>
+      </div>
+
+      <div class="modal-section-title" style="margin-top:8px;"><i class="fa-solid fa-comment-dots" style="color:var(--purple)"></i> ข้อความแสดงในหน้านักศึกษา</div>
+      <div class="frow full">
+        <div class="fg">
+          <label>ข้อความ info box <span style="font-weight:400;text-transform:none">(แสดงใต้หัวข้อกลุ่ม)</span></label>
+          <textarea id="grpInfoNote" placeholder="เช่น นักศึกษาเลือกรวมไม่น้อยกว่า 15 หน่วยกิต จากรายวิชาในกลุ่มนี้"></textarea>
+          <div class="fhint">แสดงในกล่องสีม่วงด้านบนตารางรายวิชาในหน้านักศึกษา</div>
+        </div>
+      </div>
+      <div class="frow full">
+        <div class="fg">
+          <label>หมายเหตุท้ายตาราง</label>
+          <textarea id="grpFreeNote" placeholder="เช่น *ต้องผ่านวิชาพื้นฐานก่อนลงทะเบียน" style="min-height:60px;"></textarea>
+          <div class="fhint">แสดงในกล่องสีเหลืองด้านล่างตาราง</div>
+        </div>
+      </div>
+
+      <div class="modal-section-title" style="margin-top:8px;"><i class="fa-solid fa-sliders" style="color:var(--purple)"></i> เงื่อนไขการเลือก</div>
+      <div class="frow full" style="margin-bottom:4px;">
+        <div class="fg">
+          <div class="toggle-row">
+            <label class="toggle"><input type="checkbox" id="grpAllowMix"><span class="toggle-slider"></span></label>
+            <span style="font-size:13px;color:var(--text)">อนุญาตให้เลือก<strong>แบบคละกลุ่มวิชาเอก</strong>ได้</span>
+          </div>
+          <div class="fhint" style="margin-top:6px;">เมื่อเปิด จะแสดง badge <span class="badge-mix-sm" style="margin-left:4px;"><i class="fa-solid fa-shuffle" style="font-size:9px"></i> คละ</span> และกล่องแจ้งเตือนสีน้ำเงินในหน้านักศึกษา</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-outline" onclick="closeGroupModal()">ยกเลิก</button>
+      <button class="btn btn-primary" id="grpSaveBtn" onclick="saveGroup()"><i class="fa-solid fa-floppy-disk"></i> บันทึก</button>
+    </div>
+  </div>
+</div>
+
 <!-- Confirm ลบ -->
 <div class="conf-overlay" id="confOv">
   <div class="conf-box">
@@ -612,10 +619,29 @@ const API = '/api';
 const COURSE_ID = new URLSearchParams(location.search).get('course_id') || 5;
 const COLORS = {14:'#0284c7',15:'#7c3aed',16:'#16a34a',17:'#d97706',18:'#e11d48',19:'#c026d3'};
 
+// Color palette for minor groups
+const PALETTE = [
+  '#6B3FA0','#0284c7','#16a34a','#d97706','#e11d48',
+  '#c026d3','#0891b2','#65a30d','#ea580c','#7c3aed',
+  '#0f766e','#b45309','#be185d','#1d4ed8','#15803d'
+];
+
 let allData=[],majors=[],filtered=[],page=1;
 let minorGroups=[],minorData=[],minorFiltered=[],minorPage=1;
+let groupFiltered=[];
 const PER=20;
 let deleteId=null,deleteType='subject',currentTab='subjects';
+
+// ── Build color picker ──
+function buildColorPicker(){
+  const wrap=document.getElementById('colorPicker');
+  wrap.innerHTML=PALETTE.map(c=>`<div class="color-dot" style="background:${c}" data-color="${c}" onclick="selectColor('${c}')"></div>`).join('');
+  selectColor(PALETTE[0]);
+}
+function selectColor(color){
+  document.getElementById('grpColor').value=color;
+  document.querySelectorAll('.color-dot').forEach(d=>{d.classList.toggle('selected',d.dataset.color===color);});
+}
 
 function switchTab(tab){
   currentTab=tab;
@@ -625,11 +651,17 @@ function switchTab(tab){
   document.getElementById('pane-'+tab).classList.add('active');
   const btn=document.getElementById('mainAddBtn'),title=document.getElementById('topbarTitle');
   if(tab==='subjects'){btn.innerHTML='<i class="fa-solid fa-plus"></i> เพิ่มวิชาใหม่';btn.onclick=openAdd;title.textContent='จัดการรายวิชาตามวิชาเอก';}
-  else{btn.innerHTML='<i class="fa-solid fa-plus"></i> เพิ่มวิชาโท';btn.onclick=openAddMinor;title.textContent='จัดการวิชาโท';}
+  else if(tab==='minor'){btn.innerHTML='<i class="fa-solid fa-plus"></i> เพิ่มวิชาโท';btn.onclick=openAddMinor;title.textContent='จัดการวิชาโท';}
+  else{btn.innerHTML='<i class="fa-solid fa-plus"></i> เพิ่มกลุ่มวิชาโท';btn.onclick=openAddGroup;title.textContent='จัดการกลุ่มวิชาโท';}
 }
-function onMainAdd(){if(currentTab==='subjects')openAdd();else openAddMinor();}
+function onMainAdd(){
+  if(currentTab==='subjects')openAdd();
+  else if(currentTab==='minor')openAddMinor();
+  else openAddGroup();
+}
 
 async function init(){
+  buildColorPicker();
   await loadCourses();
   await Promise.all([loadMajors(),loadAll()]);
   await loadMinorGroups();
@@ -644,7 +676,6 @@ function onCourseChange(){const cid=document.getElementById('courseSelect').valu
 
 async function loadMajors(){
   try{const r=await fetch(`${API}/majors?course_id=${COURSE_ID}`);const j=await r.json();majors=j.data||j;
-    document.getElementById('st-majors').textContent=majors.length;
     const fSel=document.getElementById('fMajorFilter'),mSel=document.getElementById('fMajor');
     fSel.innerHTML='<option value="">— ทุกวิชาเอก —</option>';mSel.innerHTML='<option value="">— เลือกวิชาเอก —</option>';
     majors.forEach(m=>{fSel.innerHTML+=`<option value="${m.id}">${m.name_th}</option>`;mSel.innerHTML+=`<option value="${m.id}">${m.name_th}</option>`;});}
@@ -700,7 +731,7 @@ function closeModal(){document.getElementById('modalOv').classList.remove('open'
 function clearErr(){['fCodeErr','fNameThErr','fMajorErr'].forEach(id=>document.getElementById(id).textContent='');}
 function openHelp(){document.getElementById('helpOverlay').style.display='flex';}
 function closeHelp(){document.getElementById('helpOverlay').style.display='none';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelp();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeHelp();closeGroupModal();}});
 
 async function save(){
   clearErr();
@@ -717,11 +748,14 @@ async function save(){
   finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-floppy-disk"></i> บันทึก';}
 }
 
+// ── MINOR GROUPS ──
 async function loadMinorGroups(){
-  try{const r=await fetch(`${API}/minor-groups`);const j=await r.json();minorGroups=j.data||j;
+  try{const r=await fetch(`${API}/minor-groups?course_id=${COURSE_ID}`);const j=await r.json();minorGroups=j.data||j;
+    document.getElementById('st-groups').textContent=minorGroups.length;
     const fSel=document.getElementById('fMinorGroup'),mSel=document.getElementById('mnGroup');
     fSel.innerHTML='<option value="">— ทุกกลุ่ม —</option>';mSel.innerHTML='<option value="">— เลือกกลุ่ม —</option>';
-    minorGroups.forEach(g=>{const t=g.allow_mix?' (คละกลุ่มได้)':'';fSel.innerHTML+=`<option value="${g.id}">${g.name_th}${t}</option>`;mSel.innerHTML+=`<option value="${g.id}">${g.name_th}${t}</option>`;});}catch{}
+    minorGroups.forEach(g=>{const t=g.allow_mix?' (คละกลุ่มได้)':'';fSel.innerHTML+=`<option value="${g.id}">${g.name_th}${t}</option>`;mSel.innerHTML+=`<option value="${g.id}">${g.name_th}${t}</option>`;});
+    applyGroupFilter();}catch{}
 }
 
 async function loadMinorData(){
@@ -784,21 +818,164 @@ async function saveMinor(){
   finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-floppy-disk"></i> บันทึก';}
 }
 
-function askDelete(id,code,type='subject'){deleteId=id;deleteType=type;document.getElementById('confMsg').textContent=`ลบ "${code}" ออกจากระบบ?`;document.getElementById('confOv').classList.add('open');document.getElementById('confYes').onclick=doDelete;}
+// ═══════════════════════════════════════════════
+//  GROUP MANAGEMENT  (ใหม่)
+// ═══════════════════════════════════════════════
+function applyGroupFilter(){
+  const q=document.getElementById('fGroupSearch').value.toLowerCase().trim();
+  const mix=document.getElementById('fGroupMix').value;
+  groupFiltered=minorGroups.filter(g=>{
+    if(q&&!g.name_th.toLowerCase().includes(q)&&!(g.name_en||'').toLowerCase().includes(q))return false;
+    if(mix==='1'&&!g.allow_mix)return false;
+    if(mix==='0'&&g.allow_mix)return false;
+    return true;
+  });
+  renderGroups();
+}
+function clearGroupFilter(){document.getElementById('fGroupSearch').value='';document.getElementById('fGroupMix').value='';applyGroupFilter();}
+
+function renderGroups(){
+  const grid=document.getElementById('groupGrid');
+  document.getElementById('groupCount').textContent=`(${groupFiltered.length} กลุ่ม)`;
+  if(!groupFiltered.length){
+    grid.innerHTML=`<div class="empty-groups" style="grid-column:1/-1"><i class="fa-regular fa-folder-open"></i><p>ไม่พบกลุ่มวิชาโท</p></div>`;
+    return;
+  }
+  grid.innerHTML=groupFiltered.map(g=>{
+    const color=g.color||'#6B3FA0';
+    const subjectCount=minorData.filter(s=>s.minor_group_id===g.id).length;
+    const reqCount=minorData.filter(s=>s.minor_group_id===g.id&&s.subject_type==='required').length;
+    const elecCount=minorData.filter(s=>s.minor_group_id===g.id&&s.subject_type==='elective').length;
+    const mixBadge=g.allow_mix?`<span class="badge-mix-sm"><i class="fa-solid fa-shuffle" style="font-size:9px"></i> คละกลุ่มได้</span>`:'';
+    const infoNote=g.info_note||g.note||'';
+    const freeNote=g.free_note||'';
+    return`<div class="group-card">
+      <div class="group-accentbar" style="background:${color}"></div>
+      <div class="group-card-top">
+        <div class="group-card-icon" style="background:${color}">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div class="group-card-info">
+          <div class="group-card-name">${g.name_th}</div>
+          ${g.name_en?`<div class="group-card-name-en">${g.name_en}</div>`:''}
+          <div class="group-card-badges">
+            <span class="badge-count"><i class="fa-solid fa-book" style="font-size:9px"></i> ${subjectCount} วิชา</span>
+            ${mixBadge}
+          </div>
+        </div>
+        <div class="group-card-actions">
+          <button class="btn btn-outline btn-sm btn-icon" title="แก้ไขกลุ่ม" onclick='openEditGroup(${JSON.stringify(g)})'><i class="fa-solid fa-pen" style="font-size:11px"></i></button>
+          <button class="btn btn-danger btn-sm btn-icon" title="ลบกลุ่ม" onclick="askDelete(${g.id},'${g.name_th}','group')"><i class="fa-solid fa-trash" style="font-size:11px"></i></button>
+        </div>
+      </div>
+      <div class="group-card-divider"></div>
+      <div class="group-card-stats">
+        <div class="group-stat"><i class="fa-solid fa-circle-check" style="color:#16a34a;font-size:12px"></i> บังคับ <strong>${reqCount}</strong></div>
+        <div class="group-stat"><i class="fa-solid fa-list" style="color:#d97706;font-size:12px"></i> เลือก <strong>${elecCount}</strong></div>
+        ${g.sort_order!=null?`<div class="group-stat"><i class="fa-solid fa-sort" style="font-size:12px"></i> ลำดับ <strong>${g.sort_order}</strong></div>`:''}
+      </div>
+      ${infoNote||freeNote?`<div class="group-card-note">
+        ${infoNote?`<div style="margin-bottom:${freeNote?'6px':'0'}"><i class="fa-solid fa-info-circle" style="color:var(--purple);font-size:10px;margin-right:4px"></i>${infoNote.length>80?infoNote.slice(0,80)+'…':infoNote}</div>`:''}
+        ${freeNote?`<div><i class="fa-solid fa-note-sticky" style="color:#d97706;font-size:10px;margin-right:4px"></i>${freeNote.length>80?freeNote.slice(0,80)+'…':freeNote}</div>`:''}
+      </div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function openAddGroup(){
+  document.getElementById('groupModalTitle').textContent='เพิ่มกลุ่มวิชาโท';
+  document.getElementById('grpEditId').value='';
+  ['grpNameTh','grpNameEn','grpInfoNote','grpFreeNote'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('grpSort').value='0';
+  document.getElementById('grpAllowMix').checked=false;
+  selectColor(PALETTE[0]);
+  clearGroupErr();
+  document.getElementById('groupOv').classList.add('open');
+  document.getElementById('grpNameTh').focus();
+}
+
+function openEditGroup(g){
+  document.getElementById('groupModalTitle').textContent='แก้ไขกลุ่มวิชาโท';
+  document.getElementById('grpEditId').value=g.id;
+  document.getElementById('grpNameTh').value=g.name_th;
+  document.getElementById('grpNameEn').value=g.name_en||'';
+  document.getElementById('grpSort').value=g.sort_order||0;
+  document.getElementById('grpInfoNote').value=g.info_note||g.note||'';
+  document.getElementById('grpFreeNote').value=g.free_note||'';
+  document.getElementById('grpAllowMix').checked=!!g.allow_mix;
+  selectColor(g.color||PALETTE[0]);
+  clearGroupErr();
+  document.getElementById('groupOv').classList.add('open');
+}
+
+function closeGroupModal(){document.getElementById('groupOv').classList.remove('open');}
+function clearGroupErr(){const e=document.getElementById('grpNameThErr');if(e)e.textContent='';}
+
+async function saveGroup(){
+  clearGroupErr();
+  const id=document.getElementById('grpEditId').value;
+  const nameTh=document.getElementById('grpNameTh').value.trim();
+  if(!nameTh){
+    const e=document.getElementById('grpNameThErr');
+    if(e)e.textContent='กรุณากรอกชื่อกลุ่ม';
+    return;
+  }
+  const body={
+    course_id:Number(COURSE_ID),
+    name_th:nameTh,
+    name_en:document.getElementById('grpNameEn').value.trim(),
+    color:document.getElementById('grpColor').value,
+    sort_order:Number(document.getElementById('grpSort').value)||0,
+    note:document.getElementById('grpInfoNote').value.trim(),
+    info_note:document.getElementById('grpInfoNote').value.trim(),
+    free_note:document.getElementById('grpFreeNote').value.trim(),
+    allow_mix:document.getElementById('grpAllowMix').checked
+  };
+  const btn=document.getElementById('grpSaveBtn');btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+  try{
+    const r=await fetch(id?`${API}/minor-groups/${id}`:`${API}/minor-groups`,{method:id?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const j=await r.json();
+    if(!j.success)throw new Error(j.message);
+    toast(id?'แก้ไขกลุ่มเรียบร้อย ✓':'เพิ่มกลุ่มเรียบร้อย ✓','ok');
+    closeGroupModal();
+    await loadMinorGroups();
+    await loadMinorData();
+  }catch(e){toast(e.message||'เกิดข้อผิดพลาด','err');}
+  finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-floppy-disk"></i> บันทึก';}
+}
+
+// ── DELETE ──
+function askDelete(id,label,type='subject'){
+  deleteId=id;deleteType=type;
+  const msgs={subject:`ลบวิชา "${label}" ออกจากระบบ?`,minor:`ลบวิชาโท "${label}" ออกจากระบบ?`,group:`ลบกลุ่มวิชาโท "${label}" ออกจากระบบ?\n(รายวิชาในกลุ่มจะไม่ถูกลบ)`};
+  document.getElementById('confMsg').textContent=msgs[type]||`ลบ "${label}" ออกจากระบบ?`;
+  document.getElementById('confOv').classList.add('open');
+  document.getElementById('confYes').onclick=doDelete;
+}
 function closeConf(){document.getElementById('confOv').classList.remove('open');deleteId=null;}
 async function doDelete(){
   if(!deleteId)return;
-  const ep=deleteType==='minor'?'minor-subjects':'major-subjects';
-  try{const r=await fetch(`${API}/${ep}/${deleteId}`,{method:'DELETE'});const j=await r.json();if(!j.success)throw new Error(j.message);toast('ลบเรียบร้อย','ok');closeConf();if(deleteType==='minor')await loadMinorData();else await loadAll();}
-  catch(e){toast(e.message||'ลบไม่สำเร็จ','err');}
+  const eps={subject:'major-subjects',minor:'minor-subjects',group:'minor-groups'};
+  const ep=eps[deleteType]||'major-subjects';
+  try{
+    const r=await fetch(`${API}/${ep}/${deleteId}`,{method:'DELETE'});
+    const j=await r.json();
+    if(!j.success)throw new Error(j.message);
+    toast('ลบเรียบร้อย','ok');closeConf();
+    if(deleteType==='minor')await loadMinorData();
+    else if(deleteType==='group'){await loadMinorGroups();await loadMinorData();}
+    else await loadAll();
+  }catch(e){toast(e.message||'ลบไม่สำเร็จ','err');}
 }
 
+// ── PAGER ──
 function renderPager(elId,curPage,pages,goFn){
   let ph=`<span class="pager-info">หน้า ${curPage}/${pages}</span>`;
   for(let i=1;i<=pages;i++){if(pages>7&&i>2&&i<pages-1&&Math.abs(i-curPage)>1){if(i===3||i===pages-2)ph+=`<span style="color:var(--text-sub);padding:0 4px">…</span>`;continue;}ph+=`<button class="pbtn ${i===curPage?'active':''}" onclick="(${goFn.toString()})(${i})">${i}</button>`;}
   document.getElementById(elId).innerHTML=ph;
 }
 
+// ── TOAST ──
 function toast(msg,type='ok'){
   const wrap=document.getElementById('toasts'),t=document.createElement('div');
   t.className=`toast toast-${type}`;
@@ -807,7 +984,7 @@ function toast(msg,type='ok'){
   setTimeout(()=>{t.style.cssText='opacity:0;transform:translateY(8px);transition:.3s';setTimeout(()=>t.remove(),300);},3000);
 }
 
-['modalOv','minorOv'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===e.currentTarget)document.getElementById(id).classList.remove('open');});});
+['modalOv','minorOv','groupOv'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===e.currentTarget)document.getElementById(id).classList.remove('open');});});
 document.getElementById('confOv').addEventListener('click',e=>{if(e.target===e.currentTarget)closeConf();});
 document.getElementById('logoutBtn').addEventListener('click',e=>{e.preventDefault();localStorage.removeItem('user');window.location.href='login.html';});
 

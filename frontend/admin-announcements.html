@@ -295,17 +295,13 @@
 <div id="toast"><i class="fa-solid fa-check-circle"></i> <span id="toastMsg"></span></div>
 
 <script>
-const STORAGE_KEY = 'bba_announcements';
 let announcements = [];
 let currentPriority = 'low';
 
 // ── Load ──────────────────────────────────────────────────────
-function load() {
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        announcements = raw ? JSON.parse(raw) : getDefaults();
-    } catch { announcements = getDefaults(); }
-    if (!announcements.length) announcements = getDefaults();
+async function load() {
+    const res = await fetch("http://localhost:3000/api/announcements");
+    announcements = await res.json();
     renderAll();
 }
 
@@ -357,10 +353,10 @@ function renderList() {
                     <span class="tag tag-${a.priority}">${{high:'สำคัญมาก',medium:'ปานกลาง',low:'ทั่วไป'}[a.priority]}</span>
                     ${a.pinned ? '<span class="tag tag-pinned">📌 ปักหมุด</span>' : ''}
                 </div>
-                <div class="announce-desc">${escHtml(a.desc)}</div>
+                <div class="announce-desc">${escHtml(a.description)}</div>
                 <div class="announce-meta">
                     <span><i class="fa-solid fa-tag"></i> ${escHtml(a.category)}</span>
-                    <span><i class="fa-regular fa-clock"></i> ${escHtml(a.date)}</span>
+                    <span>${escHtml(a.display_date)}</span>
                 </div>
             </div>
             <div class="announce-actions">
@@ -379,29 +375,32 @@ function updateStats() {
 }
 
 // ── CRUD ──────────────────────────────────────────────────────
-function saveAnnouncement() {
+async function saveAnnouncement() {
     const title = document.getElementById('inTitle').value.trim();
     const desc  = document.getElementById('inDesc').value.trim();
     const category = document.getElementById('inCategory').value;
     const date  = document.getElementById('inDate').value.trim() || formatNow();
     const priority = document.getElementById('inPriority').value;
-    const editId = parseInt(document.getElementById('editId').value) || null;
+    const editId = document.getElementById('editId').value;
 
-    if (!title) { showToast('กรุณากรอกหัวข้อประกาศ', 'error'); document.getElementById('inTitle').focus(); return; }
-    if (!desc)  { showToast('กรุณากรอกรายละเอียด', 'error'); document.getElementById('inDesc').focus(); return; }
+    if (!title || !desc) return;
 
     if (editId) {
-        const idx = announcements.findIndex(a => a.id === editId);
-        if (idx > -1) {
-            announcements[idx] = { ...announcements[idx], title, desc, category, date, priority };
-            showToast('แก้ไขประกาศเรียบร้อยแล้ว ✏️', 'success');
-        }
+        await fetch(`http://localhost:3000/api/announcements/${editId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, description: desc, category, display_date: date, priority })
+        });
     } else {
-        announcements.unshift({ id: Date.now(), title, desc, category, date, priority, pinned: false, createdAt: new Date().toISOString() });
-        showToast('เพิ่มประกาศใหม่เรียบร้อยแล้ว 🎉', 'success');
+        await fetch("http://localhost:3000/api/announcements", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, description: desc, category, display_date: date, priority })
+        });
     }
 
-    save(); renderAll(); resetForm();
+    load();
+    resetForm();
 }
 
 function editAnnouncement(id) {
@@ -409,9 +408,9 @@ function editAnnouncement(id) {
     if (!a) return;
     document.getElementById('editId').value = a.id;
     document.getElementById('inTitle').value = a.title;
-    document.getElementById('inDesc').value  = a.desc;
+    document.getElementById('inDesc').value  = a.description;
     document.getElementById('inCategory').value = a.category;
-    document.getElementById('inDate').value  = a.date;
+    document.getElementById('inDate').value  = a.display_date;
     setPriority(a.priority);
     updateChar('inTitle','charTitle',100);
     updateChar('inDesc','charDesc',300);
@@ -423,19 +422,30 @@ function editAnnouncement(id) {
     renderList();
 }
 
-function deleteAnnouncement(id) {
-    if (!confirm('ต้องการลบประกาศนี้ใช่ไหม?')) return;
-    announcements = announcements.filter(a => a.id !== id);
-    save(); renderAll(); showToast('ลบประกาศแล้ว', 'success');
-    if (parseInt(document.getElementById('editId').value) === id) resetForm();
+async function deleteAnnouncement(id) {
+    if (!confirm('ต้องการลบ?')) return;
+
+    await fetch(`http://localhost:3000/api/announcements/${id}`, {
+        method: "DELETE"
+    });
+
+    load();
 }
 
-function togglePin(id) {
+async function togglePin(id) {
     const a = announcements.find(x => x.id === id);
     if (!a) return;
-    a.pinned = !a.pinned;
-    save(); renderAll();
-    showToast(a.pinned ? '📌 ปักหมุดแล้ว' : 'เลิกปักหมุดแล้ว', 'success');
+
+    const newPinned = !a.pinned;
+
+    await fetch(`http://localhost:3000/api/announcements/${id}/pin`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pinned: newPinned })
+    });
+
+    load();
+    showToast(newPinned ? '📌 ปักหมุดแล้ว' : 'เลิกปักหมุดแล้ว', 'success');
 }
 
 function resetForm() {

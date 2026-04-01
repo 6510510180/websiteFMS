@@ -404,11 +404,25 @@ async function init(){
     ploData   = data.plos   || [];
     needsData = data.needs  || [];
     groups    = data.groups || [...new Set(needsData.map(n=>n.group).filter(Boolean))];
+    // เรียง PLO ก่อนใช้งาน
+ploData.sort((a, b) => {
+  const getNum = (p) => {
+    // ดึงเลขจาก code เช่น PLO1 → 1
+    if (p.code) {
+      const m = p.code.match(/\d+/);
+      if (m) return parseInt(m[0]);
+    }
+    // fallback ใช้ no หรือ index
+    return p.no || 999;
+  };
+  return getNum(a) - getNum(b);
+});
 
     needsData.forEach(n=>{
       if(!n.plo_levels){ n.plo_levels={};
         (n.plo_mapping||[]).forEach(code=>{ n.plo_levels[code]="✓"; }); }
     });
+    
 
     const ts = data.snapshotAt||pub.published_at||null;
     document.getElementById("snap-date").textContent = ts

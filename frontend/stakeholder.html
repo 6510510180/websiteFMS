@@ -667,9 +667,12 @@ async function loadPubState(){
   } catch(_) {}
 }
 
-function render(){ rHead(); rBody(); rBars(); rSKList(); rPLOList();
-  document.getElementById('st-p').textContent = PLOS.length;
-  document.getElementById('st-s').textContent = SKS.length;
+function render(){ 
+  rHead(); rBody(); rBars(); rSKList(); rPLOList();
+  const stP = document.getElementById('st-p');
+  const stS = document.getElementById('st-s');
+  if (stP) stP.textContent = PLOS.length;
+  if (stS) stS.textContent = SKS.length;
 }
 
 function rHead(){
@@ -696,6 +699,8 @@ function rBody(){
 }
 
 function rBars(){
+  const el = document.getElementById('plo-bars');
+  if (!el) return;
   const max = SKS.length || 1;
   document.getElementById('plo-bars').innerHTML = PLOS.map(p => {
     const cnt = SKS.filter(s => MAP[p.id] && MAP[p.id][s.id]).length;
@@ -705,7 +710,9 @@ function rBars(){
 }
 
 function rSKList(){
-  document.getElementById('sk-list').innerHTML = SKS.map(s =>
+  const el = document.getElementById('sk-list');
+  if (!el) return;
+  el.innerHTML = SKS.map(s =>
     `<div class="sk-tag"><span class="sk-name">${s.name}</span><button class="sk-del" onclick="delSK('${s.id}')">×</button></div>`
   ).join('');
 }
@@ -715,7 +722,7 @@ function rPLOList(){
   if (!el) return;
   el.innerHTML = PLOS.map(p =>
     `<div class="sk-tag"><span class="sk-name" style="font-size:11px;"><strong>${p.code || ('PLO' + (p.no || ''))}</strong> ${p.desc.slice(0, 40)}${p.desc.length > 40 ? '…' : ''}</span><button class="sk-del" onclick="delPLO('${p.id}')">×</button></div>`
-  ).join('') || '<div style="font-size:11px;color:#9088a8;padding:4px;">ยังไม่มี PLO — กรอกด้านบนหรือ Import Excel</div>';
+  ).join('') || '<div style="font-size:11px;color:#9088a8;padding:4px;">ยังไม่มี PLO</div>';
 }
 
 function filterTable(){ rBody(); }

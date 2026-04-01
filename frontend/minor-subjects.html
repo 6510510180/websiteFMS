@@ -576,10 +576,9 @@ async function init(){
   }
 
   // โหลดกลุ่มวิชาโทจาก API
-  // หมายเหตุ: ดึงทั้งหมดโดยไม่กรอง course_id เพราะบาง group
-  // อาจไม่ได้ผูก course_id ไว้ในฐานข้อมูล
+
   try{
-    const r=await fetch(`${API}/minor-groups`);
+    const r = await fetch(`${API}/minor-groups?course_id=${courseId}`);
     const j=await r.json();
     groupsData=j.data||j;
     if(!Array.isArray(groupsData)) groupsData=[];

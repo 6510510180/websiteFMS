@@ -158,7 +158,7 @@
     <ul>
       <li><a href="bba-home.html">หน้าหลัก</a></li>
       <li><a href="bba-public.html" class="active">ข้อมูลทั่วไป</a></li>
-      <li><a href="student.html">นักศึกษา</a></li>
+      <li><a href="student.html" id="nav-student">นักศึกษา</a></li>
       <li>
         <!-- Dropdown แผนการศึกษา — สร้างจาก API พร้อม courseId ที่ถูกต้อง -->
         <div class="nav-dropdown" id="planDropdown">
@@ -311,7 +311,7 @@ async function loadSearchData() {
         searchData.courses = courses || [];
         const majorArrays = await Promise.all(
             courses.map(c =>
-                fetch(`${API}/courses/${courseId}/majors`)
+                    fetch(`${API}/courses/${c.id}/majors`)
                     .then(r => r.json())
                     .then(majors => majors.map(m => ({ ...m, courseName: c.name_th, courseId: c.id })))
                     .catch(() => [])
@@ -342,6 +342,11 @@ function closeSearch(e) {
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeSearchModal();
 });
+function injectNavLinks(cid) {
+  if (!cid) return;
+  const navStudent = document.getElementById('nav-student');
+  if (navStudent) navStudent.href = `student.html?courseId=${cid}`;
+}
 
 function highlight(text, query) {
     if (!query) return text;
@@ -405,34 +410,32 @@ function onSearch(q) {
 
 
   async function init() {
-    const params = new URLSearchParams(window.location.search);
-    const courseId = params.get("courseId");
-    if (!courseId) { renderError("ไม่พบ courseId ใน URL"); return; }
+  const params = new URLSearchParams(window.location.search);
+  const courseId = params.get("courseId");
+  if (!courseId) { renderError("ไม่พบ courseId ใน URL"); return; }
 
-    const currentCourseId = Number(courseId);
+  injectNavLinks(courseId); // ← ส่ง courseId ไปหน้านักศึกษา
 
-    try {
-      // โหลดพร้อมกัน 3 อย่าง: course ปัจจุบัน, สาขาวิชา, รายชื่อ courses ทั้งหมด
-      const [courseRes, majorsRes, allCoursesRes] = await Promise.all([
-        fetch(`${API}/courses/${courseId}`),
-        fetch(`${API}/courses/${courseId}/majors`).catch(() => ({ ok: false })),
-        fetch(`${API}/courses`).catch(() => ({ ok: false })),
-      ]);
+  const currentCourseId = Number(courseId);
 
-      if (!courseRes.ok) throw new Error("course not found");
-      const course = await courseRes.json();
-      const majors = majorsRes.ok ? (await majorsRes.json()) : [];
-      const allCourses = allCoursesRes.ok ? (await allCoursesRes.json()) : [];
+  try {
+    const [courseRes, majorsRes, allCoursesRes] = await Promise.all([
+      fetch(`${API}/courses/${courseId}`),
+      fetch(`${API}/courses/${courseId}/majors`).catch(() => ({ ok: false })),
+      fetch(`${API}/courses`).catch(() => ({ ok: false })),
+    ]);
 
-      // Dropdown: highlight ตาม courseId ที่กำลังดูอยู่
-      buildPlanDropdown(Array.isArray(allCourses) ? allCourses : [], currentCourseId);
+    if (!courseRes.ok) throw new Error("course not found");
+    const course = await courseRes.json();
+    const majors = majorsRes.ok ? (await majorsRes.json()) : [];
+    const allCourses = allCoursesRes.ok ? (await allCoursesRes.json()) : [];
 
-      render(course, Array.isArray(majors) ? majors : []);
-    } catch {
-      renderError("ไม่สามารถโหลดข้อมูลหลักสูตรได้ กรุณาลองใหม่อีกครั้ง");
-    }
+    buildPlanDropdown(Array.isArray(allCourses) ? allCourses : [], currentCourseId);
+    render(course, Array.isArray(majors) ? majors : []);
+  } catch {
+    renderError("ไม่สามารถโหลดข้อมูลหลักสูตรได้ กรุณาลองใหม่อีกครั้ง");
   }
-  
+}
 
   function render(c, majors) {
   const ORDER = ["การเงิน","การตลาด","ทรัพยากรมนุษย์","โลจิสติกส์","สารสนเทศ","mice"];

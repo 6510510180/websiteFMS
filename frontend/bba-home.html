@@ -488,44 +488,46 @@ appendNewCourses();
 </script>
 <script>
 // ── Load announcements from localStorage ──────────────────────
-const ANNOUNCE_KEY = 'bba_announcements';
  
-function loadHomeAnnouncements() {
+async function loadHomeAnnouncements() {
     const list = document.getElementById('homeAnnounceList');
     if (!list) return;
- 
-    let items = [];
+
+    list.innerHTML = `<li style="color:#bbb;font-size:13px;padding:8px 0 8px 15px;">กำลังโหลด...</li>`;
+
     try {
-        const raw = localStorage.getItem(ANNOUNCE_KEY);
-        items = raw ? JSON.parse(raw) : [];
-    } catch { items = []; }
- 
-    // sort: pinned first → priority → createdAt
-    const pOrder = { high: 0, medium: 1, low: 2 };
-    items.sort((a, b) => {
-        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
-        return (pOrder[a.priority] ?? 9) - (pOrder[b.priority] ?? 9);
-    });
- 
-    // แสดงแค่ 3 รายการบนหน้าหลัก
-    const show = items.slice(0, 3);
- 
-    if (!show.length) {
-        list.innerHTML = `<li style="color:#bbb;font-size:13px;padding:8px 0 8px 15px;">ยังไม่มีประกาศ</li>`;
-        return;
+        const res = await fetch(`${API}/announcements`);
+        const items = await res.json();
+
+        if (!items.length) {
+            list.innerHTML = `<li style="color:#bbb;font-size:13px;padding:8px 0 8px 15px;">ยังไม่มีประกาศ</li>`;
+            return;
+        }
+
+        // sort: pinned → priority
+        const pOrder = { high: 0, medium: 1, low: 2 };
+        items.sort((a, b) => {
+            if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+            return (pOrder[a.priority] ?? 9) - (pOrder[b.priority] ?? 9);
+        });
+
+        const show = items.slice(0, 3);
+
+        const borderColor = { high: '#e74c3c', medium: '#f59e0b', low: '#9b51e0' };
+
+        list.innerHTML = show.map(a => `
+            <li style="margin-bottom:15px;padding-left:15px;border-left:3px solid ${borderColor[a.priority] || '#9b51e0'};">
+                <strong>${escapeHtml(a.title)}</strong>
+                ${a.pinned ? '<span style="font-size:10px;margin-left:4px;">📌</span>' : ''}
+                <p style="margin:4px 0 2px;font-size:13px;color:#555;">${escapeHtml(a.description)}</p>
+                <small style="color:#aaa;">${escapeHtml(a.display_date)}</small>
+            </li>
+        `).join('');
+
+    } catch (err) {
+        console.error(err);
+        list.innerHTML = `<li style="color:red;padding:8px;">โหลดข้อมูลไม่สำเร็จ</li>`;
     }
- 
-    // สี border ตาม priority
-    const borderColor = { high: '#e74c3c', medium: '#f59e0b', low: '#9b51e0' };
- 
-    list.innerHTML = show.map(a => `
-        <li style="margin-bottom:15px;padding-left:15px;border-left:3px solid ${borderColor[a.priority] || '#9b51e0'};">
-            <strong>${escapeHtml(a.title)}</strong>
-            ${a.pinned ? '<span style="font-size:10px;margin-left:4px;">📌</span>' : ''}
-            <p style="margin:4px 0 2px;font-size:13px;color:#555;">${escapeHtml(a.desc)}</p>
-            <small style="color:#aaa;">${escapeHtml(a.date)}</small>
-        </li>
-    `).join('');
 }
  
 function escapeHtml(str) {

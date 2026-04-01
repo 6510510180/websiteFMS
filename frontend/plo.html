@@ -187,6 +187,8 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
       </button>
     </div>
   </div>
+  <script src="fms-year-selector.js"></script>
+  <div id="year-selector-wrap"></div>
 
   <div class="tab-row">
     <button class="tab-btn active" onclick="switchTab('PLO',this)">PLO (Program Learning Outcome)</button>
@@ -440,7 +442,10 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
   </div>
 </div><!-- /helpOverlay -->
 
-<script>
+
+<script> 
+// เพิ่มบรรทัดนี้ต้น script
+let currentYear = 2567;
 /* ── Help Modal ── */
 function openHelp()  { document.getElementById('helpOverlay').style.display = 'flex'; }
 function closeHelp() { document.getElementById('helpOverlay').style.display = 'none'; }
@@ -520,30 +525,33 @@ function deleteRow(i)       { data[currentTab].splice(i,1); markUnsaved(); rende
 function updateField(i,f,v) { data[currentTab][i][f]=v; markUnsaved(); }
 function resetRows()        { if(!data[currentTab].length||confirm('ต้องการล้างข้อมูลทั้งหมดในแท็บนี้?')){ data[currentTab]=[]; markUnsaved(); renderRows(); } }
 
-async function loadFromServer() {
+// แก้ฟังก์ชัน loadFromServer ให้รับ year
+async function loadFromServer(year = currentYear) {
   try {
-    if (USE_BULK_ENDPOINT) {
-      const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo`,{cache:'no-store'});
-      if (!res.ok) throw new Error('bulk-get failed');
-      const payload = await res.json();
-      data = {
-        PLO:(payload.PLO||[]).map(r=>({code:r.code,skill:r.skill})),
-        MLO:(payload.MLO||[]).map(r=>({group:r.group||'',code:r.code,skill:r.skill}))
-      };
-    } else {
-      const plos = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plos`,{cache:'no-store'})).json();
-      const groups = await (await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/major-groups`,{cache:'no-store'})).json();
-      const mloArr = [];
-      for (const g of groups) { const mlos = await (await fetch(`${API_BASE}/api/major-groups/${g.id}/mlos`,{cache:'no-store'})).json(); for (const m of mlos) mloArr.push({group:g.label||'',code:m.code,skill:m.description}); }
-      data = { PLO:(plos||[]).map(p=>({code:p.code,skill:p.description})), MLO:mloArr };
-    }
-    markSaved(); renderRows();
+    const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo?year=${year}`);
+    if (!res.ok) throw new Error('load failed');
+    const d = await res.json();
+    data.PLO = d.PLO || [];
+    data.MLO = d.MLO || [];
+    markSaved();
+    renderRows();
   } catch(e) {
-    console.error(e);
-    showToast('ดึงข้อมูลจากเซิร์ฟเวอร์ล้มเหลว','#ef4444');
-    try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)||'{"PLO":[],"MLO":[]}'); renderRows(); showToast('เปิดข้อมูลสำรองในเครื่องชั่วคราว','#f59e0b'); } catch {}
+    // fallback จาก localStorage
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) { data = JSON.parse(saved); renderRows(); }
   }
 }
+async function initPage() {
+  currentYear = await FmsYear.init('year-selector-wrap', {
+    programId: PROGRAM_ID,
+    onYearChange: async (year) => {
+      currentYear = year;
+      await loadFromServer(year);
+    },
+  });
+  await loadFromServer(currentYear);
+}
+initPage();
 
 async function saveData() {
   const isMlo = currentTab === 'MLO';
@@ -551,9 +559,11 @@ async function saveData() {
   if (incomplete.length) { showToast(`⚠️ กรุณากรอกรหัสและหัวข้อทักษะให้ครบ (${incomplete.length} รายการ)`,'#f59e0b'); return; }
   try {
     if (USE_BULK_ENDPOINT) {
-      const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({PLO:data.PLO,MLO:data.MLO})});
-      if (!res.ok) throw new Error('bulk-put failed');
-      await res.json();
+     const res = await fetch(`${API_BASE}/api/programs/${encodeURIComponent(PROGRAM_ID)}/plo-mlo?year=${currentYear}`, {
+  method: 'PUT',
+  headers: {'Content-Type':'application/json'},
+  body: JSON.stringify({PLO:data.PLO, MLO:data.MLO})
+}); res.json();
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     markSaved();
@@ -620,7 +630,6 @@ function showToast(msg,color='#22c55e'){
 }
 
 window.addEventListener('beforeunload', (e)=>{ if(hasUnsaved){e.preventDefault();e.returnValue='';} });
-loadFromServer();
 </script>
 </body>
 </html>

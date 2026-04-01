@@ -338,6 +338,8 @@ table.mt tr.r-grand > td{
     <a href="kas.html">KAS</a>
   </nav>
   <div class="topbar-right">
+      <script src="fms-year-selector.js"></script>
+    <div id="year-selector-wrap" style="display:none;"></div>
     <button onclick="openHelp()" class="help-circle-btn" title="คู่มือการใช้งาน">?</button>
     <div class="avatar">A</div>
   </div>
@@ -646,20 +648,31 @@ function fmtS(v, size){
 }
 
 /* ── year ── */
-async function initYears(){
-  let years=[];
-  try{
-    const r=await fetch(`${API_BASE}/available-years?program_id=${PROGRAM_ID}`);
-    const j=await r.json();
-    years=j.years&&j.years.length?j.years:fallback();
-  }catch{ years=fallback(); }
-  const sel=document.getElementById('yearSel');
-  sel.innerHTML=years.map(y=>`<option value="${y}">ปีการศึกษา ${y}</option>`).join('');
-  YEAR=String(years[0]); sel.value=YEAR;
-  updateSub(); await loadData();
+async function initYears() {
+  // init FmsYear เพื่อซิงค์ปีข้ามหน้า (ซ่อน UI)
+  await FmsYear.init('year-selector-wrap', {
+    programId: PROGRAM_ID,
+  });
+
+  let years = [];
+  try {
+    const r = await fetch(`${API_BASE}/available-years?program_id=${PROGRAM_ID}`);
+    const j = await r.json();
+    years = j.years && j.years.length ? j.years : fallback();
+  } catch { years = fallback(); }
+
+  const sel = document.getElementById('yearSel');
+  sel.innerHTML = years.map(y => `<option value="${y}">ปีการศึกษา ${y}</option>`).join('');
+
+  // ใช้ปีจาก FmsYear ถ้ามี
+  const syncYear = FmsYear.getYear();
+  YEAR = syncYear && years.includes(syncYear) ? String(syncYear) : String(years[0]);
+  sel.value = YEAR;
+  updateSub();
+  await loadData();
 }
 function fallback(){ const n=new Date().getFullYear()+543; return [n,n-1,n-2,n-3,n-4]; }
-async function onYear(v){ if(!v)return; YEAR=v; updateSub(); await loadData(); }
+async function onYear(v){ if(!v)return; YEAR=v; FmsYear.setYear(v); updateSub(); await loadData(); }
 function updateSub(){
   document.getElementById('pageSub').textContent=
     `ปีการศึกษา ${YEAR} | แก้ไขคะแนนในตารางได้เลย กดบันทึกเมื่อพร้อม`;
